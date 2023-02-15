@@ -1,0 +1,1 @@
+@[Acucobol-GT pathname]\wrun32 [Acucobol-GT pathname]\pcompile.acu %*

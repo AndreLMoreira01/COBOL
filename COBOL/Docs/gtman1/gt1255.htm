@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.11.2.1  acushare -start</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt1251.htm">2.11  acushare Utility Program</a> &gt; <a href="gt1254.htm">2.11.2  Using acushare</a> &gt; </p>
+<a name="wp1033910"> </a><h2 class="pHeading3">
+2.11.2.1  acushare -start
+</h2>
+<a name="wp1033912"> </a><p class="pBody">
+The command for starting <b class="cBold">acushare</b> is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+acushare -start [ -p portnumber ] [ -e errorfile [ -g ] ]<a name="wp1116455"> </a>
+</pre></div>
+<a name="wp1116431"> </a><p class="pBody">
+A successful start creates a background process that handles license management and shared code.  
+</p>
+<a name="wp1116551"> </a><p class="pBody">
+By default, <b class="cBold">acushare</b> obtains a port number (for the <em class="cEmphasis">listening port</em>) from the operating system. If you want to direct <b class="cBold">acushare</b> to listen on a specific port, you can include the &quot;-p&quot; option followed by the desired port number.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acushare -start -p 12345<a name="wp1116552"> </a>
+</pre></div>
+<a name="wp1116553"> </a><p class="pBody">
+If the &quot;-e&quot; option is included, <b class="cBold">acushare</b> error output is appended to the file named after &quot;-e&quot;.  If &quot;-e&quot; is not used, error output is sent to /dev/console by default.  If output is not allowed on /dev/console, <b class="cBold">acushare</b> attempts to append to a file named &quot;acushare.err&quot; in the current directory.  If that fails, <b class="cBold">acushare</b> prints the message &quot;acushare: cannot open error output file&quot; to standard output and the process exits.  
+</p>
+<a name="wp1117032"> </a><p class="pBody">
+If &quot;-e&quot; is specified, you can optionally use &quot;-g&quot; to cause the error file to be compressed with the gzip compression method.  Such files must be manually decompressed with gzip before reading or editing.  For clarity and to reduce the risk of confusion or error, it is recommended that you specify a &quot;.gz&quot; extension in the filename.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acushare -start -eg acushare_trc.gz<a name="wp1120150"> </a>
+</pre></div>
+<a name="wp1057882"> </a><h3 class="pHeadingRef">
+Automatic startup at system boot
+</h3>
+<a name="wp1116870"> </a><p class="pBody">
+If you want <b class="cBold">acushare</b> to start automatically when the system boots, you can add a small amount of code to the system boot file.  The name of the boot file varies from system to system.  Typical names are &quot;/etc/rc.local&quot;, &quot;/etc/brc&quot; or &quot;/etc/rc&quot;.  Identify the proper startup file and add lines similar to the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+if [ -f /usr/etc/acushare ]; then<a name="wp1057931"> </a>
+   echo Starting ACUCOBOL-GT shared-code and license daemon &gt; \<a name="wp1057953"> </a>
+        /dev/console<a name="wp1057954"> </a>
+   /usr/etc/acushare -start &gt; /dev/console<a name="wp1057965"> </a>
+fi<a name="wp1057978"> </a>
+</pre></div>
+<a name="wp1033915"> </a><p class="pBody">
+The preceding example assumes that you've placed <b class="cBold">acushare</b> in &quot;/usr/etc&quot;.  You will need to adjust the code to match the conventions used in your environment.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

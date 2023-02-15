@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>acu_abend()</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr621.htm">6.4  Calling COBOL from C</a> &gt; </p>
+<a name="wp1121861"> </a><h2 class="pHeading2">
+acu_abend()
+</h2>
+<a name="wp1121862"> </a><p class="pBody">
+The <b class="cBold">acu_abend()</b> function allows you to perform the ACUCOBOL-GT signal handling logic in selected programs when the runtime is initialized with the &quot;--no-signal-handlers&quot; option. If you run with &quot;--no-signal-handlers&quot;, error conditions that raise signals are not detected automatically by the runtime. <b class="cBold">acu_abend()</b> causes the runtime to output error messages and resets the state of the runtime.  This function is designed for use in transaction processing environments that call the ACUCOBOL-GT runtime from a C main program. 
+</p>
+<a name="wp1121863"> </a><p class="pBody">
+Refer to the <em class="cEmphasis">ACUCOBOL-GT User's Guide</em> for more information on &quot;--no-signal-handlers&quot;.
+</p>
+<a name="wp1121864"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<a name="wp1121865"> </a><p class="pBody">
+C programs that specify the &quot;--no-signal-handlers&quot; option in the call to <b class="cBold">acu_initv()</b> may call the <b class="cBold">acu_abend()</b> function from their own signal-handling code as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+void acu_abend( int signal_number )<a name="wp1121866"> </a>
+</pre></div>
+<a name="wp1121868"> </a><p class="pBody">
+where signal_number is the signal number or &quot;-1&quot; if no signal information is available.
+</p>
+<a name="wp1121869"> </a><p class="pBody">
+Although you can call <b class="cBold">acu_abend()</b> at any time, we recommend that you call it only if the application was executing COBOL code when the signal occurred; otherwise, the error messages reported by the runtime may be misleading.  For example, you do not need to call <b class="cBold">acu_abend()</b> if:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1121870"> </a><div class="pSmartList1"><li>Your application calls <b class="cBold">acu_cobol()</b> to execute a COBOL program.</li></div>
+<a name="wp1121871"> </a><div class="pSmartList1"><li>The COBOL program exists.</li></div>
+<a name="wp1121872"> </a><div class="pSmartList1"><li>After <b class="cBold">acu_cobol()</b> returns, your application executes other non-COBOL processing.</li></div>
+</ol></div>
+<a name="wp1121873"> </a><p class="pNote">
+<hr />
+<b>Note:  </b><b class="cBold">acu_abend()</b> does not shut down the runtime.  It reports the current COBOL program and execution address. It also reports the COBOL source file and line number if you have compiled with &quot;-Gl&quot; or &quot;-Ga&quot;. It then resets the runtime to its initial state.  Therefore, even if you have called acu_abend(), you still need to call <b class="cBold">acu_shutdown()</b> to actually shut down the runtime. 
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

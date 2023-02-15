@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:26" />
+  <title>10.5.1  Mapping Context IDs</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt210.htm">Chapter 10:  Help Automation </a> &gt; <a href="gt2106.htm">10.5  Windows Help</a> &gt; </p>
+<a name="wp1026131"> </a><h2 class="pHeading2">
+10.5.1  Mapping Context IDs
+</h2>
+<a name="wp1026134"> </a><p class="pBody">
+Due to an inconsistency in the representation of the context ID value between the Windows Help program and the WinHelp API function, some special work is required.  In Windows Help, context IDs are strings.  These strings are placed in the help source as footnotes using the &quot;#&quot; character as the footnote symbol.  However, the Windows Help API function (WinHelp) does not accept a string for the context ID parameter.  Instead, it requires a number.  Fortunately, there is a simple mechanism for translating numbers into context IDs.  This is done in the &quot;[MAP]&quot; section of the help project (.HPJ) file.  In the MAP section, you should include entries that map the context string to a context number, like this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define   ContextIdName   ContextNumber<a name="wp1026135"> </a>
+</pre></div>
+<a name="wp1026136"> </a><p class="pBody">
+For example, if you had a section called &quot;Help_CustName&quot; in your help file, and you wanted to assign the corresponding ID value 1000, you would use:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define   Help_CustName   1000<a name="wp1026137"> </a>
+</pre></div>
+<a name="wp1026138"> </a><p class="pBody">
+In your COBOL program, you could then assign a HELP-ID of &quot;1000&quot; to your customer name entry field to provide a context link to the appropriate section in the help file.  
+</p>
+<a name="wp1026139"> </a><p class="pBody">
+Because mapping names to numbers on a large scale is prone to error, ACUCOBOL-GT provides a mechanism to simplify the process.  We suggest the following approach:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1026140"> </a><div class="pSmartList1"><li>Create a COPY library for each of your help files.  Each COPY library should contain all of the context IDs for its associated help file.  Typically, one help file services all the programs in an application, but it's possible to organize help files differently.  </li></div>
+<a name="wp1026141"> </a><div class="pSmartList1"><li>Whenever you need a new context ID, add a level 78 to the COPY library.  The name should be the same as the section name in the help file.  Assign a unique number to the entry.  You can either number context IDs sequentially, or you can devise your own scheme.  To add an entry for the customer name example above, you would add the following line:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+78  Help-CustName   VALUE 1000.<a name="wp1026142"> </a>
+</pre></div>
+<a name="wp1026143"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>Context names are not case-sensitive in either COBOL or the help file.  
+<hr />
+</p>
+<a name="wp1026207"> </a><div class="pSmartList1"><li>In your COBOL program, include the COPY library and use its level 78 names as HELP-IDs.  For example, this statement could be used in a Screen Section entry:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ENTRY-FIELD USING CUSTOMER-NAME, <a name="wp1026208"> </a>
+HELP-ID = Help-CustName<a name="wp1026209"> </a>
+</pre></div>
+<a name="wp1026147"> </a><div class="pSmartList1"><li>In your help file text (&quot;.RTF&quot; file), create a section with the same name as the level 78 entry, followed by its associated help text.  When creating section names, be aware that any hyphens in a COBOL name will be converted to underscores in the help file.  Therefore, in the preceding example, you would add a section called &quot;Help_CustName&quot; to your help file.  </li></div>
+<a name="wp1026149"> </a><div class="pSmartList1"><li>Compile the program source with the &quot;-defines&quot; switch to create a file containing &quot;#defines&quot; that correspond to your level 78s.  For example, if the COPY library created in step (1) is called &quot;applhelp.def&quot;, you would use:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl -defines applhelp.def<a name="wp1026150"> </a>
+</pre></div>
+<a name="wp1026151"> </a><p class="pIndented1">
+By default, this creates the file &quot;applhelp.h&quot; that contains one &quot;#define&quot; for each level 78 in &quot;applhelp.def&quot;.  Note that any hyphens in the level 78 names are converted to underscores in the corresponding &quot;#define&quot;.  This occurs because the &quot;#defines&quot; can be used in C programs as well as with help files, and hyphens are not allowed in C names (they are allowed in COBOL and the help file).  
+</p>
+<a name="wp1026152"> </a><div class="pSmartList1"><li>In your help project file (&quot;.HPJ&quot;), include a &quot;[MAP]&quot; section and add a &quot;#include&quot; statement that references the &quot;.h&quot; file created in step (5).  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+[MAP]<a name="wp1026153"> </a>
+#include &lt;applhelp.h&gt;<a name="wp1026154"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1026155"> </a><p class="pBody">
+Your help files are now ready for the help compiler.  Use your help compiler to create &quot;.HLP&quot; file from your help text source and help project files.  
+</p>
+<a name="wp1026156"> </a><p class="pBody">
+For a complete working example, see the help demonstration program included with the Windows versions of ACUCOBOL-GT.  The example program and its related files can be found in the &quot;sample\help&quot; subdirectory of your ACUCOBOL-GT installation. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

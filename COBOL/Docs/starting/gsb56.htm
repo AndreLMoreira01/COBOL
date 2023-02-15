@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/12/05 11:54:01" />
+  <title>5.4.1  Before Installing Acucorp Products</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Getting Started <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gsb5.htm"><br />HP e3000 Installation</a> &gt; <a href="gsb55.htm">5.4  Installation on HP e3000 Machines</a> &gt; </p>
+<a name="wp1038606"> </a><h2 class="pHeading2">
+5.4.1  Before Installing Acucorp Products
+</h2>
+<a name="wp1038608"> </a><p class="pBody">
+Before installing your Acucorp products, log in as MANAGER.SYS and check to see if the ACUCOBOL account exists:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+:HELLO MANAGER.SYS<a name="wp1038609"> </a>
+:LISTACCT ACUCOBOL<a name="wp1047042"> </a>
+</pre></div>
+<a name="wp1047043"> </a><p class="pBody">
+If the ACUCOBOL account already exists, use the following command to make sure the ACUCOBOL-GT User Defined Command (ACUUDC) file is <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">not</span> cataloged:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+:SHOWCATALOG<a name="wp1038612"> </a>
+</pre></div>
+<a name="wp1038613"> </a><p class="pBody">
+The ACUUDC file sets the environment variables needed to run ACUCOBOL-GT.  If ACUUDC.PUB.ACUCOBOL is cataloged, it must be removed (uncataloged) or renamed and all users and jobs that have ACUUDC cataloged must log out before installation is performed.  Otherwise, you will get an error saying the file is already in use.  If ACUUDC was cataloged at the account level, you can remove it by typing:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+:SETCATALOG ACUUDC.PUB.ACUCOBOL;ACCOUNT;DELETE<a name="wp1038614"> </a>
+</pre></div>
+<a name="wp1038616"> </a><p class="pBody">
+Another method (that does not require all users and jobs that have ACUUDC cataloged to log out) is to overwrite the version of ACUUDC that is currently cataloged with the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+:MV.HPBIN.SYS &quot;-f /ACUCOBOL/PUB/ACUUDC /ACUCOBOL/PUB/ACUUDC.inuse&quot;<a name="wp1038617"> </a>
+</pre></div>
+<a name="wp1038618"> </a><p class="pBody">
+The MV.HPBIN.SYS command allows you to move a file even though it is in use.  The &quot;-f&quot; option does the move without asking for confirmation.  This renames the ACUUDC currently in use so that the RESTORE can create and catalog a new file with the same name.  
+</p>
+<a name="wp1038619"> </a><p class="pBody">
+If you get a message saying that the ACUCOBOL account is a &quot;Non-existent account&quot; when performing the LISTACCT command, then create the account with the following commands:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+:NEWACCT ACUCOBOL,MGR<a name="wp1038620"> </a>
+:ALTACCT ACUCOBOL;CAP=+PH;ACCESS=(R,X:ANY;W,A,L:AC)<a name="wp1038621"> </a>
+:ALTUSER MGR.ACUCOBOL;CAP=+PH<a name="wp1038622"> </a>
+:ALTGROUP PUB.ACUCOBOL;CAP=+PH<a name="wp1038623"> </a>
+</pre></div>
+<a name="wp1038624"> </a><p class="pBody">
+The &quot;CAP=+PH&quot; capability must be included because some ACUCOBOL-GT programs require the Process Handling (PH) capability.  If a program resides in the HFS system, the user executing it must have PH capability.  If a program resides in the MPE/iX group and has an MPE/iX name, the user does not have to have PH capability, but the MPE/iX group does.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+/ACUCOBOL/bin/ccbl<a name="wp1050438"> </a>
+</pre></div>
+<a name="wp1050439"> </a><p class="pBody">
+requires the user to have PH capability but:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CCBL.PUB.ACUCOBOL<a name="wp1050440"> </a>
+</pre></div>
+<a name="wp1038628"> </a><p class="pBody">
+does not, as long as the PUB.ACUCOBOL group has the PH capability added to it.  If you do not want the user to have to have PH capability, then  move the programs you want to run from the /ACUCOBOL/bin directory to a valid MPE/iX group and change the name to uppercase.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+:COPY /ACUCOBOL/bin/ccbl CCBL.PUB.ACUCOBOL<a name="wp1038629"> </a>
+</pre></div>
+<a name="wp1038630"> </a><p class="pBody">
+If your products are on a DAT tape in MPE/iX STORE format, follow the directions in <a  href="gsb57.htm#wp1038634">section 5.4.2</a> to install them within the MPE/iX shell. 
+</p>
+<a name="wp1038631"> </a><p class="pBody">
+If your products are on a DAT tape in POSIX TAR format, follow the directions in <a  href="gsb59.htm#wp1039449">section 5.4.4</a> to install them within the POSIX shell.  
+</p>
+<a name="wp1038632"> </a><p class="pBody">
+If your products are delivered on a CD-ROM, mount the CD-ROM, FTP the archived file to your HP e3000 machine and follow the directions in the appropriate section for the file format.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

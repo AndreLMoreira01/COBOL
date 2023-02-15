@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:02" />
+  <title>A_ODBC_ERROR_MAP_FILE</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gld.htm">Appendix D:  Acu4GL for ODBC Information </a> &gt; <a href="4gld15.htm">D.4  Acu4GL for ODBC Configuration File Variables</a> &gt; </p>
+<a name="wp1047880"> </a><h2 class="pHeading2">
+A_ODBC_ERROR_MAP_FILE
+</h2>
+<a name="wp1047883"> </a><p class="pBody">
+Because there are so many drivers available for ODBC, you may find that data source error codes don't necessarily map well to COBOL error codes.  To solve this problem, Acu4GL for ODBC allows you to create an error map file to map native database errors to COBOL errors.  Create the file using the guidelines described on the following page, and then use the configuration file variable, A_ODBC_ERROR_MAP_FILE, to indicate the name and location of the file you created. 
+</p>
+<a name="wp1047884"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1047885"> </a><p class="pBody">
+If the file used for mapping is called MAP and this file is located in the directory C:\ODBC, you would specify:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+A_ODBC_ERROR_MAP_FILE  c:\ODBC\MAP<a name="wp1047886"> </a>
+</pre></div>
+<a name="wp1047887"> </a><p class="pBody">
+in the runtime configuration file.  There is no default value for this variable.
+</p>
+<a name="wp1047888"> </a><h3 class="pHeadingRef">
+Guidelines for creating a map file 
+</h3>
+<a name="wp1047894"> </a><p class="pBody">
+Although you can check your data source documentation for error code information, the easiest way to determine what error codes need to be mapped to more appropriate COBOL codes is through trial and error.  As users use Acu4GL for ODBC, they may report receiving error messages that don't make sense based on their situation. Research these errors and try to determine a more appropriate COBOL error response.
+</p>
+<a name="wp1047895"> </a><p class="pBody">
+When you create your error map file, use the following guidelines: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1047896"> </a><div class="pSmartList1"><li>Begin comment lines with &quot;#&quot;.  Blank lines are also considered comments.  </li></div>
+<a name="wp1047897"> </a><div class="pSmartList1"><li>Break the rest of the file into sections, with each section header consisting of all the information enclosed in brackets from the data source error function. </li></div>
+<a name="wp1047898"> </a><p class="pIndented1">
+For example, if the data source returns this error:
+</p>
+</ul></div>
+<div class="pPreformatted"><pre class="pPreformatted">
+OdbcOneInfo: State: S1000, Native Error: -346
+[Visigenic][ODBC Informix 5 Driver][Informix]Could not update 
+a row in the table.<a name="wp1047899"> </a>
+<a name="wp1047900"> </a><p class="pIndented1">
+make your section header:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+[Visigenic][ODBC Informix 5 Driver][Informix]<a name="wp1047901"> </a>
+</pre></div>
+</pre></div>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1047902"> </a><div class="pSmartList1"><li>Include two fields in each line in the section: the internal error number, and an ACUCOBOL-GT mapping string. </li></div>
+<a name="wp1047903"> </a><p class="pIndented1">
+Using the same example, if you wanted to map the Visigenic Informix driver error, &quot;-346 Could not update a row in the table&quot; to the COBOL error, &quot;Not found&quot;, you would include this line in the section:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+-346 E_NOT_FOUND<a name="wp1047904"> </a>
+</pre></div>
+<a name="wp1047905"> </a><p class="pIndented1">
+Other Visigenic Informix error maps would follow in the same section.  If you use other drivers, you could use multiple sections. 
+</p>
+<a name="wp1047906"> </a><p class="pIndented1">
+The valid values for the second field are as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+E_SYS_ERR<a name="wp1047907"> </a>
+E_PARAM_ERR<a name="wp1047908"> </a>
+E_TOO_MANY_FILES<a name="wp1047909"> </a>
+E_MODE_CLASH<a name="wp1047910"> </a>
+E_REC_LOCKED<a name="wp1047911"> </a>
+E_BROKEN<a name="wp1047912"> </a>
+E_DUPLICATE<a name="wp1047913"> </a>
+E_NOT_FOUND<a name="wp1047914"> </a>
+E_UNDEF_RECORD<a name="wp1047915"> </a>
+E_DISK_FULL<a name="wp1047916"> </a>
+E_FILE_LOCKED<a name="wp1047917"> </a>
+E_REC_CHANGED<a name="wp1047918"> </a>
+E_MISMATCH<a name="wp1047919"> </a>
+E_NO_MEMORY<a name="wp1047920"> </a>
+E_MISSING_FILE<a name="wp1047921"> </a>
+E_PERMISSION<a name="wp1047922"> </a>
+E_NO_SUPPORT<a name="wp1047923"> </a>
+E_NO_LOCKS<a name="wp1047924"> </a>
+</pre></div>
+</ul></div>
+<a name="wp1047925"> </a><p class="pBody">
+Through experience, Acucorp has discovered specific ways to better map errors for some drivers.  For a list of these driver error mapping suggestions, look at the file &quot;odbcerrs&quot; on your installation disks.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>REG_QUERY_VALUE, DISPLAY_REG_QUERY_VALUE Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1037935"> </a><h2 class="pHeading2">
+REG_QUERY_VALUE, DISPLAY_REG_QUERY_VALUE Routine
+</h2>
+<a name="wp1037941"> </a><p class="pBody">
+Retrieves the value associated with a specified registry key by accessing the Windows registry routine RegQueryValue.
+</p>
+<a name="wp1207210"> </a><p class="pBody">
+Use DISPLAY_REG_QUERY_VALUE to perform the action on the display host's registry (the local host when the application is run with a standard runtime; the <em class="cEmphasis">thin client</em> when the application is run with the thin client).  Use REG_QUERY_VALUE to perform the action on the server host's registry (the local host when the application is run with a standard runtime, and the application host when the application is run with the thin client).
+</p>
+<a name="wp1037943"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;REG_QUERY_VALUE&quot; <a name="wp1037944"> </a>
+    USING OPEN-KEY-HANDLE, RETURN-VALUE, RETURN-SIZE,<a name="wp1037945"> </a>
+    GIVING STATUS-CODE<a name="wp1037948"> </a>
+</pre></div>
+<a name="wp1037949"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;REG_QUERY_VALUE&quot; <a name="wp1037950"> </a>
+    USING OPEN-KEY-HANDLE, RETURN-VALUE, RETURN-SIZE,<a name="wp1037951"> </a>
+       SUBKEY-NAME, <a name="wp1481605"> </a>
+    GIVING STATUS-CODE<a name="wp1037953"> </a>
+</pre></div>
+<a name="wp1037954"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1037955"> </a><p class="pBody">
+<b class="cBold">OPEN-KEY-HANDLE</b>   Usage unsigned-long
+</p>
+<a name="wp1037956"> </a><p class="pBody">
+Handle of a currently open key or one of the following predefined handles of keys that are always open (defined in &quot;acugui.def&quot;):
+</p>
+<a name="wp1037957"> </a><p class="pBody">
+HKEY_CLASSES_ROOT
+</p>
+<a name="wp1037958"> </a><p class="pBody">
+HKEY_CURRENT_USER
+</p>
+<a name="wp1037959"> </a><p class="pBody">
+HKEY_LOCAL_MACHINE
+</p>
+<a name="wp1037960"> </a><p class="pBody">
+HKEY_USERS
+</p>
+<a name="wp1037961"> </a><p class="pBody">
+<b class="cBold">RETURN-VALUE</b>   PIC X(n)
+</p>
+<a name="wp1037962"> </a><p class="pBody">
+Receives the value associated with the specified key.
+</p>
+<a name="wp1037963"> </a><p class="pBody">
+<b class="cBold">RETURN-SIZE</b>   usage unsigned-long
+</p>
+<a name="wp1037964"> </a><p class="pBody">
+Specifies the size, in characters, of the RETURN-VALUE buffer.  When the function returns, RETURN-SIZE contains the size of the string copied to RETURN-VALUE.
+</p>
+<a name="wp1037965"> </a><p class="pBody">
+<b class="cBold">SUBKEY-NAME</b>   PIC  X(n) (optional)
+</p>
+<a name="wp1037966"> </a><p class="pBody">
+Name of a subkey of OPEN-KEY-HANDLE for which a value is to be retrieved.  If SUBKEY-NAME is omitted or contains an empty string, REG_QUERY_VALUE retrieves the value associated with the key identified by OPEN-KEY-HANDLE.
+</p>
+<a name="wp1037967"> </a><p class="pBody">
+<b class="cBold">STATUS-CODE</b>   Numeric data item.
+</p>
+<a name="wp1037968"> </a><p class="pBody">
+Receives the return status of the call to Microsoft's &quot;RegQueryValue&quot; function.  A return status of zero indicates success; non-zero indicates that an error occurred.
+</p>
+<a name="wp1037969"> </a><h3 class="pHeadingRef">
+Comments
+</h3>
+<a name="wp1037970"> </a><p class="pBody">
+When REG_QUERY_VALUE is called repeatedly in a loop, be sure to reset the value of RETURN-SIZE between calls.
+</p>
+<a name="wp1037971"> </a><p class="pBody">
+If the length of the value string exceeds the size of the RETURN-VALUE buffer (the buffer size is indicated in the input value of RETURN-SIZE), then the behavior of the routine depends on the operating system.  On 32-bit Windows systems, a value string that exceeds the size of the RETURN-VALUE buffer causes RETURN-SIZE to be set to the full length of the value string.  In this case, the value string is not copied into RETURN-VALUE, and STATUS-CODE is set to `234'.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

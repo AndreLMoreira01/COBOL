@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.2.1.2  Linking</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp3.htm">4.2  ACUCOBOL-GT in MPE/iX Environments</a> &gt; <a href="ch4-hp4.htm">4.2.1  Using ACUCOBOL-GT in Traditional MPE/iX Environments </a> &gt; </p>
+<a name="wp1041052"> </a><h2 class="pHeading3">
+4.2.1.2  Linking
+</h2>
+<a name="wp1041054"> </a><p class="pBody">
+To HP developers in general, the term <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">linking</span> means running a command or series of commands that arrange all of a program's objects so that they can run as a single application.
+</p>
+<a name="wp1041055"> </a><p class="pBody">
+Within ACUCOBOL-GT, the term <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">linking</span> is used to describe the linking of C subroutines or HP RLs into the ACUCOBOL-GT runtime so that the runtime can CALL the functions that these routines provide.  Programs compiled with ACUCOBOL-GT do not require linking.  
+</p>
+<a name="wp1041056"> </a><p class="pBody">
+To help illustrate this, suppose you have three COBOL objects.  If these three objects are HP COBOL objects, when you link them together you get an HP executable program:
+</p>
+<a name="wp1041057"> </a><p class="pBody">
+OBJECT1 + OBJECT2 + OBJECT3 = HPEXE
+</p>
+<a name="wp1041058"> </a><p class="pBody">
+To run the HP executable enter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:RUN HPEXE<a name="wp1041059"> </a>
+</pre></div>
+<a name="wp1041060"> </a><p class="pBody">
+If these three objects are ACUCOBOL-GT objects, you do not link them together; they remain separate object files:
+</p>
+<a name="wp1041061"> </a><p class="pBody">
+OBJECT1<br />OBJECT2<br />OBJECT3
+</p>
+<a name="wp1041062"> </a><p class="pBody">
+The ACUCOBOL-GT runtime is used to execute these objects.  Assuming that OBJECT1 is the main program, the command to run might look like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:RUN /ACUCOBOL/bin/runcbl;INFO=&quot;OBJECT1&quot;<a name="wp1041063"> </a>
+</pre></div>
+<a name="wp1041064"> </a><p class="pBody">
+or:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:runcbl &quot;OBJECT1&quot;<a name="wp1041065"> </a>
+</pre></div>
+<a name="wp1041066"> </a><p class="pBody">
+To execute OBJECT2 and OBJECT3, the main program (OBJECT1) makes a CALL to one of the other objects, and the ACUCOBOL-GT runtime dynamically loads and runs the called object.  The main program may CALL all of the other objects one by one in the following pattern: 
+</p>
+<a name="wp1041067"> </a><p class="pBody">
+OBJECT1 CALLs OBJECT2; OBJECT1 CALLs OBJECT3; etc.,
+</p>
+<a name="wp1041068"> </a><p class="pBody">
+or the CALLed object can CALL the next object in the execution sequence, in the following pattern:
+</p>
+<a name="wp1041069"> </a><p class="pBody">
+OBJECT1 CALLs OBJECT2; OBJECT2 CALLs OBJECT3; etc.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

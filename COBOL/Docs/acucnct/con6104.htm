@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:53:04" />
+  <title>6.7.1  Automatic Update Overview</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con6.htm">Chapter 6: Thin Client: Preparing the Server </a> &gt; <a href="con6103.htm">6.7  Thin Client Automatic Update </a> &gt; </p>
+<a name="wp1070854"> </a><h2 class="pHeading2">
+6.7.1  Automatic Update Overview
+</h2>
+<a name="wp1070855"> </a><p class="pBody">
+The thin client first connects to the AcuConnect executable, <b class="cBold">acurcl</b>, which is running on the server.  This executable looks up the specified alias and starts the ACUCOBOL-GT runtime on the server, which takes over the communication with the thin client.  The runtime sends the thin client information about itself, including its version number and thin client protocol number.  It also sends several configuration variables that control the thin client automatic update behavior.  
+</p>
+<a name="wp1070856"> </a><p class="pBody">
+You specify these configuration variables in the runtime configuration file for your application rather than in the <b class="cBold">acurcl</b> configuration file.  As a result, you can have a different automatic update configuration for each application alias managed by a single <b class="cBold">acurcl</b> server.  More information about the automatic upgrade configuration variables can be found in the following sections.
+</p>
+<a name="wp1070857"> </a><p class="pBody">
+Each of the following five events can cause an automatic update of the thin client:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1070858"> </a><div class="pSmartList1"><li>The client's major and minor version numbers do not match the server's.</li></div>
+<a name="wp1070859"> </a><div class="pSmartList1"><li>The client's protocol number does not match the server's.</li></div>
+<a name="wp1070860"> </a><div class="pSmartList1"><li>The TC_REQUIRES_BUILD_NUMBER configuration variable is a non-zero value, and the client's build number does not match this value.</li></div>
+<a name="wp1070861"> </a><div class="pSmartList1"><li>The TC_CHECK_INSTALLER_TIMESTAMP configuration variable is set to &quot;on&quot;, and the modification time of the installer file on the server is later than the modification time of the installer file on the client.  If the installer file does not exist on the client, the modification time of the running &quot;acuthin.exe&quot; is used.</li></div>
+<a name="wp1070862"> </a><div class="pSmartList1"><li>The <b class="cBold">acuthin</b> command has been executed with the &quot;--testautoupdate&quot; command line option. </li></div>
+</ol></div>
+<a name="wp1070863"> </a><p class="pBody">
+The TC_REQUIRES_BUILD_NUMBER configuration variable facilitates the automatic update of the thin client via a comparison of the client's build number with the variable value.  You set this variable to the thin client build number required by the application.  The default value of this variable is &quot;0&quot; (off, false, no).  
+</p>
+<a name="wp1070864"> </a><p class="pBody">
+When thin client executes, it compares its build number with the value of TC_REQUIRES_BUILD_NUMBER.  If the value of this variable does not match the client's build number, the automatic update process is initiated.  For example, suppose you have a patched version of the thin client containing some enhancements needed by your application, and you want to use the automatic update feature to deliver the patched thin client to users.  Run &quot;acuthin -v&quot; to get the build number of the patched thin client, then set TC_REQUIRES_BUILD_NUMBER to that build number in the runtime configuration file set up for your application.  Even though the version and protocol numbers have not changed, the different build number triggers the automatic update.  Note that if the value of TC_REQUIRES_BUILD_NUMBER does not match either the old or the new thin client build number, the automatic update process is initiated each time the user launches the <b class="cBold">acuthin</b> executable.  
+</p>
+<a name="wp1070865"> </a><p class="pBody">
+The value of the TC_CHECK_INSTALLER_TIMESTAMP configuration variable determines whether the thin client compares the modification times of the installer files on the client and on the server.  If this variable is set to &quot;1&quot; (on, true, yes) and the modification time of the client file is older than the time of the server file, the automatic update process is initiated.  If the installer file does not exist on the client, then the comparison is made with the modification time of the thin client executable (<b class="cBold">acuthin</b>) currently running.  The default value for this variable is &quot;0&quot; (off, false, no).  To use this automatic update method, you should ensure that your client and server clocks are synchronized to avoid unnecessary automatic updates.  Times are converted to UTC (Coordinated Universal Time)-formerly known as Greenwich Mean Time (GMT)-so the comparison works across world time zones.  
+</p>
+<a name="wp1070866"> </a><p class="pBody">
+The &quot;--testautoupdate&quot; <b class="cBold">acuthin</b> command line option lets you test the automatic update feature with your configuration.  You need to specify a server, port number, and alias when you use this option.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

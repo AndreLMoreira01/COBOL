@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.2.5  RECORD-POSITION</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3512.htm">5.2  Data Names</a> &gt; </p>
+<a name="wp1034705"> </a><h2 class="pHeading2">
+5.2.5  RECORD-POSITION
+</h2>
+<a name="wp1034708"> </a><p class="pBody">
+The RECORD-POSITION construct allows you to refer to a data item by creating a numeric literal representing the location of the data item within a record.  
+</p>
+<a name="wp1034709"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">RECORD-POSITION</u> OF data-name<a name="wp1034710"> </a>
+</pre></div>
+<a name="wp1034711"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034712"> </a><div class="pSmartList1"><li>Data-name must refer to a data item with a level number of 01 through 50 or 77.  Data-name may be qualified, but may not be subscripted or reference modified.  </li></div>
+<a name="wp1034713"> </a><div class="pSmartList1"><li>The RECORD-POSITION phrase is allowed anywhere a numeric literal data item may appear. </li></div>
+</ol></div>
+<a name="wp1034714"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034715"> </a><div class="pSmartList1"><li>The RECORD-POSITION phrase creates a numeric literal whose value is the character position of data-name within its record, as follows:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1034716"> </a><div class="pSmartList2"><li>If data-name is a level 01 or 77 data item, then the value is &quot;1&quot;.</li></div>
+<a name="wp1034717"> </a><div class="pSmartList2"><li>Otherwise, the value is the character position of the start of data-name within its containing level 01 group item.  Character positions start numbering at &quot;1&quot;.</li></div>
+</ol></div>
+<a name="wp1034718"> </a><div class="pSmartList1"><li>If data-name refers to a table item, the value is computed from the first occurrence of that item.  </li></div>
+<a name="wp1034719"> </a><div class="pSmartList1"><li>The format of the resulting literal is the same as a PIC 9(9) DISPLAY data item.</li></div>
+</ol></div>
+<a name="wp1034720"> </a><h3 class="pHeadingRef">
+Code Examples 
+</h3>
+<a name="wp1034722"> </a><h3 class="pHeadingRef">
+Code example 1:
+</h3>
+<a name="wp1034723"> </a><p class="pBody">
+If you assume the following group item:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  GROUP-1.<a name="wp1034724"> </a>
+    03  ELEM-1  PIC X(10).<a name="wp1034725"> </a>
+    03  ELEM-2  PIC X(10).<a name="wp1034726"> </a>
+    03  GROUP-2.<a name="wp1034727"> </a>
+        05  ELEM-3<a name="wp1034728"> </a>
+            OCCURS 10 TIMES  PIC X(10).<a name="wp1034729"> </a>
+        05  ELEM-4  PIC X(10).<a name="wp1034730"> </a>
+</pre></div>
+<a name="wp1034731"> </a><p class="pBody">
+then, the following procedure division code:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+DISPLAY RECORD-POSITION OF ELEM-1, CONVERT, LEFT<a name="wp1034732"> </a>
+DISPLAY RECORD-POSITION OF ELEM-2, CONVERT, LEFT<a name="wp1034733"> </a>
+DISPLAY RECORD-POSITION OF ELEM-3, CONVERT, LEFT<a name="wp1034734"> </a>
+DISPLAY RECORD-POSITION OF ELEM-4, CONVERT, LEFT<a name="wp1034735"> </a>
+</pre></div>
+<a name="wp1034736"> </a><p class="pBody">
+would produce the following output:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+1<a name="wp1034737"> </a>
+11<a name="wp1034738"> </a>
+21<a name="wp1034739"> </a>
+121<a name="wp1034740"> </a>
+</pre></div>
+<a name="wp1034741"> </a><h3 class="pHeadingRef">
+Code example 2:
+</h3>
+<a name="wp1034743"> </a><p class="pBody">
+The RECORD-POSITION construct is particularly useful with the DATA-COLUMNS property of the list box and grid controls.  For example, in a list box control, you might have a line that reads:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+data-columns - (1, 13, 24, 33 )<a name="wp1034744"> </a>
+</pre></div>
+<a name="wp1034745"> </a><p class="pBody">
+changing the line to: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+data-columns = ( <a name="wp1034746"> </a>
+    record-position of data-key-1, <a name="wp1034747"> </a>
+    record-position of data-city, <a name="wp1034748"> </a>
+    record-position of data-state, <a name="wp1034749"> </a>
+    record-position of data-amount )<a name="wp1034750"> </a>
+</pre></div>
+<a name="wp1034751"> </a><p class="pBody">
+makes it easier to understand. With this syntax, changes to the record format do not need to be echoed in the data-columns format, so this is also easier to maintain.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

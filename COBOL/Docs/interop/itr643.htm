@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>6.5.2.3  Shutting down the runtime</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr638.htm">6.5  Calling COBOL From C Programs</a> &gt; <a href="itr640.htm">6.5.2  Calling the Runtime From a C Main Program</a> &gt; </p>
+<a name="wp1122360"> </a><h2 class="pHeading3">
+6.5.2.3  Shutting down the runtime
+</h2>
+<a name="wp1122361"> </a><p class="pBody">
+You can halt the runtime from COBOL by executing a STOP RUN statement and the runtime terminates normally.  Note that this action calls the user-supplied C routine called <b class="cBold">Shutdown</b> found in &quot;sub.c&quot;.  
+</p>
+<a name="wp1122362"> </a><p class="pBody">
+To halt the runtime from C, call the following routine:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+void<a name="wp1122363"> </a>
+acu_shutdown( place_cursor )<a name="wp1131731"> </a>
+int     place_cursor;<a name="wp1131824"> </a>
+</pre></div>
+<a name="wp1122364"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1122365"> </a><p class="pBody">
+The following C program calls a single COBOL routine once, passing it one argument.  After the COBOL routine returns, it cancels that program and halts.  While it is not necessary to cancel the program in this example, the code is shown for completeness.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#include &lt;stdio.h&gt;<a name="wp1153845"> </a>
+#include &quot;sub.h&quot;<a name="wp1153846"> </a>
+main( argc, argv )<a name="wp1153847"> </a>
+int     argc;<a name="wp1132015"> </a>
+char    *argv[];<a name="wp1131952"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+{<a name="wp1131951"> </a>
+struct a_cobol_info cblinfo; <a name="wp1131950"> </a>
+Argument cblargs[1]; <a name="wp1122368"> </a>
+acu_initv(argc, argv);<a name="wp1145395"> </a>
+cblargs[0].a_address = &quot;Hello World&quot;; <a name="wp1122369"> </a>
+cblargs[0].a_length = 11; <a name="wp1122370"> </a>
+memset(&amp;cblinfo, 0, sizeof(cblinfo)); <a name="wp1122371"> </a>
+cblinfo.a_cobol_info_size = sizeof(cblinfo); <a name="wp1131949"> </a>
+cblinfo.pgm_name = &quot;cblprog&quot;; <a name="wp1131948"> </a>
+cblinfo.num_params = 1; <a name="wp1122372"> </a>
+cblinfo.params = cblargs; <a name="wp1122373"> </a>
+acu_cobol(&amp;cblinfo);   <a name="wp1122374"> </a>
+acu_cancel( &quot;cblprog&quot; );<a name="wp1122375"> </a>
+acu_shutdown( 0 );<a name="wp1122376"> </a>
+exit( 0 );<a name="wp1122377"> </a>
+</pre></div>
+}<a name="wp1122378"> </a>
+</pre></div>
+<a name="wp1122379"> </a><p class="pBody">
+A simple example of &quot;cblprog&quot; might be:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+identification division.<a name="wp1122380"> </a>
+program-id.  cblprog.<a name="wp1132108"> </a>
+data division.<a name="wp1122381"> </a>
+linkage section.<a name="wp1132201"> </a>
+77   hello-world     pic x(11).<a name="wp1132294"> </a>
+procedure division using hello-world.<a name="wp1122382"> </a>
+main-logic.<a name="wp1132387"> </a>
+     display hello-world.<a name="wp1132480"> </a>
+     exit program.<a name="wp1132573"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

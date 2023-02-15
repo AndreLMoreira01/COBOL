@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:01:15" />
+  <title>5.2.30  TRANSFORM Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch5-dosv.htm">Chapter 5:  IBM DOS/VS COBOL Conversions</a> &gt; <a href="ch5-dos3.htm">5.2  ACUCOBOL-GT and IBM DOS/VS COBOL-Specific Features</a> &gt; </p>
+<a name="wp1035137"> </a><h2 class="pHeading2">
+5.2.30  TRANSFORM Statement
+</h2>
+<a name="wp1035140"> </a><p class="pBody">
+IBM DOS/VS COBOL has a TRANSFORM statement with the following syntax:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">TRANSFORM</u>  identifier-1  CHARACTERS <u class="cUnderline">FROM</u> pattern-1 <u class="cUnderline">TO</u> pattern-2<a name="wp1035141"> </a>
+</pre></div>
+<a name="wp1035142"> </a><p class="pBody">
+Each pattern is one of the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ZERO<a name="wp1035143"> </a>
+ZEROS<a name="wp1035144"> </a>
+ZEROES<a name="wp1035145"> </a>
+SPACE<a name="wp1035146"> </a>
+SPACES<a name="wp1035147"> </a>
+QUOTE<a name="wp1035148"> </a>
+QUOTES<a name="wp1035149"> </a>
+LOW-VALUE<a name="wp1035150"> </a>
+LOW-VALUES<a name="wp1035151"> </a>
+HIGH-VALUE<a name="wp1035152"> </a>
+HIGH-VALUES<a name="wp1035153"> </a>
+nonnumeric-literal<a name="wp1035154"> </a>
+identifier-2<a name="wp1035155"> </a>
+</pre></div>
+<a name="wp1035156"> </a><p class="pBody">
+Here <em class="cEmphasis">identifier-2</em> must not be more than 255 characters long.  If it is more than 255 characters long, the results in IBM DOS/VS COBOL are undefined; in ACUCOBOL-GT only the first 255 characters are used.
+</p>
+<a name="wp1035157"> </a><p class="pBody">
+Each figurative constant (ZERO, ZEROS, ZEROES, SPACE, SPACES, QUOTE, QUOTES, LOW-VALUE, LOW-VALUES, HIGH-VALUE and HIGH-VALUES) is equivalent to a one-character nonnumeric literal containing the associated character. For example, ZERO is equivalent to '0' and HIGH-VALUE is equivalent to x&quot;FF&quot;.
+</p>
+<a name="wp1035158"> </a><p class="pBody">
+One of the following conditions must hold:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035159"> </a><div class="pSmartList1"><li><em class="cEmphasis">pattern-1</em> and <em class="cEmphasis">pattern-2</em> are the same length;</li></div>
+<a name="wp1035160"> </a><div class="pSmartList1"><li><em class="cEmphasis">pattern-1</em> contains more than one character and <em class="cEmphasis">pattern-2</em> contains exactly one character.</li></div>
+</ol></div>
+<a name="wp1035161"> </a><p class="pBody">
+The effect of the TRANSFORM statement on the contents of <em class="cEmphasis">identifier-1</em> is undefined if neither of these conditions holds. The effect on the contents of <em class="cEmphasis">identifier-1</em> is also undefined if <em class="cEmphasis">pattern-1</em> contains duplicate characters.  However, the statement finishes in a reasonable time and control passes normally to the next statement in any case.
+</p>
+<a name="wp1035162"> </a><p class="pBody">
+At run time, every character in <em class="cEmphasis">identifier-1</em> that matches a character in <em class="cEmphasis">pattern-1</em> is replaced by the character in the corresponding position in <em class="cEmphasis">pattern-2</em>.  If there is no corresponding position, because <em class="cEmphasis">pattern-2</em> is shorter than <em class="cEmphasis">pattern-1</em>, then it is replaced by the sole character in <em class="cEmphasis">pattern-2</em>.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

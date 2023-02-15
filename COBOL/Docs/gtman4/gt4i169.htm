@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-SET-DATA-COLUMNS</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1089476"> </a><h2 class="pHeading3">
+WINPRINT-SET-DATA-COLUMNS
+</h2>
+<a name="wp1040904"> </a><p class="pBody">
+This operation code defines columns in the data when printing with a proportionally spaced font.  
+</p>
+<a name="wp1040911"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040912"> </a>
+    USING WINPRINT-SET-DATA-C0LUMNS, CHARACTER-POSITION<a name="wp1040913"> </a>
+    GIVING RESULT<a name="wp1040914"> </a>
+</pre></div>
+<a name="wp1040915"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040916"> </a><p class="pBody">
+<b class="cBold">CHARACTER-POSITION</b>   Numeric value 
+</p>
+<a name="wp1040917"> </a><p class="pBody">
+One or more numeric values indicating each position that starts a new column of data.
+</p>
+<a name="wp1040918"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040919"> </a><p class="pBody">
+This is one of two op-codes that control the &quot;input&quot; by specifying the zones in the print line.  (This is similar to the DATA-COLUMNS property of the LIST-BOX control.)
+</p>
+<a name="wp1040920"> </a><p class="pBody">
+Specify one or more numeric values that represent the character position from the left side of the print record that begins a new column of data.  Data starting at this column and extending to the beginning of the next column (or end of the print record) will be printed together as a single column on the page.  The first column always starts at position &quot;1&quot; of the print record.  Initially, there is only one data column, which starts from the beginning of the print record and extends to the end of the print record.   
+</p>
+<a name="wp1040921"> </a><p class="pBody">
+Column specifications are additive.  If you call WIN$PRINTER with this operation multiple times, all the columns specified are combined and appear in the resulting printout.  Column specifications last until they are cleared, or the process that is running shuts down.  See WINPRINT-CLEAR-DATA-COLUMNS for information on how to clear column specifications. 
+</p>
+<a name="wp1040922"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The current column definitions apply to any report being printed.  One advantage to this is that you can change the column definitions mid-report.  To do this, simply change them before writing the print record.  
+<hr />
+</p>
+<a name="wp1040923"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1040924"> </a><p class="pBody">
+In the following example, the print line of a three column report is made ready for printing using a proportional font:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  PRINT-RECORD.<a name="wp1040925"> </a>
+    03  CUST-NAME     PIC X(30).<a name="wp1040926"> </a>
+    03  FILLER        PIC X.<a name="wp1040927"> </a>
+    03  CUST-PHONE    PIC X(15).<a name="wp1040928"> </a>
+    03  FILLER        PIC X.<a name="wp1040929"> </a>
+    03  CUST-BALANCE  PIC ZZZ,ZZZ,ZZZ.99-.<a name="wp1040930"> </a>
+<a name="wp1040931"> </a>
+CALL &quot;WIN$PRINTER&quot; USING WINPRINT-SET-DATA-COLUMNS, 31, 47.<a name="wp1040932"> </a>
+</pre></div>
+<a name="wp1040933"> </a><p class="pBody">
+Note that this is the same as the following:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot; USING WINPRINT-SET-DATA-COLUMNS, <a name="wp1040934"> </a>
+     RECORD-POSITION OF CUST-PHONE, <a name="wp1040935"> </a>
+     RECORD-POSITION OF CUST-BALANCE.<a name="wp1040936"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

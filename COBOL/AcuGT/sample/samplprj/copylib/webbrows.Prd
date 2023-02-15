@@ -1,0 +1,190 @@
+      * webbrows.prd
+      * webbrows.prd is generated from C:\Acucorp\Acucbl720\AcuGT\sample\samplprj\webbrows.Psf
+      * This is a generated file. DO NOT modify this file directly.      
+
+       Acu-Initial-Routine.
+      *    Before-Init
+      * get system information
+           ACCEPT System-Information FROM System-Info
+      * get terminal information
+           ACCEPT Terminal-Abilities FROM Terminal-Info
+      * set font
+           PERFORM Acu-Init-Font
+      * load bitmap
+           PERFORM Acu-Init-Bmp
+      * open file
+           PERFORM Acu-Open-Files
+      *    After-Init
+           .
+
+       Acu-Init-Font.
+      * font setting
+           INITIALIZE WFONT-DATA Times-New-Roman10B
+           MOVE 10 TO WFONT-SIZE
+           MOVE "Times New Roman" TO WFONT-NAME
+           SET WFCHARSET-DONT-CARE TO TRUE
+           SET WFONT-BOLD TO TRUE
+           SET WFONT-ITALIC TO FALSE
+           SET WFONT-UNDERLINE TO FALSE
+           SET WFONT-STRIKEOUT TO FALSE
+           SET WFFAMILY-DONT-CARE TO TRUE
+           SET WFONT-FIXED-PITCH TO FALSE
+           CALL "W$FONT" USING WFONT-GET-FONT, Times-New-Roman10B, 
+              WFONT-DATA
+           .
+
+       Acu-Init-Bmp.
+      * bitmap loading
+           COPY RESOURCE "smpl-arrows.bmp".
+           CALL "W$BITMAP" USING WBITMAP-LOAD "smpl-arrows.bmp", GIVING 
+              smpl-arrows-bmp
+           .
+
+       Acu-Exit-Rtn.
+           PERFORM Acu-Close-Files
+      *    After-Program
+           EXIT PROGRAM
+           STOP RUN
+           .
+
+       Acu-Open-Files.
+      *    Before-Open
+           PERFORM Acu-Open-CUSTOMER-FILE
+      *    After-Open
+           .
+
+       Acu-Open-CUSTOMER-FILE.
+      *    Before-Open
+           OPEN I-O CUSTOMER-FILE 
+           IF FILE-STATUS = "35"
+              OPEN OUTPUT CUSTOMER-FILE
+              IF FILE-STATUS(1:1) = "0"
+                 CLOSE CUSTOMER-FILE
+                 OPEN I-O CUSTOMER-FILE
+              END-IF
+           END-IF
+           IF NOT FILE-STATUS(1:1) = "0"
+              PERFORM Acu-Extended-File-Status
+              GO TO Acu-Exit-Rtn
+           END-IF
+      *    After-Open
+           .
+
+       Acu-CUST-Screen-Routine.
+      *    Before-Routine
+           PERFORM Acu-CUST-Screen-Scrn
+           PERFORM Acu-CUST-Screen-Proc
+      *    After-Routine
+           .
+
+       Acu-CUST-Screen-Scrn.
+           PERFORM Acu-CUST-Screen-Create-Win
+           PERFORM Acu-CUST-Screen-Init-Data
+           .
+
+       Acu-CUST-Screen-Create-Win.
+      *    Before-Create
+      * display screen
+              DISPLAY Standard GRAPHICAL WINDOW
+                 LINES 44.70, SIZE 45.60, CELL HEIGHT 10, 
+                 CELL WIDTH 10, AUTO-MINIMIZE, COLOR IS 65793, 
+                 CONTROL FONT default-font, ERASE, LABEL-OFFSET 0, 
+                 LINK TO THREAD, MIN-LINES 44.70, MIN-SIZE 45.50, 
+                 MODELESS, RESIZABLE, NO SCROLL, WITH SYSTEM MENU, 
+                 TITLE "Acucorp Web Browser Sample", TITLE-BAR, 
+                 NO WRAP, 
+                 HANDLE IS CUSTOMER-SF-1-Handle
+      * toolbar
+           DISPLAY CUST-Screen UPON CUSTOMER-SF-1-Handle
+           PERFORM CUST-Screen-Aft-Create
+           .
+
+       Acu-CUST-Screen-Init-Data.
+      *    Before-Initdata
+           PERFORM Acu-CompanyContact-Combo-Content
+      *    After-Initdata
+           .
+      * CUST-Screen
+       Acu-CUST-Screen-Proc.
+           PERFORM UNTIL Exit-Pushed
+              ACCEPT CUST-Screen  
+                 ON EXCEPTION PERFORM Acu-CUST-Screen-Evaluate-Func
+              END-ACCEPT
+           END-PERFORM
+           DESTROY CUSTOMER-SF-1-Handle
+           INITIALIZE Key-Status
+           .
+
+      * CompanyContact-Combo
+       Acu-CompanyContact-Combo-Content.
+           MODIFY CompanyContact-Combo, MASS-UPDATE = 1, RESET-LIST = 1
+           MODIFY CompanyContact-Combo, ITEM-TO-ADD = TABLE 
+              CUSTOMER-CM-6-Container
+           MODIFY CompanyContact-Combo, MASS-UPDATE = 0
+           MODIFY CompanyContact-Combo, VALUE WS-CUSTOMER-CONTACT
+           .
+
+      * CUST-Screen
+       Acu-CUST-Screen-Evaluate-Func.
+           EVALUATE TRUE
+              WHEN Exit-Pushed
+                 PERFORM Acu-CUST-Screen-Exit
+              WHEN Event-Occurred
+                 IF Event-Type = Cmd-Close
+                    PERFORM Acu-CUST-Screen-Exit
+                 END-IF
+           END-EVALUATE
+           MOVE 1 TO Accept-Control
+           .
+
+       Acu-Close-Files.
+      *    Before-Close
+           CLOSE CUSTOMER-FILE
+      *    After-Close
+           .
+
+      * Customer
+
+       Acu-Customer-Read.
+           READ CUSTOMER-FILE WITH NO LOCK 
+              KEY CUSTOMER-NAME OF CUSTOMER-FILE
+           PERFORM Customer-After-Read
+           .
+
+       Acu-Customer-Read-Next.
+           READ CUSTOMER-FILE NEXT WITH NO LOCK
+           PERFORM Customer-After-Read
+           .
+
+       Acu-Customer-Read-Prev.
+           READ CUSTOMER-FILE PREVIOUS WITH NO LOCK
+           PERFORM Customer-After-Read
+           .
+
+       Acu-Customer-Rec-Write.
+           WRITE CUSTOMER-RECORD
+           .
+
+       Acu-Customer-Rec-Rewrite.
+           REWRITE CUSTOMER-RECORD
+           .
+
+       Acu-Customer-Rec-Delete.
+           DELETE CUSTOMER-FILE
+           .
+
+       Acu-Customer-Delete.
+           DELETE FILE CUSTOMER-FILE
+           . 
+
+       Acu-CUST-Screen-Exit.
+      * for main screen
+           MOVE 101 TO Acu-Msg-Id
+           PERFORM Acu-Show-Msg
+           IF Acu-Return-Value = 1
+              SET Exit-Pushed TO TRUE
+           ELSE
+              INITIALIZE Key-Status
+           END-IF
+           .
+

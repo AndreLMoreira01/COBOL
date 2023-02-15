@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:45:44" />
+  <title>6.4.2  Adding an Access Record</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv6.htm">Chapter 6: System Security</a> &gt; <a href="srv65.htm">6.4  Using the Access File Manager</a> &gt; </p>
+<a name="wp1035364"> </a><h2 class="pHeading2">
+6.4.2  Adding an Access Record
+</h2>
+<a name="wp1041538"> </a><p class="pBody">
+To add an access record, you must assign a value to the five access record fields:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1041557"> </a><div class="pSmartList1"><li>Client Machine Name</li></div>
+<a name="wp1042608"> </a><p class="pIndented1">
+The &quot;*&quot; symbol indicates that the record will match all clients for which there are no other records.  (This will be the default setting for all clients that do not have a specific record.)  You can also enter the official machine name for a client machine.  You cannot use alias names in this field.
+</p>
+<a name="wp1041561"> </a><div class="pSmartList1"><li>Client Username</li></div>
+<a name="wp1041683"> </a><p class="pIndented1">
+If you do not specify a client username, leaving the field blank, any user name will match.  For Windows clients that do <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">not</span> define a USERNAME or USER environment variable, this field should be left blank or set to &quot;USER&quot; (see <a  href="srv64.htm#wp1041023">section 6.3, &quot;Access Records&quot;</a>).
+</p>
+<a name="wp1041572"> </a><div class="pSmartList1"><li>Local Username</li></div>
+<a name="wp1041930"> </a><p class="pIndented1">
+The Local Username is the name that AcuServer will use when executing access requests for requesters that match the first two fields of this record.  
+</p>
+<a name="wp1042693"> </a><p class="pIndented1">
+Note that if the Local Username is not a valid name on the server, the server will attempt to use the value of the server configuration variable DEFAULT_USER (if defined).  If DEFAULT_USER is not defined, the connection will be refused (AcuServer returns an error 9D,103).
+</p>
+<a name="wp1042717"> </a><p class="pIndented1">
+If the local username is the same as the client user name, leave the local username entry blank.
+</p>
+<a name="wp1041581"> </a><div class="pSmartList1"><li>Password</li></div>
+<a name="wp1042091"> </a><p class="pIndented1">
+Inclusion of a password is optional.  AcuServer ignores any password included in the AcuAccess record when you use the Windows NT security NAMED-PIPE option rather than AcuServer system security.
+</p>
+<a name="wp1042080"> </a><p class="pIndented1">
+Passwords can be up to sixty-four characters long.  The set of allowable characters includes: upper and lower case letters, numbers, the space character and most special characters (all ASCII characters numbered 32-126).  Delete, escape and other non-printable characters are not allowed.
+</p>
+<a name="wp1046733"> </a><p class="pIndented1">
+To prevent a user from attempting to log in to AcuServer, assign the password &quot;*&quot;.  The excluded user will receive an error 9D,103, indicating that access is denied.
+</p>
+<a name="wp1041590"> </a><div class="pSmartList1"><li>Umask</li></div>
+<a name="wp1042185"> </a><p class="pIndented1">
+The umask is a three-digit code that sets the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">read and write </span>permissions on new files created for the requester by AcuServer.  For more about umask see the end of <a  href="srv26.htm#wp1039679">section 2.4.1</a> and your UNIX operating system documentation.
+</p>
+</ul></div>
+<a name="wp1042567"> </a><p class="pBody">
+If you accept all of the defaults when creating the record and you are using the command line, the entry will look like:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Client Machine Name    Client Username    Local Username    Password    Umask<a name="wp1042568"> </a>
+-------------------    ---------------    --------------    --------    -----<a name="wp1044703"> </a>
+*                                         &lt;same as client&gt;  &lt;none&gt;      002<a name="wp1042569"> </a>
+</pre></div>
+<a name="wp1042573"> </a><p class="pBody">
+If you are using the ACP and accept all of the defaults, the entry will look like:</p><div><img src="images/access_p.gif" height="67" width="432" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1042574"> </a><p class="pBody">
+This is the most permissive access record that can be created.  This record will match any client and allow any user to connect to the server, provided that either:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1042575"> </a><div class="pSmartList1"><li>the user has an account of the same name on the server</li></div>
+<a name="wp1042576"> </a><div class="pSmartList1"><li>the DEFAULT_USER variable is defined with the name of a valid user</li></div>
+</ul></div>
+<a name="wp1042577"> </a><p class="pBody">
+Through inclusion or exclusion of wild cards, named entries, passwords and umasks, it is possible to construct a server access file that allows open, unrestricted access, rigid, tightly controlled access, or most any level in between.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

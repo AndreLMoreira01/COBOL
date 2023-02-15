@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.8.6  Thread Pausing</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt1641.htm">6.8  Multiple Execution Threads </a> &gt; </p>
+<a name="wp1033329"> </a><h2 class="pHeading2">
+6.8.6  Thread Pausing
+</h2>
+<a name="wp1033331"> </a><p class="pBody">
+There are some conditions in which all of the threads in your program will pause.  One reason this occurs is when some event in the system causes the entire runtime to suspend.  The pause ends when the runtime regains control.  The main cases where this occurs are: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033332"> </a><div class="pSmartList1"><li>when moving any of the application's windows with the mouse.  The host system manages this task.</li></div>
+<a name="wp1033333"> </a><div class="pSmartList1"><li>when a message box is displayed (by calling the &quot;MESSAGE&quot; utility program or DISPLAY MESSAGE BOX).  The message box is managed by the host system.  You can use this to your advantage by using message boxes to report critical errors. The message box requires that the user respond to the box before any part of the application will resume.</li></div>
+</ol></div>
+<a name="wp1033334"> </a><p class="pBody">
+Although the host system does not handle these tasks in character-based versions of the runtime, architectural similarities between the character and graphical versions cause these tasks to produce the same effect on character systems. 
+</p>
+<a name="wp1033335"> </a><p class="pBody">
+Another reason for all threads in your multithread program to pause is waiting for locked records.  You can configure the runtime to automatically wait for locked records by either setting the WAIT-FOR-LOCKS configuration option, or by compiling with the RM/COBOL compatibility (&quot;-cr&quot; option) and omitting a declarative for this particular file.  When you do this in a multi-threaded program, all threads are frozen while waiting for a locked record to unlock.  This occurs because the runtime employs a very tight wait loop that does not allow other threads to continue running.
+</p>
+<a name="wp1033336"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You can avoid this by writing your own wait loop.  Simply turn off the runtime option and perform the affected file operations in a loop until the file status is not &quot;99&quot;.  For efficiency, we recommend calling &quot;C$SLEEP&quot; for at least one second between file operations when waiting for a lock.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

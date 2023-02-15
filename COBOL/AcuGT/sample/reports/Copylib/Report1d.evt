@@ -1,0 +1,62 @@
+      * Report1d.evt
+      * Report1d.evt is generated from C:\Acucorp\Acucbl720\AcuGT\sample\reports\Report1d.Psf
+      * This is a generated file. DO NOT modify this file directly.
+      
+      ***   start event editor code   ***
+      *
+       Report1d-MaleRb-BeforePrint.
+            if Sales-Gender = "M"
+              move 1 to PR-Gender-M
+              move 0 to PR-Gender-F
+            else
+              move 0 to PR-Gender-M
+              move 1 to PR-Gender-F
+            end-if
+           .
+      *
+       Report1d-FemaleRb-BeforePrint.
+            if Sales-Gender = "F"
+              move 1 to PR-Gender-F
+              move 0 to PR-Gender-M
+            else
+              move 0 to PR-Gender-F
+              move 1 to PR-Gender-M
+            end-if
+           .
+      *
+       Report1d-HeavySalesEF-BeforePrint.
+            Move Heavy-Equipment-Sales to PR-Heavy-Sales
+           .
+      *
+       Report1d-SuppliesSalesEF-BeforePrint.
+            Move Supplies-Sales to PR-Supplies-Sales           
+           .
+      *
+       Report1d-QuotaCb-BeforePrint.
+            Add Heavy-Equipment-Sales to Supplies-Sales
+              giving Total-Salesperson-Sales.
+            If Total-Salesperson-Sales > Sales-Quota
+              move 1 to PR-Quota
+            else 
+              move 0 to PR-Quota
+            end-if
+           .
+
+       
+      *
+       Before-Master-Print-Loop.
+            MOVE LOW-VALUES TO SALES-KEY.
+            START Salesdata KEY > SALES-KEY.
+            READ Salesdata NEXT RECORD
+              AT END
+                MOVE "10" TO SALESDATA-STATUS
+            END-READ
+           .
+      *
+       End-Master-Print-Loop.
+            READ Salesdata NEXT RECORD
+              AT END
+                MOVE "10" TO SALESDATA-STATUS
+            END-READ
+           .
+

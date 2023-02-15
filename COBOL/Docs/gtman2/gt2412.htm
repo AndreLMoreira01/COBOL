@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:31" />
+  <title>4.6.3  Coordinate Space Solutions</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt24.htm">Chapter 4:  Supporting Concepts and Related Issues</a> &gt; <a href="gt249.htm">4.6  Coordinates</a> &gt; </p>
+<a name="wp1026230"> </a><h2 class="pHeading2">
+4.6.3  Coordinate Space Solutions
+</h2>
+<a name="wp1026232"> </a><p class="pBody">
+Ideally, you want the majority of your positioning coordinates to be integer values.  This is easier to work with and improves portability.  While you will undoubtedly encounter cases where you need to use non-integer coordinates, their use should be minimized.
+</p>
+<a name="wp1026233"> </a><p class="pBody">
+The simplest solution is to use the same font for your graphical objects as you use in the text layer.  Then, if you also use unboxed entry fields, you have eliminated both trouble points.  The problem with this solution is that it looks wrong when compared to other graphical programs; the font is fixed-pitch and the boxes are missing.  
+</p>
+<a name="wp1026234"> </a><p class="pBody">
+A more sophisticated solution is to change the way that coordinates are measured.  If you can set the coordinate space so that your controls fall on integral coordinates, then the problem is solved.  ACUCOBOL-GT provides a way to do this.  When you create a window (including the main application window), you can set its <em class="cEmphasis">cell</em> size with the CELL phrase of the DISPLAY WINDOW verb.  When you do this, you specify your own line and column sizes.  The phrase allows you to have the runtime measure a graphical object and set the coordinate space appropriately.  Typically, you would measure an entry field with the font you want to use and have the runtime lay out the screen accordingly.  For details on the CELL phrase, see the DISPLAY FLOATING WINDOW verb in section 6.6, Book 3, <em class="cEmphasis">Reference Manual</em>.  
+</p>
+<a name="wp1026236"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>When you change the coordinate space, you affect both the text and graphical layers.  Because of this, you have some restrictions if you are going to use the text layer.  In particular, you may not make a cell smaller than a character, nor may you make it wider than a character (it can be taller).  
+<hr />
+</p>
+<a name="wp1026237"> </a><p class="pBody">
+Here are some general guidelines to apply when deciding how to set up your coordinate space:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1026238"> </a><div class="pSmartList1"><li>If you plan to mix graphical objects with classical textual displays, use the default cell size that is the size of the text-layer font.  In this case, the overriding consideration is the placement of the text in cells.  The graphical objects will have to be specified with whatever coordinates work.  You should try to keep the number of graphical objects to a minimum, or consider converting to an entirely graphical screen if you want to mix in a large number of graphical elements.  </li></div>
+<a name="wp1026239"> </a><div class="pSmartList1"><li>If you anticipate using entry fields heavily (as would be typical in a conversion of a text-based application), you should set up the coordinate space based on the size of an entry field.  This makes the placement of label/entry-field pairs very easy.  Note that the CELL phrase allows you to specify OVERLAPPED (vertically adjacent entry fields share a common border) or SEPARATE (a little space placed between entry fields).  You can choose whichever style you think looks better.  Here is an example CELL phrase:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CELL SIZE = ENTRY-FIELD FONT MY-FONT, SEPARATE<a name="wp1026241"> </a>
+</pre></div>
+<a name="wp1026242"> </a><div class="pSmartList1"><li>If you will be using a mix of graphical objects, but only a few entry fields, you should base the coordinate space on the size of a label.  This lets you measure with the correct font, but ignores the overhead associated with entry fields.  This setting is closest to what other graphical-design systems use (typically, these use a coordinate cell size that is some fraction of the size of the system's font).  A typical CELL phrase would be:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CELL SIZE = LABEL FONT MY-FONT<a name="wp1026244"> </a>
+</pre></div>
+<a name="wp1026245"> </a><p class="pIndented1">
+Another way to get the same result is to use the GRAPHICAL phrase with the DISPLAY WINDOW verb. For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DISPLAY STANDARD GRAPHICAL WINDOW<a name="wp1026246"> </a>
+</pre></div>
+<a name="wp1026247"> </a><div class="pSmartList1"><li>If you want to compute exact pixel coordinates (for very specialized displays), you should use a cell height and width of &quot;10&quot;.  Then each tenth of a cell (&quot;.1&quot;) corresponds to one pixel.  </li></div>
+<a name="wp1026248"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>You should not use &quot;1&quot; as the cell height and width because this produces a text-layer memory map that is too large.  Applications that use &quot;1&quot; as a measure are not portable to non-graphical systems. 
+<hr />
+</p>
+<a name="wp1026250"> </a><div class="pSmartList1"><li>Finally, it is possible to set up your graphical control sizes based entirely on the pixel count.  You can specify the `x' and `y' coordinates, LINES, and SIZE of a control in pixels.  This method allows you to always have your positioning coordinates as integer values, which is nice when you need absolute positioning.  You gain better control of your screen layouts, and screens based on different cell sizes can easily be accommodated by the screen designer.  </li></div>
+<a name="wp1026251"> </a><p class="pIndented1">
+A sample DISPLAY statement would look like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DISPLAY PUSH-BUTTON    LINE 300 PIXEL(S)<a name="wp1026252"> </a>
+                       COL  225 PIXEL(S)<a name="wp1026428"> </a>
+                       LINES 30 PIXEL(S)<a name="wp1026432"> </a>
+                       SIZE 120 PIXEL(S).<a name="wp1026433"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1026253"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Pixel coordinates are relative to the size of the target window.  Lowest legal value is `1', and the highest legal value is equal to the largest resolution covered by the target window.  If that value is exceeded, the property defaults to the closest legal value.
+<hr />
+</p>
+<a name="wp1026254"> </a><p class="pBody">
+It is important to set your coordinate space early in your work.  If you lay out screens and then change the coordinate system, all of your previously designed screens will have to be reworked.  
+</p>
+<a name="wp1026255"> </a><p class="pBody">
+Because of the fundamental differences in the coordinate systems of character and graphical systems, ACUCOBOL-GT provides two sets of statement phrases with which to specify control size and positioning.  For a discussion of these phrases, see <a  href="gt236.htm#wp1026187">section 3.5, &quot;The Character Coordinate Phrases.&quot;</a> 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

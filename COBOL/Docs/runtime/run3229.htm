@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:21:17" />
+  <title>SHARED_LIBRARY_LIST*</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run3.htm"><br />Chapter 3: Runtime Configuration File</a> &gt; <a href="run33.htm">3.2  Configuration File Entries</a> &gt; </p>
+<a name="wp1070346"> </a><h2 class="pHeading2">
+SHARED_LIBRARY_LIST*
+</h2>
+<a name="wp1070348"> </a><p class="pBody">
+This variable allows you to specify the names of UNIX/Linux shared object libraries or Windows DLLs.  
+</p>
+<a name="wp1070349"> </a><p class="pBody">
+SHARED_LIBRARY_LIST can be set in one of three ways:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1070350"> </a><div class="pSmartList1"><li>In the environment</li></div>
+<a name="wp1070351"> </a><div class="pSmartList1"><li>In the runtime configuration file</li></div>
+<a name="wp1070352"> </a><div class="pSmartList1"><li>Programmatically with the SET ENVIRONMENT statement</li></div>
+</ol></div>
+<a name="wp1070353"> </a><p class="pBody">
+The runtime loads the listed objects on program startup or as the result of a SET ENVIRONMENT statement.  Names must be delimited by spaces, colons (UNIX/Linux), or semicolons (Windows).  
+</p>
+<a name="wp1070354"> </a><p class="pBody">
+With DLLs, you can specify both the name of the DLL and the calling convention to use.  Any calling convention specified this way overrides the DLL_CONVENTION variable setting.  For information about specifying DLLs and calling conventions, see section 3.3.2, &quot;Loading DLLs with Configuration Variables,&quot; in<em class="cEmphasis"> A Guide to Interoperating with ACUCOBOL-GT</em>.
+</p>
+<a name="wp1070355"> </a><p class="pBody">
+You can also list objects without path information and use the SHARED_LIBRARY_PREFIX configuration variable to specify a set of directories that the runtime will search when attempting to load a shared library. 
+</p>
+<a name="wp1070356"> </a><p class="pBody">
+Once loaded, functions exported by these libraries can be called directly.  
+</p>
+<a name="wp1070357"> </a><p class="pBody">
+The SET ENVIRONMENT statement can be used to set SHARED_LIBRARY_LIST any number of times during program execution.  Each time it is set, the runtime loads the libraries listed.  Previously loaded libraries remain loaded.  Libraries loaded with SHARED_LIBRARY_LIST remain in memory until the process exits.  The CANCEL statement cannot be used to unload the library.
+</p>
+<a name="wp1070358"> </a><p class="pBody">
+On some systems, such as AIX, if the shared module is a member of an archive, you must specify the name of the member in parentheses after the name of the archive. For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SHARED_LIBRARY_LIST=&quot;/usr/opt/db2_08_01/lib/libdb2.a(shr.o)&quot;<a name="wp1070359"> </a>
+</pre></div>
+<a name="wp1070360"> </a><p class="pBody">
+SHARED_LIBRARY_LIST is like the runtime &quot;-y&quot; option, except that it does not require setting the SHARED_LIBRARY_EXTENSION variable, and unlike &quot;-y&quot;, you can mix &quot;.a&quot; and &quot;.so&quot; libraries in the list. 
+</p>
+<a name="wp1070361"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The SHARED_LIBRARY_LIST configuration variable does not load client-side DLLs for thin client applications that make calls using the CALL verb &quot;@[DISPLAY]:&quot; syntax. These applications must explicitly load the DLL by calling it with the CALL verb before calling a function within the DLL.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

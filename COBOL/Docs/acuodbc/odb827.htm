@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:34" />
+  <title>To install acudobcs as a service from the Windows command line</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb8.htm">Chapter 8: The AcuODBC Server Environment</a> &gt; <a href="odb817.htm">8.4  AcuODBC Server Functions</a> &gt; <a href="odb826.htm">8.4.2  Installing and Removing the acuodbcs Service (Windows only)</a> &gt; </p>
+<a name="wp1046322"> </a><h2 class="pHeading3">
+To install acudobcs as a service from the Windows command line
+</h2>
+<a name="wp1045902"> </a><p class="pBody">
+Use the command &quot;acuodbcs -install&quot; to install <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuodbcs</span> as a service from the Windows command line.
+</p>
+<a name="wp1045904"> </a><p class="pBody">
+Optional arguments to &quot;-install&quot; include:
+</p>
+<a name="wp1045936"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1047642"> </a>
+Option 
+
+</th>
+    <th><a name="wp1047644"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1047646"> </a><p class="pCellBody">
+server
+</p>
+</td>
+    <td><a name="wp1047648"> </a><p class="pCellBody">
+Specifies the name of the server machine.  If no server is specified, the server is assumed to be the local host.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1047650"> </a><p class="pCellBody">
+-depends
+</p>
+</td>
+    <td><a name="wp1047654"> </a><p class="pCellBody">
+Specifies any services that must be running before <b class="cBold">acuodbcs</b> can start.  This option can be repeated as many times as necessary, but it must precede any valid start options.  The <em class="cEmphasis">ServiceDependency</em> phrase is the actual name of the service that AcuODBC Server should depend on.
+</p>
+<a name="wp1047655"> </a><p class="pCellBody">
+If you want to add or modify dependencies for a currently installed instance of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuodbcs</span> <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">from the command line</span>, you must remove the service and re-install it with the new dependencies.
+</p>
+<a name="wp1047656"> </a><p class="pCellBody">
+You can make AcuODBC Server depend on a service group.  To do this, specify the name of the service group, preceded by a plus sign (+).  For example, if Alerter is the name of a service group you want to be started before <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuodbcs</span>, the command line is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+acuodbcs -install [server] -depends
+   +Alerter [any valid -start options]<a name="wp1047657"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1047659"> </a><p class="pCellBody">
+most &quot;-start&quot; options&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1047661"> </a><p class="pCellBody">
+Any &quot;-start&quot; option other than &quot;-f&quot; can be used for &quot;-install&quot;.   (Refer to &quot;<a  href="odb832.htm#wp1053745">Starting acuodbcs from the command line</a>&quot; for a list of options.)    These options are stored for service startup on this particular port.
+</p>
+<a name="wp1047669"> </a><p class="pCellBody">
+Installing a service on a particular port resets all startup options for the service on that port.
+</p>
+<a name="wp1047670"> </a><p class="pCellBody">
+If there are no options stored for a service, starting the server on a particular port automatically installs a service on that port and stores the options used.  In other words, you can install and run a service with one set of arguments and then occasionally run the service with different arguments by using &quot;acuodbcs -start&quot;.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

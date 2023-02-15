@@ -1,0 +1,16 @@
+       MOSTRA-MSG-ERRO.
+           MOVE 1 TO CA-MESSAGE-TYPE CA-MESSAGE-RESP
+           CALL "CAMESSAG"
+           CANCEL "CAMESSAG".
+
+       MOSTRA-MSG-ATENCAO.
+           MOVE 2 TO CA-MESSAGE-TYPE
+           MOVE 1 TO CA-MESSAGE-RESP
+           CALL "CAMESSAG"
+           CANCEL "CAMESSAG".
+
+       MOSTRA-MSG-MENSAGEM.
+           MOVE 3 TO CA-MESSAGE-TYPE
+           MOVE 1 TO CA-MESSAGE-RESP
+           CALL "CAMESSAG"
+           CANCEL "CAMESSAG".

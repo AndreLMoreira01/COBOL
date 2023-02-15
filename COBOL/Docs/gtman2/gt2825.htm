@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:15" />
+  <title>8.13  Menu Handling: Sample Code</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt28.htm">Chapter 8:  Menu Bars and Pop-up Menus</a> &gt; </p>
+<a name="wp1026816"> </a><h2 class="pHeading1">
+8.13  Menu Handling: Sample Code
+</h2>
+<a name="wp1026820"> </a><p class="pBody">
+The following code fragment constructs a menu that consists of two submenus and displays it, first saving any existing menu.          
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+78  ID-NEW                 VALUE 101.<a name="wp1026821"> </a>
+78  ID-OPEN                VALUE 102.<a name="wp1032996"> </a>
+78  ID-SAVE                VALUE 103.<a name="wp1032998"> </a>
+78  ID-SAVE-AS             VALUE 104.<a name="wp1033000"> </a>
+78  ID-EXIT                VALUE 105.<a name="wp1033002"> </a>
+78  ID-SAVE-SET            VALUE 201.<a name="wp1033004"> </a>
+78  ID-PASSWORD            VALUE 202.<a name="wp1033006"> </a>
+<a name="wp1033008"> </a>
+77  OLD-MENU               PIC S9(9) COMP-4.<a name="wp1033010"> </a>
+77  MAIN-MENU              PIC S9(9) COMP-4.<a name="wp1033012"> </a>
+77  SUBMENU                PIC S9(9) COMP-4.<a name="wp1033014"> </a>
+<a name="wp1033016"> </a>
+BUILD-MENU.<a name="wp1033018"> </a>
+* Create two empty menus and save their menu handles<a name="wp1033020"> </a>
+<a name="wp1033022"> </a>
+    CALL &quot;W$MENU&quot; USING WMENU-NEW.<a name="wp1033024"> </a>
+    MOVE RETURN-CODE TO MAIN-MENU.<a name="wp1033026"> </a>
+<a name="wp1033028"> </a>
+    CALL &quot;W$MENU&quot; USING WMENU-NEW.<a name="wp1033030"> </a>
+    MOVE RETURN-CODE TO SUBMENU.<a name="wp1033032"> </a>
+<a name="wp1033034"> </a>
+    IF MAIN-MENU = ZERO OR SUBMENU = ZERO<a name="wp1033036"> </a>
+        GO TO BUILD-MENU-EXIT.<a name="wp1033038"> </a>
+<a name="wp1033040"> </a>
+* Build &quot;File&quot; submenu<a name="wp1033042"> </a>
+<a name="wp1033044"> </a>
+   CALL &quot;W$MENU&quot; USING WMENU-ADD, SUBMENU, 0, 0,<a name="wp1033046"> </a>
+      &quot;&amp;New&quot;, ID-NEW.<a name="wp1033048"> </a>
+   CALL &quot;W$MENU&quot; USING WMENU-ADD, SUBMENU, 0, 0, <a name="wp1033050"> </a>
+      &quot;&amp;Open...&quot;,ID-OPEN.<a name="wp1033052"> </a>
+   CALL &quot;W$MENU&quot; USING WMENU-ADD, SUBMENU, 0, W-DISABLED, <a name="wp1033054"> </a>
+      &quot;&amp;Save&quot;, ID-SAVE.<a name="wp1033056"> </a>
+   CALL &quot;W$MENU&quot; USING WMENU-ADD, SUBMENU, 0, W-DISABLED, <a name="wp1033058"> </a>
+      &quot;Save &amp;As...&quot;, ID-SAVE-AS.<a name="wp1033060"> </a>
+   CALL &quot;W$MENU&quot; USING WMENU-ADD, SUBMENU, 0, W-SEPARATOR.<a name="wp1033062"> </a>
+   CALL &quot;W$MENU&quot; USING WMENU-ADD, SUBMENU, 0, 0, <a name="wp1033064"> </a>
+      &quot;E&amp;xit&quot;, ID-EXIT.<a name="wp1033066"> </a>
+<a name="wp1033068"> </a>
+* Attach &quot;File&quot; submenu to main menu<a name="wp1033070"> </a>
+<a name="wp1033072"> </a>
+   CALL &quot;W$MENU&quot; USING WMENU-ADD, MAIN-MENU, 0, 0, <a name="wp1033074"> </a>
+      &quot;&amp;File&quot;, 0, SUBMENU.<a name="wp1033076"> </a>
+<a name="wp1033078"> </a>
+* When finished with the &quot;File&quot; submenu, make another <a name="wp1033080"> </a>
+* submenu and populate it.<a name="wp1033082"> </a>
+<a name="wp1033084"> </a>
+   CALL &quot;W$MENU&quot; USING WMENU-NEW.<a name="wp1033086"> </a>
+   MOVE RETURN-CODE TO SUBMENU.<a name="wp1033088"> </a>
+   IF SUBMENU = ZERO<a name="wp1033090"> </a>
+       GO TO BUILD-MENU-EXIT.<a name="wp1033092"> </a>
+<a name="wp1033094"> </a>
+   CALL &quot;W$MENU&quot; USING WMENU-ADD, SUBMENU, 0, W-CHECKED, <a name="wp1033096"> </a>
+      &quot;&amp;Save Settings on Exit&quot;, ID-SAVE-SET.<a name="wp1033098"> </a>
+   CALL &quot;W$MENU&quot; USING WMENU-ADD, SUBMENU, 0, 0, <a name="wp1033100"> </a>
+      &quot;&amp;Password Protect&quot;, ID-PASSWORD.<a name="wp1033102"> </a>
+<a name="wp1033104"> </a>
+* Attach &quot;Options&quot; submenu<a name="wp1033106"> </a>
+<a name="wp1033108"> </a>
+   CALL &quot;W$MENU&quot; USING WMENU-ADD, MAIN-MENU, 0, 0, <a name="wp1033110"> </a>
+      &quot;&amp;Options&quot;, 0, SUBMENU.<a name="wp1033112"> </a>
+<a name="wp1033114"> </a>
+* Save current menu and display new one.<a name="wp1033116"> </a>
+<a name="wp1033118"> </a>
+   CALL &quot;W$MENU&quot; USING WMENU-GET-MENU.<a name="wp1033120"> </a>
+   MOVE RETURN-CODE TO OLD-MENU.<a name="wp1033122"> </a>
+<a name="wp1033124"> </a>
+   CALL &quot;W$MENU&quot; USING WMENU-SHOW, MAIN-MENU.<a name="wp1033126"> </a>
+</pre></div>
+<a name="wp1026822"> </a><p class="pBody">
+Further on in the program, you may want to remove the check mark on the &quot;Save Settings on Exit&quot; menu item.  The following line of code would do that:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    CALL &quot;W$MENU&quot; USING WMENU-CHECK, ID-SAVE-SET, <a name="wp1026823"> </a>
+       W-UNCHECKED.<a name="wp1033128"> </a>
+</pre></div>
+<a name="wp1026824"> </a><p class="pBody">
+When it came time to remove this menu and restore the old one, you could use the following code:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    CALL &quot;W$MENU&quot; USING WMENU-SHOW, OLD-MENU.<a name="wp1026825"> </a>
+    CALL &quot;W$MENU&quot; USING WMENU-DESTROY, MAIN-MENU.<a name="wp1033130"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

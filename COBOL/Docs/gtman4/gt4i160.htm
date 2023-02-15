@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-GET-CURRENT-INFO</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1040504"> </a><h2 class="pHeading3">
+WINPRINT-GET-CURRENT-INFO
+</h2>
+<a name="wp1040506"> </a><p class="pBody">
+This operation code returns information about the currently selected printer.  
+</p>
+<a name="wp1040512"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040513"> </a>
+    USING WINPRINT-GET-CURRENT-INFO, WINPRINT-SELECTION<a name="wp1040514"> </a>
+    GIVING RESULT<a name="wp1040515"> </a>
+</pre></div>
+<a name="wp1040516"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040517"> </a><p class="pBody">
+<b class="cBold">WINPRINT-SELECTION</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 WINPRINT-SELECTION.<a name="wp1040518"> </a>
+   03 WINPRINT-NAME                    PIC X(80).<a name="wp1040519"> </a>
+   03 WINPRINT-PORT                    PIC X(80).<a name="wp1040520"> </a>
+   03 WINPRINT-DRIVER                  PIC X(80).<a name="wp1040521"> </a>
+   03 WINPRINT-DRV-VERSION             SIGNED-INT.<a name="wp1040522"> </a>
+   03 WINPRINT-NO-OF-PRINTERS          SIGNED-SHORT.<a name="wp1040523"> </a>
+      88 WPRTERR-NO-PRINTERS           VALUE -1.<a name="wp1040524"> </a>
+   03 WINPRINT-IS-DEFAULT              SIGNED-SHORT.<a name="wp1040525"> </a>
+      88 WPRT-IS-NOT-DEFAULT           VALUE 0.<a name="wp1040526"> </a>
+      88 WPRT-IS-DEFAULT               VALUE 1.<a name="wp1040527"> </a>
+   03 WINPRINT-COPIES                  SIGNED-SHORT.<a name="wp1040528"> </a>
+      88 WPRT-HAS-NO-COPY              VALUE 1.<a name="wp1040529"> </a>
+   03 WINPRINT-ORIENTATION             SIGNED-SHORT.<a name="wp1040530"> </a>
+      88 WPRT-HAS-NO-LANDSCAPE         VALUE 0.<a name="wp1040531"> </a>
+      88 WPRT-HAS-LANDSCAPE            VALUE 1.<a name="wp1040532"> </a>
+   03 WINPRINT-QUALITY                 SIGNED-SHORT.<a name="wp1040533"> </a>
+   03 WINPRINT-CURR-ORIENTATION        SIGNED-SHORT.<a name="wp1040534"> </a>
+   03 WINPRINT-CURR-COPIES             SIGNED-SHORT.<a name="wp1040535"> </a>
+</pre></div>
+<a name="wp1040536"> </a><h3 class="pHeadingRef">
+Return Values
+</h3>
+<a name="wp1040537"> </a><p class="pBody">
+A printer is considered selected if it has performed a print using &quot;-Q&#160;&lt;<em class="cEmphasis">printername</em>&gt;&quot; or &quot;-P&#160;SPOOLER&quot;, or if WIN$PRINTER has executed using any of the WINPRINT-DATA op-codes.   If no printer is selected, this operation will return information about the Windows default printer. 
+</p>
+<a name="wp1040538"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040539"> </a><p class="pBody">
+The printer may be open or closed to perform these functions.  There is no need to reset any of these functions.  WINPRINT-SELECTION should be initialized prior to use.  WINPRINT-GET-CURRENT-INFO has the following values:
+</p>
+<a name="wp1040540"> </a><p class="pBody">
+<b class="cBold">WINPRINT-NAME</b> -- Returns the name of the currently selected printer.
+</p>
+<a name="wp1040541"> </a><p class="pBody">
+<b class="cBold">WINPRINT-PORT</b> -- Specifies the printer port (or UNC address) of the currently selected printer.
+</p>
+<a name="wp1040542"> </a><p class="pBody">
+<b class="cBold">WINPRINT-DRIVER</b> -- Specifies the printer driver name.
+</p>
+<a name="wp1040543"> </a><p class="pBody">
+<b class="cBold">WINPRINT-DRV-VERSION</b> -- Specifies the version number of the printer driver (vendor-specific).
+</p>
+<a name="wp1040544"> </a><p class="pBody">
+<b class="cBold">WINPRINT-NO-OF-PRINTERS</b> -- Specifies the number of the currently selected printer in the runtime's internal list.
+</p>
+<a name="wp1040545"> </a><p class="pBody">
+<b class="cBold">WINPRINT-IS-DEFAULT</b> -- Determines if the printer is the Windows print spooler default printer. If yes, the returned value is WPRT-IS-DEFAULT.
+</p>
+<a name="wp1040546"> </a><p class="pBody">
+<b class="cBold">WINPRINT-COPIES</b> -- Returns the number of copies the printer is capable of producing. Typically this number is 99 or 999.
+</p>
+<a name="wp1040547"> </a><p class="pBody">
+<b class="cBold">WINPRINT-ORIENTATION</b> -- Determines if the printer supports landscape orientation. If yes, the return value is WPRT-HAS-LANDSCAPE.
+</p>
+<a name="wp1040548"> </a><p class="pBody">
+<b class="cBold">WINPRINT-QUALITY</b> -- Returns the current setting for the varying grades of print quality.  
+</p>
+<a name="wp1040549"> </a><p class="pBody">
+This value applies to dot-matrix printers.  Most inkjet and laser printers do not support this method of determining the level of print quality. 
+</p>
+<a name="wp1040550"> </a><p class="pBody">
+<b class="cBold">WINPRINT-CURR-COPIES</b> -- Returns the current default value for the number of copies to print.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

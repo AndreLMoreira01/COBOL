@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:45:44" />
+  <title>6.2  The Server Access File</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv6.htm">Chapter 6: System Security</a> &gt; </p>
+<a name="wp1035043"> </a><h2 class="pHeading1">
+6.2  The Server Access File
+</h2>
+<a name="wp1035046"> </a><p class="pBody">
+The foundation of AcuServer system security is the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">server access file</span>.  The server access file is an encrypted Vision file, named &quot;AcuAccess&quot; by default, which is located in the &quot;/etc&quot; directory on UNIX servers and the &quot;\etc&quot; directory on Windows NT , Windows 2000, or Windows 2003 servers.  You may rename the access file, and you can have multiple access files (for multiple instances of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span>, for example) if desired.  
+</p>
+<a name="wp1041483"> </a><p class="pBody">
+The server access file contains one or more <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">access records</span>.  These records define which users of which clients are permitted access to AcuServer.
+</p>
+<a name="wp1040516"> </a><p class="pCaution">
+<hr />
+<b>Caution:  </b>If you have upgraded from a version of AcuServer prior to 6.0.0, the server will detect and convert existing AcuAccess files the first time that they are opened.  Updated AcuAccess files are not compatible with earlier versions of AcuServer.  If you are operating in an environment that includes AcuServer version 7.<em class="cEmphasis">x</em> or 6.<em class="cEmphasis">x</em> mixed with earlier versions of AcuServer, you must use duplicate AcuAccess files.  Maintaining a mixed environment is not recommended.
+<hr />
+</p>
+<a name="wp1035047"> </a><p class="pBody">
+The server access file is designed to support a wide range of access security, from very open to very restrictive.  You choose the level of security best suited to your needs.
+</p>
+<a name="wp1035048"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If desired, you can opt to use native system security rather than AcuServer system security.  To use native security, you set the SECURITY_METHOD variable in both the runtime configuration file on the client and server configuration file on the server.  You still create a server access file containing access records that define your user base, but the server access file is used only to check if the user connecting to the server is allowed to connect, and to check to which local account the connection should be mapped.  See SECURITY_METHOD in <a  href="srv412.htm#wp1035170">section 4.2.2</a> for more information.
+<hr />
+</p>
+<a name="wp1035049"> </a><p class="pBody">
+Access records may include wild cards that allow all clients or all users (except <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">root</span> under UNIX and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Administrator</span> under Windows NT , Windows 2000, or Windows 2003) access to AcuServer.  You can also create individual access records for each user of each client, as well as individual records listing users who are explicitly excluded from accessing files.
+</p>
+<a name="wp1035050"> </a><p class="pBody">
+The individual access records allow you to specify the user ID that AcuServer will use when executing requests for users matching the given record.  In this way you can assign a user ID that has exactly the privileges needed, and no more (typical of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">group</span> access accounts).
+</p>
+<a name="wp1035051"> </a><p class="pBody">
+In addition, every access record can include a password entry which the application or user must match before AcuServer will establish a connection.  If this password is set to &quot;*&quot;, the user is explicitly denied access to AcuServer.
+</p>
+<a name="wp1035052"> </a><p class="pBody">
+The security system is almost completely transparent to the end user.  The user is made aware of the security system only when remote file access requires interactive password authentication.
+</p>
+<a name="wp1035053"> </a><p class="pBody">
+Creation and modification of the server access file requires <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">root</span> privileges on UNIX, and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Administrator</span> privileges on Windows NT , Windows 2000, or Windows 2003.  
+</p>
+<a name="wp1035055"> </a><p class="pBody">
+On UNIX servers, the access file must be owned by <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">root</span> and cannot be writable by anyone other than <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">root</span>.  If the access file does not exist, is not owned by <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">root</span>, or is writable by users other than <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">root</span>, AcuServer will not start.
+</p>
+<a name="wp1035057"> </a><p class="pBody">
+On Windows NT and Windows 2000 or 2003 servers, the access file must be owned by <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Administrator</span> or the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Administrators</span> group and cannot be writable by anyone without <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Administrator</span> privileges.  If the access file does not exist, is not owned by <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Administrator</span> or the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Administrators</span> group, or is writable by users without <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Administrator</span> privileges, AcuServer will not start.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

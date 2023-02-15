@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$CHDIR Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1115894"> </a><h2 class="pHeading2">
+C$CHDIR Routine
+</h2>
+<a name="wp1035335"> </a><p class="pBody">
+The C$CHDIR routine is used to change the current working directory.  
+</p>
+<a name="wp1035336"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$CHDIR&quot; <a name="wp1035337"> </a>
+    USING DIR-NAME, ERR-NUM<a name="wp1473628"> </a>
+</pre></div>
+<a name="wp1035338"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1035339"> </a><p class="pBody">
+<b class="cBold">DIR-NAME</b>   PIC X(n)
+</p>
+<a name="wp1035340"> </a><p class="pBody">
+Contains the name of the new directory, or spaces.
+</p>
+<a name="wp1035341"> </a><p class="pBody">
+<b class="cBold">ERR-NUM</b>   PIC 9(9) COMP-4 (optional)
+</p>
+<a name="wp1035342"> </a><p class="pBody">
+Holds the returned error number, or zero on success.
+</p>
+<a name="wp1035343"> </a><h3 class="pHeadingRef">
+Comments
+</h3>
+<a name="wp1035344"> </a><p class="pBody">
+If a second USING parameter is passed, it must be described as PIC 9(9) COMP-4.  This parameter will be set to ZERO if the directory change is successful.  Otherwise, it will contain the operating system's error number. 
+</p>
+<a name="wp1035345"> </a><p class="pBody">
+If DIR-NAME contains spaces, then the current default directory is returned in it.  In this case, ERR-NUM is not used.  Otherwise, DIR-NAME should contain the name of a directory to make the new default directory.  On Windows machines, this can include a drive letter.  If you pass ERR-NUM, it will be set to zero if the change was successful.  Otherwise, ERR-NUM will contain the error value returned by the operating system. 
+</p>
+<a name="wp1035346"> </a><p class="pBody">
+On some systems (such as VMS), it is legal to switch to a directory that does not exist, while other systems (Windows, UNIX) do not allow it.
+</p>
+<a name="wp1061145"> </a><p class="pBody">
+The behavior of this routine is affected by the FILENAME_SPACES configuration variable. The value of  FILENAME_SPACES determines whether spaces are allowed in a file name.  See the entry for <a  href="gt4h132.htm#wp1035905">FILENAME_SPACES</a> in Appendix&#160;H for more information.
+</p>
+<a name="wp1035348"> </a><h3 class="pHeadingRef">
+IMPORTANT
+</h3>
+<a name="wp1035349"> </a><p class="pBody">
+If you use C$CHDIR, create a CODE_PREFIX configuration entry to locate your object files.  Ensure that all of the search locations specified by the CODE-PREFIX are full path names.  Do not use the current directory or any relative path names in the CODE_PREFIX.  Without a full path name, the runtime system may be unable to find your object files if it needs to re-open them.  
+</p>
+<a name="wp1035350"> </a><p class="pBody">
+For example, the runtime system must occasionally re-open an object file when: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1035351"> </a><div class="pSmartList1"><li>you are using the source debugger</li></div>
+<a name="wp1035352"> </a><div class="pSmartList1"><li>the program contains segmentation (overlays)</li></div>
+<a name="wp1035353"> </a><div class="pSmartList1"><li>you are using object libraries</li></div>
+</ul></div>
+<a name="wp1035354"> </a><p class="pBody">
+If the object file was initially found in the current directory or a directory specified relative to the current directory, and you then change the current directory with the C$CHDIR routine, the runtime system will not be able to find the object file if it needs to re-open it. This will cause a fatal error and your program will halt.
+</p>
+<a name="wp1035355"> </a><p class="pBody">
+If you use C$CHDIR and you are running in debug mode, be sure to set CODE-PREFIX in the configuration file, <em class="cEmphasis">not</em> in the environment.  You may set CODE-PREFIX in the environment when you are not in debug mode.  
+</p>
+<a name="wp1035356"> </a><h3 class="pHeadingRef">
+Considerations for AcuBench users
+</h3>
+<a name="wp1035357"> </a><p class="pBody">
+When you import a screen with the Screen Import Utility, a file called &quot;import.out&quot; is created in the current working directory.  The Screen Designer uses this file to load the description(s) of the imported screen(s) into its designer grid and property sheet.  
+</p>
+<a name="wp1035358"> </a><p class="pBody">
+When you invoke the Screen Import Utility from within the Workbench, the act of exiting the runtime also causes the Screen Designer to load the import.out file which is located in the root directory of the project currently open.  
+</p>
+<a name="wp1035359"> </a><p class="pBody">
+If your application changes the current working directory, the import.out file will not be created in the root directory of the currently open project, so different, perhaps unexpected behaviors can occur.  
+</p>
+<a name="wp1035360"> </a><p class="pBody">
+Import.out files will be generated correctly, and the Screen Designer will be able to import them correctly, but you will have to locate the files for the Screen Designer and open them &quot;manually&quot; using the File/Open dialog box in the Screen Designer.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

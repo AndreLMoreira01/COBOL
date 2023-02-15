@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.9.1  CALL</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt1245.htm">2.9  Calling Subprograms</a> &gt; </p>
+<a name="wp1033796"> </a><h2 class="pHeading2">
+2.9.1  CALL
+</h2>
+<a name="wp1111898"> </a><p class="pBody">
+When a CALL occurs, <b class="cBold">runcbl</b> performs the following steps.  If during any step the call is resolved, call processing ends:  
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1112210"> </a><div class="pSmartList1"><li><b class="cBold">runcbl</b> searches the DYNAMIC_FUNCTION_CALLS configuration variable for a matching call name or call name prefix.  If a match is found and the &quot;dlopen(NULL)&quot; feature is supported (true on most UNIX systems) the call name is searched for as a dynamic function in the current process.  If it is not found, the call name is searched for as a dynamic function in each of the loaded shared libraries or DLLs specified with the &quot;-y&quot; option or with the SHARED_LIBRARY_LIST configuration variable.</li></div>
+<a name="wp1112211"> </a><div class="pSmartList1"><li>If the runtime is acting as an application host in a thin client environment, it checks for the &quot;@[DISPLAY]:&quot; prefix and, if found, passes the call to the thin client.</li></div>
+<a name="wp1112186"> </a><div class="pSmartList1"><li>The runtime next attempts to call any C subprograms that have been linked into the runtime system.  (Interfacing to C routines is detailed in section 6.3 of <em class="cEmphasis">A Guide to Interoperating with ACUCOBOL-GT</em>.)  </li></div>
+<a name="wp1033804"> </a><div class="pSmartList1"><li>If the CODE_CASE configuration variable is defined, the change to upper case or lower case is applied as appropriate.</li></div>
+<a name="wp1033805"> </a><div class="pSmartList1"><li>Next, the list of loaded but inactive programs and their ENTRY points is searched for a matching call name.  If a name is found, that program is made active, execution is initiated at the proper point in the program.</li></div>
+<a name="wp1033806"> </a><div class="pSmartList1"><li>Next, all loaded programs (both active and inactive) are searched to see if any are part of an <em class="cEmphasis">object library</em> (see section 3.2).  For each object library found, the call name is searched for in the list of modules contained in the library.  If found, that module is loaded out of the library and made active.  </li></div>
+<a name="wp1112278"> </a><div class="pSmartList1"><li>Next, on Windows systems the call name is searched for as the name of a routine in a loaded DLL.</li></div>
+<a name="wp1033807"> </a><div class="pSmartList1"><li>Next, any libraries specified with the &quot;-y&quot; runtime command are searched for a matching call name.  Note that programs in a library are searched for by their PROGRAM-IDs.  </li></div>
+<a name="wp1033808"> </a><div class="pSmartList1"><li>If the program has still not been found, the disk is searched for the object module.</li></div>
+<a name="wp1033809"> </a><p class="pIndented1">
+The name is examined to see if it is a full path name.
+</p>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1033810"> </a><div class="pSmartList2"><li>If the call name begins with a &quot;\&quot; (back slash), the call name is treated as the filename, and the object file (if it exists) is loaded and made active.</li></div>
+<a name="wp1033813"> </a><div class="pSmartList2"><li>If the call name begins with a &quot;/&quot; (forward slash) and the configuration variable APPLY_CODE_PATH is set to <em class="cEmphasis">off</em> (the default value), the call name is treated as the filename, and the object file (if it exists) is loaded and made active.  </li></div>
+<a name="wp1033814"> </a><div class="pSmartList2"><li>If the call name begins with a &quot;/&quot; (forward slash) and the configuration variable APPLY_CODE_PATH is set to <em class="cEmphasis">on</em>, the current CODE_PREFIX is applied to it.  Or, if the call name is not a full path name, the current CODE_PREFIX is applied to it.</li></div>
+</ul></div>
+<a name="wp1033819"> </a><p class="pIndented1">
+The configuration variable CODE_PREFIX  (see <a  href="gt1232.htm#wp1033578">section 2.7.2, &quot;Code and Data File Search Paths&quot;</a>) consists of a series of prefixes to apply to the call name.  These prefixes are applied, in order, until a matching file is found or all of the prefixes have been tried.  
+</p>
+<a name="wp1033820"> </a><p class="pIndented1">
+For example, to search for object files in &quot;/usr/obj/ar&quot;, &quot;/usr/obj/ap&quot;, and the directory containing the calling program, you could set CODE_PREFIX to:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CODE-PREFIX  /usr/obj/ar  /usr/obj/ap  ^<a name="wp1033821"> </a>
+</pre></div>
+<a name="wp1112917"> </a><p class="pIndented1">
+When each file name is formed, the configuration variable CODE_SUFFIX is checked to see if it has been defined.  If it has, and the call name does not have an explicit extension specified, the current value of CODE_SUFFIX is appended to the filename with an intervening period.  An extension is zero to three characters following a period at the end of the name.  (See the entry for CODE_SUFFIX in Book 4, Appendix&#160;H.)
+</p>
+<a name="wp1112852"> </a><p class="pIndented1">
+If CODE_SUFFIX is not defined, &quot;.acu&quot; is appended to the filename.  If the file is not found, the file is searched for again, this time without the &quot;.acu&quot; extension.
+</p>
+<a name="wp1033825"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>As with all filenames, upper and lower case are significant on UNIX machines but not on VMS and Windows systems.
+<hr />
+</p>
+<a name="wp1112300"> </a><div class="pSmartList1"><li>Next, on Windows, the call name is searched for as the name of a DLL. If the DLL is found it is loaded and the call name is searched for as the name of a routine in it or any other loaded DLL (see section 3.3 in <em class="cEmphasis">A Guide to Interoperating with ACUCOBOL-GT</em>).</li></div>
+<a name="wp1112926"> </a><div class="pSmartList1"><li>Next, on UNIX, the call name is searched for as the name of a shared library (see section 6.3.1 in <em class="cEmphasis">A Guide to Interoperating with ACUCOBOL-GT</em>).</li></div>
+<a name="wp1112344"> </a><div class="pSmartList1"><li>Finally, the call name is searched for as the name of a dynamic function in the current process, and then in each of the loaded shared libraries or DLLs specified with the &quot;-y&quot; runtime command line option or the SHARED_LIBRARY_LIST configuration variable.  Note that to match as a dynamic function in Step 1 of this process, the call name must match a name in the DYNAMIC_FUNCTION_CALLS configuration variable.</li></div>
+</ol></div>
+<a name="wp1083131"> </a><h3 class="pHeadingRef">
+Recursive CALLs
+</h3>
+<a name="wp1083168"> </a><p class="pBody">
+A program may directly or indirectly call itself.  A CALL statement that calls the active program (itself) is a <em class="cEmphasis">recursive call</em>.  For more information, see the RECURSION configuration variable in Appendix H, Book 4, <em class="cEmphasis">Appendices.</em>  For information on sharing data in recursively called programs (such as in the HP e3000 environment), see the RECURSION_DATA_GLOBAL configuration variable. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

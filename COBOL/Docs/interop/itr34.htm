@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:51" />
+  <title>3.2.1  Using the ACUCOBOL-GT COM Server</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr3.htm">Chapter 3: Working with Windows Technologies</a> &gt; <a href="itr33.htm">3.2  Calling COBOL From Other Windows Programs</a> &gt; </p>
+<a name="wp1047754"> </a><h2 class="pHeading2">
+3.2.1  Using the ACUCOBOL-GT COM Server
+</h2>
+<a name="wp1047758"> </a><p class="pBody">
+For ease of use in Windows environments, the ACUCOBOL-GT runtime is available as a COM server.  With the COM server, you can treat the ACUCOBOL-GT system as a COM object and include it in applications that support COM.  
+</p>
+<a name="wp1048793"> </a><p class="pBody">
+To use the COM server in other programs:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1040334"> </a><div class="pSmartList1"><li>Register the ACUCOBOL-GT COM server.  Registration occurs automatically when you load the ACUCOBOL-GT runtime using the setup program that comes with the software.  </li></div>
+<a name="wp1040335"> </a><p class="pIndented1">
+When you distribute your application, if you are not using the ACUCOBOL-GT setup program, you will have to install and register the COM server on each user's machine.  If you are using it as a remote server, you must install and register the ACUCOBOL-GT runtime with the COM server option on the server machine.  Register the ACUCOBOL-GT COM server by running it with no command-line options or with the &quot;/RegServer&quot; option.  This command-line option is not case sensitive.
+</p>
+<a name="wp1040336"> </a><p class="pIndented1">
+The ACUCOBOL-GT COM server executable is in the ACUCOBOL-GT bin directory after installation.  This file is named &quot;AcuGT.exe&quot;.  The ACUCOBOL-GT COM server requires the same files as the ACUCOBOL-GT runtime, except for &quot;wrun32.exe&quot;.  Two additional files, &quot;AcuGT.exe&quot; and &quot;AcuGT.tlb&quot;, must be installed on the machine in a single directory.  For the COM server to work, the runtime DLL &quot;wrun32.dll&quot; must either be in the same directory as &quot;AcuGT.exe&quot; or somewhere else in the Windows DLL search path.  If you move &quot;AcuGT.exe&quot; to a different directory, you must register it again from the new location.
+</p>
+<a name="wp1040337"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>If you ever need to unregister the ACUCOBOL-GT COM server, run &quot;AcuGT /UnregServer&quot;. 
+<hr />
+</p>
+<a name="wp1040338"> </a><div class="pSmartList1"><li>Start the other programming language's development environment and add the current &quot;ACUCOBOL-GT Library&quot; to your project references. </li></div>
+<a name="wp1040339"> </a><div class="pSmartList1"><li>Add code to declare and create the AcuGT object.  For example, in Visual Basic you could enter:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Dim cblObj As Object<a name="wp1040340"> </a>
+Set cblObj = New AcuGT<a name="wp1040341"> </a>
+</pre></div>
+<a name="wp1040342"> </a><div class="pSmartList1"><li>Control the ACUCOBOL-GT COM server using the &quot;Initialize&quot;, &quot;Call&quot;, &quot;Call50&quot;, &quot;Cancel&quot;, and &quot;Shutdown&quot; methods described in <a  href="itr35.htm#wp1040382">section 3.2.1.1</a>.  For example, from Visual Basic you would enter: </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+cblObj.Initialize &quot;-d&quot;   &#39; Start ACUCOBOL-GT in debug mode<a name="wp1040343"> </a>
+retVal = cblObj.Call(programName, arg0, arg1, arg2)<a name="wp1040344"> </a>
+cblObj.Shutdown<a name="wp1040345"> </a>
+</pre></div>
+<a name="wp1040346"> </a><p class="pIndented1">
+or use the &quot;With&quot; construct. For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+With cblObj<a name="wp1040347"> </a>
+  .Initialize &quot;-e @myserver:\myprogs\errorfile&quot;<a name="wp1040348"> </a>
+  .Call &quot;*myserver:\myprogs\program1.acu&quot;, &quot;call1&quot;, 1.2, 37<a name="wp1040349"> </a>
+  .Call &quot;*myserver:\myprogs\program1.acu&quot;, &quot;call2&quot;, 2.3, 38<a name="wp1040350"> </a>
+  .Call &quot;*myserver:\myprogs\program1.acu&quot;, &quot;call3&quot;, 3.4, 39<a name="wp1040351"> </a>
+  .Cancel &quot;*myserver:\myprogs\program1.acu&quot;<a name="wp1040352"> </a>
+End With<a name="wp1040353"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1040354"> </a><p class="pBody">
+If you don't explicitly call &quot;Initialize&quot;, the COM server calls it for you, passing an empty command-line parameter.  Likewise, if you don't explicitly call &quot;Shutdown&quot;, the COM server calls it for you when the object is destroyed. 
+</p>
+<a name="wp1040355"> </a><p class="pBody">
+In this example, after the AcuGT object is created in Visual Basic, &quot;Initialize&quot; is called automatically.  Then, when the AcuGT object is destroyed at the end of the subroutine, the &quot;Shutdown&quot; method is called automatically:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Private Sub Command1_Click()<a name="wp1040356"> </a>
+  Dim cblObj As Object<a name="wp1040357"> </a>
+  Set cblObj = New AcuGT<a name="wp1040358"> </a>
+  cblObj.Call &quot;program&quot;<a name="wp1040359"> </a>
+End Sub<a name="wp1040360"> </a>
+</pre></div>
+<a name="wp1040361"> </a><p class="pBody">
+If you have several COBOL calls to make, it is much more efficient to create the AcuGT object as a Public variable in the module, class, or form initialization.  For example, this may be done using the Visual Basic CreateObject function:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Dim cblObj As Object<a name="wp1040362"> </a>
+Set cblObj = CreateObject(&quot;AcuGT.Application&quot;);<a name="wp1040363"> </a>
+</pre></div>
+<a name="wp1040364"> </a><p class="pBody">
+The Visual Basic CreateObject function takes an optional second parameter-the name of the network server where the object is created.  For example, if you want to run the COBOL program on a remote machine named MOOSE, use the following syntax:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Set cblObj = CreateObject(&quot;AcuGT.Application&quot;, &quot;MOOSE&quot;);<a name="wp1040365"> </a>
+</pre></div>
+<a name="wp1040366"> </a><p class="pBody">
+The COM server sets the &quot;current directory&quot; for COBOL programs to the directory containing &quot;AcuGT.exe&quot;.  This allows you to use relative directory paths when you specify file names.  For example, suppose you have installed the COM server in C:\AUTOSRV\BIN, the COBOL programs and configuration files you want to use in C:\AUTOSRV\PROGRAMS and the data files in C:\AUTOSRV\DATA.  You could then call the &quot;Initialize&quot; method with &quot;-c ..\PROGRAMS\CONFIG&quot;, set CODE_PREFIX to &quot;..\PROGRAMS&quot; and set FILE_PREFIX to &quot;..\DATA&quot;.
+</p>
+<a name="wp1040371"> </a><p class="pBody">
+The ACUCOBOL-GT COM server is thread-safe, meaning that you can run COBOL programs asynchronously.  To do this, you must create a new thread and a new AcuGT object in that thread. Then you call the COBOL program from that thread.
+</p>
+<a name="wp1040372"> </a><p class="pBody">
+For an example of how to create new threads in Visual Basic, see &quot;Creating a Multithreaded Test Application&quot; in the Visual Basic documentation.
+</p>
+<a name="wp1040373"> </a><p class="pBody">
+It is a good idea to trap errors and handle them with your own Visual Basic error handler.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+   On Error GoTo ErrHandler<a name="wp1040374"> </a>
+   cblObj.Call &quot;program&quot;<a name="wp1040375"> </a>
+Exit Sub<a name="wp1040376"> </a>
+<a name="wp1040377"> </a>
+ErrHandler:<a name="wp1040378"> </a>
+   myval = MsgBox(Err.Description, vbOKOnly, <a name="wp1040379"> </a>
+      &quot;Call not successful&quot;)<a name="wp1040380"> </a>
+End Sub<a name="wp1040381"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

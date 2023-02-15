@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/12/05 11:53:30" />
+  <title>2.5.1.2  -Q &lt;printername&gt; </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Getting Started <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gsb2.htm"><br />Chapter 2: Windows Installation</a> &gt; <a href="gsb28.htm">2.5  Printing and Spooler Issues</a> &gt; <a href="gsb29.htm">2.5.1  Spooler Formatting</a> &gt; </p>
+<a name="wp1035349"> </a><h2 class="pHeading3">
+2.5.1.2  -Q &lt;printername&gt; 
+</h2>
+<a name="wp1035350"> </a><p class="pBody">
+If you want the Windows spooler to format the pages of your report, but you want to use a particular printer, assign your print file to:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PRINTER1 -Q \\<em class="cEmphasis">printername</em><a name="wp1035351"> </a>
+</pre></div>
+<a name="wp1035352"> </a><p class="pBody">
+in the configuration file (&quot;CBLCONFI&quot;).  <em class="cEmphasis">Printername</em> is the printer designation as given in the Printers folder under Settings in the Start menu. The name may be up to 80 characters long and contain embedded spaces. The name may not include the semicolon character (;) or be surrounded by single or double quotes.  The pages are printed in the manner described in &quot;-P&#160;SPOOLER&quot; above.  The sample programs  &quot;graphprn.cbl&quot; and &quot;prndemox.cbl&quot; contain examples of these functions. 
+</p>
+<a name="wp1035353"> </a><p class="pBody">
+To determine a valid <em class="cEmphasis">printername</em>, use the WIN$PRINTER library routine to obtain the name of the desired printer. (This is described in Appendix I under the WINPRINT-SET-PRINTER operation code in &quot;Specifying a Printer.&quot;) Then add the following line to your code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MOVE &quot;-Q \\<em class="cEmphasis">printername</em>&quot; TO WS-PRINTER-NAME.<a name="wp1035354"> </a>
+</pre></div>
+<a name="wp1035355"> </a><p class="pBody">
+When the runtime opens a file assigned to &quot;-Q &lt;<em class="cEmphasis">printername</em>&gt;&quot; it sets the Windows print spooler to use this printer. The printer driver must be installed on the computer from which you print.  If <em class="cEmphasis">printername</em> is not recognized by the runtime, a dialog box allows you to choose a printer manually.
+</p>
+<a name="wp1035356"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If you want to access a printer using a UNC path, you have to print directly to the printer by defining PRINTER as &quot;-D PRN&quot;.  If you use the UNC path, Windows formatting is not supported.
+<hr />
+</p>
+<a name="wp1035357"> </a><h3 class="pHeadingRef">
+Setting Options
+</h3>
+<a name="wp1035358"> </a><p class="pBody">
+You may also use &quot;-Q &lt;<em class="cEmphasis">printername</em>&gt;&quot; to set several other printing options in the configuration file using the following syntax:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&lt;-Q <em class="cEmphasis">printername</em>&gt;[;option1=x][;option2=x][;option3=x]...<a name="wp1035359"> </a>
+</pre></div>
+<a name="wp1035360"> </a><p class="pBody">
+The following options may appear in any order.  Options not supported by the printer driver are ignored.  <em class="cEmphasis">Printername</em> should appear as shown in WINPRINT-NAME, but the options are case insensitive.  
+</p>
+<a name="wp1043681"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The options PITCH, COLS, LINES, and FONT are all mutually dependent.  Omitting one or more of these options may cause the resulting printout to look wrong.
+<hr />
+</p>
+<a name="wp1043872"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1043944"> </a><p class="pCellBody">
+DIRECT
+</p>
+</td>
+    <td><a name="wp1043946"> </a><p class="pCellBody">
+Setting DIRECT to &quot;ON&quot; will cause the job to print as if the configuration file was set to &quot;-P SPOOLER-DIRECT&quot; (described in <a  href="gsb212.htm#wp1035383">section 2.5.2</a> below). This will also disable any use of additional options.  Setting DIRECT to the default of &quot;OFF&quot; causes the job to print to the selected printer as if the configuration file was set to &quot;-P&#160;SPOOLER&quot;.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043948"> </a><p class="pCellBody">
+FONT
+</p>
+</td>
+    <td><a name="wp1043950"> </a><p class="pCellBody">
+Use FONT to specify a single font name. The font name may have embedded spaces, but may not contain double or single quotes.  If the font does not exist, the closest matching font is chosen.
+</p>
+<a name="wp1051474"> </a><p class="pCellBody">
+The runtime does not align columns. If you are printing a report containing columns, you should use a fixed-width font.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043952"> </a><p class="pCellBody">
+PITCH
+</p>
+</td>
+    <td><a name="wp1043954"> </a><p class="pCellBody">
+This value specifies the point size of the font.  Pitch does not determine the number of characters per line.  If you use a larger pitch, the characters simply appear more crowded.  For example, when printing 132 columns, a pitch of 10 will produce better character spacing than a pitch of 12.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043956"> </a><p class="pCellBody">
+COLS
+</p>
+</td>
+    <td><a name="wp1043958"> </a><p class="pCellBody">
+Specifies the number of columns (width) on the page. This number is not validated by the runtime or the spooler.  Choose a number of columns that coordinate with the selected font and pitch when designing the report layout.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043960"> </a><p class="pCellBody">
+LINES 
+</p>
+</td>
+    <td><a name="wp1043962"> </a><p class="pCellBody">
+Specifies the lines (rows of characters) on the page.  This number is not validated by the runtime or the spooler.  Choose a number of lines that is compatible with the selected font and pitch when designing the report layout.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043964"> </a><p class="pCellBody">
+ORIENTATION
+</p>
+</td>
+    <td><a name="wp1043966"> </a><p class="pCellBody">
+If your printer supports this feature, ORIENTATION allows you to specify LANDSCAPE or PORTRAIT orientation for the report.  The default value of ORIENTATION is driver specific.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043968"> </a><p class="pCellBody">
+COPY
+</p>
+</td>
+    <td><a name="wp1043970"> </a><p class="pCellBody">
+If your printer supports this feature, COPY allows you to specify the number of copies to print.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1043883"> </a><h3 class="pHeadingRef">
+Examples
+</h3>
+<a name="wp1043884"> </a><p class="pBody">
+To use the Windows spooler with an HP Laserjet printer driver located on SERVER1, and specify the font, font size, width and number of lines in the report, enter the following into CBLCONFI:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PRINTER1 -Q \\SERVER1\HP Laserjet IV;FONT=Times New Roman;PITCH=12;COLS=132;LINES=65.<a name="wp1044803"> </a>
+</pre></div>
+<a name="wp1035381"> </a><p class="pBody">
+To print three copies directly to the printer on a server named GUTENBERG in Landscape orientation, enter the following into CBLCONFI:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PRINTER1 -Q \\GUTENBERG\HP Laserjet IV;DIRECT=ON;ORIENTATION=LANDSCAPE;COPY=3<a name="wp1035382"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

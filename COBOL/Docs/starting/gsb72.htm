@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/12/05 11:54:17" />
+  <title>7.1 Questions &amp; Answers</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Getting Started <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gsb7.htm"><br />Chapter 7: Troubleshooting Q&amp;A</a> &gt; </p>
+<a name="wp1034489"> </a><h2 class="pHeading1">
+7.1 Questions &amp; Answers
+</h2>
+<a name="wp1034490"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1034491"> </a><p class="pBody">
+I have two servers on my network. One server contains ACUCOBOL-GT for two users, and the other has ACUCOBOL-GT for three users. If the server with a two-user license file fails, can all five users use the license file on the other server?
+</p>
+<a name="wp1034492"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1034493"> </a><p class="pBody">
+No. The license manager does not add up users from multiple servers. In order to have five users on either server, you would need to request the full user limit for each server.
+</p>
+<a name="wp1034494"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1034496"> </a><p class="pBody">
+I am experiencing an error when I try to read the media on UNIX.  For example, CPIO, generates the error,  &quot;not in cpio format&quot; and TAR formatted archives generate the error,  &quot;I/O error on <em class="cEmphasis">device name</em>.&quot;  What should I do?
+</p>
+<a name="wp1034497"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1034968"> </a><p class="pBody">
+ In either case, use the following command to do an ASCII dump of the first part of the data:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+od -c device | more<a name="wp1034969"> </a>
+</pre></div>
+<a name="wp1034970"> </a><p class="pBody">
+If you see the word &quot;AMEK&quot; in the dump, this indicates that some bytes may be swapped.  You may be able to correct the problem with the &quot;dd&quot; utility.
+</p>
+<a name="wp1034501"> </a><p class="pBody">
+For CPIO archives, use the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+dd if=device bs=10b conv=swab | cpio -icvBd<a name="wp1034502"> </a>
+</pre></div>
+<a name="wp1034503"> </a><p class="pBody">
+For TAR formatted archives, use the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+dd if=device bs=20b conv=swab | tar -xvf -<a name="wp1034504"> </a>
+</pre></div>
+<a name="wp1034505"> </a><p class="pBody">
+These commands cause each pair of incoming bytes to be swapped big-endian to little-endian conversion or vice versa).  This may solve the problem.
+</p>
+<a name="wp1034506"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1034509"> </a><p class="pBody">
+Working with ACUCOBOL-GT Version 5.<em class="cEmphasis">x</em> for Windows, I'm finding that there is a substantial delay between the time I initiate my program and when my application actually begins.  I suspect that the delay may be related to the license check that is performed when the runtime starts.  Is there anything I can do to improve performance? 
+</p>
+<a name="wp1034510"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1034511"> </a><p class="pBody">
+If you used an earlier version of the Activator utility to place a <em class="cEmphasis">pointer</em> on each client machine to a license file on the server, that may be the source of the problem.  You should remove the pointer from the Windows registry.  On each affected machine, execute the Activator from a command line interface.  <em class="cEmphasis">Be sure to use the same version of the Activator that you used to install the pointer.</em>  The command syntax is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ACTIVATOR /<em class="cEmphasis">commandname</em><a name="wp1034512"> </a>
+</pre></div>
+<a name="wp1034513"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+activator.exe /<em class="cEmphasis">commandname</em><a name="wp1034514"> </a>
+</pre></div>
+<a name="wp1034515"> </a><p class="pBody">
+where <em class="cEmphasis">commandname</em> is one of the following:
+</p>
+<a name="wp1035287"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1035290"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; vertical-align: baseline">REMOVECLIENT</span>
+</p>
+</td>
+    <td><a name="wp1035292"> </a><p class="pCellBody">
+Removes the pointer to the server in the client machine's registry. This must be performed on the client machine.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035294"> </a><p class="pCellBody">
+REMOVESERVER
+</p>
+</td>
+    <td><a name="wp1035296"> </a><p class="pCellBody">
+Stops the license manager service (if running), uninstalls the license manager service, and removes registry entries pertaining to the license manager.  This command does not remove license manager files from the &quot;C:\Flexlm&quot; directory.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1034518"> </a><p class="pBody">
+There must be one space after &quot;ACTIVATOR&quot; or &quot;activator.exe&quot; and one slash (/) preceding commandname.  For example: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ACTIVATOR /REMOVESERVER<a name="wp1034519"> </a>
+</pre></div>
+<a name="wp1034520"> </a><p class="pBody">
+This will remove the following from the registry hive on the server:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+HKEY_LOCAL_MACHINE\SOFTWARE\Flexlm License Manager\acucorp<a name="wp1034521"> </a>
+</pre></div>
+<a name="wp1034522"> </a><p class="pBody">
+You should also delete the &quot;C:\FLEXLM&quot; directory and all its contents.  
+</p>
+<a name="wp1034523"> </a><p class="pBody">
+In the future, the license file should be placed in the same directory as the product executable.  If the problem persists, contact Acucorp Technical Support for assistance.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

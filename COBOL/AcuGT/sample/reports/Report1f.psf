@@ -1,0 +1,1177 @@
+; CASEMaker AcuBench Program Structure File, Version 7.2
+; WARNING: DO NOT MODIFY THIS FILE!
+
+[PROGRAM_CONTENT]
+QUIT_CONFIRM=0
+
+{{@DESCRIPTION:
+Report uses the Report Image, Date-Time, and Report Table 
+Controls, and incorporates a Report Header, and Report Footer.
+Skip Page properties are applied to the Group Headers, 
+allowing for the production of a Sales Report, with page breaks 
+for each State.
+
+Note the usage of the Table control in the Group Header.
+The Data Image cell type allows for the selection of the 
+appropriate JPEG file to display, based on context, in the 
+Before-Print paragraph of the Table control.
+
+A Report with 2  Breakpoints, Sales-State and Sales-Branch-No,
+marked by the inclusion of both Group Headers and 
+Group Footers. 
+* The Group Footer for Sales-Branch-No contains TOTALS for 
+ the Branch for Heavy-Equipment-Sales and Supplies-Sales
+* The Group Footer for Sales-State contains TOTALS for the 
+State for Heavy-Equipment-Sales and Supplies-Sales
+* Note the usage of the Group Header After-Print paragraph to 
+save the Group Footer title.
+* Note the usage of the Detail Before-Print paragraph to perform 
+the ADD operation, accumulating totals for Branch, and State
+Footers
+* Note the usage of the Total-Field Before-Print paragraph to 
+move the numeric Total field into a Formatted field for printing.
+
+@}}
+
+[WORKING_STORAGE]
+m_nType=1
+m_strName=Working Storage
+m_bBlockRecords=1
+m_bRecordFixed=1
+m_bStandard=1
+{{@FD_m_strDescriptionWK
+
+@}}
+[FDITEM0_WK]
+m_nType=11
+m_strName=salesdata-status
+m_strRawPic=X(2)
+m_strPic=X(2)
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM0_WK
+
+@}}
+[FDITEM1_WK]
+m_nType=11
+m_strName=Valid-Salesdata
+m_nItemLevel=88
+m_nSync=-1
+m_bFixed=1
+m_strTrue="00" THRU "09"
+{{@DataItem_m_strDescriptionFDITEM1_WK
+
+@}}
+[FDITEM2_WK]
+m_strName=State-Jpeg-Name
+m_strRawPic=X(40)
+m_strPic=X(40)
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM2_WK
+
+@}}
+[FDITEM3_WK]
+m_nType=10
+m_strName=PR-Heavy-Sales
+m_strRawPic=$ZZZ,ZZ9.99
+m_strPic=$ZZZ,ZZ9.99
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM3_WK
+
+@}}
+[FDITEM4_WK]
+m_nType=10
+m_strName=PR-Supplies-Sales
+m_strRawPic=$ZZZ,ZZ9.99
+m_strPic=$ZZZ,ZZ9.99
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM4_WK
+
+@}}
+[FDITEM5_WK]
+m_nType=10
+m_strName=Sales-Branch-No-Save
+m_strRawPic=X(3)
+m_strPic=X(3)
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM5_WK
+
+@}}
+[FDITEM6_WK]
+m_nType=10
+m_strName=PR-Total-Branch-Heavy-Sales
+m_strRawPic=$ZZZ,ZZ9.99
+m_strPic=$ZZZ,ZZ9.99
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM6_WK
+
+@}}
+[FDITEM7_WK]
+m_nType=10
+m_strName=PR-Total-Branch-Supplies-Sales
+m_strRawPic=$ZZZ,ZZ9.99
+m_strPic=$ZZZ,ZZ9.99
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM7_WK
+
+@}}
+[FDITEM8_WK]
+m_nType=10
+m_strName=Sales-State-Save
+m_strRawPic=XX
+m_strPic=XX
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM8_WK
+
+@}}
+[FDITEM9_WK]
+m_nType=10
+m_strName=PR-Total-State-Heavy-Sales
+m_strRawPic=$ZZZ,ZZ9.99
+m_strPic=$ZZZ,ZZ9.99
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM9_WK
+
+@}}
+[FDITEM10_WK]
+m_nType=10
+m_strName=PR-Total-State-Supplies-Sales
+m_strRawPic=$ZZZ,ZZ9.99
+m_strPic=$ZZZ,ZZ9.99
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM10_WK
+
+@}}
+[FDITEM11_WK]
+m_strName=Report1f-PageNumber
+m_strRawPic=9(5)
+m_strPic=9(5)
+m_strDefaultValue=0
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM11_WK
+
+@}}
+[FDITEM12_WK]
+m_strName=Total-Branch-Heavy-Sales
+m_strRawPic=9(6)V99
+m_strPic=9(6)V99
+m_strDefaultValue=0
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM12_WK
+
+@}}
+[FDITEM13_WK]
+m_strName=Total-Branch-Supplies-Sales
+m_strRawPic=9(6)V99
+m_strPic=9(6)V99
+m_strDefaultValue=0
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM13_WK
+
+@}}
+[FDITEM14_WK]
+m_strName=Total-State-Heavy-Sales
+m_strRawPic=9(6)V99
+m_strPic=9(6)V99
+m_strDefaultValue=0
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM14_WK
+
+@}}
+[FDITEM15_WK]
+m_strName=Total-State-Supplies-Sales
+m_strRawPic=9(6)V99
+m_strPic=9(6)V99
+m_strDefaultValue=0
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM15_WK
+
+@}}
+[FDITEM16_WK]
+m_nType=10
+m_strName=PR-Report1f-PageNumber
+m_strRawPic=ZZZZ9
+m_strPic=ZZZZ9
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM16_WK
+
+@}}
+
+
+[LINKAGE_SECTION]
+m_nType=1
+m_strName=Linkage Section
+m_bBlockRecords=1
+m_bRecordFixed=1
+m_bStandard=1
+{{@FD_m_strDescriptionLK
+
+@}}
+
+
+[DATASET_CONTENT:DS1]
+DATASET_NAME=SalesdataDS
+DATA_LAYOUT=Salesdata
+KEY=Sales-Key
+
+[SEL_LAYOUT_FILE_CONTENT:DATALAYOUT1]
+DATA_LAYOUT=Salesdata
+MODE=0
+DECLARATIVES=
+BEFORE_OPEN=
+AFTER_OPEN=
+BEFORE_COMMIT=
+AFTER_COMMIT=
+BEFORE_ROLLBACK=
+AFTER_ROLLBACK=
+BEFORE_DELETEFILE=
+AFTER_DELETEFILE=
+
+[SEL_LAYOUT_FILE_CONTENT:DATALAYOUT1-IO_FUNCTION_CONTENT]
+GENERATE_IO_FUNCTION1=Declaratives
+GENERATE_IO_FUNCTION2=Read File Key Is
+GENERATE_IO_FUNCTION3=Read File Next
+GENERATE_IO_FUNCTION4=Read File Previous
+GENERATE_IO_FUNCTION5=Delete File
+GENERATE_IO_FUNCTION6=Close File
+
+{{@SCREEN:
+*   Screen Painter Data
+*   Schema 6.0
+*
+BEGIN-SPDATA
+
+END-SPDATA
+
+@}}
+
+{{@REPORT:
+*   Report Writer Data
+*   Schema 6.0
+*
+BEGIN-RWDATA-6.0A
+
+GRAPHICAL-REPORT
+REPORT-FACTOR-10000
+
+Begin Report Report1f
+   PREFIX            = Report1f
+   LOCK-CONTROL      = TRUE
+   (Name)            = Report1f
+   Num Columns (N-Top) = 1
+   Output File Name  = Report1f.html
+   Paper Size        = ( Paper = Letter, Width = 85000, Height = 110000, RealW = 0, RealH = 0 )
+   Paper Size        = ( Header = &w&bPage &p of &P, Footer = &u&b&d, Left = 7500, Right = 7500, Top = 7500, Bottom = 7500 )
+   Report Style      = Standard
+   Target Browser    = Specify Internet Explorer
+   Watermark Style   = None
+   Begin Section Report-Header
+      COUNT-HEIGHT      = FALSE
+      SECTION-COL       = 0
+      SECTION-LINE      = 1771
+      SECTION-LINES     = 21875
+      SECTION-SIZE      = 85000
+      SECTION-GROUPTYPE = 0
+      SECTION-INDEX     = -1
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1f-RH-1
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 21875
+      Print before Page Header = TRUE
+      Size              = 85000
+      Skip Page after Print = FALSE
+      Visible           = 1:TRUE
+      Begin Rpt.Label Report1f-RwLa-1
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwLa-1
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 2083
+         Font              = MS Sans Serif/24/B
+         Justification     = Center
+         Line              = 12500
+         Lines             = 4166
+         Size              = 65625
+         Title             = "Sales Report"
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Date-Time Report1f-RwDtTm-1
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwDtTm-1
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 1042
+         Date Format       = mm/dd/yyyy
+         Date Picture Format = MMDDYYYY
+         Font              = MS Sans Serif/18/B
+         Justification     = Center
+         Line              = 17708
+         Lines             = 3125
+         Print if Repeat   = TRUE
+         Size              = 66666
+         Time Format       = None
+         Time Picture Format = None
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Image Report1f-RwImg-1
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwImg-1
+         Bitmap            = "acucorp.bmp"
+         Bitmap Path       = Full Path
+         Bitmap Position   = Center
+         Bitmap Style      = Stretch
+         Border Color      = 0
+         Border Style      = Boxed
+         Border Width      = 1
+         Color             = 0
+         Column            = 1042
+         Line              = 1042
+         Lines             = 10416
+         Print if Repeat   = TRUE
+         Size              = 67708
+         Visible           = 1:TRUE
+      End
+   End
+   Begin Section Page-Header
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 25417
+      SECTION-LINES     = 1041
+      SECTION-SIZE      = 85000
+      SECTION-GROUPTYPE = 0
+      SECTION-INDEX     = -1
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1f-PH-1
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 1041
+      Size              = 85000
+      Visible           = 1:TRUE
+   End
+   Begin Section Group-Header
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 28021
+      SECTION-LINES     = 10417
+      SECTION-SIZE      = 85000
+      SECTION-GROUPTYPE = 1
+      SECTION-GROUPBY   = Sales-State OF Salesdata
+      SECTION-INDEX     = 0
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1f-GH-1
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 10417
+      Size              = 85000
+      Skip Page after Print = FALSE
+      Skip Page before Print = TRUE
+      Visible           = 1:TRUE
+      AfterPrint        = Report1f-GH-1-AfterPrint
+      Begin Rpt.Table Report1f-RwTb-1
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwTb-1
+         Bitmap Path       = Full Path
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Cell Padding      = 1
+         Cell Spacing      = 1
+         Color             = 513
+         Column            = 20000
+         Font              = Default Font
+         Line              = 1042
+         Lines             = 6250
+         Show Grid Line    = FALSE
+         Size              = 30208
+         Table Setting     = (0, NumRow = 1, NumCol = 3 )
+         Table Setting     = (1, X = 1 )
+         Table Setting     = (1, Width = 10000, Alig = 3 )
+         Table Setting     = (1, Color = 0, Font = Default Font)
+         Table Setting     = (1, X = 2 )
+         Table Setting     = (1, Width = 10000, Alig = 3 )
+         Table Setting     = (1, Color = 0, Font = Default Font)
+         Table Setting     = (1, X = 3 )
+         Table Setting     = (1, Width = 10000, Alig = 3 )
+         Table Setting     = (1, Color = 0, Font = Default Font)
+         Table Setting     = (2, Y = 1 )
+         Table Setting     = (2, Height = 5999, Alig = 3, Color = 0, Font = Default Font)
+         Table Setting     = (3, X = 1, Y = 1, CellType = 0)
+         Table Setting     = (3, Data = "State:")
+         Table Setting     = (3, PIC = , Alig = 4, Color = 0, Font = Default Font)
+         Table Setting     = (3, X = 2, Y = 1, CellType = 1)
+         Table Setting     = (3, Data = "Sales-State OF Salesdata")
+         Table Setting     = (3, PIC = XX, Alig = 4, Color = 0, Font = Default Font)
+         Table Setting     = (3, X = 3, Y = 1, CellType = 3)
+         Table Setting     = (3, Data = "State-Jpeg-Name")
+         Table Setting     = (3, PIC = X(40), Alig = 9, Color = 0, Font = Default Font)
+         Visible           = 1:TRUE
+         BeforePrint       = Report1f-RwTb-1-BeforePrint
+      End
+      Begin Rpt.Label Report1f-RwLa-2
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwLa-2
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 4167
+         Font              = Default Font
+         Justification     = Unaligned
+         Line              = 8333
+         Lines             = 2083
+         Size              = 8333
+         Title             = "Last Name"
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Label Report1f-RwLa-3
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwLa-3
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 20833
+         Font              = Default Font
+         Justification     = Unaligned
+         Line              = 8333
+         Lines             = 2083
+         Size              = 9375
+         Title             = "First Name"
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Label Report1f-RwLa-4
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwLa-4
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 44792
+         Font              = Default Font
+         Justification     = Unaligned
+         Line              = 8333
+         Lines             = 2083
+         Size              = 8334
+         Title             = "Heavy Sales"
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Label Report1f-RwLa-5
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwLa-5
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 57292
+         Font              = Default Font
+         Justification     = Unaligned
+         Line              = 8333
+         Lines             = 2083
+         Size              = 10417
+         Title             = "Supplies Sales"
+         Visible           = 1:TRUE
+      End
+   End
+   Begin Section Group-Header
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 40208
+      SECTION-LINES     = 3125
+      SECTION-SIZE      = 85000
+      SECTION-GROUPTYPE = 1
+      SECTION-GROUPBY   = Sales-Branch-No OF Salesdata
+      SECTION-INDEX     = 1
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1f-GH-2
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 3125
+      Size              = 85000
+      Skip Page after Print = FALSE
+      Skip Page before Print = FALSE
+      Visible           = 1:TRUE
+      AfterPrint        = Report1f-GH-2-AfterPrint
+      Begin Rpt.Label Report1f-RwLa-6
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwLa-6
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 4167
+         Font              = Default Font
+         Justification     = Unaligned
+         Line              = 1042
+         Lines             = 1875
+         Size              = 6250
+         Title             = "Branch:"
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Entry-Field Report1f-RwEf-1
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwEf-1
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 15625
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Unaligned
+         Line              = 1042
+         Lines             = 1875
+         Print if Repeat   = TRUE
+         Size              = 3959
+         Value Picture     = X(3)
+         Value Variable    = Sales-Branch-No
+         Visible           = 1:TRUE
+      End
+   End
+   Begin Section Detail
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 45104
+      SECTION-LINES     = 1979
+      SECTION-SIZE      = 85000
+      SECTION-GROUPTYPE = 0
+      SECTION-INDEX     = -1
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1f-Dtl-1
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 1979
+      Size              = 85000
+      Skip Page after Print = FALSE
+      Visible           = 1:TRUE
+      Zebra             = 0
+      BeforePrint       = Report1f-Dtl-1-BeforePrint
+      Begin Rpt.Entry-Field Report1f-RwEf-2
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwEf-2
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 3646
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Unaligned
+         Line              = 729
+         Lines             = 1875
+         Print if Repeat   = TRUE
+         Size              = 16146
+         Value Picture     = X(25)
+         Value Variable    = Sales-LastName
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Entry-Field Report1f-RwEf-3
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwEf-3
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 20833
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Unaligned
+         Line              = 729
+         Lines             = 1875
+         Print if Repeat   = TRUE
+         Size              = 16667
+         Value Picture     = X(25)
+         Value Variable    = Sales-FirstName
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Entry-Field Report1f-HeavySalesEF
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-HeavySalesEF
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 44792
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Right
+         Line              = 729
+         Lines             = 1875
+         Print if Repeat   = TRUE
+         Size              = 10208
+         Value Picture     = $ZZZ,ZZ9.99
+         Value Variable    = PR-Heavy-Sales
+         Visible           = 1:TRUE
+         BeforePrint       = Report1f-HeavySalesEF-BeforePrint
+      End
+      Begin Rpt.Entry-Field Report1f-SuppliesSalesEF
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-SuppliesSalesEF
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 57500
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Right
+         Line              = 729
+         Lines             = 1875
+         Print if Repeat   = TRUE
+         Size              = 10208
+         Value Picture     = $ZZZ,ZZ9.99
+         Value Variable    = PR-Supplies-Sales
+         Visible           = 1:TRUE
+         BeforePrint       = Report1f-SuppliesSalesEF-BeforePrint
+      End
+   End
+   Begin Section Group-Footer
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 48854
+      SECTION-LINES     = 3125
+      SECTION-SIZE      = 85000
+      SECTION-GROUPTYPE = 1
+      SECTION-GROUPBY   = Sales-Branch-No OF Salesdata
+      SECTION-INDEX     = 1
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1f-GF-1
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 3125
+      Size              = 85000
+      Skip Page after Print = FALSE
+      Skip Page before Print = FALSE
+      Visible           = 1:TRUE
+      Begin Rpt.Label Report1f-RwLa-7
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwLa-7
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 2083
+         Font              = Default Font
+         Justification     = Unaligned
+         Line              = 1042
+         Lines             = 2083
+         Size              = 11459
+         Title             = "Totals for Branch:"
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Entry-Field Report1f-RwEf-4
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwEf-4
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 15625
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Unaligned
+         Line              = 1042
+         Lines             = 2083
+         Print if Repeat   = TRUE
+         Size              = 4167
+         Value Picture     = X(3)
+         Value Variable    = Sales-Branch-No-Save
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Entry-Field Report1f-TotalBranchHeavyEF
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-TotalBranchHeavyEF
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 44792
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Right
+         Line              = 1042
+         Lines             = 2083
+         Print if Repeat   = TRUE
+         Size              = 10416
+         Value Picture     = $ZZZ,ZZ9.99
+         Value Variable    = PR-Total-Branch-Heavy-Sales
+         Visible           = 1:TRUE
+         BeforePrint       = Report1f-TotalBranchHeavyEF-BeforePrint
+      End
+      Begin Rpt.Entry-Field Report1f-TotalBranchSuppliesEF
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-TotalBranchSuppliesEF
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 57292
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Right
+         Line              = 1042
+         Lines             = 2083
+         Print if Repeat   = TRUE
+         Size              = 10417
+         Value Picture     = $ZZZ,ZZ9.99
+         Value Variable    = PR-Total-Branch-Supplies-Sales
+         Visible           = 1:TRUE
+         BeforePrint       = Report1f-TotalBranchSuppliesEF-BeforePrint
+      End
+   End
+   Begin Section Group-Footer
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 53750
+      SECTION-LINES     = 3125
+      SECTION-SIZE      = 85000
+      SECTION-GROUPTYPE = 1
+      SECTION-GROUPBY   = Sales-State OF Salesdata
+      SECTION-INDEX     = 0
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1f-GF-2
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 3125
+      Size              = 85000
+      Skip Page after Print = FALSE
+      Skip Page before Print = FALSE
+      Visible           = 1:TRUE
+      Begin Rpt.Label Report1f-RwLa-8
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwLa-8
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 2083
+         Font              = Default Font
+         Justification     = Unaligned
+         Line              = 1042
+         Lines             = 2083
+         Size              = 10417
+         Title             = "Totals for State:"
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Entry-Field Report1f-RwEf-5
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwEf-5
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 15625
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Unaligned
+         Line              = 1042
+         Lines             = 2083
+         Print if Repeat   = TRUE
+         Size              = 4167
+         Value Picture     = XX
+         Value Variable    = Sales-State-Save
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Entry-Field Report1f-TotalStateHeavyEF
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-TotalStateHeavyEF
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 44792
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Right
+         Line              = 1042
+         Lines             = 2083
+         Print if Repeat   = TRUE
+         Size              = 10416
+         Value Picture     = $ZZZ,ZZ9.99
+         Value Variable    = PR-Total-State-Heavy-Sales
+         Visible           = 1:TRUE
+         BeforePrint       = Report1f-TotalStateHeavyEF-BeforePrint
+      End
+      Begin Rpt.Entry-Field Report1f-TotalStateSuppliesEF
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-TotalStateSuppliesEF
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 57292
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Right
+         Line              = 1042
+         Lines             = 2083
+         Print if Repeat   = TRUE
+         Size              = 10416
+         Value Picture     = $ZZZ,ZZ9.99
+         Value Variable    = PR-Total-State-Supplies-Sales
+         Visible           = 1:TRUE
+         BeforePrint       = Report1f-TotalStateSuppliesEF-BeforePrint
+      End
+   End
+   Begin Section Page-Footer
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 58646
+      SECTION-LINES     = 3125
+      SECTION-SIZE      = 85000
+      SECTION-GROUPTYPE = 0
+      SECTION-INDEX     = -1
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1f-PF-1
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 3125
+      Size              = 85000
+      Visible           = 1:TRUE
+      Begin Rpt.Entry-Field Report1f-RwEf-6
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwEf-6
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 26042
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Center
+         Line              = 0
+         Lines             = 3125
+         Print if Repeat   = TRUE
+         Size              = 20833
+         Value Picture     = ZZZZ9
+         Value Variable    = PR-Report1f-PageNumber
+         Visible           = 1:TRUE
+         BeforePrint       = Report1f-RwEf-6-BeforePrint
+      End
+   End
+   Begin Section Report-Footer
+      COUNT-HEIGHT      = FALSE
+      SECTION-COL       = 0
+      SECTION-LINE      = 63542
+      SECTION-LINES     = 9375
+      SECTION-SIZE      = 85000
+      SECTION-GROUPTYPE = 0
+      SECTION-INDEX     = -1
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1f-RF-1
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 9375
+      Print after Page Footer = TRUE
+      Size              = 85000
+      Skip Page before Print = False
+      Visible           = 1:TRUE
+      Begin Rpt.Label Report1f-RwLa-1a
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwLa-1a
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 2083
+         Font              = MS Sans Serif/24/B
+         Justification     = Center
+         Line              = 0
+         Lines             = 4166
+         Size              = 65625
+         Title             = "*** End Sales Report *** "
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Date-Time Report1f-RwDtTm-1a
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1f-RwDtTm-1a
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 2083
+         Date Format       = mm/dd/yyyy
+         Date Picture Format = MMDDYYYY
+         Font              = MS Sans Serif/18/B
+         Justification     = Center
+         Line              = 5208
+         Lines             = 3125
+         Print if Repeat   = TRUE
+         Size              = 66666
+         Time Format       = None
+         Time Picture Format = None
+         Visible           = 1:TRUE
+      End
+   End
+End
+
+END-RWDATA
+
+@}}
+
+{{@PARAGRAPH:
+      *
+       Report1f-RwTb-1-BeforePrint.
+           INITIALIZE STATE-JPEG-NAME.
+           EVALUATE Sales-State
+             WHEN "AL"
+               MOVE "alabama.jpg" TO state-jpeg-name
+             WHEN "AK"
+               MOVE "alaska.jpg" TO state-jpeg-name
+             WHEN "AZ"
+               MOVE "arizona.jpg" to state-jpeg-name
+             WHEN "AR"
+               MOVE "arkansas.jpg" to state-jpeg-name
+             WHEN "CA"
+               MOVE "california.jpg" to state-jpeg-name
+             WHEN "CO"
+               MOVE "colorado.jpg" to state-jpeg-name
+             WHEN "CT"
+               MOVE "connecticut.jpg" to state-jpeg-name
+             WHEN "DE"
+               MOVE "delaware.jpg" to state-jpeg-name
+             WHEN "DC"
+               MOVE "districtofcolumbia.jpg" to state-jpeg-name
+             WHEN "FL"
+               MOVE "florida.jpg" to state-jpeg-name
+             WHEN "GA"
+               MOVE "georgia.jpg" to state-jpeg-name
+             WHEN "HI"
+               MOVE "hawaii.jpg" to state-jpeg-name
+             WHEN "ID"
+               MOVE "idaho.jpg" to state-jpeg-name
+             WHEN "IL"
+               MOVE "illinois.jpg" to state-jpeg-name
+             WHEN "IN"
+               MOVE "indiana.jpg" to state-jpeg-name
+             WHEN "IA"
+               MOVE "iowa.jpg" to state-jpeg-name
+             WHEN "KS"
+               MOVE "kansas.jpg" to state-jpeg-name
+             WHEN "KY"
+               MOVE "kentucky.jpg" to state-jpeg-name
+             WHEN "LA"
+               MOVE "louisiana.jpg" to state-jpeg-name
+             WHEN "ME"
+               MOVE "maine.jpg" to state-jpeg-name
+             WHEN "MD"
+               MOVE "maryland.jpg" to state-jpeg-name
+             WHEN "MA"
+               MOVE "massachusetts.jpg" to state-jpeg-name
+             WHEN "MI"
+               MOVE "michigan.jpg" to state-jpeg-name
+             WHEN "MN"
+               MOVE "minnesota.jpg" to state-jpeg-name
+             WHEN "MS"
+               MOVE "mississippi.jpg" to state-jpeg-name
+             WHEN "MO"
+               MOVE "missouri.jpg" to state-jpeg-name
+             WHEN "MT"
+               MOVE "montana.jpg" to state-jpeg-name
+             WHEN "NE"
+               MOVE "nebraska.jpg" to state-jpeg-name
+             WHEN "NV"
+               MOVE "nevada.jpg" to state-jpeg-name
+             WHEN "NH"
+               MOVE "newhampshire.jpg" to state-jpeg-name
+             WHEN "NJ"
+               MOVE "newjersey.jpg" to state-jpeg-name
+             WHEN "NM"
+               MOVE "newmexico.jpg" to state-jpeg-name
+             WHEN "NY"
+               MOVE "newyork.jpg" to state-jpeg-name
+             WHEN "NC"
+               MOVE "northcarolina.jpg" to state-jpeg-name
+             WHEN "ND"
+               MOVE "northdakota.jpg" to state-jpeg-name
+             WHEN "OH"
+               MOVE "ohio.jpg" to state-jpeg-name
+             WHEN "OK"
+               MOVE "oklahoma.jpg" to state-jpeg-name
+             WHEN "OR"
+               MOVE "oregon.jpg" to state-jpeg-name
+             WHEN "PA"
+               MOVE "pennsylvania.jpg" to state-jpeg-name
+             WHEN "RI"
+               MOVE "rhodeisland.jpg" to state-jpeg-name
+             WHEN "SC"
+               MOVE "southcarolina.jpg" to state-jpeg-name
+             WHEN "SD"
+               MOVE "southdakota.jpg" to state-jpeg-name
+             WHEN "TN"
+               MOVE "tennessee.jpg" to state-jpeg-name
+             WHEN "TX"
+               MOVE "texas.jpg" to state-jpeg-name
+             WHEN "UT"
+               MOVE "utah.jpg" to state-jpeg-name
+             WHEN "VT" 
+               MOVE "vermont.jpg" to state-jpeg-name
+             WHEN "VA"
+               MOVE "virgina.jpg" to state-jpeg-name
+             WHEN "WA"
+               MOVE "washington.jpg" to state-jpeg-name
+             WHEN "WV"
+               MOVE "westvirginia.jpg" to state-jpeg-name
+             WHEN "WI"
+               MOVE "wisconsin.jpg" to state-jpeg-name
+             WHEN "WY"
+               MOVE "wyoming.jpg" to state-jpeg-name
+             WHEN OTHER
+               MOVE "wyoming.jpg" to state-jpeg-name
+           END-EVALUATE
+           .
+      *
+       Report1f-HeavySalesEF-BeforePrint.
+           MOVE Heavy-Equipment-Sales to PR-Heavy-Sales           
+           .
+      *
+       Report1f-SuppliesSalesEF-BeforePrint.
+           MOVE Supplies-Sales to PR-Supplies-Sales                      
+           .
+      *
+       Report1f-GH-2-AfterPrint.
+           MOVE Sales-Branch-No to Sales-Branch-No-Save
+           .
+      *
+       Report1f-TotalBranchHeavyEF-BeforePrint.
+           MOVE Total-Branch-Heavy-Sales to 
+                            PR-Total-Branch-Heavy-Sales.
+           INITIALIZE Total-Branch-Heavy-Sales
+           .
+      *
+       Report1f-TotalBranchSuppliesEF-BeforePrint.
+           MOVE Total-Branch-Supplies-Sales to 
+                          PR-Total-Branch-Supplies-Sales.
+           INITIALIZE Total-Branch-Supplies-Sales
+           .
+      *
+       Report1f-GH-1-AfterPrint.
+           MOVE Sales-State to Sales-State-Save
+           .
+      *
+       Report1f-TotalStateHeavyEF-BeforePrint.
+            Move Total-State-Heavy-Sales to 
+                           PR-Total-State-Heavy-Sales.
+            INITIALIZE Total-State-Heavy-Sales
+           .
+      *
+       Report1f-TotalStateSuppliesEF-BeforePrint.
+            Move Total-State-Supplies-Sales to 
+                           PR-Total-State-Supplies-Sales.
+            INITIALIZE Total-State-Supplies-Sales
+           .
+      *
+       Report1f-RwEf-6-BeforePrint.
+            ADD 1 to Report1f-PageNumber.
+            MOVE Report1f-PageNumber to PR-Report1f-PageNumber
+           .
+      *
+       Report1f-Dtl-1-BeforePrint.
+      * increment-gf-1-columns.
+            ADD Heavy-Equipment-Sales to Total-State-Heavy-Sales.
+            ADD Supplies-Sales to Total-State-Supplies-Sales.
+      * increment-gf-2-columns.
+            ADD Heavy-Equipment-Sales to Total-Branch-Heavy-Sales.
+            ADD Supplies-Sales to Total-Branch-Supplies-Sales           
+           .
+
+@}}
+
+[KEY_STATUS_FIELD_FORMAT]
+PIC=9(4)
+USAGE=[None]
+
+[KEYSTATUS_CONTENT:KS1]
+CONDITION=Exit-Pushed
+VALUE=27
+
+[KEYSTATUS_CONTENT:KS2]
+CONDITION=Message-Received
+VALUE=95
+
+[KEYSTATUS_CONTENT:KS3]
+CONDITION=Event-Occurred
+VALUE=96
+
+[KEYSTATUS_CONTENT:KS4]
+CONDITION=Screen-No-Input-Field
+VALUE=97
+
+[KEYSTATUS_CONTENT:KS5]
+CONDITION=Screen-Time-Out
+VALUE=99
+
+[CODE_GENERATION_OPTIONS]
+FOLLOW_PROJECT_OPTIONS=1
+GENERATE_PROGRAM_FILE=1
+GENERATE_WORKING_STORAGE=1
+GENERATE_EVENT_PARAGRAPH=1
+GENERATE_SCREEN_SECTION=1
+GENERATE_REPORT_SECTION=1
+GENERATE_PROCEDURE_DIVISION=1
+GENERATE_MENU_PARAGRAPH=1
+GENERATE_LINKAGE_SECTION=1
+REPLACE_REMARK_PART=1
+EXCLUDE_PROGRAM_VARIABLE=1
+EXCLUDE_PROGRAM_PARAGRAPH=1
+PROGRAM_EXTENSION=.cbl
+WORKINGSTORAGE_EXTENSION=.wrk
+EVENT_EXTENSION=.evt
+SCREEN_EXTENSION=.scr
+REPORT_EXTENSION=.rpt
+PROCEDURE_EXTENSION=.prd
+MENU_EXTENSION=.mnu
+LINKAGE_EXTENSION=.lks
+PROGRAM_FILE_READ_ONLY=0
+LINK_CLOSE_TO_OPEN=0
+COPYBOOK_READ_ONLY=1
+GENERATE_COPY_FILES=1
+ACCEPT_CONTROL=1
+ANSI_DOCUMENT_FORMAT=1

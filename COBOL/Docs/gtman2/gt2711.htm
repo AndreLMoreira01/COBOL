@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:12" />
+  <title>7.7  Mouse Handling: Sample Code</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt27.htm">Chapter 7:  Using the Mouse </a> &gt; </p>
+<a name="wp1026572"> </a><h2 class="pHeading1">
+7.7  Mouse Handling: Sample Code
+</h2>
+<div class="pPreformatted"><pre class="pPreformatted">
+identification division.<a name="wp1026573"> </a>
+program-id.  mouse-sample.<a name="wp1030737"> </a>
+remarks.<a name="wp1030739"> </a>
+   This program provides an example of programmed <a name="wp1030741"> </a>
+   mouse handling.<a name="wp1031955"> </a>
+data division.<a name="wp1026574"> </a>
+working-storage section.<a name="wp1030743"> </a>
+<a name="wp1030745"> </a>
+77  key-entered    pic 9(3).<a name="wp1030747"> </a>
+    88  mouse-button-clicked  value 81, 87.<a name="wp1030749"> </a>
+    88  left-button-clicked   value 81.<a name="wp1030751"> </a>
+    88  right-button-clicked  value 87.<a name="wp1030753"> </a>
+<a name="wp1030755"> </a>
+77  menu-selection  pic 9 value 1.<a name="wp1030757"> </a>
+    88  exit-selected  value 9.<a name="wp1030759"> </a>
+<a name="wp1030763"> </a>
+77  MOUSE-FLAGS    pic 9(5).<a name="wp1034168"> </a>
+77  pointer-idx    pic 9 value zero.<a name="wp1030767"> </a>
+<a name="wp1030769"> </a>
+01  name-array.<a name="wp1030771"> </a>
+  03 name-data.<a name="wp1030773"> </a>
+    05  filler    pic x(9) value &quot;arrow&quot;.<a name="wp1030775"> </a>
+    05  filler    pic x(9) value &quot;bar&quot;.<a name="wp1030777"> </a>
+    05  filler    pic x(9) value &quot;cross&quot;. <a name="wp1030779"> </a>
+    05  filler    pic x(9) value &quot;hourglass&quot;.<a name="wp1030781"> </a>
+  03  mouse-name redefines name-data occurs 4    pic x(9).<a name="wp1030783"> </a>
+<a name="wp1030785"> </a>
+copy &quot;acugui.def&quot;.<a name="wp1030787"> </a>
+screen section.<a name="wp1026575"> </a>
+01  main-screen.<a name="wp1030789"> </a>
+  03  &quot;The Screen&quot;, reverse high line 1 col 20.<a name="wp1030791"> </a>
+  03  &quot;Change Pointer&quot;, reverse high line 2 col 3.<a name="wp1030793"> </a>
+  03  &quot;Describe Pointer&quot;, reverse high line 4 col 3. <a name="wp1030795"> </a>
+  03  &quot;EXIT&quot;, reverse high line 6 col 3.<a name="wp1030797"> </a>
+procedure division.<a name="wp1026576"> </a>
+main-logic.<a name="wp1030799"> </a>
+<a name="wp1030801"> </a>
+* Test for presence of mouse on system.<a name="wp1030803"> </a>
+    call &quot;w$mouse&quot; using test-mouse-presence.<a name="wp1030805"> </a>
+    if return-code = zero<a name="wp1030807"> </a>
+      display &quot;No mouse present&quot;<a name="wp1030809"> </a>
+      go to main-logic-exit.<a name="wp1030811"> </a>
+<a name="wp1030813"> </a>
+* Enable program to recognize left and right button clicks. <a name="wp1030815"> </a>
+    add allow-left-down, allow-right-down giving mouse-flags.<a name="wp1030817"> </a>
+    set environment &quot;mouse-flags&quot; to mouse-flags.<a name="wp1030819"> </a>
+<a name="wp1030821"> </a>
+    display main-screen.<a name="wp1030823"> </a>
+    perform main-screen-handling<a name="wp1026577"> </a>
+      until exit-selected.<a name="wp1030825"> </a>
+main-logic-exit.<a name="wp1026578"> </a>
+<a name="wp1030827"> </a>
+    stop run.<a name="wp1030829"> </a>
+<a name="wp1030831"> </a>
+main-screen-handling.<a name="wp1030833"> </a>
+<a name="wp1030835"> </a>
+    accept omitted, line 1, control key in key-entered.<a name="wp1030837"> </a>
+<a name="wp1030839"> </a>
+    if mouse-button-clicked<a name="wp1030841"> </a>
+      call &quot;w$mouse&quot; using get-mouse-status, mouse-info <a name="wp1030843"> </a>
+      evaluate mouse-row<a name="wp1030845"> </a>
+        when 2   perform change-mouse-shape <a name="wp1030847"> </a>
+        when 4   perform display-mouse-shape<a name="wp1030849"> </a>
+        when 6   set exit-selected to true<a name="wp1030851"> </a>
+        when other <a name="wp1030853"> </a>
+          display &quot;Clicked&quot; <a name="wp1030855"> </a>
+        end-evaluate.<a name="wp1030857"> </a>
+<a name="wp1030859"> </a>
+change-mouse-shape.<a name="wp1030861"> </a>
+    if pointer-idx &lt; 4<a name="wp1030863"> </a>
+      add 1 to pointer-idx<a name="wp1030865"> </a>
+    else    <a name="wp1030867"> </a>
+      move 1 to pointer-idx. <a name="wp1030869"> </a>
+    call &quot;w$mouse&quot; using set-mouse-shape, pointer-idx.<a name="wp1030871"> </a>
+<a name="wp1030873"> </a>
+display-mouse-shape.<a name="wp1030875"> </a>
+    call &quot;w$mouse&quot; using get-mouse-shape.<a name="wp1030877"> </a>
+	display &quot;Current mouse shape is&quot; mouse-name (return-code).<a name="wp1030879"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

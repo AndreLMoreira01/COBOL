@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:25" />
+  <title>2.2  Runtime Options</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch2-rm.htm">Chapter 2:  RM/COBOL Conversions</a> &gt; </p>
+<a name="wp1034739"> </a><h2 class="pHeading1">
+2.2  Runtime Options
+</h2>
+<a name="wp1034741"> </a><p class="pBody">
+There are several runtime options that you will probably want to employ.  The &quot;-w&quot; flag suppresses warning messages from the runtime system.  In particular, it inhibits the warning message &quot;NONNUMERIC DATA IN NUMERIC ITEM&quot;.  This message is printed whenever a numeric field is used in a <em class="cEmphasis">numeric</em> fashion and that field does not contain a valid number.  The default action for ACUCOBOL-GT is to print the warning message and then treat the value as zero.  RM/COBOL does not check for this case and proceeds to do some undefined action.  Because it does not test for this condition, it shows up in programs surprisingly often.  When the &quot;-w&quot; runtime flag is specified, ACUCOBOL-GT does not print a message and acts on the field with its current value.  The results are not well defined but usually are the same as the same program run under RM/COBOL.  
+</p>
+<a name="wp1034742"> </a><p class="pBody">
+By default, ACUCOBOL-GT uses 1985 ANSI standard file status codes.  These codes differ from those used by RM/COBOL in several respects.  If your programs are written to the 1974 RM/COBOL standard, you should add the following line to the configuration file to cause ACUCOBOL-GT to use those file status codes:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE-STATUS-CODES  74<a name="wp1034743"> </a>
+</pre></div>
+<a name="wp1034744"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If you are converting programs from RM/COBOL-85, and use the default 1985 standard status codes, then you will <em class="cEmphasis">not</em> want to add this line to the configuration file.  
+<hr />
+</p>
+<a name="wp1034745"> </a><p class="pBody">
+RM/COBOL (but not RM/COBOL-85) also automatically closes all non-print files in a subprogram when that program exits.  This is in conflict with the ANSI standard which states that a subprogram remains in the same state until explicitly canceled.  ACUCOBOL-GT follows the ANSI standard.  If your programs depend on this behavior, however, you can add the following line to the configuration file to cause ACUCOBOL-GT to act the same way that RM/COBOL does:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CLOSE-ON-EXIT  1<a name="wp1034746"> </a>
+</pre></div>
+<a name="wp1034747"> </a><p class="pBody">
+You will also need to edit the configuration file to describe which printers are attached to your system.  You may also want to set the PATH entry to describe where your object-code files reside.  These procedures are described in Chapter 2 of the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT </span><em class="cEmphasis">User's Guide, </em>&quot;Compiler and Runtime.&quot; 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

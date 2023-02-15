@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:46:11" />
+  <title>8.1 Machine Failures</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv8.htm">Chapter 8: System Management</a> &gt; </p>
+<a name="wp1034994"> </a><h2 class="pHeading1">
+8.1 Machine Failures
+</h2>
+<a name="wp1034996"> </a><p class="pBody">
+There are two major concerns regarding client and server machine failures:  
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034997"> </a><div class="pSmartList1"><li>What happens to open files when a client or server crashes?</li></div>
+<a name="wp1034998"> </a><div class="pSmartList1"><li>How are other clients and servers affected by a crash?</li></div>
+</ul></div>
+<a name="wp1034999"> </a><p class="pBody">
+When a client application is terminated with a Control-C or <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">kill</span> command (other than a &quot;kill -9&quot;), the AcuServer<sup class="cSuperscript">®</sup> software detects the termination and closes all files held open for that client process.  However, other terminal software and hardware failures may not be detected.
+</p>
+<a name="wp1035002"> </a><p class="pBody">
+AcuServer offers an optional mechanism for detecting connections that terminate unexpectedly.  The mechanism works by establishing regular, periodic communication from the UNIX/Linux or Windows client to AcuServer.  The <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> process keeps a record of each participating connection's periodic communication and regularly analyzes these records for evidence of a dead connection.  If a connection fails to send its periodic communication for two consecutive periods, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> concludes that the connection is dead, closes any open files associated with the connection, and disconnects the socket.  The detection mechanism is enabled with two configuration variables, one on the server and one on the client.
+</p>
+<a name="wp1035004"> </a><p class="pBody">
+On the server, the detection mechanism is enabled with the DEAD_CLIENT_TIMEOUT configuration variable.  When DEAD_CLIENT_TIMEOUT is set to &quot;-1&quot;, its default value, the detection mechanism is disabled.  When DEAD_CLIENT_TIMEOUT is set to any other value, the detection mechanism is enabled and the variable's value is interpreted as the interval, in seconds, at which <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> will analyze its records to detect dead connections. 
+</p>
+<a name="wp1035006"> </a><p class="pBody">
+On the client, the AGS_PING-TIME configuration variable enables or disables the detection mechanism.  When AGS_PING_TIME is set to &quot;-1&quot;, the periodic communications mechanism is disabled and the connection cannot be automatically disconnected.  When AGS_PING_TIME is set to any other value, the reporting mechanism is enabled and the connection is included in <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span>'s monitoring table.  The value of AGS_PING_TIME specifies the interval, in seconds, at which the client will send an &quot;I'm alive&quot; message (a &quot;no-op&quot; instruction) to the server.  The value is communicated to <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> at the time that the connection is established so that <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> can determine, when it checks its monitoring records, whether a connection has missed two or more consecutive communication periods.
+</p>
+<a name="wp1035007"> </a><p class="pBody">
+The following example illustrates the system's behavior.  If DEAD_CLIENT_TIMEOUT is set to &quot;300&quot; (300 seconds = 5 minutes), the dead connection detection mechanism is enabled on the server and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> analyzes its communication records every five minutes to look for dead connections.  If, on the client, AGS_PING_TIME is set to &quot;60&quot;, when a connection is established with the server, the server is told to expect an &quot;I'm alive&quot; message every 60 seconds and the connection proceeds to send those messages.  If for some reason the connection fails to send the message for two or more consecutive periods, the next time that <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> checks its records (which it's checking every five minutes), it will detect that the connection is dead and automatically close all files opened by that connection, release all locks held by that connection, and close the associated socket.
+</p>
+<a name="wp1047352"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>The AGS_PING_TIME mechanism depends on regular system calls, which may slow some systems (noteably some versions of Solaris) and affect the runtime's performance.  Please test for performance before using this configuration variable in a production environment.
+</p>
+<a name="wp1047353"> </a><p class="pNoteEnd">
+Also note that AGS_PING_TIME starts an internal runtime thread to send its periodic communication to the server.  This means that any activity that suspends thread switching will prevent this mechanism from working.
+<hr />
+</p>
+<a name="wp1047354"> </a><p class="pBody">
+With clients that do not participate in the dead client detection mechanism, if a client system crashes while using AcuServer, the server will hold the client's open files open until the unlock function is used to close the files, or until the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> daemon is stopped and restarted (when AcuServer is stopped, all open files are closed).  For a description of the use of the unlock function, see <a  href="srv521.htm#wp1062960">section 5.8, &quot;Closing Stranded Files.&quot;</a>
+</p>
+<a name="wp1035009"> </a><p class="pBody">
+Should the server go down, all clients actively using AcuServer will get access errors when attempting to communicate with the server.  Client applications must disconnect (see C$DISCONNECT, Appendix I, Book 4 of the ACUCOBOL-GT® documentation set) or shutdown and wait for the return of the server.  All files that were open on the server at the time of the crash are left in an unknown state and may be corrupt.  If <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> is automatically started when the server boots, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> should be immediately halted.  Before AcuServer is started, all files that might have been affected by the crash should be checked and, if necessary, rebuilt.  After all files have been verified, the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> daemon can be started.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

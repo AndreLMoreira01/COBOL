@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:43:44" />
+  <title>C.8  Runtime Errors</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4glc.htm">Appendix C:  Acu4GL for Oracle Information</a> &gt; </p>
+<a name="wp1063423"> </a><h2 class="pHeading1">
+C.8  Runtime Errors
+</h2>
+<a name="wp1046025"> </a><p class="pBody">
+This section lists the Acu4GL error messages that could occur during execution of your program.  <a  href="4gl9.htm#wp1042318">Chapter 9</a> provides information on compile-time errors and also provides several methods for retrieving runtime errors.
+</p>
+<a name="wp1046026"> </a><p class="pBody">
+Each message is followed by an explanation and a recommended recovery procedure. 
+</p>
+<a name="wp1046035"> </a><p class="pBody">
+Runtime errors will have this format:<b class="cBold"> </b>
+</p>
+<a name="wp1046036"> </a><p class="pBody">
+<b class="cBold">9D,xxxx </b>
+</p>
+<a name="wp1046037"> </a><p class="pBody">
+The 9D indicates a file system error and is reported in your FILE STATUS variable.  The <em class="cEmphasis">xx</em> is a secondary, database-specific error code.  These are the secondary errors reported directly from Acu4GL for Oracle:
+</p>
+<a name="wp1046038"> </a><p class="pBody">
+<b class="cBold">9D,03 	Dictionary (.xfd) file not found</b>
+</p>
+<a name="wp1049452"> </a><p class="pBody">
+The dictionary file for one of your COBOL files cannot be located.  Be sure you have specified the correct directory via your <a  href="4gl820.htm#wp1036155">XFD_PREFIX</a> configuration variable.  You may need to recompile with the &quot;-Fx&quot; option to create the dictionary.  See <a  href="4gl82.htm#wp1046261">section 8.1</a> for additional information on compiler options.
+</p>
+<a name="wp1046040"> </a><p class="pBody">
+<b class="cBold">9D,04 	Corrupt dictionary file</b>
+</p>
+<a name="wp1046041"> </a><p class="pBody">
+The dictionary file for one of your COBOL files is corrupt and cannot be read.  Recompile with &quot;-Fx&quot; to re-create the dictionary.  Note that this error may be caused by inappropriate application of a directive.  Check all directives, and call Acucorp Technical Support if you have questions.
+</p>
+<a name="wp1046042"> </a><p class="pBody">
+<b class="cBold">9D,05 	Too many fields in the key (more than 16 for Oracle)</b>
+</p>
+<a name="wp1046043"> </a><p class="pBody">
+Check your key definitions and redefine the key that is illegal, and then recompile with &quot;-Fx&quot;.
+</p>
+<a name="wp1046044"> </a><p class="pBody">
+<b class="cBold">9D,06 	Mismatched dictionary file</b>
+</p>
+<a name="wp1046045"> </a><p class="pBody">
+The dictionary file (.xfd) for one of your files conflicts with the COBOL description of the file FD.  The &quot;xx&quot; indicates a tertiary error code that is defined by the host file system.  You can determine the exact nature of the mismatch by referring to the host system's error values.
+</p>
+<a name="wp1046046"> </a><p class="pBody">
+The tertiary error code may have any of these values:
+</p>
+<a name="wp1046047"> </a><p class="pBody">
+<b class="cBold">01</b> - mismatch found but exact cause unknown (this status is returned by the host file system)
+</p>
+<a name="wp1046048"> </a><p class="pBody">
+<b class="cBold">02</b> - mismatch found in file's maximum record size 
+</p>
+<a name="wp1046049"> </a><p class="pBody">
+<b class="cBold">03</b> - mismatch found in file's minimum record size
+</p>
+<a name="wp1046050"> </a><p class="pBody">
+<b class="cBold">04</b> - mismatch found in the number of keys in the file 
+</p>
+<a name="wp1046051"> </a><p class="pBody">
+<b class="cBold">05</b> - mismatch found in primary key description 
+</p>
+<a name="wp1046052"> </a><p class="pBody">
+<b class="cBold">06</b> - mismatch found in first alternate key description 
+</p>
+<a name="wp1046053"> </a><p class="pBody">
+<b class="cBold">07</b> - mismatch found in second alternate key description
+</p>
+<a name="wp1046054"> </a><p class="pBody">
+The list continues in this manner for each alternate key.
+</p>
+<a name="wp1046055"> </a><p class="pBody">
+<b class="cBold">9D,08 	Attempt to use multiple users</b>
+</p>
+<a name="wp1046056"> </a><p class="pBody">
+An attempt was made to change the login name during processing.  Check your login name.
+</p>
+<a name="wp1046057"> </a><p class="pBody">
+There are additional 9D secondary error numbers.  These are Oracle error codes.  You can determine the meanings of Oracle database error codes by referring to the Oracle documentation.  
+</p>
+<a name="wp1046058"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>See your Oracle documentation on the &quot;oerr&quot; syntax for more information.
+<hr />
+</p>
+<a name="wp1046059"> </a><p class="pBody">
+<b class="cBold">9D,1001		 Invalid Cursor</b>
+</p>
+<a name="wp1046060"> </a><p class="pBody">
+The prepare portion is aged out of cache.  Re-enter the code while invalidating the prepare portion.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

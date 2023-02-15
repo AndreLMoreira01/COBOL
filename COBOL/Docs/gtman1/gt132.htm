@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:09" />
+  <title>3.1 Runtime Debugger</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt13.htm"><br />Chapter 3:  Debugger and Utilities</a> &gt; </p>
+<a name="wp1107199"> </a><h2 class="pHeading1">
+3.1 Runtime Debugger
+</h2>
+<a name="wp1032219"> </a><p class="pBody">
+This chapter describes how to use the ACUCOBOL-GT runtime debugger and other utility programs supplied with ACUCOBOL-GT.  
+</p>
+<a name="wp1032222"> </a><p class="pBody">
+<b class="cBold">runcbl</b> contains a built-in source-level debugger.  This debugger runs in a window that overlays the screen so that the active program is not disturbed.  
+</p>
+<a name="wp1093052"> </a><p class="pBody">
+In all environments, the runtime debugger interface contains a menu bar and command window.  To navigate through source code in character environments, use the &quot;Up&quot; and &quot;Down&quot; menu items.  You can also use the arrow keys and Page Up and Page Down keys to move through the code.</p><div><img src="ch3_debu.gif" height="383" width="596" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1102801"> </a><p class="pBody">
+In Microsoft Windows environments, the debugger also contains a toolbar.  When you perform full source debugging in Windows, a scroll bar appears to the right of the source, offering an easy way to scroll through the code.  </p><div><img src="ch3_1_de.gif" height="303" width="400" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1032228"> </a><p class="pBody">
+You can run the debugger at any time, but in order to reference the program's symbols by name, or view the source code, you must have compiled the program with some special options.  
+</p>
+<a name="wp1032231"> </a><p class="pBody">
+The runtime debugger supports three modes of operation: source debugging, symbolic debugging, and low-level debugging.  
+</p>
+<a name="wp1032232"> </a><h3 class="pHeadingRef">
+Source Debugging
+</h3>
+<a name="wp1032235"> </a><p class="pBody">
+<em style="font-style: normal" class="cEmphasis">At the development stage, </em><em class="cEmphasis">source debugging</em> is the most useful, because it allows you to view the source code while you are debugging.   To use source debugging, compile the program with the &quot;-Gd&quot; or &quot;-Ga&quot; option.  Because these compiler options cause all of the source code to be bundled with the object code, you'll notice that the size of your object code grows considerably.
+</p>
+<a name="wp1090514"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Although the compiler accepts lines longer than 80 characters in TERMINAL format files, in source debugging mode the debugger does not display characters past the 80th column. If possible, use the AcuBench integrated debugger instead.
+<hr />
+</p>
+<a name="wp1032236"> </a><h3 class="pHeadingRef">
+Symbolic Debugging
+</h3>
+<a name="wp1032239"> </a><p class="pBody">
+<em class="cEmphasis">Symbolic debugging</em> does not allow you to view the program source, but does allow you to reference paragraphs and variables by their COBOL identifiers.  The advantage to using symbolic debugging rather than source debugging is that the compiled object module is much smaller.  This may be useful if disk space is very tight.  Some application developers compile their programs with symbolic debugging for delivery to clients in order to facilitate the resolution of client questions over the phone.  You must compile the program with the &quot;-Gy&quot; or &quot;-Gs&quot; option to use symbolic debugging.  
+</p>
+<a name="wp1032240"> </a><h3 class="pHeadingRef">
+Low-Level Debugging
+</h3>
+<a name="wp1097569"> </a><p class="pBody">
+<em class="cEmphasis">Low-level debugging</em> is available at any time <em class="cEmphasis">even if the program was not compiled with any debugging options</em>, but you must use absolute addresses to access variables, so you'll need a listing of your program.  Low-level debugging is convenient when you're debugging a data-dependent problem on a client's machine, if the client does not have a debug-version of your program.  The &quot;Trace Files&quot; command described in <a  href="gt1319.htm#wp1032962">section 3.1.4</a> operates in this mode.  &quot;Trace Files&quot; is particularly useful for tracking data-specific problems in complex applications.  
+</p>
+<a name="wp1097573"> </a><h3 class="pHeadingRef">
+Debugging in background mode
+</h3>
+<a name="wp1097680"> </a><p class="pBody">
+If your ACUCOBOL-GT programs are called from programs written in other languages, or if you are running in an environment that includes an application server or OLTP software, you likely have programs running in background mode (executed with the &quot;-b&quot; flag).  Complete instructions for debugging programs running in background mode is available in Chapter 9 of <em class="cEmphasis">A Guide to Interoperating with ACUCOBOL-GT</em>.
+</p>
+<a name="wp1097659"> </a><h3 class="pHeadingRef">
+The Abend Diagnostic Report
+</h3>
+<a name="wp1097575"> </a><p class="pBody">
+When a program experiences an abnormal shutdown, running in debug may not reveal the source of the problem.  In such cases, the ACUCOBOL-GT runtime can produce a report to show the state of the program at the moment of termination.  This Abend Diagnostic Report, or ADR, can help you to analyze the cause of an abnormal shutdown.
+</p>
+<a name="wp1096940"> </a><p class="pBody">
+More information about this report is included in <a  href="gt1326.htm#wp1096941">section 3.1.9, &quot;Using the Abend Diagnostic Report (ADR).&quot;</a>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

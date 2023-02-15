@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>STOP Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1042245"> </a><h2 class="pHeading2">
+STOP Statement
+</h2>
+<a name="wp1042247"> </a><p class="pBody">
+The STOP statement terminates or suspends the program.
+</p>
+<a name="wp1042249"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<a name="wp1042250"> </a><h3 class="pHeadingRef">
+Format 1
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">STOP</u> <u class="cUnderline">RUN</u> [ {RETURNING} return-value ]<a name="wp1042251"> </a>
+           {GIVING   }<a name="wp1042252"> </a>
+</pre></div>
+<a name="wp1042253"> </a><h3 class="pHeadingRef">
+Format 2
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">STOP</u> literal<a name="wp1042254"> </a>
+</pre></div>
+<a name="wp1042255"> </a><h3 class="pHeadingRef">
+Format 3
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">STOP</u> <u class="cUnderline">THREAD</u> [ thread-id ]<a name="wp1042256"> </a>
+</pre></div>
+<a name="wp1042258"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042259"> </a><div class="pSmartList1"><li><em class="cEmphasis">Return-value</em> must be a numeric literal or data item. </li></div>
+<a name="wp1042260"> </a><div class="pSmartList1"><li><em class="cEmphasis">Literal</em> is a numeric or alphanumeric literal.</li></div>
+<a name="wp1042261"> </a><div class="pSmartList1"><li><em class="cEmphasis">Thread-id</em> must be a USAGE HANDLE or HANDLE OF THREAD data item.</li></div>
+<a name="wp1042262"> </a><div class="pSmartList1"><li>If a STOP RUN statement is in a consecutive sequence of imperative statements in a sentence, it must be the last statement in that sequence.  Any statements after STOP RUN in a sentence will not execute.</li></div>
+<a name="wp1042263"> </a><div class="pSmartList1"><li>The optional word &quot;GIVING&quot; or &quot;RETURNING&quot; may be specified before the return value in a STOP RUN statement.  In this context, &quot;GIVING&quot; and &quot;RETURNING&quot; are merely commentary. </li></div>
+</ol></div>
+<a name="wp1042265"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042266"> </a><div class="pSmartList1"><li>A Format 1 STOP RUN statement terminates the program.  Any files in the open mode are closed.  This is done just as if they were the object of a CLOSE statement with no options. </li></div>
+<a name="wp1042268"> </a><div class="pSmartList1"><li>A Format 2 STOP literal statement suspends execution of the program and passes control to the ACUCOBOL-GT debugger.  The debugger prints the literal on the screen before accepting debugging commands.  Note, however, that you cannot do source level debugging unless you compiled with the &quot;-Zd&quot; option and run with the &quot;-d&quot; option.  </li></div>
+<a name="wp1042269"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">return-value</em> is specified, then it is assigned to the special register RETURN-CODE before the program is exited.  This special register is defined as: </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77   RETURN-CODE SIGNED-LONG, EXTERNAL.<a name="wp1042271"> </a>
+</pre></div>
+<a name="wp1042272"> </a><p class="pIndented1">
+It is implicitly shared by all programs of a run unit and is automatically created by the compiler. The final value of RETURN-CODE is returned to the host operating system when the run unit completes. 
+</p>
+<a name="wp1042273"> </a><div class="pSmartList1"><li>A Format 3 STOP THREAD statement cancels (destroys) a thread.  <em class="cEmphasis">Thread-id</em> identifies the thread to cancel.  If <em class="cEmphasis">thread-id</em> is omitted, the currently executing thread is canceled.  If the current thread is the only thread, the STOP THREAD statement behaves like STOP RUN, except that it shuts down the runtime even if there are nested run units (see CALL RUN). </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

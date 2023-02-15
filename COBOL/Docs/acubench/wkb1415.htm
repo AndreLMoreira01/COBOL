@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:14:50" />
+  <title>14.2.6  Using Report Headers and Footers and the Report Radio Button and Check Box Controls</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuBench User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="wkb14a.htm">Chapter 14: Working with Reports</a> &gt; <a href="wkb149.htm">14.2  Graphical Sample Reports</a> &gt; </p>
+<a name="wp1036756"> </a><h2 class="pHeading2">
+14.2.6  Using Report Headers and Footers and the Report Radio Button and Check Box Controls
+</h2>
+<a name="wp1036782"> </a><p class="pBody">
+In addition to the group headers added in the previous sample report, this sample demonstrates the use of report headers and footers.  Report radio buttons and check boxes are created and manipulated.  Before-Print procedures are added to the report to determine the display state of report radio buttons and check boxes.  
+</p>
+<a name="wp1039452"> </a><p class="pBody">
+This sample also shows how to handle the formatting of numeric fields, which are often used in sales reports.  Numeric fields that store currency amounts are typically described as PIC9(6)V99.  However, you need to format these fields for printing as PIC$ZZZ,ZZ9.99.  
+</p>
+<a name="wp1036816"> </a><p class="pBody">
+Set up your project and work environment as described in <a  href="wkb149.htm#wp1036373">section 14.2</a>, and use the following instructions to finish creating this report.  
+</p>
+<a name="wp1036808"> </a><h3 class="pHeadingRef">
+Create and refine the data set that corresponds to your data layout:
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036823"> </a><div class="pSmartList1"><li>Open a new blank program called Report1d from the File/New/Program interface.</li></div>
+<a name="wp1036884"> </a><div class="pSmartList1"><li>Set up the <b class="cBold">SalesdataDS</b><span style="font-family: Arial, Verdana, Helvetica, sans-serif"> data set for this program, as you have with previous sample reports.</span></li></div>
+</ol></div>
+<a name="wp1036885"> </a><h3 class="pHeadingRef">
+Design your report in the Report Composer interface:
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036886"> </a><div class="pSmartList1"><li>Open a new blank graphical report named Report1d from the File/New/Report interface, or right-click on the workspace report node and select <b class="cBold">New Report</b>.  </li></div>
+<a name="wp1036887"> </a><div class="pSmartList1"><li>Use the Drag and Drop interface to drag the same four variables named in previous samples into the Report Composer window.  Rename the report labels as before.  </li></div>
+<a name="wp1036888"> </a><div class="pSmartList1"><li>Add a report date time control to the page footer section, as described for the previous report.  </li></div>
+<a name="wp1036889"> </a><div class="pSmartList1"><li>Create the same group headers that you did in Report1c.  </li></div>
+<a name="wp1036896"> </a><div class="pSmartList1"><li>Create a report header and footer using the Section Controller.  Right-click in the Report Composer window and select <b class="cBold">Section</b> <b class="cBold">Controller</b>.  In the Header &amp; Footer frame, select the Report Header and Report Footer check boxes.  Click <b class="cBold">OK</b>.  </li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1039477"> </a><div class="pSmartList2"><li>In the Property window, set the Font property so that your report labels in the report header and footer are MS Sans Serif, size 24 bold.  </li></div>
+<a name="wp1039484"> </a><div class="pSmartList2"><li>Set the Lines property for both the report header and the footer to &quot;0.72&quot;.</li></div>
+<a name="wp1039485"> </a><div class="pSmartList2"><li>Set the Title property for the report label in your report header to &quot;Sales Report&quot;.  For the report label in the report footer, change this property to &quot;***End Sales Report***&quot;.  </li></div>
+</ul></div>
+<a name="wp1036907"> </a><div class="pSmartList1"><li>Adjust report entry fields to display numeric fields.</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1036908"> </a><div class="pSmartList2"><li>In the Drag and Drop interface, select the HeavySales and SuppliesSales variables and drag them to the Report Composer window.  Position the labels in the page header section as column headers and the entry fields in the detail section, aligned under their respective column headers.  </li></div>
+<a name="wp1036912"> </a><div class="pSmartList2"><li>In the Property window for the HeavySales entry field, enter a Value Variable of &quot;PR-Heavy-Sales&quot; with a Value Picture of &quot;$ZZZ,ZZ9.99&quot;.  Note that this variable is automatically added to Working-Storage.  Similarly, in the Property window for SuppliesSales, enter a Value Variable of &quot;PR-Supplies-Sales&quot; with a Value Picture of &quot;$ZZZ,ZZ9.99&quot;.  Set the Justification property for both entry fields to &quot;Right&quot; to align the columns on the decimal point.   Set the Border Style property for each entry field to &quot;No Box&quot;.  </li></div>
+<a name="wp1036929"> </a><div class="pSmartList2"><li>Use a Before-Print procedure entry point to format numeric fields.  In the detail section, double-click the HeavySales entry field to open the Add Paragraph dialog, which is pre-filled with &quot;Report1d-HeavySalesEF-BeforePrint&quot;.  Click <b class="cBold">OK</b> to open the Event Editor, which displays this paragraph name.  Enter the following code:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Move Heavy-Equipment-Sales to PR-Heavy-Sales. <a name="wp1036930"> </a>
+</pre></div>
+<a name="wp1036933"> </a><div class="pSmartList2"><li>Double-click the SuppliesSales entry field to open the Add Paragraph dialog, which is pre-filled with &quot;Report1d-SuppliesSalesEF-BeforePrint&quot;.  Click <b class="cBold">OK</b> to open the Event Editor, which displays this paragraph name.  Enter the following code:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Move Supplies-Sales to PR-Supplies-Sales. <a name="wp1036940"> </a>
+</pre></div>
+</ul></div>
+<a name="wp1036944"> </a><div class="pSmartList1"><li>Create report radio buttons.</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1036951"> </a><div class="pSmartList2"><li>In the Drag and Drop interface, select &quot;Rpt.Radio-Button&quot; from the right-hand drop-down box.  Select the Sales-Gender variable and drag it to the detail section in the Report Composer window.  This action causes the automatic display of the Make Radio Button dialog.  </li></div>
+<a name="wp1036958"> </a><div class="pSmartList2"><li>In the Make Radio Button interface, replace the text in the Prompt field with &quot;M&quot;.  Use the Add push button to include a second radio button and give it a title of &quot;F&quot; in the Prompt field.  (Note that if you create a radio button from the Report Component Toolbox, the Make Radio Button dialog is not automatically displayed.  In this case, change the radio button titles in the Property window.) </li></div>
+<a name="wp1036972"> </a><div class="pSmartList2"><li>Assign a Value Variable for each radio button.  Select the &quot;M&quot; radio button to display its Property window.  Enter &quot;PR-Gender-M&quot; for the Value Variable property, and &quot;9&quot; for its Value Picture.  Similarly, in the Property window for the &quot;F&quot; radio button, enter a Value Variable of &quot;PR-Gender-F&quot; and a Value Picture of &quot;9&quot;.  The only permissible values for the report radio button Value Variable are &quot;1&quot; (selected) or &quot;0&quot; (not selected).  </li></div>
+<a name="wp1036986"> </a><div class="pSmartList2"><li>Add a Before-Print procedure to the first radio button in the group for the logic that determines the display state of all the radio buttons in the group.  You need to set the state of all report radio buttons in a group.  Double-click the &quot;M&quot; radio button to open the Add Paragraph dialog, which pre-fills with &quot;Report1d-MaleRb-BeforePrint&quot;.  Click <b class="cBold">OK</b> to open the Event Editor, which displays this paragraph name.  Enter the following code:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+if Sales-Gender = &quot;M&quot;<a name="wp1036997"> </a>
+   move 1 to PR-Gender-M<a name="wp1037001"> </a>
+   move 0 to PR-Gender-F<a name="wp1037002"> </a>
+else<a name="wp1037003"> </a>
+   move 0 to PR-Gender-M<a name="wp1037004"> </a>
+   move 1 to PR-Gender-F<a name="wp1037005"> </a>
+end if.<a name="wp1037006"> </a>
+</pre></div>
+</ul></div>
+<a name="wp1037011"> </a><div class="pSmartList1"><li>Create a report check box.  </li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1037015"> </a><div class="pSmartList2"><li>In the Drag and Drop interface, select &quot;Rpt.Check-Box&quot; from the right-hand drop-down box.  Select the Sales-Quota variable and drag it to the detail section in the Report Composer window. </li></div>
+<a name="wp1037019"> </a><div class="pSmartList2"><li>Assign a value variable for the check box.  Select the Sales-Quota check box to display its Property window.  Enter &quot;PR-Quota&quot; for the Value Variable property and a Value of &quot;0:FALSE&quot;.  Assign a Value Picture of &quot;9&quot;.  The only permissible values for the report check box Value Variable are &quot;1&quot; (selected) or &quot;0&quot; (not selected). </li></div>
+<a name="wp1043985"> </a><div class="pSmartList2"><li>Note that in a column/header report like this one, the report check box title appears as a column heading in the page header section.  In the Property window for the report check box, click in the Value cell for the Title property and delete the text.  </li></div>
+<a name="wp1037020"> </a><div class="pSmartList2"><li>Add a Before-Print procedure to the check box for the logic that determines its display state.  Double-click the check box to open the Add Paragraph dialog, which pre-fills with &quot;Report1d-QuotaCb-BeforePrint&quot;.  Click <b class="cBold">OK</b> to open the Event Editor, which displays this paragraph name.  Enter the following code:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+add Heavy-Equipment-Sales to Supplies_Sales giving
+          Total-Salesperson-Sales.<a name="wp1037029"> </a>
+if Total-Salesperson-Sales &gt; Sales-Quota<a name="wp1037032"> </a>
+  move 1 to PR-Quota<a name="wp1037033"> </a>
+else<a name="wp1037034"> </a>
+  move 0 to PR-Quota<a name="wp1037035"> </a>
+end if.  <a name="wp1037036"> </a>
+</pre></div>
+</ul></div>
+<a name="wp1037037"> </a><div class="pSmartList1"><li>Generate the program.  A report (&quot;.rpt&quot;) file and a Report Composer Section in the source (&quot;.cbl&quot;) file are created.  </li></div>
+</ol></div>
+<a name="wp1037159"> </a><h3 class="pHeadingRef">
+Make one-time modifications to the generated code  
+</h3>
+<a name="wp1039608"> </a><p class="pIndented1">
+Use the instructions for code modifications described for sample Report 1a.  Note that the PERFORM . . . DO-PRINT-RTN statement is automatically generated by AcuBench.  
+</p>
+<a name="wp1037160"> </a><h3 class="pHeadingRef">
+Compile and execute the program.   
+</h3>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuBench-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

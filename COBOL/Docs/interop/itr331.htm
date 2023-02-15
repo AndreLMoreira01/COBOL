@@ -1,0 +1,364 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:51" />
+  <title>3.6.2  User Interface Approaches</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr3.htm">Chapter 3: Working with Windows Technologies</a> &gt; <a href="itr329.htm">3.6  Using Visual C++ .NET</a> &gt; </p>
+<a name="wp1045684"> </a><h2 class="pHeading2">
+3.6.2  User Interface Approaches
+</h2>
+<a name="wp1045685"> </a><p class="pBody">
+You can use Visual C++ .NET for many things that don't directly affect the user interface.  For example, you can add dynamic data exchange with another application.  If you want to add user interface code, however, you must decide whether to build your user interface using a mix of COBOL and C, or whether to use C alone.  This decision affects how your code interacts with the runtime system.  
+</p>
+<a name="wp1045686"> </a><h3 class="pHeadingRef">
+Using C only, no COBOL
+</h3>
+<a name="wp1045688"> </a><p class="pBody">
+If you build your interface entirely in C, then you have complete flexibility in how the interface works.  In this case, you either want to run the runtime system with the &quot;-b&quot; command-line option, or set the configuration variable NO_CONSOLE to &quot;1&quot;.  When you do this, the runtime won't create its own application window.  Instead, your C code must build its own window.  When you take this approach, you may not use ACCEPT or DISPLAY verbs in your COBOL program (except for those that don't interact with the screen or keyboard).  This approach also works well with a user interface created by a code-generating tool.  
+</p>
+<a name="wp1045691"> </a><h3 class="pHeadingRef">
+Using C and COBOL
+</h3>
+<a name="wp1045692"> </a><p class="pBody">
+If you want to use COBOL in conjunction with C, you must take care to cooperate with the runtime system in how the screen is displayed.  
+</p>
+<a name="wp1045693"> </a><p class="pBody">
+In some cases, you don't need to worry about the runtime system, because 32-bit Windows manages everything.  Generally speaking, this occurs when your C code displays data in its own window.  For example, you can display and accept data from a dialog box without interacting with the runtime system (all you need is the handle of the runtime's window, which you have in &quot;mswinsub.c&quot;).  
+</p>
+<a name="wp1045694"> </a><p class="pBody">
+In other cases, you'll need to cooperate with the runtime's message handler.  For example, if you want to display a graphical object in the main application window, you must monitor &quot;paint&quot; messages to the runtime system and draw your object when appropriate.  The general technique for doing this is called &quot;subclassing.&quot;  When you subclass a window, you instruct 32-bit Windows to pass all of its messages to your own message handler.  Typically, your message handler acts on one or more messages and then passes all the messages to the original message handler.  For detailed instructions on subclassing, see any 32-bit Windows programming text.  The following is an example of a typical case.
+</p>
+<a name="wp1045695"> </a><p class="pBody">
+Suppose that you want to intercept messages to the runtime system and pass them to a routine called &quot;MyMsgHandler&quot;.  You would first declare &quot;MyMsgHandler&quot; as a function designed to be called from 32-bit Windows: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+LRESULT CALLBACK MyMsgHandler( HWND, UINT, WPARAM, LPARAM );<a name="wp1045696"> </a>
+</pre></div>
+<a name="wp1045697"> </a><p class="pBody">
+Next, in your start-up code, you would get the address of the ACUCOBOL-GT message handler and then direct 32-bit Windows to send messages to your handler instead.  The code reads like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FARPROC  lpfnMyMsgHandler, lpfnAcuWndProc;<a name="wp1045698"> </a>
+<a name="wp1045699"> </a>
+lpfnMyMsgHandler = MakeProcInstance((FARPROC) MyMsgHandler, hAcuInstance );<a name="wp1045700"> </a>
+lpfnAcuWndProc = (FARPROC) GetWindowLong( hAcuWnd, GWL_WNDPROC );<a name="wp1045701"> </a>
+SetWindowLong( hAcuWnd, GWL_WNDPROC, (long) lpfnMyMsgHandler );<a name="wp1045702"> </a>
+</pre></div>
+<a name="wp1045703"> </a><p class="pBody">
+At this point, all messages that 32-bit Windows would normally direct to the ACUCOBOL-GT main window procedure are instead received by &quot;MyMsgHandler&quot;.  Your message handler should intercept and act on the messages it cares about.  At the end, it should pass each message on to the original message handler and return the result.  This is usually done with a line that reads like this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+return CallWindowProc( lpfnAcuWndProc, hWnd, iMsg, wParam, lParam );<a name="wp1045704"> </a>
+</pre></div>
+<a name="wp1045706"> </a><p class="pBody">
+For reference, ACUCOBOL-GT for 32-bit Windows currently acts on the following messages:
+</p>
+<a name="wp1045812"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1045709"> </a><p class="pCellBody">
+WM_ACTIVATE
+</p>
+</td>
+    <td><a name="wp1045711"> </a><p class="pCellBody">
+WM_LBUTTONUP
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045713"> </a><p class="pCellBody">
+WM_ACTIVATEAPP
+</p>
+</td>
+    <td><a name="wp1045715"> </a><p class="pCellBody">
+WM_MBUTTONDBLCLK
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045717"> </a><p class="pCellBody">
+WM_CHAR
+</p>
+</td>
+    <td><a name="wp1045719"> </a><p class="pCellBody">
+WM_MBUTTONDOWN
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045721"> </a><p class="pCellBody">
+WM_CLOSE
+</p>
+</td>
+    <td><a name="wp1045723"> </a><p class="pCellBody">
+WM_MBUTTONUP
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045725"> </a><p class="pCellBody">
+WM_COMMAND
+</p>
+</td>
+    <td><a name="wp1045727"> </a><p class="pCellBody">
+WM_MEASUREITEM
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045729"> </a><p class="pCellBody">
+WM_CREATE
+</p>
+</td>
+    <td><a name="wp1045731"> </a><p class="pCellBody">
+WM_MOUSEMOVE
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045733"> </a><p class="pCellBody">
+WM_CTLCOLOR
+</p>
+</td>
+    <td><a name="wp1045735"> </a><p class="pCellBody">
+WM_NCLBUTTONDBLCLK
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045737"> </a><p class="pCellBody">
+WM_CTLCOLORBTN
+</p>
+</td>
+    <td><a name="wp1045739"> </a><p class="pCellBody">
+WM_NCLBUTTONDOWN
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045741"> </a><p class="pCellBody">
+WM_CTLCOLOREDIT
+</p>
+</td>
+    <td><a name="wp1045743"> </a><p class="pCellBody">
+WM_NCPAINT
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045745"> </a><p class="pCellBody">
+WM_CTLCOLORLG
+</p>
+</td>
+    <td><a name="wp1045747"> </a><p class="pCellBody">
+WM_PAINT
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045749"> </a><p class="pCellBody">
+WM_CTLCOLORLISTBOX
+</p>
+</td>
+    <td><a name="wp1045751"> </a><p class="pCellBody">
+WM_PALETTECHANGED
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045753"> </a><p class="pCellBody">
+WM_CTLCOLORMSGBOX
+</p>
+</td>
+    <td><a name="wp1045755"> </a><p class="pCellBody">
+WM_QUERYDRAGICON
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045757"> </a><p class="pCellBody">
+WM_CTLCOLORSCROLLBAR
+</p>
+</td>
+    <td><a name="wp1045759"> </a><p class="pCellBody">
+WM_QUERYENDSESSION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045761"> </a><p class="pCellBody">
+WM_CTLCOLORSTATIC
+</p>
+</td>
+    <td><a name="wp1045763"> </a><p class="pCellBody">
+WM_QUERYNEWPALETTE
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045765"> </a><p class="pCellBody">
+WM_DESTROY
+</p>
+</td>
+    <td><a name="wp1045767"> </a><p class="pCellBody">
+WM_RBUTTONDBLCLK
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045769"> </a><p class="pCellBody">
+WM_DRAWITEM
+</p>
+</td>
+    <td><a name="wp1045771"> </a><p class="pCellBody">
+WM_RBUTTONDOWN
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045773"> </a><p class="pCellBody">
+WM_ENDSESSION
+</p>
+</td>
+    <td><a name="wp1045775"> </a><p class="pCellBody">
+WM_RBUTTONUP
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045777"> </a><p class="pCellBody">
+WM_ERASEBKGND
+</p>
+</td>
+    <td><a name="wp1045779"> </a><p class="pCellBody">
+WM_SETCURSOR
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045781"> </a><p class="pCellBody">
+WM_GETMINMAXINFO
+</p>
+</td>
+    <td><a name="wp1045783"> </a><p class="pCellBody">
+WM_SETFOCUS
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045785"> </a><p class="pCellBody">
+WM_HSCROLL
+</p>
+</td>
+    <td><a name="wp1045787"> </a><p class="pCellBody">
+WM_SIZE
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045789"> </a><p class="pCellBody">
+WM_INITMENU
+</p>
+</td>
+    <td><a name="wp1045791"> </a><p class="pCellBody">
+WM_SIZING
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045793"> </a><p class="pCellBody">
+WM_INITMENUPOPUP
+</p>
+</td>
+    <td><a name="wp1045795"> </a><p class="pCellBody">
+WM_SYSCHAR
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045797"> </a><p class="pCellBody">
+WM_KEYDOWN
+</p>
+</td>
+    <td><a name="wp1045799"> </a><p class="pCellBody">
+WM_SYSCOLORCHANGED
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045801"> </a><p class="pCellBody">
+WM_KILLFOCUS
+</p>
+</td>
+    <td><a name="wp1045803"> </a><p class="pCellBody">
+WM_SYSCOMMAND
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045805"> </a><p class="pCellBody">
+WM_LBUTTONDBLCLK
+</p>
+</td>
+    <td><a name="wp1045807"> </a><p class="pCellBody">
+WM_TIMER
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045809"> </a><p class="pCellBody">
+WM_LBUTTONDOWN
+</p>
+</td>
+    <td><a name="wp1045811"> </a><p class="pCellBody">
+WM_VSCROLL
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1045813"> </a><p class="pBody">
+See the Visual C++ .NET documentation for details about these messages.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

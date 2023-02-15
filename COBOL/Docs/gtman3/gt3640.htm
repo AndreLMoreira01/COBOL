@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>CONVERT Phrase  </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3621.htm">6.4  Common Statement Rules</a> &gt; <a href="gt3630.htm">6.4.9  Common Screen Options</a> &gt; </p>
+<a name="wp1035107"> </a><h2 class="pHeading3">
+CONVERT Phrase  
+</h2>
+<div class="pPreformatted"><pre class="pPreformatted">
+WITH {<u class="cUnderline">CONVERSION</u>}<a name="wp1035108"> </a>
+     {<u class="cUnderline">CONVERT</u>   }<a name="wp1035109"> </a>
+</pre></div>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035110"> </a><div class="pSmartList1"><li>Specifying the CONVERT phrase allows non-USAGE DISPLAY items to be accepted or displayed.  It also allows for automatic conversion of entered data into the internal format of the destination field.  </li></div>
+<a name="wp1035111"> </a><div class="pSmartList1"><li>In a DISPLAY statement, the CONVERT phrase affects only numeric and numeric edited data items.  For numeric data items, leading zeros are converted into spaces, a decimal point is inserted (if needed), and a leading minus sign is inserted (if the value is negative).  The result is then left-justified if RM/COBOL compatibility mode is being used.  Numeric edited items are not converted, but they are justified in the same manner as numeric items.  This form of the CONVERT phrase is called output conversion. </li></div>
+<a name="wp1035115"> </a><p class="pIndented1">
+Floating-point data items are converted from internal format to E-notation.     The format of E-notation is as follows: 
+</p>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1035116"> </a><div class="pSmartList2"><li>FLOAT items have eight digits, one of which is before the decimal point.</li></div>
+<a name="wp1035117"> </a><div class="pSmartList2"><li>DOUBLE items have 17 digits, one of which is before the decimal point.</li></div>
+<a name="wp1035118"> </a><div class="pSmartList2"><li>A leading sign is shown for negative values, otherwise there is a leading space.</li></div>
+<a name="wp1035119"> </a><div class="pSmartList2"><li>The exponent is shown as an &quot;E&quot;, followed by a sign if negative, followed by one or more digits.  </li></div>
+<a name="wp1035120"> </a><div class="pSmartList2"><li>The decimal point is shown using the program's current decimal point character.</li></div>
+</ul></div>
+<a name="wp1035121"> </a><div class="pSmartList1"><li>In an ACCEPT statement, the action of the CONVERT phrase depends on the data type of the receiving field:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1035122"> </a><div class="pSmartList2"><li>A nonnumeric field receives the entered data as if it were the destination of a MOVE statement with an alphanumeric source.  This causes justification and editing to have their normal effect.</li></div>
+<a name="wp1098953"> </a><div class="pSmartList2"><li>A numeric or numeric edited field causes the ACCEPT statement to first check the data for correctness.  Legal characters for numeric items include any characters that can appear in a numeric edited data item (digits, plus and minus sign, period, comma, currency symbol, &quot;CR&quot;, &quot;DB&quot;, &quot;/&quot;, and &quot;*&quot;).  Characters that are legal but have no meaning in an arithmetic literal are simply ignored (space, &quot;*&quot;, &quot;/&quot;, currency symbol, currency comma).  Any other non-space character is an error.  Legal values are then assigned to the receiving field such that the algebraic value remains the same.</li></div>
+<a name="wp1061580"> </a><div class="pSmartList2"><li>The input format for floating point numbers consists of the following components in the order given:</li></div>
+<div class="pSmartList3"><ol type="1" class="pSmartList3">
+<a name="wp1061581"> </a><div class="pSmartList3"><li>An optionally signed string of digits (possibly containing a decimal point) </li></div>
+<a name="wp1035127"> </a><div class="pSmartList3"><li>An optional exponent field consisting of:</li></div>
+<div class="pSmartList4"><ol type="a" class="pSmartList4">
+<a name="wp1035128"> </a><div class="pSmartList4"><li>   &quot;E&quot; or &quot;e&quot;</li></div>
+<a name="wp1035129"> </a><div class="pSmartList4"><li>   an optional + or -</li></div>
+<a name="wp1061593"> </a><div class="pSmartList4"><li>   an integer</li></div>
+</ol></div>
+</ol></div>
+<a name="wp1061594"> </a><p class="pIndented2">
+See <a  href="gt326.htm#wp1034362">section 2.1.2.1, &quot;Numeric literals,&quot;</a> for additional information.
+</p>
+</ol></div>
+<a name="wp1061595"> </a><div class="pSmartList1"><li>If the CONVERT phrase is not specified, the accepted data is placed in the receiving field from left to right with no editing or justification.  In RM/COBOL compatibility mode, however, a numeric receiving field causes the data to be assigned from right to left instead.  </li></div>
+<a name="wp1035134"> </a><div class="pSmartList1"><li>For entries in the Screen Section, conversion is automatically used during input and not used during output.  For this reason, Screen Section entries for non-integer numeric fields should specify a numeric edited PICTURE so that the decimal point is visible.  Likewise, signed numeric fields should either specify SIGN SEPARATE or be represented by numeric edited items.  Note that conversion occurs automatically for all controls that reference numeric, numeric edited, right justified, or wide character data.</li></div>
+<a name="wp1035135"> </a><div class="pSmartList1"><li>If a conversion error occurs, the runtime system prints an error message and forces the user to correct the field.  This behavior can be modified.  For more information, see Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide, </em>section 4.3.2.1 (subsection 3) &quot;The KEYBOARD variable.&quot; </li></div>
+<a name="wp1035136"> </a><div class="pSmartList1"><li>Several compile-time and run-time options are available to change various aspects of the CONVERT phrase, including the behavior of conversion errors and justification of the output of numeric items.  For details, see Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>, section 2.1.10, &quot;Video Options&quot; (specifically the &quot;-Vc&quot; and &quot;-Ve&quot; options).  Also, see the Terminal Manager chapter of the <em class="cEmphasis">ACUCOBOL-GT User's Guide, </em>section 4.4.2, &quot;The SCREEN Option.&quot;</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:43" />
+  <title>Guideline 2 - understand COBOL operations and database operation</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl9.htm">Chapter 9:  Performance and Troubleshooting</a> &gt; <a href="4gl92.htm">9.1 Performance Issues</a> &gt; <a href="4gl93.htm">9.1.1  Guidelines</a> &gt; </p>
+<a name="wp1036667"> </a><h2 class="pHeading3">
+Guideline 2 - understand COBOL operations and database operation
+</h2>
+<a name="wp1036668"> </a><p class="pBody">
+Some COBOL operations are particularly stressful to a database.  The more the application uses these operations, the more likely it will slow the performance of the RDBMS.
+</p>
+<a name="wp1036669"> </a><p class="pBody">
+The more you understand about your RDBMS and how it operates, the more you can help your COBOL applications to work efficiently with it.
+</p>
+<a name="wp1036670"> </a><h3 class="pHeadingRef">
+File Input and Output
+</h3>
+<a name="wp1036676"> </a><p class="pBody">
+Consider these standard COBOL I/O operations:
+</p>
+<a name="wp1036677"> </a><p class="pBody">
+READ<br />REWRITE<br />WRITE<br />DELETE<br />OPEN
+</p>
+<a name="wp1036682"> </a><p class="pBody">
+Each has an associated <em class="cEmphasis">cost</em> in terms of database performance.  Each asks the database to do something that takes time.  So if there are I/O operations that are <em class="cEmphasis">optional</em> in your COBOL application, you may want to remove them.  
+</p>
+<a name="wp1036683"> </a><p class="pBody">
+For example, let's examine file OPENs.
+</p>
+<a name="wp1036684"> </a><p class="pBody">
+Developers sometimes OPEN and CLOSE files unnecessarily, using the OPEN-CLOSE pairing as a way to demarcate each new procedure:
+</p>
+<a name="wp1036685"> </a><p class="pBody">
+OPEN file-A<br />procedural code<br />CLOSE file-A
+</p>
+<a name="wp1036686"> </a><p class="pBody">
+But it's important to know that file OPENs are expensive in terms of performance.  If you can eliminate non-essential OPENs from portions of your application, you can probably make an improvement in processing speed.
+</p>
+<a name="wp1036687"> </a><p class="pBody">
+READ operations can also affect performance.  All COBOL I/O is based on key indexes.  Examining the output of your query optimizer allows you to determine if the most efficient execution path is being used for READs.  The execution path for a given query can change as your data changes and as the size of the tables changes.  It is also affected by database initialization parameters and any statistical information that you may have gathered on your tables.  It might be helpful to know that, typically, the index path is the most efficient for Acu4GL® applications.
+</p>
+<a name="wp1036688"> </a><h3 class="pHeadingRef">
+Transactions
+</h3>
+<a name="wp1036692"> </a><p class="pBody">
+Large <em class="cEmphasis">transactions</em> are also very expensive.  The main problem here is that the database will hold locks on indexes and rows throughout an entire transaction.  Thus, the database is creating additional overhead for an extended period of time if the transaction is lengthy.
+</p>
+<a name="wp1036693"> </a><p class="pBody">
+In addition, complex information tracking must take place to ensure that transactions can be successfully rolled back.  
+</p>
+<a name="wp1036694"> </a><p class="pBody">
+Often application designers decide to err on the side of safety when applying transaction management to a mature application.  Which operations should be included in a single transaction?  The safe approach is to group everything that is related into one transaction.  But this scheme is expensive-even more so when a database is involved.  The lengthier the transaction, the longer the locks are held and system resources are tied up.  The extensive data verification in COBOL programs only prolongs this.  
+</p>
+<a name="wp1036695"> </a><p class="pBody">
+If performance is an issue, give some thought to dividing each transaction into smaller and more efficient subgroups.
+</p>
+<a name="wp1036696"> </a><h3 class="pHeadingRef">
+Tables with multiple indexes
+</h3>
+<a name="wp1036702"> </a><p class="pBody">
+If you use tables with multiple indexes, keep in mind that when a record is written or updated, locks are put onto all of the indexes, and they are all basically rewritten during the course of the write/update.  This is a costly process.  There may be multiple columns per index, and multiple indexes per table.  Each rewrite implies a certain amount of wait time.  Tables with a large number of indexes can be slow on writes/updates and possibly other operations in the database query optimizer becomes confused.
+</p>
+<a name="wp1036703"> </a><p class="pBody">
+There are two things you can do in this circumstance:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1036704"> </a><div class="pSmartList1"><li>Restructure your data </li></div>
+<a name="wp1036705"> </a><div class="pSmartList1"><li>Use the Vision file system for some of your data</li></div>
+</ul></div>
+<a name="wp1036706"> </a><h3 class="pHeadingRef">
+Restructuring the data
+</h3>
+<a name="wp1036711"> </a><p class="pBody">
+The benefits of data restructuring may be significant.
+</p>
+<a name="wp1036712"> </a><p class="pBody">
+For example, if you have any situations in which two indexes start out with the same column or set of columns, you may be able to improve performance appreciably by changing your data definition. 
+</p>
+<a name="wp1036713"> </a><p class="pBody">
+Suppose two indexes both start with MONTH, DAY, YEAR.  These identical first three columns can cause the RDBMS's query optimizer to choose the wrong index, in which case you will generate a significant amount of unnecessary and unproductive overhead.  Restructuring one of the indexes can make a difference.
+</p>
+<a name="wp1036714"> </a><h3 class="pHeadingRef">
+Using Vision files
+</h3>
+<a name="wp1036719"> </a><p class="pBody">
+If you cannot restructure your data but are finding certain operations to be too expensive, you might want to consider moving some data into the Vision indexed file system.
+</p>
+<a name="wp1036720"> </a><h3 class="pHeadingRef">
+Guiding the data searches
+</h3>
+<a name="wp1037295"> </a><p class="pBody">
+You can guide the data searches that result from database queries, and thus improve performance, by making use of an external variable called A4GL_WHERE_CONSTRAINT.  This process is explained in <a  href="4gl98.htm#wp1036752">section 9.1.2, &quot;The WHERE Constraint.&quot;</a>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

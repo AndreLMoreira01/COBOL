@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:51" />
+  <title>3.2  Calling COBOL From Other Windows Programs</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr3.htm">Chapter 3: Working with Windows Technologies</a> &gt; </p>
+<a name="wp1060318"> </a><h2 class="pHeading1">
+3.2  Calling COBOL From Other Windows Programs
+</h2>
+<a name="wp1047604"> </a><p class="pBody">
+To simplify the process of calling an ACUCOBOL-GT program from other programming languages in a Windows environment, the ACUCOBOL-GT 32-bit Windows runtime is encapsulated in a DLL file.  This DLL file has been further encapsulated in a COM server.
+</p>
+<a name="wp1118640"> </a><p class="pBody">
+To call ACUCOBOL-GT from other Windows programs, you can do one of two things:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1118643"> </a><div class="pSmartList1"><li>Create an object for the ACUCOBOL-GT COM server in the source program and call the methods of that object. This is covered in <a  href="itr34.htm#wp1047754">section 3.2.1</a>.</li></div>
+<a name="wp1041010"> </a><div class="pSmartList1"><li>Call the ACUCOBOL-GT runtime DLL in the source program.  This call requires special declarations, and is explained in <a  href="itr311.htm#wp1040558">section 3.2.2</a>.</li></div>
+</ol></div>
+<a name="wp1053391"> </a><p class="pBody">
+The advantage of using the COM server is that you can treat the ACUCOBOL-GT system as a COM object.  You do not need to insert declarations into the source code of the other programming language, you can operate in a multi-threaded environment, and the development environment is more intuitive.  Using the ACUCOBOL-GT runtime DLL instead of the COM server can provide slightly improved performance and makes application distribution smaller and installation easier.  However, the DLL can be called only from a single thread of execution.  For example, if you call a COBOL program from a user interface control's event procedure, and the event procedure is called again before the COBOL program returns, you must detect this case and either wait or inform the user of the error.  
+</p>
+<a name="wp1053496"> </a><p class="pBody">
+Regardless of which approach you choose, when a program written in another language calls an ACUCOBOL-GT program, the data is passed as a pointer to a variant type for each parameter.  The ACUCOBOL-GT program receives a handle for each parameter and uses a library routine to convert the data to COBOL types.  When ACUCOBOL-GT data items are passed back to this program, they pass through another library routine that converts the data back into variant types.  The C$GETVARIANT and C$SETVARIANT library routines are detailed in Appendix I in <em class="cEmphasis">ACUCOBOL-GT Appendices</em>.
+</p>
+<a name="wp1041012"> </a><p class="pBody">
+The parameters of the COM server methods, or exported DLL functions, are all null-terminated strings, integers, or variant type variables.  In some programming languages, such as Visual Basic (VB), the variant type is used by default for any variables that have not been assigned a data type.  Because the variant type is used to represent many different types of data, you generally don't have to convert these types of data when they are assigned to a variant variable.  The programming language automatically performs any necessary conversion.  Because the ACUCOBOL-GT COM server and runtime DLL routines take variant type parameters, it is easy to receive variables from, or return variables to, other languages.
+</p>
+<a name="wp1041013"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>All the examples in this section use Visual Basic as the source language for code samples.  Microsoft conventions for object description language are used for the descriptions of method usage.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

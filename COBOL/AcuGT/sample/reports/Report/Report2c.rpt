@@ -1,0 +1,353 @@
+      * Report2c.rpt
+      * Report2c.rpt is generated from C:\Acucorp\Acucbl720\AcuGT\sample\reports\Report2c.Psf
+      * This is a generated file. DO NOT modify this file directly.
+         
+       Acu-Report2c-PRINT-T.           
+           MOVE "PRINTER" TO PTR-DEV-NAME
+           PERFORM Acu-Report2c-PRINT-GO
+           .
+
+       Acu-Report2c-PRINT-TOFILE-T.           
+           MOVE "Report2c.TXT" TO PTR-DEV-NAME
+           PERFORM Acu-Report2c-PRINT-GO
+           .
+
+       Acu-Report2c-PRINT-GO.
+           MOVE 1 TO CURRENT-COL
+           MOVE 1 TO CURRENT-TEXTLINE
+           MOVE 1 TO CURRENT-LEFTOFFSET
+           MOVE 1 TO SYS-ISFIRSTLINE
+           MOVE 1 TO NTOPCOLUMNNUM
+           PERFORM Acu-PRINTF-OPEN-ROUTINE.
+      *    BeforePrint
+           PERFORM Acu-RPT-Report2c-PRINT-LOOP-T
+      *    AfterPrint
+           PERFORM Acu-PRINTF-CLOSE-ROUTINE
+           .
+
+       Acu-RPT-Report2c-PRINT-LOOP-T.
+           MOVE 1 TO TMP-PRINTORNOT
+           MOVE 1 TO ACU-PAGENUM
+           MOVE 1 TO ACU-PAGENUM-SYS
+           MOVE 0 TO SYS-SHOWPAGEFOOTER
+           MOVE 0 TO SYS-ENDPRIMARYFD
+           
+           PERFORM Acu-RPT-Report2c-ALL-RESET-T
+      * Check Report Header
+           PERFORM Acu-RPT-Report2c-REPORT-HEADER-T
+      * Start Normal (Page H/F, Group H/F, Detail)
+           PERFORM Acu-RPT-Report2c-MASTER-PRINT-LOOP-T
+           MOVE 1 TO SYS-ENDPRIMARYFD
+      * End Normal (Page H/F, Group H/F, Detail)
+            PERFORM Acu-RPT-Report2c-PAGE-HEADER-T
+      * Check Last Group Footer
+           PERFORM Acu-RPT-Report2c-GROUP-MUSTDSP-T
+           PERFORM Acu-RPT-Report2c-GROUP-FOOTER-T
+      * Check Report Footer
+           IF ( REPORT-FOOTER-PRINT-AFTER-PAGE = 0 )
+              PERFORM Acu-RPT-Report2c-REPORT-FOOTER-T
+           END-IF
+      * Normal Ending                      
+           MOVE 1 TO SYS-SHOWPAGEFOOTER
+           IF ( REPORT-FOOTER-PRINT-AFTER-PAGE = 0 )
+              PERFORM Acu-RPT-Report2c-PAGE-FOOTER-T
+           END-IF
+      * Check Report Footer
+           IF ( REPORT-FOOTER-PRINT-AFTER-PAGE = 1 )
+              PERFORM Acu-RPT-Report2c-REPORT-FOOTER-T
+           END-IF
+           .
+
+       Acu-RPT-Report2c-REPORT-HEADER-T.          
+           .
+
+       Acu-RPT-Report2c-REPORT-FOOTER-T.           
+           .
+
+       Acu-RPT-Report2c-PAGE-HEADER-T.
+      *    BeforePrint
+           IF ( CURRENT-TEXTLINE < 5 )
+             OR ( REPORT-HEADER-PRINT-BEFORE-PAGE = 1 )
+              PERFORM Acu-Report2c-PH-1-PRINT-RTN-T
+           END-IF
+      *    AfterPrint  
+           .
+
+       Acu-RPT-Report2c-PAGE-FOOTER-T.
+      *    BeforePrint
+           COMPUTE TMP-PIXELS = CURRENT-TEXTLINE + CURRENT-HEIGHT + 4
+           IF TMP-PIXELS > PAGE-HEIGHT OF Report2c-HEIGHT-T OR
+              SYS-SHOWPAGEFOOTER > 0
+              MOVE 0 TO SYS-SHOWPAGEFOOTER
+              COMPUTE TMP-PIXELS = PAGE-HEIGHT OF Report2c-HEIGHT-T -
+              CURRENT-TEXTLINE - 4 + 1
+              PERFORM VARYING ACU-IDX2 FROM 1 BY 1 UNTIL ACU-IDX2 >
+              TMP-PIXELS
+                 INITIALIZE PRINT-BUF
+                 PERFORM Acu-PRINT-LINE-T
+              END-PERFORM
+              PERFORM Acu-Report2c-PF-1-PRINT-RTN-T
+              PERFORM Acu-Report2c-Page-BREAK-RTN-T
+           END-IF
+      *    AfterPrint           
+           .
+
+       Acu-RPT-Report2c-PAGE-FOOTER-OVERPAGE-T.
+           MOVE 0 TO RPT-RETURN-VALUE
+           COMPUTE TMP-PIXELS = CURRENT-TEXTLINE + CURRENT-HEIGHT + 4
+           IF TMP-PIXELS > PAGE-HEIGHT OF Report2c-HEIGHT-T
+              MOVE 1 TO RPT-RETURN-VALUE
+           END-IF           
+           .
+
+       Acu-RPT-Report2c-DETAIL-T.
+           PERFORM Acu-Report2c-Dtl-1-DETAIL-PRINT-T.    
+           .
+
+       Acu-RPT-Report2c-GROUP-HEADER-T.
+      * Cause there're possibly several Group.
+           PERFORM Acu-Report2c-GH-1-GROUP-PRINT-T.
+           PERFORM Acu-Report2c-GH-2-GROUP-PRINT-T.          
+           .
+
+       Acu-RPT-Report2c-GROUP-FOOTER-T.          
+           .
+
+       Acu-RPT-Report2c-GROUP-MUSTDSP-T.          
+           .
+
+       Acu-RPT-Report2c-GROUP-NOMUSTDSP-T.          
+           .
+
+       Acu-RPT-Report2c-ALL-RESET-T.
+      * Group Reset
+           PERFORM Acu-Report2c-Report2c-GH-1-RESET-T
+           PERFORM Acu-Report2c-Report2c-GH-2-RESET-T     
+           .
+
+       Acu-RPT-Report2c-DO-PRINT-RTN-T.
+           MOVE 1 TO TMP-PRINTORNOT
+      * Check Group Footer
+           PERFORM Acu-RPT-Report2c-GROUP-FOOTER-T
+      * Init Detail's Height
+           MOVE 3.000000 TO CURRENT-HEIGHT           
+           PERFORM Acu-RPT-Report2c-PAGE-FOOTER-T
+           PERFORM Acu-RPT-Report2c-PAGE-HEADER-T
+      * Check Group Header
+           PERFORM Acu-RPT-Report2c-GROUP-HEADER-T
+      * Detail
+           PERFORM Acu-RPT-Report2c-DETAIL-T
+           .
+           
+       Acu-Report2c-Page-BREAK-RTN-T.
+           IF CURRENT-COL < NTOPCOLUMNNUM
+              COMPUTE CURRENT-LEFTOFFSET = CURRENT-LEFTOFFSET + 
+                 DETAIL-WIDTH
+              MOVE 0 TO CNT-INPAGEPIXELS
+              ADD  1 TO CURRENT-COL
+              MOVE 1 TO CURRENT-TEXTLINE
+           ELSE
+              ADD  1 TO ACU-PAGENUM-SYS
+              ADD  1 TO ACU-PAGENUM
+              MOVE 1 TO CURRENT-COL
+              MOVE 1 TO CURRENT-TEXTLINE
+              MOVE 1 TO CURRENT-LEFTOFFSET
+              MOVE " " TO BREAKPAGE-BUF
+              WRITE PRINTF-R FROM BREAKPAGE-BUF BEFORE PAGE
+              INITIALIZE PRINT-BUF
+           END-IF 
+           .
+       Acu-Report2c-Dtl-1-DETAIL-PRINT-T.
+           MOVE 80 TO DETAIL-WIDTH
+      *    BeforePrint
+           MOVE 3 TO CURRENT-HEIGHT
+           PERFORM Acu-RPT-Report2c-PAGE-FOOTER-T
+           PERFORM Acu-RPT-Report2c-PAGE-HEADER-T
+           PERFORM Acu-Report2c-Dtl-1-PRINT-RTN-T
+      *    AfterPrint
+           .
+    
+       Acu-Report2c-GH-1-GROUP-PRINT-T.
+      * Group-Header : Report2c-GH-1
+      *    BeforePrint
+           IF Report2c-GH-1-GROUPBY-BUF-T NOT = Sales-State OF Salesdata
+              MOVE 3 TO CURRENT-HEIGHT
+              PERFORM Acu-RPT-Report2c-PAGE-FOOTER-T
+              PERFORM Acu-RPT-Report2c-PAGE-HEADER-T
+              PERFORM Acu-Report2c-GH-1-PRINT-RTN-T
+              PERFORM Acu-Report2c-Report2c-GH-2-RESET-T
+              MOVE Sales-State OF Salesdata TO
+              Report2c-GH-1-GROUPBY-BUF-T
+           END-IF
+      *    AfterPrint
+           .
+
+       Acu-Report2c-Report2c-GH-1-RESET-T.
+           MOVE HIGH-VALUE TO Report2c-GH-1-GROUPBY-BUF-T
+           PERFORM Acu-Report2c-Report2c-GH-2-RESET-T
+           .
+
+       Acu-Report2c-GH-2-GROUP-PRINT-T.
+      * Group-Header : Report2c-GH-2
+      *    BeforePrint
+           IF Report2c-GH-2-GROUPBY-BUF-T NOT = Sales-Branch-No OF
+              Salesdata
+              MOVE 3 TO CURRENT-HEIGHT
+              PERFORM Acu-RPT-Report2c-PAGE-FOOTER-T
+              PERFORM Acu-RPT-Report2c-PAGE-HEADER-T
+              PERFORM Acu-Report2c-GH-2-PRINT-RTN-T
+              MOVE Sales-Branch-No OF Salesdata TO
+              Report2c-GH-2-GROUPBY-BUF-T
+           END-IF
+      *    AfterPrint
+           .
+
+       Acu-Report2c-Report2c-GH-2-RESET-T.
+           MOVE HIGH-VALUE TO Report2c-GH-2-GROUPBY-BUF-T
+           .
+       
+       Acu-Report2c-PH-1-PRINT-RTN-T.
+      * Initialize lines buffer
+           PERFORM VARYING Report2c-PH-1-PIDX FROM 1 BY 1 UNTIL
+              Report2c-PH-1-PIDX > 5
+              INITIALIZE Report2c-PH-1-LINES (Report2c-PH-1-PIDX)
+           END-PERFORM
+      * RPT.Label : Report2c-RwLa-3
+      *    BeforePrint
+           MOVE "Last Name" TO Report2c-PH-1-LINES(3)(2:11)
+      *    AfterPrint
+      * RPT.Label : Report2c-RwLa-4
+      *    BeforePrint
+           MOVE "First Name" TO Report2c-PH-1-LINES(3)(30:15)
+      *    AfterPrint
+      * Print Section Buffer
+           PERFORM VARYING Report2c-PH-1-PIDX FROM 1 BY 1 UNTIL
+              Report2c-PH-1-PIDX > 5
+              INITIALIZE PRINT-BUF
+              MOVE Report2c-PH-1-LINES (Report2c-PH-1-PIDX) TO PRINT-BUF
+              PERFORM Acu-PRINT-LINE-T
+           END-PERFORM
+           .
+
+       Acu-Report2c-GH-1-PRINT-RTN-T.
+      * Initialize lines buffer
+           PERFORM VARYING Report2c-GH-1-PIDX FROM 1 BY 1 UNTIL
+              Report2c-GH-1-PIDX > 3
+              INITIALIZE Report2c-GH-1-LINES (Report2c-GH-1-PIDX)
+           END-PERFORM
+      * RPT.Label : Report2c-RwLa-1
+      *    BeforePrint
+           MOVE "State:" TO Report2c-GH-1-LINES(2)(2:7)
+      *    AfterPrint
+      * RPT.Entry-Field : Report2c-RwEf-1
+      *    BeforePrint
+           MOVE Sales-State TO Report2c-GH-1-LINES(2)(11:2)
+      *    AfterPrint
+      * Print Section Buffer
+           PERFORM VARYING Report2c-GH-1-PIDX FROM 1 BY 1 UNTIL
+              Report2c-GH-1-PIDX > 3
+              INITIALIZE PRINT-BUF
+              MOVE Report2c-GH-1-LINES (Report2c-GH-1-PIDX) TO PRINT-BUF
+              PERFORM Acu-PRINT-LINE-T
+           END-PERFORM
+           .
+
+       Acu-Report2c-GH-2-PRINT-RTN-T.
+      * Initialize lines buffer
+           PERFORM VARYING Report2c-GH-2-PIDX FROM 1 BY 1 UNTIL
+              Report2c-GH-2-PIDX > 3
+              INITIALIZE Report2c-GH-2-LINES (Report2c-GH-2-PIDX)
+           END-PERFORM
+      * RPT.Label : Report2c-RwLa-2
+      *    BeforePrint
+           MOVE "Branch:" TO Report2c-GH-2-LINES(2)(2:8)
+      *    AfterPrint
+      * RPT.Entry-Field : Report2c-RwEf-2
+      *    BeforePrint
+           MOVE Sales-Branch-No TO Report2c-GH-2-LINES(2)(11:3)
+      *    AfterPrint
+      * Print Section Buffer
+           PERFORM VARYING Report2c-GH-2-PIDX FROM 1 BY 1 UNTIL
+              Report2c-GH-2-PIDX > 3
+              INITIALIZE PRINT-BUF
+              MOVE Report2c-GH-2-LINES (Report2c-GH-2-PIDX) TO PRINT-BUF
+              PERFORM Acu-PRINT-LINE-T
+           END-PERFORM
+           .
+
+       Acu-Report2c-Dtl-1-PRINT-RTN-T.
+      * Initialize lines buffer
+           PERFORM VARYING Report2c-Dtl-1-PIDX FROM 1 BY 1 UNTIL
+              Report2c-Dtl-1-PIDX > 3
+              INITIALIZE Report2c-Dtl-1-LINES (Report2c-Dtl-1-PIDX)
+           END-PERFORM
+      * RPT.Entry-Field : Report2c-RwEf-3
+      *    BeforePrint
+           MOVE Sales-LastName TO Report2c-Dtl-1-LINES(2)(2:25)
+      *    AfterPrint
+      * RPT.Entry-Field : Report2c-RwEf-4
+      *    BeforePrint
+           MOVE Sales-FirstName TO Report2c-Dtl-1-LINES(2)(30:25)
+      *    AfterPrint
+      * Print Section Buffer
+           PERFORM VARYING Report2c-Dtl-1-PIDX FROM 1 BY 1 UNTIL
+              Report2c-Dtl-1-PIDX > 3
+              INITIALIZE PRINT-BUF
+              MOVE Report2c-Dtl-1-LINES (Report2c-Dtl-1-PIDX) TO
+              PRINT-BUF
+              PERFORM Acu-PRINT-LINE-T
+           END-PERFORM
+           .
+
+       Acu-Report2c-PF-1-PRINT-RTN-T.
+      * Initialize lines buffer
+           PERFORM VARYING Report2c-PF-1-PIDX FROM 1 BY 1 UNTIL
+              Report2c-PF-1-PIDX > 4
+              INITIALIZE Report2c-PF-1-LINES (Report2c-PF-1-PIDX)
+           END-PERFORM
+      * RPT.DateTime : Report2c-RwDtTm-1
+      *    BeforePrint
+           PERFORM Acu-Report2c-RwDtTm-1-FORMAT-CONVERT-T
+           MOVE WRK-DATE-REF OF Report2c-RwDtTm-1-DATEBUF-T TO
+              Report2c-PF-1-LINES(2)(35:11)
+      *    AfterPrint
+      * Print Section Buffer
+           PERFORM VARYING Report2c-PF-1-PIDX FROM 1 BY 1 UNTIL
+              Report2c-PF-1-PIDX > 4
+              INITIALIZE PRINT-BUF
+              MOVE Report2c-PF-1-LINES (Report2c-PF-1-PIDX) TO PRINT-BUF
+              PERFORM Acu-PRINT-LINE-T
+           END-PERFORM
+           .
+
+      * Date/Time Format Convert
+       Acu-Report2c-RwDtTm-1-FORMAT-CONVERT-T.
+           ACCEPT WRK-DATE OF Report2c-RwDtTm-1-DATEBUF-T FROM
+              CENTURY-DATE
+           MOVE WRK-YEAR  OF Report2c-RwDtTm-1-DATEBUF-T TO
+              WRK-REF-YEAR  OF Report2c-RwDtTm-1-DATEBUF-T
+           MOVE WRK-MONTH OF Report2c-RwDtTm-1-DATEBUF-T TO
+              WRK-REF-MONTH OF Report2c-RwDtTm-1-DATEBUF-T
+           MOVE WRK-DAY   OF Report2c-RwDtTm-1-DATEBUF-T TO
+              WRK-REF-DAY   OF Report2c-RwDtTm-1-DATEBUF-T
+           ACCEPT WRK-TIME OF Report2c-RwDtTm-1-DATEBUF-T FROM TIME
+           .
+    
+       Acu-PRINTF-OPEN-ROUTINE.
+           OPEN   OUTPUT               PRINTF WITH NO REWIND.
+           MOVE   STAT-PRINTF          TO    STAT-PRINTF.
+           IF     NOT VALID-PRINTF
+                  MOVE   "PRINTF"      TO   ACU-ERR-FILE.
+
+       Acu-PRINTF-CLOSE-ROUTINE.
+           CLOSE       PRINTF.
+           
+       Acu-PRINT-LINE-T.
+           IF SYS-ISFIRSTLINE > 0
+               WRITE PRINTF-R FROM PRINT-BUF
+               MOVE 0 TO SYS-ISFIRSTLINE
+           ELSE
+               WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           END-IF
+           ADD 1 TO CURRENT-TEXTLINE
+           .   

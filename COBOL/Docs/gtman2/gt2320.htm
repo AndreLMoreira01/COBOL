@@ -1,0 +1,376 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:24" />
+  <title>3.9  Paged Grids</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt23.htm">Chapter 3:  Graphical Controls</a> &gt; </p>
+<a name="wp1026506"> </a><h2 class="pHeading1">
+3.9  Paged Grids
+</h2>
+<a name="wp1026509"> </a><p class="pBody">
+A grid is a matrix of data fields.  Each element of this matrix, called a &quot;cell,&quot; can hold either text or a bitmap, or both.  Grids are organized into rows, columns, and records.  In a grid, a &quot;row&quot; is a grouping of cells that appear on one line in the control.  A &quot;record&quot; is one or more rows that are treated as a logical unit. By default, a record occupies one row in a grid, but a record may also &quot;wrap around&quot; to the next row when it passes the right edge of the grid.  A &quot;column&quot; identifies a particular cell in a record.  
+</p>
+<a name="wp1026510"> </a><p class="pBody">
+A grid's capacity is limited by available memory.  Sometimes, however, you may want to view many records via a grid control.  This could pose a problem when you are using normal grids.  Just loading all the records into the grid could take an excessive amount of time.  To remedy this problem, you may want to use a &quot;paged&quot; grid.
+</p>
+<a name="wp1026511"> </a><p class="pBody">
+When you are using the PAGED style in a grid, the grid holds only as many records as can be viewed on the screen.  This is called a &quot;page&quot; of data.  The vertical scroll bar found in a normal grid is replaced by four buttons.  These buttons respond to requests to get the next record, the previous record, the next page, or the previous page.  When the user clicks one of these buttons, the grid sends a message to the program asking for the appropriate data depending on which button was clicked.  This data typically comes from an indexed file.  The expected program logic is to do one or more READ NEXT or READ PREVIOUS statements to retrieve the data.
+</p>
+<a name="wp1046159"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>By default, if a user switches focus by clicking any of the buttons used to scroll a paged grid, a CMD-GOTO event is <em class="cEmphasis">not</em> generated.  To modify this behavior, set the GRID_BUTTONS_CAUSE_GOTO configuration variable to &quot;1&quot; (on, true, yes), as described in Book 4, Appendix H.
+<hr />
+</p>
+<a name="wp1026512"> </a><p class="pBody">
+Paged grids are conceptually similar to paged list boxes. Programmers familiar with paged list boxes, however, may notice some differences in programming paged grids.  These differences were designed to make programming the grid's paging logic easier.  The noticeable differences are:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1026513"> </a><div class="pSmartList1"><li>The program's structure is simplified because event procedures, instead of responses to various exception values, are coded into the paging logic.</li></div>
+<a name="wp1026514"> </a><div class="pSmartList1"><li>Less coding is required, because there is no need to write any code for Next Page and Previous Page actions.  You may still opt to write additional code if you want to define actions other than the response normally expected from Next Page and Previous Page operations.</li></div>
+<a name="wp1026515"> </a><div class="pSmartList1"><li>Coding the response to the First Page and Last Page requests are simpler.</li></div>
+<a name="wp1026516"> </a><div class="pSmartList1"><li>Satisfying Next Record and Previous Record requests are easier because the grid control can tell you how many records will have to be read (in the proper direction) in response to these requests.</li></div>
+</ul></div>
+<a name="wp1026517"> </a><p class="pBody">
+Furthermore, paged grids communicate requests for more data through events such as MSG-PAGED-NEXT, MSG-PAGED-PREV, MSG-PAGED-NEXTPAGE, MSG-PAGED-PREVPAGE, MSG-PAGED-FIRST and MSG-PAGED-LAST.
+</p>
+<a name="wp1026518"> </a><p class="pBody">
+Paged grids never hold more data than they can display on the screen.  When you are adding a record at the end of a full page, the control deletes the topmost non-heading record.  This causes the grid's contents to scroll upward.  When you are adding a record to any other position, the last record in the grid is deleted.  This causes all records after the one being added to scroll downward.  
+</p>
+<a name="wp1026519"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The current cell is not changed when the grid is paged.  In other words, if the grid's cursor is at row 2, column 3, it will be at row 2, column 3 after the user clicks the &quot;next record&quot; button.  This will effectively move the cursor to a new record, even though its physical location has not changed.  Unlike other forms of cursor movement, this does not generate any additional events.  If you are performing special actions when the cursor enters a new cell (for example, displaying related information outside of the grid), then you should perform the appropriate actions in response to paging events as well as cursor-movement events.  
+<hr />
+</p>
+<a name="wp1046447"> </a><p style="font-family: Arial, Verdana, Helvetica, sans-serif">
+<hr />
+<b>Tip:  </b> The paged grid feature is demonstrated in two AcuBench sample project located in the Support area of the Acucorp Web site.  To download these projects, open your Web browser and navigate to: www.acucorp.com/support/public/sample_programs/index.php.  Select the category &quot;Graphical User Interface Sample Programs&quot; from the drop down list, and click on &quot;GridTXTViewer.zip&quot; and &quot;pagedgrid.zip&quot;.
+<hr />
+</p>
+<a name="wp1026520"> </a><h3 class="pHeadingRef">
+Example 1
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+ IDENTIFICATION DIVISION.<a name="wp1026521"> </a>
+ PROGRAM-ID. PagedGrid.<a name="wp1038198"> </a>
+ AUTHOR. Bob Cavanagh.<a name="wp1038200"> </a>
+ ENVIRONMENT DIVISION.<a name="wp1038202"> </a>
+ INPUT-OUTPUT SECTION.<a name="wp1038204"> </a>
+ FILE-CONTROL.<a name="wp1038206"> </a>
+ SELECT Samplegrid<a name="wp1038208"> </a>
+     ASSIGN       TO DISK &quot;samplegrid.dat&quot;<a name="wp1038210"> </a>
+     ORGANIZATION IS INDEXED<a name="wp1038212"> </a>
+     ACCESS MODE  IS DYNAMIC<a name="wp1038214"> </a>
+     FILE STATUS  IS samplegrid-status<a name="wp1038216"> </a>
+     RECORD KEY   IS samplegridkey<a name="wp1038218"> </a>
+     ALTERNATE RECORD KEY IS samplealtkey = last-name, 
+first-name.<a name="wp1038220"> </a>
+<a name="wp1038222"> </a>
+ DATA DIVISION.<a name="wp1038224"> </a>
+ FILE SECTION.<a name="wp1038226"> </a>
+ FD  Samplegrid.<a name="wp1038228"> </a>
+ 01  samplegrid-record.<a name="wp1038230"> </a>
+     05 samplegridkey.<a name="wp1038232"> </a>
+         10 first-name          PIC  X(20).<a name="wp1038234"> </a>
+         10 last-name           PIC  X(20).<a name="wp1038236"> </a>
+     05 samplegrid-extension    PIC  X(4).<a name="wp1038238"> </a>
+     05 samplegrid-department   PIC  X(15).<a name="wp1038240"> </a>
+     05 manager-flag            PIC  9.<a name="wp1038242"> </a>
+     05 samplegrid-email        PIC  X(15).<a name="wp1038244"> </a>
+     05 samplegrid-home-phone   PIC  X(15).<a name="wp1038246"> </a>
+*<a name="wp1038248"> </a>
+ WORKING-STORAGE SECTION.<a name="wp1038250"> </a>
+ 78  EVENT-ACTION-FAIL          VALUE 4.<a name="wp1038252"> </a>
+ 78  MSG-CLOSE                  VALUE 16415.<a name="wp1038254"> </a>
+ 78  MSG-PAGED-NEXT             VALUE 16419.<a name="wp1038256"> </a>
+ 78  MSG-PAGED-PREV             VALUE 16420.<a name="wp1038258"> </a>
+ 78  MSG-PAGED-FIRST            VALUE 16423.<a name="wp1038260"> </a>
+ 78  MSG-PAGED-LAST             VALUE 16424.<a name="wp1038262"> </a>
+ 78  ACTION-FIRST-PAGE          VALUE 10.<a name="wp1038264"> </a>
+*<a name="wp1038266"> </a>
+ 01  EVENT-STATUS<a name="wp1038268"> </a>
+     IS SPECIAL-NAMES EVENT STATUS.<a name="wp1038270"> </a>
+   03  EVENT-TYPE               PIC X(4) COMP-X.<a name="wp1038272"> </a>
+   03  EVENT-WINDOW-HANDLE      HANDLE OF WINDOW.<a name="wp1038274"> </a>
+   03  EVENT-CONTROL-HANDLE     HANDLE.<a name="wp1038276"> </a>
+   03  EVENT-CONTROL-ID         PIC XX COMP-X.<a name="wp1038278"> </a>
+   03  EVENT-DATA-1             SIGNED-SHORT.<a name="wp1038280"> </a>
+   03  EVENT-DATA-2             SIGNED-LONG.<a name="wp1038282"> </a>
+   03  EVENT-ACTION             PIC X COMP-X.<a name="wp1038284"> </a>
+*<a name="wp1038286"> </a>
+ 01  SCREEN-CONTROL<a name="wp1038288"> </a>
+     IS SPECIAL-NAMES SCREEN CONTROL.<a name="wp1038290"> </a>
+   03  ACCEPT-CONTROL      PIC 9.<a name="wp1038292"> </a>
+   03  CONTROL-VALUE       PIC 999.<a name="wp1038294"> </a>
+   03  CONTROL-HANDLE      HANDLE.<a name="wp1038296"> </a>
+   03  CONTROL-ID          PIC XX COMP-X.<a name="wp1038298"> </a>
+*<a name="wp1038300"> </a>
+ 77 Key-Status IS SPECIAL-NAMES CRT STATUS PIC 9(4) VALUE 0.<a name="wp1038302"> </a>
+    88 Exit-Pushed VALUE 27.<a name="wp1038304"> </a>
+    88 Message-Received VALUE 95.<a name="wp1038306"> </a>
+    88 Event-Occurred VALUE 96.<a name="wp1038308"> </a>
+    88 Screen-No-Input-Field VALUE 97.<a name="wp1038310"> </a>
+*<a name="wp1038312"> </a>
+ 77 samplegrid-status PIC X(2).<a name="wp1038314"> </a>
+   88 Valid-Samplegrid VALUE &quot;00&quot; THRU &quot;09&quot;.<a name="wp1038316"> </a>
+<a name="wp1038318"> </a>
+ 77 Form1-Handle HANDLE OF WINDOW.<a name="wp1038320"> </a>
+ 77 Arial24B HANDLE OF FONT.<a name="wp1038322"> </a>
+*<a name="wp1038324"> </a>
+ 01  GRID-COLUMN-HEADINGS.<a name="wp1038326"> </a>
+    05  FILLER PIC X(20) VALUE &quot;FIRST NAME&quot;.<a name="wp1038328"> </a>
+    05  FILLER PIC X(20) VALUE &quot;LAST NAME&quot;.<a name="wp1038330"> </a>
+    05  FILLER PIC X(4)  VALUE &quot;EXT&quot;.<a name="wp1038332"> </a>
+    05  FILLER PIC X(15) VALUE &quot;DEPT.&quot;.<a name="wp1038334"> </a>
+    05  FILLER PIC X(15) VALUE &quot;E-MAIL&quot;.<a name="wp1038336"> </a>
+    05  FILLER PIC X(15) VALUE &quot;HOME PHONE&quot;.        <a name="wp1038338"> </a>
+*<a name="wp1038340"> </a>
+ 01  GRID-DATA.<a name="wp1038342"> </a>
+   03 GRID-KEY.<a name="wp1038344"> </a>
+     05  GRID-FIRST-NAME PIC X(20).<a name="wp1038346"> </a>
+     05  GRID-LAST-NAME  PIC X(20).<a name="wp1038348"> </a>
+   03  GRID-EXTENSION    PIC X(4).<a name="wp1038350"> </a>
+   03  GRID-DEPARTMENT   PIC X(15).    <a name="wp1038352"> </a>
+   03  GRID-EMAIL        PIC X(15).<a name="wp1038354"> </a>
+   03  GRID-HOME-PHONE   PIC X(15).<a name="wp1038356"> </a>
+*<a name="wp1038358"> </a>
+ SCREEN SECTION.<a name="wp1038360"> </a>
+ 01 PgGridSample.<a name="wp1038362"> </a>
+     03 Scr-Grid, Grid, <a name="wp1038364"> </a>
+        COL 4.70, LINE 6.00, LINES 26.00 CELLS, <a name="wp1038366"> </a>
+        SIZE 55.30 CELLS, <a name="wp1038368"> </a>
+        ADJUSTABLE-COLUMNS, 3-D, COLOR IS 258, COLUMN-HEADINGS,<a name="wp1038370"> </a>
+        DATA-COLUMNS (1, 21, 41, 45, 60, 75), <a name="wp1038372"> </a>
+        DISPLAY-COLUMNS (1, 25, 49, 57, 76, 95), <a name="wp1038374"> </a>
+        ALIGNMENT (&quot;C&quot;, &quot;C&quot;, &quot;C&quot;, &quot;C&quot;, &quot;C&quot;, &quot;C&quot;), <a name="wp1038376"> </a>
+        DATA-TYPES (&quot;X(20)&quot;, &quot;X(20)&quot;, &quot;X(4)&quot;, &quot;X(15)&quot;,<a name="wp1038378"> </a>
+                       &quot;X(15)&quot;, &quot;X(15)&quot;), <a name="wp1041232"> </a>
+        SEPARATION (5, 5, 5, 5, 5, 5), <a name="wp1038382"> </a>
+        COLUMN-DIVIDERS (1, 1, 1, 1, 1, 1), <a name="wp1038384"> </a>
+        CURSOR-COLOR 2, CURSOR-FRAME-WIDTH 3, DIVIDER-COLOR 1, <a name="wp1038386"> </a>
+        HEADING-COLOR 257, HEADING-DIVIDER-COLOR 1, HSCROLL, <a name="wp1038388"> </a>
+        ID IS 1, NUM-ROWS 20, PAGED, RECORD-DATA Grid-Data, <a name="wp1038390"> </a>
+        RECORD-TO-ADD Grid-Data, ROW-DIVIDERS 1, 
+TILED-HEADINGS, <a name="wp1038392"> </a>
+        USE-TAB, VPADDING 80, VIRTUAL-WIDTH 112, <a name="wp1038394"> </a>
+        EVENT PROCEDURE Grid-Events.<a name="wp1038396"> </a>
+*<a name="wp1038398"> </a>
+ PROCEDURE DIVISION.<a name="wp1038400"> </a>
+ DECLARATIVES.<a name="wp1038402"> </a>
+ I-O-ERROR SECTION.<a name="wp1038404"> </a>
+     USE AFTER STANDARD ERROR PROCEDURE ON I-O.<a name="wp1038406"> </a>
+ 0200-DECL.<a name="wp1038408"> </a>
+     EXIT.<a name="wp1038410"> </a>
+ END DECLARATIVES.<a name="wp1038412"> </a>
+*<a name="wp1038414"> </a>
+ Acu-Main-Logic.<a name="wp1038416"> </a>
+     OPEN I-O SAMPLEGRID.<a name="wp1038418"> </a>
+     PERFORM Acu-PgGridSample-Scrn.<a name="wp1038420"> </a>
+     PERFORM Load-Grid.<a name="wp1038422"> </a>
+     PERFORM Acu-PgGridSample-Proc.<a name="wp1038424"> </a>
+     CLOSE SAMPLEGRID.<a name="wp1038426"> </a>
+     STOP RUN.<a name="wp1038428"> </a>
+     .<a name="wp1038430"> </a>
+ Load-Grid.<a name="wp1038432"> </a>
+      MOVE GRID-COLUMN-HEADINGS TO GRID-DATA.<a name="wp1038434"> </a>
+<a name="wp1038436"> </a>
+      MODIFY SCR-GRID INSERTION-INDEX = 1 <a name="wp1038438"> </a>
+          RECORD-TO-ADD=GRID-DATA.<a name="wp1038440"> </a>
+<a name="wp1038442"> </a>
+      MOVE SPACES TO SAMPLEGRIDKEY.<a name="wp1038444"> </a>
+<a name="wp1038446"> </a>
+      START SAMPLEGRID KEY NOT &lt;  SAMPLEGRIDKEY<a name="wp1038448"> </a>
+         INVALID KEY<a name="wp1038450"> </a>
+            EXIT PARAGRAPH<a name="wp1038452"> </a>
+      END-START.<a name="wp1038454"> </a>
+      MODIFY SCR-GRID ACTION = ACTION-FIRST-PAGE.<a name="wp1038456"> </a>
+*<a name="wp1038458"> </a>
+ Move-Data-To-Grid.<a name="wp1038460"> </a>
+      MOVE FIRST-NAME  TO GRID-FIRST-NAME.    <a name="wp1038462"> </a>
+      MOVE LAST-NAME TO GRID-LAST-NAME.<a name="wp1038464"> </a>
+<a name="wp1038466"> </a>
+      MOVE SAMPLEGRID-EXTENSION  TO GRID-EXTENSION.<a name="wp1038468"> </a>
+      MOVE SAMPLEGRID-DEPARTMENT TO GRID-DEPARTMENT.<a name="wp1038470"> </a>
+      MOVE SAMPLEGRID-EMAIL TO GRID-EMAIL.<a name="wp1038472"> </a>
+      MOVE SAMPLEGRID-HOME-PHONE TO GRID-HOME-PHONE.<a name="wp1038474"> </a>
+*<a name="wp1038476"> </a>
+ Move-Grid-To-Data.<a name="wp1038478"> </a>
+      MOVE GRID-FIRST-NAME TO FIRST-NAME.<a name="wp1038480"> </a>
+      MOVE GRID-LAST-NAME  TO LAST-NAME.<a name="wp1038482"> </a>
+<a name="wp1038484"> </a>
+      MOVE GRID-EXTENSION TO SAMPLEGRID-EXTENSION.<a name="wp1038486"> </a>
+      MOVE GRID-DEPARTMENT TO SAMPLEGRID-DEPARTMENT.<a name="wp1038488"> </a>
+      MOVE GRID-EMAIL  TO SAMPLEGRID-EMAIL.<a name="wp1038490"> </a>
+<a name="wp1038492"> </a>
+      MOVE GRID-HOME-PHONE TO SAMPLEGRID-HOME-PHONE.<a name="wp1038494"> </a>
+*<a name="wp1038496"> </a>
+ Acu-Exit-Rtn.<a name="wp1038498"> </a>
+     EXIT PROGRAM<a name="wp1038500"> </a>
+     STOP RUN<a name="wp1038502"> </a>
+     .<a name="wp1038504"> </a>
+*<a name="wp1038506"> </a>
+ Acu-PgGridSample-Routine.<a name="wp1038508"> </a>
+     PERFORM Acu-PgGridSample-Scrn.<a name="wp1038510"> </a>
+     PERFORM Acu-PgGridSample-Proc<a name="wp1038512"> </a>
+     .<a name="wp1038514"> </a>
+<a name="wp1038516"> </a>
+ Acu-PgGridSample-Scrn.<a name="wp1038518"> </a>
+     PERFORM Acu-PgGridSample-Create-Win.<a name="wp1038520"> </a>
+     DISPLAY PgGridSample UPON Form1-Handle<a name="wp1038522"> </a>
+     .<a name="wp1038524"> </a>
+<a name="wp1038526"> </a>
+ Acu-PgGridSample-Create-Win.<a name="wp1038528"> </a>
+* display screen<a name="wp1038530"> </a>
+     DISPLAY Standard GRAPHICAL WINDOW<a name="wp1038532"> </a>
+        LINES 38.00, SIZE 64.00, CELL HEIGHT 10, CELL WIDTH 10, <a name="wp1038534"> </a>
+        AUTO-RESIZE, COLOR IS 65793, ERASE, LABEL-OFFSET 0, <a name="wp1038536"> </a>
+        LINK TO THREAD, MODELESS, NO SCROLL, WITH SYSTEM MENU, <a name="wp1038538"> </a>
+        TITLE &quot;Paged Grid Sample&quot;, TITLE-BAR, NO WRAP, <a name="wp1038540"> </a>
+        EVENT PROCEDURE Form1-Event-Proc, <a name="wp1038542"> </a>
+        HANDLE IS Form1-Handle.<a name="wp1038544"> </a>
+*<a name="wp1038546"> </a>
+     DISPLAY PgGridSample UPON Form1-Handle<a name="wp1038548"> </a>
+     .<a name="wp1038550"> </a>
+<a name="wp1038552"> </a>
+* PgGridSample<a name="wp1038554"> </a>
+ Acu-PgGridSample-Proc.<a name="wp1038556"> </a>
+     PERFORM UNTIL Exit-Pushed<a name="wp1038558"> </a>
+        ACCEPT PgGridSample<a name="wp1038560"> </a>
+           ON EXCEPTION PERFORM Acu-PgGridSample-Evaluate-Func<a name="wp1038562"> </a>
+        END-ACCEPT<a name="wp1038564"> </a>
+     END-PERFORM<a name="wp1038566"> </a>
+     DESTROY Form1-Handle<a name="wp1038568"> </a>
+     INITIALIZE Key-Status<a name="wp1038570"> </a>
+     .<a name="wp1038572"> </a>
+<a name="wp1038574"> </a>
+* PgGridSample<a name="wp1038576"> </a>
+ Acu-PgGridSample-Evaluate-Func.<a name="wp1038578"> </a>
+* avoid changing focus<a name="wp1038580"> </a>
+     MOVE 1 TO Accept-Control<a name="wp1038582"> </a>
+     .<a name="wp1038584"> </a>
+  Form1-Event-Proc.<a name="wp1038586"> </a>
+*<a name="wp1038588"> </a>
+     EVALUATE Event-Type<a name="wp1038590"> </a>
+     WHEN Msg-Close<a name="wp1038592"> </a>
+        PERFORM Acu-Exit-Rtn<a name="wp1038594"> </a>
+     END-EVALUATE<a name="wp1038596"> </a>
+     .<a name="wp1038598"> </a>
+<a name="wp1038600"> </a>
+ Grid-Events.<a name="wp1038602"> </a>
+*<a name="wp1038604"> </a>
+    EVALUATE Event-Type<a name="wp1038606"> </a>
+    WHEN Msg-Paged-First<a name="wp1038608"> </a>
+       PERFORM Scr-Grid-Ev-Msg-Paged-First<a name="wp1038610"> </a>
+    WHEN Msg-Paged-Last<a name="wp1038612"> </a>
+       PERFORM Scr-Grid-Ev-Msg-Paged-Last<a name="wp1038614"> </a>
+    WHEN Msg-Paged-Next<a name="wp1038616"> </a>
+       PERFORM Scr-Grid-Ev-Msg-Paged-Next<a name="wp1038618"> </a>
+    WHEN Msg-Paged-Prev<a name="wp1038620"> </a>
+       PERFORM Scr-Grid-Ev-Msg-Paged-Prev<a name="wp1038622"> </a>
+    END-EVALUATE<a name="wp1038624"> </a>
+    .<a name="wp1038626"> </a>
+*<a name="wp1038628"> </a>
+ Scr-Grid-Ev-Msg-Paged-Next.<a name="wp1038630"> </a>
+     PERFORM EVENT-DATA-2 TIMES<a name="wp1038632"> </a>
+       READ SAMPLEGRID NEXT RECORD<a name="wp1038634"> </a>
+         AT END MOVE EVENT-ACTION-FAIL TO EVENT-ACTION<a name="wp1038636"> </a>
+         EXIT PARAGRAPH<a name="wp1038638"> </a>
+       END-READ<a name="wp1038640"> </a>
+     END-PERFORM<a name="wp1038647"> </a>
+<a name="wp1038654"> </a>
+     PERFORM MOVE-DATA-TO-GRID <a name="wp1038653"> </a>
+     MODIFY SCR-GRID, RECORD-TO-ADD = GRID-DATA<a name="wp1038658"> </a>
+     .<a name="wp1038660"> </a>
+*<a name="wp1038662"> </a>
+ Scr-Grid-Ev-Msg-Paged-Prev.<a name="wp1038664"> </a>
+     PERFORM EVENT-DATA-2 TIMES<a name="wp1038666"> </a>
+       READ SAMPLEGRID PREVIOUS RECORD<a name="wp1038668"> </a>
+         AT END <a name="wp1038670"> </a>
+           MOVE EVENT-ACTION-FAIL TO EVENT-ACTION <a name="wp1038672"> </a>
+           EXIT PARAGRAPH<a name="wp1038674"> </a>
+         END-READ       <a name="wp1038676"> </a>
+     END-PERFORM.<a name="wp1038678"> </a>
+<a name="wp1038680"> </a>
+     PERFORM MOVE-DATA-TO-GRID.<a name="wp1038682"> </a>
+     MODIFY SCR-GRID, <a name="wp1038684"> </a>
+       INSERTION-INDEX = 2, RECORD-TO-ADD = GRID-DATA<a name="wp1038686"> </a>
+     .<a name="wp1038688"> </a>
+*<a name="wp1038690"> </a>
+ Scr-Grid-Ev-Msg-Paged-First.<a name="wp1038692"> </a>
+     MOVE LOW-VALUES TO SAMPLEGRIDKEY.<a name="wp1038694"> </a>
+     START SAMPLEGRID KEY &gt;= SAMPLEGRIDKEY<a name="wp1038696"> </a>
+       INVALID KEY MOVE EVENT-ACTION-FAIL TO EVENT-ACTION<a name="wp1038698"> </a>
+     END-START<a name="wp1038700"> </a>
+     .<a name="wp1038702"> </a>
+*<a name="wp1038704"> </a>
+ Scr-Grid-Ev-Msg-Paged-Last.<a name="wp1038706"> </a>
+     MOVE HIGH-VALUES TO SAMPLEGRIDKEY<a name="wp1038708"> </a>
+     START SAMPLEGRID KEY &lt;= SAMPLEGRIDKEY<a name="wp1038710"> </a>
+       INVALID KEY MOVE EVENT-ACTION-FAIL TO EVENT-ACTION<a name="wp1038712"> </a>
+     END-START<a name="wp1038714"> </a>
+     .<a name="wp1046475"> </a>
+*<a name="wp1046474"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.2.2  Subscripting</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3512.htm">5.2  Data Names</a> &gt; </p>
+<a name="wp1034586"> </a><h2 class="pHeading2">
+5.2.2  Subscripting
+</h2>
+<a name="wp1034589"> </a><p class="pBody">
+Subscripting is used when reference is made to an individual element of a table.  
+</p>
+<a name="wp1034590"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+{data-name     }  ( { index-val [ {+}<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>integer <span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>]<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>}<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>...)<a name="wp1034591"> </a>
+{condition-name}                  {-}<a name="wp1034592"> </a>
+</pre></div>
+<a name="wp1034593"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034594"> </a><div class="pSmartList1"><li><em class="cEmphasis">Index-val</em> must be either an integer literal, an integer elementary data item, or an index name.  It may be qualified.  </li></div>
+<a name="wp1034595"> </a><div class="pSmartList1"><li><em class="cEmphasis">Data-name</em> and <em class="cEmphasis">condition-name</em> must be subordinate to an OCCURS clause.</li></div>
+<a name="wp1034596"> </a><div class="pSmartList1"><li><em class="cEmphasis">Integer</em> must be an integer literal.</li></div>
+<a name="wp1034597"> </a><div class="pSmartList1"><li>The number of subscripts must equal the number of OCCURS clauses in the description of the table element being referenced.  When more than one subscript is required, they are written in the order of successively less inclusive dimensions of the table.</li></div>
+<a name="wp1034599"> </a><div class="pSmartList1"><li>If both qualification and subscripting of a data name are being used, the qualification is done first.  </li></div>
+<a name="wp1034600"> </a><div class="pSmartList1"><li>If both subscripting and reference modification of a data name are being used, the subscripting is done first.  </li></div>
+</ol></div>
+<a name="wp1034601"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034602"> </a><div class="pSmartList1"><li>The value of the subscript must be a positive integer.  The lowest occurrence value is represented by the value &quot;1&quot;.  Each successive element of a table within a dimension is referenced by occurrence numbers of 2, 3, 4, and so on.  The highest permissible occurrence number for any given dimension of a table is the maximum number of occurrences of the item as specified by the associated OCCURS clause.</li></div>
+<a name="wp1034603"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">integer</em> is specified, the value of the subscript is determined by adding or subtracting the <em class="cEmphasis">integer</em> from <em class="cEmphasis">index-val</em>.  This modified value is subject to all of the conditions of rule 1 above.  </li></div>
+<a name="wp1088355"> </a><div class="pSmartList1"><li>By default, it is not an error to reference a table element beyond the last one in the table, but the results are undefined and may adversely affect your program.  In fact, this is the single most frequent cause of &quot;memory access violation&quot; errors.  Use the &quot;-Za&quot; compiler option to cause an error message to display whenever an out-of-bounds table element is referenced.  The error text is: &quot;Index out of bounds.&quot;  This error is an <em class="cEmphasis">intermediate </em>runtime error that can trigger the execution of installed error procedures.  See the entry for CBL_ERROR_PROC in Book 4, Appendix I. </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

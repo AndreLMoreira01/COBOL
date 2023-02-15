@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:43:13" />
+  <title>B.6  Table Locking</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4glb.htm">Appendix B:  Acu4GL for Microsoft SQL Server Information</a> &gt; </p>
+<a name="wp1039820"> </a><h2 class="pHeading1">
+B.6  Table Locking
+</h2>
+<a name="wp1039825"> </a><p class="pBody">
+By default, Microsoft SQL Server doesn't support the type of record and table locking that COBOL expects.  For this reason, the Acu4GL for Microsoft SQL Server product implements its own locking method.  This is accomplished with the addition of two tables to a database.  You choose which database will hold these tables during installation of the Acu4GL for Microsoft SQL Server product.
+</p>
+<a name="wp1039826"> </a><p class="pBody">
+Before using the locking tables, you must execute the included <b class="cBold">ms_inst.sql</b> script.  (See the installation instructions you used from this manual for the exact procedure.  They can be located in the table of contents.)  If you don't perform this step, the first time you try to execute a COBOL program that opens a Microsoft SQL Server table, you will receive error 9D,11, &quot;ACUCOBOL Lock Table Incorrect&quot;.
+</p>
+<a name="wp1039827"> </a><h3 class="pHeadingRef">
+AcuLocks table
+</h3>
+<a name="wp1039828"> </a><p class="pBody">
+The first locking table is called AcuLocks; it holds the record locks.  The columns in this table are 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1039829"> </a><div class="pSmartList1"><li>the DBID</li></div>
+<a name="wp1039830"> </a><div class="pSmartList1"><li>the Table ID</li></div>
+<a name="wp1039831"> </a><div class="pSmartList1"><li>the Process ID of the process holding the lock</li></div>
+<a name="wp1039832"> </a><div class="pSmartList1"><li>the primary key of the record that is locked</li></div>
+</ul></div>
+<a name="wp1039833"> </a><p class="pBody">
+There is a unique index on the DBID, the Table ID, and the Key Value, so that inserts into this table are automatically rejected if another user holds a lock on the row in question.  This also gives the Database Administrator the information needed to determine who has locks set, and whether the user in question still has a connection to the server.
+</p>
+<a name="wp1039834"> </a><h3 class="pHeadingRef">
+AcuOpenTables table
+</h3>
+<a name="wp1039835"> </a><p class="pBody">
+The second locking table is called AcuOpenTables; it holds information about open tables.  
+</p>
+<a name="wp1039836"> </a><p class="pBody">
+The columns in this table are
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1039837"> </a><div class="pSmartList1"><li>the DBID</li></div>
+<a name="wp1039838"> </a><div class="pSmartList1"><li>the Table ID </li></div>
+<a name="wp1039839"> </a><div class="pSmartList1"><li>the process ID (PID) of the process that has the table open</li></div>
+<a name="wp1039840"> </a><div class="pSmartList1"><li>the Open Mode (Input, Output, I/O or Extend)</li></div>
+<a name="wp1039841"> </a><div class="pSmartList1"><li>whether Multiple records can be locked</li></div>
+<a name="wp1039842"> </a><div class="pSmartList1"><li>whether the file can be open for I/O by any other users</li></div>
+<a name="wp1039843"> </a><div class="pSmartList1"><li>whether the file can be open at all by any other users </li></div>
+<a name="wp1039844"> </a><div class="pSmartList1"><li>whether Mass Update was specified in the open  </li></div>
+</ul></div>
+<a name="wp1039845"> </a><p class="pBody">
+There are no indices on this table, but there is a trigger, which will automatically reject opens that are not allowed based on other users' open modes.
+</p>
+<a name="wp1039846"> </a><p class="pBody">
+By using these lock tables, the Acu4GL for Microsoft SQL Server product is able to support all the types of locking ordinarily supported by ACUCOBOL-GT.  No special runtime configuration variables are required.
+</p>
+<a name="wp1039847"> </a><p class="pBody">
+This method of locking is all that is needed if no applications other than COBOL programs are going to be using the Acu4GL for Microsoft SQL Server product.  But if your site has other applications that access the Microsoft SQL Server databases, you must use a method of locking that is inherent to Microsoft SQL Server.
+</p>
+<a name="wp1039848"> </a><p class="pBody">
+Another method of locking that Microsoft SQL Server supports internally is the result of time stamping and the use of BROWSE MODE (see the discussion of BROWSE MODE in the <em class="cEmphasis">Microsoft SQL Server Commands Reference Manual</em>).  If a table has a time stamp column, the Acu4GL for Microsoft SQL Server product will use browse mode.  This will allow the server to detect whether another application has modified a record while an ACUCOBOL-GT application has had it locked.
+</p>
+<a name="wp1039849"> </a><p class="pBody">
+For information about alternative locking methods, see the configuration variables <a  href="4glb28.htm#wp1039678">A_MSSQL_NATIVE_LOCK_TIMEOUT</a> and <a  href="4glb43.htm#wp1039774">A_MSSQL_USE_DROPDOWN_QUERIES</a>.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

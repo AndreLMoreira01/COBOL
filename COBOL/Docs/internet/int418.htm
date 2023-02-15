@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/01/05 10:10:06" />
+  <title>4.5  Writing a CGI Program</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Programmer's Guide to the Internet <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="int4.htm">Chapter 4: Launching Applications on a Web Server With CGI</a> &gt; </p>
+<a name="wp1045119"> </a><h2 class="pHeading1">
+4.5  Writing a CGI Program
+</h2>
+<a name="wp1060071"> </a><p class="pBody">
+Each element of your HTML, XML, or WML interface has a corresponding CGI variable.  Your application must be able to interpret the CGI input data and return an appropriate response to the user.  This is where your CGI program comes in.
+</p>
+<a name="wp1060101"> </a><p class="pBody">
+Your CGI program must perform three basic functions:
+</p>
+<a name="wp1060115"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1060221"> </a>
+Function
+
+</th>
+    <th><a name="wp1060223"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1060081"> </a><p class="pCellBody">
+Read CGI input data from the client 
+</p>
+</td>
+    <td><a name="wp1060083"> </a><p class="pCellBody">
+When a user enters information onto the form, that information is sent to the CGI program in the form of CGI data.  Your program must be able to read CGI input data.  In ACUCOBOL-GT, this is accomplished with the ACCEPT verb.  See <a  href="int419.htm#wp1053913">section 4.5.1</a> for details.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1060088"> </a><p class="pCellBody">
+Process the input data and arrive at results
+</p>
+</td>
+    <td><a name="wp1060090"> </a><p class="pCellBody">
+Typically, this involves either a calculation, database lookup, or file read, but it could involve a CALL to an existing COBOL program on a local or remote machine.  See <a  href="int422.htm#wp1028419">section 4.5.2</a> for details.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1060095"> </a><p class="pCellBody">
+Generate output that can be read by the client browser
+</p>
+</td>
+    <td><a name="wp1060097"> </a><p class="pCellBody">
+Minimally, this includes an HTTP response header with a URL pointer to the response data.  Otherwise, the header may be followed by response data formatted in HTML, WML, or XML.  In ACUCOBOL-GT, HTTP output is accomplished using the DISPLAY verb.  See <a  href="int423.htm#wp1028430">section 4.5.3</a> for details.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1060102"> </a><p class="pBody">
+In the simplest case, your ACUCOBOL-GT CGI program can contain one ACCEPT statement and one DISPLAY statement.  Even if your program is more complicated, it will always start with an ACCEPT and end with a DISPLAY.  Few languages make CGI programming so simple.  
+</p>
+<a name="wp1053719"> </a><p class="pBody">
+When writing your CGI program, consider the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1053720"> </a><div class="pSmartList1"><li>CGI programs must be written to be non-interactive.  They take a set of input data, process it, and produce output.</li></div>
+<a name="wp1053721"> </a><div class="pSmartList1"><li>While the CGI program is running, the user is waiting for a response in the Web browser.  CGI programs should be kept small and do their job quickly to reduce the user wait time. </li></div>
+<a name="wp1053722"> </a><div class="pSmartList1"><li>If users get tired of waiting and press the Stop button on their browsers, the Web server generally kills the CGI program.  The output from the CGI program is discarded. </li></div>
+<a name="wp1053723"> </a><div class="pSmartList1"><li>One of the limitations of CGI is that it does not automatically maintain any state information.  It is the CGI programmer's responsibility to record state information in a file or database and then encode a &quot;key&quot; to that state information in the HTML, XML, or WML output. </li></div>
+<a name="wp1053712"> </a><p class="pIndented1">
+For example, if a client invokes a CGI program to &quot;log in&quot; to your application or to add an item to his/her &quot;shopping cart,&quot; the CGI program must record that fact along with any user identification information in a file or database.  When the CGI program generates the output, it should encode a user ID or key in a CGI variable that will get passed to the next CGI program that the client invokes.  The next CGI program can then look up the user state information (for example, shopping cart contents) from the database.  The user state information should also include a date/time &quot;stamp&quot; so that a maintenance program can delete records for users who haven't logged on in a specified amount of time or who left the application without logging out.
+</p>
+<a name="wp1056353"> </a><div class="pSmartList1"><li>If you choose to use ANSI style ACCEPT and DISPLAY statements instead of-or in addition to-the ACCEPT and DISPLAY <em class="cEmphasis">external-form-item</em> syntax described in this section, you must include the UPON SYSOUT phrase or else compile with the &quot;-Ca&quot; option.  &quot;-Ca&quot; implies UPON SYSOUT for all ANSI DISPLAY statements.</li></div>
+</ul></div>
+<a name="wp1053790"> </a><p class="pBody">
+With these considerations in mind, you are ready to write your  CGI program.  The following sections describe how to accomplish the necessary I/O and processing tasks.  <a  href="int424.htm#wp1028487">Section 4.5.4, &quot;Sample CGI Programs&quot;</a> provides some sample code for your reference.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

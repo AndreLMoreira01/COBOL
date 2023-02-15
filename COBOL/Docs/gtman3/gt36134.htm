@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>ROLLBACK Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1041309"> </a><h2 class="pHeading2">
+ROLLBACK Statement
+</h2>
+<a name="wp1041312"> </a><p class="pBody">
+The ROLLBACK TRANSACTION verb causes a transaction to be rolled back or &quot;canceled.&quot;
+</p>
+<a name="wp1041314"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">ROLLBACK</u> TRANSACTION<a name="wp1041315"> </a>
+</pre></div>
+<a name="wp1041317"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<a name="wp1041318"> </a><p class="pBody">
+The following rules describe how transaction management operates with Vision and relative files.  For other file systems linked with the runtime, each system's native mechanism for transaction management is invoked.  See the Acucorp interface document for the specific file system for more details.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041319"> </a><div class="pSmartList1"><li>ROLLBACK locks the log file, checks its integrity, then writes a ROLLBACK notation to the log file and unlocks it.</li></div>
+<a name="wp1041320"> </a><div class="pSmartList1"><li>When ROLLBACK is enabled in the FILE-CONTROL entry for a file, the record and file locking rules are extended for that file.  Every record updated as part of a transaction is locked until that transaction is committed or rolled back.  The ROLLBACK verb removes these locks.  Record locks applied when reading the file are also kept until the end of the transaction.</li></div>
+<a name="wp1041321"> </a><div class="pSmartList1"><li>During a transaction involving Vision or relative files, a CLOSE of a file that is locked, or that has locked or deleted records, is postponed until the transaction is committed or rolled back.  If the same physical file is opened again within the transaction, even if the program is using a different logical file (different SELECT), the postponed CLOSE is canceled.   Note that the mode of the original OPEN is retained.  (For example, if the file were originally OPEN I-O, and if the CLOSE were canceled, then an OPEN OUTPUT on the same file within the same transaction would <em class="cEmphasis">not</em> recreate the file.)  When the second OPEN is encountered, the file position is reset to the beginning so that a READ NEXT would read the first file in the record.  CLOSE is handled in this special way so that record locks are held-these locks are necessary for rollback.</li></div>
+<a name="wp1041322"> </a><div class="pSmartList1"><li>If the runtime system is killed by the user or encounters a fatal error prior to completing a transaction, an automatic rollback occurs. </li></div>
+<a name="wp1041326"> </a><div class="pSmartList1"><li>Unless the LOGGING configuration variable is set to &quot;0&quot;, file operations that occur in transactions are logged and recoverable regardless of whether the files have rollback capability.</li></div>
+<a name="wp1041329"> </a><div class="pSmartList1"><li>Temporary files used for rollback are created in the working directory, or in the directory specified by the LOG-DIR configuration variable of the runtime.  </li></div>
+<a name="wp1041330"> </a><div class="pSmartList1"><li>The first write or rewrite on a sequential access mode file after a ROLLBACK TRANSACTION will be successful even if the primary key was written out of sequence, and even if the primary key on a rewrite does not match the last record read.  No file error 22 will occur.  This allows the program to continue where it left off after a rollback.</li></div>
+<a name="wp1041333"> </a><div class="pSmartList1"><li>If the STOP-RUN-ROLLBACK configuration variable is set to 1, an implicit ROLLBACK occurs before a STOP RUN or before the end of the program.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>CBL_GET_EXIT_INFO Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1034991"> </a><h2 class="pHeading2">
+CBL_GET_EXIT_INFO Routine
+</h2>
+<a name="wp1034995"> </a><p class="pBody">
+CBL_GET_EXIT_INFO provides an exit procedure with certain information about the termination that invoked it.  It is included mainly for compatibility with other COBOL implementations.
+</p>
+<a name="wp1034996"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;CBL_GET_EXIT_INFO&quot; <a name="wp1034997"> </a>
+    USING EXIT-INFO <a name="wp1060234"> </a>
+    [RETURNING STATUS-CODE]<a name="wp1471957"> </a>
+</pre></div>
+<a name="wp1034998"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1034999"> </a><p class="pBody">
+<b class="cBold">EXIT-INFO</b>   Group item.
+</p>
+<a name="wp1035000"> </a><p class="pBody">
+Group item containing four elementary data items laid out as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+exit-info.<a name="wp1035001"> </a>
+   p-block-size   PIC X(4) COMP-N VALUE 16.<a name="wp1035002"> </a>
+   p-return-code  PIC X(4) COMP-N.<a name="wp1035003"> </a>
+   p-rts-error    PIC X(4) COMP-N.<a name="wp1035004"> </a>
+   p-exit-flags   PIC X(4) COMP-N.<a name="wp1035005"> </a>
+</pre></div>
+<a name="wp1035006"> </a><p class="pBody">
+<b class="cBold">STATUS-CODE</b>   Any numeric data item.
+</p>
+<a name="wp1035007"> </a><p class="pBody">
+Return status of the operation.
+</p>
+<a name="wp1035008"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1158552"> </a><p class="pBody">
+Termination information is returned in the last three items of exit-info and in status-code. The items returned and their values are as follows:
+</p>
+<a name="wp1160807"> </a><p style="text-align: left" class="pListOptions">
+<b class="cBold">p-return-code</b>	most recent value of RETURN-CODE
+</p>
+<a name="wp1160808"> </a><p style="text-align: left" class="pListOptions">
+<b class="cBold">p-rts-error</b>	error number of the most recent runtime error, or zero if none
+</p>
+<a name="wp1160809"> </a><p style="text-align: left" class="pListOptions">
+<b class="cBold">p-exit-flags</b>	a 32-bit word with flag bits as follows (bit 0 is the least significant bit):
+</p>
+<a name="wp1161222"> </a><p class="pBodyRelative">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1161165"> </a>
+bit
+
+</th>
+    <th><a name="wp1161167"> </a>
+meaning of &quot;1&quot; in this bit
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161169"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1161171"> </a><p class="pCellBody">
+always zero
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161173"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1161175"> </a><p class="pCellBody">
+always zero
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161177"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1161179"> </a><p class="pCellBody">
+terminated by STOP RUN, CALL PROGRAM, or CHAIN
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161181"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1161183"> </a><p class="pCellBody">
+always zero
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161185"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1161187"> </a><p class="pCellBody">
+terminated by operator
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161189"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1161191"> </a><p class="pCellBody">
+always zero
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161193"> </a><p class="pCellBody">
+6-31
+</p>
+</td>
+    <td><a name="wp1161195"> </a><p class="pCellBody">
+reserved; always zero
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1160818"> </a><p style="text-align: left" class="pListOptions">
+<b class="cBold">status-code</b>	the status of the operation as follows:
+</p>
+<a name="wp1164243"> </a><p class="pBodyRelative">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1164324"> </a>
+Value
+
+</th>
+    <th><a name="wp1164326"> </a>
+meaning
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1164328"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1164330"> </a><p class="pCellBody">
+success
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1164332"> </a><p class="pCellBody">
+1006
+</p>
+</td>
+    <td><a name="wp1164334"> </a><p class="pCellBody">
+called from outside exit procedure
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1164336"> </a><p class="pCellBody">
+1009
+</p>
+</td>
+    <td><a name="wp1164338"> </a><p class="pCellBody">
+value of p-block-size is not 16
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:36:12" />
+  <title>5.6.6  Putting It All Together</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql5.htm">Chapter 5: Sample Programs</a> &gt; <a href="sql518.htm">5.6  Working With More Than One Row - select3.sqb </a> &gt; </p>
+<a name="wp1034676"> </a><h2 class="pHeading2">
+5.6.6  Putting It All Together
+</h2>
+<a name="wp1034677"> </a><p class="pBody">
+In this program, which builds upon the previous programs, the following lines of code:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+EXEC SQL<a name="wp1034678"> </a>
+   DECLARE COBCUR1 CURSOR FOR <a name="wp1034679"> </a>
+       SELECT<a name="wp1034680"> </a>
+            C_NUMBER, C_FIRST_NAME, C_LAST_NAME,<a name="wp1034681"> </a>
+            TO_CHAR, C_INFO<a name="wp1034682"> </a>
+       FROM CUSTOMER<a name="wp1034683"> </a>
+       WHERE C_NUMBER &gt;= :C-NUMBER<a name="wp1034684"> </a>
+END-EXEC.<a name="wp1034685"> </a>
+<a name="wp1034686"> </a>
+EXEC SQL <a name="wp1034687"> </a>
+   OPEN COBCUR1 <a name="wp1034688"> </a>
+END-EXEC.<a name="wp1034689"> </a>
+<a name="wp1034690"> </a>
+perform until SQLCODE not equal 0<a name="wp1034691"> </a>
+<a name="wp1034692"> </a>
+    EXEC SQL<a name="wp1034693"> </a>
+         FETCH COBCUR1 INTO :C-RECORD<a name="wp1034694"> </a>
+    END-EXEC<a name="wp1034695"> </a>
+    IF sqlcode EQUAL 0<a name="wp1034696"> </a>
+         display c-number, &quot;: &quot;,c-first-name, <a name="wp1034697"> </a>
+                 c-last-name, c-info<a name="wp1034698"> </a>
+    end-if<a name="wp1034699"> </a>
+end-perform.<a name="wp1034700"> </a>
+<a name="wp1034701"> </a>
+EXEC SQL<a name="wp1034702"> </a>
+    CLOSE COBCUR1<a name="wp1034703"> </a>
+END-EXEC.<a name="wp1034704"> </a>
+</pre></div>
+<a name="wp1034705"> </a><p class="pBody">
+cause the program to do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034706"> </a><div class="pSmartList1"><li>Identify the cursor:  for all customers numbers greater than or equal to that supplied by the user, retrieve the values of C_NUMBER, C_FIRST_NAME, C_LAST_NAME, C_BIRTHDAY, and C_INFO and place them in a table of results.  </li></div>
+<a name="wp1034707"> </a><div class="pSmartList1"><li>Open the cursor.</li></div>
+<a name="wp1034708"> </a><div class="pSmartList1"><li>Fetch the values of the indicated variables and assign them to the group item host variable :C_RECORD.</li></div>
+<a name="wp1034709"> </a><div class="pSmartList1"><li>If there are no errors or warnings, display the values of the variables.</li></div>
+<a name="wp1034710"> </a><div class="pSmartList1"><li>Do this until the program internally indicates that there are no more rows left in the table of results.</li></div>
+<a name="wp1034711"> </a><div class="pSmartList1"><li>Close the cursor.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

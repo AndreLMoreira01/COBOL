@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>REWRITE Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1041267"> </a><h2 class="pHeading2">
+REWRITE Statement
+</h2>
+<a name="wp1041269"> </a><p class="pBody">
+The REWRITE statement logically replaces a record in a file.
+</p>
+<a name="wp1041271"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">REWRITE</u> record [ <u class="cUnderline">FROM</u> source-field ]<a name="wp1041272"> </a>
+<a name="wp1041273"> </a>
+    [ <u class="cUnderline">INVALID</u> KEY statement-1 ]<a name="wp1041274"> </a>
+<a name="wp1041275"> </a>
+    [ <u class="cUnderline">NOT</u> <u class="cUnderline">INVALID</u> KEY statement-2 ]<a name="wp1041276"> </a>
+<a name="wp1041277"> </a>
+    [ <u class="cUnderline">END-REWRITE</u> ]<a name="wp1041278"> </a>
+</pre></div>
+<a name="wp1041280"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041281"> </a><div class="pSmartList1"><li><em class="cEmphasis">Record</em> must be the name of a logical record in the Data Division File Section.  The associated file may not be a sort file.  </li></div>
+<a name="wp1041282"> </a><div class="pSmartList1"><li><em class="cEmphasis">Source-field</em> is a data item or literal.</li></div>
+<a name="wp1041283"> </a><div class="pSmartList1"><li><em class="cEmphasis">Statement-1</em> and <em class="cEmphasis">statement-2</em> are imperative statements.</li></div>
+<a name="wp1041284"> </a><div class="pSmartList1"><li>The INVALID KEY and NOT INVALID KEY phrases may not be specified for sequential files or relative files with sequential access.</li></div>
+<a name="wp1041285"> </a><div class="pSmartList1"><li><em class="cEmphasis">Record</em> and <em class="cEmphasis">source-field</em> may not share any storage area.</li></div>
+</ol></div>
+<a name="wp1041287"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041288"> </a><div class="pSmartList1"><li>The file associated with <em class="cEmphasis">record</em> must be a mass storage file and must be open in the I-O mode.</li></div>
+<a name="wp1041289"> </a><div class="pSmartList1"><li>For files with sequential access mode, the preceding I/O statement executed for the file must have been a successful READ statement.  The REWRITE statement replaces the last record read by the contents of <em class="cEmphasis">record</em>.  If the file is an indexed file, the primary key must not have been changed since the last READ.  </li></div>
+<a name="wp1041290"> </a><div class="pSmartList1"><li>For random or dynamic access mode files, the REWRITE statement replaces the record specified by the file's key.</li></div>
+<a name="wp1041291"> </a><p class="pIndented1">
+For relative files, this is the record specified by its RELATIVE KEY data item.  For indexed files, the record identified by the primary key is replaced.  
+</p>
+<a name="wp1041292"> </a><div class="pSmartList1"><li>For an indexed file with alternate keys, the order in which duplicated keys are subsequently returned is affected as follows:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1041293"> </a><div class="pSmartList2"><li>If the value of an alternate key has not changed, its order of retrieval is unchanged.</li></div>
+<a name="wp1041294"> </a><div class="pSmartList2"><li>If the value is changed, and the new value is a duplicated value, the record's logical position is unpredictable within the set of records with that value.  </li></div>
+</ol></div>
+<a name="wp1041295"> </a><div class="pSmartList1"><li>The REWRITE statement does not affect the current file position.</li></div>
+<a name="wp1041296"> </a><div class="pSmartList1"><li>The following occurrences cause the invalid-key condition:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1041297"> </a><div class="pSmartList2"><li>The access mode is sequential and an indexed file's primary key is not identical to the value returned from the preceding READ statement.</li></div>
+<a name="wp1041298"> </a><div class="pSmartList2"><li>The record being replaced does not exist in the file.</li></div>
+<a name="wp1041299"> </a><div class="pSmartList2"><li>The value of an alternate key that does not allow duplicates equals that of another record already in the file.  </li></div>
+</ol></div>
+<a name="wp1041300"> </a><p class="pIndented1">
+The invalid-key condition causes the REWRITE to fail and does not update the file.  
+</p>
+<a name="wp1041301"> </a><div class="pSmartList1"><li>If the invalid-key condition occurs, and there is an INVALID KEY phrase, <em class="cEmphasis">statement-1</em> executes.  If there is no INVALID KEY phrase, but there is an appropriate USE AFTER EXCEPTION procedure, that procedure executes.  Otherwise, an invalid-key condition causes a message to be printed and the program halts.</li></div>
+<a name="wp1041302"> </a><div class="pSmartList1"><li>If the NOT INVALID KEY phrase is specified, <em class="cEmphasis">statement-2</em> executes if the REWRITE statement is successful.  </li></div>
+<a name="wp1041303"> </a><div class="pSmartList1"><li>For a sequential file, the size of the record must be the same as the one it is replacing.  The size of the record written is determined by the size of <em class="cEmphasis">record</em>.  </li></div>
+<a name="wp1041304"> </a><div class="pSmartList1"><li>The REWRITE statement updates the value of the FILE STATUS data item for the file. </li></div>
+<a name="wp1041305"> </a><div class="pSmartList1"><li>If the FROM phrase is specified, it is identical to first moving the value of <em class="cEmphasis">source-field</em> to <em class="cEmphasis">record</em> using the rules of the MOVE statement and then performing the REWRITE as if there were no FROM phrase.  </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

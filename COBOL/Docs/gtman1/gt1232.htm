@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.7.2  Code and Data File Search Paths</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt1230.htm">2.7  Runtime Configuration</a> &gt; </p>
+<a name="wp1033578"> </a><h2 class="pHeading2">
+2.7.2  Code and Data File Search Paths
+</h2>
+<a name="wp1033581"> </a><p class="pBody">
+A series of directories can be specified that are used to locate program object files and data files.  Object files are located via the CODE_PREFIX configuration variable.  Data files are located by the FILE_PREFIX variable.  
+</p>
+<a name="wp1033586"> </a><p class="pBody">
+Each of these variables specifies a series of one or more directories to be searched for the desired code or data file.  The search method is detailed in <a  href="gt1239.htm#wp1033680">section 2.8, &quot;File Name Interpretation&quot;</a> and <a  href="gt1245.htm#wp1033786">section 2.9, &quot;Calling Subprograms.&quot;</a>  
+</p>
+<a name="wp1033587"> </a><p class="pBody">
+The directories are specified as a sequence of space-delimited prefixes to be applied to the file name.  All directories in the sequence must be valid names.  The current directory can be indicated by a period (regardless of the host operating system).  For example, the following line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE_PREFIX    .  /usr/data<a name="wp1033588"> </a>
+</pre></div>
+<a name="wp1033589"> </a><p class="pBody">
+specifies that data files should first be searched for in the current directory and then in the &quot;/usr/data&quot; directory.  For convenience, colons can be used along with spaces as a delimiter (except on Windows systems where semicolons are used, and VMS systems where commas are used).  As an example of this, the following may be specified for a Windows system: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CODE_PREFIX    C:\;C:\OBJ<a name="wp1033590"> </a>
+</pre></div>
+<a name="wp1102462"> </a><p class="pBody">
+The &quot;^&quot; (carat) character can be specified in CODE_PREFIX to indicate the directory containing the calling program.
+</p>
+<a name="wp1037717"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>Directory names with embedded spaces can be used as FILE_PREFIX and CODE_PREFIX configuration variables if the directory name is enclosed in quotes, for example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE_PREFIX  C:\&quot;Sales Data&quot; <a name="wp1037771"> </a>
+</pre></div>
+<a name="wp1037801"> </a><p class="pNoteEnd">
+This example will cause the program to search for files first under the referenced directory name, and then in the current directory.
+<hr />
+</p>
+<a name="wp1033592"> </a><p class="pBody">
+You can also specify a default file name extension for both code and data files.  By default, ACUCOBOL-GT makes no assumptions about the file name extension used by files.  A default name extension can be specified for code files by the configuration variable CODE_SUFFIX and for data files with the variable FILE_SUFFIX.  These suffixes are automatically appended to any file name that does not explicitly contain an extension.  A period is automatically placed between the file name and the extension, if needed.  
+</p>
+<a name="wp1033597"> </a><p class="pBody">
+For example, you can cause all of your object files to have the implicit extension of &quot;.COB&quot; by placing the following line in your configuration file:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CODE-SUFFIX  COB<a name="wp1033598"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

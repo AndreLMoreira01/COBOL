@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:17" />
+  <title>6.1 Preparing and Compiling Your COBOL Program</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl6.htm">Chapter 6:  Working with COBOL</a> &gt; </p>
+<a name="wp1039097"> </a><h2 class="pHeading1">
+6.1 Preparing and Compiling Your COBOL Program
+</h2>
+<a name="wp1035295"> </a><p class="pBody">
+After the environment has been set up for the Acu4GL® interface, you are ready to use the system.  The following example illustrates how to set up a COBOL program to use your Acu4GL RDBMS product.
+</p>
+<a name="wp1035296"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If you are not familiar with the XFD directives described in <a  href="4gl4.htm#wp1039333">Chapter 4, &quot;Using Directives,&quot;</a> you may want to read that chapter before continuing with this section.
+<hr />
+</p>
+<a name="wp1035297"> </a><p class="pBody">
+The purchase-orders file from a COBOL program at an imaginary company will be stored in the database.  This file contains the records that handle all of the information from the company's purchase orders.
+</p>
+<a name="wp1035298"> </a><p class="pBody">
+Within the purchase-orders file, are two record types:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1035299"> </a><div class="pSmartList1"><li>the purchase-order header record.  (There is one of these for each purchase-order form.)</li></div>
+<a name="wp1035300"> </a><div class="pSmartList1"><li>the purchase-order detail record.  (There is one detail record for each line item in a purchase-order.)</li></div>
+</ul></div>
+<a name="wp1035301"> </a><p class="pBody">
+The file is keyed off the <em class="cEmphasis">purchase-order-number</em>.  We will build and examine the database table three times, to illustrate three different approaches to using the COBOL file description:  
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1035302"> </a><div class="pSmartList1"><li>First, no directives will be added to the COBOL code.  The code will be compiled as is.  Only the largest record will be included in the database table.</li></div>
+<a name="wp1035303"> </a><div class="pSmartList1"><li>Second, the WHEN directive will be added, and the program recompiled.  This will cause all record formats to be included in the database.</li></div>
+<a name="wp1035304"> </a><div class="pSmartList1"><li>Finally, several fields will be grouped together and renamed as a matter of convenience.  </li></div>
+</ul></div>
+<a name="wp1035305"> </a><p class="pBody">
+Here's the sample code: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+IDENTIFICATION DIVISION.<a name="wp1035306"> </a>
+program-id.  purchase.<a name="wp1035307"> </a>
+ENVIRONMENT DIVISION.<a name="wp1035308"> </a>
+input-output section.<a name="wp1035309"> </a>
+file-control.<a name="wp1035310"> </a>
+ <a name="wp1035311"> </a>
+select p-o-file<a name="wp1035312"> </a>
+assign to disk &quot;purch1&quot;<a name="wp1035313"> </a>
+organization is indexed <a name="wp1035314"> </a>
+access mode is dynamic<a name="wp1035315"> </a>
+record key is p-o-number<a name="wp1035316"> </a>
+file status is p-o-status.<a name="wp1035317"> </a>
+ <a name="wp1035318"> </a>
+DATA DIVISION.<a name="wp1035319"> </a>
+file section.<a name="wp1035320"> </a>
+fd p-o-file.<a name="wp1035321"> </a>
+01 p-o-record.<a name="wp1035322"> </a>
+   03 p-o-division-number                pic 9(3).<a name="wp1035323"> </a>
+   03 p-o-record-type                    pic x.<a name="wp1035324"> </a>
+      88 header-record                   value &quot;h&quot;.<a name="wp1035325"> </a>
+      88 detail-record                   value &quot;d&quot;.<a name="wp1035326"> </a>
+   03 p-o-number                         pic 9(10).<a name="wp1035327"> </a>
+   03 p-o-number-detail redefines <a name="wp1035328"> </a>
+         p-o-number.<a name="wp1035329"> </a>
+      05 picking-ticket-number           pic 9(6).<a name="wp1035330"> </a>
+      05 shipping-region                 pic 9(2).<a name="wp1035331"> </a>
+      05 p-o-customer-type               pic 9(2).<a name="wp1035332"> </a>
+      05 p-o-customer-breakdown redefines <a name="wp1035333"> </a>
+            p-o-customer-type.<a name="wp1035334"> </a>
+         07 customer-category            pic x.<a name="wp1035335"> </a>
+         88 p-o-customer-retail          value &quot;r&quot;.<a name="wp1035336"> </a>
+         88 p-o-customer-whlsale         value &quot;w&quot;.<a name="wp1035337"> </a>
+         07 customer-pay-format          pic x.<a name="wp1035338"> </a>
+            88 is-net-30                 value &quot;3&quot;.<a name="wp1035339"> </a>
+            88 is-net-10                 value &quot;1&quot;. <a name="wp1035340"> </a>
+   03 p-o-date.<a name="wp1035341"> </a>
+      05 p-o-yy                          pic 9(2).<a name="wp1035342"> </a>
+      05 p-o-mm                          pic 9(2).<a name="wp1035343"> </a>
+      05 p-o-dd                          pic 9(2).<a name="wp1035344"> </a>
+ <a name="wp1035345"> </a>
+01 p-o-detail-record.<a name="wp1035346"> </a>
+   03 p-o-dept-number                    pic 9(3).<a name="wp1035347"> </a>
+   03 p-o-record-type                    pic x.<a name="wp1035348"> </a>
+   03 detail-p-o-number                  pic 9(10).<a name="wp1035349"> </a>
+   03 p-o-shipping-info.<a name="wp1035350"> </a>
+      05 p-o-quantity-to-ship            pic s9(4) comp.<a name="wp1035351"> </a>
+      05 p-o-total-quantity              pic s9(4) comp.<a name="wp1035352"> </a>
+   03 p-o-notes.<a name="wp1035353"> </a>
+      05 notes-line occurs 3 times       pic x(40).<a name="wp1035354"> </a>
+working-storage section.<a name="wp1035355"> </a>
+01 p-o-status                            pic x(2).<a name="wp1035356"> </a>
+<a name="wp1035357"> </a>
+PROCEDURE DIVISION.<a name="wp1035358"> </a>
+level-1 section.<a name="wp1035359"> </a>
+main-logic.<a name="wp1035360"> </a>
+ <a name="wp1035361"> </a>
+open output p-o-file.<a name="wp1035362"> </a>
+close p-o-file.<a name="wp1035363"> </a>
+stop run.<a name="wp1035364"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

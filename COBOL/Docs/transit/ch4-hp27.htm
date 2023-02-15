@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.2.5.2  Debugging programs that use VPLUS</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp3.htm">4.2  ACUCOBOL-GT in MPE/iX Environments</a> &gt; <a href="ch4-hp25.htm">4.2.5  Using the ACUCOBOL-GT Debugger in MPE/iX Environments</a> &gt; </p>
+<a name="wp1041386"> </a><h2 class="pHeading3">
+4.2.5.2  Debugging programs that use VPLUS
+</h2>
+<a name="wp1041389"> </a><p class="pBody">
+Debugging programs that use VPLUS is tricky because debugger I/O and VPLUS I/O cannot share the same terminal session.  A common way to work around this problem is to use two terminal sessions, one to host debugger output and one to host VPLUS I/O.  In the application of this method, the first terminal session hosts debugger output and establishes a FILE equation that directs VPLUS output to a second terminal session.  This is the strategy we recommend you use when you want to debug an ACUCOBOL-GT program that uses VPLUS.  
+</p>
+<a name="wp1041390"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>You do not need to use two terminal sessions if the program you want to debug does not use VPLUS.
+</p>
+<a name="wp1066580"> </a><p class="pNoteEnd">
+Before you can use the source-level debugger on any program, you must compile the program with the &quot;-Gd&quot; option.
+<hr />
+</p>
+<a name="wp1066581"> </a><p class="pBody">
+The following steps describe one way to start your program so that debugger I/O will go to one terminal session and VPLUS I/O will go to another:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041393"> </a><div class="pSmartList1"><li>Get a logical device number for the session that will host the <br />VPLUS I/O.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1041394"> </a><div class="pSmartList2"><li>Establish a serial connection to the HP e3000 that has the qualities of a directly connected terminal (e.g.: a DTC, modem connection, modem connection from a terminal emulator, etc.). </li></div>
+<a name="wp1067392"> </a><div class="pSmartList2"><li>Get the logical device number (LDEV) of the connection.  The LDEV will be used later in the FILE equation that redirects VPLUS I/O to this logical device.  You can use the &quot;SHOWME&quot; command to get the LDEV number.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:SHOWME<a name="wp1067393"> </a>
+$STDIN LDEV: 90    $STDLIST LDEV: 90<a name="wp1067394"> </a>
+</pre></div>
+<a name="wp1041397"> </a><p class="pIndented2">
+Make a note of the LDEV number.  In the above example, the LDEV number is 90.  
+</p>
+<a name="wp1041398"> </a><div class="pSmartList2"><li>Log out of the session (VPLUS cannot use the connection if it is already in use).</li></div>
+</ol></div>
+<a name="wp1041399"> </a><div class="pSmartList1"><li>Open a session for the ACUCOBOL-GT debugger.  The connection type does not matter; the connection can be from a terminal emulator.</li></div>
+<a name="wp1041400"> </a><div class="pSmartList1"><li>In the debugger session, set a FILE equation that points to the VPLUS terminal filename that is specified in the VOPENTERM call and set the DEV number to the LDEV number derived from step 1.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:FILE VPLUSTF;DEV=90<a name="wp1041401"> </a>
+</pre></div>
+<a name="wp1041402"> </a><div class="pSmartList1"><li>Start the ACUCOBOL-GT debugger by including the &quot;-d&quot; option before the name of the program.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:RUN /ACUCOBOL/bin/runcbl;INFO=&quot;-d VPLUSP&quot; <a name="wp1041403"> </a>
+</pre></div>
+<a name="wp1041404"> </a><div class="pSmartList1"><li>Use the debugger to debug your program.</li></div>
+</ol></div>
+<a name="wp1067646"> </a><p class="pBody">
+When you use the debugger, the runtime switches into block mode before calling a VPLUS intrinsic and then back into raw mode after the call completes.  This is done because the runtime requires raw mode when using the debugger.  When the runtime is in block mode you will not be able to use COBOL DISPLAY/ACCEPT statements, nor will runtime errors be displayed on the screen.  To capture runtime error messages, you should use the &quot;-le&quot; runtime option to send error messages to a file.
+</p>
+<a name="wp1067755"> </a><p class="pBody">
+Some VPLUS calls may cause the keyboard to become locked when using the debugger.  If this happens, you must use the appropriate commands for your terminal to unlock the keyboard.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

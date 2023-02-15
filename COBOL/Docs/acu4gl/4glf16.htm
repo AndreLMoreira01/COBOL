@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:45:15" />
+  <title>A_DB2_LOCK_METHOD</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4glf.htm">Appendix F:  Acu4GL for DB2 Information </a> &gt; <a href="4glf11.htm">F.4  Acu4GL for DB2 Configuration File Variables</a> &gt; </p>
+<a name="wp1052297"> </a><h2 class="pHeading2">
+A_DB2_LOCK_METHOD
+</h2>
+<a name="wp1052301"> </a><p class="pBody">
+Use this variable to specify the locking method that Acu4GL for DB2 should use when accessing your data source.  Possible values are:
+</p>
+<a name="wp1052302"> </a><p class="pBody">
+<em class="cEmphasis">none<br /></em>SETPOS<br />SETSTMTOPTION<br />UPDATECOLUMN
+</p>
+<a name="wp1052303"> </a><p class="pBody">
+The default is &quot;UPDATECOLUMN&quot;.
+</p>
+<a name="wp1052304"> </a><h3 class="pHeadingRef">
+Example:
+</h3>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+A_DB2_LOCK_METHOD UPDATECOLUMN<a name="wp1052305"> </a>
+</pre></div>
+<a name="wp1052306"> </a><h3 class="pHeadingRef">
+SETPOS
+</h3>
+<a name="wp1052308"> </a><p class="pBody">
+Specify SETPOS as your lock method to tell Acu4GL for DB2 to perform the following locking sequence:
+</p>
+<a name="wp1052309"> </a><p class="pBody">
+When setting up a statement handle for accessing the DB2 data source, the Acu4GL product calls a function called SQLSetScrollOptions, with values (SQL-CONCUR-LOCK, SQL-SCROLL-KEYSET-DRIVEN, 1).    
+</p>
+<a name="wp1052310"> </a><p class="pBody">
+When fetching rows from the data source, the Acu4GL product calls SQLExtendedFetch instead of SQLFetch. 
+</p>
+<a name="wp1052311"> </a><p class="pBody">
+Finally, it calls SQLSetPos, with the values (1, SQL-POSITION, SQL-LOCK-EXCLUSIVE). 
+</p>
+<a name="wp1052312"> </a><p class="pBody">
+If any of these functions do not exist, A_DB2_LOCK_METHOD reverts to none.  
+</p>
+<a name="wp1052313"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Even if these functions do exist, there is no guarantee that any rows will be locked using this sequence of calls.  Contact your database vendor to determine whether or not this sequence will be effective for your data source.  
+<hr />
+</p>
+<a name="wp1052314"> </a><h3 class="pHeadingRef">
+SETSTMTOPTION
+</h3>
+<a name="wp1052316"> </a><p class="pBody">
+This option is similar to SETPOS, except a function called SQLSetStmtOption performs the task of SQLSetScrollOptions, and has more functionality.
+</p>
+<a name="wp1052317"> </a><p class="pBody">
+In particular, when using this method of locking, the Acu4GL product will call SQLSetStmtOption a number of times, with values (SQL-CONCURRENCY, SQL-CONCUR-LOCK), (SQL-CURSOR-TYPES, SQL-CURSOR-KEYSET-DRIVEN), and (SQL_KEYSET-SIZE, 1).  Again, if the function does not exist, A_DB2_LOCK_METHOD reverts to none.  
+</p>
+<a name="wp1052319"> </a><h3 class="pHeadingRef">
+UPDATECOLUMN
+</h3>
+<a name="wp1052321"> </a><p class="pBody">
+Specifying UPDATECOLUMN as your lock method performs an entirely different type of locking.  Instead of trying to lock a row while reading it, this method creates a new statement handle for the data source.  Then, after fetching the data from the data source, it resubmits an SQL query to select the same row (based on the primary key) and adds an UPDATE clause.  Last, it fetches the data from the data source.  This method has the most overhead, but it is much more likely to succeed in locking records.   
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

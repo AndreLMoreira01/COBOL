@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>CBL_EXIT_PROC Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1034952"> </a><h2 class="pHeading2">
+CBL_EXIT_PROC Routine
+</h2>
+<a name="wp1034957"> </a><p class="pBody">
+CBL_EXIT_PROC installs, removes, and queries exit procedures to be called automatically when the current run unit terminates normally.  
+</p>
+<a name="wp1034958"> </a><p class="pBody">
+In some cases exit procedures can be called when a run unit generates an error.  See the CBL_ERROR_PROC Routine for error-caused terminations of the run unit.  
+</p>
+<a name="wp1034959"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;CBL_EXIT_PROC&quot; <a name="wp1034960"> </a>
+    USING PRIORITY-NUMBER PROGRAM-NAME<a name="wp1471934"> </a>
+    [RETURNING STATUS-CODE]<a name="wp1034961"> </a>
+</pre></div>
+<a name="wp1034962"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1034963"> </a><p class="pBody">
+<b class="cBold">PRIORITY-NUMBER</b>   Numeric data item or literal
+</p>
+<a name="wp1034964"> </a><p class="pBody">
+Priority number of the queue or the special value &quot;254&quot; or &quot;255&quot;.
+</p>
+<a name="wp1034965"> </a><p class="pBody">
+<b class="cBold">PROGRAM-NAME</b>   Alphanumeric data item or literal
+</p>
+<a name="wp1034966"> </a><p class="pBody">
+Name of the exit procedure to be installed, removed, or queried.
+</p>
+<a name="wp1034967"> </a><p class="pBody">
+<b class="cBold">STATUS-CODE</b>   Any numeric data item
+</p>
+<a name="wp1034968"> </a><p class="pBody">
+Queue number when the exit procedure is queried.
+</p>
+<a name="wp1034969"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1090255"> </a><p class="pBody">
+A run unit can dynamically build one or more queues of exit procedures to be called if and when the run unit terminates normally or when an error procedure terminates normally.  
+</p>
+<a name="wp1090256"> </a><p class="pBody">
+Exit procedures are kept in queues, one queue for each priority level.  Each run unit has its own set of queues, with priorities ranging from 0 to 127, inclusive.  The priority queue for an exit procedure is determined when the procedure is installed.  Because it is possible for an error or exit procedure to install or remove error or exit procedures, the priorities and queues can change dynamically.  The queues and priorities that apply in the end are those in effect at the time when the runtime chooses an error or exit procedure to call.
+</p>
+<a name="wp1034974"> </a><p class="pBody">
+When the program calls CBL_EXIT_PROC, if the priority-number is in the range from 0 to 127, inclusive, then:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034975"> </a><div class="pSmartList1"><li>The exit procedure is removed from the current run unit, if present; </li></div>
+<a name="wp1034976"> </a><div class="pSmartList1"><li>The exit procedure is installed at the beginning of the corresponding queue for the current run unit.</li></div>
+</ol></div>
+<a name="wp1034977"> </a><p class="pBody">
+If the priority-number is &quot;254&quot;, the exit procedure is simply removed from the current run unit.
+</p>
+<a name="wp1034978"> </a><p class="pBody">
+If the priority-number is &quot;255&quot;, the priority number of the queue in the current run unit containing the exit procedure is returned in status-code (or RETURN-CODE, if no RETURNING phrase is present).   (RETURN-CODE is described in Book 3, <em class="cEmphasis">ACUCOBOL-GT Reference Manual</em>, section 6.6, under CALL statement, General Rule 21.)  If it is not in any queue in the current run unit, the value &quot;255&quot; is returned.
+</p>
+<a name="wp1034979"> </a><p class="pBody">
+The installed exit procedures for the current run unit are called when the current run unit terminates by executing a STOP RUN, CALL PROGRAM or CHAIN statement.
+</p>
+<a name="wp1034980"> </a><p class="pBody">
+An exit procedure cannot start a new run unit by executing a CALL RUN or CHAIN statement.  If it tries to do so, the runtime displays an error message and stops without calling any other procedures.
+</p>
+<a name="wp1034981"> </a><p class="pBody">
+An exit procedure must not call STOP RUN.  Its effects are undefined.  
+</p>
+<a name="wp1034982"> </a><p class="pBody">
+Exit procedures in queues with lower priority numbers are called before those in queues with higher priority numbers.  Exit procedures in the same queue are called in sequential order (the opposite of installation order).  Each exit procedure is removed from its queue just before it is called.
+</p>
+<a name="wp1034983"> </a><p class="pBody">
+An exit procedure may install, remove, or query other exit procedures.
+</p>
+<a name="wp1034984"> </a><p class="pBody">
+An exit procedure is called as though by a CALL statement and must return by an EXIT PROGRAM statement.
+</p>
+<a name="wp1034985"> </a><p class="pBody">
+Exit procedure names are case-insensitive and must not contain spaces.
+</p>
+<a name="wp1034986"> </a><p class="pBody">
+No arguments are passed to an exit procedure, and an exit procedure may not return a value.
+</p>
+<a name="wp1034987"> </a><p class="pBody">
+To prevent the program from entering an infinite loop or non-terminating condition, the total number of exit procedures installed or called is limited to the value of the configuration parameter MAX_ERROR_AND_EXIT-PROCS.  The default value is 64.  Any attempt to exceed this limit aborts the application.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

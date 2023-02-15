@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/12/05 11:54:01" />
+  <title>5.2  File System Syntax</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Getting Started <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gsb5.htm"><br />HP e3000 Installation</a> &gt; </p>
+<a name="wp1038469"> </a><h2 class="pHeading1">
+5.2  File System Syntax
+</h2>
+<a name="wp1038471"> </a><p class="pBody">
+There are some differences between the file organization system used by MPE/iX and the system used by ACUCOBOL-GT.  This can affect your installation.  
+</p>
+<a name="wp1038472"> </a><h3 class="pHeadingRef">
+MPE/iX vs. HFS
+</h3>
+<a name="wp1038475"> </a><p class="pBody">
+The MPE/iX environment typically uses FILE.GROUP.ACCOUNT syntax for specifying files and directories.  With ACUCOBOL-GT, you can also use Hierarchical File System (HFS) syntax.  This system arranges the account, group, and file in a different order.  It also uses slashes instead of dots to separate accounts, groups, and files.  Files specified using HFS are case sensitive, can have file extensions, names longer than eight characters, and allow multiple levels of directories.  For example, the following path:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+/ACUCOBOL/sample/def/acucobol.def<a name="wp1038476"> </a>
+</pre></div>
+<a name="wp1038477"> </a><p class="pBody">
+refers to a file called &quot;acucobol.def&quot; in a subdirectory called &quot;def&quot; which is in a subdirectory called &quot;sample&quot; in a directory (or account) called &quot;ACUCOBOL&quot;.
+</p>
+<a name="wp1038478"> </a><p class="pBody">
+If you use standard MPE/iX syntax, you can only reference MPE files. If you use HFS syntax, you can reference both HFS and MPE files.  
+</p>
+<a name="wp1038479"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Most ACUCOBOL-GT files and directories must be specified using the HFS syntax. This means that, in some cases, you will not be able to use MPE syntax.  
+<hr />
+</p>
+<a name="wp1038480"> </a><h3 class="pHeadingRef">
+LISTF vs. LISTFILE
+</h3>
+<a name="wp1038482"> </a><p class="pBody">
+The LISTF command in MPE/iX does not display HFS files. You must use the LISTFILE command instead.  Hewlett-Packard made this decision to minimize the chances of conflicts between files using HFS syntax and existing uses of LISTF.  
+</p>
+<a name="wp1038483"> </a><p class="pBody">
+Even with MPE/iX commands like LISTFILE, you will not be able to see all of the ACUCOBOL-GT files unless you give the commands to look for HFS files.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+:LISTFILE @<a name="wp1038484"> </a>
+</pre></div>
+<a name="wp1038485"> </a><p class="pBody">
+shows only files that conform to standard MPE notation.  Instead, use the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+:LISTFILE ./@<a name="wp1038486"> </a>
+</pre></div>
+<a name="wp1038487"> </a><p class="pBody">
+to show MPE files and HFS files.  The prefix of &quot;./&quot; allows MPE/iX to use HFS notation so the program looks for MPE and HFS files in the current directory.  
+</p>
+<a name="wp1038488"> </a><p class="pBody">
+You may also use a wildcard (such as &quot;@&quot;, &quot;?&quot;, or &quot;#&quot;) to reference HFS files, or a leading slash (&quot;/&quot;) character to look for MPE and HFS files in a location that starts from the root.  For example, if you are in the PUB.ACUCOBOL group and want to move to the ACUCOBOL-GT &quot;bin&quot; directory and list a file called &quot;ccbl&quot;, you would type:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+:CHDIR /ACUCOBOL/bin<a name="wp1038489"> </a>
+:LISTFILE /ACUCOBOL/bin/ccbl<a name="wp1038490"> </a>
+</pre></div>
+<a name="wp1038491"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+:CHDIR ../bin<a name="wp1038492"> </a>
+:LISTFILE ./ccbl<a name="wp1038493"> </a>
+</pre></div>
+<a name="wp1038494"> </a><p class="pBody">
+The &quot;..&quot; prefix specifies the directory above the current working directory (the parent directory of the current working directory).  For example, if you are in the PUB.ACUCOBOL group:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+:LISTFILE ..<a name="wp1038495"> </a>
+</pre></div>
+<a name="wp1038496"> </a><p class="pBody">
+is equivalent to:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+:LISTFILE /ACUCOBOL<a name="wp1038497"> </a>
+</pre></div>
+<a name="wp1038498"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>When purging or manipulating files it is important that you do not confuse HFS file extensions with MPE/iX groups or accounts.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    program.acu<a name="wp1042220"> </a>
+</pre></div>
+<a name="wp1042237"> </a><p class="pBody">
+is an HFS filename with a file extension of &quot;.acu&quot;.  This should not be confused with:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    PROGRAM.ACU<a name="wp1042254"> </a>
+</pre></div>
+<a name="wp1042271"> </a><p class="pNoteEnd">
+which could be an MPE/iX group called &quot;PROGRAM&quot; in an account called &quot;ACU&quot;.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

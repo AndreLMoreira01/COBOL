@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:24" />
+  <title>WAIT_FOR_FILE_ACCESS </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4h.htm">Appendix H: Configuration File Entries</a> &gt; <a href="gt4h3.htm">H.2  Configuration File Entries</a> &gt; </p>
+<a name="wp1037850"> </a><h2 class="pHeading2">
+WAIT_FOR_FILE_ACCESS 
+</h2>
+<a name="wp1037854"> </a><p class="pBody">
+This configuration variable is designed for Windows 98 systems.  It gives you some control over situations where a user must wait for access to a shared file.  The runtime will try repeatedly to acquire the file lock, up to 400 times.  If it has been unable to obtain a file lock after 400 tries, it will (by default) display a message box, asking if the user would like to continue waiting.  If the user clicks the &quot;Yes&quot; button, then the runtime will try again another 400 times (or the value of LOCKING_RETRIES).  If the user clicks the &quot;No&quot; button, then the runtime will return an error to the COBOL program (such as file error 30,33 (system error) or file error 99 (record locked).  
+</p>
+<a name="wp1037855"> </a><p class="pBody">
+The WAIT_FOR_FILE_ACCESS variable lets you choose one of three behaviors: either the user will always see the message box and make a choice, or the program will always return an error code if it cannot acquire the lock, or the runtime will always behave as if the user answered &quot;yes&quot; to the message box.
+</p>
+<a name="wp1037856"> </a><p class="pBody">
+You can modify the text shown to the user in the message box via the TEXT configuration variable.  The message is number 28.  To include the filename in your message, insert &quot;%s&quot; at the place where you want the name of the file to appear.  You can introduce line breaks by including &quot;\n&quot; in the message.
+</p>
+<a name="wp1037857"> </a><p class="pBody">
+Possible values for the WAIT_FOR_FILE_ACCESS variable are:
+</p>
+<a name="wp1037877"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1037860"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1037862"> </a><p class="pCellBody">
+&quot;No&quot;
+</p>
+</td>
+    <td><a name="wp1037864"> </a><p class="pCellBody">
+Do not display message box if lock is not acquired.  Send error to COBOL program.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037866"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1037868"> </a><p class="pCellBody">
+&quot;Ask&quot;
+</p>
+</td>
+    <td><a name="wp1037870"> </a><p class="pCellBody">
+Show the message box and ask the user. (Default)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037872"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1037874"> </a><p class="pCellBody">
+&quot;Yes&quot;
+</p>
+</td>
+    <td><a name="wp1037876"> </a><p class="pCellBody">
+Do not show the message box.  Assume that the user wants to wait for the file.  This ensures that the user eventually can access the file, but introduces a small risk of an infinite loop if the system's lock table becomes corrupt.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1037878"> </a><p class="pBody">
+For programs running in background (&quot;-b&quot; runtime option), or programs with redirected input or output, the &quot;Ask&quot; option is treated the same as the &quot;Yes&quot; option.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

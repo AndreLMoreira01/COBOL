@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>6.3.2  Calling C Programs via the Direct Method</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr64.htm">6.3  Calling C Programs From COBOL</a> &gt; </p>
+<a name="wp1121448"> </a><h2 class="pHeading2">
+6.3.2  Calling C Programs via the Direct Method
+</h2>
+<a name="wp1151146"> </a><p class="pBody">
+The direct method allows you to pass arguments to C functions without writing special interfacing routines.  Parameters are passed directly to the C function according to the CALL statement that invoked the function, using the standard C calling conventions.  This direct method simulates the actions of a native code compiler such as Micro Focus or VAX/COBOL.  
+</p>
+<a name="wp1151162"> </a><p class="pBody">
+Use the BY VALUE phrase of the CALL statement to pass numeric parameters in a way that is compatible with C calling conventions.  Use the BY REFERENCE phrase to pass address parameters.
+</p>
+<a name="wp1150992"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>With the direct method, using BY VALUE causes the actual value to be passed to the routine (as expected).  Using NULL causes binary zeros to be passed to the routine (matching the NULL concept in C).  With the direct method, passing a zero BY VALUE is much the same as specifying NULL (contrast this with the corresponding note under the interface method described in <a  href="itr611.htm#wp1121485">section 6.3.3, &quot;Calling C Programs via the Interface Method&quot;</a>).
+<hr />
+</p>
+<a name="wp1121451"> </a><p class="pBody">
+When a C function is called by the direct method, its return value is placed in the special register RETURN-CODE. 
+</p>
+<a name="wp1121452"> </a><p class="pBody">
+You should note that the direct method makes it easy to generate memory access violations.  You may omit a BY REFERENCE or BY VALUE phrase or forget to terminate strings properly with a NULL value (as required by&#160;C).
+</p>
+<a name="wp1121453"> </a><p class="pBody">
+To use the direct method, add the name of the C function to be called to DIRECTTABLE in the file &quot;direct.c&quot;.  The table has three columns:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1121454"> </a><div class="pSmartList1"><li>In the first column, place the name you want to use in the COBOL CALL statement.  Use all uppercase characters, and place the name in quotation marks.</li></div>
+<a name="wp1121455"> </a><div class="pSmartList1"><li>In the second column, place the address of the routine to be called.   (You can accomplish this by specifying &quot;FUNC&quot; followed by the exact name of the routine as declared in C.  &quot;FUNC&quot; is a macro that generates the appropriate cast of the routine name.)  </li></div>
+<a name="wp1121456"> </a><div class="pSmartList1"><li>In the third column, place the function's return type, which may be one of these seven types:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+C_int<a name="wp1121457"> </a>
+C_long<a name="wp1121458"> </a>
+C_unsigned<a name="wp1121459"> </a>
+C_pointer<a name="wp1121460"> </a>
+C_short<a name="wp1121461"> </a>
+C_void<a name="wp1121462"> </a>
+C_char<a name="wp1121463"> </a>
+</pre></div>
+</ul></div>
+<a name="wp1121464"> </a><p class="pBody">
+You may need to prototype the function if it is not prototyped in an included header file.  For example, to call the C function &quot;open&quot; directly, you would include the following code in the &quot;direct.c&quot; file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+extern int open();<a name="wp1121465"> </a>
+struct  DIRECTTABLE LIBDIRECT[] = {<a name="wp1121466"> </a>
+    { &quot;OPEN&quot;,  FUNC open,  C_int }, <a name="wp1121467"> </a>
+    {NULL,     NULL,       0 }<a name="wp1121468"> </a>
+    };<a name="wp1121469"> </a>
+</pre></div>
+<a name="wp1121470"> </a><p class="pBody">
+After you make the change to &quot;direct.c&quot;, be sure to relink the runtime system.
+</p>
+<a name="wp1121471"> </a><p class="pBody">
+To use the &quot;open&quot; function in COBOL, you might do something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77   FILE-NAME      PIC X(20)<a name="wp1121472"> </a>
+77   FILE-HANDLE    SIGNED-INT<a name="wp1121473"> </a>
+<a name="wp1121474"> </a>
+MOVE &quot;myfile&quot; TO FILE-NAME.<a name="wp1121475"> </a>
+INSPECT FILE-NAME REPLACING TRAILING SPACES <a name="wp1121476"> </a>
+     BY LOW-VALUES.<a name="wp1121477"> </a>
+CALL &quot;OPEN&quot; USING BY REFERENCE FILE-NAME BY VALUE 0.<a name="wp1121478"> </a>
+MOVE RETURN-CODE TO FILE-HANDLE.<a name="wp1121479"> </a>
+</pre></div>
+<a name="wp1121480"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Strings passed to C routines should have LOW-VALUE terminators.  Variables that are not passed by address should have the BY VALUE qualifier in COBOL and should be COMP-5 or one of the C data types. 
+<hr />
+</p>
+<a name="wp1121481"> </a><p class="pBody">
+In the example above, FILE-NAME cannot be more than 19 characters, because the 20th, or last, character must be the string terminator.  
+</p>
+<a name="wp1121482"> </a><p class="pBody">
+Up to 20 parameters may be passed via the direct method.  If you need to pass more than 20, call Acucorp Technical Support and request the routine &quot;callc.c&quot;.  The comments within the code explain how to use the &quot;callc.c&quot; routine.
+</p>
+<a name="wp1121483"> </a><p class="pBody">
+External C variables can also be linked with COBOL EXTERNAL data items.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

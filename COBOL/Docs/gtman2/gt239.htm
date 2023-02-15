@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:24" />
+  <title>3.7.1  Drawing the Image</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt23.htm">Chapter 3:  Graphical Controls</a> &gt; <a href="gt238.htm">3.7  Bitmap Buttons</a> &gt; </p>
+<a name="wp1026865"> </a><h2 class="pHeading2">
+3.7.1  Drawing the Image
+</h2>
+<a name="wp1026868"> </a><p class="pBody">
+You create the bitmap image with a <em class="cEmphasis">paint</em> tool.  This tool is host-system dependent, as are the images it creates.  Under Microsoft Windows, you can use the <em class="cEmphasis">Paint</em> program that is bundled with Windows.  For most bitmap buttons, you will want to use the <em class="cEmphasis">zoom</em> mode of the paint program to make it easier to adjust the individual pixels.
+</p>
+<a name="wp1026249"> </a><p class="pBody">
+You create your bitmap as a strip that contains one or more bitmap button faces.  For example, the following bitmap image contains 15 button faces:
+</p>
+<a name="wp1041530"> </a><p class="pBodyRelative">
+</p><div><img src="ch3_butt.gif" height="17" width="409" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1026252"> </a><p class="pBody">
+You can use more than one bitmap image strip in your program; however, the runtime is more efficient when it pulls multiple images from the same strip.  In addition, it is usually more convenient to store multiple images in a single file rather than several small files.  Note that all images in a particular strip must be the same size.  
+</p>
+<a name="wp1026253"> </a><p class="pBody">
+When you design the image, the first thing you need to do is to settle on the size of the image.  The default size under Windows is 15 pixels high by 16 pixels wide.  However, you can use any size you want.  Note that the bitmap size is the size of the button's image.  To accommodate the button's border, the actual button will be somewhat larger.  Under Windows, eight pixels are added to the width and seven pixels are added to the height (so the default button size is 24 pixels wide by 22 pixels high).  The first thing you should do in the bitmap editor is set the dimensions of the bitmap to the desired size.  For example, a strip of six default-size buttons would have an image size 15 pixels high by 96 pixels wide (6 * 16 = 96).  
+</p>
+<a name="wp1026254"> </a><p class="pBody">
+When you draw a strip that contains multiple images, make sure that each image starts on a boundary that is a multiple of the image size.  In the default case, your images should start at offset 0, 16, 32, etc. (i.e., pixel numbers 1, 17, 33, etc.).  
+</p>
+<a name="wp1026257"> </a><p class="pBody">
+Under Windows, certain colors that you use in the bitmap will be mapped to colors chosen by the user in the <em class="cEmphasis">Control Panel</em>.  This mapping allows you to create buttons that will have the same color scheme as the text-labeled buttons on the screen.  The following table names the bitmap colors that are translated, as well as their RGB (red, green, blue) values and the system color that they are translated to.
+</p>
+<a name="wp1029523"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1029345"> </a>
+Bitmap Color
+
+</th>
+    <th><a name="wp1029347"> </a>
+RGB Values
+
+</th>
+    <th><a name="wp1029349"> </a>
+System Color Used
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029351"> </a><p class="pCellBody">
+Black
+</p>
+</td>
+    <td><a name="wp1029353"> </a><p class="pCellBody">
+0, 0, 0
+</p>
+</td>
+    <td><a name="wp1029355"> </a><p class="pCellBody">
+Button Text
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029357"> </a><p class="pCellBody">
+Dark gray
+</p>
+</td>
+    <td><a name="wp1029359"> </a><p class="pCellBody">
+128, 128, 128
+</p>
+</td>
+    <td><a name="wp1029361"> </a><p class="pCellBody">
+Button Shadow
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029363"> </a><p class="pCellBody">
+Light Gray
+</p>
+</td>
+    <td><a name="wp1029365"> </a><p class="pCellBody">
+192, 192, 192
+</p>
+</td>
+    <td><a name="wp1029367"> </a><p class="pCellBody">
+Button Face
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029369"> </a><p class="pCellBody">
+White
+</p>
+</td>
+    <td><a name="wp1029371"> </a><p class="pCellBody">
+255, 255, 255
+</p>
+</td>
+    <td><a name="wp1029373"> </a><p class="pCellBody">
+Button Highlight
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029375"> </a><p class="pCellBody">
+Blue
+</p>
+</td>
+    <td><a name="wp1029377"> </a><p class="pCellBody">
+0, 0, 255
+</p>
+</td>
+    <td><a name="wp1029379"> </a><p class="pCellBody">
+Selected Item Background
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029381"> </a><p class="pCellBody">
+Magenta
+</p>
+</td>
+    <td><a name="wp1029383"> </a><p class="pCellBody">
+255, 0, 255
+</p>
+</td>
+    <td><a name="wp1029385"> </a><p class="pCellBody">
+Window Background
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">  
+</p>
+<a name="wp1026303"> </a><p class="pBody">
+None of the other colors are translated.  
+</p>
+<a name="wp1026304"> </a><p class="pBody">
+It is best to use light gray as your primary background color.  This color ensures that the button's edges (which are supplied by the runtime) blend in correctly.  
+</p>
+<a name="wp1026305"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The color transformation described above occurs only for bitmaps stored in 16-color or 256-color format.  Bitmaps stored in 24-bit format (true color) do not contain an internal palette.  As a result, there is no efficient way of performing the transformation described above.  Bitmaps in 24-bit format will be displayed with their colors unchanged.  
+<hr />
+</p>
+<a name="wp1026307"> </a><p class="pBody">
+Once you have finished creating the bitmap, save it as a file.  Under Windows, you may use files in JPG format as well as BMP.  Once loaded, JPG files can be used in any context that BMP files may be used with no code changes.  The recognizable extensions for JPG files are &quot;JPE&quot;, &quot;JPEG&quot;, and &quot;JPG&quot;.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/01/05 10:10:06" />
+  <title>4.5.3  Generating Output</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Programmer's Guide to the Internet <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="int4.htm">Chapter 4: Launching Applications on a Web Server With CGI</a> &gt; <a href="int418.htm">4.5  Writing a CGI Program</a> &gt; </p>
+<a name="wp1028430"> </a><h2 class="pHeading2">
+4.5.3  Generating Output
+</h2>
+<a name="wp1028431"> </a><p class="pBody">
+Your CGI program can generate many types of output, including-but not limited to-HTML, WML, and XML.  By default, it returns HTML output for users accessing your program on a Web site.  If you want the output to be in XML format, or if you intend for it to be displayed on a WAP device, you must configure your program to generate XML or WML output instead.  To do so, you use the runtime configuration variable, CGI_CONTENT_TYPE.   (See <a  href="int425.htm#wp1036700">section 4.6</a> for more information on this variable.)
+</p>
+<a name="wp1039678"> </a><p class="pBody">
+Regardless of the format, to generate output, your CGI program must use the DISPLAY statement.  With ACUCOBOL-GT, the DISPLAY verb constructs HTTP response headers for you automatically and routes them to &quot;stdout&quot;.  The response header that the DISPLAY verb generates can include a pointer to a URL where response data can be found, or it can be followed by an HTML, WML, or XML document.  Headers that point to URLs have the content type &quot;location&quot;.  Headers that include form data have the content type &quot;text/html&quot;, &quot;text/wml&quot;, or &quot;text/xml&quot;.
+</p>
+<a name="wp1039681"> </a><p class="pBody">
+Note that the runtime can DISPLAY virtually any type of content, as long as the content type ID corresponds to the form specified in the DISPLAY syntax.
+</p>
+<a name="wp1028433"> </a><h3 class="pHeadingRef">
+Using the DISPLAY Statement
+</h3>
+<a name="wp1028435"> </a><p class="pBody">
+You can use the DISPLAY statement to display records from many types of forms, including HTML, WML, and XML forms. To do so, use the following syntax:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DISPLAY external-form-item<a name="wp1028436"> </a>
+</pre></div>
+<a name="wp1028437"> </a><p class="pBody">
+where <em class="cEmphasis">external-form-item</em> is an output record for the form when used in a Common Gateway Interface (CGI) program.  It is a group data item (declared with the IS EXTERNAL-FORM and IDENTIFIED BY clauses) that may have one or more elementary items associated with fields in an HTML, WML, or XML template.  The association is made using the IS IDENTIFIED BY clause.  
+</p>
+<a name="wp1028440"> </a><p class="pBody">
+<em class="cEmphasis">External-form-item</em> may also be an input record for a form.  In this case, the group item is declared with only the IS EXTERNAL-FORM clause.  This is used primarily when you are debugging your CGI program.
+</p>
+<a name="wp1028441"> </a><p class="pBody">
+The DISPLAY verb treats input and output forms differently.  For output forms, DISPLAY merges the data contained in the elementary items into the associated template file and sends the result to the standard output stream in conformance with the CGI specification.  To do this, DISPLAY scans the  template file for data names delineated by two percentage signs on either side (i.e.,  %%data-name%%).  It then replaces those data names with the contents of the associated elementary items from the output form, stripping trailing spaces.  
+</p>
+<a name="wp1028442"> </a><p class="pBody">
+The maximum length of a single line in the template file is 256 bytes.  The maximum length of a single output line is 512 bytes.  No conversion is performed on the output form items before they are merged with the template file.
+</p>
+<a name="wp1028443"> </a><p class="pBody">
+You may specify a series of directories for locating template files.  To do this, use the HTML_TEMPLATE_PREFIX configuration variable, even if you are specifying a directory for locating XML or WML templates.  (See <a  href="int425.htm#wp1036700">section 4.6</a> for details.)  For related information about file content, see also the configuration variable &quot;CGI_CONTENT_TYPE&quot;.
+</p>
+<a name="wp1041640"> </a><p class="pBody">
+When associating the template file with the IS IDENTIFIED BY clause, you may omit the template file suffix if it is either &quot;.html&quot; or &quot;.htm&quot;; otherwise, you must include the suffix.  If the suffix is omitted, DISPLAY first appends &quot;.html&quot; to the specified file name and tries to open it.  If that fails, DISPLAY appends &quot;.htm&quot; to the file name and tries to open it.  If that fails, DISPLAY tries to open the file exactly as specified.  If all these attempts fail, the following error message is sent to the standard output stream in HTML format:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Can&#39;t open HTML template &quot;template-file-name&quot;<a name="wp1041629"> </a>
+</pre></div>
+<a name="wp1047832"> </a><p class="pBody">
+When the Web server executes your CGI program, the current working directory depends on the configuration of the specific Web server that is running.  In many cases the current working directory is the same as the Web server's &quot;root&quot; directory.  As part of the CGI specification, when the Web server executes your CGI program, it sets an environment variable called PATH_TRANSLATED to the directory containing your CGI program.  You may want to use this information to locate your template files.  
+</p>
+<a name="wp1041700"> </a><p class="pBody">
+For example, if your template files are in the same directory as your CGI programs, set the HTML_TEMPLATE_PREFIX configuration variable to the value of PATH_TRANSLATED as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  CGI-DIRECTORY   PIC X(100) VALUE SPACES.<a name="wp1028451"> </a>
+...<a name="wp1028452"> </a>
+ACCEPT CGI-DIRECTORY FROM ENVIRONMENT &quot;PATH_TRANSLATED&quot;.<a name="wp1028453"> </a>
+SET CONFIGURATION &quot;HTML_TEMPLATE_PREFIX&quot; TO CGI-DIRECTORY.<a name="wp1028454"> </a>
+</pre></div>
+<a name="wp1028455"> </a><p class="pBody">
+The output from a CGI program must begin with a &quot;response header&quot;.  DISPLAY automatically generates a &quot;Content-Type&quot; response header if the specified template file is a local file (i.e.,  not a URL).  
+</p>
+<a name="wp1028456"> </a><p class="pBody">
+You may specify the EXTERNAL-FORM clause for an item that has no subordinate items.  This is useful for displaying static Web pages.  To do this, specify the name of the static Web page in the IDENTIFIED BY clause.  For example, if you have a Web page called &quot;webpage1.html&quot;, add the following lines to your COBOL program:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  WEB-PAGE-1   IS EXTERNAL-FORM <a name="wp1028457"> </a>
+IDENTIFIED BY &quot;webpage1&quot;<a name="wp1030370"> </a>
+...<a name="wp1028458"> </a>
+DISPLAY WEB-PAGE-1.<a name="wp1028459"> </a>
+</pre></div>
+<a name="wp1028460"> </a><p class="pBody">
+You may also specify a complete URL instead of a template file name in the IDENTIFIED BY clause.  In this case, DISPLAY generates a &quot;Location&quot; response header that contains the URL.  This header specifies that the data you're returning is a pointer to another location.  To determine whether the template file name is a URL, DISPLAY scans it for the &quot;://&quot; string.  DISPLAY does not apply the HTML_TEMPLATE_PREFIX when the template file name is a URL.
+</p>
+<a name="wp1028461"> </a><p class="pBody">
+For example, if your program determines that the information the user has requested is on another Web server, and its URL is &quot;http://www.theinfo.com&quot;, add the following lines to your COBOL program:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  THE-INFO-URL   IS EXTERNAL-FORM <a name="wp1028462"> </a>
+IDENTIFIED BY &quot;http://www.theinfo.com&quot;  <a name="wp1028463"> </a>
+...<a name="wp1028464"> </a>
+DISPLAY THE-INFO-URL.<a name="wp1028465"> </a>
+</pre></div>
+<a name="wp1028466"> </a><p class="pBody">
+The length of the URL must not exceed 256 bytes.  
+</p>
+<a name="wp1028467"> </a><p class="pBody">
+Only one response header is sent to the standard output stream.  Your CGI program should exit immediately after sending a location header (i.e., after displaying an external form identified by a URL).
+</p>
+<a name="wp1028468"> </a><p class="pBody">
+You may use as many template files as you like in a single program.  A common way to use multiple template files is to have three output forms: a header, body, and footer.  Each of these has a corresponding template file.  You first display the header form, then move each row of data to the body form and display it, and finally display the footer form.
+</p>
+<a name="wp1047845"> </a><p class="pBody">
+When an input form is specified in a DISPLAY statement, the names and values of each elementary item are sent to the standard output stream in the format specified by the CGI_CONTENT_TYPE variable (HTML, WML, XML, etc.).  One line is generated for each elementary item.  The line consists of the name of the item followed by &quot;&#160;= &quot;, followed by the first 100 bytes of the item's value.  This can be useful when you are testing and debugging your CGI program.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

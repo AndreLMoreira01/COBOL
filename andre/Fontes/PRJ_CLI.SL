@@ -1,0 +1,7 @@
+       SELECT CCLIENTE ASSIGN TO 'CLIENTE.ARQ'
+                  ORGANIZATION INDEXED
+                  ACCESS MODE  DYNAMIC
+                  LOCK MODE    AUTOMATIC
+                  RECORD KEY   CLI-CPF
+                  ALTERNATE RECORD KEY CLI-NOME WITH DUPLICATES
+                  FILE STATUS  IS ST-CLI.

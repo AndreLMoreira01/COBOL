@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:45:44" />
+  <title>6.1 Security Overview</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv6.htm">Chapter 6: System Security</a> &gt; </p>
+<a name="wp1034973"> </a><h2 class="pHeading1">
+6.1 Security Overview
+</h2>
+<a name="wp1034975"> </a><p class="pBody">
+System security for AcuServer<sup class="cSuperscript">®</sup> file server software is designed to address two fundamental security issues:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034976"> </a><div class="pSmartList1"><li>controlling access to data files</li></div>
+<a name="wp1034977"> </a><div class="pSmartList1"><li>prevention of unauthorized use of AcuServer to perform privileged activities (such as modifying privileged files)</li></div>
+</ol></div>
+<a name="wp1041451"> </a><p class="pBody">
+The first issue, controlling access to data files, is addressed in two ways: first, via the AcuServer <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">server access file</span> (discussed in detail in this chapter), and second, through the standard UNIX or Windows NT/2000 file access provisions.  Whether a user of AcuServer can access a given file depends on two things:  (1) the user ID assigned the requester in the server access file, and (2) either the Windows NT/2000 security set up for your files, or the UNIX ownerships and permissions set on the particular file.  
+</p>
+<a name="wp1034979"> </a><p class="pBody">
+On both Windows or UNIX networks, you have the option to use your operating system security rather than AcuServer system security.  By setting the SECURITY_METHOD configuration variable on both the client and the server, you can override the server access file and use the full range of native security features on files and directories on the server instead.  See SECURITY_METHOD in <a  href="srv412.htm#wp1035170">section 4.2.2, &quot;Server Configuration Variables,&quot;</a> for information and considerations.
+</p>
+<a name="wp1041468"> </a><p class="pBody">
+The second issue, preventing unauthorized privileged use, is addressed through strict enforcement of the security measures that you have established through the server's operating system.  
+</p>
+<a name="wp1034981"> </a><p class="pBody">
+On a Windows NT , Windows 2000, or Windows 2003 server, AcuServer system security is designed to work with files that reside on an NTFS file system.  (AcuServer can work with a FAT file system, but the files are less secure.)
+</p>
+<a name="wp1034984"> </a><p class="pBody">
+If you currently use a FAT file system, there are two utilities you can use to create an NTFS file system:  FORMAT and CONVERT.  If you use the FORMAT utility with the option &quot;/fs:ntfs&quot; it will reformat your hard drive and set it up as an NTFS file system.  You will lose any existing data on the hard drive if you use the FORMAT utility.  If you use the CONVERT utility with the option &quot;/fs:ntfs&quot; it will convert your FAT file system into an NTFS file system.  The existing data will be preserved with the CONVERT utility.  Note that these utilities are part of the Windows NT , Windows 2000, or Windows 2003 operating environment and are not supported by Acucorp.
+</p>
+<a name="wp1034985"> </a><p class="pBody">
+After you set up the NTFS file system, you may set read and write access permissions on your files by using the Windows NT/2000 security features.  Please refer to your Windows documentation for more information about NTFS file systems and security procedures.  Make sure that the &quot;AcuAccess&quot; file and the &quot;a_srvcfg&quot; file can be written only by those accounts and groups that you want to have write privileges.
+</p>
+<a name="wp1034986"> </a><p class="pBody">
+If your files reside on a FAT file system, they are less secure.  The files are accessible to anyone who can access the file system on that machine, unless you establish <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">shared directories</span>.  When you create a shared directory, you can assign permissions that apply to all files and subdirectories in the shared directory.
+</p>
+<a name="wp1034987"> </a><p class="pBody">
+NTFS file systems may also have shared directories.  The permissions on the shared directory operate in addition to any NTFS permissions you have established.  Shared directory permissions specify the maximum access allowed.
+</p>
+<a name="wp1034988"> </a><p class="pBody">
+When AcuServer is running as a Windows NT/2000 service, it usually belongs to an implicit group called &quot;SYSTEM.&quot;  Make sure that the &quot;SYSTEM&quot; group (or whichever group that you are using for your <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> services) is added to your file permissions with &quot;Full Control.&quot;  
+</p>
+<a name="wp1034989"> </a><p class="pBody">
+Files created by AcuServer are owned by the Administrators group and allow &quot;Full Control&quot; for &quot;SYSTEM&quot; and &quot;Administrator.&quot;  &quot;Everyone&quot; is given the permissions specified by the third digit in the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">umask </span>in the AcuAccess file. 
+</p>
+<a name="wp1034990"> </a><p class="pBody">
+UNIX ownerships and permissions can be set on key AcuServer files.  Note, however, that your site could jeopardize security if you include entries in the server access file that explicitly allow users running as <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">root</span> on the clients to run as <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">root</span> on the server.  We strongly recommend against the inclusion of such entries.
+</p>
+<a name="wp1034991"> </a><p class="pBody">
+Achieving sound AcuServer system security depends on the configuration and management of the following security elements:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034992"> </a><div class="pSmartList1"><li>the AcuServer server access file (the database of authorized and excluded AcuServer users)</li></div>
+<a name="wp1034993"> </a><div class="pSmartList1"><li>the Windows NT , Windows 2000, or Windows 2003 security protections set up for the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> executable file, server configuration file, server access file, and remote data files and directories.  Recall that the NTFS file system is more secure.</li></div>
+<a name="wp1034994"> </a><div class="pSmartList1"><li>the UNIX ownerships assigned to the acuserve executable file, server configuration file, server access file, and remote data files and directories</li></div>
+<a name="wp1034995"> </a><div class="pSmartList1"><li>the UNIX access permissions (read, write and execute) set on the acuserve executable file, server configuration file, server access file, and remote data files and directories.</li></div>
+</ul></div>
+<a name="wp1034996"> </a><p class="pBody">
+UNIX ownerships and permissions on the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve </span>executable, server configuration file and server access file are specified in <a  href="srv26.htm#wp1039679">section 2.4.1</a>.  These specifications must be strictly maintained.  If the ownerships and permissions are more permissive than those specified, AcuServer will not start.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

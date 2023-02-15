@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:28:56" />
+  <title>5.2.2  How Relational Databases Organize Data</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb5.htm">Chapter 5: Writing Queries to Access Data</a> &gt; <a href="odb53.htm">5.2  What to Consider</a> &gt; </p>
+<a name="wp1028281"> </a><h2 class="pHeading2">
+5.2.2  How Relational Databases Organize Data
+</h2>
+<a name="wp1028284"> </a><p class="pBody">
+Because SQL is designed to work with relational databases, you should understand the way relational databases organize data before attempting to write an ODBC program.
+</p>
+<a name="wp1028285"> </a><p class="pBody">
+Even though AcuODBC gives you access to an indexed or relative file system, you will have to write SQL queries referring to &quot;tables&quot; and &quot;columns.&quot; AcuODBC uses a data dictionary to convert COBOL data files into database tables that can be accessed with SQL statements.  (Refer to <a  href="odb62.htm#wp1028242">Section 6.1, &quot;Data Dictionaries,&quot;</a> for more information.)
+</p>
+<a name="wp1028286"> </a><p class="pBody">
+In general, where COBOL manages data using files, databases manage data using tables.  A table is composed of rows and columns.  In the simplest case, each elementary data item in the record layout for a Vision file corresponds to one column in an SQL table.  For example, a file with the following record layout:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  QA-RECORD.<a name="wp1028287"> </a>
+    05  CLIENT_ID         PIC 9(5).<a name="wp1028288"> </a>
+    05  OWNER             PIC X(30).<a name="wp1028289"> </a>
+    05  STREET            PIC X(30).<a name="wp1028290"> </a>
+    05  CITY              PIC X(30).<a name="wp1028291"> </a>
+    05  STATE_PROVINCE    PIC X(30).<a name="wp1028292"> </a>
+    05  POST_CODE         PIC X(6).<a name="wp1039269"> </a>
+    05  COUNTRY           PIC X(30).<a name="wp1028293"> </a>
+</pre></div>
+<a name="wp1037382"> </a><p class="pBody">
+would be interpreted as the following table by AcuODBC if the file contained this data:</p><div><img src="images/table_cl.gif" height="325" width="679" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028296"> </a><p class="pBody">
+Each COBOL record can be viewed as a row of a table.  In this example, each row contains a complete set of information regarding a single client.  Columns specify the type of information we have gathered for each client.
+</p>
+<a name="wp1028297"> </a><p class="pBody">
+However, COBOL permits certain conditions that database tables do not:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1041552"> </a><div class="pSmartList1"><li>COBOL can redefine records or fields, and can also define arrays with the OCCURS clause.  Because this representation of data is not supported by relational databases, it is not supported by SQL.  </li></div>
+<a name="wp1041562"> </a><div class="pSmartList1"><li>COBOL permits records of different sizes or kinds in a single file; SQL does not.</li></div>
+<a name="wp1028298"> </a><div class="pSmartList1"><li>COBOL programs can redefine records so that two different database columns actually occupy the same record location in the COBOL data file.  Attempting to modify such columns is not valid, and results in an error.</li></div>
+<a name="wp1028299"> </a><div class="pSmartList1"><li>Vision and relative records don't have any type-checking.  A field that is defined by the database as numeric may not actually contain numeric data in that field in every row.  This may cause problems for some applications that try to display or update data that is invalid for a particular column.</li></div>
+</ul></div>
+<a name="wp1028300"> </a><p class="pBody">
+Even if you use some of the above-mentioned COBOL features that are not supported by the SQL table structure in your files, you may be able to access the file through AcuODBC by including special comments, known as directives, in your FD, as described in <a  href="odb69.htm#wp1028480">section 6.3, &quot;Using Directives.&quot;</a>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

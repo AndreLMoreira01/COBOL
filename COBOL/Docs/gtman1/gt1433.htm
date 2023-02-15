@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:48" />
+  <title>4.6.1  Required Functions</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt14.htm"><br />Chapter 4:  Terminal Manager</a> &gt; <a href="gt1432.htm">4.6  The Terminal Database File</a> &gt; </p>
+<a name="wp1034796"> </a><h2 class="pHeading2">
+4.6.1  Required Functions
+</h2>
+<a name="wp1034799"> </a><p class="pBody">
+In order for the Terminal Manager to run, four functions must be defined for the terminal; all of the remaining functions are optional.  These required functions are <b class="cBold">Cursor-positioning</b> (cm), <b class="cBold">Clear-screen</b> (cl), <b class="cBold">Clear-to-end-of-line</b> (ce), and <b class="cBold">Clear-to-end-of-screen </b>(cd).  If these functions are not present when the Terminal Manager tries to run, an error will be printed and the program halted.  
+</p>
+<a name="wp1034800"> </a><p class="pBody">
+The Clear-screen function should clear the entire screen and home the cursor.  The clear-to-end-of-line function should clear from the cursor position to the end of the current line.  The clear-to-end-of-screen function should clear from the cursor position to the end of the screen.  
+</p>
+<a name="wp1034801"> </a><p class="pBody">
+The Terminal Manager starts by establishing a window that is the size of the screen.  By default, a screen size of 24 by 80 is assumed.  If this is not correct, you can set the Lines (li) and Columns (co) fields to the correct size.  These settings are made with a &quot;#&quot; instead of an &quot;=&quot;.  For example, if you have a 25-line terminal, the proper setting is &quot;li#25&quot;.
+</p>
+<a name="wp1034802"> </a><p class="pBody">
+Continuing with our example, the DEC VT-100 clears the screen by sending an &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif">ESC</span>[2J&quot;.  Unfortunately, this does not home the cursor.  This can be accomplished by sending &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif">ESC</span>[;H&quot;.  These can be sent in either order.  Clearing to the end of line is done by sending &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif">ESC</span>[K&quot; and clearing to the end of the screen by &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif">ESC</span>[J&quot;.  The terminal has the default screen dimensions, so we do not need to add the &quot;co&quot; or &quot;li&quot; options.  Our entry now reads:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+vt100|vt-100|DEC VT-100:\<a name="wp1038186"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:cl=\E[;H\E[2J:ce=\E[K:cd=\E[J:<a name="wp1038196"> </a>
+</pre></div>
+</pre></div>
+<a name="wp1034803"> </a><p class="pBody">
+Cursor positioning is accomplished by a special encoded form.  The program must specify varying information in the control-sequence (the row and column numbers).  Special abbreviations are allowed to encode this information.  These abbreviations and their meanings are:
+</p>
+<a name="wp1050005"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1050026"> </a><p class="pCellBody">
+<b class="cBold">%d</b>
+</p>
+</td>
+    <td><a name="wp1050028"> </a><p class="pCellBody">
+Inserts the row or column number here in ASCII.  For example, row 5 would be inserted here as &quot;5&quot;.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050030"> </a><p class="pCellBody">
+<b class="cBold">%2</b>
+</p>
+</td>
+    <td><a name="wp1050032"> </a><p class="pCellBody">
+Acts like &quot;%d&quot; except that it always prints as two digits.  Row 5 is inserted as &quot;05&quot;.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050034"> </a><p class="pCellBody">
+<b class="cBold">%3</b>
+</p>
+</td>
+    <td><a name="wp1050036"> </a><p class="pCellBody">
+Acts like %2 except that three digits are used.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050038"> </a><p class="pCellBody">
+<b class="cBold">%.</b>
+</p>
+</td>
+    <td><a name="wp1050040"> </a><p class="pCellBody">
+Inserts the row or column number here literally.  Row 5 would be inserted here as a decimal 5 (ASCII control-E).  Note that if this type is used, then Cursor-up (up) and Backspace-cursor (bc) must also be defined.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050042"> </a><p class="pCellBody">
+<b class="cBold">%+x<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</b>
+</p>
+</td>
+    <td><a name="wp1050044"> </a><p class="pCellBody">
+Acts like &quot;%.&quot; except that x is added to the row or column number first.  If the sequence were &quot;%+&#160;&#160;&quot; (note the trailing space), then row 5 would be inserted here as the sum of the space character and 5, &quot;%&quot; in ASCII.  This form is quite common.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050046"> </a><p class="pCellBody">
+<b class="cBold">%&gt;xy</b>
+</p>
+</td>
+    <td><a name="wp1050048"> </a><p class="pCellBody">
+This does not insert anything in the string.  If the row or column number is greater then x, then y is added, otherwise this has no effect.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050050"> </a><p class="pCellBody">
+<b class="cBold">%r</b>
+</p>
+</td>
+    <td><a name="wp1050052"> </a><p class="pCellBody">
+Normally the row is inserted first, and then the column.  This reverses the order.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050054"> </a><p class="pCellBody">
+<b class="cBold">%i</b>
+</p>
+</td>
+    <td><a name="wp1050056"> </a><p class="pCellBody">
+Normally the row and column numbers are relative to zero.  Including this causes them to be relative to 1.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050058"> </a><p class="pCellBody">
+<b class="cBold">%%</b>
+</p>
+</td>
+    <td><a name="wp1050060"> </a><p class="pCellBody">
+Sends a literal &quot;%&quot;.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1034813"> </a><p class="pBody">
+For example, the ADM-3A terminal positions the cursor by sending an &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif">ESC</span>=&quot; followed by the row and column offset by a space character.  The code for this is &quot;\E=%+&#160;&#160;%+&#160;&#160;&quot; (note spaces).  
+</p>
+<a name="wp1034814"> </a><p class="pBody">
+The VT-100 positions the cursor by sending an &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif">ESC</span>[&quot; followed by the row, a semicolon, the column and then an &quot;H&quot;.  The row and column are sent as ASCII strings and the home position is row 1, column 1.  The correct string is &quot;\E[%i%d;%dH&quot;.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+vt100|vt-100|DEC VT-100 :\<a name="wp1038020"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:cl=\E[;H\E[2J:ce=\E[K:cd=\E[J:\<a name="wp1038063"> </a>
+<b class="cBold">:cm=\E[%i%d;%dH:</b><a name="wp1038075"> </a>
+</pre></div>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

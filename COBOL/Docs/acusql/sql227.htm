@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:35:43" />
+  <title>2.9  Error Messages</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql2.htm">Chapter 2: Program Preparation</a> &gt; </p>
+<a name="wp1037785"> </a><h2 class="pHeading1">
+2.9  Error Messages
+</h2>
+<a name="wp1037800"> </a><p class="pBody">
+The SQLCA can accommodate only 70 characters of error information in the error message field.  Generally, this is not enough for a useful error message.  See &quot;<a  href="sql210.htm#wp1033940">SQL Communications Area (SQLCA)</a>&quot; for additional information on this required file. 
+</p>
+<a name="wp1059240"> </a><h3 class="pHeadingRef">
+SQL Server Environments
+</h3>
+<a name="wp1059241"> </a><p class="pBody">
+In Microsoft SQL Server environments, the external variable F-ERRMSG is set to the full text of the error message returned to accommodate error messages longer than 70 characters.  
+</p>
+<a name="wp1037992"> </a><p class="pBody">
+F-ERRMSG is an external variable of USAGE POINTER that must be manipulated in order to see its contents.  The following code demonstrates how to see the contents of the error message string:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  f-errmsg         usage pointer external. <a name="wp1051830"> </a>
+01  my-pointer       usage pointer. <a name="wp1051831"> </a>
+01  my-errmsg        pic x(512). <a name="wp1051832"> </a>
+ <a name="wp1051833"> </a>
+....<a name="wp1051834"> </a>
+0000-START.                                                              <a name="wp1051835"> </a>
+    EXEC SQL WHENEVER SQLERROR GO TO ERROR-EXIT END-EXEC. <a name="wp1051836"> </a>
+....<a name="wp1051837"> </a>
+ERROR-EXIT.                                                              <a name="wp1051838"> </a>
+    EXEC SQL WHENEVER SQLERROR CONTINUE END-EXEC.                          <a name="wp1051839"> </a>
+      DISPLAY &quot;SQL ERROR: SQLCODE  &quot; SQLCODE                               <a name="wp1051840"> </a>
+      DISPLAY &quot;           SQLSTATE &quot; SQLSTATE                              <a name="wp1051841"> </a>
+      DISPLAY SQLERRMC                                                     <a name="wp1051842"> </a>
+        set my-pointer to address of my-errmsg.<a name="wp1051843"> </a>
+        call &quot;c$memcpy&quot; using by value my-pointer, f-errmsg, 
+512.       <a name="wp1051844"> </a>
+        display my-errmsg<a name="wp1051845"> </a>
+      ACCEPT OMITTED                                                       <a name="wp1051846"> </a>
+    STOP RUN.   <a name="wp1037904"> </a>
+</pre></div>
+<a name="wp1051850"> </a><p class="pBody">
+where
+</p>
+<a name="wp1038116"> </a><p class="pBody">
+<em class="cEmphasis">f-errmsg</em> is an external variable that contains the full text of the error message.
+</p>
+<a name="wp1038164"> </a><p class="pBody">
+<em class="cEmphasis">my-pointer</em> is the address of the location to which C$MEMCPY copies the error message.
+</p>
+<a name="wp1038122"> </a><p class="pBody">
+<em style="font-style: italic" class="cEmphasis">my-errmsg</em><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic"> </span>is the full text of the error message, which in this case can contain up to 512 bytes.
+</p>
+<a name="wp1038115"> </a><p class="pBody">
+See Book 3, <em class="cEmphasis">Reference Manual</em>, of the ACUCOBOL-GT documentation set for information on C$MEMCPY and USAGE POINTER.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

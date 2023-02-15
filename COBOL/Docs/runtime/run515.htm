@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:22:12" />
+  <title>5.4.10  Breakpoints Menu</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run5.htm"><br />Chapter 5: Runtime Debugger</a> &gt; <a href="run55.htm">5.4  Debugger Commands</a> &gt; </p>
+<a name="wp1037751"> </a><h2 class="pHeading2">
+5.4.10  Breakpoints Menu
+</h2>
+<a name="wp1037755"> </a><p class="pBody">
+The Breakpoints menu contains commands for managing a program's breakpoints.</p><div><img src="images/ch3_11_d.gif" height="185" width="407" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1037760"> </a><p class="pBody">
+A breakpoint is a location in your program's code that you designate.  It causes control to return to the debugger.  Control is returned before the code at the breakpoint location is executed.
+</p>
+<a name="wp1037761"> </a><p class="pBody">
+Breakpoints are displayed in the source.  An enabled breakpoint shows as &quot;B&quot; in column 1, a disabled breakpoint as &quot;b&quot; (lowercase) instead.  The &quot;@&quot; sign (showing the program's current location) displays over the &quot;B&quot; if the current line is also a breakpoint.  
+</p>
+<a name="wp1037763"> </a><p class="pBody">
+Breakpoints are saved between sessions.  The breakpoints are stored in a file that is named &quot;<em class="cEmphasis">username</em>.adb&quot;, where <em class="cEmphasis">username</em> is your login name, as known by the runtime.  This file is placed in the directory named by the &quot;ACUCOBOL&quot; environment variable, or the current directory, if that variable is not set.  In addition to your breakpoints, the run-all-threads state is recorded, as well as the last size of the debugger's window.  Keep in mind that although breakpoints are saved between sessions, they are not saved between compiles.
+</p>
+<a name="wp1037765"> </a><p class="pBody">
+<b class="cBold">Set </b>allows you to set a breakpoint at a paragraph.  Selecting Set displays the Set Breakpoint dialog box.</p><div><img src="images/ch3_12_s.gif" height="191" width="400" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1037770"> </a><p class="pBody">
+The Set Breakpoint dialog box prompts you for a breakpoint <em class="cEmphasis">Location</em>, <em class="cEmphasis">Condition</em>, and <em class="cEmphasis">Skip count</em>.  
+</p>
+<a name="wp1037772"> </a><p class="pBody">
+The <span style="font-weight: bold" class="cBoldItalic">Location</span> field prompts you for a hexadecimal address and a program name, although the current cursor location is supplied as the default breakpoint address location.  Hexadecimal addresses are specified with a &quot;.&quot; (period) as the first character.  A breakpoint is set at that address in the program.  If you omit the program name, the current program is used.  To obtain the hexadecimal address of a line of code, use the compiler's program listing.
+</p>
+<a name="wp1037776"> </a><p class="pBody">
+Suppose you want to set a breakpoint in a called program in the run unit, but you do not  know the exact address.  First, make sure you've compiled the called program with source-level debugging.  Then, from the current program, set the breakpoint at address &quot;0&quot;, called-program-name.  The debugger breaks as soon as the called program is entered.  You see the called program's source code on the screen, and the called program's name on the command line.  The called program is now the current program, and you can use <em class="cEmphasis">Set</em> or <em class="cEmphasis">Toggle at Cursor</em> to set the desired breakpoint.
+</p>
+<a name="wp1037777"> </a><p class="pBody">
+If you have compiled for full source debugging, you can use an alternate notation to set a breakpoint within a called program.  Instead of specifying an exact address, provide the full path and file name for the ACUCOBOL-GT source file, followed by a colon (&quot;:&quot;) and the line number.  The syntax is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    /fullpath/filename.cbl:line<a name="wp1037778"> </a>
+</pre></div>
+<a name="wp1037779"> </a><p class="pBody">
+For example, in the command window, you could type:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+   b /usr/source/invoice.cbl:559<a name="wp1037780"> </a>
+</pre></div>
+<a name="wp1037782"> </a><p class="pBody">
+Breakpoints can have a condition, known as the &quot;When Condition,&quot; specified for them.  The condition is entered into the <span style="font-weight: bold" class="cBoldItalic">Condition</span> field.  The breakpoint is activated only when the condition is true.  For breakpoints with a skip count (see below), the skip count is decreased only when the condition is true.  Conditions are simple comparisons between two numeric or alphanumeric data items or literals, including figurative constants (exception: the ALL literal is not supported).  The allowed comparisons are &quot;=&quot;, &quot;&lt;&quot;, &quot;&gt;&quot;, &quot;&lt;=&quot; and &quot;&gt;=&quot;.  You may place the word &quot;NOT&quot; before any of these operators.  The comparisons are done according to the rules for COBOL.  Any data items referenced must exist in the program containing the breakpoint.  If the condition is not meaningful or is illegal (including table boundary violations), then the breakpoint is immediately activated when it is reached and an error message follows.
+</p>
+<a name="wp1037784"> </a><p class="pBody">
+In the <span style="font-weight: bold" class="cBoldItalic">Skip count</span> field, enter the number of times to skip the breakpoint.  The breakpoint does not activate until the skip count reaches zero.  The keyboard form of this command is
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+b address, counter<a name="wp1037785"> </a>
+</pre></div>
+<a name="wp1037786"> </a><p class="pBody">
+This command can also be set from the command line with:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+b address [,program] [,SKIP count] [,WHEN condition]<a name="wp1037787"> </a>
+</pre></div>
+<a name="wp1037788"> </a><p class="pBody">
+A second command that is also supported but does not allow conditions to be set is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+b address [,program] [,count]<a name="wp1037789"> </a>
+</pre></div>
+<a name="wp1037790"> </a><p class="pBody">
+*<b class="cBold">Toggle at Cursor Line</b> sets or removes a breakpoint at the source line containing the cursor.  
+</p>
+<a name="wp1037792"> </a><p class="pBody">
+To use this command from the keyboard, press F4.  The F4 key works on lines that do not contain verbs.  The closest previous line with a verb is the location used.
+</p>
+<a name="wp1037793"> </a><p class="pBody">
+*<b class="cBold">Disable/enable at Cursor Line </b>allows you to keep a breakpoint location while turning off the breakpoint.  You can disable/enable breakpoints from the menu or from the Breakpoint dialog box.  
+</p>
+<a name="wp1037797"> </a><p class="pBody">
+<b class="cBold">View </b>is the same as the &quot;list breakpoints&quot; command (&quot;B&quot;).  It displays a dialog box that lists all of your breakpoints and allows you to modify them, add new ones, view the next line of code containing a breakpoint, disable a breakpoint, and clear a breakpoint.  It shows the location and skip count for each breakpoint.  For breakpoints that are located in the current program, the paragraph they are contained in is also listed.    
+</p>
+<a name="wp1037799"> </a><p class="pBody">
+<b class="cBold">Clear</b> removes a breakpoint.  At the prompt, you can enter either the breakpoint's paragraph name or hexadecimal address.  Hexadecimal addresses are specified with a &quot;.&quot; (period) as the first character.  Exact addresses are given in the View command described above.  
+</p>
+<a name="wp1037803"> </a><p class="pBody">
+To use this command from the keyboard, type &quot;C address&quot;.  
+</p>
+<a name="wp1037806"> </a><p class="pBody">
+<b class="cBold">Clear All</b> removes all breakpoints.
+</p>
+<a name="wp1037807"> </a><p class="pBody">
+To use this command from the keyboard, type &quot;CA&quot;.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

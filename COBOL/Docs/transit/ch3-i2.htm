@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:30" />
+  <title>3.1 Compile-Time Options</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch3-i.htm">Chapter 3:  ICOBOL Conversions</a> &gt; </p>
+<a name="wp1034686"> </a><h2 class="pHeading1">
+3.1 Compile-Time Options
+</h2>
+<a name="wp1034688"> </a><p class="pBody">
+This chapter discusses how to convert a program written for Data General ICOBOL to ACUCOBOL-GT.  ACUCOBOL-GT provides a great deal of compatibility with ICOBOL, but there are a few differences that you will want to address.  
+</p>
+<a name="wp1034690"> </a><p class="pBody">
+It is important that you use the correct compile-time options to provide the greatest compatibility with your existing ICOBOL programs.  The most important option is the &quot;-Ci&quot; option that puts the compiler into its ICOBOL compatibility mode.  When you use this option, most ICOBOL syntax will be accepted by ACUCOBOL-GT.  In addition, the meaning of certain phrases will be altered to match the ICOBOL usage.  When ICOBOL compatibility mode is specified, the &quot;-Zr&quot; compile-time option is automatically implied.  This option allows for recursive PERFORM statements.  
+</p>
+<a name="wp1034691"> </a><p class="pBody">
+There are a few other options that you will probably want to use.  The &quot;-Vx&quot; option enables the entry of function keys on all ACCEPT statements.  If you do not specify this, then only ACCEPT statements with an ON ESCAPE clause will allow the entry of function keys.  If you want to use ICOBOL's default handling of high and low intensity, then you should specify &quot;-Vah&quot;.  This causes all input and update fields to be displayed in high intensity, while all literal and output fields are shown in low intensity.  
+</p>
+<a name="wp1034692"> </a><p class="pBody">
+You may also want to use the &quot;-Dz&quot; compile-time option to modify the way that COMPUTATIONAL data items are handled.  Specifying this option causes the runtime system to compute the size error condition based on the physical size of the data item in memory, not on its PICTURE clause.  For example, this would allow the value 255 to be placed in a PIC 99 COMP data item.  Without this option, the largest value that can be placed in such an item is 99.  
+</p>
+<a name="wp1035007"> </a><p class="pBody">
+Finally, you may need to suppress certain reserved words used by ACUCOBOL-GT.  If you want to suppress all of the reserved words not used by ICOBOL, you should specify &quot;-Rarsv&quot;.  If you plan to use some of the features of ACUCOBOL-GT not found in ICOBOL, then you will probably have to allow for some more reserved words.  For details on your choices about reserved words, see Appendix B of the ACUCOBOL-GT documentation set and section 2.1.8 of the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT </span><em class="cEmphasis">User's Guide</em>.   
+</p>
+<a name="wp1034694"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>When you select ICOBOL compatibility mode, the storage of COMPUTATIONAL items is changed to match that of ICOBOL.  You should not specify any of the compile-time options that affect COMPUTATIONAL storage, because  they will override the ICOBOL settings.  The following table summarizes the storage of COMPUTATIONAL items.
+<hr />
+</p>
+<a name="wp1034974"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1034892"> </a>
+# of 9's
+
+</th>
+    <th><a name="wp1034894"> </a>
+Unsigned
+
+</th>
+    <th><a name="wp1034896"> </a>
+Signed
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034898"> </a><p class="pCellBody">
+1-2
+</p>
+</td>
+    <td><a name="wp1034900"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1034902"> </a><p class="pCellBody">
+1
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034904"> </a><p class="pCellBody">
+3-4
+</p>
+</td>
+    <td><a name="wp1034906"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1034908"> </a><p class="pCellBody">
+2
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034910"> </a><p class="pCellBody">
+5-6
+</p>
+</td>
+    <td><a name="wp1034912"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1034914"> </a><p class="pCellBody">
+3
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034916"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1034918"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1034920"> </a><p class="pCellBody">
+4
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034922"> </a><p class="pCellBody">
+8-9
+</p>
+</td>
+    <td><a name="wp1034924"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1034926"> </a><p class="pCellBody">
+4
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034928"> </a><p class="pCellBody">
+10-11
+</p>
+</td>
+    <td><a name="wp1034930"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1034932"> </a><p class="pCellBody">
+5
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034934"> </a><p class="pCellBody">
+12
+</p>
+</td>
+    <td><a name="wp1034936"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1034938"> </a><p class="pCellBody">
+6
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034940"> </a><p class="pCellBody">
+13-14
+</p>
+</td>
+    <td><a name="wp1034942"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1034944"> </a><p class="pCellBody">
+6
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034946"> </a><p class="pCellBody">
+15-16
+</p>
+</td>
+    <td><a name="wp1034948"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1034950"> </a><p class="pCellBody">
+7
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034952"> </a><p class="pCellBody">
+17-18
+</p>
+</td>
+    <td><a name="wp1034954"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1034956"> </a><p class="pCellBody">
+8
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

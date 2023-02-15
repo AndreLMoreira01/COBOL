@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:43:44" />
+  <title>C.2.8  Acu4GL for Oracle: Setting Up the Search Path</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4glc.htm">Appendix C:  Acu4GL for Oracle Information</a> &gt; <a href="4glc3.htm">C.2  Acu4GL for Oracle Installation and Setup</a> &gt; </p>
+<a name="wp1045727"> </a><h2 class="pHeading2">
+C.2.8  Acu4GL for Oracle: Setting Up the Search Path
+</h2>
+<a name="wp1045732"> </a><p class="pBody">
+If you own a file because you created it with OPEN OUTPUT from COBOL, or because you created it using SQL, you do not need to do anything more to access the file.  However, if you want to access files that are owned by other users on the system and do not have public synonyms, you must provide the runtime with information on how to locate these files.
+</p>
+<a name="wp1045733"> </a><p class="pBody">
+The USER<em class="cEmphasis">_</em>PATH configuration variable is used by the runtime to locate files.  It functions in much the same way as ACUCOBOL-GT's FILE<em class="cEmphasis">_</em>PREFIX variable (see Chapter 2 in Book 1, <em class="cEmphasis">User's Guide</em> of the ACUCOBOL-GT compiler documentation).  The syntax for this variable is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+USER<em class="cEmphasis">_</em>PATH  <em class="cEmphasis">user1</em> [<em class="cEmphasis">user2</em>]...<a name="wp1045734"> </a>
+</pre></div>
+<a name="wp1045735"> </a><p class="pBody">
+Where the user argument may either be the name of a user on the system, or a period (<b class="cBold">.</b>), which indicates the files owned by yourself.  For example, if you have the following settings:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ORA<em class="cEmphasis">_</em>LOGIN    =   OPS$ORACLE<a name="wp1045736"> </a>
+ORA<em class="cEmphasis">_</em>PASSWD   =   DATA_FERIT<a name="wp1045737"> </a>
+USER<em class="cEmphasis">_</em>PATH   =    barbara scott.<a name="wp1045738"> </a>
+</pre></div>
+<a name="wp1045739"> </a><p class="pBody">
+and then attempt to open for I/O the file &quot;myfile&quot;, the runtime uses the following search path:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+OPEN I-O       barbara.myfile<a name="wp1045740"> </a>
+OPEN I-O       scott.myfile<a name="wp1045741"> </a>
+OPEN I-O       ops$oracle.myfile<a name="wp1045742"> </a>
+</pre></div>
+<a name="wp1045743"> </a><p class="pBody">
+Remember that another option for allowing access to a file to all users on the system is to create a public synonym for the file.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:57:47" />
+  <title>4.12  Creating COM Objects on Remote Network Servers</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr4.htm">Chapter 4: Using ActiveX Controls and COM Objects</a> &gt; </p>
+<a name="wp1038131"> </a><h2 class="pHeading1">
+4.12  Creating COM Objects on Remote Network Servers
+</h2>
+<a name="wp1038133"> </a><p class="pBody">
+ACUCOBOL-GT includes a special verb to accommodate COM objects:  CREATE.  The Format 1 CREATE statement creates a new instance of a COM object.  (Use the Screen Section or Format 14 DISPLAY to create an instance of an ActiveX control.)  Refer to Chapter 6<em style="font-style: italic" class="cEmphasis"> </em><em style="font-style: normal" class="cEmphasis">in the</em><em class="cEmphasis"> ACUCOBOL-GT Reference Manual</em> for a detailed description of the CREATE statement.
+</p>
+<a name="wp1038134"> </a><p class="pBody">
+If you have access privileges to do so, you can create a COM object on a remote-networked computer by passing the name of the computer in SERVER-NAME.  That name is the same as the machine-name portion of a share name.  For example, for a share named \\MyServer\Public, server name is MyServer.  Note that CREATE cannot be used to create an object on a UNIX or VMS server.  SERVER-NAME must be the name of a Windows machine.
+</p>
+<a name="wp1038135"> </a><p class="pBody">
+The following code returns the version number of an instance of Excel running on a remote computer named MyServer:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CREATE Application of Excel <a name="wp1038136"> </a>
+    SERVER-NAME is &quot;MyServer&quot;<a name="wp1038137"> </a>
+    HANDLE in xl-app.<a name="wp1038138"> </a>
+INQUIRE xl-app Version in xl-vers.<a name="wp1038139"> </a>
+DISPLAY xl-vers.<a name="wp1038140"> </a>
+</pre></div>
+<a name="wp1038141"> </a><p class="pBody">
+If the remote server does not exist or is unavailable, then an exception is raised and xl-app is set to NULL.
+</p>
+<a name="wp1038142"> </a><p class="pBody">
+You might think of using CREATE if you want to use an ActiveX object that does not have a user interface.  However, the CREATE verb does not create ActiveX controls.  If you want to create an ActiveX control that does not have a visual representation on the screen, set VISIBLE = 0 in the DISPLAY statement or Screen Section item.  If you do not want any screen at all, create the initial window also with VISIBLE = 0. 
+</p>
+<a name="wp1038143"> </a><p class="pBody">
+The CREATE statement can be used with thin client applications to create instances of an object on the client or on remote Windows servers. 
+</p>
+<a name="wp1038144"> </a><p class="pBody">
+For instance, you can use the CREATE statement to provide Microsoft Office functions such as spell check and mail merge to end users.  The clients must be Windows workstations, but they can be naked of all software except for Windows and the ACUCOBOL-GT Thin Client.  The server running AcuConnect can be Windows, UNIX, or Linux.  Note that clients must have execution privileges on the computer hosting Office, and use of the Office technology is subject to Microsoft licensing terms.
+</p>
+<a name="wp1038145"> </a><p class="pBody">
+You use the Format 1 CREATE statement to create a remote instance of the desired application on the Windows computer hosting Office.  When executed, your thin client application CREATEs the Office object on the Windows host, sends it instructions and data, gets results, then either displays results on the client or performs further processing on them.
+</p>
+<a name="wp1038146"> </a><p class="pBody">
+Although CREATE cannot be used to create an object on a UNIX or VMS server, non-Windows servers running AcuConnect can provide connectivity to Windows servers in a multiple-tier configuration.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

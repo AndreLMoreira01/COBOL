@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/12/05 11:54:01" />
+  <title>5.4.3  Verifying Your MPE/iX Installation</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Getting Started <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gsb5.htm"><br />HP e3000 Installation</a> &gt; <a href="gsb55.htm">5.4  Installation on HP e3000 Machines</a> &gt; </p>
+<a name="wp1038668"> </a><h2 class="pHeading2">
+5.4.3  Verifying Your MPE/iX Installation
+</h2>
+<a name="wp1038671"> </a><p class="pBody">
+Once your Acucorp products are installed, you can verify that the installation was successful by compiling and running the &quot;TOURHP&quot; program.  (Refer to Chapter 4 in <em class="cEmphasis">Transitioning to ACUCOBOL-GT</em> for detailed information about compiling and running programs in the HP&#160;e3000 environment.) 
+</p>
+<a name="wp1044206"> </a><p class="pBody">
+To test your installation, log into your own account. Make sure the account has the PH capabilities described in <a  href="gsb56.htm#wp1038606">section 5.4.1</a> (if needed), and that &quot;ACUUDC.PUB.ACUCOBOL&quot; has been cataloged.  Then compile and run the &quot;TOURHP&quot; program.  TOURHP is a special sample program for HP e3000 users that demonstrates how to use the ACUCOBOL-GT compiler and runtime and creates a small KSAM file:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1038674"> </a><div class="pSmartList1"><li>Go to the ACUCOBOL-GT &quot;sample&quot; directory that contains sample COBOL source files:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:CHDIR /ACUCOBOL/sample<a name="wp1038675"> </a>
+</pre></div>
+<a name="wp1038676"> </a><div class="pSmartList1"><li>Compile the sample program named TOURHP:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:ccbl &quot;-cp -gd -v TOURHP&quot;<a name="wp1038677"> </a>
+</pre></div>
+<a name="wp1038678"> </a><p class="pIndented1">
+Most of the ACUCOBOL-GT files are case sensitive. Be sure that <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">ccbl</span> is lowercase.  In the command shown above, the &quot;-cp&quot; option places the ACUCOBOL-GT compiler in HP COBOL compatibility mode.  The compiler will automatically select a file with the &quot;.cbl&quot; extension.  The &quot;-gd&quot; option includes source code information in the compiled object for use with the interactive debugger. Finally, the &quot;-v&quot; option places the compiler in &quot;verbose&quot; mode so that you will see messages displaying the compiler's status.  When you press ENTER after typing this command, you should see the following messages:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    Start TOURHP<a name="wp1038679"> </a>
+       Data Division<a name="wp1038680"> </a>
+       Procedure Division<a name="wp1038681"> </a>
+       Including Debugging Info<a name="wp1038682"> </a>
+       Writing Code Addresses<a name="wp1038683"> </a>
+    Compilation complete<a name="wp1044176"> </a>
+</pre></div>
+<a name="wp1044177"> </a><p class="pIndented1">
+If you get an error similar to the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    Unknown command name. (CIERR 975)<a name="wp1044190"> </a>
+</pre></div>
+<a name="wp1044191"> </a><p class="pIndented1">
+It is probably because the path for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">ccbl</span> was not added to your HPPATH environment variable.  You can check this by typing:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    :SHOWVAR HPPATH<a name="wp1044192"> </a>
+</pre></div>
+<a name="wp1044193"> </a><p class="pIndented1">
+If the HPPATH is incorrect, you might see the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    HPPATH = !HPGROUP,PUB,PUB.SYS,ARPA.SYS<a name="wp1044194"> </a>
+</pre></div>
+<a name="wp1044195"> </a><p class="pIndented1">
+Normally when ACUUDC is cataloged it will add &quot;/ACUCOBOL/bin&quot; to your path.  Verify that ACUUDC is cataloged.  If you do not want to add &quot;/ACUCOBOL/bin&quot; to HPPATH, you will have to specify the full or relative pathname as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    :/ACUCOBOL/bin/ccbl &quot;-cp -gd -v TOURHP&quot;<a name="wp1044203"> </a>
+</pre></div>
+<a name="wp1050571"> </a><p class="pIndented1">
+If you don't want to use ACUUDC, and prefer to type commands that are in the &quot;/ACUCOBOL/bin&quot; directory without having to enter the full or relative pathname, you can type:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    :SETVAR HPPATH &quot;!HPPATH,/ACUCOBOL/bin&quot; <a name="wp1044201"> </a>
+</pre></div>
+<a name="wp1044237"> </a><p class="pIndented1">
+to set the HPPATH variable.
+</p>
+<a name="wp1038704"> </a><div class="pSmartList1"><li>Compiling the &quot;TOURHP&quot; program creates an object file in the same directory with the same prefix, &quot;TOURHP&quot;, but with an extension of &quot;.acu&quot;.  (For more examples of how to compile your programs and what options are available, refer to Chapter 4 in <em class="cEmphasis">Transitioning to ACUCOBOL-GT</em>.)  Use the LISTFILE command to display the compiled object:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:LISTFILE ./TOURHP@<a name="wp1038705"> </a>
+</pre></div>
+<a name="wp1038706"> </a><p class="pIndented1">
+If you use the wildcard as shown, this should display &quot;TOURHP&quot; (the source COBOL program) and &quot;TOURHP.acu&quot; (the compiled object).  The compiled object is ready to run using the ACUCOBOL-GT runtime system.  No linking is required.  If you use the following LISTFILE command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:LISTFILE NEWKFILE,2<a name="wp1038707"> </a>
+</pre></div>
+<a name="wp1038708"> </a><p class="pIndented1">
+you should get a message indicating that the file &quot;NEWKFILE&quot; does not exist. This is the expected behavior. It simply means that the KSAM file that will be created by running the TOURHP program does not yet exist.
+</p>
+<a name="wp1038709"> </a><div class="pSmartList1"><li>Now run the compiled program with the following command:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:runcbl &quot;-c CNFGVAR TOURHP&quot;<a name="wp1038710"> </a>
+</pre></div>
+<a name="wp1050469"> </a><p class="pIndented1">
+In this case, the &quot;-c&quot; option tells the runtime to look for the configuration file named &quot;CNFGVAR&quot;.  This file sets the variable &quot;DEFAULT_HOST&quot; to &quot;KSAM&quot;, causing the runtime to create KSAM files instead of Vision files.  The runtime automatically selects a file with the &quot;.acu&quot; extension.  If you run the same LISTFILE command indicated in step 3, you will see that a KSAM file named &quot;NEWKFILE&quot; has been created. 
+</p>
+<a name="wp1038712"> </a><p class="pIndented1">
+If you get the message &quot;Can't find entry for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">terminal</span> in /ACUCOBOL/etc/a_termcap&quot;, you need to configure your terminal for ACUCOBOL-GT.  This is set in the ACUUDC with the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:SETVAR A_TERM &quot;hp&quot;<a name="wp1038713"> </a>
+</pre></div>
+<a name="wp1038714"> </a><p class="pIndented1">
+You can verify this by typing:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:SHOWVAR A_TERM<a name="wp1038715"> </a>
+</pre></div>
+<a name="wp1038716"> </a><p class="pIndented1">
+For more information on configuring your terminal for ACUCOBOL-GT, see Chapter 4 of the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT User's Guide</span>.
+</p>
+<a name="wp1038717"> </a><div class="pSmartList1"><li>When you have the &quot;TOURHP&quot; program running, you may want to set a configuration file to support the printers you have attached to your system.  You may edit the &quot;CNFGVAR&quot; file supplied with the &quot;TOURHP&quot; program or the &quot;/ACUCOBOL/etc/cblconfi&quot; file supplied with ACUCOBOL-GT.  (The &quot;cblconfi&quot; file is used by default, unless you specify a different file with the &quot;-c&quot; runtime option.) For more information about working with the configuration file, see section 2.7 of the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT User's Guide</span>.</li></div>
+<a name="wp1038718"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>EDITOR/iX cannot edit HFS files, so you need to use an editor that can, or move the file to a valid MPE/iX group using an MPE/iX name in uppercase.  
+<hr />
+</p>
+<a name="wp1038719"> </a><div class="pSmartList1"><li>Read the &quot;RELEASE&quot; file (if present). It describes changes to the products not covered in the documentation.  You can see if this file exists by typing:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:LISTFILE /ACUCOBOL/RE@<a name="wp1038720"> </a>
+</pre></div>
+<a name="wp1038721"> </a><p class="pIndented1">
+You can display it on the screen using the PRINT command.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:PRINT /ACUCOBOL/RELEASE<a name="wp1038722"> </a>
+</pre></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

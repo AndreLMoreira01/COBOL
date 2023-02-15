@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:45:06" />
+  <title>LOCKS_PER_FILE, MAX_FILES, and MAX_LOCKS</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv4.htm">Chapter 4: Configuration</a> &gt; <a href="srv43.htm">4.2  Configuration Variables</a> &gt; <a href="srv412.htm">4.2.2  Server Configuration Variables</a> &gt; </p>
+<a name="wp1047856"> </a><h2 class="pHeading3">
+LOCKS_PER_FILE, MAX_FILES, and MAX_LOCKS
+</h2>
+<a name="wp1047862"> </a><p class="pBody">
+The values of LOCKS_PER_FILE, MAX_FILES, and MAX_LOCKS are applied to the corresponding executable of each configuration file.  That is, the values of the variables defined in the runtime configuration file are applied to the executing client program, and the values defined in the server configuration file are applied to the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve </span>process.  Remote file access is restricted by the smaller of the two values.  
+</p>
+<a name="wp1035406"> </a><p class="pBody">
+For example, if we have the following configuration values:</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1038862"> </a><p class="pCellBody">
+runtime (cblconfig)
+</p>
+</td>
+    <td><a name="wp1038864"> </a><p class="pCellBody">
+MAX_FILES
+</p>
+</td>
+    <td><a name="wp1038866"> </a><p class="pCellBody">
+64
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038868"> </a><p class="pCellBody">
+server (a_srvcfg)
+</p>
+</td>
+    <td><a name="wp1038870"> </a><p class="pCellBody">
+MAX_FILES
+</p>
+</td>
+    <td><a name="wp1038872"> </a><p class="pCellBody">
+32
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1035408"> </a><p class="pBody">
+the runtime is able to open 64 files with a limit of 32 remote files.
+</p>
+<a name="wp1035409"> </a><p class="pBody">
+Alternatively, if the configuration values are:</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1038902"> </a><p class="pCellBody">
+runtime (cblconfig)
+</p>
+</td>
+    <td><a name="wp1038904"> </a><p class="pCellBody">
+MAX_FILES
+</p>
+</td>
+    <td><a name="wp1038906"> </a><p class="pCellBody">
+32
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038908"> </a><p class="pCellBody">
+server (a_srvcfg)
+</p>
+</td>
+    <td><a name="wp1038910"> </a><p class="pCellBody">
+MAX_FILES
+</p>
+</td>
+    <td><a name="wp1038912"> </a><p class="pCellBody">
+64
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1035411"> </a><p class="pBody">
+the runtime will be able to open, at most, 32 remote files.
+</p>
+<a name="wp1035412"> </a><p class="pBody">
+Determine values for LOCKS_PER_FILE, MAX_FILES and MAX_LOCKS by noting the values set in <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">cblconfig </span>and then multiplying the value of each variable by the number of runtimes likely to access the server simultaneously.  The resultant values will be sufficient to support the case where all runtimes have the maximum number of files open with the maximum number of locks applied.  We recommended that the values assigned these variables in &quot;a_srvcfg&quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic"> </span>not be smaller than the values assigned in &quot;cblconfig.&quot;
+</p>
+<a name="wp1035413"> </a><p class="pBody">
+For example, if you anticipate having four runtimes accessing the server simultaneously, and the settings of your runtime configuration variables are:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+LOCKS_PER_FILE  10<a name="wp1035414"> </a>
+MAX_FILES  30<a name="wp1035415"> </a>
+MAX_LOCKS  40<a name="wp1035416"> </a>
+</pre></div>
+<a name="wp1035417"> </a><p class="pBody">
+the corresponding variables in <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">a_srvcfg </span>might be:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+LOCKS_PER_FILE  40<a name="wp1035418"> </a>
+MAX_FILES  120<a name="wp1035419"> </a>
+MAX_LOCKS  160<a name="wp1035420"> </a>
+</pre></div>
+<a name="wp1035421"> </a><p class="pBody">
+The value of LOCKS_PER_FILE and MAX_FILES in the server configuration file cannot exceed 32767 for Vision files.  The value of MAX_LOCKS cannot exceed 8191 for Vision files.  To conserve system resources and improve runtime and server performance, set these variables to the smallest value that still meets your requirements. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

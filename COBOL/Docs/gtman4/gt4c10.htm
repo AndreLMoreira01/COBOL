@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:09" />
+  <title>C.9  Changes Affecting Version 4.3</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4c.htm">Appendix C:  Changes Affecting Previous Versions</a> &gt; </p>
+<a name="wp1034740"> </a><h2 class="pHeading1">
+C.9  Changes Affecting Version 4.3
+</h2>
+<a name="wp1034741"> </a><p class="pBody">
+Version 5.0 of ACUCOBOL-GT contains significant changes in the internal workings of both the compiler and runtime.  The following paragraphs describe changes that can affect programs originally written with ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>Version 4.3.  
+</p>
+<a name="wp1034742"> </a><h3 class="pHeadingRef">
+Licensing changes
+</h3>
+<a name="wp1034743"> </a><p class="pBody">
+With the Version 5.0 release, the licensing procedure for Acucorp products has been changed.   All products still require a license file, but you no longer need a separate license disk to install your products.  Instead, you will receive a pair of alphanumeric strings (keys) that must be entered to activate your software.  See your <em class="cEmphasis">Getting Started</em> book for details.
+</p>
+<a name="wp1034744"> </a><h3 class="pHeadingRef">
+Compiler changes
+</h3>
+<a name="wp1034745"> </a><p class="pBody">
+Two compilation switches provide compatibility with Version 4.3:
+</p>
+<a name="wp1035871"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1035877"> </a><p class="pCellBody">
+-C43
+</p>
+</td>
+    <td><a name="wp1035879"> </a><p class="pCellBody">
+Causes the compiler to generate code according to the rules used by Version 4.3. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035881"> </a><p class="pCellBody">
+-Z43
+</p>
+</td>
+    <td><a name="wp1035883"> </a><p class="pCellBody">
+Creates object code that can be run with a Version 4.3 runtime.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034748"> </a><div class="pSmartList1"><li>Prior to Version 5.0, the width of a printer cell was based on the average width of the selected printer font.  Now, the width of a printer cell is computed in the same way that cells are computed for the screen, based on the width of the &quot;0&quot; (zero) character.  Note that proportional fonts may contain wider characters.  This may affect the horizontal placement of a bitmap on the page, the width of bitmaps and margins if they are specified in cells, and the number of columns reported by the WINPRINT-GET-PAGE-LAYOUT call.  See the <a  href="gt4i137.htm#wp1039711">WIN$PRINTER Routine</a> in Appendix I, &quot;Library Routines&quot;, for details.</li></div>
+<a name="wp1034749"> </a><div class="pSmartList1"><li>The Arial font shipped with Windows 98 Version 2 is different from the Arial font shipped with earlier versions of Windows and Windows NT.  The new font has a character width of 35 pixels, instead of the previous 23 pixel width.  This can cause field overlap or screen distortions in programs that rely on the size of the Arial font.  If you do not want to adjust your applications to accommodate the new wider version of the Arial font, a new configuration variable, <a  href="gt4h208.htm#wp1037194">OLD_ARIAL_DIMENSIONS</a> will force the runtime to use the 23 pixel measurement.  See <a  href="gt4h.htm#wp1285646"><span style="font-family: Arial, Verdana, Helvetica, sans-serif">Appendix H, &quot;Configuration File Entries,&quot;</span></a> for details. </li></div>
+<a name="wp1034752"> </a><div class="pSmartList1"><li>In previous versions, the command line option for the <b class="cBold">logutil</b> utility date filter &quot;-d&quot; had problems comparing dates when the specified 2-digit year was &quot;00&quot; or greater.  Now, <b class="cBold">logutil</b> requires that years be specified in a 4-digit format.  If you enter a year less than 1900, <b class="cBold">logutil</b> will report &quot;logutil: use 4 digit year specification.&quot;</li></div>
+<a name="wp1034753"> </a><div class="pSmartList1"><li>Starting with ACUCOBOL-GT 5.0 release, the compiler no longer automatically assigns the &quot;MULTILINE&quot; style to an entry field with LINES value of &quot;2&quot; or greater.  Although Version 5.0 correctly handles cases compiled with 4.x versions, in order for that to happen you need to specify an appropriate source-compatibility flag (such as &quot;-Z43&quot;).  Note that the flag is not required if you had explicitly set the &quot;MULTILINE&quot; style in your 4.<em class="cEmphasis">x</em>-version program.</li></div>
+</ul></div>
+<a name="wp1034754"> </a><h3 class="pHeadingRef">
+Runtime changes
+</h3>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034755"> </a><div class="pSmartList1"><li>In previous versions, the UNIX runtime would use the name of the user that started a runtime process to identify the user to <b class="cBold">acushare</b> and count the number of processes a user was executing simultaneously.  In Version 5.0, the user is defined as a unique terminal name.  Each terminal is counted as a unique user and requires one user license.  Background processes adopt the name of the terminal which started them.  There are 1024 processes per user allowed for each terminal name.  </li></div>
+<a name="wp1034756"> </a><p class="pIndented1">
+<b class="cBold">acushare</b> 5.0 can be used with older runtimes and will report the maximum processes and processes per user settings for those runtimes as long as they have different serial numbers from the 5.0 runtime installed on the machine.  If a Version 4.3 and a Version 5.0 runtimes on the same machine have the same serial number, <b class="cBold">acushare</b> 5.0 supports both but does not report maximum processes or processes per user.  
+</p>
+<a name="wp1034757"> </a><div class="pSmartList1"><li>Microsoft has changed standard input stream handling in Internet Information Server 4.0.  When you are running with the &quot;-f&quot; option or when the A_CGI environment variable is set, the runtime reads only the number of bytes set in the CONTENT_LENGTH environment variable by the web server.  The runtime no longer waits for an end of file condition. </li></div>
+<a name="wp1034758"> </a><div class="pSmartList1"><li>The runtime no longer differentiates between &quot;UNIX-4&quot; and &quot;UNIX-V&quot; in the OPERATING-SYSTEM field of the SYSTEM-INFORMATION structure.  Instead, it reports &quot;UNIX&quot; for all UNIX operating systems.  </li></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$SETEVENTPARAM Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1036726"> </a><h2 class="pHeading2">
+C$SETEVENTPARAM Routine
+</h2>
+<a name="wp1036735"> </a><p class="pBody">
+C$SETEVENTPARAM is an alternate way to set event parameters for ActiveX controls. Use it to set a single event parameter when there are several for an event.  To use this routine you must know the actual name of the parameter. You may determine these names by reading the ActiveX control's documentation or by looking at the definitions in the copy book for the ActiveX control. 
+</p>
+<a name="wp1036737"> </a><p class="pBody">
+It is common for an ActiveX event to receive many parameters. C$SETEVENTPARAM allows you to set the values of only the parameters you care about. 
+</p>
+<a name="wp1301463"> </a><p class="pBody">
+Please note that C$SETEVENTPARAM cannot be used to set event parameters for COM objects.  You must use C$SETEVENTDATA for COM objects.
+</p>
+<a name="wp1036738"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$SETEVENTPARAM&quot; <a name="wp1036739"> </a>
+    USING EVENT-CONTROL-HANDLE, PARAM-NAME, PARAM-VALUE<a name="wp1036740"> </a>
+    GIVING RESULT-CODE<a name="wp1036741"> </a>
+</pre></div>
+<a name="wp1036742"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1036743"> </a><p class="pBody">
+<b class="cBold">EVENT-CONTROL-HANDLE</b>    USAGE HANDLE
+</p>
+<a name="wp1036744"> </a><p class="pBody">
+Handle to the control that generated the event. 
+</p>
+<a name="wp1036745"> </a><p class="pBody">
+<b class="cBold">PARAM-NAME</b>    PIC X(n)
+</p>
+<a name="wp1036746"> </a><p class="pBody">
+The symbolic name of the event parameter.
+</p>
+<a name="wp1036747"> </a><p class="pBody">
+<b class="cBold">PARAM-VALUE</b>    Any COBOL data type
+</p>
+<a name="wp1036748"> </a><p class="pBody">
+Source item containing the event parameter's value. 
+</p>
+<a name="wp1036749"> </a><p class="pBody">
+<b class="cBold">RESULT-CODE</b>    Signed numeric value
+</p>
+<a name="wp1036750"> </a><p class="pBody">
+Receives the result-code for the operation. This will be 0 to indicate success or a negative value to indicate failure. (Microsoft defines many standard &quot;result codes&quot; in their documentation.  Note that these are usually in hexadecimal notation.)
+</p>
+<a name="wp1036752"> </a><h3 class="pHeadingRef">
+Comments
+</h3>
+<a name="wp1036753"> </a><p class="pBody">
+C$SETEVENTPARAM converts the COBOL-type data in the source item to the named event parameter's type.  Using this routine instead of C$SETEVENTDATA will make your code more readable.  The object code will be a little larger and calls to this routine will take a little longer than calls to C$SETEVENTDATA. However, these differences will probably be unnoticeable and the benefits of readable code outweigh the performance and size considerations.
+</p>
+<a name="wp1036756"> </a><p class="pBody">
+You are responsible for specifying a compatible types. For example, if the source item you specify is alphabetic, and the event parameter you are setting is a signed integer, C$SETEVENTPARAM tries to read a number from the alphabetic item and move it to the event parameter. This is not a programming error and neither the compiler nor runtime warns you about it.
+</p>
+<a name="wp1036757"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1062766"> </a><p class="pBody">
+Suppose you have displayed an ActiveX control that triggers an event called AxEventOne which has three parameters. Then suppose that PARAM-1 and PARAM-2 contain information about the event and that only PARAM-3 is meant to be set by the event procedure. Since PARAM-3 is the third parameter, to set it you would have to pass two &quot;dummy&quot; parameters using C$SETEVENTDATA. For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$SETEVENTDATA&quot; <a name="wp1062768"> </a>
+   USING EVENT-CONTROL-HANDLE, 0, 0, PARAM-3.<a name="wp1062779"> </a>
+</pre></div>
+<a name="wp1036761"> </a><p class="pBody">
+However, If you determined that the name of PARAM-3 in the ActiveX control was&quot;Param3&quot;. You could then use C$SETEVENTPARAM to accomplish this task in a more elegant and readable way. For example,
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$SETEVENTPARAM&quot; <a name="wp1036762"> </a>
+   USING EVENT-CONTROL-HANDLE, &quot;Param3&quot;, PARAM-3.<a name="wp1062780"> </a>
+</pre></div>
+<a name="wp1389270"> </a><p class="pBody">
+For more examples of how to set event parameters for ActiveX events, refer to section 4.4 in <em class="cEmphasis">A Guide to Interoperating with ACUCOBOL-GT</em>. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

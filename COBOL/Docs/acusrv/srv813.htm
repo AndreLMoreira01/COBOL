@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:46:11" />
+  <title>8.4.4  Unexpected User Name</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv8.htm">Chapter 8: System Management</a> &gt; <a href="srv89.htm">8.4  Troubleshooting</a> &gt; </p>
+<a name="wp1035503"> </a><h2 class="pHeading2">
+8.4.4  Unexpected User Name
+</h2>
+<a name="wp1035506"> </a><p class="pBody">
+Problem: AcuServer establishes a connection with the client, but uses an unexpected user name <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">(Local Username).</span>
+</p>
+<a name="wp1035507"> </a><p class="pBody">
+There are two common reasons for getting an unexpected <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Local Username</span> on the server:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035508"> </a><div class="pSmartList1"><li>The client machine/client user combination isn't matching the expected access record.</li></div>
+<a name="wp1035509"> </a><div class="pSmartList1"><li>The client machine/client user combination matches an access record that specifies an unexpected <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Local Username</span> (perhaps the name of a group account, or an account with restricted privileges).</li></div>
+</ol></div>
+<a name="wp1035510"> </a><p class="pBody">
+To investigate and correct this situation you must be familiar with AcuServer server access configuration, and have access to <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">root</span> or <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Administrator</span> privileges.  We recommend that you work with your AcuServer system administrator.
+</p>
+<a name="wp1035511"> </a><p class="pBody">
+The diagnostic procedures include:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035512"> </a><div class="pSmartList1"><li>confirming your client user name</li></div>
+<a name="wp1035513"> </a><div class="pSmartList1"><li>confirming your client machine name</li></div>
+<a name="wp1035514"> </a><div class="pSmartList1"><li>looking up your client user name/client machine name combination in the server access file</li></div>
+</ol></div>
+<a name="wp1035515"> </a><h3 class="pHeadingRef">
+Diagnostics:
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035516"> </a><div class="pSmartList1"><li>Confirm your client user name.</li></div>
+<a name="wp1035517"> </a><p class="pIndented1">
+<em class="cEmphasis">On UNIX clients:</em>
+</p>
+<a name="wp1035518"> </a><p class="pIndented1">
+Log onto the client system using the same user name and UNIX environment that resulted in the unexpected user name.
+</p>
+<a name="wp1035519"> </a><p class="pIndented1">
+If the system is a UNIX system, enter &quot;who am i&quot; at the UNIX prompt.
+</p>
+<a name="wp1035520"> </a><p class="pIndented1">
+Is the user name returned the name you expected? 
+</p>
+<a name="wp1035521"> </a><p class="pIndented1">
+<em class="cEmphasis">On Windows clients:</em>
+</p>
+<a name="wp1035522"> </a><p class="pIndented1">
+If a user is logged into a Windows NT/2000 workgroup or domain, AcuServer will use the user's log-in name.  Otherwise, it uses the user name value that is set by the environment variable USERNAME.  If USERNAME is not set, then the runtime uses the value that is set by the environment variable USER.  (The values of these variables are case-sensitive.)  If neither of these environment variables is set, then the runtime uses the literal string &quot;USER&quot;.
+</p>
+<a name="wp1035523"> </a><p class="pIndented1">
+To confirm the presence (or absence) of the &quot;USERNAME&quot; environment variable, enter &quot;SET&quot; at the command prompt.  SET will display the value of all environment variables.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COMSPEC=C:\COMMAND.COM<a name="wp1035524"> </a>
+PATH=C:\;C:\WINDOWS;C:\MOUSE;<a name="wp1041112"> </a>
+PROMPT=$P$G<a name="wp1041160"> </a>
+USERNAME=BERNIE<a name="wp1041225"> </a>
+</pre></div>
+<a name="wp1035525"> </a><p class="pIndented1">
+If USERNAME is defined, the value of USERNAME is the name passed to AcuServer.  Otherwise the variable USER is checked.  (Both of these variables are case-sensitive.)  If USER is not set, then the literal string &quot;USER&quot; is passed.
+</p>
+<a name="wp1035527"> </a><div class="pSmartList1"><li>Confirm the name of the client system.</li></div>
+<a name="wp1035528"> </a><p class="pIndented1">
+<em class="cEmphasis">On UNIX clients, enter</em>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+hostname<a name="wp1035529"> </a>
+</pre></div>
+<a name="wp1035530"> </a><p class="pIndented1">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+uname -n<a name="wp1035531"> </a>
+</pre></div>
+<a name="wp1035532"> </a><p class="pIndented1">
+The system will return its official network host name.
+</p>
+<a name="wp1035536"> </a><p class="pIndented1">
+<em class="cEmphasis">For Windows 98 clients</em>:
+</p>
+<a name="wp1035537"> </a><p class="pIndented1">
+Under Windows 98, the runtime uses the host name that is set in the Control Panel in the following menus:
+</p>
+<a name="wp1035538"> </a><p class="pIndented1">
+Control Panel/Network/Configuration
+</p>
+<a name="wp1035539"> </a><p class="pIndented1">
+Select TCP/IP, then choose:
+</p>
+<a name="wp1035540"> </a><p class="pIndented1">
+Properties/DNS Configuration/Host
+</p>
+<a name="wp1035541"> </a><p class="pIndented1">
+The name you specify for the &quot;Host&quot; entry is the one that the runtime uses.
+</p>
+<a name="wp1035542"> </a><p class="pIndented1">
+<em class="cEmphasis">For Windows NT/2000 clients</em>:
+</p>
+<a name="wp1035543"> </a><p class="pIndented1">
+Start/Settings/Control Panel/Network/Protocols
+</p>
+<a name="wp1035544"> </a><p class="pIndented1">
+Select TCP/IP, then choose:
+</p>
+<a name="wp1035545"> </a><p class="pIndented1">
+Properties/DNS/Host Name
+</p>
+<a name="wp1035546"> </a><p class="pIndented1">
+The name you specify for the &quot;Host Name&quot; entry is the one that the runtime uses.
+</p>
+<a name="wp1035547"> </a><div class="pSmartList1"><li>On the server, examine the server access file for the record that matches the client machine name/client user name combination.  This requires <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">root</span> privileges on a UNIX server, and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Administrator</span> group privileges on a Windows NT , Windows 2000, or Windows 2003 server.  It should be done by the AcuServer system administrator.</li></div>
+<a name="wp1035548"> </a><p class="pIndented1">
+Run the server access file manager utility:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acuserve -access<a name="wp1035549"> </a>
+</pre></div>
+<a name="wp1035550"> </a><p class="pIndented1">
+Be sure to enter the name of the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">working</span> server access file when prompted.
+</p>
+<a name="wp1035551"> </a><p class="pIndented1">
+Select menu item [4] - &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Display one/all security records</span>.&quot;  Respond &quot;N&quot; to the prompt: &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Display all records?&quot;</span>  To the next two prompts provide the client machine name and client user name respectively.  The matching record will be displayed.  
+</p>
+<a name="wp1035552"> </a><p class="pIndented1">
+The AcuServer system administrator should be able to determine whether this is the appropriate and expected access record for the client machine name/client user name combination, and take any necessary steps to modify the record, or add a new one.
+</p>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

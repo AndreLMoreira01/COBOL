@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-GET-NO-PRINTERS</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1040598"> </a><h2 class="pHeading3">
+WINPRINT-GET-NO-PRINTERS
+</h2>
+<a name="wp1040600"> </a><p class="pBody">
+This operation code retrieves the number of printers installed on a system. 
+</p>
+<a name="wp1040606"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040607"> </a>
+    USING WINPRINT-GET-NO-PRINTERS, WINPRINT-SELECTION<a name="wp1040608"> </a>
+    GIVING RESULT<a name="wp1040609"> </a>
+</pre></div>
+<a name="wp1040610"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040611"> </a><p class="pBody">
+<b class="cBold">WINPRINT-SELECTION</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 WINPRINT-SELECTION.<a name="wp1040612"> </a>
+   03 WINPRINT-NAME                    PIC X(80).<a name="wp1040613"> </a>
+   03 WINPRINT-PORT                    PIC X(80).<a name="wp1040614"> </a>
+   03 WINPRINT-DRIVER                  PIC X(80).<a name="wp1040615"> </a>
+   03 WINPRINT-DRV-VERSION             SIGNED-INT.<a name="wp1040616"> </a>
+   03 WINPRINT-NO-OF-PRINTERS          SIGNED-SHORT.<a name="wp1040617"> </a>
+      88 WPRTERR-NO-PRINTERS           VALUE -1.<a name="wp1040618"> </a>
+   03 WINPRINT-IS-DEFAULT              SIGNED-SHORT.<a name="wp1040619"> </a>
+      88 WPRT-IS-NOT-DEFAULT           VALUE 0.<a name="wp1040620"> </a>
+      88 WPRT-IS-DEFAULT               VALUE 1.<a name="wp1040621"> </a>
+   03 WINPRINT-COPIES                  SIGNED-SHORT.<a name="wp1040622"> </a>
+      88 WPRT-HAS-NO-COPY              VALUE 1.<a name="wp1040623"> </a>
+   03 WINPRINT-ORIENTATION             SIGNED-SHORT.<a name="wp1040624"> </a>
+      88 WPRT-HAS-NO-LANDSCAPE         VALUE 0.<a name="wp1040625"> </a>
+      88 WPRT-HAS-LANDSCAPE            VALUE 1.<a name="wp1040626"> </a>
+   03 WINPRINT-QUALITY                 SIGNED-SHORT.<a name="wp1040627"> </a>
+   03 WINPRINT-CURR-ORIENTATION        SIGNED-SHORT.<a name="wp1040628"> </a>
+   03 WINPRINT-CURR-COPIES             SIGNED-SHORT.<a name="wp1040629"> </a>
+</pre></div>
+<a name="wp1040630"> </a><h3 class="pHeadingRef">
+Return Values
+</h3>
+<a name="wp1040631"> </a><p class="pBody">
+The number returned by this operation will be stored in WINPRINT-NO-OF-PRINTERS.  
+</p>
+<a name="wp1040632"> </a><p class="pBody">
+The number in WINPRINT-NO-OF-PRINTERS may differ depending on the host operating system.  On a Windows 98 system, the number in WINPRINT-NO-OF-PRINTERS will represent the number of printers that are attached with a local driver. But in a Windows NT/Windows 2000 environment, the number in WINPRINT-NO-OF-PRINTERS will represent the number of printers that are attached with a local driver and possibly include the number of remote printers with drivers stored on network servers.
+</p>
+<a name="wp1040633"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040634"> </a><p class="pBody">
+This op-code does not alter any of the current printer settings.  It is recommended, but not required, that this op-code be executed before the WINPRINT-GET-PRINTER-INFO op-code. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

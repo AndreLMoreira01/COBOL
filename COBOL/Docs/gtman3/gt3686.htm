@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>COMMIT Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1037135"> </a><h2 class="pHeading2">
+COMMIT Statement
+</h2>
+<a name="wp1037137"> </a><p class="pBody">
+The COMMIT statement unlocks locked records and (optionally) flushes buffers to disk.  COMMIT may also indicate the end of a transaction, and cause the changes to be written to the transaction log file. 
+</p>
+<a name="wp1037139"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">COMMIT</u> TRANSACTION<a name="wp1037140"> </a>
+</pre></div>
+<a name="wp1037141"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037142"> </a><div class="pSmartList1"><li>When this statement is executed, all locked records owned by the current run-unit are unlocked.</li></div>
+<a name="wp1037143"> </a><div class="pSmartList1"><li>COMMIT also causes a request to be made to the host operating system to flush all buffers to disk.  The exact effect of flushing disk buffers depends on the host operating system.  Some systems do not ensure that buffers are fully flushed when the COMMIT verb finishes.  For example, UNIX only schedules a flush, which occurs over the next few seconds.  VAX/VMS already flushes after each write (except for locked files). </li></div>
+<a name="wp1037151"> </a><div class="pSmartList1"><li>You can prevent the buffers from being flushed to disk by using the FLUSH-ON-COMMIT line in your runtime configuration file.  </li></div>
+<a name="wp1037152"> </a><div class="pSmartList1"><li>The function of COMMIT depends on whether or not it ends a transaction.  The following rules describe how transaction management operates with Vision and relative files.  For other file systems linked with the runtime, each system's native mechanism for transaction management is invoked.  See the Acucorp interface document for the specific file system for more details.</li></div>
+<a name="wp1037153"> </a><div class="pSmartList1"><li>When ROLLBACK is enabled in the FILE-CONTROL entry for a file, the record and file locking rules are extended for that file.  Every record updated as part of a transaction is locked until that transaction is committed or rolled back.  The COMMIT verb removes these locks.  Record locks applied when the file is read are kept until the end of the transaction, if ROLLBACK is enabled for the file. </li></div>
+<a name="wp1037155"> </a><p class="pIndented1">
+Record locks are held during a transaction in order to prevent another process from updating the records in a way which might make rollback impossible.  Note, however, that a record may be deleted during a transaction, and another process is allowed to write a record with the same record key to the file.  If this happens, and duplicates are disallowed on that record key, then the ROLLBACK will fail with a duplicate key error.
+</p>
+<a name="wp1037156"> </a><div class="pSmartList1"><li>During a transaction involving Vision or relative files, a CLOSE of a file that is locked, or that has locked records, is postponed until the transaction is committed or rolled back.  </li></div>
+<a name="wp1037157"> </a><p class="pIndented1">
+If the same physical file is opened again <em class="cEmphasis">within the transaction</em>, even if a different logical file (different SELECT) is used, the postponed CLOSE is canceled.  Note that the mode of the original OPEN is retained.  (For example, if the file were originally OPEN I-O, and if the CLOSE were canceled, then an OPEN OUTPUT on the same file within the same transaction would <em class="cEmphasis">not</em> empty the file.)  When the second OPEN is encountered, the file position is reset to the beginning so that a READ NEXT would read the first file in the record.  CLOSE is handled in this special way so that record locks are held--these locks are necessary for rollback.
+</p>
+<a name="wp1037158"> </a><div class="pSmartList1"><li>COMMIT locks the log file, checks its integrity, then writes the changes and unlocks the log file.  The log file is specified with the <em class="cEmphasis">filename</em>-LOG or LOG-FILE configuration variable.  See <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>, Chapter 5, section 5.1.6.</li></div>
+<a name="wp1037159"> </a><div class="pSmartList1"><li>There is an implicit COMMIT before a STOP RUN or before the end of the program, unless the STOP-RUN-ROLLBACK configuration variable is set to 1. Then, an implicit ROLLBACK occurs.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

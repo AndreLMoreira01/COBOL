@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:19" />
+  <title>6.2.3  Examples of Default Mapping</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb6.htm">Chapter 6: Mapping COBOL Data Items and Database Fields</a> &gt; <a href="odb63.htm">6.2  XFD Files</a> &gt; </p>
+<a name="wp1028380"> </a><h2 class="pHeading2">
+6.2.3  Examples of Default Mapping
+</h2>
+<a name="wp1028386"> </a><p class="pBody">
+The following section includes examples of how data dictionaries are formed. For more information, see <a  href="odb64.htm#wp1044190">section 6.2.1, &quot;How the Data Dictionary Is Formed.&quot;</a>
+</p>
+<a name="wp1028387"> </a><p class="pBody">
+If your program has one file with the three records shown below, the underlined fields are included in the database table by default (this example assumes that <b class="cBold">ar-codes-key</b> is named in a KEY IS phrase).  Some fields do not appear in the table, but the data dictionary maps them to the &quot;master&quot; field names.  The interface thus eliminates redundancies and gives you optimum performance.
+</p>
+<a name="wp1028388"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In the following example, the ship-weight and ship-instruct fields would be invisible to any ODBC application, unless you use a directive to make the fields visible.  
+<hr />
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  ar-codes-record.<a name="wp1028389"> </a>
+    03  ar-codes-key.<a name="wp1028390"> </a>
+        05  <u class="cUnderline">ar-code-type</u>     pic x.  <a name="wp1028391"> </a>
+        05  <u class="cUnderline">ar-code-num</u>      pic 999.<a name="wp1028392"> </a>
+</pre></div>
+<a name="wp1028393"> </a><p class="pBody">
+<em class="cEmphasis">These fields are included because they are the key.</em>
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  ship-code-record.<a name="wp1028394"> </a>
+    03  filler               pic x(4).<a name="wp1028395"> </a>
+    03  ship-weight          pic s999v9.<a name="wp1028396"> </a>
+    03  ship-instruct        pic x(15).<a name="wp1028397"> </a>
+01  terms-code-record.<a name="wp1028398"> </a>
+    03  filler               pic x(4).<a name="wp1028399"> </a>
+    03  <u class="cUnderline">terms-rate-1</u>         pic s9v999.<a name="wp1028400"> </a>
+    03  <u class="cUnderline">terms-days-1</u>         pic 9(3).<a name="wp1028401"> </a>
+    03  <u class="cUnderline">terms-rate-2</u>         pic s9v999.<a name="wp1028402"> </a>
+    03  <u class="cUnderline">terms-descript</u>       pic x(15).<a name="wp1028403"> </a>
+</pre></div>
+<a name="wp1028404"> </a><p class="pBody">
+<em class="cEmphasis">These fields are included because they comprise the largest record.</em>
+</p>
+<a name="wp1028405"> </a><p class="pBody">
+The diagram below shows how AcuODBC identifies database columns for some of the fields in the COBOL record, while other fields are mapped to those columns by the data dictionary; this means that all the fields are accessible to the COBOL program.</p><div><img src="images/dd_brace.gif" height="142" width="408" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1035221"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If your application reads a record that should be a ship-code-record, the data that is displayed is unreadable.  If you try to modify that record, you may receive an error message.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

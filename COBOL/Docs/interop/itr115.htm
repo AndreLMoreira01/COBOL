@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:01:17" />
+  <title>11.2.1.1  XML documents</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr11.htm">Chapter 11: Working with Non-Vision Data</a> &gt; <a href="itr113.htm">11.2  Working with XML Data</a> &gt; <a href="itr114.htm">11.2.1  XML Concepts</a> &gt; </p>
+<a name="wp1036516"> </a><h2 class="pHeading3">
+11.2.1.1  XML documents
+</h2>
+<a name="wp1036517"> </a><p class="pBody">
+XML documents are strictly text files.  In the context of data transport, the phrase &quot;XML document&quot; refers to a file or data stream containing any form of structured data.  Examples include e-commerce transactions, server APIs, mathematical equations, customer information, and inventory status.
+</p>
+<a name="wp1036518"> </a><p class="pBody">
+XML documents contain only markup and content.  All of the rules and semantics of the document are defined by the applications that process them.  Like HTML documents, XML documents can be displayed in a Web browser.  In this case, the semantics are usually derived from style sheets or Resource Description Framework (RDF) files.  
+</p>
+<a name="wp1036519"> </a><p class="pBody">
+XML documents are said to be either &quot;well-formed&quot; or &quot;valid.&quot;  Well-formed documents follow all of the XML rules for a document-for example, for every start tag, there is a corresponding end tag. Valid XML documents are well-formed, but they also contain a document type definition (DTD), and they obey the constraints of that definition.  For example, the following XML file contains a DTD that describes all the elements of the file:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&lt;?xml version = &quot;1.0&quot;?&gt;<a name="wp1036521"> </a>
+&lt;!DOCTYPE ORDERFILE [<a name="wp1036522"> </a>
+&lt;!ELEMENT ORDERFILE (CUSTOMER)*&gt;<a name="wp1036523"> </a>
+&lt;!ELEMENT CUSTOMER (NAME, DATE, ORDERS)&gt;<a name="wp1036524"> </a>
+&lt;!ELEMENT NAME (LAST-NAME, FIRST-NAME)&gt;<a name="wp1036525"> </a>
+&lt;!ELEMENT LAST-NAME (#PCDATA)&gt;<a name="wp1036526"> </a>
+&lt;!ELEMENT FIRST-NAME (#PCDATA)&gt;<a name="wp1036527"> </a>
+&lt;!ELEMENT DATE (#PCDATA)&gt;<a name="wp1036528"> </a>
+&lt;!ELEMENT ORDERS (ITEM)*&gt;<a name="wp1036529"> </a>
+&lt;!ELEMENT ITEM (PRODUCT, NUMBER, (PRICE | CHARGEACCT | SAMPLE))&gt;<a name="wp1036530"> </a>
+&lt;!ELEMENT PRODUCT (#PCDATA)&gt;<a name="wp1036531"> </a>
+&lt;!ELEMENT NUMBER (#PCDATA)&gt;<a name="wp1036532"> </a>
+&lt;!ELEMENT PRICE (#PCDATA)&gt;<a name="wp1036533"> </a>
+&lt;!ELEMENT CHARGEACCT (#PCDATA)&gt;<a name="wp1036534"> </a>
+&lt;!ELEMENT SAMPLE (#PCDATA)&gt;<a name="wp1036535"> </a>
+]&gt;<a name="wp1036536"> </a>
+&lt;ORDERFILE&gt;<a name="wp1036537"> </a>
+    &lt;CUSTOMER&gt;<a name="wp1036538"> </a>
+        &lt;NAME&gt;<a name="wp1036539"> </a>
+            &lt;LAST-NAME&gt;Smith&lt;/LAST-NAME&gt;<a name="wp1036540"> </a>
+            &lt;FIRST-NAME&gt;Sam&lt;/FIRST-NAME&gt;<a name="wp1036541"> </a>
+        &lt;/NAME&gt;<a name="wp1036542"> </a>
+        &lt;DATE&gt;October 15, 2001&lt;/DATE&gt;<a name="wp1036543"> </a>
+        &lt;ORDERS&gt;<a name="wp1036544"> </a>
+            &lt;ITEM&gt;<a name="wp1036545"> </a>
+                &lt;PRODUCT&gt;Tomatoes&lt;/PRODUCT&gt;<a name="wp1036546"> </a>
+                &lt;NUMBER&gt;8&lt;/NUMBER&gt;<a name="wp1036547"> </a>
+                &lt;PRICE&gt;1.25&lt;/PRICE&gt;<a name="wp1036548"> </a>
+            &lt;/ITEM&gt;<a name="wp1036549"> </a>
+            &lt;ITEM&gt;<a name="wp1036550"> </a>
+        &lt;PRODUCT&gt;Apples&lt;/PRODUCT&gt;<a name="wp1036551"> </a>
+                &lt;NUMBER&gt;12&lt;/NUMBER&gt;<a name="wp1036552"> </a>
+                &lt;PRICE&gt;2.50&lt;/PRICE&gt;<a name="wp1036553"> </a>
+            &lt;/ITEM&gt;<a name="wp1036554"> </a>
+            &lt;ITEM&gt;<a name="wp1036555"> </a>
+        &lt;PRODUCT&gt;Bananas&lt;/PRODUCT&gt;<a name="wp1036556"> </a>
+                &lt;NUMBER&gt;6&lt;/NUMBER&gt;<a name="wp1036557"> </a>
+                &lt;PRICE&gt;.50&lt;/PRICE&gt;<a name="wp1036558"> </a>
+            &lt;/ITEM&gt;<a name="wp1036559"> </a>
+        &lt;/ORDERS&gt;<a name="wp1036560"> </a>
+    &lt;/CUSTOMER&gt;<a name="wp1036561"> </a>
+    &lt;CUSTOMER&gt;<a name="wp1036562"> </a>
+        &lt;NAME&gt;<a name="wp1036563"> </a>
+            &lt;LAST-NAME&gt;Snead&lt;/LAST-NAME&gt;<a name="wp1036564"> </a>
+            &lt;FIRST-NAME&gt;Todd&lt;/FIRST-NAME&gt;<a name="wp1036565"> </a>
+        &lt;/NAME&gt;<a name="wp1036566"> </a>
+        &lt;DATE&gt;October 17, 2001&lt;/DATE&gt;<a name="wp1036567"> </a>
+        &lt;ORDERS&gt;<a name="wp1036568"> </a>
+            &lt;ITEM&gt;<a name="wp1036569"> </a>
+                &lt;PRODUCT&gt;Slicer/Dicer&lt;/PRODUCT&gt;<a name="wp1036570"> </a>
+                &lt;NUMBER&gt;1&lt;/NUMBER&gt;<a name="wp1036571"> </a>
+                &lt;CHARGEACCT&gt;1234-5678-3456-7890&lt;/CHARGEACCT&gt;<a name="wp1036572"> </a>
+            &lt;/ITEM&gt;<a name="wp1036573"> </a>
+        &lt;/ORDERS&gt;<a name="wp1036574"> </a>
+    &lt;/CUSTOMER&gt;<a name="wp1036575"> </a>
+&lt;/ORDERFILE&gt;<a name="wp1036576"> </a>
+</pre></div>
+<a name="wp1036578"> </a><p class="pBody">
+Documents that include and obey a schema rather than a DTD are considered to be &quot;schema-valid.&quot;  Schemas are files describing the XML document and its precise structure.  XML documents that are accompanied by schemas produce the most reliable FDs and SELECT statements when run through the <b class="cBold">xml2fd</b> utility, especially if the schema has information about data types and lengths.  
+</p>
+<a name="wp1036579"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Please note that the <b class="cBold">xml2fd</b> utility is used exclusively with AcuXML.  If you are calling the C$XML library routine, you do not need to run XML documents through <b class="cBold">xml2fd</b>.
+<hr />
+</p>
+<a name="wp1036580"> </a><p class="pBody">
+Following is an example of a schema file for the same XML document.  As you can see, it is much more descriptive than the DTD.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ <a name="wp1036581"> </a>
+&lt;?xml version=&quot;1.0&quot;?&gt;<a name="wp1036582"> </a>
+&lt;xs:schema xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;<a name="wp1036583"> </a>
+  &lt;xs:annotation&gt;<a name="wp1036584"> </a>
+    &lt;xs:documentation&gt;<a name="wp1036585"> </a>
+      Created by AcuXML(tm) version 6.0.0 (2002-11-12) on 2002/11/12<a name="wp1036586"> </a>
+    &lt;/xs:documentation&gt;<a name="wp1036587"> </a>
+  &lt;/xs:annotation&gt;<a name="wp1036588"> </a>
+<a name="wp1036589"> </a>
+  &lt;xs:element name=&quot;TEST-ORDERFILE&quot;&gt;<a name="wp1036590"> </a>
+    &lt;xs:complexType&gt;<a name="wp1036591"> </a>
+      &lt;xs:sequence&gt;<a name="wp1036592"> </a>
+        &lt;xs:element maxOccurs=&quot;unbounded&quot; ref=&quot;CUSTOMER&quot;/&gt;<a name="wp1036593"> </a>
+      &lt;/xs:sequence&gt;<a name="wp1036594"> </a>
+    &lt;/xs:complexType&gt;<a name="wp1036595"> </a>
+  &lt;/xs:element&gt;<a name="wp1036596"> </a>
+<a name="wp1036597"> </a>
+  &lt;xs:element name=&quot;CUSTOMER&quot;&gt;<a name="wp1036598"> </a>
+    &lt;xs:complexType&gt;<a name="wp1036599"> </a>
+      &lt;xs:sequence&gt;<a name="wp1036600"> </a>
+        &lt;xs:element ref=&quot;NAME&quot;/&gt;<a name="wp1036601"> </a>
+        &lt;xs:element ref=&quot;DATE&quot;/&gt;<a name="wp1036602"> </a>
+        &lt;xs:element ref=&quot;ORDERS&quot;/&gt;<a name="wp1036603"> </a>
+      &lt;/xs:sequence&gt;<a name="wp1036604"> </a>
+    &lt;/xs:complexType&gt;<a name="wp1036605"> </a>
+  &lt;/xs:element&gt;<a name="wp1036606"> </a>
+<a name="wp1036607"> </a>
+  &lt;xs:element name=&quot;NAME&quot;&gt;<a name="wp1036608"> </a>
+    &lt;xs:complexType&gt;<a name="wp1036609"> </a>
+      &lt;xs:sequence&gt;<a name="wp1036610"> </a>
+        &lt;xs:element ref=&quot;LAST-NAME&quot;/&gt;<a name="wp1036611"> </a>
+        &lt;xs:element ref=&quot;FIRST-NAME&quot;/&gt;<a name="wp1036612"> </a>
+      &lt;/xs:sequence&gt;<a name="wp1036613"> </a>
+    &lt;/xs:complexType&gt;<a name="wp1036614"> </a>
+  &lt;/xs:element&gt;<a name="wp1036615"> </a>
+<a name="wp1036616"> </a>
+  &lt;xs:element name=&quot;ORDERS&quot;&gt;<a name="wp1036617"> </a>
+    &lt;xs:complexType&gt;<a name="wp1036618"> </a>
+      &lt;xs:sequence&gt;<a name="wp1036619"> </a>
+        &lt;xs:element ref=&quot;ITEM&quot; maxOccurs=&quot;3&quot;/&gt;<a name="wp1036620"> </a>
+      &lt;/xs:sequence&gt;<a name="wp1036621"> </a>
+    &lt;/xs:complexType&gt;<a name="wp1036622"> </a>
+  &lt;/xs:element&gt;<a name="wp1036623"> </a>
+<a name="wp1036624"> </a>
+  &lt;xs:element name=&quot;ITEM&quot;&gt;<a name="wp1036625"> </a>
+    &lt;xs:complexType&gt;<a name="wp1036626"> </a>
+      &lt;xs:sequence&gt;<a name="wp1036627"> </a>
+        &lt;xs:element ref=&quot;PRODUCT&quot;/&gt;<a name="wp1036628"> </a>
+        &lt;xs:element ref=&quot;NUMBER&quot;/&gt;<a name="wp1036629"> </a>
+        &lt;xs:element ref=&quot;PRICE&quot;/&gt;<a name="wp1036630"> </a>
+        &lt;xs:element ref=&quot;CHARGEACCT&quot;/&gt;<a name="wp1036631"> </a>
+        &lt;xs:element ref=&quot;SAMPLE&quot;/&gt;<a name="wp1036632"> </a>
+      &lt;/xs:sequence&gt;<a name="wp1036633"> </a>
+    &lt;/xs:complexType&gt;<a name="wp1036634"> </a>
+  &lt;/xs:element&gt;<a name="wp1036635"> </a>
+<a name="wp1036636"> </a>
+  &lt;xs:element name=&quot;LAST-NAME&quot;&gt;<a name="wp1036637"> </a>
+    &lt;xs:simpleType&gt;<a name="wp1036638"> </a>
+      &lt;xs:restriction base=&quot;xs:string&quot;&gt;<a name="wp1036639"> </a>
+        &lt;xs:maxLength value=&quot;5&quot;/&gt;<a name="wp1036640"> </a>
+      &lt;/xs:restriction&gt;<a name="wp1036641"> </a>
+    &lt;/xs:simpleType&gt;<a name="wp1036642"> </a>
+  &lt;/xs:element&gt;<a name="wp1036643"> </a>
+<a name="wp1036644"> </a>
+  &lt;xs:element name=&quot;FIRST-NAME&quot;&gt;<a name="wp1036645"> </a>
+    &lt;xs:simpleType&gt;<a name="wp1036646"> </a>
+      &lt;xs:restriction base=&quot;xs:string&quot;&gt;<a name="wp1036647"> </a>
+        &lt;xs:maxLength value=&quot;4&quot;/&gt;<a name="wp1036648"> </a>
+      &lt;/xs:restriction&gt;<a name="wp1036649"> </a>
+    &lt;/xs:simpleType&gt;<a name="wp1036650"> </a>
+  &lt;/xs:element&gt;<a name="wp1036651"> </a>
+<a name="wp1036652"> </a>
+  &lt;xs:element name=&quot;DATE&quot;&gt;<a name="wp1036653"> </a>
+    &lt;xs:simpleType&gt;<a name="wp1036654"> </a>
+      &lt;xs:restriction base=&quot;xs:string&quot;&gt;<a name="wp1036655"> </a>
+        &lt;xs:maxLength value=&quot;16&quot;/&gt;<a name="wp1036656"> </a>
+      &lt;/xs:restriction&gt;<a name="wp1036657"> </a>
+    &lt;/xs:simpleType&gt;<a name="wp1036658"> </a>
+  &lt;/xs:element&gt;<a name="wp1036659"> </a>
+<a name="wp1036660"> </a>
+  &lt;xs:element name=&quot;PRODUCT&quot;&gt;<a name="wp1036661"> </a>
+    &lt;xs:simpleType&gt;<a name="wp1036662"> </a>
+      &lt;xs:restriction base=&quot;xs:string&quot;&gt;<a name="wp1036663"> </a>
+        &lt;xs:maxLength value=&quot;12&quot;/&gt;<a name="wp1036664"> </a>
+      &lt;/xs:restriction&gt;<a name="wp1036665"> </a>
+    &lt;/xs:simpleType&gt;<a name="wp1036666"> </a>
+  &lt;/xs:element&gt;<a name="wp1036667"> </a>
+<a name="wp1036668"> </a>
+  &lt;xs:element name=&quot;NUMBER&quot;&gt;<a name="wp1036669"> </a>
+    &lt;xs:simpleType&gt;<a name="wp1036670"> </a>
+      &lt;xs:restriction base=&quot;xs:integer&quot;&gt;<a name="wp1036671"> </a>
+        &lt;xs:totalDigits value=&quot;2&quot;/&gt;<a name="wp1036672"> </a>
+      &lt;/xs:restriction&gt;<a name="wp1036673"> </a>
+    &lt;/xs:simpleType&gt;<a name="wp1036674"> </a>
+  &lt;/xs:element&gt;<a name="wp1036675"> </a>
+<a name="wp1036676"> </a>
+  &lt;xs:element name=&quot;PRICE&quot;&gt;<a name="wp1036677"> </a>
+    &lt;xs:simpleType&gt;<a name="wp1036678"> </a>
+      &lt;xs:restriction base=&quot;xs:string&quot;&gt;<a name="wp1036679"> </a>
+        &lt;xs:maxLength value=&quot;4&quot;/&gt;<a name="wp1036680"> </a>
+      &lt;/xs:restriction&gt;<a name="wp1036681"> </a>
+    &lt;/xs:simpleType&gt;<a name="wp1036682"> </a>
+  &lt;/xs:element&gt;<a name="wp1036683"> </a>
+<a name="wp1036684"> </a>
+  &lt;xs:element name=&quot;CHARGEACCT&quot;&gt;<a name="wp1036685"> </a>
+    &lt;xs:simpleType&gt;<a name="wp1036686"> </a>
+      &lt;xs:restriction base=&quot;xs:string&quot;&gt;<a name="wp1036687"> </a>
+        &lt;xs:maxLength value=&quot;19&quot;/&gt;<a name="wp1036688"> </a>
+      &lt;/xs:restriction&gt;<a name="wp1036689"> </a>
+    &lt;/xs:simpleType&gt;<a name="wp1036690"> </a>
+  &lt;/xs:element&gt;<a name="wp1036691"> </a>
+<a name="wp1036692"> </a>
+  &lt;xs:element name=&quot;SAMPLE&quot;&gt;<a name="wp1036693"> </a>
+    &lt;xs:simpleType&gt;<a name="wp1036694"> </a>
+      &lt;xs:restriction base=&quot;xs:integer&quot;&gt;<a name="wp1036695"> </a>
+        &lt;xs:totalDigits value=&quot;1&quot;/&gt;<a name="wp1036696"> </a>
+      &lt;/xs:restriction&gt;<a name="wp1036697"> </a>
+    &lt;/xs:simpleType&gt;<a name="wp1036698"> </a>
+  &lt;/xs:element&gt;<a name="wp1036699"> </a>
+<a name="wp1036700"> </a>
+&lt;/xs:schema&gt;<a name="wp1036701"> </a>
+</pre></div>
+<a name="wp1036702"> </a><p class="pBody">
+ACUCOBOL-GT applications can read and write any type of XML data.  Typically, the party with whom you are exchanging data will require that the data include a DTD.  Occasionally, they may require a schema for their own development work.  
+</p>
+<a name="wp1036703"> </a><p class="pBody">
+With AcuXML, you can specify the type of XML output that you want to generate.  You use the configuration variable AXML_CREATE_STYLE.  If you want the output to include a schema, you set AXML_CREATE_STYLE to &quot;schema&quot;, and then use another configuration variable to define the schema name (AXML_SCHEMA_NAME).  By default, a schema is then created each time ACUCOBOL-GT generates XML output.  To prevent this for subsequent output, you can set a third configuration variable, AXML_CREATE_SCHEMA, to &quot;false&quot;, then just the name of the schema file is included.  Configuration variables are described in Appendix H in <em class="cEmphasis">ACUCOBOL-GT Appendices</em>.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

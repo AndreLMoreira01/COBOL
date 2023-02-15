@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>WAIT Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1042871"> </a><h2 class="pHeading2">
+WAIT Statement
+</h2>
+<a name="wp1042875"> </a><p class="pBody">
+ The WAIT statement synchronizes operations between threads.
+</p>
+<a name="wp1042877"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">WAIT</u> <u class="cUnderline">FOR</u> { THREAD thread-ID           }<a name="wp1042878"> </a>
+         { <u class="cUnderline">LAST</u> <u class="cUnderline">THREAD</u>                }<a name="wp1042879"> </a>
+         { <u class="cUnderline">ANY</u> <u class="cUnderline">THREAD</u>                 }<a name="wp1042880"> </a>
+</pre></div>
+<a name="wp1042881"> </a><p class="pBody">
+Remaining phrases are optional, can appear in any order.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ { <u class="cUnderline">BEFORE</u> TIME timeout }<a name="wp1042882"> </a>
+ { <u class="cUnderline">TEST</u> <u class="cUnderline">ONLY</u>           }<a name="wp1042883"> </a>
+<a name="wp1042884"> </a>
+ <u class="cUnderline">THREAD</u> IN thread-2<a name="wp1042885"> </a>
+<a name="wp1042886"> </a>
+ <u class="cUnderline">SIZE</u> IN size-item<a name="wp1042887"> </a>
+<a name="wp1042888"> </a>
+ <u class="cUnderline">STATUS</u> IN status-item<a name="wp1042889"> </a>
+ [ ON <u class="cUnderline">EXCEPTION</u> statement-1 ]<a name="wp1042890"> </a>
+<a name="wp1042891"> </a>
+ [ <u class="cUnderline">NOT</u> ON <u class="cUnderline">EXCEPTION</u> statement-2 ]<a name="wp1042892"> </a>
+<a name="wp1042893"> </a>
+ [ <u class="cUnderline">END-WAIT</u> ]<a name="wp1042894"> </a>
+</pre></div>
+<a name="wp1042896"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042897"> </a><div class="pSmartList1"><li><em class="cEmphasis">Thread-ID </em>and <em class="cEmphasis">thread-2 </em>are usage HANDLE or HANDLE OF THREAD data items.  <em class="cEmphasis">Thread-2</em> may not be indexed or reference modified. </li></div>
+<a name="wp1042898"> </a><div class="pSmartList1"><li><em class="cEmphasis">Timeout</em> is a numeric literal or data item.  </li></div>
+<a name="wp1042899"> </a><div class="pSmartList1"><li><em class="cEmphasis">Size-item</em> is a numeric data item.  It may not be indexed or reference modified.</li></div>
+<a name="wp1042900"> </a><div class="pSmartList1"><li><em class="cEmphasis">Status-item</em> is a two-character group item, PIC XX, or PIC 99 data item.  It may not be indexed or reference modified.  </li></div>
+<a name="wp1042901"> </a><div class="pSmartList1"><li><em class="cEmphasis">Statement-1</em> and <em class="cEmphasis">statement-2</em> are any imperative statements.  </li></div>
+</ol></div>
+<a name="wp1042903"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042904"> </a><div class="pSmartList1"><li>The WAIT statement waits for a thread to terminate or send a message.  The thread waited on is determined as follows:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1042905"> </a><div class="pSmartList2"><li>FOR THREAD <em class="cEmphasis">thread-ID </em>specifies the thread identified by <em class="cEmphasis">thread-ID.</em></li></div>
+<a name="wp1042906"> </a><div class="pSmartList2"><li>FOR LAST THREAD specifies the <em class="cEmphasis">last</em> thread (see section 6.8.1, Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide</em> for a discussion of the <em class="cEmphasis">last</em> thread). </li></div>
+<a name="wp1042909"> </a><div class="pSmartList2"><li>FOR ANY THREAD specifies all threads.  The first one to terminate or send a message satisfies the WAIT statement  </li></div>
+</ol></div>
+<a name="wp1042912"> </a><div class="pSmartList1"><li>If a message is available when the WAIT statement executes, then WAIT statement finishes immediately.  </li></div>
+<a name="wp1042913"> </a><div class="pSmartList1"><li>When BEFORE TIME is specified, the WAIT statement will time-out after the specified <em class="cEmphasis">(timeout) </em>number of hundredths of seconds.  If the WAIT statement times out before receiving a message, it terminates with an exception condition and it does not modify <em class="cEmphasis">thread-2</em> or <em class="cEmphasis">size-item</em>.  If <em class="cEmphasis">timeout</em> is zero, then the WAIT statement times-out immediately if a message is not available.  Specifying TEST ONLY is equivalent to specifying a <em class="cEmphasis">timeout</em> value of zero. </li></div>
+<a name="wp1042915"> </a><div class="pSmartList1"><li>If the thread waited for does not exist or terminates before sending a message, then the WAIT statement terminates with an exception condition and does not modify <em class="cEmphasis">size-item</em>.  Such a condition is reflected in the status code placed in <em class="cEmphasis">status-item</em>.  <b style="font-weight: normal" class="cBold">Note</b> that the test occurs before the time-out test in the case that <em class="cEmphasis">timeout</em> is zero or TEST ONLY is specified.  </li></div>
+<a name="wp1042916"> </a><div class="pSmartList1"><li>The WAIT statement places the thread ID of the sending or terminating thread in <em class="cEmphasis">thread-2</em>.</li></div>
+<a name="wp1042917"> </a><div class="pSmartList1"><li>The size of the message sent is placed in <em class="cEmphasis">size-item</em>.  The size is expressed in standard character positions (bytes).  </li></div>
+<a name="wp1042918"> </a><div class="pSmartList1"><li>The status of the WAIT statement is placed in <em class="cEmphasis">status-item</em>.  The following values are possible (these approximate the standard file status codes):</li></div>
+<a name="wp1066693"> </a><p class="pBodyRelative">
+<div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1066706"> </a><p class="pCellBody">
+&quot;00&quot;
+</p>
+</td>
+    <td><a name="wp1066708"> </a><p class="pCellBody">
+Success - message received
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066710"> </a><p class="pCellBody">
+&quot;10&quot;
+</p>
+</td>
+    <td><a name="wp1066712"> </a><p class="pCellBody">
+Exception - thread does not exist or terminated
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066714"> </a><p class="pCellBody">
+&quot;99&quot;
+</p>
+</td>
+    <td><a name="wp1066716"> </a><p class="pCellBody">
+Exception - timed-out
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1042922"> </a><div class="pSmartList1"><li>If the WAIT statement is successful (as indicated in rule 7), it executes <em class="cEmphasis">statement-1</em>.  If an exception condition exists, it executes <em class="cEmphasis">statement-2</em> instead.  </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

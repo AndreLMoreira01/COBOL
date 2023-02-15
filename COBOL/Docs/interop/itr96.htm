@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:56" />
+  <title>9.4.1  Including the Transaction Gateway Routines in the Runtime</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr9.htm">Chapter 9: Working with Transaction Processing Systems</a> &gt; <a href="itr95.htm">9.4  Working with the IBM CICS Transaction Gateway</a> &gt; </p>
+<a name="wp1038254"> </a><h2 class="pHeading2">
+9.4.1  Including the Transaction Gateway Routines in the Runtime
+</h2>
+<a name="wp1038949"> </a><p class="pBody">
+For Windows systems, IBM may supply the Transaction Gateway library as a &quot;.lib&quot; file rather than a DLL.  As mentioned earlier, the Transaction Gateway routines must be linked into the ACUCOBOL-GT runtime.  The process uses the direct call method described in <a  href="itr6.htm#wp1064484">Chapter 6</a> of this guide.  
+</p>
+<a name="wp1041849"> </a><p class="pBody">
+To link the Transaction Gateway library into &quot;wrun32.dll&quot;, you must:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1038256"> </a><div class="pSmartList1"><li>Include the following lines in the file &quot;direct.c&quot;, located in the acugt\lib folder of your ACUCOBOL-GT installation.</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+extern short CICS_ExternalCall();<a name="wp1038257"> </a>
+extern short CICS_EciListSystems();<a name="wp1038258"> </a>
+struct DIRECTTABLE LIBDIRECT[] = {<a name="wp1038259"> </a>
+   { &quot;CICSEXTERNALCALL&quot;, FUNC CICS_ExternalCall, C_short },<a name="wp1038260"> </a>
+   { &quot;CICSECILISTSYSTEMS&quot;, FUNC CICS_EciListSystems, C_short },<a name="wp1038261"> </a>
+   { NULL, NULL, 0 }<a name="wp1038262"> </a>
+   };<a name="wp1042174"> </a>
+</pre></div>
+<a name="wp1042175"> </a><div class="pSmartList1"><li>Open Visual Studio .NET and load the solution file &quot;wrun32.sln&quot;, located in the acugt\lib folder. </li></div>
+<a name="wp1038265"> </a><div class="pSmartList1"><li>Open the <b class="cBold">Project/Properties</b> interface, expand the <b class="cBold">Linker</b> folder, and do the following:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1042356"> </a><div class="pSmartList2"><li>Select <b style="font-weight: bold" class="cBold">Input</b><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">, then </span>add the name of the Transaction Gateway library, &quot;cclwin32.lib&quot;,<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold"> </span><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">next to &quot;Additional Dependencies&quot;</span>.  </li></div>
+<a name="wp1042333"> </a><div class="pSmartList2"><li>Select <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">General</span> and add the path to &quot;cclwin32.lib&quot; on the &quot;Additional Library Directories&quot; line.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+C:\Program&#160;Files\IBM\IBM&#160;CICS&#160;Transaction&#160;Gateway\lib<a name="wp1038266"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1038267"> </a><div class="pSmartList1"><li>On the main menu bar, select <b class="cBold">Build/Rebuild Solution</b>.  This command recompiles all of the required files, including &quot;direct.c&quot;, and links &quot;cclwin32.lib&quot; into &quot;wrun32.dll&quot;.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

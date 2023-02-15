@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:25" />
+  <title>2.4.4  Converting indexed files</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch2-rm.htm">Chapter 2:  RM/COBOL Conversions</a> &gt; <a href="ch2-rm5.htm">2.4  Converting RM/COBOL Data Files</a> &gt; </p>
+<a name="wp1035271"> </a><h2 class="pHeading2">
+2.4.4  Converting indexed files
+</h2>
+<a name="wp1035389"> </a><p class="pBody">
+<b class="cBold">vutil</b> can convert an indexed file created by RM/COBOL-85 into a Vision file.  This is useful when you are moving data from an RM/COBOL-85 application to an ACUCOBOL-GT application.  The command is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">vutil</span>  -convert  [ -ac ]  [ +c ]  [ -f # ]  [ -2345 ]<a name="wp1035390"> </a>
+                 [ -q ]  [ -d <em style="font-style: normal" class="cEmphasis">dir </em>]  [ <em style="font-style: normal" class="cEmphasis">files </em>]<a name="wp1035391"> </a>
+</pre></div>
+<a name="wp1035392"> </a><p class="pBody">
+The &quot;convert&quot; option starts with the same letter as the &quot;check&quot; option described earlier.  You must use at least two letters of the word &quot;convert&quot; in order to specify this option.  If you just use &quot;-c&quot;, <b class="cBold">vutil</b> will assume that you are specifying the &quot;check&quot; option.
+</p>
+<a name="wp1035393"> </a><p class="pBody">
+The &quot;convert&quot; function will take each named <em style="font-style: normal" class="cEmphasis">file</em> and convert it from an RM/COBOL-85 indexed file to a corresponding Vision file.  The Vision file replaces the original RM/COBOL-85 file, so you should have a current backup of the original files.  If no <em style="font-style: normal" class="cEmphasis">files</em> are specified, then the standard input is read for a list of files to convert.
+</p>
+<a name="wp1035394"> </a><p class="pBody">
+Normally the resulting Vision file will be compressed if the original file has compressed records (this is the RM/COBOL-85 default).  Specifying the &quot;<b style="font-weight: normal" class="cBold">-c</b>&quot; option will cause the resulting file to have uncompressed records regardless of the original file; using &quot;<b style="font-weight: normal" class="cBold">+c</b>&quot; will cause the resulting records to be compressed.
+</p>
+<a name="wp1035396"> </a><p class="pBody">
+The &quot;<b style="font-weight: normal" class="cBold">-f #</b>&quot; option sets the compression factor to be used when the file is converted.  This option does not force the use of compression, it merely sets the compression factor if compression is used.  The compression factor, a numeric literal, specifies how much of the space saved by compression is actually to be removed from the record. 
+</p>
+<a name="wp1035397"> </a><p class="pBody">
+Normally <b class="cBold">vutil</b> will warn the user about the impending conversion and ask if he or she wants to continue.  The &quot;<b style="font-weight: normal" class="cBold">-a</b>&quot; (for &quot;automatic&quot;) option suppresses this warning.  This can be useful when you are calling <b class="cBold">vutil</b> from another program.
+</p>
+<a name="wp1035398"> </a><p class="pBody">
+The &quot;<b style="font-weight: normal" class="cBold">-5</b>&quot; option specifies that you want the resulting file to be in Vision Version 5.  The &quot;<b style="font-weight: normal" class="cBold">-4</b>&quot; option specifies a Vision Version 4 file.  A &quot;<b style="font-weight: normal" class="cBold">-3</b>&quot; means you want a Version 3 file, and <b style="font-weight: normal" class="cBold">&quot;-2</b>&quot; means you want a Version 2 file.  
+</p>
+<a name="wp1035399"> </a><p class="pBody">
+The &quot;<b style="font-weight: normal" class="cBold">-d</b>&quot; option specifies that you want the converted files to be placed in a new directory.  <em style="font-style: normal" class="cEmphasis">Dir</em> should be the name of a directory on the machine other than the directory containing the files to be converted.  When &quot;-d&quot; is specified, the original files are not destroyed.  Instead, the converted files are placed in <em style="font-style: normal" class="cEmphasis">dir</em>.  The &quot;-d&quot; option implies the &quot;-a&quot; option.
+</p>
+<a name="wp1035400"> </a><p class="pBody">
+The &quot;<b style="font-weight: normal" class="cBold">-q</b>&quot; option causes <b class="cBold">vutil</b> to exit (with status 99) if user interaction is required.
+</p>
+<a name="wp1035401"> </a><p class="pBody">
+There are a few types of files that cannot be converted due to restrictions in Vision.  Any of the following properties will cause <b class="cBold">vutil</b> to print a message and leave the file alone:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035402"> </a><div class="pSmartList1"><li>A record size or block size greater than 32 KB.</li></div>
+<a name="wp1035403"> </a><div class="pSmartList1"><li>More than 120 keys.</li></div>
+<a name="wp1035404"> </a><div class="pSmartList1"><li>An individual key with more than 250 bytes in it.</li></div>
+<a name="wp1035405"> </a><div class="pSmartList1"><li>A non-ASCII code-set or collating sequence.</li></div>
+</ol></div>
+<a name="wp1035406"> </a><p class="pBody">
+Some files cannot be converted due to unresolved format differences.  A file with split keys cannot be converted for this reason.  
+</p>
+<a name="wp1035407"> </a><p class="pBody">
+If the original file has variable size records, <b class="cBold">vutil</b> will convert these to fixed size records with space padding.  These files should be compressed to keep disk usage down.
+</p>
+<a name="wp1035408"> </a><p class="pBody">
+<b class="cBold">vutil</b> makes a copy of the file while it is converting it.  You must have adequate disk space for <b class="cBold">vutil</b> to complete its conversion.  Also, RM/COBOL-85 indexed files and Vision files differ in the amount of disk space they use.  This difference is fairly unpredictable and can vary quite widely.  Sometimes the Vision files are smaller, and sometimes the RM/COBOL-85 files are smaller.  Be sure to have plenty of spare disk space when you start converting files to accommodate the potential difference.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

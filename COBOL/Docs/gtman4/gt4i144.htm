@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-SET-JOB</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1039983"> </a><h2 class="pHeading3">
+WINPRINT-SET-JOB
+</h2>
+<a name="wp1039985"> </a><p class="pBody">
+This operation code returns the identifier of the job that is currently spooling into the printer.  The ID number returned by this operation will be compatible with, and may be used in conjunction with, the operations WINPRINT-SET-JOB-STATUS and WINPRINT-GET-JOB-STATUS. 
+</p>
+<a name="wp1039989"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot; <a name="wp1039990"> </a>
+    USING WINPRINT-SET-JOB JOB-ID<a name="wp1039991"> </a>
+    GIVING PRINT-JOB.<a name="wp1039992"> </a>
+</pre></div>
+<a name="wp1039993"> </a><h3 class="pHeadingRef">
+Return Values
+</h3>
+<a name="wp1039994"> </a><p class="pBody">
+If you set JOB-ID to &quot;0&quot;, WINPRINT-SET-JOB returns the identifier of the job that is currently spooling into the printer (PRINT-JOB).  You can then use that number to tell WIN$PRINTER operations which print job is the target.  This is your only way to obtain the ID of a job. To restore the system default settings, simply call this operation with a JOB-ID of &quot;-1&quot;.  
+</p>
+<a name="wp1039995"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1039997"> </a><p class="pBody">
+This call should be issued immediately after the opening of a job.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+OPEN OUTPUT FIRST-FILE.<a name="wp1039998"> </a>
+CALL &quot;WIN$PRINTER&quot; USING WINPRINT-SET-JOB JOB-ID GIVING 
+FIRST-ID.<a name="wp1039999"> </a>
+</pre></div>
+<a name="wp1040000"> </a><p class="pBody">
+where FIRST-ID is a variable declared signed-integer, such as:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77 FIRST-ID USAGE SIGNED-INT.<a name="wp1040001"> </a>
+</pre></div>
+<a name="wp1040002"> </a><p class="pBody">
+Subsequent calls to WIN$PRINTER may use FIRST-ID to identify the target for the next action, as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+      OPEN    OUTPUT           FIRST-FILE.<a name="wp1040003"> </a>
+      CALL    &quot;WIN$PRINTER&quot;    USING<a name="wp1040004"> </a>
+              WINPRINT-SET-JOB 0<a name="wp1040005"> </a>
+              GIVING           FIRST-ID.<a name="wp1040006"> </a>
+      OPEN    OUTPUT           SECOND-FILE. | Is now current.<a name="wp1040007"> </a>
+*Initialize the print record for the first print job.<a name="wp1040008"> </a>
+      MOVE    &quot;This is job 1, printed with MS Sans Serif.&quot; TO<a name="wp1040009"> </a>
+              RECORD-FILE-1.<a name="wp1040010"> </a>
+*Initialize the print record for the second print job.<a name="wp1040011"> </a>
+      MOVE    &quot;This is job 2, printed with Script.&quot; TO<a name="wp1040012"> </a>
+              RECORD-FILE-2.<a name="wp1040013"> </a>
+*Set active job to the first print job.<a name="wp1040014"> </a>
+      CALL    &quot;WIN$PRINTER&quot;    USING<a name="wp1040015"> </a>
+              WINPRINT-SET-JOB FIRST-ID.<a name="wp1040016"> </a>
+*Set the preferred font for the first print job.<a name="wp1040017"> </a>
+      INITIALIZE               WINPRINT-DATA.<a name="wp1040018"> </a>
+      MOVE    FIRST-FONT       TO WPRTDATA-FONT.<a name="wp1040019"> </a>
+      CALL    &quot;WIN$PRINTER&quot;    USING<a name="wp1040020"> </a>
+              WINPRINT-SET-FONT<a name="wp1040021"> </a>
+              WINPRINT-DATA.<a name="wp1040022"> </a>
+</pre></div>
+<a name="wp1149254"> </a><p class="pBody">
+If you try to perform an operation that requires an active print job and there is none, an error status is returned. This series of calls can be used with all WIN$PRINTER functions, with the following exceptions:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1040024"> </a><div class="pSmartList1"><li>The status of a printer cannot be determined using WINPRINT-GET-PRINTER-STATUS or WINPRINT-GET-JOB-STATUS unless the print job has already started.  This is because the port monitor must both detect a print error and report it to the printer queue before it can be recognized by WIN$PRINTER functions.  </li></div>
+<a name="wp1040025"> </a><div class="pSmartList1"><li>Due to a limitation in the Microsoft Windows API, computers that run Windows 9x (Windows 98, and Windows ME) do not return the spooler job ID when opening a print job.  This means that you cannot use the WINPRINT-GET-JOB-STATUS and WINPRINT-SET-JOB-STATUS operations of the WIN$PRINTER library routine on these machines.  (These operations are used to check and modify the status of a particular printer.)</li></div>
+</ul></div>
+<a name="wp1040027"> </a><p class="pBody">
+When you are printing multiple jobs simultaneously, you should not set a printer font before the print job has been opened because the font could be applied to the wrong job.  Once the print job is opened, you may set the font, using the JOB-ID of the target printer. 
+</p>
+<a name="wp1149248"> </a><p class="pBody">
+However, if you need to change the printer settings for subsequent job on a different printer, you should set JOB-ID to &quot;-1&quot; before setting WINPRINT-SET-SETTINGS or WINPRINT-SET-PRINTER(-EX).  This causes WINPRINT-SET-JOB to return the ID number of the next job in the queue (after the current job).  This should be done just prior to calling an OPEN statement.  When JOB-ID is set to &quot;-1&quot;, the runtime executes the next WIN$PRINTER operation as if no current job were printing.  This does not affect existing jobs, but it affects the status of subsequent jobs, unless it is an OPEN, WRITE, or CLOSE statement.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

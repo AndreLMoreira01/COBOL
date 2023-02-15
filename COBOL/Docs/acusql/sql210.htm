@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:35:43" />
+  <title>2.3.2  SQL INCLUDE files</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql2.htm">Chapter 2: Program Preparation</a> &gt; <a href="sql28.htm">2.3  Data Division</a> &gt; </p>
+<a name="wp1033927"> </a><h2 class="pHeading2">
+2.3.2  SQL INCLUDE files
+</h2>
+<a name="wp1033929"> </a><p class="pBody">
+You can include files of terminal or ANSI format in your ESQL source by using the SQL INCLUDE statement.
+</p>
+<a name="wp1033930"> </a><p class="pBody">
+The standard SQLCA and SQLDA INCLUDE files are built into the pre-compiler and are included whenever they are named in the source, as in:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*  Include the SQL Communications Area (SQLCA)<a name="wp1033931"> </a>
+   EXEC SQL INCLUDE SQLCA END-EXEC.<a name="wp1033932"> </a>
+</pre></div>
+<a name="wp1033933"> </a><p class="pBody">
+These files include specific adaptations for AcuSQL.  <em class="cEmphasis">Do not attempt to substitute other versions of these files.</em>
+</p>
+<a name="wp1033934"> </a><p class="pBody">
+User-defined INCLUDE files must begin with an SQL BEGIN DECLARE statement and end with an SQL END DECLARE statement if the code is to be used as ESQL code.  Variables not within the BEGIN/END DECLARE section cannot be used as host variables.  They can still be used as &quot;local&quot; variables.  See <a  href="sql211.htm#wp1033983">section 2.3.3, &quot;Host Variables,&quot;</a> for additional information. 
+</p>
+<a name="wp1037100"> </a><p class="pBody">
+In statements of the form:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+EXEC SQL INCLUDE <em class="cEmphasis">filename</em> END-EXEC.<a name="wp1033936"> </a>
+</pre></div>
+<a name="wp1033937"> </a><p class="pBody">
+the compiler adds to <em class="cEmphasis">filename</em> the standard file extension for COBOL source files (the default is &quot;.cbl&quot;).  To specify another extension, or to exclude an extension, <em class="cEmphasis">filename</em> must be enclosed in either single or double quotation marks.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+EXEC SQL INCLUDE &#39;SQLCOPYBOOK&#39; END-EXEC.<a name="wp1033938"> </a>
+</pre></div>
+<a name="wp1033939"> </a><p class="pBody">
+If the user-defined INCLUDE files do not reside in the current directory, you must indicate where they're located using the &quot;-Pi&quot; compiler option or ACUSQL_INCLUDE environment variable.
+</p>
+<a name="wp1033940"> </a><h3 class="pHeadingRef">
+SQL Communications Area (SQLCA)
+</h3>
+<a name="wp1037560"> </a><p class="pBody">
+The SQLCA is a COBOL group item that is used to provide information to your ESQL/COBOL program.  The SQLCA contains data items for error checking, warnings, and status information that is updated whenever an ESQL statement is executed.  Your COBOL program can check this structure after each ESQL operation or in a centralized error-checking routine if you are using the WHENEVER directive in your application.  See <a  href="sql225.htm#wp1034654">section 2.7</a> and <a  href="sql55.htm#wp1040445">section 5.3.1</a> for information on the WHENEVER directive.  
+</p>
+<a name="wp1037569"> </a><p class="pBody">
+The field most commonly used in the SQLCA group item is SQLCODE, which contains the status of the last statement executed.  SQLCODE can contain the following values:
+</p>
+<a name="wp1038687"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1038676"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1038678"> </a><p class="pCellBody">
+The executed statement succeeded without an error or warning.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038680"> </a><p class="pCellBody">
+&gt;0<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1038682"> </a><p class="pCellBody">
+The executed statement succeeded, but there was a warning.  Check the other fields in the SQLCA structure to determine the nature of the warning.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038684"> </a><p class="pCellBody">
+&lt;0
+</p>
+</td>
+    <td><a name="wp1038686"> </a><p class="pCellBody">
+The executed statement encountered an error.  Check the other fields in the SQLCA structure to determine the nature of the error.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1038691"> </a><p class="pBody">
+If SQLCODE contains a non-zero value, your application can check the value of SQLERRMC for the text associated with the error or warning, and, when appropriate, display that text as an error message or warning.
+</p>
+<a name="wp1033952"> </a><h3 class="pHeadingRef">
+SQL Descriptor Area (SQLDA)
+</h3>
+<a name="wp1033956"> </a><p class="pBody">
+The SQLDA is a COBOL group item used in performing dynamic SQL operations.  SQLDA is used to store information about the input and output variables of dynamically prepared SQL statements.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

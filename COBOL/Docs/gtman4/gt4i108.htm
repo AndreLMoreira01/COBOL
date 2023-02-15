@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>REG_OPEN_KEY_EX, DISPLAY_REG_OPEN_KEY_EX Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1037858"> </a><h2 class="pHeading2">
+REG_OPEN_KEY_EX, DISPLAY_REG_OPEN_KEY_EX Routine
+</h2>
+<a name="wp1037864"> </a><p class="pBody">
+Opens a specified registry key by accessing the Windows registry routine &quot;RegOpenKeyEx&quot;.  
+</p>
+<a name="wp1207154"> </a><p class="pBody">
+Use DISPLAY_REG_OPEN_KEY_EX to perform the action on the display host's registry (the local host when the application is run with a standard runtime; the <em class="cEmphasis">thin client</em> when the application is run with the thin client).  Use REG_OPEN_KEY_EX to perform the action on the server host's registry (the local host when the application is run with a standard runtime, and the application host when the application is run with the thin client).
+</p>
+<a name="wp1037865"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;REG_OPEN_KEY_EX&quot; <a name="wp1037866"> </a>
+    USING OPEN-KEY-HANDLE, SUBKEY-TO-BE-OPENED, SAM-DESIRED, <a name="wp1037867"> </a>
+        SUBKEY-HANDLE, <a name="wp1037870"> </a>
+    GIVING STATUS-CODE<a name="wp1037871"> </a>
+</pre></div>
+<a name="wp1037872"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1037873"> </a><p class="pBody">
+<b class="cBold">OPEN-KEY-HANDLE</b>  Usage unsigned-long
+</p>
+<a name="wp1037874"> </a><p class="pBody">
+Handle of a currently open key or one of the following predefined handles of keys that are always open (defined in &quot;acugui.def&quot;):
+</p>
+<a name="wp1037875"> </a><p class="pBody">
+HKEY_CLASSES_ROOT
+</p>
+<a name="wp1037876"> </a><p class="pBody">
+HKEY_CURRENT_USER
+</p>
+<a name="wp1037877"> </a><p class="pBody">
+HKEY_LOCAL_MACHINE
+</p>
+<a name="wp1037878"> </a><p class="pBody">
+HKEY_USERS
+</p>
+<a name="wp1037879"> </a><p class="pBody">
+<b class="cBold">SUBKEY-TO-BE-OPENED</b>  PIC  X(n)
+</p>
+<a name="wp1037880"> </a><p class="pBody">
+String containing the name of the key to open.  This key must be a subkey of the key identified by OPEN-KEY-HANDLE. 
+</p>
+<a name="wp1037881"> </a><p class="pBody">
+<b class="cBold">SAM-DESIRED</b>  Usage unsigned-long
+</p>
+<a name="wp1037882"> </a><p class="pBody">
+Specifies a security access mask (SAM) that describes the desired security access for the new key.  This parameter can be a combination of the following values (defined in &quot;acugui.def&quot;): 
+</p>
+<a name="wp1057877"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1057590"> </a>
+Value
+
+</th>
+    <th><a name="wp1057592"> </a>
+Meaning
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1057594"> </a><p class="pCellBody">
+KEY_ALL_ACCESS
+</p>
+</td>
+    <td><a name="wp1057596"> </a><p class="pCellBody">
+Combination of KEY_QUERY_VALUE, KEY_ENUMERATE_SUB_KEYS, KEY_NOTIFY, KEY_CREATE_SUB_KEY, KEY_CREATE_LINK, and KEY_SET_VALUE access.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1057598"> </a><p class="pCellBody">
+KEY_CREATE_LINK
+</p>
+</td>
+    <td><a name="wp1057600"> </a><p class="pCellBody">
+Permission to create a symbolic link.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1057602"> </a><p class="pCellBody">
+KEY_CREATE_SUB_KEY
+</p>
+</td>
+    <td><a name="wp1057604"> </a><p class="pCellBody">
+Permission to create subkeys.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1057606"> </a><p class="pCellBody">
+KEY_ENUMERATE_SUB_KEYS
+</p>
+</td>
+    <td><a name="wp1057608"> </a><p class="pCellBody">
+Permission to enumerate subkeys.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1057610"> </a><p class="pCellBody">
+KEY_EXECUTE
+</p>
+</td>
+    <td><a name="wp1057612"> </a><p class="pCellBody">
+Permission for read access.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1057614"> </a><p class="pCellBody">
+KEY_NOTIFY
+</p>
+</td>
+    <td><a name="wp1057616"> </a><p class="pCellBody">
+Permission for change notification.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1057618"> </a><p class="pCellBody">
+KEY_QUERY_VALUE
+</p>
+</td>
+    <td><a name="wp1057620"> </a><p class="pCellBody">
+Permission to query subkey data.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1057622"> </a><p class="pCellBody">
+KEY_READ
+</p>
+</td>
+    <td><a name="wp1057624"> </a><p class="pCellBody">
+Combination of KEY_QUERY_VALUE, KEY_ENUMERATE_SUB_KEYS, and KEY_NOTIFY access.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1057626"> </a><p class="pCellBody">
+KEY_SET_VALUE
+</p>
+</td>
+    <td><a name="wp1057628"> </a><p class="pCellBody">
+Permission to set subkey data.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1057630"> </a><p class="pCellBody">
+KEY_WRITE
+</p>
+</td>
+    <td><a name="wp1057632"> </a><p class="pCellBody">
+Combination of KEY_SET_VALUE and KEY_CREATE_SUB_KEY access.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1037929"> </a><p class="pBody">
+You may combine the above in COBOL by using the &quot;CBL_OR&quot; library routine.
+</p>
+<a name="wp1037930"> </a><p class="pBody">
+<b class="cBold">SUBKEY-HANDLE</b>   Usage unsigned-long
+</p>
+<a name="wp1037931"> </a><p class="pBody">
+Data item to receive the handle of the opened key.
+</p>
+<a name="wp1037932"> </a><p class="pBody">
+<b class="cBold">STATUS-CODE    </b>Numeric data item.
+</p>
+<a name="wp1037933"> </a><p class="pBody">
+Receives the return status of call to Microsoft's  &quot;RegOpenKeyEx&quot; function.  A return status of zero indicates success; non-zero indicates that an error occurred.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

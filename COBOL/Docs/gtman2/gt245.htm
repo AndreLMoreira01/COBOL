@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:31" />
+  <title>4.4  Styles and Special Properties</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt24.htm">Chapter 4:  Supporting Concepts and Related Issues</a> &gt; </p>
+<a name="wp1026119"> </a><h2 class="pHeading1">
+4.4  Styles and Special Properties
+</h2>
+<a name="wp1026122"> </a><p class="pBody">
+ACUCOBOL-GT utilizes a special type of COBOL identifier that is context-sensitive.  These are the <em class="cEmphasis">style</em> and <em class="cEmphasis">special property </em>names of controls.  Each type of control has a set of styles and special properties that apply to it.  If these names were reserved words in COBOL, there would be many new reserved words, making it likely that existing programs would have to be changed to be compiled with ACUCOBOL-GT.  Because more styles and special properties are expected in future versions, this proliferation of reserved words would create an ever-increasing problem.
+</p>
+<a name="wp1026123"> </a><p class="pBody">
+To address this issue, ACUCOBOL-GT does not reserve the style and special property names in the usual manner.  Instead, the compiler reserves them only when in the context of acting on a control of the proper type.  For example, when you are defining an entry-field control in the Screen Section, the style and special property names associated with entry fields are reserved.  At other times, they are not.  This allows you to declare variables and paragraphs with the same names as long as you do not try to refer to those items in a context where the reserved meaning would apply.  
+</p>
+<a name="wp1026124"> </a><p class="pBody">
+Style and special property names are reserved in the following four cases:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1026125"> </a><div class="pSmartList1"><li>When defining a Screen Section entry for a control;</li></div>
+<a name="wp1026126"> </a><div class="pSmartList1"><li>In the scope of a DISPLAY statement that creates a control;</li></div>
+<a name="wp1026127"> </a><div class="pSmartList1"><li>In the scope of a MODIFY statement that changes a control;</li></div>
+<a name="wp1026128"> </a><div class="pSmartList1"><li>In the scope of an INQUIRE statement that references a control.</li></div>
+</ol></div>
+<a name="wp1026129"> </a><p class="pBody">
+At all other times, the style and special property names are not reserved.  
+</p>
+<a name="wp1026130"> </a><p class="pBody">
+Since the compiler reserves only names that are appropriate for a particular type of control, it can recognize those names only when it knows what type of control is being acted on.  If the control class is generic (variable), then the compiler cannot determine which set of names to reserve, so it does not reserve any of them.  This leads to cases where the compiler cannot resolve seemingly correct code.  
+</p>
+<a name="wp1026131"> </a><p class="pBody">
+For example, MAX-TEXT is a special property name associated with entry fields.  The following code appears to be correct, but will not compile:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+77  FIELD-1  USAGE HANDLE.<a name="wp1026132"> </a>
+<a name="wp1026133"> </a>
+MODIFY FIELD-1, MAX-TEXT = 15.<a name="wp1026134"> </a>
+</pre></div>
+<a name="wp1026135"> </a><p class="pBody">
+In the above example, the compiler does not recognize MAX-TEXT as a meaningful word because it does not know that FIELD-1 is an entry field.  In order for this code to compile, you would have to change it to read:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+77  FIELD-1  USAGE HANDLE OF ENTRY-FIELD.<a name="wp1026136"> </a>
+<a name="wp1030675"> </a>
+MODIFY FIELD-1, MAX-TEXT = 15.<a name="wp1026137"> </a>
+</pre></div>
+<a name="wp1026138"> </a><p class="pBody">
+By declaring FIELD-1 as a handle to an entry field, you alert the compiler to use the style and special property names associated with entry fields whenever it is referenced.  
+</p>
+<a name="wp1026139"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Sometimes you might need to use generic handles in your code when you don't know at compile-time what kind of control will be needed during program execution.  In these cases, you can always use the alternative form of specifying styles and special properties.  In this form, you include the word &quot;STYLE&quot; or &quot;PROPERTY&quot; followed by the numeric value associated with the style or special property (the value can be a literal or stored in a variable).  Level 78 declarations for the style and special property names can be found in the file &quot;controls.def&quot;.  
+<hr />
+</p>
+<a name="wp1026140"> </a><p class="pBody">
+For example, the level 78 name that corresponds to MAX-TEXT is EFP-MAX-TEXT (&quot;EFP&quot; is short for <em class="cEmphasis">E</em>ntry <em class="cEmphasis">F</em>ield <em class="cEmphasis">P</em>roperty).  The following code is another way of coding the preceding example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+77  FIELD-1  USAGE HANDLE.<a name="wp1026141"> </a>
+<a name="wp1030680"> </a>
+MODIFY FIELD-1, PROPERTY EFP-MAX-TEXT = 15.<a name="wp1026142"> </a>
+</pre></div>
+<a name="wp1026143"> </a><p class="pBody">
+In most cases, you will probably use the style and special property names known by the compiler.  However, the advantage of using the values provided in &quot;controls.def&quot; is that you can assign them to variables that need to be set dynamically (at run time).
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

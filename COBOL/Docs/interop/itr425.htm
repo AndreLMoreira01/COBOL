@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:57:47" />
+  <title>4.20  AXDEFGEN Utility Reference</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr4.htm">Chapter 4: Using ActiveX Controls and COM Objects</a> &gt; </p>
+<a name="wp1038384"> </a><h2 class="pHeading1">
+4.20  AXDEFGEN Utility Reference
+</h2>
+<a name="wp1038390"> </a><p class="pBody">
+The ActiveX Definitions Generator (<b class="cBold">AXDEFGEN</b>) utility is a dialog-based application designed to facilitate the addition of ActiveX controls and COM objects to Windows-based ACUCOBOL-GT programs.  As mentioned in section 3.4.1, the role of <b class="cBold">AXDEFGEN</b> is to locate the names of ActiveX controls and COM objects currently registered on the system and generate a COBOL COPY file for the control or object that you select.  This COPY file is used by the ACUCOBOL-GT compiler for syntax and parameter type checking as well as efficient code generation.
+</p>
+<a name="wp1038391"> </a><p class="pBody">
+<b class="cBold">AXDEFGEN</b> is located in the \AcuGT\bin directory wherever you installed ACUCOBOL-GT on your machine.  If you run <b class="cBold">AXDEFGEN</b> without command-line parameters, a dialog box appears.
+</p>
+<a name="wp1038395"> </a><p class="pBodyRelative">
+</p><div><img src="images/axdefge2.gif" height="415" width="488" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1038396"> </a><p class="pBody">
+The dialog box has two tabs:  Components and Libraries.  The Components tab lists all ActiveX controls and other COM objects that have registered type libraries.  The items on this list are derived from the HKEY_CLASSES_ROOT\CLSID registry key and then matched by the Globally Unique IDentifier (GUID) of the type library against the HKEY_CLASSES_ROOT\TypeLib registry entries.  The Libraries tab contains a list of libraries derived directly from the HKEY_CLASSES_ROOT\TypeLib registry key.  Therefore, some items may appear under both tabs, and some items in the Libraries list may represent collections of items from the Components list.  <b class="cBold">AXDEFGEN</b> generates a COPY file for the entire type library, whether you select the library name from the Libraries list or the name of an individual component from the Components list. 
+</p>
+<a name="wp1038397"> </a><p class="pBody">
+Select the name of an ActiveX control or COM object that you want to include in your COBOL program, then browse to choose an output path and filename for the COPY file.  (The extension &quot;.def&quot; is automatically appended to the filename you specify.)  When done, click <b class="cBold">OK</b> to generate the COPY file.
+</p>
+<a name="wp1038398"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>To prevent compiler errors, <b class="cBold">AXDEFGEN</b> automatically converts any embedded spaces that it finds to hyphens when generating the COPY file, including spaces found in object methods, events, properties, parameters, and enumerators.
+<hr />
+</p>
+<a name="wp1038399"> </a><p class="pBody">
+Many ActiveX controls and COM objects have documentation available.  If they do, the ActiveX Help push button on the right side of this box is enabled.  Click the button to read the help file for the selected ActiveX control or COM object.  If the ActiveX Help push button is disabled, it means that <b class="cBold">AXDEFGEN</b> could not locate a help file for the selected control.
+</p>
+<a name="wp1038400"> </a><p class="pBody">
+If desired, you can execute AXDEFGEN from the command line.  It takes two optional command line parameters.  The first is the registry name of an ActiveX control or other COM object.  The second is the name of the COPY file you want AXDEFGEN to create. For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+AXDEFGEN MSCAL.Calendar cal.def<a name="wp1038401"> </a>
+</pre></div>
+<a name="wp1038402"> </a><p class="pBody">
+creates a COPY file named &quot;cal.def&quot; in the current directory containing the definitions for the Microsoft Calendar Control, which is an ActiveX control registered as &quot;MSCAL.Calendar&quot; in the system registry.  Likewise:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+AXDEFGEN Word.Application word.def<a name="wp1038403"> </a>
+</pre></div>
+<a name="wp1038404"> </a><p class="pBody">
+creates a COPY file named &quot;word.def&quot; in the current directory containing the definitions for Microsoft Word, which is registered as Word.Application in the system registry. 
+</p>
+<a name="wp1038405"> </a><p class="pBody">
+For more information on ActiveX and COM programming, including instructions on what to do with the COPY files generated by <b class="cBold">AXDEFGEN</b>, refer to <a  href="itr43.htm#wp1037506">section 4.2, &quot;Adding ActiveX Controls or COM Objects to Your COBOL Program.&quot;</a>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

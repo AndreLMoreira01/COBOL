@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:02" />
+  <title>A_ODBC_LOCK_METHOD</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gld.htm">Appendix D:  Acu4GL for ODBC Information </a> &gt; <a href="4gld15.htm">D.4  Acu4GL for ODBC Configuration File Variables</a> &gt; </p>
+<a name="wp1071814"> </a><h2 class="pHeading2">
+A_ODBC_LOCK_METHOD
+</h2>
+<a name="wp1047930"> </a><p class="pBody">
+Use this variable to specify the locking method that the Acu4GL product should use when accessing your data source.  Possible values are:
+</p>
+<a name="wp1047931"> </a><p class="pBody">
+<em class="cEmphasis">none<br /></em>SETPOS<br />SETSTMTOPTION<br />UPDATECOLUMN
+</p>
+<a name="wp1047932"> </a><h3 class="pHeadingRef">
+Example:
+</h3>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+A_ODBC_LOCK_METHOD UPDATECOLUMN<a name="wp1047933"> </a>
+</pre></div>
+<a name="wp1047934"> </a><p class="pBody">
+The default value is none, meaning that the Acu4GL product will do nothing special to lock your data.  This does not necessarily mean that your data won't be locked.  Locking depends mainly on your data source and driver.  No value simply tells Acu4GL for ODBC not to perform any locking functions.
+</p>
+<a name="wp1047935"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Please note that we cannot guarantee that setting this variable will have any effect for a particular ODBC driver.  Locking depends mainly on the data source and the driver.  You can use this variable to attempt to induce row locking.  If none of the settings cause any rows to be locked, or if the machine hangs, please report this behavior to Acucorp Technical Support.
+<hr />
+</p>
+<a name="wp1047936"> </a><h3 class="pHeadingRef">
+SETPOS
+</h3>
+<a name="wp1047938"> </a><p class="pBody">
+Specify SETPOS as your lock method to tell Acu4GL for ODBC to perform the following locking sequence:
+</p>
+<a name="wp1047939"> </a><p class="pBody">
+When setting up a statement handle for accessing the ODBC data source, the Acu4GL product calls a function called SQLSetScrollOptions, with values (SQL-CONCUR-LOCK, SQL-SCROLL-KEYSET-DRIVER, 1). 
+</p>
+<a name="wp1047940"> </a><p class="pBody">
+When fetching rows from the data source, the Acu4GL product calls SQLExtendedFetch instead of SQLFetch. 
+</p>
+<a name="wp1047941"> </a><p class="pBody">
+Finally, it calls SQLSetPos, with the values (1, SQL-POSITION, SQL-LOCK-EXCLUSIVE). 
+</p>
+<a name="wp1047942"> </a><p class="pBody">
+If any of these functions do not exist in the ODBC driver, then A_ODBC_LOCK_METHOD reverts to none.  
+</p>
+<a name="wp1047943"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Even if these functions do exist, there is no guarantee that any rows will be locked using this sequence of calls.  Contact your driver vendor to determine whether or not this sequence will be effective for your data source.  
+<hr />
+</p>
+<a name="wp1047944"> </a><h3 class="pHeadingRef">
+SETSTMTOPTION
+</h3>
+<a name="wp1047946"> </a><p class="pBody">
+Specify SETSTMTOPTION as your lock method for ODBC version 2.0 (and later) drivers.  This option is similar to SETPOS, except ODBC version 2 defines a new function called SQLSetStmtOption which performs the task of SQLSetScrollOptions, but has more functionality.
+</p>
+<a name="wp1047947"> </a><p class="pBody">
+In particular, when using this method of locking, the Acu4GL product will call SQLSetStmtOption a number of times, with values (SQL-CONCURRENCY, SQL-CONCUR-LOCK), (SQL-CURSOR-TYPES, SQL-CURSOR-KEYSET-DRIVEN), and (SQL_KEYSET-SIZE, 1).  Again, if the function does not exist, A_ODBC_LOCK_METHOD reverts to none.  
+</p>
+<a name="wp1047948"> </a><h3 class="pHeadingRef">
+UPDATECOLUMN
+</h3>
+<a name="wp1047950"> </a><p class="pBody">
+Specifying UPDATECOLUMN as your lock method performs an entirely different type of locking.  Instead of trying to lock a row while reading it, this method creates a new statement handle for the data source.  Then, after fetching the data from the data source, it resubmits an SQL query to select the same row (based on the primary key) and adds an UPDATE clause.  Last, it fetches the data from the data source.  Because this method has the most overhead, it is not recommended for slow drivers such as Microsoft Access, but it is much more likely to succeed in locking records.   
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

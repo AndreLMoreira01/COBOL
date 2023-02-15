@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:57" />
+  <title>A.9  Common Questions and Answers</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gla.htm">Appendix A:  Acu4GL for Informix Information </a> &gt; </p>
+<a name="wp1037731"> </a><h2 class="pHeading1">
+A.9  Common Questions and Answers
+</h2>
+<a name="wp1052430"> </a><p class="pBody">
+This section contains some questions and answers specific to Acu4GL for Informix.  Refer to <a  href="4gl10.htm#wp1038172">Chapter 10</a> for additional questions and answers that pertain to the Acu4GL family of products.
+</p>
+<a name="wp1037736"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1042016"> </a><p class="pBody">
+How do I create new databases?  
+</p>
+<a name="wp1037737"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1042095"> </a><p class="pBody">
+You have two choices.  You can use an Informix product, such as <b class="cBold">ISQL</b>, to create a new database, or you can use the program <b class="cBold">sql.acu</b> praovided with your Acu4GL product.
+</p>
+<a name="wp1037738"> </a><p class="pBody">
+To use the <b class="cBold">sql.acu </b>utility to create an empty database and grant access privileges to other users, enter the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+runcbl sql.acu<a name="wp1037739"> </a>
+</pre></div>
+<a name="wp1037740"> </a><p class="pBody">
+The program pauses to accept an SQL command.  Enter the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CREATE DATABASE database-name<a name="wp1037741"> </a>
+</pre></div>
+<a name="wp1037742"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If you want to use the transaction logging facility available in ACUCOBOL-GT, you must enable it for the database you are creating.  The precise SQL command depends on the Informix engine you are using, as shown below.
+<hr />
+</p>
+<a name="wp1037743"> </a><p class="pBody">
+For Informix-OnLine, enter the following command to use transaction logging:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CREATE DATABASE database-name WITH LOG;<a name="wp1037744"> </a>
+</pre></div>
+<a name="wp1037745"> </a><p class="pBody">
+For Informix-SE, enter the following command to use transaction logging:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CREATE DATABASE database-name WITH LOG IN <a name="wp1037746"> </a>
+   &#39;/acct/f1992/acct_log&#39;;<a name="wp1039110"> </a>
+</pre></div>
+<a name="wp1037747"> </a><p class="pBody">
+If you are using an Informix database with transactions enabled, you <em class="cEmphasis">must </em> use ACUCOBOL-GT's transaction management capabilities.  (Either use START TRANSACTION and COMMIT, or compile with &quot;-fs&quot;, or use the <b class="cBold">sql.acu</b> program to issue BEGIN WORK and COMMIT.)  Using a transaction-enabled database without ACUCOBOL-GT's transaction management capabilities results in the records not being locked and can generate error messages.
+</p>
+<a name="wp1037748"> </a><p class="pBody">
+The program pauses to accept an SQL command.  Now enter the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+GRANT DBA TO PUBLIC<a name="wp1037749"> </a>
+</pre></div>
+<a name="wp1037750"> </a><p class="pBody">
+Then press <b class="cBold">Enter</b> again to exit the program.
+</p>
+<a name="wp1037751"> </a><p class="pBody">
+The database name may be up to ten characters in length and must contain only letters, digits, and underscores.  The first character must be a letter.  
+</p>
+<a name="wp1042235"> </a><p class="pBody">
+The statement GRANT DBA TO PUBLIC gives the database administrator access privileges to all other users.
+</p>
+<a name="wp1042236"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1042279"> </a><p class="pBody">
+Is it possible to use both Informix-OnLine and Informix-SE on the same machine?
+</p>
+<a name="wp1042237"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1042321"> </a><p class="pBody">
+Yes.  You'll need to tell the runtime which database engine to use.  You do this by setting the environment variable SQLEXEC as shown here:
+</p>
+<a name="wp1037755"> </a><p class="pBody">
+Informix-OnLine
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SQLEXEC =  ${INFORMIXDIR}/lib/sqlturbo<a name="wp1037756"> </a>
+</pre></div>
+<a name="wp1037757"> </a><p class="pBody">
+Informix-SE
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SQLEXEC =  ${INFORMIXDIR}/lib/sqlexec<a name="wp1037758"> </a>
+</pre></div>
+<a name="wp1037759"> </a><p class="pBody">
+Setting SQLEXEC tells the Informix utility programs and the ACUCOBOL-GT runtime which engine to access.  This variable must be set before you execute the runtime.  Only one engine (either OnLine or SE) can be used for any given execution of the runtime.
+</p>
+<a name="wp1037760"> </a><p class="pBody">
+INFORMIXDIR is an environment variable that you must set to the location of your Informix product.
+</p>
+<a name="wp1037770"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1042390"> </a><p class="pBody">
+What files do I need in order to link my C routines into Acu4GL?
+</p>
+<a name="wp1037771"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1042447"> </a><p class="pBody">
+From your ACUCOBOL-GT runtime medium you need:
+</p>
+<a name="wp1037772"> </a><p class="pBody">
+sub.c<br />sub85.c<br />filetbl.c<br />config85.c<br />sub.h<br />libruncbl.a<br />libvision.a<br />libacuterm.a<br />clntstub.o    
+</p>
+<a name="wp1037773"> </a><p class="pBody">
+If you are using AcuServer(TM), instead of linking clntstub.o, see the relinking instructions in your <em class="cEmphasis">AcuServer User's Guide</em>.
+</p>
+<a name="wp1037774"> </a><p class="pBody">
+From your Acu4GL medium, you need all of the following that are present:
+</p>
+<a name="wp1037775"> </a><p class="pBody">
+infemb7.o - for version 7.2<br />infemb73.o - for version 7.3<br />infemb.oo - for version 5.1<br />inf.o<br />cur.o<br />* libsql.a<br />* libgen.a    <br />* libos.a      <br />* libasf.a  <br />* netlib.a  
+</p>
+<a name="wp1041598"> </a><p class="pBody">
+* These files are provided by Informix and should be located in the appropriate Informix directory.
+</p>
+<a name="wp1041599"> </a><p class="pBody">
+Instructions for linking are given in <a  href="4gla4.htm#wp1037047">section A.1.2, &quot;Installing the Acu4GL for Informix Product.&quot;</a>
+</p>
+<a name="wp1042615"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1042671"> </a><p class="pBody">
+I could not find the secondary error number for a 9D in the documentation.  What does the number mean?
+</p>
+<a name="wp1037784"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1042685"> </a><p class="pBody">
+The errors fall into three categories:
+</p>
+<a name="wp1042700"> </a><p class="pBody">
+01 - 99 are Acu4GL codes and are described in <a  href="4gla19.htm#wp1037581">section A.8</a> of this manual.
+</p>
+<a name="wp1042708"> </a><p class="pBody">
+100 - 199 are ISAM errors and are explained in Informix manuals.
+</p>
+<a name="wp1042713"> </a><p class="pBody">
+200 and up are Informix database errors and are explained in Informix manuals.
+</p>
+<a name="wp1037794"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1042945"> </a><p class="pBody">
+Can the Acu4GL for Informix product support a full date/time format?
+</p>
+<a name="wp1037795"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1042972"> </a><p class="pBody">
+The finest time granularity that Informix will support is one hundredths of a second.  In order to achieve this, you must be sure the code is correct in the <a  href="4gl48.htm#wp1034508">DATE</a> directive and specify a date-format-string in your COBOL application as opposed to just a date.  
+</p>
+<a name="wp1052961"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1043201"> </a><p class="pBody">
+Are there any ACUCOBOL-GT library routines that do not work with or would not make sense to use with Acu4GL for Informix?
+</p>
+<a name="wp1037850"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1043217"> </a><p class="pBody">
+Yes.  There are two ACUCOBOL-GT library routines that either don't work with or do not make sense to use with Acu4GL for Informix: C$COPY and C$RECOVER.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

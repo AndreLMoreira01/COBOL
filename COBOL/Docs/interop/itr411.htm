@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:57:47" />
+  <title>4.6  Name Clashes</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr4.htm">Chapter 4: Using ActiveX Controls and COM Objects</a> &gt; </p>
+<a name="wp1037880"> </a><h2 class="pHeading1">
+4.6  Name Clashes
+</h2>
+<a name="wp1037883"> </a><p class="pBody">
+An ActiveX control may have property, method, or event names that are the same as COBOL reserved words or ACUCOBOL-GT standard property or style names.  This situation creates ambiguity for the compiler.  In addition, because ActiveX class names are used in the USAGE HANDLE clause of data description entries, in Screen Section items, and in DISPLAY statements, they may also cause ambiguities with COBOL reserved words.  
+</p>
+<a name="wp1037884"> </a><p class="pBody">
+To avoid these ambiguities, <b class="cBold">AXDEFGEN</b> prepends an &quot;at&quot; sign character (&quot;@&quot;) to every class, property, method, and event name in the generated COPY file.  
+</p>
+<a name="wp1037885"> </a><p class="pBody">
+In addition, ambiguity may occur with event names when two or more ActiveX controls define the same event name.  To reduce this possibility, <b class="cBold">AXDEFGEN</b> prepends the control name to each event name.  For example, if an ActiveX control named &quot;MyControl&quot; has an event called &quot;RightMouseButtonClick&quot;, <b class="cBold">AXDEFGEN</b> names the control &quot;@MyControl&quot; and the event &quot;@MyControlRightMouseButtonClick&quot;.
+</p>
+<a name="wp1037886"> </a><p class="pBody">
+The &quot;@&quot; sign is not <em class="cEmphasis">required</em> unless ambiguities exist in the meaning in a certain context.  However, to guard against unanticipated name conflicts and to ensure clarity in the reading and maintenance of the source code, we strongly recommend that you always use &quot;@&quot; when referring to an ActiveX property, style, or method in your source code.  
+</p>
+<a name="wp1037887"> </a><p class="pBody">
+If you do not use an &quot;@&quot; sign and a clash occurs, a compiler error results.  For example, if you had a component named Editor that has a method Open, the following would cause a compiler error because Open clashes with ACUCOBOL-GT syntax:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+...<a name="wp1037888"> </a>
+77 hDocument HANDLE OF Editor.<a name="wp1037889"> </a>
+...<a name="wp1037890"> </a>
+PROCEDURE DIVISION.<a name="wp1037891"> </a>
+MAIN.<a name="wp1037892"> </a>
+     DISPLAY Editor LINE 1, COLUMN 1, LINES 10, SIZE 80,<a name="wp1037893"> </a>
+          HANDLE IN hDocument.<a name="wp1037894"> </a>
+     MODIFY hDocument Open(&quot;myfile.txt&quot;).<a name="wp1037895"> </a>
+...<a name="wp1037896"> </a>
+</pre></div>
+<a name="wp1037897"> </a><p class="pBody">
+To address this, prepend the method name with an &quot;@&quot; as shown below:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+...<a name="wp1037898"> </a>
+77 hDocument HANDLE OF Editor.<a name="wp1037899"> </a>
+...<a name="wp1037900"> </a>
+PROCEDURE DIVISION.<a name="wp1037901"> </a>
+MAIN.<a name="wp1037902"> </a>
+     DISPLAY Editor LINE 1, COLUMN 1, LINES 10, SIZE 80,<a name="wp1037903"> </a>
+          HANDLE IN hDocument.<a name="wp1037904"> </a>
+     MODIFY hDocument @Open(&quot;myfile.txt&quot;).<a name="wp1037905"> </a>
+...<a name="wp1037906"> </a>
+</pre></div>
+<a name="wp1037907"> </a><p class="pBody">
+If a class name immediately follows the level number in a Screen Section item, you must either use the &quot;@&quot; prefix or specify FILLER between the level number and class name.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

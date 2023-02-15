@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:02" />
+  <title>D.2.5  Acu4GL for ODBC: Designating the Host File System</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gld.htm">Appendix D:  Acu4GL for ODBC Information </a> &gt; <a href="4gld7.htm">D.2  Acu4GL for ODBC Installation and Setup </a> &gt; </p>
+<a name="wp1047755"> </a><h2 class="pHeading2">
+D.2.5  Acu4GL for ODBC: Designating the Host File System
+</h2>
+<a name="wp1047762"> </a><p class="pBody">
+Each time the COBOL application creates a <em class="cEmphasis">new</em> file, it needs to know which file system to use.  The runtime checks the file system to use when the file is opened.  You provide the name of the file system with one of two runtime configuration file variables; the first is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DEFAULT_HOST <em class="cEmphasis">filesystem</em><a name="wp1047763"> </a>
+</pre></div>
+<a name="wp1047764"> </a><p class="pBody">
+This will designate the file system to be used for newly created files that are not individually assigned.  For example,  
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DEFAULT_HOST ODBC<a name="wp1047765"> </a>
+</pre></div>
+<a name="wp1047766"> </a><p class="pBody">
+means that all new files will be ODBC files unless otherwise specified by the second configuration variable, which is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<em class="cEmphasis">filename</em>_HOST <em class="cEmphasis">filesystem</em><a name="wp1047767"> </a>
+</pre></div>
+<a name="wp1047768"> </a><p class="pBody">
+where <em class="cEmphasis">filename</em> is the file name, without any extension, named in the ASSIGN TO clause of your SELECT statement.  This configuration variable is used to assign an individual data file to a different file system.  Any file so assigned will use the designated file system, and not the one specified by DEFAULT<span style="font-family: Arial, Verdana, Helvetica, sans-serif">_</span>HOST.  For example,
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<em class="cEmphasis">myfile_</em>HOST VISION<a name="wp1047769"> </a>
+</pre></div>
+<a name="wp1047770"> </a><p class="pBody">
+means that <em class="cEmphasis">myfile</em> will be under the Vision file system. The ability to designate a different file system for certain files enables you to tailor your application to a specific customer's needs or to implement an incremental conversion for a customer.  With relational databases, this is particularly useful in that it allows you to tune an application for processing speed and resource requirements.  
+</p>
+<a name="wp1047771"> </a><p class="pBody">
+You can use these runtime configuration file entries in combination to assign your new files in a default with exceptions manner; for example, this set of entries: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+DEFAULT<em class="cEmphasis">_</em>HOST VISION<a name="wp1047772"> </a>
+<em class="cEmphasis">afile_</em>HOST ODBC<a name="wp1057290"> </a>
+<em class="cEmphasis">bfile_</em>HOST ODBC<a name="wp1057291"> </a>
+</pre></div>
+<a name="wp1047773"> </a><p class="pBody">
+means that all new files except <em class="cEmphasis">afile</em> and <em class="cEmphasis">bfile</em> will be assigned to Vision, and those two files will be assigned to ODBC.  
+</p>
+<a name="wp1047774"> </a><p class="pBody">
+You can also change the values of these variables during program execution by including in your code: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SET ENVIRONMENT &quot;<em class="cEmphasis">filename_</em>HOST&quot; TO <em class="cEmphasis">filesystem</em><a name="wp1047775"> </a>
+</pre></div>
+<a name="wp1047776"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SET ENVIRONMENT &quot;DEFAULT<em class="cEmphasis">_</em>HOST&quot; TO <em class="cEmphasis">filesystem</em><a name="wp1047777"> </a>
+</pre></div>
+<a name="wp1047778"> </a><p class="pBody">
+This enables you to change file systems during the execution of your program.  This is not the typical way to specify a file system; normally it is designated in the runtime configuration file and is not changed in the COBOL program. 
+</p>
+<a name="wp1047779"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The Acu4GL for ODBC product allows you to create an ODBC table with an OPEN OUTPUT statement, just as you can create Vision indexed files, if the data source driver allows for table creation.  The ODBC equivalent of a Vision file is a table, not a database.  You must create a database for your ODBC tables before you run the COBOL program that creates the tables, just as you must create a directory for your files before you run a COBOL program that creates Vision files.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

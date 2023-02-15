@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:31" />
+  <title>4.8.4.1  Resize manager LAYOUT-DATA values</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt24.htm">Chapter 4:  Supporting Concepts and Related Issues</a> &gt; <a href="gt2414.htm">4.8  Layout Managers</a> &gt; <a href="gt2419.htm">4.8.4  The Resize Layout Manager</a> &gt; </p>
+<a name="wp1031976"> </a><h2 class="pHeading3">
+4.8.4.1  Resize manager LAYOUT-DATA values
+</h2>
+<a name="wp1029515"> </a><p class="pBody">
+For the resize manager, a control's LAYOUT-DATA property may be a combination of any of the following values.  To combine values, simply add them together.  The names of the values come from the &quot;lmresize.def&quot; file.
+</p>
+<a name="wp1029516"> </a><h5 class="pHeading4">
+RLM-RESIZE-X (value 1)
+</h5>
+<a name="wp1029517"> </a><p class="pBody">
+This causes the control to be resized horizontally by an amount equal to the width of the current window width minus its design width.  This causes the control to grow and shrink horizontally as the window changes width.  This is frequently useful if you have a control such as a grid or a multi-line entry field in the middle of the window whose area you want to increase as the user grows the window.  
+</p>
+<a name="wp1029518"> </a><h5 class="pHeading4">
+RLM-MOVE-X (value 2)
+</h5>
+<a name="wp1029519"> </a><p class="pBody">
+This causes the control to reposition itself horizontally by an amount equal to the difference of the current window width and its design width.  This is useful when you have a control that you want to keep near the right edge of the window.  
+</p>
+<a name="wp1029520"> </a><h5 class="pHeading4">
+RLM-NO-MIN-X (value 4)
+</h5>
+<a name="wp1029521"> </a><p class="pBody">
+Without this, the resize manager will not reposition or resize a control horizontally to be less than its design values.  This prevents the control from disappearing or colliding with other controls if the user makes the window too small.  Instead, the control will extend off the edge of the window if the window is too small.  Specifying this value relaxes this rule and the control is allowed to become smaller than its design size or move to the left of its design position.  When you use this, you may want to use the MIN-SIZE window property to limit how narrow the user can make the window.  
+</p>
+<a name="wp1029522"> </a><h5 class="pHeading4">
+RLM-RESIZE-Y (value 16)
+</h5>
+<a name="wp1029523"> </a><p class="pBody">
+Similar to RLM-RESIZE-X, but it affects the vertical size of the control.  Only those controls whose height is specified in CELLS or PIXELS are affected.  Use this when you want to add more lines to a control such as a grid or list box when the user grows the window.  This setting has undefined effects when used for a control whose height does not use CELLS or PIXELS.  This may become defined in a future version, so you should avoid specifying this for controls that do not use CELLS or PIXELS.  
+</p>
+<a name="wp1029524"> </a><h5 class="pHeading4">
+RLM-MOVE-Y (value 32)
+</h5>
+<a name="wp1029525"> </a><p class="pBody">
+Similar to RLM-MOVE-X, except it affects the vertical position of the control.  This is useful when you want a control to stay near the bottom edge of the window.
+</p>
+<a name="wp1029526"> </a><h5 class="pHeading4">
+RLM-NO-MIN-Y (value 64)
+</h5>
+<a name="wp1029527"> </a><p class="pBody">
+Same as RLM-NO-MIN-X, except that it affects the vertical aspect of the control instead of the horizontal aspect.  
+</p>
+<a name="wp1029528"> </a><p class="pBody">
+The following are also found in &quot;lmresize.def&quot;.  These are not unique values, but useful combinations of the preceding values.
+</p>
+<a name="wp1029529"> </a><h5 class="pHeading4">
+RLM-RESIZE-X-ANY
+</h5>
+<a name="wp1029530"> </a><p class="pBody">
+Combines RLM-RESIZE-X and RLM-NO-MIN-X.  This combination allows for arbitrary resizing of the control horizontally.  
+</p>
+<a name="wp1029531"> </a><h5 class="pHeading4">
+RLM-MOVE-X-ANY
+</h5>
+<a name="wp1029532"> </a><p class="pBody">
+Combines RLM-MOVE-X and RLM-NO-MIN-X.  This combination allows for arbitrary repositioning of the control horizontally.  
+</p>
+<a name="wp1029533"> </a><h5 class="pHeading4">
+RLM-RESIZE-Y-ANY
+</h5>
+<a name="wp1029534"> </a><p class="pBody">
+Combines RLM-RESIZE-Y and RLM-NO-MIN-Y.  This combination allows for arbitrary resizing of the control vertically.  
+</p>
+<a name="wp1029535"> </a><h5 class="pHeading4">
+RLM-MOVE-Y-ANY
+</h5>
+<a name="wp1029536"> </a><p class="pBody">
+Combines RLM-MOVE-Y and RLM-NO-MIN-Y.  This combination allows for arbitrary repositioning of the control vertically.  
+</p>
+<a name="wp1029537"> </a><h5 class="pHeading4">
+RLM-RESIZE-BOTH
+</h5>
+<a name="wp1029538"> </a><p class="pBody">
+Combines RLM-RESIZE-X and RLM-RESIZE-Y.  This combination allows for the control to resize itself in both dimensions as the window is resized.
+</p>
+<a name="wp1029539"> </a><h5 class="pHeading4">
+RLM-RESIZE-BOTH-ANY
+</h5>
+<a name="wp1029540"> </a><p class="pBody">
+Combines  RLM-RESIZE-X-ANY and RLM-RESIZE-Y-ANY.  This combination allows the control to resize itself in both dimensions and without a minimum size.  
+</p>
+<a name="wp1029541"> </a><h5 class="pHeading4">
+RLM-MOVE-BOTH
+</h5>
+<a name="wp1029542"> </a><p class="pBody">
+Combines RLM-MOVE-X and RLM-MOVE-Y.  This combination keeps a control near the lower right corner of the window.  
+</p>
+<a name="wp1029543"> </a><h5 class="pHeading4">
+RLM-MOVE-BOTH-ANY
+</h5>
+<a name="wp1029544"> </a><p class="pBody">
+Combines RLM-MOVE-X-ANY and RLM-MOVE-Y-ANY.  This combination keeps a control near the lower right corner of the window, with no minimum position.  
+</p>
+<a name="wp1031814"> </a><p class="pBody">
+There are other useful combinations, but these are the most common ones.  
+</p>
+<a name="wp1029451"> </a><p class="pBody">
+
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

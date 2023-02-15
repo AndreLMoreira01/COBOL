@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:24" />
+  <title>3.8.5  Paged List Box Example</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt23.htm">Chapter 3:  Graphical Controls</a> &gt; <a href="gt2314.htm">3.8  Paged List Boxes</a> &gt; </p>
+<a name="wp1026493"> </a><h2 class="pHeading2">
+3.8.5  Paged List Box Example
+</h2>
+<a name="wp1026498"> </a><p class="pBody">
+The following partial program shows a full implementation of a paged list box.  Code that is incidental to the handling of the list box is omitted in the interest of brevity. 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+file-control.<a name="wp1026499"> </a>
+     select keywords-file<a name="wp1037482"> </a>
+         assign to &quot;techword.dat&quot;<a name="wp1037484"> </a>
+         organization is indexed<a name="wp1037486"> </a>
+         access mode is dynamic<a name="wp1037488"> </a>
+         record key is keyword-word<a name="wp1037490"> </a>
+         file status is keyword-status.<a name="wp1037492"> </a>
+<a name="wp1037494"> </a>
+file section.<a name="wp1026500"> </a>
+fd  keywords-file.<a name="wp1037496"> </a>
+01  keyword-record.<a name="wp1037498"> </a>
+    03  keyword-key.<a name="wp1037500"> </a>
+        05  keyword-word         pic x(15).<a name="wp1037502"> </a>
+        05  keyword-id           pic 9(7).<a name="wp1037504"> </a>
+<a name="wp1037506"> </a>
+working-storage section.<a name="wp1037508"> </a>
+<a name="wp1037510"> </a>
+78  list-box-lines               value 16.<a name="wp1037512"> </a>
+<a name="wp1037514"> </a>
+copy &quot;acucobol.def&quot;.<a name="wp1037516"> </a>
+copy &quot;acugui.def&quot;.<a name="wp1037518"> </a>
+<a name="wp1037520"> </a>
+77  keyword-status               pic xx.<a name="wp1037522"> </a>
+77  number-reads-needed          pic 99.<a name="wp1037524"> </a>
+<a name="wp1037526"> </a>
+* STATE-FLAG tracks where you are in the file.  <a name="wp1037528"> </a>
+* READING-FORWARDS indicates that the last read was <a name="wp1037530"> </a>
+* of the last record shown in the box.  <a name="wp1037532"> </a>
+* READING-BACKWARDS indicates that the last read <a name="wp1037534"> </a>
+* was of the first record in the box (via READ <a name="wp1037536"> </a>
+* PREVIOUS).  AT-START and AT-END handle special <a name="wp1037538"> </a>
+* cases when you reach either end of the file.<a name="wp1037540"> </a>
+<a name="wp1037546"> </a>
+77  state-flag                   pic x.<a name="wp1037552"> </a>
+    88  reading-forwards         value &quot;f&quot;.<a name="wp1037554"> </a>
+    88  reading-backwards        value &quot;b&quot;.<a name="wp1037556"> </a>
+    88  at-start                 value &quot;s&quot;.<a name="wp1037558"> </a>
+    88  at-end                   value &quot;e&quot;.<a name="wp1037560"> </a>
+<a name="wp1037562"> </a>
+77  list-data                    pic x(15).<a name="wp1037564"> </a>
+<a name="wp1037566"> </a>
+77  key-status <a name="wp1037568"> </a>
+    is special-names crt status  pic 9(4).<a name="wp1037570"> </a>
+<a name="wp1037572"> </a>
+* Note: although the program never directly <a name="wp1037574"> </a>
+* references the Screen Control data item, you have <a name="wp1037576"> </a>
+* to declare it anyway.  That is because &quot;notify&quot;<a name="wp1037578"> </a>
+* style events will set it to the proper value when <a name="wp1037580"> </a>
+* entering an EXCEPTION PROCEDURE.  The value <a name="wp1037582"> </a>
+* generated causes the controlling ACCEPT statement <a name="wp1037584"> </a>
+* to continue processing after the exception <a name="wp1037586"> </a>
+* procedure finishes.  If you omit SCREEN-CONTROL, <a name="wp1037588"> </a>
+* then the result is that you exit the ACCEPT after <a name="wp1037590"> </a>
+* the exception procedure completes.  <a name="wp1037592"> </a>
+<a name="wp1037594"> </a>
+01  screen-control<a name="wp1037596"> </a>
+    is special-names screen control.<a name="wp1037598"> </a>
+    03  accept-control            pic 9.<a name="wp1037600"> </a>
+    03  control-value             pic 999.<a name="wp1037602"> </a>
+<a name="wp1037604"> </a>
+01  event-status<a name="wp1037606"> </a>
+    is special-names event status.<a name="wp1037608"> </a>
+    03  event-type                pic x(4) comp-x.<a name="wp1037610"> </a>
+    03  event-window-handle       handle.<a name="wp1037612"> </a>
+    03  event-control-handle      handle.<a name="wp1037614"> </a>
+    03  event-control-id          pic x(2) comp-x.<a name="wp1037616"> </a>
+    03  event-data-1              signed-short.<a name="wp1037618"> </a>
+    03  event-data-2              signed-long<a name="wp1037620"> </a>
+    03  event-action              pic x comp-x.<a name="wp1037622"> </a>
+<a name="wp1037624"> </a>
+screen section.<a name="wp1037626"> </a>
+01  screen-1.<a name="wp1037628"> </a>
+    03  list-1, list-box using list-data, <a name="wp1037630"> </a>
+        line 3, column 10, size 30,<a name="wp1037632"> </a>
+        lines list-box-lines, 3-d,<a name="wp1037634"> </a>
+        paged,<a name="wp1037636"> </a>
+        exception procedure is list-1-handler.<a name="wp1037638"> </a>
+<a name="wp1037644"> </a>
+* Other screen items typically found here<a name="wp1037650"> </a>
+<a name="wp1037652"> </a>
+procedure division.<a name="wp1037654"> </a>
+main-logic.<a name="wp1037656"> </a>
+   open input keywords-file.<a name="wp1037658"> </a>
+   set reading-forwards to true.<a name="wp1037660"> </a>
+<a name="wp1037662"> </a>
+* Code to construct user's window omitted<a name="wp1037664"> </a>
+<a name="wp1037666"> </a>
+   display screen-1.<a name="wp1037668"> </a>
+<a name="wp1037670"> </a>
+* Load the first page of list box items<a name="wp1037672"> </a>
+<a name="wp1037674"> </a>
+   modify list-1, mass-update = 1<a name="wp1037676"> </a>
+   perform list-box-lines times <a name="wp1037678"> </a>
+      read keywords-file next record<a name="wp1037680"> </a>
+         at end     set at-end to true<a name="wp1037682"> </a>
+                    exit perform<a name="wp1037684"> </a>
+         end-read<a name="wp1037686"> </a>
+      modify list-1, <a name="wp1037688"> </a>
+             item-to-add = keyword-word<a name="wp1037690"> </a>
+   end-perform<a name="wp1037692"> </a>
+   modify list-1, mass-update = 0.<a name="wp1037694"> </a>
+<a name="wp1037696"> </a>
+* Now activate the list box<a name="wp1037698"> </a>
+<a name="wp1037700"> </a>
+   accept screen-1.<a name="wp1037702"> </a>
+<a name="wp1037704"> </a>
+* Code to use the entered data omitted<a name="wp1037706"> </a>
+<a name="wp1037708"> </a>
+   stop run.<a name="wp1037710"> </a>
+<a name="wp1037712"> </a>
+* LIST-1-HANDLER handles all exceptions generated <a name="wp1037714"> </a>
+* by the list box.  The only exceptions you care <a name="wp1037716"> </a>
+* about are those that require a response in <a name="wp1037718"> </a>
+* order to manage the list box properly.<a name="wp1037720"> </a>
+<a name="wp1037722"> </a>
+list-1-handler.<a name="wp1037724"> </a>
+   if key-status = w-event<a name="wp1037726"> </a>
+      evaluate event-type<a name="wp1037728"> </a>
+        when ntf-pl-next<a name="wp1037730"> </a>
+          perform get-next-item<a name="wp1037732"> </a>
+<a name="wp1037734"> </a>
+        when ntf-pl-prev<a name="wp1037736"> </a>
+          perform get-prev-item<a name="wp1037742"> </a>
+<a name="wp1037748"> </a>
+        when ntf-pl-nextpage<a name="wp1037750"> </a>
+          modify list-1, mass-update = 1<a name="wp1037752"> </a>
+          perform get-next-item list-box-lines times<a name="wp1037754"> </a>
+          modify list-1, mass-update = 0<a name="wp1037756"> </a>
+<a name="wp1037758"> </a>
+        when ntf-pl-prevpage<a name="wp1037760"> </a>
+          modify list-1, mass-update = 1<a name="wp1037762"> </a>
+          perform get-prev-item list-box-lines times<a name="wp1037764"> </a>
+          modify list-1, mass-update = 0<a name="wp1037766"> </a>
+<a name="wp1037768"> </a>
+        when ntf-pl-first<a name="wp1037770"> </a>
+          move low-values to keyword-word<a name="wp1037772"> </a>
+          start keywords-file, <a name="wp1037774"> </a>
+                key not &lt; keyword-word<a name="wp1037776"> </a>
+             invalid key    exit paragraph<a name="wp1037778"> </a>
+             end-start<a name="wp1037780"> </a>
+          set reading-forwards to true<a name="wp1037782"> </a>
+          modify list-1, mass-update = 1<a name="wp1037784"> </a>
+          modify list-1, reset-list = 1<a name="wp1037786"> </a>
+          perform get-next-item list-box-lines times<a name="wp1037788"> </a>
+          modify list-1, mass-update = 0<a name="wp1037790"> </a>
+<a name="wp1037792"> </a>
+        when ntf-pl-last<a name="wp1037794"> </a>
+          move high-values to keyword-word<a name="wp1037796"> </a>
+          start keywords-file,<a name="wp1037798"> </a>
+                key not &gt; keyword-word<a name="wp1037800"> </a>
+             invalid key    exit paragraph<a name="wp1037802"> </a>
+             end-start<a name="wp1037804"> </a>
+          set reading-backwards to true<a name="wp1037806"> </a>
+          modify list-1, mass-update = 1<a name="wp1037808"> </a>
+          modify list-1, reset-list = 1<a name="wp1037810"> </a>
+          perform get-prev-item list-box-lines times<a name="wp1037812"> </a>
+          modify list-1, mass-update = 0<a name="wp1037814"> </a>
+<a name="wp1037816"> </a>
+* In the search logic, if you get too close to the <a name="wp1037818"> </a>
+* end of the file, you simply act as if you wanted to <a name="wp1037820"> </a>
+* find the last full page.  Do this by setting the <a name="wp1037822"> </a>
+* event type to NTF-PL-LAST and re-evaluating.<a name="wp1037824"> </a>
+<a name="wp1037826"> </a>
+        when ntf-pl-search<a name="wp1037828"> </a>
+          inquire list-1,<a name="wp1037830"> </a>
+                  search-text in keyword-word<a name="wp1037832"> </a>
+          start keywords-file,<a name="wp1037834"> </a>
+                key not &lt; keyword-word<a name="wp1037840"> </a>
+            invalid key <a name="wp1037846"> </a>
+                move ntf-pl-last to event-type<a name="wp1037848"> </a>
+                go to list-1-handler<a name="wp1037850"> </a>
+            end-start<a name="wp1037852"> </a>
+          set reading-forwards to true<a name="wp1037854"> </a>
+          modify list-1, mass-update = 1<a name="wp1037856"> </a>
+          perform get-next-item list-box-lines times<a name="wp1037858"> </a>
+          if at-end<a name="wp1037860"> </a>
+            move ntf-pl-last to event-type<a name="wp1037862"> </a>
+            go to list-1-handler<a name="wp1037864"> </a>
+          end-if<a name="wp1037866"> </a>
+          modify list-1, mass-update = 0<a name="wp1037868"> </a>
+      end-evaluate<a name="wp1037870"> </a>
+    end-if.<a name="wp1037872"> </a>
+<a name="wp1037874"> </a>
+* GET-NEXT-ITEM handles all cases where you read <a name="wp1037876"> </a>
+* forwards through the file.  It adjusts for the <a name="wp1037878"> </a>
+* four possible states you could be in and then <a name="wp1037880"> </a>
+* retrieves the next record.  This record is added<a name="wp1037882"> </a>
+* to the end of the list box.  In some cases, you <a name="wp1037884"> </a>
+* have to traverse over the page of records <a name="wp1037886"> </a>
+* currently displayed (because you are switching <a name="wp1037888"> </a>
+* direction).  <a name="wp1037890"> </a>
+<a name="wp1037892"> </a>
+get-next-item.<a name="wp1026501"> </a>
+   evaluate true<a name="wp1037894"> </a>
+     when at-start<a name="wp1037896"> </a>
+        move low-values to keyword-word<a name="wp1037898"> </a>
+        start keywords-file, key not &lt; keyword-word<a name="wp1037900"> </a>
+          invalid key    exit paragraph<a name="wp1037902"> </a>
+          end-start<a name="wp1037904"> </a>
+        add 1 to list-box-lines <a name="wp1037906"> </a>
+            giving number-reads-needed<a name="wp1037908"> </a>
+     when at-end<a name="wp1037910"> </a>
+        exit paragraph<a name="wp1037912"> </a>
+     when reading-backwards<a name="wp1037914"> </a>
+        move list-box-lines to number-reads-needed<a name="wp1037916"> </a>
+     when reading-forwards<a name="wp1037918"> </a>
+        move 1 to number-reads-needed<a name="wp1037920"> </a>
+     end-evaluate<a name="wp1037922"> </a>
+<a name="wp1037924"> </a>
+     perform number-reads-needed times<a name="wp1037926"> </a>
+        read keywords-file next record<a name="wp1037928"> </a>
+          at end   set at-end to true<a name="wp1037930"> </a>
+                   exit paragraph<a name="wp1037936"> </a>
+          end-read<a name="wp1037946"> </a>
+     end-perform<a name="wp1037952"> </a>
+<a name="wp1037958"> </a>
+     modify list-1, <a name="wp1037964"> </a>
+       item-to-add = keyword-word<a name="wp1037970"> </a>
+<a name="wp1037976"> </a>
+     set reading-forwards to true.<a name="wp1037982"> </a>
+<a name="wp1037988"> </a>
+* GET-PREV-ITEM is the converse of GET-NEXT-ITEM.  <a name="wp1037994"> </a>
+* It retrieves the previous record in the list and <a name="wp1038000"> </a>
+* adds it to the top of the list box.  The code is <a name="wp1038006"> </a>
+* structured identically to GET-NEXT-ITEM.  <a name="wp1038012"> </a>
+<a name="wp1038018"> </a>
+get-prev-item.<a name="wp1038024"> </a>
+   evaluate true<a name="wp1038030"> </a>
+     when at-end<a name="wp1038036"> </a>
+        move high-values to keyword-word<a name="wp1038042"> </a>
+        start keywords-file, key not &gt; keyword-word<a name="wp1038048"> </a>
+            invalid key  exit paragraph<a name="wp1038054"> </a>
+            end-start<a name="wp1038060"> </a>
+        add 1 to list-box-lines <a name="wp1038066"> </a>
+            giving number-reads-needed<a name="wp1038072"> </a>
+     when at-start<a name="wp1038078"> </a>
+        exit paragraph<a name="wp1038084"> </a>
+     when reading-forwards<a name="wp1038090"> </a>
+        move list-box-lines to number-reads-needed<a name="wp1038096"> </a>
+     when reading-backwards<a name="wp1038102"> </a>
+        move 1 to number-reads-needed<a name="wp1038108"> </a>
+   end-evaluate<a name="wp1038114"> </a>
+<a name="wp1038120"> </a>
+perform number-reads-needed times<a name="wp1038126"> </a>
+   read keywords-file previous record<a name="wp1038132"> </a>
+     at end  set at-start to true<a name="wp1038138"> </a>
+             exit paragraph<a name="wp1038144"> </a>
+     end-read<a name="wp1038150"> </a>
+end-perform<a name="wp1038156"> </a>
+<a name="wp1038162"> </a>
+modify list-1<a name="wp1038168"> </a>
+   insertion-index = 1<a name="wp1038174"> </a>
+   item-to-add = keyword-word<a name="wp1038180"> </a>
+<a name="wp1038186"> </a>
+set reading-backwards to true.<a name="wp1038192"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

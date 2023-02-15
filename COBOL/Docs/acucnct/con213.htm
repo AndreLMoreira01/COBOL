@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:52:54" />
+  <title>2.3.2  CALLing C$ASYNCPOLL</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con2.htm">Chapter 2: Distributed Processing: Preparing Your Application</a> &gt; <a href="con211.htm">2.3  Synchronous or Asynchronous Execution</a> &gt; </p>
+<a name="wp1029036"> </a><h2 class="pHeading2">
+2.3.2  CALLing C$ASYNCPOLL
+</h2>
+<a name="wp1029039"> </a><p class="pBody">
+To check the status of the server program while the client is running, you can CALL the C$ASYNCPOLL routine.  The syntax for this CALL is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$ASYNCPOLL&quot; using handle-of-call state-of-call parameter-1<a name="wp1029041"> </a>
+parameter-2. <a name="wp1034445"> </a>
+</pre></div>
+<a name="wp1036197"> </a><p class="pBody">
+where:
+</p>
+<a name="wp1036133"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1036152"> </a><p class="pCellBody">
+<em class="cEmphasis">handle-of-call</em>
+</p>
+</td>
+    <td><a name="wp1036154"> </a><p class="pCellBody">
+is the handle of the CALL previously run with C$ASYNCRUN
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1036156"> </a><p class="pCellBody">
+<em class="cEmphasis">state-of-call</em>
+</p>
+</td>
+    <td><a name="wp1036158"> </a><p class="pCellBody">
+is a PIC s(9) with value &quot;0&quot; if the run is not yet completed, or &quot;1&quot; if the run is completed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1036160"> </a><p class="pCellBody">
+<em class="cEmphasis">parameter</em>
+</p>
+</td>
+    <td><a name="wp1036162"> </a><p class="pCellBody">
+is the parameter of the CALL returned when state-of-call is &quot;1&quot;
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1036134"> </a><p class="pBody">
+For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;C$ASYNCPOLL&quot; using h-call-prog2 state-of-call customer-info. <a name="wp1029049"> </a>
+</pre></div>
+<a name="wp1029574"> </a><p class="pBody">
+Note that any parameters given in C$ASYNCPOLL must match the parameters given in C$ASYNCRUN.  C$ASYNCPOLL tells AcuConnect to query the server about the status of the remote application.  AcuConnect returns a status that you can DISPLAY on the client.  If the status is &quot;1&quot; (CALL completed), C$ASYNCPOLL terminates the connection with the remote application.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

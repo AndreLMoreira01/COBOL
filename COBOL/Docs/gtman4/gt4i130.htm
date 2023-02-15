@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>W$TEXTSIZE Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1039570"> </a><h2 class="pHeading2">
+W$TEXTSIZE Routine
+</h2>
+<a name="wp1039576"> </a><p class="pBody">
+The W$TEXTSIZE routine allows you to measure the height and width of a string of text in a particular font.
+</p>
+<a name="wp1039577"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;W$TEXTSIZE&quot;<a name="wp1039578"> </a>
+    USING TEXT-STRING, TEXTSIZE-DATA<a name="wp1039579"> </a>
+</pre></div>
+<a name="wp1039580"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1039581"> </a><p class="pBody">
+<b class="cBold">TEXT-STRING</b>   PIC X(n)
+</p>
+<a name="wp1039582"> </a><p class="pBody">
+Contains the string to be measured
+</p>
+<a name="wp1039586"> </a><p class="pBody">
+TEXTSIZE-DATA   PIC X(n)   
+</p>
+<a name="wp1039588"> </a><p class="pBody">
+The TEXTSIZE-DATA data item is found in the COPY file &quot;acugui.def&quot;.  It is defined as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 TEXTSIZE-DATA.<a name="wp1039589"> </a>
+   03 TEXTSIZE-FONT      HANDLE OF FONT.<a name="wp1039590"> </a>
+   03 TEXTSIZE-WINDOW    HANDLE OF WINDOW.<a name="wp1039591"> </a>
+   03 TEXTSIZE-SIZE-X    PIC 9(7)V99  COMP-4.<a name="wp1039592"> </a>
+   03 TEXTSIZE-CELLS-X   PIC 9(7)V99  COMP-4.<a name="wp1039593"> </a>
+   03 TEXTSIZE-BASE-X    PIC 9(9)     COMP-4.<a name="wp1039594"> </a>
+   03 TEXTSIZE-SIZE-Y    PIC 99V99    COMP-4.<a name="wp1039595"> </a>
+   03 TEXTSIZE-CELLS-Y   PIC 99V99    COMP-4.<a name="wp1039596"> </a>
+   03 TEXTSIZE-BASE-Y    PIC 9(4)     COMP-4.<a name="wp1039597"> </a>
+   03 TEXTSIZE-FLAGS     PIC X        COMP-X.<a name="wp1039598"> </a>
+      88 TEXTSIZE-STRIP-SPACES VALUE 1, FALSE ZERO.<a name="wp1039599"> </a>
+</pre></div>
+<a name="wp1039600"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1039601"> </a><p class="pBody">
+The W$TEXTSIZE routine measures the average height and width of TEXT-STRING according to the parameters found in TEXTSIZE-DATA and returns the results in TEXTSIZE-DATA.  The measurement is returned using a variety of units.  
+</p>
+<a name="wp1039602"> </a><p class="pBody">
+The data elements in TEXTSIZE-DATA are used as follows:
+</p>
+<a name="wp1039603"> </a><h3 class="pHeadingRef">
+Input Items:
+</h3>
+<a name="wp1039604"> </a><p class="pBody">
+<b class="cBold">TEXTSIZE-FONT</b> (HANDLE OF FONT) -- This item holds the handle of the font that you want the runtime to measure.  If the value is NULL, DEFAULT-FONT is used.  TEXTSIZE-FONT is initialized to NULL in &quot;acugui.def&quot;.
+</p>
+<a name="wp1039605"> </a><p class="pBody">
+<b class="cBold">TEXTSIZE-WINDOW </b>(HANDLE OF WINDOW) -- This item holds the handle of the window that you want to use when measuring the number of window cells the text occupies (see TEXTSIZE-CELLS-X and TEXTSIZE-CELLS-Y below).  If this value is NULL, the current window is used.  If there is no current window, the &quot;cells&quot; measurement is returned with the value zero.  TEXTSIZE-WINDOW is initialized to NULL in &quot;acugui.def&quot;.
+</p>
+<a name="wp1039606"> </a><p class="pBody">
+<b class="cBold">TEXTSIZE-FLAGS </b>(PIC X  COMP-X) -- If TEXTSIZE-STRIP-SPACES is true, W$TEXTSIZE does not include any trailing spaces in the measurement of TEXTSTRING.  Otherwise, trailing spaces are included in the measurement.  TEXTSIZE-FLAGS is initialized to NULL in &quot;acugui.def&quot;.
+</p>
+<a name="wp1039607"> </a><h3 class="pHeadingRef">
+Output Items:
+</h3>
+<a name="wp1039608"> </a><p class="pBody">
+<b class="cBold">TEXTSIZE-SIZE-X </b>(PIC  9(7)V99  COMP-4) -- Returns the width of the text in <em class="cEmphasis">label size</em> units.  This is the SIZE value required for a label to exactly contain the text.  It is computed by dividing the length of the text by the size of the font's &quot;0&quot; character.  For fixed-pitch fonts, the value returned is the same as the number of characters in TEXT-STRING.
+</p>
+<a name="wp1039609"> </a><p class="pBody">
+<b class="cBold">TEXTSIZE-SIZE-Y </b>(PIC  99V99  COMP-4) -- Returns the height of the text in <em class="cEmphasis">label size</em> units.  This is the LINES value required for a label to exactly contain the text.  By definition, this value is always &quot;1&quot;.
+</p>
+<a name="wp1039610"> </a><p class="pBody">
+<b class="cBold">TEXTSIZE-CELLS-X </b>(PIC  9(7)V99  COMP-4) -- Returns the width of the text in window cells.  It is computed by dividing the width of the text by the width of a window cell.
+</p>
+<a name="wp1039611"> </a><p class="pBody">
+<b class="cBold">TEXTSIZE-CELLS-Y </b>(PIC  99V99  COMP-4) -- Returns the height of the text in window cells.  It is computed by dividing the height of the text by the height of a window cell.
+</p>
+<a name="wp1039612"> </a><p class="pBody">
+<b class="cBold">TEXTSIZE-BASE-X </b>(PIC  9(9)  COMP-4) -- Returns the width of the text in <em class="cEmphasis">base units</em>.  On a graphical system, a base unit is a pixel.  On a character-based system, a base unit is a character cell.
+</p>
+<a name="wp1039613"> </a><p class="pBody">
+<b class="cBold">TEXTSIZE-BASE-Y </b>(PIC  9(4)  COMP-4) -- Returns the height of the text in <em class="cEmphasis">base units</em>.  On a graphical system, a base unit is a pixel.  On a character-based system, a base unit is a character cell.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

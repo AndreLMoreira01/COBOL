@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.4.5  RECORD Clause</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3519.htm">5.4  File Section</a> &gt; </p>
+<a name="wp1034924"> </a><h2 class="pHeading2">
+5.4.5  RECORD Clause
+</h2>
+<a name="wp1034927"> </a><p class="pBody">
+The RECORD clause describes the size of the logical records.
+</p>
+<a name="wp1034928"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">RECORD</u> { CONTAINS [min-rec <u class="cUnderline">TO</u>] max-rec CHARACTERS }<a name="wp1034929"> </a>
+       { IS <u class="cUnderline">VARYING</u> IN SIZE [ FROM min-rec ]      }<a name="wp1034930"> </a>
+       {       [ <u class="cUnderline">TO</u> max-rec ] CHARACTERS          }<a name="wp1034931"> </a>
+       {       [ <u class="cUnderline">DEPENDING</u> ON depend ]            }<a name="wp1034932"> </a>
+</pre></div>
+<a name="wp1034933"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034934"> </a><div class="pSmartList1"><li><em class="cEmphasis">Min-rec</em> is an integer literal that defines the smallest record size.</li></div>
+<a name="wp1034935"> </a><div class="pSmartList1"><li><em class="cEmphasis">Max-rec</em> is an integer literal that defines the largest record size.</li></div>
+<a name="wp1034936"> </a><div class="pSmartList1"><li><em class="cEmphasis">Depend</em> is a numeric data item described in Working Storage or in Linkage.  <em class="cEmphasis">Depend</em> cannot be in the File Section.</li></div>
+</ol></div>
+<a name="wp1034937"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034938"> </a><div class="pSmartList1"><li>This clause is never required, because the minimum and maximum record sizes of a file are computed by the compiler from the file's record descriptions.  However, you may want to use this clause to indicate variable-length records.</li></div>
+<a name="wp1034939"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>The compiler has an internal restriction of at least 6 bytes for SORT FILE records.  If a record is shorter than that, the compiler detects it and pads the record to 6 bytes.  
+<hr />
+</p>
+<a name="wp1034941"> </a><div class="pSmartList1"><li>No record description for a file can contain more characters than specified by <em class="cEmphasis">max-rec</em> or fewer characters than specified by <em class="cEmphasis">min-rec</em>. </li></div>
+<a name="wp1034942"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">min-rec</em> is omitted, it is set to be equal to <em class="cEmphasis">max-rec</em>.</li></div>
+<a name="wp1034943"> </a><div class="pSmartList1"><li>If the VARYING phrase is used, then the file has variable-length records.  If the CONTAINS phrase is used, and both <em class="cEmphasis">min-rec</em> and <em class="cEmphasis">max-rec</em> are specified, the file will contain variable-length records.  If the CONTAINS phrase is used and only <em class="cEmphasis">max-rec</em> is specified, then the file will contain fixed-length records.</li></div>
+<a name="wp1034944"> </a><div class="pSmartList1"><li>If the DEPENDING ON phrase is used, the size of the record written or rewritten to the file is set according to the value of <em class="cEmphasis">depend</em>.  When a record is read from the file, <em class="cEmphasis">depend </em>is set to the size of the record found.  Using the DEPENDING ON phrase automatically implies that the file has variable-length records.</li></div>
+</ol></div>
+<a name="wp1034945"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Other source statements may take precedence over the RECORD clause in determining the record type.  The complete rules for determining a file's record type are described in <a  href="gt359.htm#wp1034468">section 5.1.7, &quot;File Types.&quot;</a>
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

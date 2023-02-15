@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>EVALUATE Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1039136"> </a><h2 class="pHeading2">
+EVALUATE Statement
+</h2>
+<a name="wp1039139"> </a><p class="pBody">
+The EVALUATE statement causes multiple conditions to be evaluated.  The subsequent action of the program depends on the results of these evaluations.
+</p>
+<a name="wp1039140"> </a><p class="pBody">
+The EVALUATE statement is very similar to the CASE construct common in many other programming languages.  The EVALUATE/CASE construct provides the ability to selectively execute one of a set of instruction alternatives based on the evaluation of a set of choice alternatives.
+</p>
+<a name="wp1039141"> </a><p class="pBody">
+EVALUATE extends the power of the typical CASE construct by allowing multiple data items and conditions to be named in the EVALUATE phrase (see code example 2).
+</p>
+<a name="wp1039142"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This manual entry includes code examples and highlights for first-time users following the General Rules section.
+<hr />
+</p>
+<a name="wp1039144"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">EVALUATE</u>  {subject}  [ ALSO {subject} ] ...<a name="wp1039145"> </a>
+          {<u class="cUnderline">TRUE</u>   }         {<u class="cUnderline">TRUE</u>   }<a name="wp1039146"> </a>
+          {<u class="cUnderline">FALSE</u>  }         {<u class="cUnderline">FALSE</u>  }<a name="wp1039147"> </a>
+<a name="wp1039148"> </a>
+  { { <u class="cUnderline">WHEN</u> obj-phrase [ ALSO obj-phrase ] ... } ... <a name="wp1039149"> </a>
+<a name="wp1039150"> </a>
+           statement-1 } ...<a name="wp1039151"> </a>
+<a name="wp1039152"> </a>
+  [ <u class="cUnderline">WHEN</u> <u class="cUnderline">OTHER</u> statement-2 ]<a name="wp1039153"> </a>
+<a name="wp1039154"> </a>
+  [ <u class="cUnderline">END-EVALUATE</u> ]<a name="wp1039155"> </a>
+</pre></div>
+<a name="wp1039156"> </a><p class="pBody">
+<em class="cEmphasis">obj-phrase</em> has the following format:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+  { <u class="cUnderline">ANY</u>                                  }<a name="wp1039157"> </a>
+  { <u class="cUnderline">TRUE</u>                                 }<a name="wp1039158"> </a>
+  { <u class="cUnderline">FALSE</u>                                }<a name="wp1039159"> </a>
+  { [=] cond-obj                         }<a name="wp1039160"> </a>
+  { [<u class="cUnderline">NOT =</u>] obj-item [ {<u class="cUnderline">THRU</u>   } obj-item ]}<a name="wp1039161"> </a>
+  {                  {<u class="cUnderline">THROUGH</u>}           }<a name="wp1039162"> </a>
+</pre></div>
+<a name="wp1039164"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039165"> </a><div class="pSmartList1"><li><em class="cEmphasis">Subject</em> may be a literal, data item, arithmetic expression, or conditional expression.  </li></div>
+<a name="wp1039166"> </a><div class="pSmartList1"><li><em class="cEmphasis">Cond-obj</em> is a conditional expression.</li></div>
+<a name="wp1039167"> </a><div class="pSmartList1"><li><em class="cEmphasis">Obj-item</em> may be a literal, data item, or arithmetic expression.</li></div>
+<a name="wp1039168"> </a><div class="pSmartList1"><li><em class="cEmphasis">Statement-1</em> and <em class="cEmphasis">statement-2</em> are imperative statements.</li></div>
+<a name="wp1039169"> </a><div class="pSmartList1"><li>Before the first WHEN phrase, <em class="cEmphasis">subject</em> and the words TRUE and FALSE are called &quot;subjects,&quot; and all the subjects together are called the &quot;subject set&quot;.  </li></div>
+<a name="wp1039170"> </a><div class="pSmartList1"><li>The operands and the words TRUE, FALSE, and ANY which appear in a WHEN phrase are called &quot;objects,&quot; and the collection of objects in a single WHEN phrase is called the &quot;object set&quot;.</li></div>
+<a name="wp1039171"> </a><div class="pSmartList1"><li>The words THROUGH and THRU are equivalent.  Two <em class="cEmphasis">obj-items</em> connected by a THROUGH phrase must be of the same class.  They are treated as a single object.  </li></div>
+<a name="wp1039172"> </a><div class="pSmartList1"><li>The number of objects within each object set must match the number of subjects in the subject set.</li></div>
+<a name="wp1039173"> </a><div class="pSmartList1"><li>Each object within an object set must correspond to the subject having the same ordinal position as in the subject set.  For each pair:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1039174"> </a><div class="pSmartList2"><li><em class="cEmphasis">Obj-item</em> must be a valid operand for comparison to the corresponding <em class="cEmphasis">subject</em>.</li></div>
+<a name="wp1039175"> </a><div class="pSmartList2"><li>TRUE, FALSE, or <em class="cEmphasis">cond-obj</em> as an object must correspond to TRUE, FALSE, or a conditional expression as the subject.</li></div>
+<a name="wp1039176"> </a><div class="pSmartList2"><li>ANY may correspond to any type of subject.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp1039179"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039180"> </a><div class="pSmartList1"><li>The EVALUATE statement operates as if each subject and object were evaluated and assigned a value or range of values.  These values may be numeric, nonnumeric, truth values, or ranges of numeric or nonnumeric values.  These values are determined as follows:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1039181"> </a><div class="pSmartList2"><li>Any subject or object that is a data item or literal, without either the THROUGH or the NOT phrase, is assigned the value and class of that data item or literal.</li></div>
+<a name="wp1039182"> </a><div class="pSmartList2"><li>Any subject or object that is an arithmetic expression, without either the THROUGH or the NOT phrase, is assigned a numeric value according to the rules for evaluating arithmetic expressions.</li></div>
+<a name="wp1039183"> </a><div class="pSmartList2"><li>Any subject or object that is a conditional expression is assigned a truth value according to the rules for evaluating conditional expressions.</li></div>
+<a name="wp1039184"> </a><div class="pSmartList2"><li>Any subject or object specified by the words TRUE or FALSE is assigned a truth value corresponding to that word.</li></div>
+<a name="wp1039185"> </a><div class="pSmartList2"><li>Any object specified by the word ANY is not evaluated.</li></div>
+<a name="wp1039186"> </a><div class="pSmartList2"><li>If the THROUGH phrase is specified for an object, without the NOT phrase, the range of values includes all permissible values of the corresponding subject that are greater than or equal to the first operand and less than or equal to the second operand, according to the rules for comparison.</li></div>
+<a name="wp1039187"> </a><div class="pSmartList2"><li>If the NOT phrase is specified for an object, the values assigned to that object are all permissible values of the corresponding subject not equal to the value, or range of values, that would have been assigned had the NOT phrase been omitted.  </li></div>
+</ol></div>
+<a name="wp1039188"> </a><div class="pSmartList1"><li>The EVALUATE statement then proceeds as if the values assigned to the subjects and objects were compared to determine if any WHEN phrase satisfies the subject set.  Each object within the object set for the first WHEN phrase is compared to the subject having the same ordinal position within the subject set.  The comparison is satisfied if one of the following is true:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1039189"> </a><div class="pSmartList2"><li>If the items being compared are assigned numeric or nonnumeric values, the comparison is satisfied if the value (or one of the range of values) assigned to the object is equal to the value assigned to the subject.  </li></div>
+<a name="wp1039190"> </a><div class="pSmartList2"><li>If the items being compared are assigned truth values, the comparison is satisfied if the truth values are the same.</li></div>
+<a name="wp1039191"> </a><div class="pSmartList2"><li>If the object is the word ANY, the comparison is always satisfied.</li></div>
+</ol></div>
+<a name="wp1039192"> </a><div class="pSmartList1"><li>If the comparison is satisfied for every object within the object set, the corresponding WHEN phrase is selected.</li></div>
+<a name="wp1039193"> </a><div class="pSmartList1"><li>If the comparison is not satisfied for one or more objects within the object set, the procedure repeats for the next WHEN phrase.  This is repeated until a WHEN phrase is selected or all the object sets have been tested.</li></div>
+<a name="wp1039194"> </a><div class="pSmartList1"><li>If a WHEN phrase is selected, the corresponding <em class="cEmphasis">statement-1</em> is executed.  </li></div>
+<a name="wp1039195"> </a><div class="pSmartList1"><li>If no WHEN phrase is selected and a WHEN OTHER phrase is specified, <em class="cEmphasis">statement-2</em> is executed.  If no WHEN OTHER phrase is present, control transfers to the end of the EVALUATE statement.</li></div>
+<a name="wp1039196"> </a><div class="pSmartList1"><li>The scope of execution of the EVALUATE statement is terminated when the end of <em class="cEmphasis">statement-1</em> or <em class="cEmphasis">statement-2</em> is reached, or when no WHEN phrase is selected and no WHEN OTHER phrase is specified.</li></div>
+</ol></div>
+<a name="wp1039199"> </a><h3 class="pHeadingRef">
+Code Examples
+</h3>
+<a name="wp1124504"> </a><h3 class="pHeadingRef">
+Example 1:
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+EVALUATE AGE<a name="wp1039200"> </a>
+   WHEN 56 THRU 99  PERFORM  SENIOR_PROSPECT<a name="wp1039201"> </a>
+   WHEN 40 THRU 55  PERFORM  MATURE_PROSPECT<a name="wp1039202"> </a>
+   WHEN 21 THRU 39  PERFORM  YOUNG_PROSPECT<a name="wp1039203"> </a>
+   WHEN OTHER       PERFORM  NOT_A_PROSPECT<a name="wp1039204"> </a>
+END-EVALUATE.<a name="wp1039205"> </a>
+</pre></div>
+<a name="wp1039206"> </a><h3 class="pHeadingRef">
+Example 2:
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+EVALUATE INCOME ALSO TRUE<a name="wp1039207"> </a>
+   WHEN  20000 THRU 39999  ALSO RISK_CLASS = &quot;A&quot;<a name="wp1039208"> </a>
+      PERFORM LOW_INCOME_PROSPECT<a name="wp1039209"> </a>
+   WHEN  40000 THRU 59999  ALSO RISK_CLASS = &quot;A&quot;<a name="wp1039210"> </a>
+      PERFORM  MID_INCOME_PROSPECT<a name="wp1039211"> </a>
+   WHEN  60000 THRU 999999 ALSO RISK_CLASS = &quot;A&quot;<a name="wp1039212"> </a>
+      PERFORM  HIGH_INCOME_PROSPECT<a name="wp1039213"> </a>
+   WHEN  60000 THRU 999999 ALSO NOT RISK_CLASS = &quot;A&quot;<a name="wp1039214"> </a>
+      PERFORM  HIGH_INCOME_HIGH_RISK_PROSPECT<a name="wp1039215"> </a>
+   WHEN  OTHER<a name="wp1039216"> </a>
+      PERFORM UNCLASSIFIED_PROSPECT<a name="wp1039217"> </a>
+END-EVALUATE.<a name="wp1039218"> </a>
+</pre></div>
+<a name="wp1039221"> </a><h3 class="pHeadingRef">
+Highlights for first-time users
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039222"> </a><div class="pSmartList1"><li>Statement subjects (associated with the EVALUATE phrase) and statement objects (associated with the WHEN phrase) must be equal in number, correspond by position and be valid operands for comparison.  Note the number and order of subjects in example 2 and the correspondent number and position of WHEN objects.</li></div>
+<a name="wp1039223"> </a><div class="pSmartList1"><li>If all of the conditions in a WHEN phrase match, the associated imperative statement is executed.  None of the remaining WHEN phrases is evaluated.  Program execution then falls through to the end of the EVALUATE statement.</li></div>
+<a name="wp1039224"> </a><div class="pSmartList1"><li>The WHEN OTHER phrase is an optional phrase for the handling of all remaining cases (the set of possible conditions not explicitly tested for by the preceding WHEN phrases).  The WHEN OTHER phrase, if present, must be the last WHEN phrase in the statement.</li></div>
+<a name="wp1039225"> </a><div class="pSmartList1"><li>The words TRUE and FALSE may be used in the subject or object phrase to specify a literal truth condition.</li></div>
+<a name="wp1039226"> </a><div class="pSmartList1"><li>The word ANY may be used in the WHEN phrase to specify an unconditional match with the corresponding item in the subject phrase.</li></div>
+<a name="wp1039227"> </a><div class="pSmartList1"><li>The word NOT may be used in the WHEN phrase to negate its associated condition.</li></div>
+<a name="wp1039228"> </a><div class="pSmartList1"><li>The word THROUGH or THRU may be used in the WHEN phrase to describe a range of values.  When combined with NOT, THRU describes an excluded set of values.  For example,  <span style="font-family: Arial, Verdana, Helvetica, sans-serif">NOT 10 THRU 20</span> means that any object holding a value from 10 to 20, including the numbers 10 and 20, will result in a FALSE, or no match evaluation.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

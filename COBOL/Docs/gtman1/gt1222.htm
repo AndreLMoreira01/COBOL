@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.1.19  Compiler Directives</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt122.htm">2.1 Using the Compiler</a> &gt; </p>
+<a name="wp1090177"> </a><h2 class="pHeading2">
+2.1.19  Compiler Directives
+</h2>
+<a name="wp1093302"> </a><p class="pBody">
+Compiler directives allow you to specify compiler behavior or options directly in the COBOL source code.  A compiler directive is a line of code that conforms to the valid syntax of a directive.  One directive is supported:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&gt;&gt;IMP<a name="wp1093304"> </a>
+</pre></div>
+<a name="wp1090903"> </a><p class="pBody">
+The &quot;&gt;&gt;IMP&quot; directive is an <em class="cEmphasis">implementor defined</em> directive, meaning that Acucorp defines its specific uses (described below).  The syntax is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&gt;&gt;IMP (ACU-CBLFLAGS=CompilerOption)<a name="wp1090907"> </a>
+</pre></div>
+<a name="wp1090241"> </a><p class="pBody">
+<em class="cEmphasis">CompilerOption</em> can be:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+-Dl<em class="cEmphasis">n</em>, where <em class="cEmphasis">n</em> is the integer value 1, 2, 4, or 8<a name="wp1090385"> </a>
+-Sa<a name="wp1090400"> </a>
+-St<a name="wp1090891"> </a>
+</pre></div>
+<a name="wp1090892"> </a><p class="pBody">
+The directive must start in the indicator area: column 7 for ANSI format source; column 1 for terminal format source.
+</p>
+<a name="wp1090442"> </a><p class="pBody">
+ACU-CBLFLAGS and its argument must be enclosed in parenthesis.  An equal sign (&quot;=&quot;) must immediately follow ACU-CBLFLAGS and immediately precede <em class="cEmphasis">CompilerOption</em>.  Note that all three options require a leading hyphen.
+</p>
+<a name="wp1090452"> </a><p class="pBody">
+The supported options allow you to work around two unusual compile time issues.
+</p>
+<a name="wp1092573"> </a><h3 class="pHeadingRef">
+Specifying an alternate data alignment
+</h3>
+<a name="wp1092574"> </a><p class="pBody">
+You can use the &quot;-Dl<em class="cEmphasis">n</em>&quot; argument to specify an alternate byte alignment for SYNCHRONIZED data items (for details on the &quot;-Dl&quot; option, see <a  href="gt1211.htm#wp1032646">section 2.1.9, &quot;Data Storage Options&quot;</a>).  For example, the RM COBOL compatibility switch (-Cr) implies two byte alignment (which is consistent with legacy RM COBOL).  Some variables in your program may require a larger alignment.  To apply the directive, in the source code immediately before the variable or set of variables (which may be contained in a COPY file), add the directive in the indicator area.  For example, to specify four byte alignment add:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&gt;&gt;IMP(ACU-CBLFLAGS=-Dl4)<a name="wp1091528"> </a>
+</pre></div>
+<a name="wp1091529"> </a><p class="pBody">
+Immediately after the last variable that requires special alignment, set the alignment back to the original value:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&gt;&gt;IMP(ACU-CBLFLAGS=-Dl2)<a name="wp1091692"> </a>
+</pre></div>
+<a name="wp1091039"> </a><h3 class="pHeadingRef">
+Forcing compilation of ANSI or terminal format files
+</h3>
+<a name="wp1092588"> </a><p class="pBody">
+When specified with a compiler directive, the &quot;-Sa&quot; and &quot;-St&quot; options override the &quot;-Sa&quot; or &quot;-St&quot; option specified on the command line within the scope of the containing file.
+</p>
+<a name="wp1092589"> </a><p class="pBody">
+In some instances, due to source origin issues, developers may choose to enforce compilation of a single source format by specifying either the &quot;-Sa&quot; (ANSI) or &quot;-St&quot; (terminal) compiler option in the command line.  Without the use of a compiler directive, the compiler will not compile source files of another format within the same compilation unit.  (In prior releases this was particularly problematic for terminal format compilation (-Sa) when <b class="cBold">axdefgen</b> had been used to create COPY files for ActiveX components, because <b class="cBold">axdefgen</b> creates ANSI format COPY files.  <b class="cBold">axdefgen</b> now automatically inserts a compiler directive in the first line of all COPY files it creates.)  
+</p>
+<a name="wp1093000"> </a><p class="pBody">
+When the &quot;-Sa&quot; or &quot;-St&quot; option is specified in a compiler directive on the first line of the source file, the compiler compiles that source file regardless of the format option specified on the command line.  Compilation of that format applies to only the file containing the directive.
+</p>
+<a name="wp1092541"> </a><p class="pBody">
+For example, when the &quot;-St&quot; (terminal format) option is specified on the command line and you want to compile an ANSI format COBOL source file in the same compilation unit, place the following compiler directive in column 7 of the first line of the COBOL file:  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&gt;&gt;IMP(ACU-CBLFLAGS=-Sa)<a name="wp1092121"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,529 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:57" />
+  <title>A.4  Informix Performance</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gla.htm">Appendix A:  Acu4GL for Informix Information </a> &gt; </p>
+<a name="wp1060366"> </a><h2 class="pHeading1">
+A.4  Informix Performance
+</h2>
+<a name="wp1037258"> </a><p class="pBody">
+Informix databases include many advanced concepts such as parallel queries, multi-processor support, and virtual processors.
+</p>
+<a name="wp1037262"> </a><p class="pBody">
+In order to increase performance for large sites on powerful multi-processor machines, Informix has changed some of the database default configurations, moving to a &quot;cost based&quot; optimization  for its default query mode.  This means that the query optimizer for Informix OnLine makes its decisions about optimization based purely on costs without taking into consideration translation isolation mode.  With this default, OnLine does not give preference to index scans (nested-loop joins and key base reads) over table scans (other join methods).  
+</p>
+<a name="wp1037263"> </a><p class="pBody">
+The behavior can be especially problematic in the case of benchmark testing.  When the table is created, a mass insert of the records is performed on the database table.  The indexes are created for the table, but the database has not yet gathered information about the distribution of data in the underlying table or the usefulness of a particular index.  The lack of statistical information within the database regarding the data in the tables results in possible poor decisions on the part of the query optimizer.  The optimizer is unable to determine that an index exists that best matches the requirements of the query and will choose an alternate execution approach that will cause drastically poorer performance of the benchmark application.
+</p>
+<a name="wp1037264"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1044505"> </a><p class="pBody">
+As an example of the problem, we will examine performance times from Acucorp's &quot;iobench&quot; program.
+</p>
+<a name="wp1044506"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1044704"> </a>
+Test
+
+</th>
+    <th><a name="wp1044706"> </a>
+Informix 5.1<br />SunOS 4.1.3
+
+</th>
+    <th><a name="wp1044708"> </a>
+Informix 7.2<br />Intel 486<br />System 5.4
+
+</th>
+    <th><a name="wp1051632"> </a>
+Informix 9
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044710"> </a><p class="pCellBody">
+Write Sequential
+</p>
+</td>
+    <td><a name="wp1044712"> </a><p class="pCellBody">
+1.2
+</p>
+</td>
+    <td><a name="wp1044714"> </a><p class="pCellBody">
+1.8
+</p>
+</td>
+    <td><a name="wp1051634"> </a><p class="pCellBody">
+3.33
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044716"> </a><p class="pCellBody">
+Sort Sequential
+</p>
+</td>
+    <td><a name="wp1044718"> </a><p class="pCellBody">
+3.3
+</p>
+</td>
+    <td><a name="wp1044720"> </a><p class="pCellBody">
+3.4
+</p>
+</td>
+    <td><a name="wp1051636"> </a><p class="pCellBody">
+4.30
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044722"> </a><p class="pCellBody">
+Load Index 1
+</p>
+</td>
+    <td><a name="wp1044724"> </a><p class="pCellBody">
+13.8
+</p>
+</td>
+    <td><a name="wp1044726"> </a><p class="pCellBody">
+16.1
+</p>
+</td>
+    <td><a name="wp1051638"> </a><p class="pCellBody">
+24.74
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044728"> </a><p class="pCellBody">
+Read Index 1
+</p>
+</td>
+    <td><a name="wp1044730"> </a><p class="pCellBody">
+19.5
+</p>
+</td>
+    <td><a name="wp1044732"> </a><p class="pCellBody">
+732.9
+</p>
+</td>
+    <td><a name="wp1051640"> </a><p class="pCellBody">
+1085.90
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044734"> </a><p class="pCellBody">
+Update Index 1
+</p>
+</td>
+    <td><a name="wp1044736"> </a><p class="pCellBody">
+4.5
+</p>
+</td>
+    <td><a name="wp1044738"> </a><p class="pCellBody">
+2.8
+</p>
+</td>
+    <td><a name="wp1051642"> </a><p class="pCellBody">
+56.33
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044740"> </a><p class="pCellBody">
+Load Index 2
+</p>
+</td>
+    <td><a name="wp1044742"> </a><p class="pCellBody">
+24.2
+</p>
+</td>
+    <td><a name="wp1044744"> </a><p class="pCellBody">
+29.6
+</p>
+</td>
+    <td><a name="wp1051644"> </a><p class="pCellBody">
+28.33
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044746"> </a><p class="pCellBody">
+Update Index 2
+</p>
+</td>
+    <td><a name="wp1044748"> </a><p class="pCellBody">
+13.6
+</p>
+</td>
+    <td><a name="wp1044750"> </a><p class="pCellBody">
+10.0
+</p>
+</td>
+    <td><a name="wp1051646"> </a><p class="pCellBody">
+56.83
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044752"> </a><p class="pCellBody">
+Total
+</p>
+</td>
+    <td><a name="wp1044754"> </a><p class="pCellBody">
+80.1
+</p>
+</td>
+    <td><a name="wp1044756"> </a><p class="pCellBody">
+796.6
+</p>
+</td>
+    <td><a name="wp1051648"> </a><p class="pCellBody">
+1259.66
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1048967"> </a><p class="pBody">
+The times between the two machines and databases that the benchmark were run on are comparable for all times except for the read operation.  The read operation shows a significant performance degradation.
+</p>
+<a name="wp1037324"> </a><h3 class="pHeadingRef">
+Isolating the problem
+</h3>
+<a name="wp1037325"> </a><p class="pBody">
+To isolate the source of the problem, you can insert into your COBOL program a call to Acucorp's utility program <b class="cBold">sql.acu</b>.  Before the Read benchmark test, we inserted the call:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;sql.acu&quot; USING SQL-COMMAND.<a name="wp1037326"> </a>
+</pre></div>
+<a name="wp1037327"> </a><p class="pBody">
+In the working-storage section, SQL-COMMAND is defined as follows: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77 SQL-COMMAND      pic x(75) value &quot;SET EXPLAIN ON&quot;.<a name="wp1037328"> </a>
+</pre></div>
+<a name="wp1037329"> </a><p class="pBody">
+This call instructs the Informix database engine to print out the query optimizer's execution plan to a file in the current directory called &quot;sqexpain.out&quot;.  Here is a sample of the optimizer's output:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+QUERY:<a name="wp1037330"> </a>
+------ <a name="wp1037331"> </a>
+SELECT *, rowid FROM idx1 WHERE idx_1_key &gt;= ? ORDER<a name="wp1037332"> </a>
+BY idx_1_key ASC<a name="wp1037333"> </a>
+<a name="wp1037334"> </a>
+Estimated Cost: 2<a name="wp1037335"> </a>
+Estimated # of Rows Returned: 3<a name="wp1037336"> </a>
+Temporary Files Required For: Order By  <a name="wp1037337"> </a>
+<a name="wp1037338"> </a>
+1) informix.idx1: SEQUENTIAL SCAN<a name="wp1037339"> </a>
+<a name="wp1037340"> </a>
+    Filters: informix.idx1.idx_1_key &gt;= &#39;0000000900&#39;<a name="wp1037341"> </a>
+</pre></div>
+<a name="wp1037342"> </a><p class="pBody">
+This output shows that the Informix query optimizer is doing a sequential scan on the table for each set of start/read operations.  The optimizer is also making use of a temporary file during processing in order to sort the information in key order as described by the &quot;ORDER BY&quot; clause.  This clause is necessary in order to assure that the COBOL application receives the records in the required sequence.
+</p>
+<a name="wp1037343"> </a><h3 class="pHeadingRef">
+Problem resolutions
+</h3>
+<a name="wp1037344"> </a><p class="pBody">
+To correct the problems with the query optimizer, you can take one of several approaches.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041018"> </a><div class="pSmartList1"><li>Override the Informix database parameter in the database configuration files.</li></div>
+<a name="wp1041048"> </a><div class="pSmartList1"><li>Override the new database parameter for a given user session.</li></div>
+<a name="wp1041058"> </a><div class="pSmartList1"><li>Provide the query optimizer with more information so that it can choose a more efficient method of returning data.</li></div>
+</ol></div>
+<a name="wp1037348"> </a><h3 class="pHeadingRef">
+Configuration files
+</h3>
+<a name="wp1037349"> </a><p class="pBody">
+The Informix database engine reads a system configuration file each time it is started up.  There are two different configuration files that apply.  The file &quot;onconfig.std&quot; is used as a template for creating database configuration files when new databases are created.  The &quot;onconfig.&lt;database&gt;&quot;  file is the configuration file for a given database.
+</p>
+<a name="wp1037350"> </a><p class="pBody">
+In the database configuration file, locate the line
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+OPTCOMPIND    2    # To hint the optimizer<a name="wp1037351"> </a>
+</pre></div>
+<a name="wp1037352"> </a><p class="pBody">
+Modify the line to read
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+OPTCOMPIND    0    # To hint the optimizer<a name="wp1037353"> </a>
+</pre></div>
+<a name="wp1037354"> </a><p class="pBody">
+The OPTCOMPIND configuration parameter helps the optimizer choose an appropriate join method for your application.  A setting of 0 indicates that when appropriate indexes exist, the optimizer chooses index scans (nested-loop joins), without consideration of the cost, over table scans (sort-merge joins or hash joins).   
+</p>
+<a name="wp1037355"> </a><p class="pBody">
+This new setting takes effect the next time you shut down and restart the ONLINE database engine.  The altered setting is then applied to all operations with the query optimizer.  To assure that this change applies to newly created databases, you should modify the &quot;onconfig.std&quot; file.
+</p>
+<a name="wp1037356"> </a><h3 class="pHeadingRef">
+Altering a user session
+</h3>
+<a name="wp1037357"> </a><p class="pBody">
+You can modify how the query optimizer executes queries on an individual basis by setting a UNIX environment variable in the user's environment.  This environment variable should be set before executing your COBOL application.  It cannot be set with the COBOL &quot;SET CONFIGURATION&quot; or &quot;SET ENVIRONMENT&quot; verbs.  Use the syntax &quot;setenv OPTCOMPIND 0&quot; or &quot;OPTCOMPIND=0; export OPTCOMPIND&quot; depending on which shell is being used.
+</p>
+<a name="wp1037358"> </a><p class="pBody">
+Method 1 and method 2 resulted in the following &quot;iobench&quot; times:
+</p>
+<a name="wp1045377"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1045324"> </a>
+Test
+
+</th>
+    <th><a name="wp1045326"> </a>
+Informix 5.1<br />SunOS4.1.3
+
+</th>
+    <th><a name="wp1045328"> </a>
+Informix 7.2<br />Intel 486<br />System 5.4
+
+</th>
+    <th><a name="wp1051675"> </a>
+Informix 9
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045330"> </a><p class="pCellBody">
+Write Sequential
+</p>
+</td>
+    <td><a name="wp1045332"> </a><p class="pCellBody">
+1.2
+</p>
+</td>
+    <td><a name="wp1045334"> </a><p class="pCellBody">
+1.8
+</p>
+</td>
+    <td><a name="wp1051677"> </a><p class="pCellBody">
+3.25
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045336"> </a><p class="pCellBody">
+Sort Sequential
+</p>
+</td>
+    <td><a name="wp1045338"> </a><p class="pCellBody">
+3.3
+</p>
+</td>
+    <td><a name="wp1045340"> </a><p class="pCellBody">
+3.3
+</p>
+</td>
+    <td><a name="wp1051679"> </a><p class="pCellBody">
+4.33
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045342"> </a><p class="pCellBody">
+Load Index 1
+</p>
+</td>
+    <td><a name="wp1045344"> </a><p class="pCellBody">
+13.8
+</p>
+</td>
+    <td><a name="wp1045346"> </a><p class="pCellBody">
+16.6
+</p>
+</td>
+    <td><a name="wp1051681"> </a><p class="pCellBody">
+24.92
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045348"> </a><p class="pCellBody">
+Read Index 1
+</p>
+</td>
+    <td><a name="wp1045350"> </a><p class="pCellBody">
+19.5
+</p>
+</td>
+    <td><a name="wp1045352"> </a><p class="pCellBody">
+22.4
+</p>
+</td>
+    <td><a name="wp1051683"> </a><p class="pCellBody">
+47.23
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045354"> </a><p class="pCellBody">
+Update Index 1
+</p>
+</td>
+    <td><a name="wp1045356"> </a><p class="pCellBody">
+4.5
+</p>
+</td>
+    <td><a name="wp1045358"> </a><p class="pCellBody">
+4.1
+</p>
+</td>
+    <td><a name="wp1051685"> </a><p class="pCellBody">
+5.57
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045360"> </a><p class="pCellBody">
+Load Index 2
+</p>
+</td>
+    <td><a name="wp1045362"> </a><p class="pCellBody">
+24.2
+</p>
+</td>
+    <td><a name="wp1045364"> </a><p class="pCellBody">
+22.9
+</p>
+</td>
+    <td><a name="wp1051687"> </a><p class="pCellBody">
+28.19
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045366"> </a><p class="pCellBody">
+Update Index 2
+</p>
+</td>
+    <td><a name="wp1045368"> </a><p class="pCellBody">
+13.6
+</p>
+</td>
+    <td><a name="wp1045370"> </a><p class="pCellBody">
+10.9
+</p>
+</td>
+    <td><a name="wp1051689"> </a><p class="pCellBody">
+6.22
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045372"> </a><p class="pCellBody">
+Total
+</p>
+</td>
+    <td><a name="wp1045374"> </a><p class="pCellBody">
+80.1
+</p>
+</td>
+    <td><a name="wp1045376"> </a><p class="pCellBody">
+81.9
+</p>
+</td>
+    <td><a name="wp1051691"> </a><p class="pCellBody">
+119.71
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1048989"> </a><p class="pBody">
+We can verify the changes that were made by examining the output of the query optimizer.  The above test resulted in these results:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+QUERY:<a name="wp1037417"> </a>
+------<a name="wp1037418"> </a>
+SELECT *, rowid FROM idx1 WHERE idx_1_key &gt;= ? ORDER BY idx_1_key ASC<a name="wp1037419"> </a>
+Estimated Cost: 4<a name="wp1037420"> </a>
+Estimated # of Rows Returned: 3<a name="wp1037421"> </a>
+1) informix.idx1: INDEX PATH<a name="wp1037422"> </a>
+    (1) Index Keys: idx_1_key <a name="wp1037423"> </a>
+        Lower Index Filter: informix.idx1.idx_1_key &gt;= &#39;0000000900&#39;<a name="wp1037424"> </a>
+</pre></div>
+<a name="wp1037425"> </a><p class="pBody">
+Both method 1 and method 2 above are useful if you are processing new data.  They have the drawback, however, that they permanently constrain the execution paths that the query optimizer has to choose from.  To allow the query optimizer the greatest flexibility in working with data that exists day-to-day on your system, you will want to choose the next method.
+</p>
+<a name="wp1037426"> </a><h3 class="pHeadingRef">
+Provide the query optimizer with information
+</h3>
+<a name="wp1037427"> </a><p class="pBody">
+Database tables that are in use on a frequent basis can benefit from providing the query optimizer with more information.  This allows the optimizer to work at its best in returning information from the database.  You provide the optimizer with information of the tables by issuing the following SQL command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+UPDATE STATISTICS HIGH FOR TABLE &lt;tablename&gt;;<a name="wp1037428"> </a>
+</pre></div>
+<a name="wp1037429"> </a><p class="pBody">
+Executing this command updates the Informix system database catalog tables  SYSTABLES, SYSCOLUMNS, SYSINDEXES, and SYSDISTRIB.  The optimizer uses this data to determine the best execution path for queries.  The database server does not update this statistical data automatically.  Statistics are updated only when you issue an UPDATE STATISTICS statement.
+</p>
+<a name="wp1037430"> </a><p class="pBody">
+Informix recommends that you run UPDATE STATISTICS in high mode for all columns that head an index.  For the fastest execution time of the UPDATE STATISTICS statement, you must execute one UPDATE STATISTICS statement in the high mode for each such column.  For each multi-column index, run UPDATE STATISTICS in low mode for all its columns.  
+</p>
+<a name="wp1037431"> </a><p class="pBody">
+You may want to perform the UPDATE STATISTICS on the entire table periodically as shown above, instead of just on the indexes.
+</p>
+<a name="wp1038646"> </a><p class="pBody">
+For more information on optimizing Informix performance and general maintenance issues, please refer to your Informix-OnLine documentation.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

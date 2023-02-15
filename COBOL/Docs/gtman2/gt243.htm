@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:31" />
+  <title>4.2  Events</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt24.htm">Chapter 4:  Supporting Concepts and Related Issues</a> &gt; </p>
+<a name="wp1026081"> </a><h2 class="pHeading1">
+4.2  Events
+</h2>
+<a name="wp1026083"> </a><p class="pBody">
+In graphical systems, <em class="cEmphasis">events</em> communicate actions taken by the user and various graphical objects.  For example, if the user types a key, the system may generate several events to denote that fact: a <em class="cEmphasis">key pressed</em> event, a <em class="cEmphasis">character typed</em> event, and a <em class="cEmphasis">key released</em> event.  A push button might generate a <em class="cEmphasis">button pushed</em> event when the user activates it.  Much of graphical programming involves detecting and handling events.
+</p>
+<a name="wp1026084"> </a><p class="pBody">
+Event programming is foreign to most COBOL programs.  In order to simplify the programming of graphical systems, ACUCOBOL-GT handles most events internally.  The runtime either performs the appropriate action, or converts the event into a form more recognizable to a traditional COBOL program.  For example, you can create your push buttons so that button pushed events are treated as if a particular function key was pressed.  
+</p>
+<a name="wp1026085"> </a><p class="pBody">
+Certain events must be handled by the program, however.  In ACUCOBOL-GT, there are very few of these, but they are important.  Events that must be acted upon by the COBOL program are called <em class="cEmphasis">terminating events</em>. The name comes from the fact that their occurrence causes any active ACCEPT statement to terminate, so that the COBOL program can handle the event.  
+</p>
+<a name="wp1026088"> </a><p class="pBody">
+When a terminating event occurs, any active ACCEPT statement terminates and returns an exception value of &quot;96&quot;.  In the file &quot;acugui.def,&quot; you will find a level 78 for this value, called W-EVENT.  When you set up a situation where a terminating event could occur, you must be ready to handle this exception value.  
+</p>
+<a name="wp1026091"> </a><p class="pBody">
+When a terminating event occurs, the runtime fills in the new EVENT STATUS data item (<em class="cEmphasis">event-status</em>) with information about the event.  The EVENT STATUS data item is declared in SPECIAL-NAMES.  This data item identifies which event occurred, which window it occurred in, which control it applies to (if any), and any additional information your program might need.  For details on the EVENT STATUS data item, see section 4.2.3, Book 3, <em class="cEmphasis">Reference Manual</em>.  
+</p>
+<a name="wp1026092"> </a><p class="pBody">
+If desired, for any control that generates events you can specify a list of event types that that control either must receive or not receive (filter out).  To create such a list, you use the EVENT-LIST, AX-EVENT-LIST, and EXCLUDE-EVENT-LIST Common  Properties.  These are described in section 6.4.9, &quot;Common Screen Options,&quot; of Book 3.
+</p>
+<a name="wp1031675"> </a><p class="pBody">
+For a description of the events that can be returned by the runtime, see <a  href="gt26.htm#wp1035078">Chapter 6, &quot;Events Reference.&quot;</a>  
+</p>
+<a name="wp1026094"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>There is a special control style called SELF-ACT that can be assigned to push buttons, radio buttons, and check boxes.  This style simplifies the handling of button events.  If you also assign an exception value to the button, it will act just like the equivalent function key.  For more about the SELF-ACT style see the description in <a  href="gt2566.htm#wp1212510">section 5.15, &quot;Push Button.&quot;</a> 
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

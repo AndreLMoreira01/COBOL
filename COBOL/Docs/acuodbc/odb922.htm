@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:40" />
+  <title>To configure the master DSN using srvconfig.sh</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb9.htm">Chapter 9: Remote Data Sources</a> &gt; <a href="odb912.htm">9.5  Configuring Remote Data Sources from the UNIX Command Line</a> &gt; <a href="odb921.htm">9.5.3  Creating multicompany DSNs using srvconfig.sh</a> &gt; </p>
+<a name="wp1028718"> </a><h2 class="pHeading3">
+To configure the master DSN using srvconfig.sh
+</h2>
+<a name="wp1038534"> </a><p class="pBody">
+The initial steps involved in creating a master DSN are the same as the steps involved in creating any DSN, as shown in the following sample session.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+$ <b class="cBold">srvconfig.sh</b><a name="wp1028719"> </a>
+In which directory are your data source configuration (.dsn)<a name="wp1028720"> </a>
+files [.]?  This should match the value of DSN-DIRECTORY in<a name="wp1046926"> </a>
+your configuration file.<a name="wp1046927"> </a>
+<a name="wp1037164"> </a>
+Current Data Sources:<a name="wp1028722"> </a>
+testing.dsn<a name="wp1028723"> </a>
+<a name="wp1037165"> </a>
+Data Source Name:  <b class="cBold">multi</b><a name="wp1028724"> </a>
+Data Source Configuration file &quot;multi&quot; does not exist.<a name="wp1028725"> </a>
+<a name="wp1037483"> </a>
+Do you wish to create it [Y]? <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">y</span><a name="wp1037484"> </a>
+<a name="wp1037485"> </a>
+What type of information do you want to edit?<a name="wp1037166"> </a>
+General, Advanced, Vision, Tracing, FileAlias, Multicompany,<a name="wp1028728"> </a>
+AcuServer [Exit]: <b class="cBold">g</b><a name="wp1046928"> </a>
+<a name="wp1028730"> </a>
+Your current XFD Directory values are:<a name="wp1037167"> </a>
+<a name="wp1037517"> </a>
+Select a command<a name="wp1037518"> </a>
+Add, [Quit]: <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">a</span><a name="wp1037519"> </a>
+Enter the new XFD Directory: <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">/</span><b class="cBold">usr/test/xfds</b><a name="wp1037516"> </a>
+<a name="wp1028731"> </a>
+You current XFD Directory values are:<a name="wp1037523"> </a>
+1) /usr/test/xfds<a name="wp1037525"> </a>
+<a name="wp1037526"> </a>
+Select a command<a name="wp1037527"> </a>
+Add, Delete, [Quit]: <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">q</span><a name="wp1037528"> </a>
+<a name="wp1037524"> </a>
+Your current Data Directory values are:<a name="wp1037161"> </a>
+<a name="wp1028732"> </a>
+Select a command<a name="wp1037168"> </a>
+Add, [Quit]: <b class="cBold">q</b><a name="wp1028733"> </a>
+</pre></div>
+<a name="wp1037150"> </a><p class="pBody">
+When specifying General information for a master DSN, specify only the XFD Directory; you will specify data directories when you provide Multicompany information.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Data File Extension [ ]:<a name="wp1028735"> </a>
+</pre></div>
+<a name="wp1028740"> </a><p class="pBody">
+Enter the extension for your data files or accept the default, then add Multicompany information as appropriate.  The following steps demonstrate how to list individual DSNs, the location of their data files, and their write permissions.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+What type of information do you want to edit?<a name="wp1028741"> </a>
+General, Advanced, Vision, Tracing, FileAlias, Multicompany,<a name="wp1028742"> </a>
+AcuServer [Exit]: <b class="cBold">m</b><a name="wp1046929"> </a>
+<a name="wp1037356"> </a>
+Is this a Master data source or a company-specific data source?<a name="wp1028744"> </a>
+[Master], Company-Specific:<a name="wp1028745"> </a>
+<a name="wp1028746"> </a>
+Your current Companies are:<a name="wp1037357"> </a>
+<a name="wp1028747"> </a>
+Select a command<a name="wp1037358"> </a>
+Add, [Quit]: <b class="cBold">a</b><a name="wp1028748"> </a>
+Company: <b class="cBold">clinic01</b><a name="wp1028749"> </a>
+Data Directory: <b class="cBold">/usr/clinics/clinic01</b><a name="wp1028750"> </a>
+</pre></div>
+<a name="wp1028751"> </a><p class="pBody">
+&quot;Company&quot; and &quot;Data Directory&quot; are both case-sensitive fields.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Write Permission<a name="wp1028752"> </a>
+ReadOnly, Read/Write, [DSN Default]:<a name="wp1028753"> </a>
+<a name="wp1028754"> </a>
+State<a name="wp1037359"> </a>
+[Enabled], Disabled:<a name="wp1028755"> </a>
+</pre></div>
+<a name="wp1028756"> </a><p class="pBody">
+Enter <b class="cBold">Enabled</b> if you want to include the company in the master DSN.  Enter <b class="cBold">Disabled</b> if you do not want to include the company.  You can modify this later.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Company:Data Directory:Write Permission:State<a name="wp1028757"> </a>
+1) clinic01:/usr/clinics/clinic01:DSN Default:Enabled<a name="wp1028758"> </a>
+<a name="wp1028759"> </a>
+Select a command<a name="wp1037360"> </a>
+Add, Modify, Delete, [Quit]: <b class="cBold">a</b><a name="wp1028760"> </a>
+Company: <b class="cBold">clinic02</b><a name="wp1028761"> </a>
+Data Directory: <b class="cBold">/usr/hospitals/clinic02</b><a name="wp1028762"> </a>
+<a name="wp1028763"> </a>
+Write Permission<a name="wp1037361"> </a>
+ReadOnly, Read/Write, [DSN Default]:<a name="wp1028764"> </a>
+<a name="wp1028765"> </a>
+State<a name="wp1037362"> </a>
+[Enabled], Disabled:<a name="wp1028766"> </a>
+<a name="wp1028767"> </a>
+Company:Data Directory:Write Permission:State<a name="wp1037363"> </a>
+1) clinic01:/usr/clinics/clinic01:DSN Default:Enabled<a name="wp1028768"> </a>
+2) clinic02:/usr/hospitals/clinic02:DSN Default:Enabled<a name="wp1028769"> </a>
+<a name="wp1028770"> </a>
+Select a command<a name="wp1037364"> </a>
+Add, Modify, Delete, [Quit]: <b class="cBold">a</b><a name="wp1028771"> </a>
+Company: <b class="cBold">clinic03</b><a name="wp1028772"> </a>
+Data Directory: <b class="cBold">/usr/clinics/clinic03</b><a name="wp1028773"> </a>
+<a name="wp1028774"> </a>
+Write Permission<a name="wp1037365"> </a>
+ReadOnly, Read/Write, [DSN Default]:<a name="wp1028775"> </a>
+<a name="wp1028776"> </a>
+State<a name="wp1037366"> </a>
+[Enabled], Disabled:<a name="wp1028777"> </a>
+<a name="wp1028778"> </a>
+Company:Data Directory:Write Permission:State<a name="wp1037367"> </a>
+1) clinic01:/usr/clinics/clinic01:DSN Default:Enabled<a name="wp1028779"> </a>
+2) clinic02:/usr/hospitals/clinic02:DSN Default:Enabled<a name="wp1028780"> </a>
+3) clinic03:/usr/clinics/clinic03:DSN Default:Enabled<a name="wp1028781"> </a>
+<a name="wp1028782"> </a>
+Select a command<a name="wp1037368"> </a>
+Add, Modify, Delete, [Quit]: <b class="cBold">m</b><a name="wp1028783"> </a>
+<a name="wp1028784"> </a>
+Enter company number to modify (between 0 and 3) [0]: <b class="cBold">2</b><a name="wp1037369"> </a>
+Company [clinic02]:<a name="wp1028785"> </a>
+Data Directory:/usr/hospitals/clinic02]: <b class="cBold">/usr/clinics/
+clinic02</b><a name="wp1028786"> </a>
+<a name="wp1028787"> </a>
+Write Permission<a name="wp1037370"> </a>
+ReadOnly, Read/Write, [DSN Default]:<a name="wp1028788"> </a>
+<a name="wp1028789"> </a>
+State<a name="wp1037371"> </a>
+[Enabled], Disabled:<a name="wp1028790"> </a>
+<a name="wp1028791"> </a>
+Your current Companies are:<a name="wp1037372"> </a>
+Company:Data Directory:Write Permission:State<a name="wp1028792"> </a>
+1) clinic01:/usr/clinics/clinic01:DSN Default:Enabled<a name="wp1028793"> </a>
+2) clinic02:/usr/clinics/clinic02:DSN Default:Enabled<a name="wp1028794"> </a>
+3) clinic03:/usr/clinics/clinic03:DSN Default:Enabled<a name="wp1028795"> </a>
+<a name="wp1028796"> </a>
+Select a command<a name="wp1037373"> </a>
+Add, Modify, Delete, [Quit]: <a name="wp1028797"> </a>
+<a name="wp1028798"> </a>
+What type of information do you want to edit?<a name="wp1037374"> </a>
+General, Advanced, Vision, Tracing, FileAlias, Multicompany,<a name="wp1028799"> </a>
+AcuServer<a name="wp1046930"> </a>
+[Exit]: <a name="wp1028800"> </a>
+</pre></div>
+<a name="wp1028801"> </a><p class="pBody">
+Supply any additional information as necessary and exit when you have finished configuring the DSN.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Save the data [Y]? <b class="cBold">Y</b><a name="wp1028802"> </a>
+$<a name="wp1028803"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

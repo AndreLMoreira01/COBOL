@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:24" />
+  <title>3.8.4  Paged List Box Event Handling</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt23.htm">Chapter 3:  Graphical Controls</a> &gt; <a href="gt2314.htm">3.8  Paged List Boxes</a> &gt; </p>
+<a name="wp1026464"> </a><h2 class="pHeading2">
+3.8.4  Paged List Box Event Handling
+</h2>
+<a name="wp1026469"> </a><p class="pBody">
+The largest and most demanding issue regarding paged list boxes is the additional required event handling.  Whenever a paged list box needs more data, it generates an event.  The program must detect these events and respond in a way that will update the box's contents appropriately.  There are several such events.  They are described in detail in <a  href="gt26.htm#wp1035078">Chapter 6, &quot;Events Reference.&quot;</a>  In brief, they are:
+</p>
+<a name="wp1026470"> </a><h5 class="pHeading4">
+NTF-PL-NEXT
+</h5>
+<a name="wp1033169"> </a><p class="pBody">
+Indicates the user wants to scroll the list box one record in the downward direction.
+</p>
+<a name="wp1026471"> </a><h5 class="pHeading4">
+NTF-PL-PREV
+</h5>
+<a name="wp1033221"> </a><p class="pBody">
+Indicates the user wants to scroll the list box one record in the upward direction.  
+</p>
+<a name="wp1026472"> </a><h5 class="pHeading4">
+NTF-PL-NEXTPAGE
+</h5>
+<a name="wp1033220"> </a><p class="pBody">
+Indicates the user wants to scroll the list box one page in the downward direction.  
+</p>
+<a name="wp1026473"> </a><h5 class="pHeading4">
+NTF-PL-PREVPAGE
+</h5>
+<a name="wp1033219"> </a><p class="pBody">
+Indicates the user wants to scroll the list box one page in the upward direction.
+</p>
+<a name="wp1026474"> </a><h5 class="pHeading4">
+NTF-PL-FIRST
+</h5>
+<a name="wp1033218"> </a><p class="pBody">
+Indicates the user wants to scroll to the top of the list.
+</p>
+<a name="wp1026475"> </a><h5 class="pHeading4">
+NTF-PL-LAST
+</h5>
+<a name="wp1033217"> </a><p class="pBody">
+Indicates the user wants to scroll to the bottom of the list.  
+</p>
+<a name="wp1026476"> </a><h5 class="pHeading4">
+NTF-PL-SEARCH
+</h5>
+<a name="wp1033213"> </a><p class="pBody">
+Indicates the user wants to scroll to the page that contains the text he or she has entered.  
+</p>
+<a name="wp1026477"> </a><p class="pBody">
+In each case, the program should locate the appropriate records and add them to the box.  After adding the records, the program re-ACCEPTs the box to continue processing.  Alternatively (and preferably), the program can use an EXCEPTION PROCEDURE to handle the events, thus never leaving the ACCEPT.  
+</p>
+<a name="wp1026478"> </a><p class="pBody">
+The program needs to track where it is in the overall list of items so that it can respond sensibly to the NEXT and PREVIOUS requests.  Usually, the list of items consists of records contained in an indexed data file, and the ordering of those records is based on one of the file's keys.  In this case, you can track the current location in the list by using the file's current record position.  In this way you need only to remember if the last record you read from the file was placed at the beginning or end of the list box.  If the record was placed at the beginning, then a single READ PREVIOUS will give you the previous record for the list.  If the record was placed at the end, then a READ NEXT will give you the next record for the list.  If you must get the next item from the opposite end of the list from your current position, then reading a page worth of records in the appropriate direction will get you to the proper record.  The examples that follow explore this scheme in more detail.
+</p>
+<a name="wp1026479"> </a><p class="pBody">
+Let's begin with a simple example.  Suppose you are reading from an indexed file to get records for your list box.  Also suppose that you always ensure that the last record you read from the file was the one at the end of the current page.  In this situation, the following code fragment illustrates how you might handle the NTF-PL-NEXT event.  This code builds on the code shown in the earlier example on constructing a paged list box (see <a  href="gt2315.htm#wp1026426">section 3.8.1, &quot;Creating a Paged List Box&quot;</a>):
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+list-1-handler.<a name="wp1026480"> </a>
+   if key-status = w-event<a name="wp1037366"> </a>
+      evaluate event-type<a name="wp1037368"> </a>
+        when ntf-pl-next<a name="wp1037370"> </a>
+          read keywords-file next record<a name="wp1037372"> </a>
+             at end<a name="wp1037374"> </a>
+                continue<a name="wp1037376"> </a>
+             not at end  <a name="wp1037378"> </a>
+                modify list-1, <a name="wp1037380"> </a>
+                       item-to-add = keywords-word <a name="wp1037382"> </a>
+          end-read<a name="wp1037384"> </a>
+      end-evaluate<a name="wp1037386"> </a>
+   end-if.<a name="wp1037388"> </a>
+</pre></div>
+<a name="wp1026481"> </a><p class="pBody">
+In this example, you first determine if the exception that led you to this paragraph was an event.  Then you evaluate the event type.  In the case of an NTF-PL-NEXT event, you read the next record in the file and add it to the list box.  
+</p>
+<a name="wp1026482"> </a><p class="pBody">
+To this add the case of handling the NTF-PL-NEXTPAGE event.  The code for this is very similar, except that you want to add a full page of records.  Here is an augmented example that does that:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+list-1-handler.<a name="wp1026483"> </a>
+   if key-status = w-event<a name="wp1037390"> </a>
+      evaluate event-type<a name="wp1037392"> </a>
+         when ntf-pl-next<a name="wp1037394"> </a>
+            perform add-next-record<a name="wp1037396"> </a>
+         when ntf-pl-nextpage<a name="wp1037398"> </a>
+            perform add-next-record <a name="wp1037400"> </a>
+                    lines-per-page times<a name="wp1037402"> </a>
+      end-evaluate<a name="wp1037404"> </a>
+   end-if.<a name="wp1037406"> </a>
+<a name="wp1037408"> </a>
+add-next-record.<a name="wp1037410"> </a>
+   if not keywords-at-end<a name="wp1037416"> </a>
+      read keywords-file next record<a name="wp1037422"> </a>
+         at end      set keywords-at-end to true<a name="wp1037424"> </a>
+         not at end  modify list-1, <a name="wp1037426"> </a>
+                     item-to-add = keywords-word<a name="wp1037428"> </a>
+      end-read<a name="wp1037430"> </a>
+   end-if.<a name="wp1037432"> </a>
+</pre></div>
+<a name="wp1026484"> </a><p class="pBody">
+A problem with this approach is that you have to do a lot more work to implement NTF-PL-PREV and NTF-PL-PREVPAGE.  Because the file's current position is at the end of the list, you have to read backward through the entire page to get to the records you want.  Then, when you are done adding records, you have to read forward through the page to maintain the program's assumptions.  A more efficient technique keeps track of which side of the list you have last read from, and adjusts the position accordingly.  This technique is shown in the full example included in <a  href="gt2319.htm#wp1026493">section 3.8.5, &quot;Paged List Box Example,&quot;</a> or in the &quot;pagebox.cbl&quot; sample program.  
+</p>
+<a name="wp1026485"> </a><p class="pBody">
+Before laying out the full paged list-box example, consider how you might handle the NTF-PL-SEARCH event.  This event is unusual in that you have to reposition the file arbitrarily.  To get the search text that the user entered, you must first INQUIRE on the list box's SEARCH-TEXT property.  That information is then used to do the positioning.  Typical code might look like:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+list-1-handler.<a name="wp1026486"> </a>
+   if key-status = w-event<a name="wp1037434"> </a>
+     evaluate event-type<a name="wp1037436"> </a>
+       when ntf-pl-next<a name="wp1037438"> </a>
+          perform add-next-record<a name="wp1037440"> </a>
+       when ntf-pl-nextpage<a name="wp1037442"> </a>
+          perform add-next-record<a name="wp1037444"> </a>
+                  lines-per-page times<a name="wp1037446"> </a>
+       when ntf-pl-search<a name="wp1037448"> </a>
+          inquire list-1,<a name="wp1037450"> </a>
+                  search-text in keywords-word<a name="wp1037452"> </a>
+          start keywords-file,<a name="wp1037454"> </a>
+                key not less than keywords-word<a name="wp1037456"> </a>
+            invalid key<a name="wp1037458"> </a>
+               perform search-failure-handling<a name="wp1037460"> </a>
+            not invalid key<a name="wp1037462"> </a>
+               perform add-next-record <a name="wp1037464"> </a>
+                       lines-per-page times<a name="wp1037466"> </a>
+          end-start<a name="wp1037468"> </a>
+     end-evaluate<a name="wp1037474"> </a>
+   end-if.<a name="wp1037480"> </a>
+</pre></div>
+<a name="wp1026487"> </a><p class="pBody">
+The full example that follows explores the issue of handling a failed search.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

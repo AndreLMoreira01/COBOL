@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:09" />
+  <title>3.8.2.3  USE/GIVE instructions</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt13.htm"><br />Chapter 3:  Debugger and Utilities</a> &gt; <a href="gt1389.htm">3.8  External Sort Utility - AcuSort</a> &gt; <a href="gt1391.htm">3.8.2  AcuSort Instructions</a> &gt; </p>
+<a name="wp1110718"> </a><h2 class="pHeading3">
+3.8.2.3  USE/GIVE instructions
+</h2>
+<a name="wp1110719"> </a><p class="pBody">
+The USE and GIVE instructions specify the name and characteristics of the input file and output file, respectively, of a sort or merge process.  Note that you must specify all USE instructions before any GIVE instructions.  The input and output file descriptions include ORG, RECORD, and KEY phrases, which define the file's characteristics.  The syntax for these instructions is as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+use <em class="cEmphasis">input-file</em><a name="wp1110720"> </a>
+   org<em class="cEmphasis"> file-type</em>	<a name="wp1110721"> </a>
+   record <em class="cEmphasis">format, record-length [, max-length]</em><a name="wp1110722"> </a>
+   key<em class="cEmphasis">(key-structure)</em> <a name="wp1110723"> </a>
+<a name="wp1110724"> </a>
+give <em class="cEmphasis">output-file</em><a name="wp1110725"> </a>
+   org <em class="cEmphasis">file-type</em><a name="wp1110726"> </a>
+   record <em class="cEmphasis">format, record-length [, max-length]</em><a name="wp1110727"> </a>
+   key<em class="cEmphasis">(key-structure)</em> <a name="wp1110728"> </a>
+</pre></div>
+<a name="wp1110729"> </a><p class="pBody">
+where
+</p>
+<a name="wp1110730"> </a><p class="pBody">
+<em class="cEmphasis">input-file</em> is the pathname of the input file.
+</p>
+<a name="wp1110731"> </a><p class="pBody">
+<em class="cEmphasis">output-file </em>is the pathname of the output file.
+</p>
+<a name="wp1110732"> </a><p class="pBody">
+<em class="cEmphasis">file-type</em> specifies the type of input or output file: indexed (IX), relative (RL), line sequential (LS), or binary sequential (SQ).
+</p>
+<a name="wp1110733"> </a><p class="pBody">
+<em class="cEmphasis">format</em> indicates that the file contains fixed length records (F) or variable length records (V).
+</p>
+<a name="wp1110734"> </a><p class="pBody">
+<em class="cEmphasis">record-length</em> specifies the record length for a fixed length record or the minimum record length for a variable length record.
+</p>
+<a name="wp1110735"> </a><p class="pBody">
+<em class="cEmphasis">max-length</em> specifies the maximum record length for a variable length record.
+</p>
+<a name="wp1110738"> </a><p class="pBody">
+<em class="cEmphasis">key-structure</em> specifies the key structure for an indexed file.  Refer to the following section for information about key structure.
+</p>
+<a name="wp1110740"> </a><p class="pBody">
+
+</p>
+<a name="wp1110741"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If the input and output files have the same organization and/or record information, you need not specify these options for each file.  The <b class="cBold">AcuSort</b> utility applies the most recent RECORD and ORG options to subsequent files when these options are not specified for the files. 
+<hr />
+</p>
+<a name="wp1110743"> </a><h3 class="pHeadingRef">
+KEY structure
+</h3>
+<a name="wp1110744"> </a><p class="pBody">
+For each key or key segment, you must specify the start position, the length, and the key type, as defined below.  Use a comma to separate field attributes and a comma before starting the description of a new key or key segment.
+</p>
+<a name="wp1110745"> </a><p class="pBody">
+The following command specifies the key structure for an indexed file: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+key <em class="cEmphasis">(start, length, key-type, ...)</em><a name="wp1110746"> </a>
+</pre></div>
+<a name="wp1110747"> </a><p class="pBody">
+where
+</p>
+<a name="wp1110748"> </a><p class="pBody">
+<em class="cEmphasis">start</em> is the offset of the record key (in bytes, starting at position 1).  
+</p>
+<a name="wp1110749"> </a><p class="pBody">
+<em class="cEmphasis">length</em> is the size of the key in bytes.
+</p>
+<a name="wp1110750"> </a><p class="pBody">
+<em class="cEmphasis">key-type</em> is a code indicating the key type (see the list of key types below).
+</p>
+<a name="wp1110753"> </a><p class="pBody">
+You can specify one of the following key types in the KEY statement:
+</p>
+<a name="wp1110775"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1110756"> </a><p class="pCellBody">
+P
+</p>
+</th>
+    <th><a name="wp1110758"> </a><p class="pCellBody">
+Primary key
+</p>
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1110760"> </a><p class="pCellBody">
+PD
+</p>
+</td>
+    <td><a name="wp1110762"> </a><p class="pCellBody">
+Primary key with duplicates allowed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1110764"> </a><p class="pCellBody">
+A
+</p>
+</td>
+    <td><a name="wp1110766"> </a><p class="pCellBody">
+Alternate key
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1110768"> </a><p class="pCellBody">
+AD
+</p>
+</td>
+    <td><a name="wp1110770"> </a><p class="pCellBody">
+Alternate key with duplicates allowed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1110772"> </a><p class="pCellBody">
+C
+</p>
+</td>
+    <td><a name="wp1110774"> </a><p class="pCellBody">
+Key segment belonging to the primary or alternate key previously described
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1110776"> </a><p class="pBody">
+The following sample describes the key structure for an indexed file with three keys:  
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+key (502, 98, PD, 1, 18, A, 95, 18, AD, 337, 18, C)<a name="wp1110777"> </a>
+</pre></div>
+<a name="wp1110778"> </a><p class="pBody">
+In this example, the primary key allows duplicates.  Its offset is 502 and its length is 98.  The first alternate key has an offset of 1 and a length of 18.  The second alternate key allows duplicates, and consists of two segments.  The first segment starts at offset 95 and has a length of 18.  The second segment starts at offset 337 and has a length of 18.  
+</p>
+<a name="wp1110779"> </a><p class="pBody">
+The <b class="cBold">AcuSort</b> utility always sorts duplicate records in the order in which they are encountered in the input file, a process known as a &quot;stable sort.&quot;  
+</p>
+<a name="wp1113055"> </a><h3 class="pHeadingRef">
+USE/GIVE example
+</h3>
+<a name="wp1113056"> </a><p class="pBody">
+In the following sample code:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+use c:\acuprod\data\ordrdetl org ix<a name="wp1113090"> </a>
+   record f 143<a name="wp1113888"> </a>
+   key (1, 36, p)<a name="wp1113891"> </a>
+   give c:\acuprod\data\ordrdet_sorted<a name="wp1113894"> </a>
+</pre></div>
+<a name="wp1113073"> </a><p class="pBody">
+the input file is &quot;ordrdetl&quot; and the output file is &quot;ordrdet_sorted&quot;.  They are both indexed files with a fixed record length of 143.  The primary key is 36 bytes long, starting at position 1.  Complete sample code can be found in <a  href="gt1396.htm#wp1113256">section 3.8.3, &quot;Code Sample.&quot;</a>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

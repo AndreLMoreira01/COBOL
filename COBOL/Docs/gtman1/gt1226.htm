@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.5  COPY Libraries</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; </p>
+<a name="wp1033314"> </a><h2 class="pHeading1">
+2.5  COPY Libraries
+</h2>
+<a name="wp1033318"> </a><p class="pBody">
+The COPY verb accepts the following forms:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY library-name [ OF path-name ] [ SUPPRESS ].<a name="wp1033319"> </a>
+COPY RESOURCE resource-name [ OF path-name ].<a name="wp1033320"> </a>
+</pre></div>
+<a name="wp1033321"> </a><p class="pBody">
+where <em class="cEmphasis">library-name</em> and <em class="cEmphasis">path-name </em>are either user-defined words or alphanumeric literals.  <em class="cEmphasis">Resource-name</em> is an alphanumeric literal.  
+</p>
+<a name="wp1033322"> </a><p class="pBody">
+Environment variables may be used in the <em class="cEmphasis">path-name</em>--this is indicated by a $ sign before the name of the variable. For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY <em class="cEmphasis">library-name</em> OF &quot;$COPYLIB&quot;.<a name="wp1033323"> </a>
+</pre></div>
+<a name="wp1033324"> </a><p class="pBody">
+You may also use multiple environment variables to define a path:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY <em class="cEmphasis">library-name</em> OF &quot;$LIB/$COPYLIB/$SUBDIR&quot;.<a name="wp1033325"> </a>
+</pre></div>
+<a name="wp1033326"> </a><p class="pBody">
+<em class="cEmphasis">Library-name </em>is the file name of the copy file to include in the object library. <em class="cEmphasis">Resource-name</em> is a file (other than a COBOL object) that is to be included in a COBOL object library.  If <em class="cEmphasis">path-name</em> is specified, then it is treated as a directory specification for <em class="cEmphasis">library-name </em>or <em class="cEmphasis">resource-name</em>.  
+</p>
+<a name="wp1033327"> </a><p class="pBody">
+The file name is derived by concatenating <em class="cEmphasis">path-name</em> with <em class="cEmphasis">library-name</em> or <em class="cEmphasis">resource-name</em>, using the appropriate syntax for the host operating system.  For example, on a UNIX system,
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY MYCOPY OF &quot;/usr2/acctdir&quot;<a name="wp1033328"> </a>
+</pre></div>
+<a name="wp1033329"> </a><p class="pBody">
+is translated to
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY &quot;/usr2/acctdir/MYCOPY&quot;.<a name="wp1105382"> </a>
+</pre></div>
+<a name="wp1105383"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>Please note the use of quotation marks on <em class="cEmphasis">path-name</em> and on <em class="cEmphasis">library-name</em> and <em class="cEmphasis">resource-name</em> when they include lower case letters.  This is a requirement on systems that are case sensitive, because the runtime would otherwise convert lower case to upper case.
+</p>
+<a name="wp1093722"> </a><p class="pNoteEnd">
+The &quot;-Ce&quot; compatibility option can be used to specify an alternate default file extension.  See <a  href="gt127.htm#wp1032402">section 2.1.5, &quot;Compatibility Options.&quot;</a>
+<hr />
+</p>
+<a name="wp1033333"> </a><p class="pBody">
+A library name can be specified by a user-defined word which may include a period.  This is a special extension to the meaning of &quot;user-defined word&quot;.  This allows you to specify a file extension without putting the name in quotes.  For example, the two statements:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY &quot;MYFILE.CPY&quot;<a name="wp1033335"> </a>
+</pre></div>
+<a name="wp1033336"> </a><p class="pBody">
+and
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY MYFILE.CPY<a name="wp1033337"> </a>
+</pre></div>
+<a name="wp1033338"> </a><p class="pBody">
+are both allowed and mean exactly the same thing. 
+</p>
+<a name="wp1033339"> </a><p class="pBody">
+When a period is placed in a library name which is a user-defined word used without quotes, it must be preceded and followed by a (non-period) character normally allowed in an identifier (thus &quot;.MYFILE&quot;, &quot;MYFILE.&quot; and &quot;MYFILE..CPY&quot; are all disallowed).
+</p>
+<a name="wp1033341"> </a><p class="pBody">
+In addition, the COPY RESOURCE statement allows the resource name to be a user-defined word just like in a Format 1 COPY statement (the resource name does not have to be an alphanumeric literal).
+</p>
+<a name="wp1033342"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>User-defined words are always treated as uppercase on machines where file names are case-sensitive.
+<hr />
+</p>
+<a name="wp1033343"> </a><p class="pBody">
+If the derived file name is a full path name or contains a drive designation, then that name is used unmodified.  Otherwise, a series of directories is searched to find the COPY file.  The default search path is just the current directory. 
+</p>
+<a name="wp1033345"> </a><p class="pBody">
+You can modify the search path by setting an operating system variable.  On UNIX, Linux, and Windows systems, you do this by setting the environment variable COPYPATH to be the list of directories to search.  For VMS systems, the <em class="cEmphasis">symbol</em> COPYPATH is set instead.  
+</p>
+<a name="wp1033347"> </a><p class="pBody">
+The COPYPATH variable consists of a series of prefixes to apply to the file name.  Each prefix is terminated by a special character that depends on the host operating system.
+</p>
+<a name="wp1037477"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1037378"> </a>
+System
+
+</th>
+    <th><a name="wp1037380"> </a>
+Separator
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037386"> </a><p class="pCellBody">
+Windows
+</p>
+</td>
+    <td><a name="wp1037388"> </a><p class="pCellBody">
+Semicolon
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037394"> </a><p class="pCellBody">
+UNIX/Linux
+</p>
+</td>
+    <td><a name="wp1037396"> </a><p class="pCellBody">
+Colon
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037398"> </a><p class="pCellBody">
+MPE/iX
+</p>
+</td>
+    <td><a name="wp1037400"> </a><p class="pCellBody">
+Colon
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037402"> </a><p class="pCellBody">
+VMS
+</p>
+</td>
+    <td><a name="wp1037404"> </a><p class="pCellBody">
+Comma
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1033378"> </a><p class="pBody">
+For example, to search the current directory, the directory &quot;/u/pr&quot; and the directory &quot;/u/ap&quot; on a UNIX system, the appropriate COPYPATH setting would be:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:/u/pr:/u/ap:<a name="wp1033379"> </a>
+</pre></div>
+<a name="wp1033381"> </a><p class="pBody">
+The initial colon indicates an empty prefix (i.e., the current directory).  Note that the &quot;-Sp&quot; compiler option can also be used to specify the search path for COPY libraries.  If used, it takes precedence over the COPYPATH setting. 
+</p>
+<a name="wp1033384"> </a><p class="pBody">
+You may use the word SUPPRESS to exclude the contents of a COPY file or any COPY files nested within from the program listing.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY MYFILE OF &quot;$MYLIB&quot; SUPPRESS.<a name="wp1033385"> </a>
+</pre></div>
+<a name="wp1033386"> </a><p class="pBody">
+COPY statements may contain other COPY statements.  This nesting is limited by the total number of files that the operating system will allow a program to open at once.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

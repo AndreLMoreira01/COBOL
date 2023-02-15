@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.4.1  File Description Entry</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3519.htm">5.4  File Section</a> &gt; </p>
+<a name="wp1034808"> </a><h2 class="pHeading2">
+5.4.1  File Description Entry
+</h2>
+<a name="wp1034811"> </a><p class="pBody">
+A file description entry describes the physical structure, identification, and record names for a program's data files.
+</p>
+<a name="wp1034812"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">FD</u> file-name [IS <u class="cUnderline">EXTERNAL</u>] [IS <u class="cUnderline">GLOBAL</u>]<a name="wp1034813"> </a>
+<a name="wp1034814"> </a>
+   [<u class="cUnderline">BLOCK</u> CONTAINS [min <u class="cUnderline">TO</u>] max  {<u class="cUnderline">RECORDS</u>   } ] <a name="wp1034815"> </a>
+                                 {CHARACTERS} <a name="wp1034816"> </a>
+<a name="wp1034817"> </a>
+   [<u class="cUnderline">RECORD</u> { CONTAINS [min <u class="cUnderline">TO</u>] max CHARACTERS  } ]<a name="wp1034818"> </a>
+           { IS <u class="cUnderline">VARYING</u> IN SIZE [ FROM min ]   }<a name="wp1034819"> </a>
+           {   [ <u class="cUnderline">TO</u> max ] CHARACTERS           }<a name="wp1034820"> </a>
+           {   [ <u class="cUnderline">DEPENDING</u> ON depend ]         }<a name="wp1034821"> </a>
+<a name="wp1034822"> </a>
+   [ <u class="cUnderline">LABEL</u>  { <u class="cUnderline">RECORD</u> IS   }  {<u class="cUnderline">STANDARD</u>} ]<a name="wp1034823"> </a>
+            { <u class="cUnderline">RECORDS</u> ARE }  {<u class="cUnderline">OMITTED</u> }<a name="wp1034824"> </a>
+<a name="wp1034825"> </a>
+   [ <u class="cUnderline">VALUE</u> <u class="cUnderline">OF</u> <u class="cUnderline">LABEL</u> IS label-lit ]<a name="wp1034826"> </a>
+<a name="wp1034827"> </a>
+   [ <u class="cUnderline">VALUE</u> <u class="cUnderline">OF</u> { <u class="cUnderline">FILE-ID</u> } IS id-name ]<a name="wp1034828"> </a>
+              { <u class="cUnderline">ID</u>      } <a name="wp1034829"> </a>
+<a name="wp1034830"> </a>
+   [ <u class="cUnderline">CODE-SET</u> IS alphabet ]<a name="wp1034831"> </a>
+<a name="wp1034832"> </a>
+   [ <u class="cUnderline">DATA</u>  { <u class="cUnderline">RECORD</u> IS   }  {record-name} ... ]<a name="wp1034833"> </a>
+           { <u class="cUnderline">RECORDS</u> ARE }<a name="wp1034834"> </a>
+<a name="wp1034835"> </a>
+   [ <u class="cUnderline">LINAGE</u> IS page-size LINES <a name="wp1034836"> </a>
+<a name="wp1034837"> </a>
+     [ WITH <u class="cUnderline">FOOTING</u> AT footing-line ]<a name="wp1034838"> </a>
+<a name="wp1034839"> </a>
+     [ LINES AT <u class="cUnderline">TOP</u> top-lines ]<a name="wp1034840"> </a>
+<a name="wp1034841"> </a>
+     [ LINES AT <u class="cUnderline">BOTTOM</u> bottom-lines ] ] .<a name="wp1034842"> </a>
+</pre></div>
+<a name="wp1034843"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034844"> </a><div class="pSmartList1"><li><em class="cEmphasis">File-name</em> must refer to a file name contained in a SELECT clause in the Environment Division.  </li></div>
+<a name="wp1034846"> </a><div class="pSmartList1"><li>The clause IS EXTERNAL must immediately follow the file-name in each program that declares the file. </li></div>
+<a name="wp1034847"> </a><div class="pSmartList1"><li>An external file must have the same file-name in each COBOL program that declares it, and must be described the same way in each program.</li></div>
+<a name="wp1034848"> </a><div class="pSmartList1"><li>The other clauses following <em class="cEmphasis">file-name</em> can appear in any order.</li></div>
+<a name="wp1034849"> </a><div class="pSmartList1"><li>One or more record description entries must follow a file description entry.</li></div>
+<a name="wp1034850"> </a><div class="pSmartList1"><li>The LINAGE phrase may be specified only for an FD associated with a sequential file.  </li></div>
+</ol></div>
+<a name="wp1034851"> </a><h3 class="pHeadingRef">
+General Rule
+</h3>
+<a name="wp1034852"> </a><p class="pBody">
+The file description entry clauses are described separately in the following sections.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

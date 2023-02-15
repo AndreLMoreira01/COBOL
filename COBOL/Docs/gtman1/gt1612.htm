@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.1.3.7  Other Vision features</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt162.htm">6.1 Handling Files</a> &gt; <a href="gt165.htm">6.1.3  Indexed Files - Vision</a> &gt; </p>
+<a name="wp1032381"> </a><h2 class="pHeading3">
+6.1.3.7  Other Vision features
+</h2>
+<a name="wp1045550"> </a><h3 class="pHeadingRef">
+Block size
+</h3>
+<a name="wp1045071"> </a><p class="pBody">
+Vision files have a block size (physical record size) of between 512 and 8192 bytes (in 512 byte increments).  The block size specifies how large a node is in the Vision index tree.  The block size of Vision Version 2, 3 or 4 files is restricted to 1024 bytes.  The block size is specified by the BLOCK CONTAINS clause (see section 5.4.4, &quot;BLOCK CONTAINS Clause,&quot; in Book 3, <em class="cEmphasis">Reference Manual</em>.  If the BLOCK CONTAINS clause is omitted, the file will have 512 byte blocks.  
+</p>
+<a name="wp1045565"> </a><p class="pBody">
+Each index node holds a number of key entries and pointers to other nodes or record data.  The larger the block size, the more key entries each node can store.  Also, larger block sizes produce shorter index trees.  However, larger index nodes can cause Vision to spend more time performing linear searches of each node to find the desired key entry.  Therefore, it is important to determine the optimal block size for your particular key and data structure.  If you have very large keys, a larger block size can help keep the tree height manageable.  If you have smaller keys, a large block size will produce a short tree, but performance may be lost in the time it takes Vision to scan each of the large nodes.
+</p>
+<a name="wp1045566"> </a><p class="pBody">
+Some experimentation will help you determine the optimal block size for your application and hardware.  In the past, Vision has used 512 and 1024 byte block sizes. Users have reported good results with these values.  If your keys are small- or medium-size, try using the 512 or 1024 block sizes.  If you have a file with large keys and you are using Vision 5 files, you might want to experiment a larger block size.
+</p>
+<a name="wp1045434"> </a><h3 class="pHeadingRef">
+Compression and encryption
+</h3>
+<a name="wp1032386"> </a><p class="pBody">
+Vision can optionally compress and/or encrypt records.  Record compression uses a simple run-length compression algorithm.  Encryption uses a byte transformation algorithm that is unique to every byte in the file.  Encrypted files may not have records extracted by the Vision utility program <b class="cBold">vutil</b>.  Records are stored internally in the least amount of space required.  Furthermore, they are packed together and span block boundaries, so no disk space is wasted.  Compression is discussed in more detail in <a  href="gt1616.htm#wp1032429">section 6.1.6.1, &quot;Compression.&quot;</a>
+</p>
+<a name="wp1046118"> </a><h3 class="pHeadingRef">
+User count
+</h3>
+<a name="wp1032388"> </a><p class="pBody">
+Vision maintains a <em class="cEmphasis">user count</em> for each file.  This count is normally zero.  When a file is opened for update, the user count is incremented; when the file is closed, the user count is decremented.  The user count is thus the number of currently updating processes for the file.  If a program dies catastrophically, however, the user count will not get decremented.  (For a definition of &quot;catastrophic,&quot; see <a  href="gt1640.htm#wp1033082">section 6.7, &quot;Exiting From ACUCOBOL-GT Programs.&quot;</a>)  This results in the count never reaching zero.  Thus, if the value is non-zero when there are no active users, it indicates a catastrophic program failure and suggests that corrective action may need to be taken.  At the very least, the file should be checked for integrity, but depending on the program that died, perhaps more significant action should be taken.  Basically a non-zero user count indicates that someone knowledgeable about the system should intervene and ensure that everything is okay.  This can be used as an early warning system to head off some problems.  Note that a non-zero user count is not a fatal error to Vision.  It is used only as an indicator of potential problems.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

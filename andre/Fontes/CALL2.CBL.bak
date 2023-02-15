@@ -1,0 +1,71 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID       CALL2.
+
+       WORKING-STORAGE SECTION.
+       01 CAMPOS.
+           03 IND                       PIC 9(03).
+
+           03 QTD-CAMPOS-LINKAGE        PIC 9(03) COMP-1.
+           03 TAM-CAMPO-LINKAGE-T       PIC 9(05) OCCURS 3.
+
+           COPY "MAINRTN.MSG".
+
+       LINKAGE SECTION.
+       77  STATUS-L                     PIC X(01).
+       77  CNPJ-CLIENTE-L               PIC 9(15).
+       77  NOME-CLIENTE-L               PIC X(90).
+
+       PROCEDURE DIVISION USING STATUS-L, CNPJ-CLIENTE-L, 
+                                NOME-CLIENTE-L.
+            
+           |*VERIFICA QUANTOS CAMPOS EXISTEM NA LINKAGE:
+
+           CALL "C$NARG" USING QTD-CAMPOS-LINKAGE
+                        ON OVERFLOW 
+                                DISPLAY 'PROGRAMA C$NARG NÃO ENCONTRADO'
+                        NOT OVERFLOW
+                                CANCEL 'C$NARG'
+           END-CALL.
+
+           IF QTD-CAMPOS-LINKAGE <> 3
+              INITIALIZE CA-MESSAGE-LINK
+              MOVE 'CALL2: NÚMERO INVÁLIDO DE ARGUMENTOS.'
+                   TO CA-MESSAGE-1
+              PERFORM MOSTRA-MSG-ERRO
+              EXIT PROGRAM
+              STOP RUN
+           END-IF.
+                
+           |*VERIFICA O TAMANHO DE CADA CAMPO DA LINKAGE:
+           PERFORM VARYING IND FROM 1 BY 1
+                                  UNTIL IND > QTD-CAMPOS-LINKAGE
+                    CALL "C$PARAMSIZE" USING IND
+                                 GIVING TAM-CAMPO-LINKAGE-T(IND)
+           END-PERFORM.
+
+           IF TAM-CAMPO-LINKAGE-T(1) <> 1 OR
+              TAM-CAMPO-LINKAGE-T(2) <> 15 OR
+              TAM-CAMPO-LINKAGE-T(3) <> 90
+              INITIALIZE CA-MESSAGE-LINK
+              MOVE 'TAMANHO INVÁLIDO EM ALGUM ARGUMENTO.'
+                   TO CA-MESSAGE-LINK
+              PERFORM MOSTRA-MSG-ERRO
+              EXIT PROGRAM
+              STOP RUN
+           END-IF.
+
+           |* FIM DOS TESTES DA LINKAGE
+
+           MOVE 'NOVO NOME DO CLIENTE' TO NOME-CLIENTE-L.
+           EXIT PROGRAM
+           STOP RUN.
+
+           MOSTRA-MSG-ERRO.
+
+           MOVE 1 TO CA-MESSAGE-TYPE CA-MESSAGE-RESP
+           CALL "CAMESSAG" 
+                ON OVERFLOW 
+                        DISPLAY "PROG CAMESSAGE NÃO ENCONTRADO"
+                NOT OVERFLOW
+                        CANCEL "CAMESSAG"
+           END-CALL.

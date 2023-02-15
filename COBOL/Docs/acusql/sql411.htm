@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:36:08" />
+  <title> ASQL_TRANSACTION_METHOD</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql4.htm">Chapter 4:  Program Execution</a> &gt; <a href="sql43.htm">4.2  Running Your Application with Microsoft SQL Server</a> &gt; </p>
+<a name="wp1035386"> </a><h2 class="pHeading2">
+ ASQL_TRANSACTION_METHOD
+</h2>
+<a name="wp1035389"> </a><p class="pBody">
+This configuration variable determines how transactions are started.  Note that transactions are always completed by executing a COMMIT or a ROLLBACK.  However, because SQL Server does not allow certain statements to be executed within transactions (for example, CREATE TABLE may not be inside a transaction), the AcuSQL interface for SQL Server relies on the user to provide guidance on when to start transactions.  ASQL_TRANSACTION_METHOD is checked when a connection is opened, and the value determines the transaction method that applies to that connection until the connection is closed.  This gives you the flexibility to set this variable differently for each connection.  By doing this, you can possibly separate the types of statements that are not allowed in SQL Server transactions into a single connection that will never be in a transaction.  Using the same technique, you can separate statements that must be in a transaction into a connection that handles transactions as you specify.
+</p>
+<a name="wp1035390"> </a><p class="pBody">
+ASQL_TRANSACTION_METHOD can be set to the following values:
+</p>
+<a name="wp1035391"> </a><h5 class="pHeading4">
+ALWAYS  		
+</h5>
+<a name="wp1035392"> </a><p class="pBody">
+The connection is always in a transaction.  At the moment the connection is established, a transaction is started.  Whenever a transaction is committed or rolled back, a new transaction is then immediately started.  This is the behavior of ODBC-style connections.  Using this method, you should not explicitly start a transaction using SQL Server-specific syntax, and you should COMMIT and ROLLBACK transactions using standard ESQL syntax (such as COMMIT WORK).
+</p>
+<a name="wp1035393"> </a><h5 class="pHeading4">
+CONFIG		
+</h5>
+<a name="wp1035394"> </a><p class="pBody">
+The connection starts a transaction whenever the configuration variable <a  href="sql410.htm#wp1040730">ASQL_START_TRANSACTION</a> is set to &quot;True&quot;.  Note that setting ASQL_START_TRANSACTION to &quot;True&quot; causes AcuSQL to immediately start a transaction, and then causes the interface to immediately reset the value to &quot;False&quot;.  Using this method, you should not explicitly start a transaction using SQL Server-specific syntax, and you should COMMIT and ROLLBACK transactions using standard ESQL syntax (such as COMMIT WORK).  The interface keeps track of when transactions are started, committed, and rolled back.  Executing SQL Server-specific syntax can interfere with synchronizing this tracking.
+</p>
+<a name="wp1035398"> </a><h5 class="pHeading4">
+EXPLICIT	
+</h5>
+<a name="wp1035400"> </a><p class="pBody">
+The interface assumes that the COBOL program is explicitly executing BEGIN TRANSACTION, COMMIT TRANSACTION, and ROLLBACK TRANSACTION statements, and that the interface need not concern itself with them.  If a transaction statement causes an error, the error is returned to the program in the same way that other SQL statement errors are returned.  The interface does not keep track of transactions itself, so you should use SQL Server-specific transaction syntax when ASQL_TRANSACTION_METHOD is set to EXPLICIT, rather than the standard ESQL syntax.
+</p>
+<a name="wp1035402"> </a><h5 class="pHeading4">
+FIRST-DML		
+</h5>
+<a name="wp1035403"> </a><p class="pBody">
+The connection attempts to start a transaction whenever the first Data Manipulation Language (DML) statement is detected.  INSERT, UPDATE, and DELETE are all DML statements.  Using this method may cause errors if you create tables or indexes (or do other things not supported within transactions by SQL Server) after you have executed a DML statement and before you execute a COMMIT or ROLLBACK.  This is the default value for ASQL_TRANSACTION_METHOD.
+</p>
+<a name="wp1035404"> </a><h5 class="pHeading4">
+NEVER		
+</h5>
+<a name="wp1035405"> </a><p class="pBody">
+The connection will never be in a transaction.  If a COMMIT or ROLLBACK is executed while this connection is current, an error is returned to the COBOL program, indicating that a transaction is not active.  This option is the same as EXPLICIT.  This means that the interface does not know anything about transactions and does not keep track of any transactions started.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

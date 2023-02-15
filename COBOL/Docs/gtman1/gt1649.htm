@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.8.5  Threading Rules That Affect Windows and ACCEPT Statements</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt1641.htm">6.8  Multiple Execution Threads </a> &gt; </p>
+<a name="wp1033277"> </a><h2 class="pHeading2">
+6.8.5  Threading Rules That Affect Windows and ACCEPT Statements
+</h2>
+<a name="wp1033279"> </a><p class="pBody">
+There are a number of special rules that govern how and when threads can receive user input.  In the following discussion, the phrase &quot;ACCEPT statement&quot; refers specifically to formats 1, 2, and 7 of the ACCEPT statement.  These are the forms that retrieve the user's input.  
+</p>
+<a name="wp1033280"> </a><p class="pBody">
+When a thread attempts to execute an ACCEPT statement, two rules determine if that thread is allowed to proceed:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033281"> </a><div class="pSmartList1"><li>The thread may proceed if no other thread is in an ACCEPT statement.  This rule ensures that threads do not compete for a single piece of input.  It prevents the possibility, for example, of alternate keystrokes going to different threads.  </li></div>
+<a name="wp1033282"> </a><div class="pSmartList1"><li>The thread may proceed if the window in which the ACCEPT will occur is active, or if the active window is controlled by the current thread.  A window is controlled by the thread that created it or the last thread that did an ACCEPT statement in it.  A window can be controlled by only one thread at a time.  This rule ensures that windows do not activate arbitrarily.  </li></div>
+</ol></div>
+<a name="wp1033284"> </a><p class="pBody">
+If an ACCEPT does not meet both of these conditions at the time that it would normally execute, its thread is suspended.  The thread will remain suspended until both conditions are met (at which time the thread resumes and the ACCEPT executes).  
+</p>
+<a name="wp1033285"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Even if the thread is suspended and the ACCEPT is not started, the ACCEPT may still be timed out with ACCEPT BEFORE TIME.  It can also be terminated with a message, if ACCEPT ALLOWING MESSAGES is specified.  
+<hr />
+</p>
+<a name="wp1033289"> </a><p class="pBody">
+These rules apply only if there is more than one thread.  If a suspended thread becomes the only remaining thread, then it automatically resumes execution.  
+</p>
+<a name="wp1033290"> </a><p class="pBody">
+If a thread suspends due to rule (2), it will suspend forever unless its window becomes active.  This can happen in one of two ways: (a) another thread activates the window, or (b) the user activates the window.  Arranging for the latter is much more common.  It is the case where you want to give the user the ability to work in multiple windows at once, freely switching between them.  
+</p>
+<a name="wp1033293"> </a><p class="pBody">
+To create windows that the user can activate at will, you describe the windows as MODELESS when you create them.  A modeless window allows the user to activate another window (the other type of window, called modal, does not allow the user to activate another window).  When the user activates a modeless window, by clicking on it or using the host's method, the runtime generates a CMD-ACTIVATE event.  In a single-threaded program, the program must detect this event and ACCEPT something in the appropriate window in order to activate that window.  In a multithreaded program, there is a second option.  To use this option you code your program in such a way that each modeless window runs in a separate thread, and you use the phrase LINK TO THREAD or BIND TO THREAD when you create each window.  This phrase instructs the runtime to handle the CMD-ACTIVATE events on its own.  In this arrangement, when a CMD-ACTIVATE event occurs, the runtime suspends the current thread and activates the new window.  The thread controlling the newly active window then resumes execution.  Technically speaking, the thread running the ACCEPT in the newly active window can leave the suspended state because it meets rules (1) and (2) described above.  
+</p>
+<a name="wp1033296"> </a><p class="pBody">
+This automatic runtime handling allows you to easily manage multiple windows.  Each window is contained in a thread that need only manage that one window.  The threads do not need to be aware of each other or know which window is active.  If the threads have some need to communicate among themselves, they can do so with <em class="cEmphasis">messages</em> (see <a  href="gt1646.htm#wp1033184"><span style="font-family: Arial, Verdana, Helvetica, sans-serif">Section 6.8.3, &quot;Thread Communication&quot;</span></a>).
+</p>
+<a name="wp1033297"> </a><p class="pBody">
+Here is an example.  The following program presents a maintenance screen for a data file.  It also pops-up a window that has a list of all the records in the file.  The user can update a record on the maintenance screen, and can select records from the list.  When the user selects a record, the maintenance screen is updated with the selected record.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+MAIN-LOGIC.<a name="wp1033298"> </a>
+   PERFORM INITIALIZE<a name="wp1033299"> </a>
+   DISPLAY STANDARD GRAPHICAL WINDOW, <a name="wp1033300"> </a>
+      LINK TO THREAD<a name="wp1033301"> </a>
+   PERFORM THREAD SEARCH-THREAD, <a name="wp1033302"> </a>
+   PERFORM UNTIL DONE<a name="wp1033303"> </a>
+      PERFORM DISPLAY-RECORD<a name="wp1033304"> </a>
+      ACCEPT MAINTENANCE-SCREEN <a name="wp1033305"> </a>
+         ALLOWING MESSAGES FROM LAST THREAD<a name="wp1033306"> </a>
+         ON EXCEPTION<a name="wp1033307"> </a>
+            IF KEY-STATUS = W-MESSAGE<a name="wp1033308"> </a>
+                PERFORM SAVE-CURRENT-RECORD<a name="wp1033309"> </a>
+                RECEIVE RECORD-NUMBER <a name="wp1033310"> </a>
+                        FROM LAST THREAD<a name="wp1033311"> </a>
+            END-IF<a name="wp1033312"> </a>
+      END-ACCEPT<a name="wp1033313"> </a>
+   END-PERFORM<a name="wp1033314"> </a>
+   PERFORM SHUT-DOWN<a name="wp1033315"> </a>
+   STOP RUN.<a name="wp1033316"> </a>
+<a name="wp1033317"> </a>
+SEARCH-THREAD.<a name="wp1033318"> </a>
+   DISPLAY FLOATING GRAPHICAL WINDOW,<a name="wp1033319"> </a>
+      MODELESS, LINK TO THREAD<a name="wp1033320"> </a>
+      HANDLE IN H-SEARCH-WINDOW<a name="wp1033321"> </a>
+   PERFORM DISPLAY-SEARCH-LIST<a name="wp1033322"> </a>
+   PERFORM UNTIL 1 = 0<a name="wp1033323"> </a>
+      PERFORM ACCEPT-SEARCH-LIST<a name="wp1033324"> </a>
+      SEND RECORD-NUMBER-SELECTED TO LAST THREAD<a name="wp1033325"> </a>
+   END-PERFORM.<a name="wp1033326"> </a>
+</pre></div>
+<a name="wp1033327"> </a><p class="pBody">
+This example shows how using threads can simplify managing multiple windows.  In it, one thread manages the main window, and one manages the search window.  The search window is very simple, its thread sits in an infinite loop fetching a list item from the user and sending it to the main thread.  The main thread sits in a loop accepting the main screen.  If a message arrives from the search thread, it saves the current record and retrieves the record sent from the search window.  By using multiple threads, each piece of your window-handling code stands alone.  If it were written as a single-threaded program, the two loops accepting the windows would have to be combined into a single loop, with a state variable tracking which window is currently active.  
+</p>
+<a name="wp1060970"> </a><p style="font-family: Arial, Verdana, Helvetica, sans-serif">
+<hr />
+<b>Tip:  </b> The use of modeless windows and threads to provide the ability to switch between screens by pressing Taskbar buttons is demonstrated in an AcuBench sample project located in the Support area of the Acucorp Web site.  To download the project, open your Web browser and navigate to: www.acucorp.com/support/public/sample_programs/index.php.  Select the category &quot;Graphical User Interface Sample Programs&quot; from the drop down list and click on &quot;Threadds.zip&quot;.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

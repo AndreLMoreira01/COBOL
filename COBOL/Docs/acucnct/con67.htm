@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:53:04" />
+  <title>6.2.2.2  Running AcuConnect on HP MPE/iX systems</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con6.htm">Chapter 6: Thin Client: Preparing the Server </a> &gt; <a href="con63.htm">6.2  Installing Server Software Components</a> &gt; <a href="con65.htm">6.2.2  Installing AcuConnect</a> &gt; </p>
+<a name="wp1035096"> </a><h2 class="pHeading3">
+6.2.2.2  Running AcuConnect on HP MPE/iX systems
+</h2>
+<a name="wp1035100"> </a><p class="pBody">
+A limitation in the MPE/iX operating environment requires that sites planning to use AcuConnect on an MPE/iX host carefully consider how they will deploy the service.  The remainder of this section describes the situation and offers two management approaches for deploying on MPE/iX.
+</p>
+<a name="wp1035101"> </a><p class="pBody">
+AcuConnect uses the same basic methods as AcuServer<sup class="cSuperscript">®</sup> to start the service, validate a service request, and fulfill a request.  AcuConnect runs as an independent resident program (daemon) called <b class="cBold">acurcl</b>.  The running <b class="cBold">acurcl</b> process takes the user ID of the account that starts the program.  The service normally runs in the background, waiting for requests.  When a service request is received, <b class="cBold">acurcl</b> determines the user ID of the requester, checks an authorization file (&quot;AcuAccess&quot;) to determine if the requester is allowed to use the service, and determines the proxy user ID to be used for the requester (the requester user ID can be mapped to another ID; the mapped ID may be unique or may be shared by a number of users).  If authorization is successful, <b class="cBold">acurcl</b> temporarily assumes the proxy user ID to fulfill the request.  On most UNIX systems, the SETUID system function is used to assume the correct user ID.  A similar function is used in the Windows operating environment.
+</p>
+<a name="wp1035102"> </a><p class="pBody">
+In the MPE/iX environment, the operating system does not provide a way for a program (in this case, <b class="cBold">acurcl</b>) to change its user ID.  Therefore, the service always uses the ID of the account that started <b class="cBold">acurcl</b>.  Any action <b class="cBold">acurcl</b> takes is performed with that ID.  This inability to change IDs imposes some limitations and requires that MPE/iX sites carefully consider how they will deploy AcuConnect.
+</p>
+<a name="wp1035103"> </a><p class="pBody">
+Because <b class="cBold">acurcl </b>takes the user ID of the account that starts it, and because it uses that ID to access files and fulfill requests, that account must be able to service all anticipated requesters.  There are two approaches to managing this issue.  The approaches can be combined.
+</p>
+<a name="wp1035104"> </a><p class="pBody">
+One approach is to start <b class="cBold">acurcl</b> from an account that is accessible to all requesters (a &quot;group&quot; account).  Of course, such an account must have all of the necessary access permissions to satisfy every requester.  The limitation of this approach is that all requesters have the same proxy user ID on the server and there is no way to identify a unique requester.
+</p>
+<a name="wp1035105"> </a><p class="pBody">
+The second approach is to start a separate instance of <b class="cBold">acurcl</b> for each unique requester, or group of requesters (multiple group accounts).  This approach will work so long as the number of separate instances does not over-tax system resources (process space, processor capacity, and dynamic memory).  The number of instances that each system can handle will vary depending on the resources of that machine.  Some experimentation may be necessary to determine the limits of a given machine.  Note that when <b class="cBold">acurcl</b> is not executing a request, it waits on a socket in an efficient loop, consuming few resources.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

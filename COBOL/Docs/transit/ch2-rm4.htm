@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:25" />
+  <title>2.3  Memory Management</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch2-rm.htm">Chapter 2:  RM/COBOL Conversions</a> &gt; </p>
+<a name="wp1034749"> </a><h2 class="pHeading1">
+2.3  Memory Management
+</h2>
+<a name="wp1034751"> </a><p class="pBody">
+RM/COBOL supports two forms of memory management.  One form is the standard ANSI COBOL form.  This is also the memory management scheme used by ACUCOBOL-GT.  If your RM/COBOL application uses the ANSI-style of memory management, then you do not need to make any changes to run under ACUCOBOL-GT.
+</p>
+<a name="wp1034752"> </a><p class="pBody">
+The RM/COBOL implementation of the ANSI memory management is very restrictive, however, in that the main program plus the set of all called programs must fit in 64K bytes (except for those that are canceled).  For this reason, many applications use RM/COBOL's alternate mode of memory management.  In this mode, all of the currently active programs must fit in 64K bytes, but programs that are not currently active need not.  This has the effect of dynamically canceling inactive subprograms as needed to free up enough space.  This has the advantage that the programmer largely does not need to worry about canceling subprograms.  When this style of memory management is used, however, the programmer cannot depend on a subprogram's remaining loaded in memory.  This can cause variables to lose values.  RM/COBOL also causes open files in a subprogram to be closed when that subprogram exits (except for files assigned to a printer).  
+</p>
+<a name="wp1034753"> </a><p class="pBody">
+ACUCOBOL-GT has a much larger address space, and thus has no need for this scheme.  Furthermore, this form of memory management results in unpredictable behavior, since the state of a called and exited subprogram is unknown.  For these reasons, ACUCOBOL-GT does not directly support the alternate form of RM/COBOL memory management.  
+</p>
+<a name="wp1034754"> </a><p class="pBody">
+ACUCOBOL-GT does, however, have several techniques that can be used when you are converting programs that use this style of memory management.  Virtually any RM/COBOL program will run under the ACUCOBOL-GT memory management scheme.  The only significant problem that applications face has to do with handling menus.  These applications have one or more master menus that the user selects specific tasks from.  Usually, each of these tasks is a separate program that is called from the menu program when selected.  Since ACUCOBOL-GT abides by the ANSI/ISO standard, each of these programs remain in memory until explicitly canceled.  As the user chooses more and more menu selections, the memory used can become large.  This could eventually overrun the amount of memory available in the machine.  
+</p>
+<a name="wp1034755"> </a><p class="pBody">
+The ANSI/ISO solution to this problem is to cancel the task-handling subprograms when they are finished.  This would normally happen when control is returned to the menu program.  ACUCOBOL-GT has an extension to the CANCEL verb to make this task easier.  This is the statement &quot;CANCEL ALL&quot;.  This statement has the effect of canceling every program except for those that are currently active.  This has two advantages over the standard CANCEL statement:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034756"> </a><div class="pSmartList1"><li>You do not need to know the name of the program being canceled.  Thus you can place this one statement in the main loop in your menu program to handle all of the menu selections.</li></div>
+<a name="wp1034757"> </a><div class="pSmartList1"><li>The CANCEL ALL statement also cancels subprograms called by intervening programs.  Suppose the menu program calls program A, which in turn calls program B.  If you explicitly cancel program A, the ANSI standard states that program B will remain unconcealed.  The CANCEL ALL statement, on the other hand, will cancel both program A and B.  </li></div>
+</ol></div>
+<a name="wp1034758"> </a><p class="pBody">
+This is probably the easiest way to handle the memory management problem.  Another technique, however, that gives you greater control is to use the INITIAL PROGRAM attribute.  Any program that has the initial attribute is automatically canceled whenever it exits.  You can specify the initial attribute by either of these two methods:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034759"> </a><div class="pSmartList1"><li>By specifying &quot;IS INITIAL PROGRAM&quot; in the PROGRAM-ID clause.</li></div>
+<a name="wp1034760"> </a><div class="pSmartList1"><li>By using the &quot;-Zi&quot; compile-time flag.  </li></div>
+</ol></div>
+<a name="wp1034761"> </a><p class="pBody">
+You can use this technique if you want greater control over memory management than the CANCEL ALL statement gives you.  
+</p>
+<a name="wp1035575"> </a><p class="pBody">
+Finally, do not overlook the standard CANCEL verb.  This has the advantage that it is part of both the 1974 and 1985 COBOL standards.  
+</p>
+<a name="wp1035576"> </a><p class="pBody">
+For more information about runtime memory management, see section 6.3, &quot;Memory Management,&quot; in the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT User's Guide</span>. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:35:43" />
+  <title>2.5.2  Stored Procedures</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql2.htm">Chapter 2: Program Preparation</a> &gt; <a href="sql217.htm">2.5  Procedure Division</a> &gt; </p>
+<a name="wp1053355"> </a><h2 class="pHeading2">
+2.5.2  Stored Procedures
+</h2>
+<a name="wp1053460"> </a><p class="pBody">
+Those with Microsoft SQL Server can call stored procedures via embedded SQL.  Some restrictions apply.  (See <a  href="sql220.htm#wp1053415">section 2.5.2.1</a> for details.)
+</p>
+<a name="wp1053359"> </a><p class="pBody">
+Generally, you can execute two types of stored procedures:  those that return no result sets, and those that return a single result set.  If you execute stored procedures that return more than one result, the results are not available to the COBOL program.  AcuSQL does support output parameters and return code values, however.
+</p>
+<a name="wp1053360"> </a><p class="pBody">
+Consider the following stored procedure that has one output parameter and also returns a value:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+create procedure sp_listcustomer<a name="wp1053361"> </a>
+    @lastname varchar(100) = NULL,<a name="wp1053362"> </a>
+    @numrows int output<a name="wp1053363"> </a>
+    as<a name="wp1053364"> </a>
+select @numrows = count(*) from customer where c_last_name = @lastname<a name="wp1053365"> </a>
+select c_last_name, c_first_name, c_birthday from customer<a name="wp1053366"> </a>
+    where c_last_name = @lastname<a name="wp1053367"> </a>
+return 23<a name="wp1053368"> </a>
+</pre></div>
+<a name="wp1053369"> </a><p class="pBody">
+This stored procedure returns a single result set (c_last_name, c_first_name, and c_birthday).  Depending on the rows in the customer table, this can consist of many rows.
+</p>
+<a name="wp1053370"> </a><p class="pBody">
+There are two ways to execute this procedure from a COBOL program:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1053371"> </a><div class="pSmartList1"><li>Ignore the result sets, and just use the output parameters and return code.  This can be done with the following code:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+display &quot;Enter the name to search for: &quot;, no.<a name="wp1053372"> </a>
+accept c-last-name.<a name="wp1053373"> </a>
+EXEC SQL exec :ret-code = sp_listcustomer :c-last-name,<a name="wp1053374"> </a>
+:num-rows out<a name="wp1059755"> </a>
+END-EXEC.<a name="wp1053376"> </a>
+</pre></div>
+<a name="wp1059467"> </a><p class="pIndented1">
+Note that c-last-name, ret-code, and num-rows need to have been declared as valid variables in a DECLARE section.  When executed this way, all the rows returned by the stored procedure are thrown away, and only the num-rows variable and the ret-code variable are changed.  ret-code will be the value 23 (based on the &quot;return 23&quot; in the stored procedure)and num-rows will be the number of rows that match the WHERE.
+</p>
+<a name="wp1053378"> </a><div class="pSmartList1"><li>Have the result set returned to the COBOL program.  This requires a cursor to be declared, and is done with the following code:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+display &quot;Enter the name to search for: &quot;, no.<a name="wp1053379"> </a>
+accept c-last-name.<a name="wp1053380"> </a>
+EXEC SQL declare spcursor cursor for<a name="wp1053381"> </a>
+         exec :ret-code = sp_listcustomer :c-last-name,<a name="wp1053382"> </a>
+         :num-rows out<a name="wp1053383"> </a>
+END-EXEC.<a name="wp1053384"> </a>
+<a name="wp1053385"> </a>
+EXEC SQL<a name="wp1053386"> </a>
+    open spcursor<a name="wp1053387"> </a>
+END-EXEC.<a name="wp1053388"> </a>
+<a name="wp1053389"> </a>
+move 0 to num-rows-read.<a name="wp1053390"> </a>
+perform until SQLCODE not = 0<a name="wp1053391"> </a>
+    EXEC SQL<a name="wp1053392"> </a>
+        FETCH spcursor into<a name="wp1053393"> </a>
+         :c-last-name, :c-first-name,<a name="wp1053394"> </a>
+         :c-birthday<a name="wp1053395"> </a>
+    END-EXEC<a name="wp1053396"> </a>
+    if SQLCODE = 0<a name="wp1053397"> </a>
+        add 1 to num-rows-read<a name="wp1053398"> </a>
+        display c-last-name, &quot;, &quot;, c-first-name, &quot;, &quot;,<a name="wp1053399"> </a>
+               c-birthday<a name="wp1053400"> </a>
+    end-if<a name="wp1053401"> </a>
+end-perform.<a name="wp1053402"> </a>
+if num-rows not = num-rows-read<a name="wp1053403"> </a>
+    display &quot;stored procedure error, &quot; num-rows,<a name="wp1053404"> </a>
+            &quot; not = &quot;, num-rows-read<a name="wp1053405"> </a>
+end-if.<a name="wp1053406"> </a>
+</pre></div>
+<a name="wp1053407"> </a><p class="pIndented1">
+Note that c-last-name, ret-code, num-rows, c-first-name, and c-birthday need to have been declared as valid variables in a DECLARE section.  When executed this way, the num-rows and ret-code variables are set to the values given by the stored procedure at the time the cursor is opened. You must then execute FETCH commands in order to get the result set columns. This particular example tests the number of rows actually fetched against the num-rows value returned by the stored procedure.
+</p>
+<a name="wp1053408"> </a><p class="pIndented1">
+There are two types of syntax allowed by the precompiler when MSSQL syntax is in effect (that is, when you specify the &quot;-Pk mssql&quot; option).
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+EXEC SQL EXEC [:status-var = ] procedure-name 
+[[:param-var [out[put]]],<a name="wp1053409"> </a>
+...]<a name="wp1053410"> </a>
+</pre></div>
+<a name="wp1053411"> </a><p class="pIndented1">
+and
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+EXEC SQL DECLARE cursor-name CURSOR FOR EXEC <a name="wp1053412"> </a>
+[:status-var = ] procedure-name [[:param-var 
+[out[put]]], ...]<a name="wp1053413"> </a>
+</pre></div>
+<a name="wp1053414"> </a><p class="pIndented1">
+The second form requires all the usual steps necessary for cursors:  you must open the cursor and then fetch from it until all the rows have been fetched.
+</p>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

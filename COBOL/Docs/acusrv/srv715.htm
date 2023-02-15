@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:46:00" />
+  <title>7.5.3  RENAME</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv7.htm">Chapter 7: Programming for AcuServer</a> &gt; <a href="srv712.htm">7.5  Restrictions to Library Functions</a> &gt; </p>
+<a name="wp1035663"> </a><h2 class="pHeading2">
+7.5.3  RENAME
+</h2>
+<a name="wp1035665"> </a><p class="pBody">
+RENAME renames the file specified by <em class="cEmphasis">SOURCE-FILE</em> to the name specified by DEST-FILE.  The syntax of RENAME is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;RENAME&quot; USING SOURCE-FILE, DEST-FILE, <a name="wp1035666"> </a>
+        RENAME-STATUS, FILE-TYPE.<a name="wp1040211"> </a>
+</pre></div>
+<a name="wp1035667"> </a><p class="pBody">
+Remote file name notation is not permitted on the <em class="cEmphasis">DEST-FILE</em> parameter.  If the <em class="cEmphasis">SOURCE-FILE</em> parameter specifies a remote file:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1035668"> </a><div class="pSmartList1"><li>The rename takes place on the specified server.</li></div>
+<a name="wp1035669"> </a><div class="pSmartList1"><li>The location of source and destination files on the server is dependent on the paths specified by <em class="cEmphasis">SOURCE-FILE</em> and <em class="cEmphasis">DEST-FILE</em>.  Parameters that do not specify an absolute pathname (an absolute path starts with a &quot;/&quot;), are considered to be located relative to the directory in which the server (acuserve) was started.  For example:</li></div>
+<a name="wp1035670"> </a><p class="pIndented1">
+If <b class="cBold">acuserve</b> was started on condor in the /acucobol directory, and <em class="cEmphasis">SOURCE-FILE</em> is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+@condor:sales_records/index.dat<a name="wp1035671"> </a>
+</pre></div>
+<a name="wp1035672"> </a><p class="pIndented1">
+AcuServer expects to find index.dat in directory /acucobol/sales_records (note the absence of a &quot;/&quot; after &quot;condor:&quot;).
+</p>
+<a name="wp1035673"> </a><p class="pIndented1">
+If <em class="cEmphasis">SOURCE-FILE</em> is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+@condor:/usr2/sales_records/index.dat<a name="wp1035674"> </a>
+</pre></div>
+<a name="wp1035675"> </a><p class="pIndented1">
+AcuServer expects to find index.dat in directory /usr2/sales_records.
+</p>
+<a name="wp1035676"> </a><p class="pIndented1">
+These pathing rules hold for both <em class="cEmphasis">SOURCE-FILE</em> and <em class="cEmphasis">DEST-FILE</em>; however, <em class="cEmphasis">DEST-FILE</em> can never include the name of the remote host (@condor).
+</p>
+</ul></div>
+<a name="wp1035677"> </a><p class="pBody">
+FILE_PREFIX is not used to search for file names held in any of the function's parameters.  <em class="cEmphasis">Name aliases</em> are not substituted for names held in the function's parameters.  Full path names to the files, including remote name notation on the <em class="cEmphasis">SOURCE-FILE</em>, must be hard coded in the function call.  A more portable solution is to use the ACCEPT FROM ENVIRONMENT statement to get pathnames during program execution.  See the entry for ACCEPT in Chapter 6 of the <em class="cEmphasis">ACUCOBOL-GT Reference Manual</em>.
+</p>
+<a name="wp1035679"> </a><p class="pBody">
+<em class="cEmphasis">RENAME-STATUS</em> holds a zero (&quot;0&quot;) if the routine is successful; otherwise it is set to the operating system's error number, or &quot;19&quot; if there is a network error (for example, AcuServer is not running).
+</p>
+<a name="wp1035680"> </a><p class="pBody">
+For a complete description of RENAME, excluding the above restrictions, see Appendix I of the ACUCOBOL-GT documentation.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

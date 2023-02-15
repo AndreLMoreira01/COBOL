@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:02" />
+  <title>D.9  Data Type Mapping </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gld.htm">Appendix D:  Acu4GL for ODBC Information </a> &gt; </p>
+<a name="wp1048072"> </a><h2 class="pHeading1">
+D.9  Data Type Mapping 
+</h2>
+<a name="wp1048073"> </a><h3 class="pHeadingRef">
+Overview of ODBC data types
+</h3>
+<a name="wp1048079"> </a><p class="pBody">
+ODBC defines certain generic data types, which every data source driver maps to its own internal types.  Each driver needs to be queried about which types it supports, since different drivers support different types.  
+</p>
+<a name="wp1048080"> </a><p class="pBody">
+The types that Acu4GL for ODBC uses, if they exist in the driver, are:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SQL_CHAR<a name="wp1048081"> </a>
+SQL_VARCHAR<a name="wp1092464"> </a>
+SQL_DECIMAL<a name="wp1092465"> </a>
+SQL_NUMERIC<a name="wp1092466"> </a>
+SQL_SMALLINT<a name="wp1092467"> </a>
+SQL_INTEGER<a name="wp1092468"> </a>
+SQL_REAL<a name="wp1092469"> </a>
+SQL_FLOAT<a name="wp1092470"> </a>
+SQL_DOUBLE<a name="wp1092471"> </a>
+SQL_TINYINT<a name="wp1092472"> </a>
+SQL_BIGINT<a name="wp1092473"> </a>
+SQL_BINARY<a name="wp1092474"> </a>
+SQL_VARBINARY<a name="wp1092475"> </a>
+SQL_LONGVARBINARY<a name="wp1092476"> </a>
+SQL_DATE<a name="wp1092477"> </a>
+SQL_TIMESTAMP<a name="wp1092478"> </a>
+</pre></div>
+<a name="wp1048082"> </a><p class="pBody">
+For example, Informix maps these types like this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SQL_CHAR                   CHAR<a name="wp1052823"> </a>
+SQL_VARCHAR                VARCHAR<a name="wp1052827"> </a>
+SQL_DECIMAL                DECIMAL or MONEY<a name="wp1052831"> </a>
+SQL_NUMERIC                no such type<a name="wp1052835"> </a>
+SQL_SMALLINT               SMALLINT<a name="wp1052839"> </a>
+SQL_INTEGER                INTEGER or SERIAL<a name="wp1052843"> </a>
+SQL_REAL                   REAL<a name="wp1052847"> </a>
+SQL_FLOAT                  no such type<a name="wp1052851"> </a>
+SQL_DOUBLE                 FLOAT<a name="wp1052855"> </a>
+SQL_TINYINT                no such type<a name="wp1052859"> </a>
+SQL_BIGINT                 no such type<a name="wp1052863"> </a>
+SQL_BINARY                 no such type<a name="wp1052867"> </a>
+SQL_VARBINARY              no such type<a name="wp1052871"> </a>
+SQL_LONGVARBINARY          BYTE<a name="wp1052875"> </a>
+SQL_DATE                   DATE<a name="wp1052879"> </a>
+SQL_TIMESTAMP              DATETIME YEAR TO FRACTION(5)<a name="wp1052883"> </a>
+</pre></div>
+<a name="wp1052886"> </a><p class="pBody">
+
+</p>
+<a name="wp1048085"> </a><p class="pBody">
+Informix also defines a type that ODBC calls SQL_LONGVARCHAR, and Informix calls TEXT, which the Acu4GL for ODBC product doesn't use.
+</p>
+<a name="wp1048086"> </a><p class="pBody">
+Notice that Informix has two types that match the ODBC SQL_DECIMAL type, and two that match the SQL_INTEGER type.  The Acu4GL product will usually use the first type that it finds that matches an ODBC type, unless there are restrictions on that type.  For example, the SERIAL type is limited in that a table can have only one such column, while a typical table may have more than one column of integer data. 
+</p>
+<a name="wp1048087"> </a><p class="pBody">
+So the Acu4GL for ODBC product will use the Informix INTEGER type, instead of the SERIAL type for integer data.
+</p>
+<a name="wp1048088"> </a><p class="pBody">
+For another example, Access maps these types like this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SQL_CHAR                      CHAR<a name="wp1048089"> </a>
+SQL_VARCHAR                   TEXT<a name="wp1048090"> </a>
+SQL_DECIMAL                   no such type<a name="wp1053144"> </a>
+SQL_NUMERIC                   CURRENCY<a name="wp1053145"> </a>
+SQL_SMALLINT                  SHORT<a name="wp1053146"> </a>
+SQL_INTEGER                   LONG or COUNTER<a name="wp1053147"> </a>
+SQL_REAL                      SINGLE<a name="wp1053148"> </a>
+SQL_FLOAT                     no such type<a name="wp1053149"> </a>
+SQL_DOUBLE                    DOUBLE<a name="wp1053150"> </a>
+SQL_TINYINT                   BYTE<a name="wp1053151"> </a>
+SQL_BIGINT                    no such type<a name="wp1053152"> </a>
+SQL_BINARY                    BINARY<a name="wp1053153"> </a>
+SQL_VARBINARY                 VARBINARY<a name="wp1053154"> </a>
+SQL_LONGVARBINARY             LONGBINARY<a name="wp1053155"> </a>
+SQL_DATE                      no such type<a name="wp1053156"> </a>
+SQL_TIMESTAMP                 DATETIME<a name="wp1053157"> </a>
+</pre></div>
+<a name="wp1048091"> </a><p class="pBody">
+Access also defines types, SQL_BIT = BIT and SQL_LONGVARCHAR = LONGTEXT which the Acu4GL for ODBC product doesn't use.
+</p>
+<a name="wp1048092"> </a><h3 class="pHeadingRef">
+Mapping COBOL data types to ODBC data types
+</h3>
+<a name="wp1048099"> </a><p class="pBody">
+When the Acu4GL for ODBC product creates a table, it uses what it determines to be the best match of a data type for any particular column. 
+</p>
+<a name="wp1048100"> </a><p class="pBody">
+This means that the database column will be able to hold any data that the COBOL data type can hold, and is as close as possible to the type of data that the COBOL program is using.  This determination is based in part on what data types the data source has available.  Obviously, if a data source doesn't support some data type, the Acu4GL for ODBC product can't use it with that data source.  The actual algorithm used is rather complicated, but the general rules are as follows:
+</p>
+<a name="wp1048101"> </a><p class="pBody">
+User preferences take precedence.  This means that the XFD directives specified are checked first.  Therefore, when data should be of type DATE or BINARY, a DATE or BINARY type is located and used, if the data source supports it.
+</p>
+<a name="wp1048102"> </a><p class="pBody">
+If the COBOL data type is usage float or usage double, a data source type of FLOAT, REAL, or DOUBLE is used, depending on what is available.  If none of these is available, the Acu4GL product abides by the next rule.
+</p>
+<a name="wp1048103"> </a><p class="pBody">
+If the COBOL data type is numeric, a numeric type is used in the data source.  The numeric type chosen depends on how large the COBOL data type is, and how many digits to the right of the decimal point (if any) there are. 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1048104"> </a><div class="pSmartList1"><li>For example, if the COBOL data type is PIC 99, the data source types checked for are TINYINT, SMALLINT, INTEGER, BIGINT, DECIMAL, NUMERIC, CHAR.  The first of these that exists is the type that will be used for that column.</li></div>
+<a name="wp1048105"> </a><div class="pSmartList1"><li>For another example, if the COBOL data type is PIC 9(6)v99, the data source types checked for are DECIMAL, NUMERIC, DOUBLE, FLOAT, REAL, CHAR.  Again, the first of these types that exists is the type that will be used for that column.</li></div>
+<a name="wp1048106"> </a><div class="pSmartList1"><li>Anything else will use CHAR.</li></div>
+</ul></div>
+<a name="wp1048107"> </a><p class="pBody">
+Occasionally, you may encounter a data source type that only supports type CHAR (which is the only data type that is guaranteed to exist, according to the ODBC specification).  Under these data sources, all the COBOL data types will be mapped to CHAR types.  
+</p>
+<a name="wp1048108"> </a><h3 class="pHeadingRef">
+Mapping ODBC data types to COBOL data types
+</h3>
+<a name="wp1048114"> </a><p class="pBody">
+Sometimes developers are in a situation where they need to create a COBOL File Description based on an existing data source table.  The most important thing to understand in this situation is that there is almost nothing that you can do wrong!  When the Acu4GL product opens a data source table, the only thing it checks is that the column names match the COBOL data names.  
+</p>
+<a name="wp1048115"> </a><p class="pBody">
+When the Acu4GL product reads data from the data source, it essentially does a COBOL-style MOVE from the native data type to the COBOL data type, whatever it is.  And since most types have a CHAR representation (in other words, you can actually display most data types, using a standard ODBC-capable tool), using PIC X(nn) for each column will work perfectly well.
+</p>
+<a name="wp1048116"> </a><p class="pBody">
+A better general rule is to use a COBOL type that closely matches the data source data type, but don't worry about getting an exact fit.  So you can use PIC 9(9) whenever the data source has an INTEGER type.
+</p>
+<a name="wp1048117"> </a><p class="pBody">
+If you have more information about the data source type, you might be able to use a different COBOL representation.  For example, if you know that a particular column in an ODBC data source has values only in the range 0-999, you could use PIC 999 for your COBOL data.  The COMP-type you use is really determined by your own preferences, and should have little bearing on the COBOL data type you choose.
+</p>
+<a name="wp1048118"> </a><p class="pBody">
+If you want to somehow choose your COBOL data types so that there is a best fit, you can use the following mapping:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SQL_CHAR               PIC X(nn)      nn =size of item<a name="wp1048119"> </a>
+SQL_VARCHAR            PIC X(nn)      nn = maximum size of item<a name="wp1048120"> </a>
+SQL_DECIMAL            PIC 9(n)v9(m)<a name="wp1053158"> </a>
+SQL_NUMERIC            PIC 9(n)v9(m)<a name="wp1053159"> </a>
+SQL_SMALLINT           PIC 9(5) COMP-5<a name="wp1053172"> </a>
+SQL_INTEGER            PIC 9(9) COMP-5<a name="wp1053173"> </a>
+SQL_REAL               USAGE FLOAT<a name="wp1053174"> </a>
+SQL_FLOAT              USAGE FLOAT<a name="wp1053163"> </a>
+SQL_DOUBLE             USAGE DOUBLE<a name="wp1053164"> </a>
+SQL_TINYINT            PIC 9(3) COMP-5<a name="wp1053177"> </a>
+SQL_BIGINT             PIC 9(9) COMP-5<a name="wp1053178"> </a>
+SQL_BINARY             PIC X(nn)<a name="wp1053179"> </a>
+SQL_VARBINARY          PIC X(nn)<a name="wp1053168"> </a>
+SQL_LONGVARBINARY      PIC X(nn)<a name="wp1053169"> </a>
+SQL_DATE               PIC 9(6) or PIC 9(8)<a name="wp1053170"> </a>
+SQL_TIMESTAMP          USAGE DISPLAY<a name="wp1053171"> </a>
+</pre></div>
+<a name="wp1048121"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The BINARY data types are usually of a form that COBOL can't understand anyway.  You will usually just read these columns, and rewrite them unchanged.  If you have more information about the data in the columns, you might be able to do something else, but this requires more knowledge about the columns.
+<hr />
+</p>
+<a name="wp1048603"> </a><p class="pBody">
+The DECIMAL, NUMERIC, DATE, and TIMESTAMP types usually have special representations in a data source, which really doesn't match any COBOL data type exactly.  When the Acu4GL product binds the data (a technical term), it asks the data source to return it in character form, so the most efficient COBOL data type would probably be USAGE DISPLAY.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-GET-PRINTER-STATUS</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1040731"> </a><h2 class="pHeading3">
+WINPRINT-GET-PRINTER-STATUS
+</h2>
+<a name="wp1040733"> </a><p class="pBody">
+This operation code allows you to check the current status of a printer.  This can be used to see if a printer is available to perform a print job or not.
+</p>
+<a name="wp1040737"> </a><p class="pBody">
+In some cases the printer may respond that it is ready when, in fact, there are jobs pending because the printer is out of paper or paused.  (This is a feature of the Windows API.)  We recommend that you check condition of the printer using the WINPRINT-JOB-STATUS operation codes.
+</p>
+<a name="wp1040738"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040739"> </a>
+    USING WINPRINT-GET-PRINTER-STATUS, WINPRINT-SELECTION<a name="wp1040740"> </a>
+    GIVING RESULT<a name="wp1040741"> </a>
+</pre></div>
+<a name="wp1040742"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040743"> </a><p class="pBody">
+<b class="cBold">WINPRINT-SELECTION</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 WINPRINT-SELECTION.<a name="wp1040744"> </a>
+   03 WINPRINT-NAME                    PIC X(80).<a name="wp1040745"> </a>
+   03 WINPRINT-PORT                    PIC X(80).<a name="wp1040746"> </a>
+   03 WINPRINT-DRIVER                  PIC X(80).<a name="wp1040747"> </a>
+   03 WINPRINT-DRV-VERSION             SIGNED-INT.<a name="wp1040748"> </a>
+   03 WINPRINT-NO-OF-PRINTERS          SIGNED-SHORT.<a name="wp1040749"> </a>
+      88 WPRTERR-NO-PRINTERS           VALUE -1.<a name="wp1040750"> </a>
+   03 WINPRINT-IS-DEFAULT              SIGNED-SHORT.<a name="wp1040751"> </a>
+      88 WPRT-IS-NOT-DEFAULT           VALUE 0.<a name="wp1040752"> </a>
+      88 WPRT-IS-DEFAULT               VALUE 1.<a name="wp1040753"> </a>
+   03 WINPRINT-COPIES                  SIGNED-SHORT.<a name="wp1040754"> </a>
+      88 WPRT-HAS-NO-COPY              VALUE 1.<a name="wp1040755"> </a>
+   03 WINPRINT-ORIENTATION             SIGNED-SHORT.<a name="wp1040756"> </a>
+      88 WPRT-HAS-NO-LANDSCAPE         VALUE 0.<a name="wp1040757"> </a>
+      88 WPRT-HAS-LANDSCAPE            VALUE 1.<a name="wp1040758"> </a>
+   03 WINPRINT-QUALITY                 SIGNED-SHORT.<a name="wp1040759"> </a>
+   03 WINPRINT-CURR-ORIENTATION        SIGNED-SHORT.<a name="wp1040760"> </a>
+   03 WINPRINT-CURR-COPIES             SIGNED-SHORT.<a name="wp1040761"> </a>
+</pre></div>
+<a name="wp1040762"> </a><h3 class="pHeadingRef">
+Return Values
+</h3>
+<a name="wp1040763"> </a><p class="pBody">
+This operation returns the printer status as defined in the Windows API.  
+</p>
+<a name="wp1040764"> </a><p class="pBody">
+A great variety of conditions can affect a single print job and printer status may be the result of a combination of values.  This makes it impossible to catalog all possible status settings in &quot;winprint.def&quot;.  Refer to the Windows API documentation for a description of any status not covered in that file.
+</p>
+<a name="wp1040765"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040766"> </a><p class="pBody">
+This operation may be called any time, whether the printer is open or not. There is no need to reset this function. WINPRINT-SELECTION should be initialized prior to use.  WINPRINT-NAME must be set to the name of the desired printer.  WINPRINT-NAME passes the printer name as an input variable. Printer settings are not modified by this operation.
+</p>
+<a name="wp1040767"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If this function is executed on a networked printer with a missing or malfunctioning network, your application may appear to hang.   Once the timeout has completed, your application will resume. This is a feature of the Windows API, not an effect of the runtime.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.1.15.1  Remote file name handling</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt122.htm">2.1 Using the Compiler</a> &gt; <a href="gt1217.htm">2.1.15  File Name Handling</a> &gt; </p>
+<a name="wp1033061"> </a><h2 class="pHeading3">
+2.1.15.1  Remote file name handling
+</h2>
+<a name="wp1033066"> </a><p class="pBody">
+If AcuServer or AcuConnect is running on remote machines, the compiler can read remote source files from and write resulting files to those systems.  The remote filename syntax that is used with the compiler is different than that used with the runtime and AcuServer.  Because the compiler uses the &quot;at&quot; sign (&quot;@&quot;) as a placeholder for the base name of the source file, you cannot use that symbol as a tag in front of the name of the remote system (for example, &quot;-o @server:/objects/@.acu&quot; is ambiguous).  Instead, the syntax is more like standard URL syntax.  The remote filename specification must be of the form:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+acurfap://server:[port]:filename<a name="wp1033067"> </a>
+</pre></div>
+<a name="wp1033068"> </a><p class="pBody">
+<em class="cEmphasis">acurfap</em> stands for &quot;Acucorp Remote File Access Protocol.&quot;
+</p>
+<a name="wp1033069"> </a><p class="pBody">
+Remote file name notation can be used with any compiler option that takes a file name as an argument.  The &quot;//server:port&quot; notation can be used with any configuration variable that allows remote name notation.  See Appendix H, &quot;Configuration File Entries&quot; in Book 4 for details on configuration variables.
+</p>
+<a name="wp1033070"> </a><p class="pBody">
+If AcuServer is listening on the default port of a server machine, you do not have to specify the port number because the compiler defaults to that number (&quot;6523&quot;).  However, if you omit the port number, you must include two colons (&quot;::&quot;) before the file name.   If AcuServer is listening on a port other than the default, the &quot;::&quot; notation will not work.
+</p>
+<a name="wp1033071"> </a><h3 class="pHeadingRef">
+Examples
+</h3>
+<a name="wp1033072"> </a><p class="pBody">
+If AcuServer is running on a UNIX machine named <em class="cEmphasis">myserver</em> and is listening on the default port, you can compile &quot;apmain.cbl&quot; straight to that machine with the following command.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ccbl -o acurfap://myserver::/myapp/obj/@.acu apmain.cbl<a name="wp1033073"> </a>
+</pre></div>
+<a name="wp1062252"> </a><p class="pBody">
+If &quot;apmain.cbl&quot; is located on the server, you can compile the remote file and write the resulting object file to the server with the following command.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ccbl -o acurfap://myserver::/myapp/obj/@.acu <a name="wp1062253"> </a>
+    acurfap://myserver::/myapp/src/apmain.cbl<a name="wp1062247"> </a>
+</pre></div>
+<a name="wp1033074"> </a><p class="pBody">
+If AcuConnect is running on a Windows machine named <em class="cEmphasis">myserver</em> and is listening on port &quot;5632&quot;, you can compile &quot;apmain.cbl&quot; straight to that machine with the following command.  Notice that if specifying a Windows directory, you must also include a drive letter followed by a colon (the &quot;c:&quot; in this example) after the port number (or the optional &quot;::&quot;).
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ccbl32 -o acurfap://myserver:5632:c:/myapp/obj/@.acu <a name="wp1033075"> </a>
+    apmain.cbl<a name="wp1072362"> </a>
+</pre></div>
+<a name="wp1033076"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>  When specifying a remote file name for a Windows machine, you can use the <em class="cEmphasis">backward slashes</em> (&quot;\&quot;) used by Windows, the <em class="cEmphasis">forward slashes</em> (&quot;/&quot;) used by UNIX, or a combination of the two. 
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

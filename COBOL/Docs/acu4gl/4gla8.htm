@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:57" />
+  <title>A_INF_DUPLICATE_KEY</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gla.htm">Appendix A:  Acu4GL for Informix Information </a> &gt; <a href="4gla7.htm">A.3  Acu4GL for Informix Configuration File Variables</a> &gt; </p>
+<a name="wp1048325"> </a><h2 class="pHeading2">
+A_INF_DUPLICATE_KEY
+</h2>
+<a name="wp1043286"> </a><p class="pBody">
+This variable determines how Acu4GL for Informix handles the processing of alternate keys with duplicates.  When reading on an alternate key with duplicates, it is possible that all records will not be returned.  The probability of this scenario increases if the direction of the read changes (for example, switching from read next to read previous).  This generally occurs when:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1037178"> </a><div class="pSmartList1"><li>The the data set was imported from an external file</li></div>
+<a name="wp1037179"> </a><div class="pSmartList1"><li>The the database has undergone large amounts of modifications resulting in the re-use of row IDs</li></div>
+<a name="wp1037180"> </a><div class="pSmartList1"><li>The the initial query returned the record set in some way such that the records are not in row ID order</li></div>
+</ul></div>
+<a name="wp1037181"> </a><p class="pBody">
+There are three potential values that can be set for this variable:
+</p>
+<a name="wp1037182"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>These settings can affect performance.  If you need assistance, see your Database Administrator. 
+<hr />
+</p>
+<a name="wp1037183"> </a><h5 class="pHeading4">
+Zero (&quot;0&quot;)
+</h5>
+<a name="wp1066283"> </a><p class="pBody">
+If this variable is set to zero, no ROWID is added to the SELECT statements for reading in a forward direction, but a ROWID is added to SELECT statements for reading in a backward direction if the file is not a VIEW.
+</p>
+<a name="wp1037184"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>Setting this variable to zero (&quot;0&quot;) is not recommended because ROWIDs may not be in an ascending order.  This method can be used if the direction in which the application reads records does not change, but it is unknown if this will work for all situations.  This method is provided for backwards compatibility only.
+<hr />
+</p>
+<a name="wp1056859"> </a><h5 class="pHeading4">
+One (&quot;1&quot;)
+</h5>
+<a name="wp1066290"> </a><p class="pBody">
+If this variable is set to one (&quot;1&quot;), a ROWID is added to the ORDER BY clause of all SELECT statements reading tables on an alternate key that allow duplicates.  A ROWID is not added if the file is a VIEW.  This assures a predictable ordering of keys. This is the default setting.
+</p>
+<a name="wp1057985"> </a><h5 class="pHeading4">
+Two (&quot;2&quot;)
+</h5>
+<a name="wp1066297"> </a><p class="pBody">
+If this variable is set to two (&quot;2&quot;), the primary key segments are added to the ORDER BY clause of all SELECT statements reading tables or VIEWs on an alternate key that allow duplicates.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

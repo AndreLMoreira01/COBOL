@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:31" />
+  <title>4.1 Handles</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt24.htm">Chapter 4:  Supporting Concepts and Related Issues</a> &gt; </p>
+<a name="wp1026057"> </a><h2 class="pHeading1">
+4.1 Handles
+</h2>
+<a name="wp1026059"> </a><p class="pBody">
+Normally, when you create a graphical object, the runtime system generates a unique value to identify that object, and stores that value in the program's specified <em class="cEmphasis">handle</em>.  You make future references to that object by naming its handle.  Most of the graphically oriented features of ACUCOBOL-GT make use of handles.  A handle is a COBOL data item.  Internally, a handle is simply a number.  The COBOL program uses handles to identify various graphical items.
+</p>
+<a name="wp1026060"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In addition to all the graphical controls and user-interface-type objects (e.g., window, font), a handle can be applied to a thread within a program. 
+<hr />
+</p>
+<a name="wp1026061"> </a><p class="pBody">
+If you have worked with ACUCOBOL-GT's text-based subwindows (textual, pop-up windows), you are already familiar with the use of handles.  The POP-UP AREA phrase of the DISPLAY WINDOW verb names a PIC X(10) data item that holds the handle of the created window.  When you want to remove the window, you use that data item in the CLOSE WINDOW verb.  The data item tells the system which window to close.
+</p>
+<a name="wp1026064"> </a><p class="pBody">
+There is a data type, called USAGE IS HANDLE, that you use when you want to declare a handle for a data item.  The syntax for it is as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+USAGE IS HANDLE OF <em class="cEmphasis">type</em><a name="wp1026065"> </a>
+</pre></div>
+<a name="wp1026066"> </a><p class="pBody">
+You can use this data type with or without specifying a type of handle, but there are certain benefits if you do specify it.  The primary benefit, for handles of controls, is that the proper style and property names are known by the compiler and can be used.  Consider the difference in this example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77  h-1  handle.<a name="wp1026067"> </a>
+77  h-2  handle of entry-field.<a name="wp1026443"> </a>
+</pre></div>
+<a name="wp1026068"> </a><p class="pBody">
+then,
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+modify h-2, max-text = 15.     ( <em class="cEmphasis">legal</em> )<a name="wp1026069"> </a>
+modify h-1, max-text = 15.     ( <em class="cEmphasis">compile error</em> )<a name="wp1026444"> </a>
+</pre></div>
+<a name="wp1026070"> </a><p class="pBody">
+Another significant benefit to typed handles is that the compiler can check that they are being used in proper contexts.  
+</p>
+<a name="wp1026072"> </a><p class="pBody">
+The runtime system can tell when a handle is no longer valid.  If you make reference to an invalid handle (for example, a handle to an object you have destroyed), the requested operation is simply ignored. 
+</p>
+<a name="wp1026073"> </a><p class="pBody">
+When you make use of graphical objects in the Screen Section, the runtime system automatically creates and manages the associated handles for you.  In this case you do not explicitly use handles when referring to graphical objects. 
+</p>
+<a name="wp1026074"> </a><p class="pBody">
+For more information about handles and the USAGE IS clause, see section 5.7.1.8 &quot;USAGE clause&quot; in Book 3, <em class="cEmphasis">Reference Manual</em>.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

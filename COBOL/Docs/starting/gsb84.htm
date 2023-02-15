@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/12/05 11:54:24" />
+  <title>8.2.1  How License Management Works</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Getting Started <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gsb8.htm"><br />Chapter 8: License Management</a> &gt; <a href="gsb83.htm">8.2  License File Management Under UNIX/Linux</a> &gt; </p>
+<a name="wp1034759"> </a><h2 class="pHeading2">
+8.2.1  How License Management Works
+</h2>
+<a name="wp1036847"> </a><p class="pBody">
+The <b class="cBold">acushare</b> utility program is an important component of any UNIX or Linux system running AcuServer or the ACUCOBOL-GT runtime.  <b class="cBold">Acushare</b> monitors the number of simultaneous users of Acucorp products, where a &quot;user&quot; is defined as a unique terminal name.
+</p>
+<a name="wp1034766"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>For programs called via AcuConnect and CGI processes started by a web server, each process on the server is counted as a separate user.  Likewise, if a terminal allows users to log in with more than one <b class="cBold">telnet</b> (tty) session under a single user name, each <b class="cBold">telnet</b> session is counted as a separate user by the license manager.
+<hr />
+</p>
+<a name="wp1036864"> </a><p class="pBody">
+<b class="cBold">Acushare</b> keeps a list of active users (terminals) and ensures that the number of users executing the runtime simultaneously does not exceed the limits of the site's license.  
+</p>
+<a name="wp1037498"> </a><p class="pBody">
+<b class="cBold">Acushare</b> keeps track of users for each product's distinct serial number.  For example, if you have a runtime for 10 users, and a second runtime for 20 users, then a total of 30 users could be executing applications on the system simultaneously, if both runtimes are executing.  This ensures that distinct software applications are monitored separately.  
+</p>
+<a name="wp1037499"> </a><p class="pBody">
+When the ACUCOBOL-GT runtime or AcuServer run, they perform the following actions related to license management:
+</p>
+<a name="wp1036990"> </a><h3 class="pHeadingRef">
+Check acushare
+</h3>
+<a name="wp1036991"> </a><p class="pBody">
+When the ACUCOBOL-GT runtime or AcuServer starts up, each checks to make sure that <b class="cBold">acushare</b> is running on the system.  If it's not running, the product attempts to start it.  In order for this automatic startup to be successful, <b class="cBold">acushare</b> must be located in the product's search path.
+</p>
+<a name="wp1037788"> </a><p class="pBody">
+If the product cannot start <b class="cBold">acushare</b>, it exits with the following message:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Shared memory and license manager (acushare) is not 
+running<a name="wp1037789"> </a>
+</pre></div>
+<a name="wp1037793"> </a><p class="pBody">
+For details regarding separately starting <b class="cBold">acushare</b>, see <a  href="gsb85.htm#wp1034833">section 8.2.2</a> below.
+</p>
+<a name="wp1034774"> </a><h3 class="pHeadingRef">
+Register each terminal name
+</h3>
+<a name="wp1034775"> </a><p class="pBody">
+If <b class="cBold">acushare</b> is running on the system, the ACUCOBOL-GT runtime or AcuServer attempts to register itself with <b class="cBold">acushare</b>.  If the user limit has not already been reached, the registration occurs.  <b class="cBold">Acushare</b> places the user's (terminal) name on the list of active product users (unless it's already there).
+</p>
+<a name="wp1034776"> </a><p class="pBody">
+If the user limit specified in the site's license file would be exceeded by the addition of this user, the product checks the product's configuration file (and then checks the environment), to determine if it should retry the registration process in a few seconds.  
+</p>
+<a name="wp1034777"> </a><p class="pBody">
+A runtime configuration variable can be used to specify the number of retries allowed when you are executing the runtime.  If this variable is set to a positive integer value, the runtime waits &quot;n&quot; seconds and tries again to register itself.  The value &quot;n&quot; (the number of seconds to wait between retries) is set in the variable A_RETRY_DELAY.  If no retries are desired, or all retries have been performed and the limit is still exceeded, the product exits with a message.
+</p>
+<a name="wp1037524"> </a><h3 class="pHeadingRef">
+Recheck acushare
+</h3>
+<a name="wp1037525"> </a><p class="pBody">
+Each active product checks periodically to determine if <b class="cBold">acushare</b> is still running.  If the product detects that <b class="cBold">acushare</b> has stopped and has not been restarted, it tries to restart it itself.  If unsuccessful, it issues the following warning message:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+License manager (acushare) is not running<a name="wp1034780"> </a>
+</pre></div>
+<a name="wp1034781"> </a><p class="pBody">
+This warning message appears at the line specified in the runtime configuration variable SCREEN ERROR-LINE.  Or, if that's not set, at the bottom of the screen.  
+</p>
+<a name="wp1034782"> </a><p class="pBody">
+If <b class="cBold">acushare</b> has not been restarted by the time the product makes another periodic check, the product exits.
+</p>
+<a name="wp1034783"> </a><h3 class="pHeadingRef">
+Ending a session
+</h3>
+<a name="wp1034784"> </a><p class="pBody">
+When the user ends a session on the terminal, the product receives a signal to terminate.  If the product was executed with &quot;-h&quot; or &quot;-sb&quot; it ignores the signal and continues to run.  When a product is executing without a controlling terminal, <b class="cBold">acushare</b> displays the terminal name as &quot;(none)&quot;.  The terminal is removed from <b class="cBold">acushare&#39;s</b> list of active users only when the product terminates.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

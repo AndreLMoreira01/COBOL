@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:09" />
+  <title>3.7.3  Understanding the report</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt13.htm"><br />Chapter 3:  Debugger and Utilities</a> &gt; <a href="gt1384.htm">3.7  The Profiler</a> &gt; </p>
+<a name="wp1109970"> </a><h2 class="pHeading2">
+3.7.3  Understanding the report
+</h2>
+<a name="wp1100565"> </a><p class="pBody">
+The report is divided into three sections:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1100566"> </a><div class="pSmartList1"><li>The first section contains general information about when the program was run, which version of the runtime was used, and general system capabilities.</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Profile run on Fri Feb 06 10:05:15 2006, sorted by name<a name="wp1100567"> </a>
+ACUCOBOL-GT version 7.2.0 (2006-05-10)<a name="wp1100568"> </a>
+Timer interval = 10.029 milliseconds<a name="wp1100569"> </a>
+</pre></div>
+<a name="wp1105123"> </a><p class="pIndented1">
+Note that the runtime uses the best timer that it can get from the system, which generally means an interval around ten milliseconds (100 &quot;ticks&quot; per second).  As a result, it's best to run the application for at least ten seconds (not counting time waiting in an ACCEPT loop for user interaction) to get a useful number of data points.
+</p>
+<a name="wp1100570"> </a><div class="pSmartList1"><li>The second section contains information about the programs executed.</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+   Pct       Secs     Count      I/O   Program            
+======================================================== <a name="wp1100571"> </a>
+   36.7%      8.35    57927        0   PDM0425<a name="wp1100572"> </a>
+   32.8%      7.47        1    38950   TRP140<a name="wp1100573"> </a>
+   15.2%      3.46    41947        0   TRA050A<a name="wp1100574"> </a>
+   14.2%      3.24    57927        0   TRS130B<a name="wp1100575"> </a>
+    0.7%      0.15        2        8   PCM1800<a name="wp1100576"> </a>
+    0.3%      0.07       14       15   TRZCG01B<a name="wp1100577"> </a>
+    0.0%      0.00        1        0   PCM1520 <a name="wp1100578"> </a>
+</pre></div>
+<a name="wp1105245"> </a><p class="pIndented1">
+This condensed information gives you an easy way to see which programs to focus your attention on.  In general, you will want to start by tuning the programs in which the most time is being spent. 
+</p>
+<a name="wp1105235"> </a><p class="pIndented1">
+Because this example was generated on a Windows system, it doesn't show a comparison of system time (time spent performing I/O operations and doing memory management) and user time (time spent in the application, running PERFORMs, etc.).  On UNIX systems, this additional information is included and can be used to help you figure out where to focus.
+</p>
+<a name="wp1100579"> </a><div class="pSmartList1"><li>The third section (which contains the bulk of the information in the report) has information about the paragraphs executed by each program. </li></div>
+<a name="wp1105341"> </a><p class="pIndented1">
+In this section, the paragraph totals are per program, not per application, so the total for all paragraphs in each program should add up to 100%.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+TRP140<a name="wp1100580"> </a>
+<a name="wp1106778"> </a>
+    Opens:         1<a name="wp1106427"> </a>
+    Reads:         38949<a name="wp1106345"> </a>
+<a name="wp1106358"> </a>
+ Pct       Secs    Count    Total   Paragraph  <a name="wp1106791"> </a>
+====================================================== <a name="wp1106552"> </a>
+52.1%      3.89    41947     17.1%  Z70-CALL-TRA050A<a name="wp1106553"> </a>
+40.5%      3.03    38949     13.3%  Z10-READ-FTR013A<a name="wp1106585"> </a>
+ 5.6%      0.42    38948      1.9%  B20-PROCESS-ECR<a name="wp1106612"> </a>
+ 0.5%      0.04     2996      0.2%  B20-PROCESS-EO<a name="wp1106639"> </a>
+ 0.4%      0.03       14      0.1%  Z40-CALL-TRZCG01B<a name="wp1106652"> </a>
+ 0.3%      0.02        1      0.1%  A00-MAINLINE<a name="wp1106697"> </a>
+ 0.3%      0.02        1      0.1%  A10-DEBUT-PROG<a name="wp1106724"> </a>
+ 0.3%      0.02        0      0.1%  Z99-END<a name="wp1106751"> </a>
+</pre></div>
+<a name="wp1105295"> </a><p class="pIndented1">
+In most COBOL programs, one or two paragraphs use the lion's share of the time.  There may be another paragraph or two that takes up a moderate amount of time, but most paragraphs use a very small percentage of the total program time.
+</p>
+<a name="wp1105255"> </a><p class="pIndented1">
+Note that you may find very small paragraphs (like the EXIT paragraph) getting a very large number of counts (CALLs).  Because the time spent counting each CALL is added to the paragraph time, it may appear that such paragraphs are taking a large amount of time, when in fact the behavior of the timer is artificially inflating the paragraph time.
+</p>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

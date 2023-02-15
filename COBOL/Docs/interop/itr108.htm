@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:01:05" />
+  <title>10.4.1.2  Opening specific queues</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr10.htm">Chapter 10: Working with Messaging Middleware</a> &gt; <a href="itr105.htm">10.4  Connecting to WebSphere  MQ Applications</a> &gt; <a href="itr106.htm">10.4.1  Adding WebSphere MQ Calls to Your ACUCOBOL-GT Program</a> &gt; </p>
+<a name="wp1054482"> </a><h2 class="pHeading3">
+10.4.1.2  Opening specific queues
+</h2>
+<a name="wp1054483"> </a><p class="pBody">
+To open specific message queues in WebSphere MQ, use the following code:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &#39;MQOPEN&#39;<a name="wp1054484"> </a>
+    USING by value HCONN, by reference OBJDESC,<a name="wp1054485"> </a>
+    by value OPTS, by reference HQUEUE,<a name="wp1054486"> </a>
+    COMPCODE, REASON<a name="wp1054487"> </a>
+</pre></div>
+<a name="wp1054488"> </a><p class="pBody">
+in the following modes: 
+</p>
+<a name="wp1054514"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">INPUT Mode:</span></p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1054491"> </a>
+Variable
+
+</th>
+    <th><a name="wp1054493"> </a>
+Description
+
+</th>
+    <th><a name="wp1054495"> </a>
+Definition
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054497"> </a><p class="pCellBody">
+HCONN
+</p>
+</td>
+    <td><a name="wp1054499"> </a><p class="pCellBody">
+S9(9) BINARY  handle to queue manager
+</p>
+</td>
+    <td><a name="wp1054501"> </a><p class="pCellBody">
+User-defined
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054503"> </a><p class="pCellBody">
+OBJDESC
+</p>
+</td>
+    <td><a name="wp1054505"> </a><p class="pCellBody">
+Structure that identifies the object to be opened
+</p>
+</td>
+    <td><a name="wp1054507"> </a><p class="pCellBody">
+cmqodv.cpy
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054509"> </a><p class="pCellBody">
+OPTS
+</p>
+</td>
+    <td><a name="wp1054511"> </a><p class="pCellBody">
+S9(9) BINARY options that control the action of MQOPEN
+</p>
+</td>
+    <td><a name="wp1054513"> </a><p class="pCellBody">
+User-defined
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal"></span>
+</p>
+<a name="wp1054515"> </a><p class="pBody">
+The available OPTS S9(9) BINARY options are specified in &quot;cmqv.cpy&quot;.  From the options that are available, at least one of the following options must be specified: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1054516"> </a><div class="pSmartList1"><li>MQOO-BROWSE - Open in browse messages</li></div>
+<a name="wp1055465"> </a><div class="pSmartList1"><li>MQOO-INPUT - Open in read messages</li></div>
+<a name="wp1055466"> </a><div class="pSmartList1"><li>MQOO-OUTPUT - Open to write messages</li></div>
+<a name="wp1055467"> </a><div class="pSmartList1"><li>MQOO-SET - Open to set properties of objects</li></div>
+<a name="wp1055468"> </a><div class="pSmartList1"><li>MQOO-INQUIRE - Open to inquire about objects</li></div>
+</ul></div>
+<a name="wp1054517"> </a><p class="pBody">
+To specify multiple options, add them together.
+</p>
+<a name="wp1054543"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">OUTPUT Mode:</span></p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1054520"> </a>
+Variable
+
+</th>
+    <th><a name="wp1054522"> </a>
+Description
+
+</th>
+    <th><a name="wp1054524"> </a>
+Definition
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054526"> </a><p class="pCellBody">
+HQUEUE 
+</p>
+</td>
+    <td><a name="wp1054528"> </a><p class="pCellBody">
+S9(9) BINARY   handle to queue
+</p>
+</td>
+    <td><a name="wp1054530"> </a><p class="pCellBody">
+User-defined
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054532"> </a><p class="pCellBody">
+COMPCODE
+</p>
+</td>
+    <td><a name="wp1054534"> </a><p class="pCellBody">
+S9(9) BINARY  returns the completion code
+</p>
+</td>
+    <td><a name="wp1054536"> </a><p class="pCellBody">
+User-defined
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054538"> </a><p class="pCellBody">
+REASON
+</p>
+</td>
+    <td><a name="wp1054540"> </a><p class="pCellBody">
+S9(9) BINARY  returns the reason
+</p>
+</td>
+    <td><a name="wp1054542"> </a><p class="pCellBody">
+User-defined
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal"></span>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

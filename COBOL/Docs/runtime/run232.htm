@@ -1,0 +1,945 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:20:41" />
+  <title>2.6  The Terminal Database File</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run2.htm"><br />Chapter 2: Setting Up Your Terminals</a> &gt; </p>
+<a name="wp1044599"> </a><h2 class="pHeading1">
+2.6  The Terminal Database File
+</h2>
+<a name="wp1044603"> </a><p class="pBody">
+The terminal database file, which is similar to the <b class="cBold">termcap</b> file supplied with many UNIX systems, may be edited to add new terminals to the ones it currently supports.  Existing entries in the file may also be edited, if needed, to describe your terminal.
+</p>
+<a name="wp1044604"> </a><p class="pBody">
+Each line of this file is either blank, a comment (marked by a &quot;#&quot; in column 1), or a definition of a terminal.  You can continue a &quot;line&quot; on following lines by ending the line to be continued with a &quot;\&quot; (see below for an example). The &quot;\&quot; character must be the last character on the line.
+</p>
+<a name="wp1044605"> </a><p class="pBody">
+A terminal definition consists of several fields, separated by colons.  The end of the line marks the end of the definition.  The first field is always the name of the terminal.  Several names can be placed here, separated by a vertical bar (&quot;|&quot;).  The rest of the fields consist of codes that describe various terminal functions.  Most of these codes are followed by an equals sign and a coded string that describes how to operate that particular function.  
+</p>
+<a name="wp1044606"> </a><p class="pBody">
+Here is a generic representation of a terminal database file entry, where <b class="cBold">TN</b><em class="cEmphasis">n</em> is a terminal name, <b class="cBold">tf</b> is a terminal function code, and <b class="cBold">cs </b>is<b class="cBold"> </b>a coded string to accomplish the function (some terminal function codes are self-defining and do not need a coded string): 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+TN1|TN2|TN3:\<a name="wp1044607"> </a>
+:tf[=cs]:tf[=cs]:tf[=cs]:\<a name="wp1044608"> </a>
+:tf[=cs]:tf[=cs]:<a name="wp1044609"> </a>
+</pre></div>
+<a name="wp1044610"> </a><p class="pBody">
+The coded string that describes a function is just a representation of the control-sequence (or sequences) that the terminal uses to activate that function.  These strings consist of the literal characters used in the control-sequence.  Several special forms are recognized to aid in describing the control-sequence.  The following abbreviations are supported: 
+</p>
+<a name="wp1044644"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1044613"> </a><p class="pCellBody">
+\E
+</p>
+</td>
+    <td><a name="wp1044615"> </a><p class="pCellBody">
+an escape character
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044617"> </a><p class="pCellBody">
+\n
+</p>
+</td>
+    <td><a name="wp1044619"> </a><p class="pCellBody">
+a newline (control-J)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044621"> </a><p class="pCellBody">
+\r
+</p>
+</td>
+    <td><a name="wp1044623"> </a><p class="pCellBody">
+a carriage return (control-M)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044625"> </a><p class="pCellBody">
+\t
+</p>
+</td>
+    <td><a name="wp1044627"> </a><p class="pCellBody">
+a tab (control-I)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044629"> </a><p class="pCellBody">
+\b
+</p>
+</td>
+    <td><a name="wp1044631"> </a><p class="pCellBody">
+a backspace (control-H)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044633"> </a><p class="pCellBody">
+\f
+</p>
+</td>
+    <td><a name="wp1044635"> </a><p class="pCellBody">
+a form-feed (control-L)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044637"> </a><p class="pCellBody">
+^X
+</p>
+</td>
+    <td><a name="wp1044639"> </a><p class="pCellBody">
+X is any character, treated as control-X
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044641"> </a><p class="pCellBody">
+\nnn
+</p>
+</td>
+    <td><a name="wp1044643"> </a><p class="pCellBody">
+three digits treated as an octal value
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1044646"> </a><p class="pBody">
+The following is a list of all of the supported function codes.   The most commonly used codes will be treated in detail in the following sections. 
+</p>
+<a name="wp1044837"> </a><p class="pBodyRelative">
+   </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1044650"> </a><p class="pCellBody">
+AC
+</p>
+</td>
+    <td><a name="wp1044652"> </a><p class="pCellBody">
+Attributes used by clear screen
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044654"> </a><p class="pCellBody">
+AT
+</p>
+</td>
+    <td><a name="wp1044656"> </a><p class="pCellBody">
+Special color for IBM 3164 terminal
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044658"> </a><p class="pCellBody">
+B1 - B8
+</p>
+</td>
+    <td><a name="wp1044660"> </a><p class="pCellBody">
+Background color 1-8
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044662"> </a><p class="pCellBody">
+BL
+</p>
+</td>
+    <td><a name="wp1044664"> </a><p class="pCellBody">
+Blink
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044666"> </a><p class="pCellBody">
+C1 - C8
+</p>
+</td>
+    <td><a name="wp1044668"> </a><p class="pCellBody">
+Foreground color 1-8
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044670"> </a><p class="pCellBody">
+DI
+</p>
+</td>
+    <td><a name="wp1044672"> </a><p class="pCellBody">
+De-initialization string
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044674"> </a><p class="pCellBody">
+DL
+</p>
+</td>
+    <td><a name="wp1044676"> </a><p class="pCellBody">
+Default intensity is low
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044678"> </a><p class="pCellBody">
+DP
+</p>
+</td>
+    <td><a name="wp1044680"> </a><p class="pCellBody">
+Disable print mode
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044682"> </a><p class="pCellBody">
+EP
+</p>
+</td>
+    <td><a name="wp1044684"> </a><p class="pCellBody">
+Enable print mode
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044686"> </a><p class="pCellBody">
+GA
+</p>
+</td>
+    <td><a name="wp1044688"> </a><p class="pCellBody">
+Graphics on and off are characters
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044690"> </a><p class="pCellBody">
+GE
+</p>
+</td>
+    <td><a name="wp1044692"> </a><p class="pCellBody">
+Graphic escape
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044694"> </a><p class="pCellBody">
+GF
+</p>
+</td>
+    <td><a name="wp1044696"> </a><p class="pCellBody">
+Graphics off
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044698"> </a><p class="pCellBody">
+GM
+</p>
+</td>
+    <td><a name="wp1044700"> </a><p class="pCellBody">
+Graphics map
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044702"> </a><p class="pCellBody">
+GO
+</p>
+</td>
+    <td><a name="wp1044704"> </a><p class="pCellBody">
+Graphics on
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044706"> </a><p class="pCellBody">
+GX
+</p>
+</td>
+    <td><a name="wp1044708"> </a><p class="pCellBody">
+Graphics movement glitch
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044710"> </a><p class="pCellBody">
+HI
+</p>
+</td>
+    <td><a name="wp1044712"> </a><p class="pCellBody">
+High-intensity, normal video
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044714"> </a><p class="pCellBody">
+LO
+</p>
+</td>
+    <td><a name="wp1044716"> </a><p class="pCellBody">
+Low-intensity, normal video
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044718"> </a><p class="pCellBody">
+NM
+</p>
+</td>
+    <td><a name="wp1044720"> </a><p class="pCellBody">
+Normal Video (only if ìsgî set)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044722"> </a><p class="pCellBody">
+NS
+</p>
+</td>
+    <td><a name="wp1044724"> </a><p class="pCellBody">
+Screen does not scroll when corner is used
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044726"> </a><p class="pCellBody">
+OC
+</p>
+</td>
+    <td><a name="wp1044728"> </a><p class="pCellBody">
+One color can be displayed at a time
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044730"> </a><p class="pCellBody">
+RA
+</p>
+</td>
+    <td><a name="wp1044732"> </a><p class="pCellBody">
+Reverse video, alternate intensity
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044734"> </a><p class="pCellBody">
+RB
+</p>
+</td>
+    <td><a name="wp1044736"> </a><p class="pCellBody">
+Reverse video, blink
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044738"> </a><p class="pCellBody">
+RU
+</p>
+</td>
+    <td><a name="wp1044740"> </a><p class="pCellBody">
+Reverse video, underline
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044742"> </a><p class="pCellBody">
+RV
+</p>
+</td>
+    <td><a name="wp1044744"> </a><p class="pCellBody">
+Reverse video
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044746"> </a><p class="pCellBody">
+UL
+</p>
+</td>
+    <td><a name="wp1044748"> </a><p class="pCellBody">
+Underline
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044750"> </a><p class="pCellBody">
+W3
+</p>
+</td>
+    <td><a name="wp1044752"> </a><p class="pCellBody">
+Set terminal width to 132 columns
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044754"> </a><p class="pCellBody">
+W8
+</p>
+</td>
+    <td><a name="wp1044756"> </a><p class="pCellBody">
+Set terminal width to 80 columns
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044758"> </a><p class="pCellBody">
+al
+</p>
+</td>
+    <td><a name="wp1044760"> </a><p class="pCellBody">
+Insert (add) line
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044762"> </a><p class="pCellBody">
+bc
+</p>
+</td>
+    <td><a name="wp1044764"> </a><p class="pCellBody">
+Backspace cursor (defaults to ^H)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044766"> </a><p class="pCellBody">
+cd
+</p>
+</td>
+    <td><a name="wp1044768"> </a><p class="pCellBody">
+Clear to end-of-screen
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044770"> </a><p class="pCellBody">
+ce
+</p>
+</td>
+    <td><a name="wp1044772"> </a><p class="pCellBody">
+Clear to end-of-line
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044774"> </a><p class="pCellBody">
+cl
+</p>
+</td>
+    <td><a name="wp1044776"> </a><p class="pCellBody">
+Clear screen
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044778"> </a><p class="pCellBody">
+cm
+</p>
+</td>
+    <td><a name="wp1044780"> </a><p class="pCellBody">
+Cursor positioning
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044782"> </a><p class="pCellBody">
+co
+</p>
+</td>
+    <td><a name="wp1044784"> </a><p class="pCellBody">
+Number of screen columns (default 80)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044786"> </a><p class="pCellBody">
+dl
+</p>
+</td>
+    <td><a name="wp1044788"> </a><p class="pCellBody">
+Delete line
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044790"> </a><p class="pCellBody">
+do
+</p>
+</td>
+    <td><a name="wp1044792"> </a><p class="pCellBody">
+Down one line (defaults to ^J)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044794"> </a><p class="pCellBody">
+is
+</p>
+</td>
+    <td><a name="wp1044796"> </a><p class="pCellBody">
+Initialization string
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044798"> </a><p class="pCellBody">
+is1
+</p>
+</td>
+    <td><a name="wp1044800"> </a><p class="pCellBody">
+Additional initialization string
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044802"> </a><p class="pCellBody">
+is2
+</p>
+</td>
+    <td><a name="wp1044804"> </a><p class="pCellBody">
+Additional initialization string
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044806"> </a><p class="pCellBody">
+li
+</p>
+</td>
+    <td><a name="wp1044808"> </a><p class="pCellBody">
+Number of screen lines (default 24)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044810"> </a><p class="pCellBody">
+nd
+</p>
+</td>
+    <td><a name="wp1044812"> </a><p class="pCellBody">
+Non-destructive space
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044814"> </a><p class="pCellBody">
+sg
+</p>
+</td>
+    <td><a name="wp1044816"> </a><p class="pCellBody">
+Standout-mode glitch (uses magic cookies)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044818"> </a><p class="pCellBody">
+tc
+</p>
+</td>
+    <td><a name="wp1044820"> </a><p class="pCellBody">
+Continue description with another entry
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044822"> </a><p class="pCellBody">
+up
+</p>
+</td>
+    <td><a name="wp1044824"> </a><p class="pCellBody">
+Cursor up one line
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044826"> </a><p class="pCellBody">
+ve
+</p>
+</td>
+    <td><a name="wp1044828"> </a><p class="pCellBody">
+Set cursor to normal
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044830"> </a><p class="pCellBody">
+vi
+</p>
+</td>
+    <td><a name="wp1044832"> </a><p class="pCellBody">
+Set cursor to invisible
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044834"> </a><p class="pCellBody">
+vs
+</p>
+</td>
+    <td><a name="wp1044836"> </a><p class="pCellBody">
+Set cursor to bright
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1044838"> </a><p class="pBody">
+The following codes are also available to represent various keys.  Most terminals have only a subset of this full set.
+</p>
+<a name="wp1044980"> </a><p class="pBodyRelative">
+   </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1044841"> </a><p class="pCellBody">
+K1 - K0
+</p>
+</td>
+    <td><a name="wp1044843"> </a><p class="pCellBody">
+Function keys 11 - 20
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044845"> </a><p class="pCellBody">
+K?
+</p>
+</td>
+    <td><a name="wp1044847"> </a><p class="pCellBody">
+Help
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044849"> </a><p class="pCellBody">
+KA
+</p>
+</td>
+    <td><a name="wp1044851"> </a><p class="pCellBody">
+Attention
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044853"> </a><p class="pCellBody">
+KB
+</p>
+</td>
+    <td><a name="wp1044855"> </a><p class="pCellBody">
+Bottom
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044857"> </a><p class="pCellBody">
+KC
+</p>
+</td>
+    <td><a name="wp1044859"> </a><p class="pCellBody">
+Clear
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044861"> </a><p class="pCellBody">
+KD
+</p>
+</td>
+    <td><a name="wp1044863"> </a><p class="pCellBody">
+Do (command)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044865"> </a><p class="pCellBody">
+KE
+</p>
+</td>
+    <td><a name="wp1044867"> </a><p class="pCellBody">
+End
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044869"> </a><p class="pCellBody">
+KF
+</p>
+</td>
+    <td><a name="wp1044871"> </a><p class="pCellBody">
+Find
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044873"> </a><p class="pCellBody">
+KI
+</p>
+</td>
+    <td><a name="wp1044875"> </a><p class="pCellBody">
+Insert character
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044877"> </a><p class="pCellBody">
+KL
+</p>
+</td>
+    <td><a name="wp1044879"> </a><p class="pCellBody">
+Page left
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044881"> </a><p class="pCellBody">
+KM
+</p>
+</td>
+    <td><a name="wp1044883"> </a><p class="pCellBody">
+Mark (select)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044885"> </a><p class="pCellBody">
+KP
+</p>
+</td>
+    <td><a name="wp1044887"> </a><p class="pCellBody">
+Print
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044889"> </a><p class="pCellBody">
+KR
+</p>
+</td>
+    <td><a name="wp1044891"> </a><p class="pCellBody">
+Page right
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044893"> </a><p class="pCellBody">
+KS
+</p>
+</td>
+    <td><a name="wp1044895"> </a><p class="pCellBody">
+Send
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044897"> </a><p class="pCellBody">
+KT
+</p>
+</td>
+    <td><a name="wp1044899"> </a><p class="pCellBody">
+Top
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044901"> </a><p class="pCellBody">
+KV
+</p>
+</td>
+    <td><a name="wp1044903"> </a><p class="pCellBody">
+Save
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044905"> </a><p class="pCellBody">
+KX
+</p>
+</td>
+    <td><a name="wp1044907"> </a><p class="pCellBody">
+Delete character
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044909"> </a><p class="pCellBody">
+Kc
+</p>
+</td>
+    <td><a name="wp1044911"> </a><p class="pCellBody">
+Cancel
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044913"> </a><p class="pCellBody">
+Kl
+</p>
+</td>
+    <td><a name="wp1044915"> </a><p class="pCellBody">
+Word left
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044917"> </a><p class="pCellBody">
+Kr
+</p>
+</td>
+    <td><a name="wp1044919"> </a><p class="pCellBody">
+Word right
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044921"> </a><p class="pCellBody">
+Kx
+</p>
+</td>
+    <td><a name="wp1044923"> </a><p class="pCellBody">
+Exit
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044925"> </a><p class="pCellBody">
+k1 - k0
+</p>
+</td>
+    <td><a name="wp1044927"> </a><p class="pCellBody">
+Function keys 1 - 10
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044929"> </a><p class="pCellBody">
+kA
+</p>
+</td>
+    <td><a name="wp1044931"> </a><p class="pCellBody">
+Insert line
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044933"> </a><p class="pCellBody">
+kB
+</p>
+</td>
+    <td><a name="wp1044935"> </a><p class="pCellBody">
+Tab left
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044937"> </a><p class="pCellBody">
+kE
+</p>
+</td>
+    <td><a name="wp1044939"> </a><p class="pCellBody">
+Clear to end
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044941"> </a><p class="pCellBody">
+kL
+</p>
+</td>
+    <td><a name="wp1044943"> </a><p class="pCellBody">
+Delete line
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044945"> </a><p class="pCellBody">
+kN
+</p>
+</td>
+    <td><a name="wp1044947"> </a><p class="pCellBody">
+Page Down
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044949"> </a><p class="pCellBody">
+kP
+</p>
+</td>
+    <td><a name="wp1044951"> </a><p class="pCellBody">
+Page Up
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044953"> </a><p class="pCellBody">
+kd
+</p>
+</td>
+    <td><a name="wp1044955"> </a><p class="pCellBody">
+Down arrow
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044957"> </a><p class="pCellBody">
+kh
+</p>
+</td>
+    <td><a name="wp1044959"> </a><p class="pCellBody">
+Home
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044961"> </a><p class="pCellBody">
+kl
+</p>
+</td>
+    <td><a name="wp1044963"> </a><p class="pCellBody">
+Left arrow
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044965"> </a><p class="pCellBody">
+kr
+</p>
+</td>
+    <td><a name="wp1044967"> </a><p class="pCellBody">
+Right arrow
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044969"> </a><p class="pCellBody">
+ku
+</p>
+</td>
+    <td><a name="wp1044971"> </a><p class="pCellBody">
+Up arrow
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044973"> </a><p class="pCellBody">
+U1 - U0
+</p>
+</td>
+    <td><a name="wp1044975"> </a><p class="pCellBody">
+User defined key 1 - 10
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1044977"> </a><p class="pCellBody">
+A1 - A0
+</p>
+</td>
+    <td><a name="wp1044979"> </a><p class="pCellBody">
+User defined key 11 - 20
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1044981"> </a><p class="pBody">
+All of the function codes described with lower-case characters are identical to ones found in the UNIX <b class="cBold">termcap</b> file.  These sequences can be taken verbatim from <b class="cBold">termcap</b> and included in the ACUCOBOL-GT terminal database file when you are adding a new terminal entry.
+</p>
+<a name="wp1044983"> </a><p class="pBody">
+To help with this discussion, an example of an entry for a DEC VT-100 will be developed.  At each step of the example, the new portion of the entry will be in <b class="cBold">bold type.  </b>Initially, we need to assign a set of names that we want to use to refer to the terminal.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+vt100|vt-100|DEC VT-100:<a name="wp1044984"> </a>
+</pre></div>
+<a name="wp1044985"> </a><p class="pBody">
+This allows for any of the names &quot;vt100&quot;, &quot;vt-100&quot; or &quot;DEC VT-100&quot; to be used for the TERM or A_TERM variable.  By convention, the last name in the list is a long, descriptive name.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

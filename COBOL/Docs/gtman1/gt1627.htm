@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.4.1  Memory Access Violations</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt1626.htm">6.4   Memory Testing and Error Handling</a> &gt; </p>
+<a name="wp1032773"> </a><h2 class="pHeading2">
+6.4.1  Memory Access Violations
+</h2>
+<a name="wp1032775"> </a><p class="pBody">
+If your program tries to access a portion of memory that is protected by the operating system, ACUCOBOL-GT generates a <em class="cEmphasis">memory access violation</em> message and shuts down.  
+</p>
+<a name="wp1032776"> </a><p class="pBody">
+The most common cause of this violation is indexing beyond the legal range of a table.  Often this sort of error is difficult to detect, because it can be data-dependent, as shown in this example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+PERFORM UNTIL IDX &gt; NO-OF-EMPLOYEES  <a name="wp1032777"> </a>
+   DISPLAY &quot;EMPLOYEE NAME:   &quot;, EMP-TABLE(IDX)<a name="wp1032778"> </a>
+   ADD 1 TO IDX<a name="wp1032779"> </a>
+END PERFORM.<a name="wp1032780"> </a>
+</pre></div>
+<a name="wp1032781"> </a><p class="pBody">
+If NO-OF-EMPLOYEES ever exceeds the size of EMP-TABLE, or if IDX is ever set to zero, you could get a memory access violation when the program is run.   
+</p>
+<a name="wp1032782"> </a><p class="pBody">
+To uncover this type of memory access violation, use the &quot;-Za&quot; compile-time option while you are debugging your program.  When you run a program that has been compiled with &quot;-Za&quot;, ACUCOBOL-GT prints a <em class="cEmphasis">subscript out of bounds </em>error message, detailing the legal range of indexes for any table-indexing error that it encounters.  (Note that the <em class="cEmphasis">subscript out of bounds</em> error appears when you <em class="cEmphasis">run</em> the program, not when you compile it.)  You can then correct the program as necessary. 
+</p>
+<a name="wp1032783"> </a><p class="pBody">
+A memory access violation can also occur if there is a bug in any C routine linked into the runtime.  Because of the nature of C, the violation can occur long after the called C function executes.  Techniques for debugging these problems are discussed in section 6.4.3 and in section 6.7 of <em class="cEmphasis">A Guide to Interoperating with ACUCOBOL-GT</em>.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

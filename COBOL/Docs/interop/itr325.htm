@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:51" />
+  <title>3.5.3.1  General rules</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr3.htm">Chapter 3: Working with Windows Technologies</a> &gt; <a href="itr321.htm">3.5  Accessing the Windows API</a> &gt; <a href="itr324.htm">3.5.3  Calling a Windows API function from ACUCOBOL-GT</a> &gt; </p>
+<a name="wp1071139"> </a><h2 class="pHeading3">
+3.5.3.1  General rules
+</h2>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1072393"> </a><div class="pSmartList1"><li>You must load the DLL to call it's function.  (Even if it is already loaded by the system, you must implement it.)  There are three ways to load a DLL in ACUCOBOL-GT:  you can CALL it, use the &quot;-y&quot; runtime option, or use the SHARED_LIBRARY_LIST configuration variable.  These are described fully in <a  href="itr312.htm#wp1065389">section 3.3</a> of this chapter.</li></div>
+<a name="wp1074231"> </a><div class="pSmartList1"><li>If you CALL a DLL, you can enter any of the following:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;MyDll&quot;<a name="wp1074232"> </a>
+CALL &quot;MyDll.dll&quot; <a name="wp1074233"> </a>
+CALL &quot;C:\MyDir\MyDll.dll&quot;<a name="wp1074247"> </a>
+</pre></div>
+<a name="wp1074292"> </a><p class="pIndented1">
+We recommend the middle option.  The last won't work if your system is mobile.  If you set CODE_PREFIX, the runtime looks for the DLL in the CODE_PREFIX directory.  If it is not found, it also tries the Windows system directory.  
+</p>
+<a name="wp1070043"> </a><div class="pSmartList1"><li>You must indicate the DLL calling convention in your COBOL program.  The vast majority of the time, the convention for Windows API DLLs is WINAPI also known as <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">stdcall.</span> You can specify calling conventions in ACUCOBOL-GT in several ways:</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1070044"> </a><div class="pSmartList2"><li>Using the DLL_CONVENTION variable.  To indicate WINAPI/stdcall, you would set DLL_CONVENTION to &quot;1&quot;. </li></div>
+<a name="wp1070045"> </a><div class="pSmartList2"><li>Using the SHARED_LIBRARY_LIST variable  </li></div>
+<a name="wp1070046"> </a><div class="pSmartList2"><li>In the CALL statement for individual library functions</li></div>
+<a name="wp1070047"> </a><div class="pSmartList2"><li>Setting the CODE_MAPPING variable to &quot;1&quot;, then using configuration entries to specify the calling convention for individual functions</li></div>
+<a name="wp1070048"> </a><div class="pSmartList2"><li>Using the &quot;-y&quot; runtime option</li></div>
+</ul></div>
+<a name="wp1072195"> </a><p class="pIndented1">
+ <a  href="itr313.htm#wp1065396">Section 3.3.1</a> describes the nuances of specifying calling conventions.
+</p>
+<a name="wp1070049"> </a><div class="pSmartList1"><li>You must indicate &quot;A&quot; or &quot;W&quot;, ANSI/wide, in the function name if both ANSI and Unicode versions of the function are available.  See <a  href="itr322.htm#wp1070031">section 3.5.1</a> for a more detailed description.</li></div>
+<a name="wp1070050"> </a><div class="pSmartList1"><li>You must adhere to case sensitivity of the function name.  </li></div>
+<a name="wp1070051"> </a><div class="pSmartList1"><li>You must terminate any strings that you pass to a function.  Use  x&quot;00&quot; (LOW-VALUES) as in the following examples:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+STRING &quot;My example&quot; LOW-VALUES DELIMITED BY SIZE INTO 
+target-string.<a name="wp1081908"> </a>
+</pre></div>
+<a name="wp1081909"> </a><p class="pIndented1">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+INSPECT target-string REPLACING TRAILING SPACES BY 
+x&quot;00&quot;.<a name="wp1081910"> </a>
+</pre></div>
+<a name="wp1081906"> </a><div class="pSmartList1"><li>Do not use literals with Windows functions.</li></div>
+<a name="wp1070052"> </a><div class="pSmartList1"><li>You must map your ACUCOBOL-GT handle to the Windows handle.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+INQUIRE acuhandle SYSTEM HANDLE IN syshandle <a name="wp1072524"> </a>
+</pre></div>
+<a name="wp1072529"> </a><p class="pIndented1">
+Then &quot;syshandle&quot; can be passed on to the Windows API function.  You  declare the handle in Working-Storage like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77 syshandle USAGE PIC X(4) COMP-N.<a name="wp1081996"> </a>
+</pre></div>
+<a name="wp1070054"> </a><div class="pSmartList1"><li>You should cancel the DLL when finished using it.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CANCEL &quot;mydll.dll&quot;. <a name="wp1082019"> </a>
+</pre></div>
+<a name="wp1084494"> </a><p class="pIndented1">
+Note that DLLs loaded with &quot;-y&quot; or SHARED_LIBRARY_LIST cannot be cancelled or unloaded.
+</p>
+<a name="wp1070409"> </a><div class="pSmartList1"><li>Always pass string variables BY REFERENCE.  In C, BY REFERENCE is indicated by an &quot;&amp;&quot;.  You can also use BY REFERENCE when the data type is prefixed with LP, as in LPSTR.</li></div>
+<a name="wp1081984"> </a><p class="pIndented1">
+You can pass a numeric value BY REFERENCE or BY VALUE, depending on how the function is implemented.  (Refer to the Microsoft documentation.)
+</p>
+<a name="wp1070060"> </a><p class="pIndented1">
+CALL a function BY CONTENT to make a copy of it and provide an address to the copy.  This lets users read, not modify, content.
+</p>
+<a name="wp1070062"> </a><div class="pSmartList1"><li>Most Windows API functions return only &quot;true&quot; or &quot;false&quot; when they succeed or fail.  You must call GetLastError for specific reasons.</li></div>
+<a name="wp1072872"> </a><div class="pSmartList1"><li>Whatever memory you allocate via ACUCOBOL-GT's M$ALLOC routine, it is your responsibility to release/free via M$FREE.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

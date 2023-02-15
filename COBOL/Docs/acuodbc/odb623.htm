@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:19" />
+  <title>6.5  How AcuODBC Locates XFD Files</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb6.htm">Chapter 6: Mapping COBOL Data Items and Database Fields</a> &gt; </p>
+<a name="wp1035544"> </a><h2 class="pHeading1">
+6.5  How AcuODBC Locates XFD Files
+</h2>
+<a name="wp1035548"> </a><p class="pBody">
+XFD files contain the data dictionary used to map the SQL from your Windows application to the appropriate I/O requests.
+</p>
+<a name="wp1029413"> </a><p class="pBody">
+The following sections describe the rules followed by AcuODBC to locate the data dictionary files.  There are some general rules and the some rules specific to remote file access.
+</p>
+<a name="wp1029414"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<a name="wp1029415"> </a><p class="pBody">
+Data dictionary files must be located in the directory specified in the XFD Directory field on the General tab of the AcuODBC Configuration property sheet.  The AcuODBC driver looks for an XFD file with the same base name as the table.  In this instance, the driver does not differentiate between uppercase and lowercase letters nor between hyphens and underscores.
+</p>
+<a name="wp1029416"> </a><p class="pBody">
+The name of each file corresponds to the name used in the SELECT clause of the COBOL program, followed by the &quot;XFD&quot; extension.  See <a  href="odb68.htm#wp1028425">section 6.2.5, &quot;Naming the XFD File,&quot;</a> for more information.
+</p>
+<a name="wp1029418"> </a><p class="pBody">
+To locate an XFD file, AcuODBC needs the DSN and table names.  If the data source is part of a master DSN, AcuODBC uses the XFD directory specified for the master DSN.  If you have defined an alias on the File Alias&#160;tab of the AcuODBC Configuration property sheet, the XFD file is accessed through the name of the alias, not the original name of the file.  See <a  href="odb336.htm#wp1029878">section 3.8, &quot;Multicompany Support,&quot;</a> and <a  href="odb333.htm#wp1029736">section 3.7, &quot;File Aliases,&quot;</a> for more information.
+</p>
+<a name="wp1029419"> </a><p class="pBody">
+If the AcuODBC driver cannot find the XFD file in any of these places, it looks for WHEN condition tables.
+</p>
+<a name="wp1029420"> </a><p class="pBody">
+Finally, if the driver does not find the XFD files in any of these places, you receive an error message indicating that the table was not found.  In addition, should you have duplicate table names, the driver finds the XFD file, but the table it refers to is undefined; that is, you cannot know which of the duplicate tables it defines.
+</p>
+<a name="wp1029422"> </a><h3 class="pHeadingRef">
+Remote File Access 
+</h3>
+<a name="wp1029423"> </a><p class="pBody">
+Using a remote file server, you can locate data dictionary files on the remote server, but this is not necessary.  This is a feature you can use at your convenience.
+</p>
+<a name="wp1029424"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If you using AcuODBC Server, files located on the same server where processing occurs are considered local.  This section pertains to remote files and local processing, where you are running AcuServer<sup class="cSuperscript">®</sup>.
+<hr />
+</p>
+<a name="wp1029425"> </a><p class="pBody">
+When you create a DSN and then decide to locate XFD files on the remote server, you must complete the XFD Directory field on the General tab of the AcuODBC Configuration property sheet with the name of the remote directory containing the XFD files.  When you type the name of the remote directory, keep in mind that on UNIX, pathnames are case sensitive.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

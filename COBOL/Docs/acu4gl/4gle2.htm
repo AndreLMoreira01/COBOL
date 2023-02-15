@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:40" />
+  <title>E.1 Sybase Concepts Overview</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gle.htm">Appendix E:  Acu4GL for Sybase Information </a> &gt; </p>
+<a name="wp1081981"> </a><h2 class="pHeading1">
+E.1 Sybase Concepts Overview
+</h2>
+<a name="wp1081986"> </a><p class="pBody">
+A quick overview of some basic design concepts underlying the Sybase Database Management System will help you interface your COBOL program to it.
+</p>
+<a name="wp1049107"> </a><h3 class="pHeadingRef">
+Servers
+</h3>
+<a name="wp1055353"> </a><p class="pBody">
+A Sybase server is one copy of the database engine executing on a computer.  A server has a name, and when a program wants to access the database controlled by a server, the program asks for a connection to that server by name.  Multiple servers can be executing on a single machine, controlling different databases.  The default name that Sybase gives to a server is SYBASE.  Naming of servers is discussed in section E.6, &quot;Acu4GL for Sybase Configuration File Variables,&quot; under the configuration variable <a  href="4gle27.htm#wp1049523">A_SYB_DEFAULT_CONNECTION</a>.
+</p>
+<a name="wp1049112"> </a><h3 class="pHeadingRef">
+Table ownership
+</h3>
+<a name="wp1049117"> </a><p class="pBody">
+Table names in Sybase have the form <em class="cEmphasis">database.owner.table_name.  </em>Within Sybase, if you are the owner of a given table, you can refer to it as just <em class="cEmphasis">table_name</em>.  If you are <em class="cEmphasis">not</em> the owner, you must refer to it with the <em class="cEmphasis">owner </em>of the table as a prefix.  Different owners can thus have tables of the same name.  However, this is <em class="cEmphasis">not</em> true when you use Acu4GL for Sybase.
+</p>
+<a name="wp1049118"> </a><p class="pBody">
+Acu4GL for Sybase works a little differently.  It automatically determines the owner name it will use to reference a table.  It is therefore essential that there <em class="cEmphasis">not</em> be multiple tables with the same name in a single database, even though the tables have different owners.  If there are, the Acu4GL for Sybase product will not necessarily find the correct one, and no diagnostic will be issued.  
+</p>
+<a name="wp1049119"> </a><p class="pBody">
+Note that table names include dots (&quot;.&quot;) as separators.  Because of this, you must make sure there are no extensions on COBOL file names that will be converted to table names.  If you were to have a COBOL file named &quot;IDX1.DAT&quot;, Acu4GL for Sybase would attempt to open a table DAT with owner IDX1.  You can avoid this problem either by renaming your COBOL file in your source program, or by using an ACUCOBOL-GT® runtime configuration file entry to map the file name to an allowable file name, such as:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+IDX1.DAT  IDX1<a name="wp1049120"> </a>
+</pre></div>
+<a name="wp1049121"> </a><p class="pBody">
+If you map your file name to a new name, we recommend that you simply drop the extension to form the new name.  Here's why.  The compiler uses the base file name-without the extension-to create the XFD file name (&quot;IDX1.XFD&quot;).  The runtime needs to be able to locate this file.  But if you've mapped the file name to something completely different (such as &quot;MYFILE&quot;), the runtime will look for an XFD file named &quot;MYFILE.XFD&quot;.  So you'd have to remember to change the name of &quot;IDX1.XFD&quot; to &quot;MYFILE.XFD&quot; in the XFD directory.  Save yourself this extra step by simply dropping the extension when you map the name.
+</p>
+<a name="wp1049122"> </a><h3 class="pHeadingRef">
+Security
+</h3>
+<a name="wp1049126"> </a><p class="pBody">
+Security is implemented in the Sybase RDBMS.  A user is required to log in to the RDBMS before any file processing can occur.  Acu4GL for Sybase provides both a default and a user-configurable method for implementing this.
+</p>
+<a name="wp1049127"> </a><p class="pBody">
+Generally, it is best for someone with Database Administrator (DBA) privileges to create and drop the tables, allowing others only the permissions to add, change, or delete information contained in them.
+</p>
+<a name="wp1049128"> </a><p class="pBody">
+See the Sybase documentation for more details on DBA privileges.
+</p>
+<a name="wp1049129"> </a><h3 class="pHeadingRef">
+Alternate REWRITE method
+</h3>
+<a name="wp1049133"> </a><p class="pBody">
+If the above stored procedure is not available, then the update query passed to the database has been optimized to only update dirty columns.  This should improve performance.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>6.3.3  Calling C Programs via the Interface Method</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr64.htm">6.3  Calling C Programs From COBOL</a> &gt; </p>
+<a name="wp1121485"> </a><h2 class="pHeading2">
+6.3.3  Calling C Programs via the Interface Method
+</h2>
+<a name="wp1151546"> </a><p class="pBody">
+The interface method uses special routines that are passed the name of the called function.  Use this method when you want to simulate the actions of a non-native system.  ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>supports two types of interfaces that simulate interfaces available in two versions of RM/COBOL: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1151548"> </a><div class="pSmartList1"><li>the &quot;sub85&quot; interface, which is source-compatible with C routines written for RM/COBOL-85.</li></div>
+<a name="wp1151549"> </a><div class="pSmartList1"><li>the &quot;sub&quot; interface, which is compatible with RM/COBOL version 2.  </li></div>
+</ul></div>
+<a name="wp1151550"> </a><p class="pBody">
+You may use either or both of these interfaces.  With the interface method, parameters are passed to the interface routines in a standardized format.  The parameters must typically be converted to a format that is usable in C.  
+</p>
+<a name="wp1152532"> </a><p class="pBody">
+Every ACUCOBOL-GT compiler comes with a sample C subroutine interface.  The &quot;sub.c&quot; file implements the &quot;sub&quot; interface.  The &quot;sub85.c&quot; file implements the &quot;sub85&quot; interface.  The &quot;sub.h&quot; file contains some useful definitions, particularly if you are using the &quot;sub85&quot; interface.  These files contain extensive comments describing how they are used.  They also contain the source to the SYSTEM library routine.  You can use these files as the starting point for your code.  The two interfaces are described in the following sections.
+</p>
+<a name="wp1152107"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>At run time, the &quot;sub&quot; interface performs a linear search for a called routine.  This process can be inefficient when a very large number of &quot;sub&quot; routines are present.  If your program calls a large number of C routines, we recommend that you use the &quot;sub85&quot; or &quot;direct&quot; interface.
+</p>
+<a name="wp1152108"> </a><p class="pNoteEnd">
+Also, in the &quot;sub85&quot; and &quot;sub&quot; interface methods, parameters are not passed directly to the C routine.  Instead, an array of pointers is passed, and each pointer points to the corresponding parameter (or in the case of &quot;sub85,&quot; a description of the parameter).  In this case, the notion of BY VALUE has no reasonable definition, because there is no place to put the value.  Because of this, the runtime ignores the BY VALUE phrase and passes an address to a copy of the value (essentially treating BY VALUE as BY CONTENT).  It must do this because there is no C variable available in which to pass the value.  However, specifying NULL does have a reasonable definition:  The pointer corresponding to that parameter is set to binary zeros.  Therefore, with the interface method, NULL and BY VALUE ZERO have different meanings (contrast this with the corresponding note under the direct method described in <a  href="itr610.htm#wp1121448">section 6.3.2, &quot;Calling C Programs via the Direct Method&quot;</a>).
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

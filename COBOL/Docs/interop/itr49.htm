@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:57:47" />
+  <title>4.4  ActiveX and COM Events</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr4.htm">Chapter 4: Using ActiveX Controls and COM Objects</a> &gt; </p>
+<a name="wp1037777"> </a><h2 class="pHeading1">
+4.4  ActiveX and COM Events
+</h2>
+<a name="wp1037781"> </a><p class="pBody">
+ActiveX control and COM object events can have any number and type of associated parameters or no parameters.  The event parameters are used to provide information about the event to the program.  They can also be used to get information from the program in response to the event.
+</p>
+<a name="wp1037782"> </a><p class="pBody">
+When an ActiveX control or COM object event occurs, the control or object invokes its event procedure.  The EVENT-STATUS data item reflects the invoking event. EVENT-TYPE is either CMD-GOTO, CMD-HELP, MSG-VALIDATE, or MSG-AX-EVENT.  For a description of these events, refer to section 6.3 of <em class="cEmphasis">ACUCOBOL-GT User Interface Programming</em>.
+</p>
+<a name="wp1037783"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>The runtime ignores events from all controls while it is creating an ActiveX control or COM object.  If you are using a control that delivers significant information using events and you don't want to miss those events while you are creating a new control, set the CONTROL_CREATION_EVENTS runtime configuration variable to &quot;1&quot; (on, true, yes).  Alternatively, you could avoid creating a control when you are expecting an event.
+</p>
+<a name="wp1037785"> </a><p class="pNoteEnd">
+In addition, the runtime suspends ActiveX and COM events when the application is not processing an ACCEPT statement; in other words, it suspends events in between ACCEPT statements.  If your control does not support the suspend/resume behavior and you are using it with the ACUCOBOL-GT Thin Client, this can be problematic.  To prevent problems, set the TC_RESTRICTS_AX_EVENTS thin client configuration variable to &quot;1&quot; to mimic the runtime behavior.
+<hr />
+</p>
+<a name="wp1037799"> </a><p class="pBody">
+MSG-AX-EVENT (value 16436) occurs when an ActiveX control or COM object has &quot;fired&quot; an event.  EVENT-DATA-2 contains the control's event type.  For COM objects, you can use the C$SETEVENTDATA and C$GETEVENTDATA library routines to set and get event the event parameters for the current event.  
+</p>
+<a name="wp1037800"> </a><p class="pBody">
+For ActiveX controls, however, you can use C$GETEVENTDATA/C$SETEVENTDATA, or you can use the C$GETEVENTPARAM/C$SETEVENTPARAM routines to get and set individual event parameters.   
+</p>
+<a name="wp1037801"> </a><p class="pBody">
+For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 DATE-1<a name="wp1037802"> </a>
+    03 MONTH PIC 99.<a name="wp1037803"> </a>
+    03 FILLER PIC X VALUE &#39;/&#39;.<a name="wp1037804"> </a>
+    03 DAY PIC 99.<a name="wp1037805"> </a>
+    03 FILLER PIC X VALUE &#39;/&#39;.<a name="wp1037806"> </a>
+    03 YEAR PIC 99.<a name="wp1037807"> </a>
+77 KEY-ASCII PIC X USAGE COMP-X.<a name="wp1037808"> </a>
+77 KEY-CHAR PIC X REDEFINES KEY-ASCII.<a name="wp1037809"> </a>
+...<a name="wp1037810"> </a>
+<a name="wp1037811"> </a>
+* Handle events<a name="wp1037812"> </a>
+...<a name="wp1037813"> </a>
+ CALENDAR-EVENT-HANDLER.<a name="wp1037814"> </a>
+      EVALUATE EVENT-TYPE<a name="wp1037815"> </a>
+         WHEN MSG-AX-EVENT<a name="wp1037816"> </a>
+              EVALUATE EVENT-DATA-2<a name="wp1037817"> </a>
+                 WHEN CalendarBeforeUpdate<a name="wp1037818"> </a>
+* Don't allow years &gt;= 2020<a name="wp1037819"> </a>
+                     INQUIRE EVENT-CONTROL-HANDLE <a name="wp1037820"> </a>
+                        Value IN DATE-1<a name="wp1037821"> </a>
+                     IF YEAR OF DATE-1 &gt;= 2020<a name="wp1037822"> </a>
+* Cancel the update (set the &#39;Cancel&#39; parameter to 1)<a name="wp1037823"> </a>
+                         CALL &quot;C$SETEVENTPARAM&quot; USING<a name="wp1037824"> </a>
+                          EVENT-CONTROL-HANDLE, &quot;Cancel&quot;, 1<a name="wp1037825"> </a>
+                     END-IF<a name="wp1037826"> </a>
+                 WHEN CalendarKeyPress<a name="wp1037827"> </a>
+* Stop run if the user presses &#39;X&#39;<a name="wp1037828"> </a>
+                     CALL &quot;C$GETEVENTPARAM&quot; USING <a name="wp1037829"> </a>
+                          EVENT-CONTROL-HANDLE, &quot;KeyAscii&quot;,<a name="wp1037830"> </a>
+                             KEY-ASCII<a name="wp1037831"> </a>
+                     IF KEY-CHAR = &#39;X&#39; STOP RUN END-IF<a name="wp1037832"> </a>
+...<a name="wp1037833"> </a>
+</pre></div>
+<a name="wp1037834"> </a><p class="pBody">
+Note that the CalendarBeforeUpdate event has one parameter, CANCEL.  (See the CalendarBeforeUpdate definition in the control's COPY file.)
+</p>
+<a name="wp1037835"> </a><p class="pBody">
+In this example, EVENT-CONTROL-HANDLE contains the handle of the control that fired the event (e.g., CALENDAR-1).  C$SETEVENTPARAM is used to set the CANCEL parameter to &quot;1&quot; in response to a CalendarBeforeUpdate event when the year is 2020 or later. C$GETEVENTPARAM is used in the handling of the CalendarKeyPress event to get the key value and stop the runtime if it is &quot;X&quot;.
+</p>
+<a name="wp1037836"> </a><p class="pBody">
+For another example, suppose you have displayed an ActiveX control called &quot;AX&quot; whose handle is in AX-1.  Further suppose that this control fires an event called AxEventOne, which has three parameters.  You would use the following COBOL syntax to get the event parameters, add &quot;2&quot; to each one, and set the event parameters to their new values:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+evaluate event-type<a name="wp1037837"> </a>
+    when w-event<a name="wp1037838"> </a>
+        evaluate event-data-2<a name="wp1037839"> </a>
+            when AxEventOne<a name="wp1037840"> </a>
+              call &quot;c$geteventdata&quot; <a name="wp1037841"> </a>
+                 using event-control-handle, <a name="wp1037842"> </a>
+                   param-1, param-2, param-3<a name="wp1037843"> </a>
+              add 2 to param-1<a name="wp1037844"> </a>
+              add 2 to param-2<a name="wp1037845"> </a>
+              add 2 to param-3<a name="wp1037846"> </a>
+              call &quot;c$seteventdata&quot; <a name="wp1037847"> </a>
+                 using event-control-handle, <a name="wp1037848"> </a>
+                   param-1, param-2, param-3<a name="wp1037849"> </a>
+</pre></div>
+<a name="wp1037850"> </a><p class="pBody">
+To use C$GETEVENTPARAM and C$SETEVENTPARAM, you must know the actual names of the parameters.  You can determine these names by reading the ActiveX control's documentation or by looking at the definitions in the COPY file for the ActiveX control. 
+</p>
+<a name="wp1037851"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Using the C$SETEVENTPARAM approach, you do not need to pass all of the event parameters.  You need to specify only the name of the particular parameter you want to set.  With C$SETEVENTDATA you don't need to specify parameter names, but you must pass an ordered parameter list up to the parameter you want to set.
+<hr />
+</p>
+<a name="wp1037852"> </a><p class="pBody">
+An event commonly receives many parameters. C$GETEVENTPARAM and C$SETEVENTPARAM allow you to get and set the values of only the parameters you care about.  Suppose in the above example that PARAM-1 and PARAM-2 contain information about the event and that only PARAM-3 is meant to be set by the event procedure.  Because PARAM-3 is the third parameter, to set it you would have to pass two &quot;dummy&quot; parameters to C$SETEVENTDATA. For example,
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+call &quot;c$seteventdata&quot; using event-control-handle, <a name="wp1037853"> </a>
+      0, 0, param-3.<a name="wp1037854"> </a>
+</pre></div>
+<a name="wp1037855"> </a><p class="pBody">
+Suppose you determined that the name of PARAM-3 in the ActiveX control was &quot;Param3&quot;.  You could then use C$SETEVENTPARAM to accomplish the task in our example in a more elegant and readable way.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+call &quot;c$seteventparam&quot; using event-control-handle, <a name="wp1037856"> </a>
+      &quot;param3&quot;, param-3.<a name="wp1037857"> </a>
+</pre></div>
+<a name="wp1037858"> </a><p class="pBody">
+In the Calendar example, you would use:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+call &quot;c$seteventparam&quot; using event-control-handle,<a name="wp1037859"> </a>
+      &quot;cancel&quot;, 1<a name="wp1037860"> </a>
+</pre></div>
+<a name="wp1037861"> </a><p class="pBody">
+instead of:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+call &quot;c$seteventdata&quot; using event-control-handle, 1<a name="wp1037862"> </a>
+</pre></div>
+<a name="wp1037863"> </a><p class="pBody">
+And you would use:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+call &quot;c$geteventparam&quot; using event-control-handle, <a name="wp1037864"> </a>
+      &quot;KeyAscii&quot;, key-ascii<a name="wp1037865"> </a>
+</pre></div>
+<a name="wp1037866"> </a><p class="pBody">
+instead of:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+call &quot;c$geteventdata&quot; using event-control-handle, key-ascii<a name="wp1037867"> </a>
+</pre></div>
+<a name="wp1037868"> </a><p class="pBody">
+Using these routines can make your code more readable.  The object code will be a little larger, and your program will run slightly slower.  However, these differences may be unnoticeable and the benefits of readable code can outweigh the performance and size considerations.
+</p>
+<a name="wp1037869"> </a><p class="pBody">
+To determine in which specific window and control the event occurred, you can use the EVENT-WINDOW-HANDLE, EVENT-CONTROL-HANDLE, and/or EVENT-CONTROL-ID fields in the event procedure.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1037870"> </a><div class="pSmartList1"><li>EVENT-WINDOW-HANDLE holds the handle of the floating window in which the event occurred.  If the event occurred in a control, this item is the handle of the floating window that contains the control.  </li></div>
+<a name="wp1037871"> </a><div class="pSmartList1"><li>EVENT-CONTROL-HANDLE holds the handle of the control in which the event occurred.  If the event did not occur in a control, this item is set to NULL.</li></div>
+<a name="wp1037872"> </a><div class="pSmartList1"><li>EVENT-CONTROL-ID holds the ID of the control in which the event occurred.  IDs are assigned by the application when each control is created.  If the event did not occur in a control, this item has the value zero.  </li></div>
+</ul></div>
+<a name="wp1037873"> </a><p class="pBody">
+During an ActiveX or COM event, you can refer to the control which &quot;fired&quot; the event using the EVENT-CONTROL-HANDLE item. 
+</p>
+<a name="wp1037874"> </a><p class="pBody">
+For more information on the C$GETEVENTDATA, C$SETEVENTDATA,  C$GETEVENTPARAM, and C$SETEVENTPARAM library routines, please refer to Appendix I in <em style="font-style: italic" class="cEmphasis">ACUCOBOL-GT Appendices</em><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">.</span>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

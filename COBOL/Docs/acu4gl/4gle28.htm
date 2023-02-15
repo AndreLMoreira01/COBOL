@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:40" />
+  <title>A_SYB_EXTRA_PROC</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gle.htm">Appendix E:  Acu4GL for Sybase Information </a> &gt; <a href="4gle17.htm">E.4  Acu4GL for Sybase Configuration File Variables</a> &gt; </p>
+<a name="wp1049534"> </a><h2 class="pHeading2">
+A_SYB_EXTRA_PROC
+</h2>
+<a name="wp1049537"> </a><p class="pBody">
+A_SYB_EXTRA_PROC can be used to keep modifications to the AcuLocks table out of transactions.  If these modifications are kept out of transactions, users can read a record, even if they cannot REWRITE it.  Otherwise, they are locked out.  A_SYB_EXTRA_PROC works by creating a separate connection for these modifications.  
+</p>
+<a name="wp1049538"> </a><p class="pBody">
+When this variable is set to a non-zero value, an extra connection is used for the following three procedures:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1049539"> </a><div class="pSmartList1"><li>Modifying the AcuLocks table</li></div>
+<a name="wp1049540"> </a><div class="pSmartList1"><li>Modifying the AcuOpenTables table</li></div>
+<a name="wp1049541"> </a><div class="pSmartList1"><li>Modifying the IMAGE data.  Note that two connections are required when updating IMAGE or TEXT data.  This is a majaor reason for setting A_SYB_EXTRA_PROC.</li></div>
+</ul></div>
+<a name="wp1049542"> </a><p class="pBody">
+The default value is &quot;0&quot; (off, false, no).  A non-zero value can also be represented by &quot;On&quot; (true, yes).
+</p>
+<a name="wp1049543"> </a><p class="pBody">
+If this variable is set to &quot;On,&quot; the extra connection is used to send TEXT or IMAGE data to the server.  The first connection is used to deliver non-TEXT and non-IMAGE data to the server.  When a WRITE or REWRITE is executed, the interface program INSERTS or UPDATES the non-TEXT and non-IMAGE data by using placeholder data in the TEXT or IMAGE columns.  
+</p>
+<a name="wp1049544"> </a><p class="pBody">
+The TEXT or IMAGE data is then sent using the extra connection established with the A_SYB_EXTRA_PROC variable.  If the first connection is inside a transaction, the second connection is locked out of the row that is added or updated.  The result is that it is not possible to WRITE or REWRITE records containing TEXT or IMAGE data while inside a transaction.  
+</p>
+<a name="wp1049545"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>Large columns cannot be used in conjunction with transaction management because any column larger than 255 bytes (254 characters) is automatically converted to a TEXT or IMAGE column when the table is created.
+</p>
+<a name="wp1056866"> </a><p class="pNoteEnd">
+If you have TEXT or IMAGE columns in your table, WRITEs and REWRITEs fail unless this variable is set to &quot;On&quot;.
+<hr />
+</p>
+<a name="wp1049546"> </a><h3 class="pHeadingRef">
+See also
+</h3>
+<a name="wp1049547"> </a><p class="pBody">
+<a  href="4gle51.htm#wp1049746"><span style="font-family: Arial, Verdana, Helvetica, sans-serif">Section E.5, &quot;Record and Table Locking&quot;</span></a>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

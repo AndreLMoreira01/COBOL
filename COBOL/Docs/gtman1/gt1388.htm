@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:09" />
+  <title>3.7.4  Understanding the data file</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt13.htm"><br />Chapter 3:  Debugger and Utilities</a> &gt; <a href="gt1384.htm">3.7  The Profiler</a> &gt; </p>
+<a name="wp1100590"> </a><h2 class="pHeading2">
+3.7.4  Understanding the data file
+</h2>
+<a name="wp1100591"> </a><p class="pBody">
+The <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuprof</span>  utility takes the raw data in &quot;acumon.xml&quot; and combines the individual data points to create useful aggregates in the report file.  Like <b class="cBold">alfred</b>, the <b class="cBold">acuprof</b> utility is an ACUCOBOL-GT program that is located in the &quot;tools&quot; subdirectory.
+</p>
+<a name="wp1100592"> </a><p class="pBody">
+Because &quot;acumon.xml&quot; is a straightforward XML file, any tool that can parse XML can parse the raw report.  This means that you can bring the report into recent versions of Microsoft Excel, for example, or create your own parsing tool using the C$XML routine to return the information most useful to you.
+</p>
+<a name="wp1100593"> </a><p class="pBody">
+This section contains the basic information that you need to understand the data collected in &quot;acumon.xml&quot;.
+</p>
+<a name="wp1100594"> </a><h3 class="pHeadingRef">
+The &quot;ticks&quot; timer
+</h3>
+<a name="wp1100595"> </a><p class="pBody">
+In the final report, program time is reported in seconds, or fractions of a second.  The raw XML file, however, counts user and processor time in &quot;ticks&quot;.  The length of a tick is system-dependent, but usually equals about (10-milliseconds).  The precise amount of time in each &quot;tick&quot; is reported at the beginning of the XML file (as described below).  Each time the timer starts, the runtime examines the current program location and records a tick for the current program and current paragraph.  By looking at how many ticks a program or paragraph accumulates, you get a real-time sampling of where the run spent its time. 
+</p>
+<a name="wp1100596"> </a><p class="pBody">
+If a program is running multiple threads and there is only one timer, when the timer expires, a tick is given to the current program and current paragraph, regardless of which thread is running.  
+</p>
+<a name="wp1100597"> </a><p class="pBody">
+The timer runs in &quot;process time&quot; on machines that support the concept (UNIX).  Process time is CPU time spent for the particular process and bears little relationship to real time.  On other machines (Windows NT), a real-time timer is used instead.  For these machines, it is important to run as few other tasks as possible while collecting profile data.  
+</p>
+<a name="wp1100598"> </a><h3 class="pHeadingRef">
+Structure of the raw report file
+</h3>
+<a name="wp1100599"> </a><p class="pBody">
+The structure of the XML file is similar to that of the final report.  It contains general information about a specific execution of the application, followed by information about each program and each paragraph in the program.  Because, however, the XML file contains raw data instead of aggregate information, it is more useful to think of the file as divided into &quot;levels&quot;, rather than sections.  The top level (outermost set of XML tags) contains general execution information.  The next level (middle set of XML tags) contains program information.  The last level (innermost set of XML tags) contains information about paragraphs in each program.
+</p>
+<a name="wp1100600"> </a><h3 class="pHeadingRef">
+The runtime level
+</h3>
+<a name="wp1100601"> </a><p class="pBody">
+The &lt;Runtime-Version&gt; HTML tag shows the version number of the runtime used by this particular profiling run.  The value is the full version number (including any information seen in &quot;runcbl -v&quot; such as build dates or patch numbers).
+</p>
+<a name="wp1100602"> </a><p class="pBody">
+The &lt;Run-Date&gt; tag marks the date and time of the run that produced the profile data.
+</p>
+<a name="wp1100603"> </a><p class="pBody">
+The &lt;Has-Timer&gt; tag is set to &quot;1&quot; if the runtime has support for profiling timers, &quot;0&quot; if not.  If support is not available, the various ticks fields below will all be zero.  Currently, timer support is available under Windows NT and UNIX machines that have &quot;setitimer&quot; and &quot;siginterrupt&quot; routines.
+</p>
+<a name="wp1100604"> </a><p class="pBody">
+&lt;Usecs-Per-Tick&gt; contains the number of microseconds represented by each tick of the timer.  The runtime normally asks for a 10-millisecond timer (a value of 10000 for this field).
+</p>
+<a name="wp1100605"> </a><p class="pBody">
+When available, &lt;User-Time-Msecs&gt; shows the number of milliseconds of CPU time spent processing user code for this run.
+</p>
+<a name="wp1100606"> </a><p class="pBody">
+When available, &lt;System-Time-Msecs&gt; shows the number of milliseconds of CPU time spent processing system code on behalf of the profiled process.
+</p>
+<a name="wp1100607"> </a><h3 class="pHeadingRef">
+The program level
+</h3>
+<a name="wp1100608"> </a><p class="pBody">
+The &lt;Program&gt; tag marks the root of a subtree of information for each program used by the profiled run.  Each time a program leaves memory, it produces one of these subtrees.  Because of this architecture, a particular program can appear in the &quot;acumon.xml&quot; file more than once.  
+</p>
+<a name="wp1100609"> </a><p class="pBody">
+If a particular program appears many times in a run, it may be getting canceled too often.  This can present performance issues, because each cancel causes the program to be reloaded from disk the next time it is called.  
+</p>
+<a name="wp1100610"> </a><p class="pBody">
+Each program sub-tree contains the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1100611"> </a><div class="pSmartList1"><li>The &lt;Program-Name&gt; tag contains the program's ID.</li></div>
+<a name="wp1100612"> </a><div class="pSmartList1"><li>&lt;Call-Name&gt; shows the name the program was called by.  This is useful if more than one program has been given the same program ID.</li></div>
+<a name="wp1100613"> </a><div class="pSmartList1"><li>&lt;Object-Code&gt; gives the name that describes the object code instruction set.  The name &quot;AcuCode&quot; is used for machine-independent object files.  If the object was compiled for native code, the name of the relevant CPU type is given.</li></div>
+<a name="wp1100614"> </a><div class="pSmartList1"><li>&lt;Call-Count&gt; indicates the number of times this program was entered.</li></div>
+<a name="wp1100615"> </a><div class="pSmartList1"><li>&lt;Program-Ticks&gt; shows the number of times the timer went off in this program.  Time spent waiting for the user to respond is counted only on Windows NT systems.</li></div>
+<a name="wp1100616"> </a><div class="pSmartList1"><li>&lt;Has-Symbols&gt; is set to &quot;1&quot; if the program was compiled for debugging and had section/paragraph symbols available.  When this is &quot;0&quot;, no paragraph data is included for this program. </li></div>
+<a name="wp1100617"> </a><div class="pSmartList1"><li>&lt;File-Opens&gt; lists the number of times this program opened any file using the OPEN statement or I$IO.  Note that this counts opens, not files (so if you open the same file ten times in the course of a run, that counts as &quot;10&quot; and not &quot;1&quot;).  Some machines open files much more slowly than others, so a large number here usually suggests a potential performance issue.</li></div>
+<a name="wp1100618"> </a><div class="pSmartList1"><li>&lt;File-Reads&gt; lists the number of record read attempts.  READ, READ NEXT, and READ PREVIOUS all count here and are not distinguished.</li></div>
+<a name="wp1100619"> </a><div class="pSmartList1"><li>&lt;File-Writes&gt; indicates the number of records written. </li></div>
+<a name="wp1100620"> </a><div class="pSmartList1"><li>&lt;File-Rewrites&gt; gives the number of records rewritten by the program.</li></div>
+<a name="wp1100621"> </a><div class="pSmartList1"><li>&lt;File-Deletes&gt; shows the number of records deleted by the program.</li></div>
+<a name="wp1100622"> </a><div class="pSmartList1"><li>&lt;File-Starts&gt; lists the number of file positions made using the START statement or the I$IO subroutine.  </li></div>
+<a name="wp1104703"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>Attempted reads, writes, rewrites, deletes, and starts that failed are counted along with the successful file operations.
+<hr />
+</p>
+<a name="wp1100623"> </a><div class="pSmartList1"><li>&lt;File-Commits&gt; and &lt;File-Rollbacks&gt; show the number of COMMIT and ROLLBACK statements performed by the program, regardless of outcome. </li></div>
+<a name="wp1100624"> </a><div class="pSmartList1"><li>&lt;Records-Sorted&gt; gives the number of records sorted by this program via the SORT statement.</li></div>
+</ul></div>
+<a name="wp1100625"> </a><h3 class="pHeadingRef">
+The paragraph level
+</h3>
+<a name="wp1100626"> </a><p class="pBody">
+&lt;Paragraph&gt; indicates the root of a subtree of information about a paragraph contained in the program.  If the program has been compiled with debugging, there will be one of these for each Procedure Division section or paragraph in the program.
+</p>
+<a name="wp1100627"> </a><p class="pBody">
+Each paragraph sub-tree contains the following tags:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1100628"> </a><div class="pSmartList1"><li>&lt;Name&gt; gives the name of the paragraph or section.  This appears in uppercase, regardless of the case seen in the actual source code.  </li></div>
+<a name="wp1100629"> </a><div class="pSmartList1"><li>&lt;Count&gt; shows the number of times this paragraph was entered, by any means.</li></div>
+<a name="wp1100630"> </a><div class="pSmartList1"><li>&lt;Ticks&gt; indicates the number of times the timer went off while in this paragraph.  Time spent waiting for the user to respond is counted only on Windows NT systems.  Time spent in between paragraphs or programs may count for either the caller or the called routine, depending on the timing.</li></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

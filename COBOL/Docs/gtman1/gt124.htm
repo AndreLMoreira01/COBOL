@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.1.2  Native Code Options</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt122.htm">2.1 Using the Compiler</a> &gt; </p>
+<a name="wp1038979"> </a><h2 class="pHeading2">
+2.1.2  Native Code Options
+</h2>
+<a name="wp1038595"> </a><p class="pBody">
+ACUCOBOL-GT supports several options that cause it to generate and execute object files that contain native instructions for select families of processors.  These options may <em class="cEmphasis">not</em> be combined with other options into a single option.  For example, it is an error to specify &quot;-nv&quot;; you must specify &quot;-n -v&quot; instead. 
+</p>
+<a name="wp1073405"> </a><p class="pBody">
+The compiler uses <b class="cBold">cblutil</b> to produce the native-code object file.  <b class="cBold">cblutil</b> is installed in the same directory as the compiler by default.  The compiler searches the execution path if it cannot find <b class="cBold">cblutil</b> in its own directory. 
+</p>
+<a name="wp1032282"> </a><p class="pBody">
+You run a native-code object module just like a portable-code object module.  You may mix native-code objects and portable-code objects in the same run.  Native objects may be placed in libraries just like portable objects.  
+</p>
+<a name="wp1032283"> </a><p class="pBody">
+You can use the debugger with a native-code module in the same fashion as with a portable-code module.  The only restriction is that you may not begin program execution at an arbitrary point in a native-code module (the &quot;@!&quot; command).  Also, to prepare a native-code object for use with the debugger, you must compile the program with one of the debugging options, such as &quot;-Ga&quot; or &quot;-Gd&quot;.  A complete list of debugging options is located in <a  href="gt1213.htm#wp1132435">section 2.1.11, &quot;Debugging Options.&quot;</a>
+</p>
+<a name="wp1032284"> </a><p class="pBody">
+Example:
+</p>
+<a name="wp1032285"> </a><p class="pBody">
+To compile and run the &quot;tour.cbl&quot; program as a portable-code object, use the following commands:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl tour.cbl<a name="wp1032286"> </a>
+runcbl tour<a name="wp1065001"> </a>
+</pre></div>
+<a name="wp1032287"> </a><p class="pBody">
+To compile and run the same program as a native-code object, use the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl -n tour.cbl<a name="wp1032288"> </a>
+runcbl tour<a name="wp1065002"> </a>
+</pre></div>
+<a name="wp1083010"> </a><p class="pBody">
+These are the ACUCOBOL-GT compiler native code options:
+</p>
+<a name="wp1083061"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1083013"> </a><p class="pCellBody">
+<b class="cBold">-n<br /></b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1083019"> </a><p class="pCellBody">
+This option causes the compiler to produce native code for the host machine (instead of processor-independent portable code).  If native code generation is not supported for the host machine, the compiler generates an error.
+</p>
+<a name="wp1097480"> </a><p class="pCellBody">
+The word-size of the native code generated with the &quot;-n&quot; option matches the internal word-size of the compiler, and not that of the host machine's processor.  It does this because the word-size of the native code must match the internal word-size of the runtime to execute correctly.  Therefore, a 32-bit compiler, even when running on a 64-bit machine, will produce 32-bit native code.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083025"> </a><p class="pCellBody">
+<b class="cBold">--intel<br /></b><span style="font-family: Arial, Verdana, Helvetica, sans-serif">or<br /></span><b class="cBold">--ia-32</b>
+</p>
+</td>
+    <td><a name="wp1083030"> </a><p class="pCellBody">
+This option causes the compiler to produce 32-bit native code for Intel-class processors (486, Pentium, Pentium II, Pentium III, or compatible processors).  You can use this option from any host machine.  This is the same as specifying &quot;-n&quot; when the host machine is an Intel-class machine.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083032"> </a><p class="pCellBody">
+<b class="cBold">--pa_risc<br /></b>or<br /><b class="cBold">--pa</b>
+</p>
+</td>
+    <td><a name="wp1083034"> </a><p class="pCellBody">
+This option causes the compiler to produce 32-bit code for PA-RISC Version 1.0 processors running the HP-UX or MPE/iX operating systems.  Note that the runtime must be a 32-bit runtime, to match the code contained in the object file.  The 32-bit runtime runs without modification on PA-RISC 2.0 platforms as well, providing a portable solution.  You can use this option from any host machine.  This is the same as specifying &quot;-n&quot; with a 32-bit compiler on an HP-UX or MPE/iX machine.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083036"> </a><p class="pCellBody">
+<b class="cBold">--pa_risc_2.0<br /></b><span style="font-family: Arial, Verdana, Helvetica, sans-serif">or<br /></span><b class="cBold">--pa2</b>
+</p>
+</td>
+    <td><a name="wp1083038"> </a><p class="pCellBody">
+This option causes the compiler to produce 64-bit code for PA-RISC Version 2.0 processors running the HP-UX operating system.  Note that the runtime must be a 64-bit runtime, to match the code contained in the object file.  You can use this option from any host machine.  This is the same as specifying &quot;-n&quot; with a 64-bit compiler on an HP-UX machine.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083040"> </a><p class="pCellBody">
+<b class="cBold">--powerpc<br /></b>or<br /><b class="cBold">--ppc</b>
+</p>
+</td>
+    <td><a name="wp1083042"> </a><p class="pCellBody">
+This option causes the compiler to produce 32-bit PowerPC native code for pSeries processors running AIX.  You can use this option from any host machine.  This is the same as specifying &quot;-n&quot; with a 32-bit compiler on a pSeries machine.
+</p>
+<a name="wp1086312"> </a><p class="pCellBody">
+Note that you can compile native code only for machines with a POWER3 or later chip, not withPOWER2 or earlier.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083044"> </a><p class="pCellBody">
+<b class="cBold">--powerpc_64<br /></b>or<br /><b class="cBold">--ppc64</b>
+</p>
+</td>
+    <td><a name="wp1083046"> </a><p class="pCellBody">
+This option causes the compiler to produce 64-bit PowerPC native code for pSeries processors running AIX.  You can use this option from any host machine.  This is the same as specifying &quot;-n&quot; with a 64-bit compiler on a pSeries machine.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083048"> </a><p class="pCellBody">
+<b class="cBold">--sparc</b>
+</p>
+</td>
+    <td><a name="wp1083053"> </a><p class="pCellBody">
+	This option causes the compiler to produce 32-bit native code for SPARC (v7 - v9) processors.  You can use this option from any host machine.  This is the same as specifying &quot;-n&quot; with a 32-bit compiler on a SPARC-based host machine.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083055"> </a><p class="pCellBody">
+<b class="cBold">--sparc_v9</b>
+</p>
+</td>
+    <td><a name="wp1083060"> </a><p class="pCellBody">
+ This option causes the compiler to produce 64-bit native code for SPARC version 9 processor.  You can use this option from any host machine.  This is the same as specifying &quot;-n&quot; with a 64-bit compiler on a SPARC v9-based host machine.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

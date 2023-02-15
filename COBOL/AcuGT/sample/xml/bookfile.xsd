@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="unqualified">
+  <xs:annotation>
+    <xs:documentation>
+      Created by AcuXML(tm) version 6.0.0 Alpha (2002-10-30) on 2002/10/30
+    </xs:documentation>
+  </xs:annotation>
+
+  <xs:element name="bookfile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="transaction"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="transaction">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Lender"/>
+        <xs:element ref="Borrower"/>
+        <xs:element minOccurs="0" ref="note"/>
+        <xs:element ref="books"/>
+      </xs:sequence>
+    <xs:attribute name="borrowDate" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Lender">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="name"/>
+        <xs:element ref="street"/>
+        <xs:element ref="city"/>
+        <xs:element ref="state"/>
+      </xs:sequence>
+    <xs:attribute name="phone" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Borrower">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="name"/>
+        <xs:element ref="street"/>
+        <xs:element ref="city"/>
+        <xs:element ref="state"/>
+      </xs:sequence>
+    <xs:attribute name="phone" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="books">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="book" maxOccurs="10"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="book">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="bookTitle"/>
+        <xs:element ref="pubDate"/>
+        <xs:element ref="replacementValue"/>
+        <xs:element ref="maxDaysOut"/>
+      </xs:sequence>
+    <xs:attribute name="bookID" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="name" type="simplename" />
+  <xs:simpleType name="simplename">
+      <xs:restriction base="xs:string">
+        <xs:maxLength value="30"/>
+      </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="street" type="simplestreet" />
+  <xs:simpleType name="simplestreet">
+      <xs:restriction base="xs:string">
+        <xs:maxLength value="30"/>
+      </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="city" type="simplecity" />
+  <xs:simpleType name="simplecity">
+    <xs:restriction base="xs:string">
+        <xs:maxLength value="30"/>
+      </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="state" type="simplestate" />
+  <xs:simpleType name="simplestate">
+      <xs:restriction base="xs:string">
+        <xs:maxLength value="2"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+  <xs:element name="note" type="simplenote" />
+    <xs:simpleType name="simplenote">
+      <xs:restriction base="xs:string">
+        <xs:maxLength value="255"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+  <xs:element name="bookTitle" type="simplebookTitle" />
+  <xs:simpleType name="simplebookTitle">
+      <xs:restriction base="xs:string">
+        <xs:maxLength value="30"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+  <xs:element name="pubDate" type="simplepubDate" />
+  <xs:simpleType name="simplepubDate">
+     <xs:restriction base="xs:string">
+        <xs:maxLength value="30"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+  <xs:element name="replacementValue" type="simplereplacementValue" />
+  <xs:simpleType name="simplereplacementValue">
+      <xs:restriction base="xs:string">
+        <xs:maxLength value="7"/>
+      </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="maxDaysOut" type="simplemaxDaysOut" />
+  <xs:simpleType name="simplemaxDaysOut">
+      <xs:restriction base="xs:string">
+        <xs:maxLength value="3"/>
+      </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

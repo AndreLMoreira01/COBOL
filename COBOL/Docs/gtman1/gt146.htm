@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:48" />
+  <title>4.2.1  Step One: Terminal Identification</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt14.htm"><br />Chapter 4:  Terminal Manager</a> &gt; <a href="gt145.htm">4.2  Getting Your Terminals Ready</a> &gt; </p>
+<a name="wp1032260"> </a><h2 class="pHeading2">
+4.2.1  Step One: Terminal Identification
+</h2>
+<a name="wp1032263"> </a><p class="pBody">
+The ACUCOBOL-GT runtime opens the terminal database file.  Each entry in the file consists of the name of a terminal, followed by its screen and keyboard attributes, definitions and codes.  (Runtimes for some systems, such as Windows, typically do not use a terminal database file. Check with your Acucorp Customer Service representative if your terminal is non-standard, to determine if you require the terminal database file.)
+</p>
+<a name="wp1032265"> </a><p class="pBody">
+The runtime first looks for the system variable A_TERMCAP; if that variable is present, the runtime opens the file named in it as the terminal database file.  If the system variable A_TERMCAP is <em class="cEmphasis">not</em> present, the runtime opens the file name shown in the table below.  The file name varies with the operating system (note that file names on UNIX systems are case-sensitive):
+</p>
+<a name="wp1043404"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1043375"> </a>
+System
+
+</th>
+    <th><a name="wp1043377"> </a>
+Terminal database file
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043383"> </a><p class="pCellBody">
+UNIX
+</p>
+</td>
+    <td><a name="wp1043385"> </a><p class="pCellBody">
+/etc/a_termcap
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043387"> </a><p class="pCellBody">
+MPE/iX
+</p>
+</td>
+    <td><a name="wp1043389"> </a><p class="pCellBody">
+/etc/a_termcap
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043391"> </a><p class="pCellBody">
+VMS 
+</p>
+</td>
+    <td><a name="wp1043393"> </a><p class="pCellBody">
+SYS$LIBRARY:A_TERMS.DAT
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1032290"> </a><p class="pBody">
+You must tell the Terminal Manager what terminal database file to use with your ACUCOBOL-GT application.  Either:
+</p>
+<a name="wp1032292"> </a><p class="pBody">
+a)  use the path and name specified in the table above, and do not set A_TERMCAP (this approach works fine in most cases),
+</p>
+<a name="wp1032293"> </a><p class="pBody">
+or
+</p>
+<a name="wp1032294"> </a><p class="pBody">
+b)  use a path and name of your choosing, and specify that path and name in A_TERMCAP.
+</p>
+<a name="wp1032296"> </a><p class="pBody">
+After the terminal database file is opened, the Terminal Manager needs to know what terminal type is to be used, and where to locate the entry that describes it.  One of the system variables A_TERM or TERM holds the name of the entry that is to be used.  
+</p>
+<a name="wp1032297"> </a><p class="pBody">
+The Terminal Manager looks first for the variable A_TERM.  If it is present, the Terminal Manager searches the terminal database file for the terminal named in A_TERM.  If A_TERM is <em class="cEmphasis">not</em> present, the Terminal Manager looks for the variable TERM and then searches the terminal database file for the terminal named in TERM.  Setting TERM to the correct terminal name will handle most situations; see <a  href="gt147.htm#wp1032306">section 4.2.2</a> in this chapter for exceptions.  If neither TERM nor A_TERM is present, the Terminal Manager terminates the runtime with an error message.  
+</p>
+<a name="wp1032298"> </a><p class="pBody">
+The various operating systems handle TERM and A_TERM in different ways:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1032299"> </a><div class="pSmartList1"><li>On VMS systems, TERM and A_TERM are <em class="cEmphasis">symbols.</em>  </li></div>
+<a name="wp1032300"> </a><div class="pSmartList1"><li>On UNIX systems, they are <em class="cEmphasis">environment variables</em>; most UNIX systems set the TERM variable at login time.  </li></div>
+<a name="wp1032302"> </a><div class="pSmartList1"><li>The Windows console (character-mode) runtime does not use the terminal database file, and so does not need to know the value of TERM. </li></div>
+<a name="wp1032303"> </a><div class="pSmartList1"><li>Graphical runtimes do not use the terminal database file, and so do not need to know the value of TERM. </li></div>
+<a name="wp1032304"> </a><div class="pSmartList1"><li>The ATM runtime uses TERM and A_TERM as environment variables, just like UNIX.</li></div>
+</ul></div>
+<a name="wp1032305"> </a><p class="pBody">
+The terminal database file shipped with the ACUCOBOL-GT runtime contains definitions of the characteristics of most popular terminals; you will probably find yours listed.  If the entry named in A_TERM or TERM describes the terminal you will use with your ACUCOBOL-GT application, then nothing more need be done.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

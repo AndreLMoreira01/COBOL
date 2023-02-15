@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.2.4  Condition-Name (Level 88)</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3512.htm">5.2  Data Names</a> &gt; </p>
+<a name="wp1034662"> </a><h2 class="pHeading2">
+5.2.4  Condition-Name (Level 88)
+</h2>
+<a name="wp1034663"> </a><p class="pBody">
+Level-number 88 designates a <em class="cEmphasis">condition-name</em> entry.  Level 88s are used to assign names to values at execution time.  Thus, a <em class="cEmphasis">condition-name</em> is not the name of an item, but rather the name of a value.  A level 88 doesn't reserve any storage area.  
+</p>
+<a name="wp1034667"> </a><p class="pBody">
+Each level 88 must be associated with a data item and must immediately follow that item in the Data Division.  The associated data item is called a <em class="cEmphasis">condition-variable</em>.  A level 88 may name a specific value, a set of values, or a range of values.   For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+05  student-status    pic 9(2).<a name="wp1034668"> </a>
+    88  kindergarten  value 0.<a name="wp1034669"> </a>
+    88  elementary    values are 1 through 6.<a name="wp1034670"> </a>
+    88  jr-high       values 7, 8, 9.<a name="wp1034671"> </a>
+    88  high-school   values are 10 through 12.<a name="wp1034672"> </a>
+</pre></div>
+<a name="wp1034673"> </a><p class="pBody">
+Condition-names are often used in the Procedure Division as a test (usually with an IF statement) to specify conditions under which control will pass to another part of the program.  They can make sentences much more meaningful to the reader.  For example, if you've defined the condition-names shown above, then you could write this code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+if kindergarten<a name="wp1034674"> </a>
+    perform assign-half-day-schedule. <a name="wp1034675"> </a>
+</pre></div>
+<a name="wp1034676"> </a><p class="pBody">
+without the condition-name, you would have to write:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+if student-status = &quot;0&quot;<a name="wp1034677"> </a>
+    perform assign-half-day-schedule.<a name="wp1034678"> </a>
+</pre></div>
+<a name="wp1034679"> </a><p class="pBody">
+If you defined this condition-name:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+07 priority-code        pic x.<a name="wp1034680"> </a>
+   88 highest-priority  value &quot;d&quot;.<a name="wp1034681"> </a>
+</pre></div>
+<a name="wp1034682"> </a><p class="pBody">
+then you could write this easily understood code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+if highest-priority perform fill-order-at-once.<a name="wp1034683"> </a>
+</pre></div>
+<a name="wp1034684"> </a><p class="pBody">
+without the condition-name, you would have to write:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+if priority-code = &quot;d&quot; perform fill-order-at-once.<a name="wp1034685"> </a>
+</pre></div>
+<a name="wp1034686"> </a><p class="pBody">
+Thus, real benefit comes from choosing a meaningful name for each value or set of values.
+</p>
+<a name="wp1034687"> </a><p class="pBody">
+Setting a <em class="cEmphasis">condition-name</em> to TRUE is equivalent to moving any one of its values to the associated <em class="cEmphasis">condition-variable</em>.  For example, note how the SET verb is used below to establish the truth of the condition: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+05  end-of-shipping-file    pic x value &quot;n&quot;.<a name="wp1034688"> </a>
+    88  no-more-shipments   value &quot;y&quot;.<a name="wp1034689"> </a>
+<a name="wp1034690"> </a>
+...<a name="wp1034691"> </a>
+<a name="wp1034692"> </a>
+perform process-daily-arrivals <a name="wp1034693"> </a>
+  until no-more-shipments.<a name="wp1034694"> </a>
+<a name="wp1034695"> </a>
+...<a name="wp1034696"> </a>
+<a name="wp1034697"> </a>
+read shipping-file <a name="wp1034698"> </a>
+  at end set no-more-shipments to true.<a name="wp1034699"> </a>
+</pre></div>
+<a name="wp1034700"> </a><p class="pBody">
+The same result could have been achieved with this code:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+read shipping-file <a name="wp1034701"> </a>
+  at end move &quot;y&quot; to end-of-shipping-file.<a name="wp1034702"> </a>
+</pre></div>
+<a name="wp1034703"> </a><p class="pBody">
+If explicitly referenced, a condition-name must be unique or must be made unique through qualification or subscripting.  If qualification is used to make a condition-name unique, the associated condition-variable may be used as the first qualifier.  The hierarchy of names associated with the condition-variable may be used in further qualification.  If references to a condition-variable require subscripting, then references to the associated condition-name also require the same combination of subscripting.  
+</p>
+<a name="wp1034704"> </a><p class="pBody">
+For more information about <em class="cEmphasis">condition-names</em>, see <a  href="gt3534.htm#wp1035089">section 5.7.1, &quot;Data Description Entry,&quot;</a> <a  href="gt3548.htm#wp1036377">section 5.7.1.14, &quot;VALUE clause,&quot;</a> and the <a  href="gt36137.htm#wp1041588">SET Statement</a> section.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

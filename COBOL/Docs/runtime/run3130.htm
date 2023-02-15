@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:21:17" />
+  <title>FLUSH_ALL </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run3.htm"><br />Chapter 3: Runtime Configuration File</a> &gt; <a href="run33.htm">3.2  Configuration File Entries</a> &gt; </p>
+<a name="wp1068840"> </a><h2 class="pHeading2">
+FLUSH_ALL 
+</h2>
+<a name="wp1068841"> </a><p class="pBody">
+This configuration variable can be used to control the flushing of file buffers to disk.  It is one of several variables that control buffer flushing.  See the other entries in this appendix that begin with &quot;FLUSH&quot;.
+</p>
+<a name="wp1068846"> </a><p class="pBody">
+This variable can take a combination of the following values:
+</p>
+<a name="wp1068847"> </a><p class="pBody">
+1 (on, true, yes, all)
+</p>
+<a name="wp1068848"> </a><p class="pBody">
+0 (off, false, no)
+</p>
+<a name="wp1068849"> </a><p class="pBody">
+MASS_UPDATE
+</p>
+<a name="wp1068850"> </a><p class="pBody">
+REMOTE
+</p>
+<a name="wp1068855"> </a><p class="pBody">
+When this variable is set to &quot;1&quot;, files opened for MASS-UPDATE are flushed along with other files.  This means that the local cache used to hold the MASS-UPDATE buffers is flushed whenever the operating system cache is flushed.  
+</p>
+<a name="wp1068856"> </a><p class="pBody">
+When this variable is set to the default value of  &quot;0&quot;, files opened for MASS-UPDATE are not flushed. 
+</p>
+<a name="wp1068857"> </a><p class="pBody">
+Setting this variable to MASS_UPDATE causes the runtime to flush local files, including files opened with MASS-UPDATE.  
+</p>
+<a name="wp1068858"> </a><p class="pBody">
+Setting this variable to REMOTE causes the runtime to flush local files not opened with MASS-UPDATE, as well as remote files.  
+</p>
+<a name="wp1068859"> </a><p class="pBody">
+You can also set this variable to a combination of values.  For example,
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FLUSH_ALL  MASS_UPDATE  REMOTE <a name="wp1068860"> </a>
+</pre></div>
+<a name="wp1068861"> </a><p class="pBody">
+causes the runtime to flush all local files, including those opened with MASS-UPDATE, as well as remote files.  
+</p>
+<a name="wp1068862"> </a><h3 class="pHeadingRef">
+Note on bitmask integer values:
+</h3>
+<a name="wp1068863"> </a><p class="pBody">
+Internally, the value of this configuration variable is converted to a bitmask, and its bitmask integer value is determined by the keywords used to set it.  Keywords translate into integer values as follows:  
+</p>
+<a name="wp1068864"> </a><p class="pBody">
+FALSE, NO and OFF are equivalent to &quot;0&quot; 
+</p>
+<a name="wp1068865"> </a><p class="pBody">
+MASS_UPDATE is equivalent to &quot;1&quot; 
+</p>
+<a name="wp1068866"> </a><p class="pBody">
+REMOTE is equivalent to &quot;2&quot; 
+</p>
+<a name="wp1068867"> </a><p class="pBody">
+ALL, TRUE, YES and ON are equivalent to &quot;-1&quot;
+</p>
+<a name="wp1068869"> </a><p class="pBody">
+When the runtime is started with the &quot;-l&quot; and &quot;-e <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">errfile</span>&quot; arguments, only the integer value of FLUSH_ALL is recorded in the error file.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

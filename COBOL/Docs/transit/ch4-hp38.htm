@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.3.3.2  WITH DUPLICATES on primary keys</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp30.htm">4.3  The &quot;-Cp&quot; HP COBOL Compatibility Switch </a> &gt; <a href="ch4-hp36.htm">4.3.3  File-Control Paragraph</a> &gt; </p>
+<a name="wp1041557"> </a><h2 class="pHeading3">
+4.3.3.2  WITH DUPLICATES on primary keys
+</h2>
+<a name="wp1041560"> </a><p class="pBody">
+In HP COBOL compatibility mode, duplicate primary key values are allowed if the indexed file system supports them and the WITH DUPLICATES phrase is specified in the File-Control paragraph.  Vision and KSAM support duplicate primary key values.  The syntax is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">RECORD</u> KEY IS key-name [= seg-name] [WITH [<u class="cUnderline">NO</u>] <u class="cUnderline">DUPLICATES</u>]<a name="wp1041561"> </a>
+</pre></div>
+<a name="wp1041562"> </a><p class="pBody">
+The phrase &quot;WITH NO DUPLICATES&quot; is commentary because, by default, duplicate values are not allowed for the primary key.
+</p>
+<a name="wp1041563"> </a><p class="pBody">
+The phrase &quot;WITH DUPLICATES&quot; indicates that duplicate primary key values are allowed.  If &quot;WITH DUPLICATES&quot; is used with a file system that doesn't support duplicate primary keys, when the file is created via the OPEN statement a status of &quot;0M&quot; is returned, indicating that the file was successfully created but that duplicate primary keys are not supported.
+</p>
+<a name="wp1041564"> </a><p class="pBody">
+When &quot;WITH DUPLICATES&quot; is used with Vision, KSAM, and other file systems that support it, the rules that govern how REWRITE and DELETE operations are handled are determined by the file system.  This is because support for duplicate primary keys is not part of the ANSI 1985 Standard, few files systems support it, and therefore no common rules exist.  The rules for Vision are given in General Rule 14 of section 4.3.1, &quot;File-Control Paragraph,&quot; of the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT Reference Manual</span>.
+</p>
+<a name="wp1041567"> </a><p class="pBody">
+There are some small but important differences between how KSAM and Vision handle REWRITE and DELETE when duplicate primary keys are allowed.
+</p>
+<a name="wp1041568"> </a><p class="pBody">
+Under KSAM, the first record is rewritten or deleted unless the file is open with ACCESS SEQUENTIAL mode.  These latter programs should convert easily to Vision because Vision's default lock handling will cause the correct record to be locked and result in the same set of records being updated.  
+</p>
+<a name="wp1041569"> </a><p class="pBody">
+For RANDOM and DYNAMIC access files, there could be a difference between how KSAM and Vision update records depending on how the records are read before they are rewritten or deleted.  (Note that the HP COBOL II Reference Manual advises against allowing duplicates primary key values with RANDOM or DYNAMIC access files.)  KSAM's behavior can be mimicked with Vision by always reading the record immediately before rewriting or deleting it.  This ensures the correct record is accessed.  Otherwise, KSAM and Vision rules are generally compatible unless the program does a series of READ NEXT's and then rewrites or deletes a record other than the one last read.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

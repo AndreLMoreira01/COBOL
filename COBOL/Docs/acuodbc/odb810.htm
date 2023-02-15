@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:34" />
+  <title>To add access records from the command line</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb8.htm">Chapter 8: The AcuODBC Server Environment</a> &gt; <a href="odb84.htm">8.3  System Security - The AcuAccess File</a> &gt; <a href="odb88.htm">8.3.2  Managing AcuAccess Records</a> &gt; </p>
+<a name="wp1028500"> </a><h2 class="pHeading3">
+To add access records from the command line
+</h2>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1028503"> </a><div class="pSmartList1"><li>To add an access record from the command line, start the access file manager with the &quot;acuodbcs -access&quot; command and select option <b class="cBold">1</b> from the main menu.  </li></div>
+<a name="wp1055554"> </a><p class="pIndented1">
+The manager presents a series of five prompts, one for each field in the record. The first field is the Client Machine Name field.  The prompt looks something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+A value of &quot;*&quot; for client machine name means that this<a name="wp1028504"> </a>
+record will match all clients for which there are no<a name="wp1055569"> </a>
+other records.  You cannot use alias names. The name<a name="wp1055571"> </a>
+must be the official machine name.<a name="wp1055574"> </a>
+Enter the official machine name [*]:<a name="wp1028505"> </a>
+</pre></div>
+<a name="wp1028506"> </a><div class="pSmartList1"><li>Enter a client machine name or accept the default value.</li></div>
+<a name="wp1028507"> </a><p class="pIndented1">
+The second prompt is for the Client Username.  If this field is blank, any user name will match.  For Windows clients that do not define a USERNAME or USER environment variable, this field should be left blank or set to &quot;USER&quot;.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+If no client user name is entered it implies any user.<a name="wp1028508"> </a>
+Enter client user name []:<a name="wp1028509"> </a>
+</pre></div>
+<a name="wp1028510"> </a><div class="pSmartList1"><li>Enter a client user name or accept the default value.</li></div>
+<a name="wp1028511"> </a><p class="pIndented1">
+The third prompt is for the Local Username.  This is the name that AcuODBC Server will use when executing access requests for requesters that match the first two fields of this record.  Note that if the Local Username is not a valid name on the server, the connection will be refused (AcuODBC Server returns an error 9D,103). 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+A value of &#39;same as client&#39; for local user name <a name="wp1028512"> </a>
+means to use the client user name.<a name="wp1048856"> </a>
+If no local user name is entered DEFAULT-USER is used.<a name="wp1048847"> </a>
+Enter the local user name [same as client]:<a name="wp1028513"> </a>
+</pre></div>
+<a name="wp1028514"> </a><div class="pSmartList1"><li>Enter a local user name or accept the default value.</li></div>
+<a name="wp1028517"> </a><p class="pIndented1">
+The fourth prompt allows you to specify a password that must be supplied by requesters who match this record.  Setting a password is optional.
+</p>
+<a name="wp1028518"> </a><p class="pIndented1">
+The password can be up to sixty-four characters long.  The set of allowable characters includes: upper and lower case letters, numbers, the space character and most special characters (all ASCII characters numbered 32-126).  Delete, escape and other non-printable characters are not allowed.  
+</p>
+<a name="wp1028519"> </a><p class="pIndented1">
+The password characters are not echoed on the screen when entered. You will be asked to enter the password a second time to verify that it was entered correctly.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+If no password is entered it implies none.<a name="wp1028520"> </a>
+Enter password []:<a name="wp1028521"> </a>
+Retype password for verification:<a name="wp1028522"> </a>
+</pre></div>
+<a name="wp1028523"> </a><div class="pSmartList1"><li>Enter a password or accept the default value (none).  If password verification fails, you see the following message:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Mismatch - try again.<a name="wp1028524"> </a>
+If no password is entered it implies none.<a name="wp1028525"> </a>
+Enter password []:<a name="wp1028526"> </a>
+</pre></div>
+<a name="wp1028527"> </a><p class="pIndented1">
+The final prompt allows you to specify a umask.  The umask is not used by AcuODBC Server.  Because other Acucorp products use umask, however, the information is provided here.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+The umask defines the file creation mask for all files 
+created by this user.  It must be an octal value between 
+000 and 777.<a name="wp1028528"> </a>
+Enter umask [002]:<a name="wp1028529"> </a>
+</pre></div>
+<a name="wp1028530"> </a><div class="pSmartList1"><li>Enter a umask value or accept the default value.  If an invalid umask value is entered, you will see this message:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Invalid value for umask - try again.<a name="wp1028531"> </a>
+</pre></div>
+<a name="wp1028532"> </a><div class="pSmartList1"><li>After you specify a valid umask, the access file manager adds the record to the server access file.  Press Enter to return to the access manager main menu.</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Record added.<a name="wp1028533"> </a>
+Press &lt;Return&gt; to continue...<a name="wp1028534"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1028535"> </a><p class="pBody">
+If you accept all of the defaults when creating the record, the entry will look like:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<u class="cUnderline">Client Machine Name</u>    <u class="cUnderline">Client Username</u>    <u class="cUnderline">Local Username</u>    <u class="cUnderline">Password</u>    <u class="cUnderline">Umask</u><a name="wp1028536"> </a>
+*                                         &lt;same as client&gt;  &lt;none&gt;      002<a name="wp1029523"> </a>
+</pre></div>
+<a name="wp1028537"> </a><p class="pBody">
+This record entry will match any client and allow any user to connect to the server, provided that the user has an account of the same name on the server.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

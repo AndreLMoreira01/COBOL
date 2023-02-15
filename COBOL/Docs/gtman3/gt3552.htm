@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.9.1  PICTURE, FROM, TO, and USING Clauses</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3551.htm">5.9  Screen Description Entry</a> &gt; </p>
+<a name="wp1036882"> </a><h2 class="pHeading2">
+5.9.1  PICTURE, FROM, TO, and USING Clauses
+</h2>
+<a name="wp1036890"> </a><p class="pBody">
+These Screen Section clauses describe the format, storage, and action of a screen data field.
+</p>
+<a name="wp1036891"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+[ {<u class="cUnderline">PICTURE</u>} IS picture-string  ]<a name="wp1036892"> </a>
+  {<u class="cUnderline">PIC</u>    }<a name="wp1036893"> </a>
+<a name="wp1036894"> </a>
+[ [ <u class="cUnderline">FROM</u> out-item ] [ <u class="cUnderline">TO</u> in-item ]  ]<a name="wp1036895"> </a>
+[       <u class="cUnderline">USING</u> update-item           ]<a name="wp1036896"> </a>
+</pre></div>
+<a name="wp1036897"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036898"> </a><div class="pSmartList1"><li>The rules for the Screen Section PICTURE clause are the same as the rules for the standard PICTURE clause detailed in <a  href="gt3540.htm#wp1035311">section 5.7.1.6</a>.</li></div>
+<a name="wp1036899"> </a><div class="pSmartList1"><li>If the PICTURE clause is specified, then a VALUE clause may not be specified.</li></div>
+<a name="wp1036900"> </a><div class="pSmartList1"><li><em class="cEmphasis">Out-item</em> is a literal or an identifier referencing a data item in the File, Working-Storage, or Linkage sections.  <em class="cEmphasis">Out-item</em> may be subscripted and reference modified.  </li></div>
+<a name="wp1036901"> </a><div class="pSmartList1"><li><em class="cEmphasis">In-item</em> and <em class="cEmphasis">update-item</em> are identifiers referencing data items in the File, Working-Storage, or Linkage sections.  These items may be subscripted and reference modified.  </li></div>
+<a name="wp1036902"> </a><div class="pSmartList1"><li><em class="cEmphasis">In-item</em>, <em class="cEmphasis">out-item</em> and <em class="cEmphasis">update-item</em> must be such that a MOVE specified between them and the screen entry is legal according to the rules of the MOVE statement.  </li></div>
+</ol></div>
+<a name="wp1036903"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036904"> </a><div class="pSmartList1"><li>Because of the difficulty in viewing the internal storage of certain classes of numeric items, you should avoid using the picture symbol &quot;V&quot; in a screen entry.   If you use the picture symbol &quot;S&quot;, you should also specify the SIGN SEPARATE clause.  Alternately, you can use a numeric edited screen entry to display these types of data items in a sensible format.</li></div>
+<a name="wp1036905"> </a><div class="pSmartList1"><li>A screen entry specifying the FROM phrase is an <em class="cEmphasis">output</em> field.  A screen entry specifying the TO phrase is an <em class="cEmphasis">input</em> field.  A screen entry specifying both the FROM and TO phrases is an <em class="cEmphasis">update</em> field.  </li></div>
+<a name="wp1036906"> </a><div class="pSmartList1"><li>A screen entry with the USING phrase is equivalent to a screen entry specifying both the FROM and TO phrases referencing the same data item.</li></div>
+<a name="wp1036907"> </a><div class="pSmartList1"><li>When a DISPLAY verb executes, each output and update field referenced is sent to the screen.  When this occurs, each <em class="cEmphasis">out-item</em> and <em class="cEmphasis">update-item</em> is first moved to the corresponding screen entry using the standard rules of the MOVE statement.  These fields are then displayed on the user's screen.  </li></div>
+<a name="wp1036908"> </a><div class="pSmartList1"><li>Input fields are initialized when a DISPLAY verb executes.  Numeric and numeric-edited fields have ZERO moved to them, all other fields have SPACES moved to them.  These moves occur using the standard rules of the MOVE statement.  The appearance of input fields on the screen when a DISPLAY verb executes is configurable by various runtime options.  Note that the screen entry is initialized; the corresponding <em class="cEmphasis">in-item</em> or <em class="cEmphasis">update-item</em> is not.</li></div>
+<a name="wp1036909"> </a><div class="pSmartList1"><li>When an ACCEPT verb executes, each input and update field referenced is input by the user.  After the user is done, each screen entry is moved to the corresponding <em class="cEmphasis">in-item</em> or <em class="cEmphasis">update-item</em> using the standard rules of the MOVE statement.  </li></div>
+<a name="wp1036910"> </a><div class="pSmartList1"><li>If the PICTURE phrase is omitted, then the screen entry derives its PICTURE from the <em class="cEmphasis">in-item</em>, <em class="cEmphasis">out-item</em>, or <em class="cEmphasis">update-item</em> specified.  The derived PICTURE is identical to the PICTURE for the specified item.  If both <em class="cEmphasis">in-item</em> and <em class="cEmphasis">out-item</em> are specified, then the PICTURE is derived from <em class="cEmphasis">out-item</em>.  Note that only the PICTURE is derived; other clauses such as the SIGN clause are not inherited.  </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:24" />
+  <title>3.8  Paged List Boxes</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt23.htm">Chapter 3:  Graphical Controls</a> &gt; </p>
+<a name="wp1026402"> </a><h2 class="pHeading1">
+3.8  Paged List Boxes
+</h2>
+<a name="wp1026407"> </a><p class="pBody">
+The standard list box control provides a convenient way for a program to implement a look-up facility for a group of items.  It is also tempting to extend this type of use into a method for locating records in a data file.  Unfortunately, this doesn't work well when there are too many records in the file.  The programmer runs into two main problems:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1026408"> </a><div class="pSmartList1"><li>The standard list box has a limited capacity (64K bytes), usually less than 2000 items.</li></div>
+<a name="wp1026409"> </a><div class="pSmartList1"><li>It takes too long to load the list box with the entire set of items.</li></div>
+</ol></div>
+<a name="wp1026410"> </a><p class="pBody">
+Also, if the number of items is very large, the user may have a difficult time locating a particular item.  There are two reasons for this:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1026411"> </a><div class="pSmartList1"><li>The resolution of the scroll bar's slider is too coarse.</li></div>
+<a name="wp1026412"> </a><div class="pSmartList1"><li>The search mechanism is too primitive (single-character match on the first byte of the record).</li></div>
+</ol></div>
+<a name="wp1026413"> </a><p class="pBody">
+The <em class="cEmphasis">paged</em> list box is a variation of the standard list box that solves all of these problems.  A paged list box works by managing only a limited number of records at a time.  When it needs more records, it requests them from the controlling program.  Paged list boxes are intended to be used in conjunction with a large, ordered data source, typically records stored in an indexed file.  
+</p>
+<a name="wp1026414"> </a><p class="pBody">
+Compared to a standard list box, a paged list box has the following advantages:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1026415"> </a><div class="pSmartList1"><li>There are no capacity limitations.  Since the paged list box stores only a small number of items at once, capacity is not an issue. </li></div>
+<a name="wp1026416"> </a><div class="pSmartList1"><li>Load time is minimized.  The list box displays as soon as it receives enough items to fill its visible portion.  </li></div>
+<a name="wp1026417"> </a><div class="pSmartList1"><li>There is an enhanced search facility.  A paged list box can search for items based on full text strings instead of single characters.  When the paged list box is active, the user can simply begin typing a string of text.  A <em class="cEmphasis">search box</em> pops up, displaying the entered characters and the list box <em class="cEmphasis">scrolls</em> to the first entry that matches the string.  You determine (with the SORT-ORDER property) whether the search is case-sensitive or not.</li></div>
+<a name="wp1026418"> </a><div class="pSmartList1"><li>Memory requirements are minimal.  Because it stores only a few items at once, a paged list box can be less of a drain on memory than a standard list box.  </li></div>
+</ul></div>
+<a name="wp1026419"> </a><p class="pBody">
+The primary disadvantage of a paged list box is that it's more complicated to program.  Also, it's not well suited to handling unordered data.  
+</p>
+<a name="wp1026420"> </a><p class="pBody">
+The rest of this section details the basics of programming paged list boxes.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

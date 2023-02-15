@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>6.5.2.2  Initializing the runtime</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr638.htm">6.5  Calling COBOL From C Programs</a> &gt; <a href="itr640.htm">6.5.2  Calling the Runtime From a C Main Program</a> &gt; </p>
+<a name="wp1122346"> </a><h2 class="pHeading3">
+6.5.2.2  Initializing the runtime
+</h2>
+<a name="wp1122347"> </a><p class="pBody">
+If you are calling the runtime from a C main program, you must initialize the runtime prior to calling any COBOL programs from your C code.  To do this, call the following routine:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+int<a name="wp1122348"> </a>
+acu_initv( argc, argv )<a name="wp1122349"> </a>
+int     argc;<a name="wp1122350"> </a>
+char    *argv[];<a name="wp1122351"> </a>
+</pre></div>
+<a name="wp1122352"> </a><p class="pBody">
+You pass this routine's arguments in a format identical to those passed to the C <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">main</span> function. The COBOL program's name is used during initialization to determine the default title of any GUI-based window, but the program itself is not loaded or executed.  Arguments to the COBOL program are not used by initialization and may be omitted.  If you omit the COBOL program name, initialization occurs using the default name of &quot;cbl.out&quot;.  
+</p>
+<a name="wp1122353"> </a><p class="pBody">
+The <b class="cBold">acu_initv()</b> function calls the user-supplied routines <b class="cBold">exam_args</b> (passing argc and argv) and <b class="cBold">Startup</b> (passing the name of the COBOL program).  These routines are normally empty, but may be modified by you.  They can be found in the &quot;sub.c&quot; file supplied with the runtime system.  
+</p>
+<a name="wp1149626"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Since argv is an array of character pointers that may be needed after <b class="cBold">acu_initv()</b> returns, keep argv in scope until you shut down the runtime.  For more information, see the entry for <b class="cBold">acu_initv()</b> in <a  href="itr625.htm#wp1121796">section 6.4.3, &quot;Function Reference.&quot;</a> 
+<hr />
+</p>
+<a name="wp1122354"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1122355"> </a><p class="pBody">
+The following code might be used by a server routine that intends to use COBOL subroutines to perform various file operations.  In this scenario, no screen operations are done from COBOL, so we want to inhibit ACUCOBOL-GT's default screen initialization.  To do this, we must pass the &quot;-b&quot; command-line option.  Because the program will perform no screen operations, we do not care about the default window title and, thus, do not need to pass a COBOL program name.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+int<a name="wp1122356"> </a>
+main( argc, argv )<a name="wp1130987"> </a>
+int     argc;<a name="wp1131080"> </a>
+char    *argv[];<a name="wp1131173"> </a>
+{<a name="wp1131266"> </a>
+     char     *initv[2];<a name="wp1131359"> </a>
+     initv[0] = argv[0];<a name="wp1122357"> </a>
+     initv[1] = &quot;-b&quot;;<a name="wp1131545"> </a>
+     acu_initv( 2, initv );<a name="wp1131452"> </a>
+     /* other code follows */<a name="wp1122358"> </a>
+}<a name="wp1131638"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

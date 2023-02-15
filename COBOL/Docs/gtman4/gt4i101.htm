@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>REG_CREATE_KEY, DISPLAY_REG_CREATE_KEY Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1037485"> </a><h2 class="pHeading2">
+REG_CREATE_KEY, DISPLAY_REG_CREATE_KEY Routine
+</h2>
+<a name="wp1037491"> </a><p class="pBody">
+Creates a specified registry key by providing access to the Windows registry routine RegCreateKey.  If the key already exists, this function opens it (same functionality as REG_OPEN_KEY).  If the key does not exist, it is created and then opened.
+</p>
+<a name="wp1206332"> </a><p class="pBody">
+Use DISPLAY_REG_CREATE_KEY when you want the action to be performed on the display host's registry (the local host when the application is run with a standard runtime; the <em class="cEmphasis">thin client</em> when the application is run with the thin client).  Use REG_CREATE_KEY when you want the action to be performed on the server host's registry (the local host when the application is run with a standard runtime, and the application host when the application is run with the thin client). 
+</p>
+<a name="wp1037492"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;REG_CREATE_KEY&quot; <a name="wp1481504"> </a>
+    USING OPEN-KEY-HANDLE, SUBKEY-TO-BE-CREATED, <a name="wp1481505"> </a>
+        SUBKEY-HANDLE <a name="wp1481506"> </a>
+    GIVING STATUS-CODE<a name="wp1037497"> </a>
+</pre></div>
+<a name="wp1037498"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1037499"> </a><p class="pBody">
+<b class="cBold">OPEN-KEY-HANDLE</b>   Usage unsigned-long
+</p>
+<a name="wp1037503"> </a><p class="pBody">
+Handle of a currently open key or one of the following predefined handles of keys that are always open (defined in &quot;acugui.def&quot;):
+</p>
+<a name="wp1037504"> </a><p class="pBody">
+HKEY_CLASSES_ROOT
+</p>
+<a name="wp1037505"> </a><p class="pBody">
+HKEY_CURRENT_USER
+</p>
+<a name="wp1037506"> </a><p class="pBody">
+HKEY_LOCAL_MACHINE
+</p>
+<a name="wp1037507"> </a><p class="pBody">
+HKEY_USERS
+</p>
+<a name="wp1037508"> </a><p class="pBody">
+The key created or opened by REG_CREATE_KEY is a subkey of the key identified by OPEN-KEY-HANDLE.
+</p>
+<a name="wp1037509"> </a><p class="pBody">
+<b class="cBold">SUBKEY-TO-BE-CREATED</b>   PIC  X(n)
+</p>
+<a name="wp1037510"> </a><p class="pBody">
+Name of the subkey to create or open.
+</p>
+<a name="wp1037511"> </a><p class="pBody">
+<b class="cBold">SUBKEY-HANDLE</b>    Usage unsigned-long
+</p>
+<a name="wp1037512"> </a><p class="pBody">
+Data item to receive the handle of the newly created or opened key.
+</p>
+<a name="wp1037513"> </a><p class="pBody">
+<b class="cBold">STATUS-CODE</b>   Numeric data item.
+</p>
+<a name="wp1037514"> </a><p class="pBody">
+Receives the return status of the call to Microsoft's &quot;RegCreateKey&quot; function.  A return status of zero indicates success; non-zero indicates that an error occurred.
+</p>
+<a name="wp1037515"> </a><h3 class="pHeadingRef">
+Comments
+</h3>
+<a name="wp1037516"> </a><p class="pBody">
+REG_CREATE_KEY may be used to create several keys at once.
+</p>
+<a name="wp1037517"> </a><p class="pBody">
+For example, by setting SUBKEY-TO-BE-CREATED to
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+     &quot;key1\key2\key3&quot;<a name="wp1037518"> </a>
+</pre></div>
+<a name="wp1037519"> </a><p class="pBody">
+you could create three keys, where &quot;key3&quot; is a subkey of &quot;key2&quot;, &quot;key2&quot; is a subkey of &quot;key1&quot;, and &quot;key1&quot; is a subkey of the key specified by OPEN-KEY-HANDLE.  The lowest-level key (&quot;key3&quot; in this example) is the one that is opened and has its handle returned in SUBKEY-HANDLE.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

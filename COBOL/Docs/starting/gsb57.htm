@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/12/05 11:54:01" />
+  <title>5.4.2  Installing Products Within the MPE/iX Shell</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Getting Started <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gsb5.htm"><br />HP e3000 Installation</a> &gt; <a href="gsb55.htm">5.4  Installation on HP e3000 Machines</a> &gt; </p>
+<a name="wp1038634"> </a><h2 class="pHeading2">
+5.4.2  Installing Products Within the MPE/iX Shell
+</h2>
+<a name="wp1038635"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You must have system manager (SM) or system supervisor (OP) capability to perform the following procedures.
+<hr />
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1038636"> </a><div class="pSmartList1"><li>Extract the contents of the MPE/iX STORE archive with the following command:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:FILE T;DEV=TAPE<a name="wp1038637"> </a>
+:RESTORE *T;@.@.@;SHOW;TREE;ACCOUNT=ACUCOBOL;CREATE;CREATOR=MGR<a name="wp1038638"> </a>
+</pre></div>
+<a name="wp1038639"> </a><p class="pIndented1">
+The &quot;TREE&quot; option is required because most Acucorp files are in HFS format.  The &quot;TREE&quot; option tells RESTORE to recursively scan and include all files below the specified wildcards or directories.  The &quot;ACCOUNT=ACUCOBOL&quot; option is required to switch the file's account as you install (RESTORE) it from tape because a different account was used in the creation of the installation archive. The &quot;CREATE&quot; option recreates account, group, creator, or HFS directories if needed.  The &quot;CREATOR=MGR&quot; option changes the creator of the files to MGR. 
+</p>
+<a name="wp1039208"> </a><p class="pIndented1">
+If you get the following error message:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+EXCLUSIVE VIOLATION: FILE ACCESSED EXCLUSIVELY<a name="wp1040093"> </a>
+(FSERR&#160;91) /ACUCOBOL/PUB/ACUUDC NOT RESTORED: <a name="wp1045016"> </a>
+DISC FILE IN USE, CANNOT PURGE<a name="wp1045017"> </a>
+</pre></div>
+<a name="wp1040094"> </a><p class="pIndented1">
+then you did not remove or rename ACUUDC before doing the RESTORE.  Remove or rename ACUUDC as described <a  href="gsb56.htm#wp1038606">section 5.4.1</a>, and perform the RESTORE again.  
+</p>
+<a name="wp1048278"> </a><p class="pIndented1">
+If you get the following error message:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SPECIFIED ACCOUNT DOES NOT EXIST<a name="wp1040095"> </a>
+</pre></div>
+<a name="wp1040096"> </a><p class="pIndented1">
+then you did not create an account for ACUCOBOL prior to installation.  Create the account as described in <a  href="gsb56.htm#wp1038606">section 5.4.1</a>, and perform the RESTORE again.  
+</p>
+<a name="wp1038651"> </a><div class="pSmartList1"><li>Change the access permissions for the &quot;/ACUCOBOL/bin&quot; and <br />&quot;/ACUCOBOL/etc&quot; directories so that you can access ACUCOBOL-GT commands from other accounts:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:CHMOD.HPBIN.SYS &quot;755 /ACUCOBOL/etc&quot;<a name="wp1038653"> </a>
+:CHMOD.HPBIN.SYS &quot;755 /ACUCOBOL/bin&quot;<a name="wp1038654"> </a>
+</pre></div>
+<a name="wp1038655"> </a><p class="pIndented1">
+These commands allow read, write, and execute ability for the owner (7--), read and execute ability for the group (-5-), and read and execute ability for everyone else (--5).  The CHMOD.HPBIN.SYS and MKDIR.HPBIN.SYS commands are used because these are HFS format directories.   
+</p>
+<a name="wp1045885"> </a><p class="pNoteListHead">
+<hr />
+<b>Note:  </b>If you are using Acucorp's Thin Client technology, you must also create the &quot;/etc&quot; directory that is used by the AcuAccess file using the following command: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:MKDIR.HPBIN.SYS &quot;/etc&quot;<a name="wp1048164"> </a>
+</pre></div>
+<a name="wp1048168"> </a><p class="pNoteListEnd">
+For more information about thin client and the AcuAccess file, refer to the <em class="cEmphasis">AcuConnect User's Guide</em>.
+<hr />
+</p>
+<a name="wp1038656"> </a><div class="pSmartList1"><li>Make sure the UDC for ACUCOBOL-GT, &quot;ACUUDC.PUB.ACUCOBOL&quot;, is cataloged with the following command:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:SHOWCATALOG<a name="wp1038657"> </a>
+</pre></div>
+<a name="wp1045850"> </a><p class="pIndented1">
+This UDC sets the environment variables needed to run ACUCOBOL-GT.  If you want to make this a logon UDC, add the &quot;OPTION LOGON&quot; line to ACUUDC.  This can only be done if you do not already have a logon UDC for the specified level. <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">MPE/iX only recognizes one logon UDC for each level</span>.  If a logon UDC exists, you can add ACUUDC to the existing logon UDC at that level.  If ACUUDC is not cataloged, catalog it at the desired level.  For example,  use the following command to catalog and activate the UDC at the account level:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:SETCATALOG ACUUDC.PUB.ACUCOBOL;APPEND;ACCOUNT<a name="wp1045851"> </a>
+:ACUUDC<a name="wp1045852"> </a>
+</pre></div>
+<a name="wp1038658"> </a><p class="pIndented1">
+Start the Activator utility to create the product license files.  
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:/ACUCOBOL/bin/activator<a name="wp1038661"> </a>
+</pre></div>
+<a name="wp1038662"> </a><div class="pSmartList1"><li>At the prompt, type the product code and product key that came with your product package.  When you press <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">Return</span> after typing in each code and key pair, the license file is created.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:/ACUCOBOL/bin/activator<a name="wp1038663"> </a>
+Enter the product code []: 2EKAAAKNNVDA6KJBSWAA<a name="wp1038664"> </a>
+Enter the product key []: 9XFKJGKNNU7Z <a name="wp1038665"> </a>
+</pre></div>
+<a name="wp1038666"> </a><p class="pIndented1">
+If you have another set of product codes and keys to enter, run the Activator again.  (Repeat this step until all code and key pairs are entered.)  You can use the REDO command to recall the Activator utility.
+</p>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

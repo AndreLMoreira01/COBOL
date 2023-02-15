@@ -1,0 +1,1414 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:01:15" />
+  <title>5.6  IBM DOS/VS Error Codes</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch5-dosv.htm">Chapter 5:  IBM DOS/VS COBOL Conversions</a> &gt; </p>
+<a name="wp1040436"> </a><h2 class="pHeading1">
+5.6  IBM DOS/VS Error Codes
+</h2>
+<a name="wp1040439"> </a><p class="pBody">
+IBM DOS/VS COBOL has a form of the USE statement in the DECLARATIVES section that is not recognized by ACUCOBOL-GT:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<u style="text-decoration: none" class="cUnderline">USE</u> AFTER STANDARD <u style="text-decoration: none" class="cUnderline">ERROR</u> PROCEDURE ON file-name <u style="text-decoration: none" class="cUnderline">GIVING</u><a name="wp1040440"> </a>
+       data-name-1 [data-name-2]<a name="wp1040441"> </a>
+</pre></div>
+<a name="wp1040442"> </a><p class="pBody">
+This form is accepted by ACUCOBOL-GT when the &quot;-Cv&quot; option is in effect.
+</p>
+<a name="wp1040443"> </a><p class="pBody">
+When an error handler introduced by this statement is invoked, the runtime puts special error codes into the eight-byte data item <em style="font-style: normal" class="cEmphasis">data-name-1</em>.  Each byte is loaded with &quot;1&quot;s if the corresponding error condition is true.  If the corresponding error condition is false, ACUCOBOL-GT loads it with &quot;0&quot;s.  
+</p>
+<a name="wp1040444"> </a><p class="pBody">
+Here are the IBM conditions:
+</p>
+<a name="wp1040518"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1040447"> </a>
+byte
+
+</th>
+    <th><a name="wp1040449"> </a>
+indexed
+
+</th>
+    <th><a name="wp1040451"> </a>
+direct
+
+</th>
+    <th><a name="wp1040453"> </a>
+sequential
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040455"> </a><p class="pCellBody">
+1 (leftmost)
+</p>
+</td>
+    <td><a name="wp1040457"> </a><p class="pCellBody">
+DASD error
+</p>
+</td>
+    <td><a name="wp1040459"> </a><p class="pCellBody">
+data check in count
+</p>
+</td>
+    <td><a name="wp1040461"> </a><p class="pCellBody">
+parity error
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040463"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1040465"> </a><p class="pCellBody">
+wrong record length
+</p>
+</td>
+    <td><a name="wp1040467"> </a><p class="pCellBody">
+wrong record length
+</p>
+</td>
+    <td><a name="wp1040469"> </a><p class="pCellBody">
+wrong record length
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040471"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1040473"> </a><p class="pCellBody">
+prime data full
+</p>
+</td>
+    <td><a name="wp1040475"> </a><p class="pCellBody">
+no room found
+</p>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1040477"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040479"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1040481"> </a><p class="pCellBody">
+cylinder index too small
+</p>
+</td>
+    <td><a name="wp1040483"> </a><p class="pCellBody">
+data check in key or data
+</p>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1040485"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040487"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1040489"> </a><p class="pCellBody">
+master index too small
+</p>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1040491"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1040493"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040495"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1040497"> </a><p class="pCellBody">
+overflow area full
+</p>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1040499"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1040501"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040503"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1040505"> </a><p class="pCellBody">
+no EOF record written in prime data area
+</p>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1040507"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1040509"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040511"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1040513"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1040515"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1040517"> </a>
+</pre></div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1040519"> </a><p class="pBody">
+This is how the preceding error conditions are mapped into the conditions detected by ACUCOBOL-GT:
+</p>
+<a name="wp1041073"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1040522"> </a>
+85
+
+</th>
+    <th><a name="wp1040524"> </a>
+74
+
+</th>
+    <th><a name="wp1040526"> </a>
+Vax
+
+</th>
+    <th><a name="wp1040528"> </a>
+DG
+
+</th>
+    <th><a name="wp1040530"> </a>
+IBM
+
+</th>
+    <th><a name="wp1040532"> </a>
+data-name-1
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040534"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040536"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040538"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040540"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040542"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040544"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040546"> </a><p class="pCellBody">
+48
+</p>
+</td>
+    <td><a name="wp1040548"> </a><p class="pCellBody">
+91
+</p>
+</td>
+    <td><a name="wp1040550"> </a><p class="pCellBody">
+48
+</p>
+</td>
+    <td><a name="wp1040552"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040554"> </a><p class="pCellBody">
+13
+</p>
+</td>
+    <td><a name="wp1040556"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040558"> </a><p class="pCellBody">
+49
+</p>
+</td>
+    <td><a name="wp1040560"> </a><p class="pCellBody">
+91
+</p>
+</td>
+    <td><a name="wp1040562"> </a><p class="pCellBody">
+49
+</p>
+</td>
+    <td><a name="wp1040564"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040566"> </a><p class="pCellBody">
+13
+</p>
+</td>
+    <td><a name="wp1040568"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040570"> </a><p class="pCellBody">
+47
+</p>
+</td>
+    <td><a name="wp1040572"> </a><p class="pCellBody">
+91
+</p>
+</td>
+    <td><a name="wp1040574"> </a><p class="pCellBody">
+47
+</p>
+</td>
+    <td><a name="wp1040576"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040578"> </a><p class="pCellBody">
+13
+</p>
+</td>
+    <td><a name="wp1040580"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040582"> </a><p class="pCellBody">
+42
+</p>
+</td>
+    <td><a name="wp1040584"> </a><p class="pCellBody">
+91
+</p>
+</td>
+    <td><a name="wp1040586"> </a><p class="pCellBody">
+94
+</p>
+</td>
+    <td><a name="wp1040588"> </a><p class="pCellBody">
+91
+</p>
+</td>
+    <td><a name="wp1040590"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040592"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040594"> </a><p class="pCellBody">
+38
+</p>
+</td>
+    <td><a name="wp1040596"> </a><p class="pCellBody">
+93
+</p>
+</td>
+    <td><a name="wp1040598"> </a><p class="pCellBody">
+38
+</p>
+</td>
+    <td><a name="wp1040600"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040602"> </a><p class="pCellBody">
+93
+</p>
+</td>
+    <td><a name="wp1040604"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040606"> </a><p class="pCellBody">
+41
+</p>
+</td>
+    <td><a name="wp1040608"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040610"> </a><p class="pCellBody">
+41
+</p>
+</td>
+    <td><a name="wp1040612"> </a><p class="pCellBody">
+91
+</p>
+</td>
+    <td><a name="wp1040614"> </a><p class="pCellBody">
+93
+</p>
+</td>
+    <td><a name="wp1040616"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040618"> </a><p class="pCellBody">
+37
+</p>
+</td>
+    <td><a name="wp1040620"> </a><p class="pCellBody">
+95
+</p>
+</td>
+    <td><a name="wp1040622"> </a><p class="pCellBody">
+37
+</p>
+</td>
+    <td><a name="wp1040624"> </a><p class="pCellBody">
+91
+</p>
+</td>
+    <td><a name="wp1040626"> </a><p class="pCellBody">
+93
+</p>
+</td>
+    <td><a name="wp1040628"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040630"> </a><p class="pCellBody">
+93
+</p>
+</td>
+    <td><a name="wp1040632"> </a><p class="pCellBody">
+93
+</p>
+</td>
+    <td><a name="wp1040634"> </a><p class="pCellBody">
+91
+</p>
+</td>
+    <td><a name="wp1040636"> </a><p class="pCellBody">
+94
+</p>
+</td>
+    <td><a name="wp1040638"> </a><p class="pCellBody">
+93
+</p>
+</td>
+    <td><a name="wp1040640"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040642"> </a><p class="pCellBody">
+94
+</p>
+</td>
+    <td><a name="wp1040644"> </a><p class="pCellBody">
+94
+</p>
+</td>
+    <td><a name="wp1040646"> </a><p class="pCellBody">
+97
+</p>
+</td>
+    <td><a name="wp1040648"> </a><p class="pCellBody">
+97
+</p>
+</td>
+    <td><a name="wp1040650"> </a><p class="pCellBody">
+93
+</p>
+</td>
+    <td><a name="wp1040652"> </a><p class="pCellBody">
+01000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040654"> </a><p class="pCellBody">
+48
+</p>
+</td>
+    <td><a name="wp1040656"> </a><p class="pCellBody">
+90
+</p>
+</td>
+    <td><a name="wp1040658"> </a><p class="pCellBody">
+48
+</p>
+</td>
+    <td><a name="wp1040660"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040662"> </a><p class="pCellBody">
+13
+</p>
+</td>
+    <td><a name="wp1040664"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040666"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1040668"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1040670"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1040672"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1040674"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1040676"> </a><p class="pCellBody">
+00100000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040678"> </a><p class="pCellBody">
+22
+</p>
+</td>
+    <td><a name="wp1040680"> </a><p class="pCellBody">
+22
+</p>
+</td>
+    <td><a name="wp1040682"> </a><p class="pCellBody">
+22
+</p>
+</td>
+    <td><a name="wp1040684"> </a><p class="pCellBody">
+22
+</p>
+</td>
+    <td><a name="wp1040686"> </a><p class="pCellBody">
+22
+</p>
+</td>
+    <td><a name="wp1040688"> </a><p class="pCellBody">
+00010000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040690"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1040692"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1040694"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1040696"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1040698"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1040700"> </a><p class="pCellBody">
+00010000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040702"> </a><p class="pCellBody">
+34
+</p>
+</td>
+    <td><a name="wp1040704"> </a><p class="pCellBody">
+34
+</p>
+</td>
+    <td><a name="wp1040706"> </a><p class="pCellBody">
+34
+</p>
+</td>
+    <td><a name="wp1040708"> </a><p class="pCellBody">
+34
+</p>
+</td>
+    <td><a name="wp1040710"> </a><p class="pCellBody">
+34
+</p>
+</td>
+    <td><a name="wp1040712"> </a><p class="pCellBody">
+00100000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040714"> </a><p class="pCellBody">
+30
+</p>
+</td>
+    <td><a name="wp1040716"> </a><p class="pCellBody">
+30
+</p>
+</td>
+    <td><a name="wp1040718"> </a><p class="pCellBody">
+30
+</p>
+</td>
+    <td><a name="wp1040720"> </a><p class="pCellBody">
+30
+</p>
+</td>
+    <td><a name="wp1040722"> </a><p class="pCellBody">
+30
+</p>
+</td>
+    <td><a name="wp1040724"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040726"> </a><p class="pCellBody">
+48
+</p>
+</td>
+    <td><a name="wp1040728"> </a><p class="pCellBody">
+90
+</p>
+</td>
+    <td><a name="wp1040730"> </a><p class="pCellBody">
+48
+</p>
+</td>
+    <td><a name="wp1040732"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040734"> </a><p class="pCellBody">
+13
+</p>
+</td>
+    <td><a name="wp1040736"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040738"> </a><p class="pCellBody">
+49
+</p>
+</td>
+    <td><a name="wp1040740"> </a><p class="pCellBody">
+90
+</p>
+</td>
+    <td><a name="wp1040742"> </a><p class="pCellBody">
+49
+</p>
+</td>
+    <td><a name="wp1040744"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040746"> </a><p class="pCellBody">
+13
+</p>
+</td>
+    <td><a name="wp1040748"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040750"> </a><p class="pCellBody">
+23
+</p>
+</td>
+    <td><a name="wp1040752"> </a><p class="pCellBody">
+23
+</p>
+</td>
+    <td><a name="wp1040754"> </a><p class="pCellBody">
+23
+</p>
+</td>
+    <td><a name="wp1040756"> </a><p class="pCellBody">
+23
+</p>
+</td>
+    <td><a name="wp1040758"> </a><p class="pCellBody">
+23
+</p>
+</td>
+    <td><a name="wp1040760"> </a><p class="pCellBody">
+01000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040762"> </a><p class="pCellBody">
+99
+</p>
+</td>
+    <td><a name="wp1040764"> </a><p class="pCellBody">
+99
+</p>
+</td>
+    <td><a name="wp1040766"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040768"> </a><p class="pCellBody">
+94
+</p>
+</td>
+    <td><a name="wp1040770"> </a><p class="pCellBody">
+23
+</p>
+</td>
+    <td><a name="wp1040772"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040774"> </a><p class="pCellBody">
+44
+</p>
+</td>
+    <td><a name="wp1040776"> </a><p class="pCellBody">
+97
+</p>
+</td>
+    <td><a name="wp1040778"> </a><p class="pCellBody">
+44
+</p>
+</td>
+    <td><a name="wp1040780"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040782"> </a><p class="pCellBody">
+21
+</p>
+</td>
+    <td><a name="wp1040784"> </a><p class="pCellBody">
+01000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040786"> </a><p class="pCellBody">
+43
+</p>
+</td>
+    <td><a name="wp1040788"> </a><p class="pCellBody">
+90
+</p>
+</td>
+    <td><a name="wp1040790"> </a><p class="pCellBody">
+43
+</p>
+</td>
+    <td><a name="wp1040792"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040794"> </a><p class="pCellBody">
+23
+</p>
+</td>
+    <td><a name="wp1040796"> </a><p class="pCellBody">
+01000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040798"> </a><p class="pCellBody">
+47
+</p>
+</td>
+    <td><a name="wp1040800"> </a><p class="pCellBody">
+90
+</p>
+</td>
+    <td><a name="wp1040802"> </a><p class="pCellBody">
+47
+</p>
+</td>
+    <td><a name="wp1040804"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040806"> </a><p class="pCellBody">
+13
+</p>
+</td>
+    <td><a name="wp1040808"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040810"> </a><p class="pCellBody">
+10
+</p>
+</td>
+    <td><a name="wp1040812"> </a><p class="pCellBody">
+10
+</p>
+</td>
+    <td><a name="wp1040814"> </a><p class="pCellBody">
+10
+</p>
+</td>
+    <td><a name="wp1040816"> </a><p class="pCellBody">
+10
+</p>
+</td>
+    <td><a name="wp1040818"> </a><p class="pCellBody">
+10
+</p>
+</td>
+    <td><a name="wp1040820"> </a><p class="pCellBody">
+01000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040822"> </a><p class="pCellBody">
+42
+</p>
+</td>
+    <td><a name="wp1040824"> </a><p class="pCellBody">
+91
+</p>
+</td>
+    <td><a name="wp1040826"> </a><p class="pCellBody">
+42
+</p>
+</td>
+    <td><a name="wp1040828"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040830"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040832"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040834"> </a><p class="pCellBody">
+05
+</p>
+</td>
+    <td><a name="wp1040836"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040838"> </a><p class="pCellBody">
+05
+</p>
+</td>
+    <td><a name="wp1040840"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040842"> </a><p class="pCellBody">
+10
+</p>
+</td>
+    <td><a name="wp1040844"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040846"> </a><p class="pCellBody">
+39
+</p>
+</td>
+    <td><a name="wp1040848"> </a><p class="pCellBody">
+94
+</p>
+</td>
+    <td><a name="wp1040850"> </a><p class="pCellBody">
+39
+</p>
+</td>
+    <td><a name="wp1040852"> </a><p class="pCellBody">
+9A
+</p>
+</td>
+    <td><a name="wp1040854"> </a><p class="pCellBody">
+95
+</p>
+</td>
+    <td><a name="wp1040856"> </a><p class="pCellBody">
+01000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040858"> </a><p class="pCellBody">
+46
+</p>
+</td>
+    <td><a name="wp1040860"> </a><p class="pCellBody">
+96
+</p>
+</td>
+    <td><a name="wp1040862"> </a><p class="pCellBody">
+46
+</p>
+</td>
+    <td><a name="wp1040864"> </a><p class="pCellBody">
+10
+</p>
+</td>
+    <td><a name="wp1040866"> </a><p class="pCellBody">
+21
+</p>
+</td>
+    <td><a name="wp1040868"> </a><p class="pCellBody">
+01000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040870"> </a><p class="pCellBody">
+9A
+</p>
+</td>
+    <td><a name="wp1040872"> </a><p class="pCellBody">
+9A
+</p>
+</td>
+    <td><a name="wp1040874"> </a><p class="pCellBody">
+9A
+</p>
+</td>
+    <td><a name="wp1040876"> </a><p class="pCellBody">
+9A
+</p>
+</td>
+    <td><a name="wp1040878"> </a><p class="pCellBody">
+23
+</p>
+</td>
+    <td><a name="wp1040880"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040882"> </a><p class="pCellBody">
+02
+</p>
+</td>
+    <td><a name="wp1040884"> </a><p class="pCellBody">
+02
+</p>
+</td>
+    <td><a name="wp1040886"> </a><p class="pCellBody">
+02
+</p>
+</td>
+    <td><a name="wp1040888"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040890"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040892"> </a><p class="pCellBody">
+00010000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040894"> </a><p class="pCellBody">
+35
+</p>
+</td>
+    <td><a name="wp1040896"> </a><p class="pCellBody">
+94
+</p>
+</td>
+    <td><a name="wp1040898"> </a><p class="pCellBody">
+35
+</p>
+</td>
+    <td><a name="wp1040900"> </a><p class="pCellBody">
+91
+</p>
+</td>
+    <td><a name="wp1040902"> </a><p class="pCellBody">
+93
+</p>
+</td>
+    <td><a name="wp1040904"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040906"> </a><p class="pCellBody">
+37
+</p>
+</td>
+    <td><a name="wp1040908"> </a><p class="pCellBody">
+90
+</p>
+</td>
+    <td><a name="wp1040910"> </a><p class="pCellBody">
+39
+</p>
+</td>
+    <td><a name="wp1040912"> </a><p class="pCellBody">
+91
+</p>
+</td>
+    <td><a name="wp1040914"> </a><p class="pCellBody">
+93
+</p>
+</td>
+    <td><a name="wp1040916"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040918"> </a><p class="pCellBody">
+98
+</p>
+</td>
+    <td><a name="wp1040920"> </a><p class="pCellBody">
+98
+</p>
+</td>
+    <td><a name="wp1040922"> </a><p class="pCellBody">
+30
+</p>
+</td>
+    <td><a name="wp1040924"> </a><p class="pCellBody">
+9B
+</p>
+</td>
+    <td><a name="wp1040926"> </a><p class="pCellBody">
+93
+</p>
+</td>
+    <td><a name="wp1040928"> </a><p class="pCellBody">
+01000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040930"> </a><p class="pCellBody">
+94
+</p>
+</td>
+    <td><a name="wp1040932"> </a><p class="pCellBody">
+94
+</p>
+</td>
+    <td><a name="wp1040934"> </a><p class="pCellBody">
+39
+</p>
+</td>
+    <td><a name="wp1040936"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1040938"> </a><p class="pCellBody">
+93
+</p>
+</td>
+    <td><a name="wp1040940"> </a><p class="pCellBody">
+01000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040942"> </a><p class="pCellBody">
+9B
+</p>
+</td>
+    <td><a name="wp1040944"> </a><p class="pCellBody">
+9B
+</p>
+</td>
+    <td><a name="wp1040946"> </a><p class="pCellBody">
+9B
+</p>
+</td>
+    <td><a name="wp1040948"> </a><p class="pCellBody">
+9B
+</p>
+</td>
+    <td><a name="wp1040950"> </a><p class="pCellBody">
+23
+</p>
+</td>
+    <td><a name="wp1040952"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040954"> </a><p class="pCellBody">
+02
+</p>
+</td>
+    <td><a name="wp1040956"> </a><p class="pCellBody">
+02
+</p>
+</td>
+    <td><a name="wp1040958"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040960"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040962"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040964"> </a><p class="pCellBody">
+00010000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040966"> </a><p class="pCellBody">
+07
+</p>
+</td>
+    <td><a name="wp1040968"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040970"> </a><p class="pCellBody">
+07
+</p>
+</td>
+    <td><a name="wp1040972"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040974"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040976"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040978"> </a><p class="pCellBody">
+14
+</p>
+</td>
+    <td><a name="wp1040980"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040982"> </a><p class="pCellBody">
+14
+</p>
+</td>
+    <td><a name="wp1040984"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040986"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040988"> </a><p class="pCellBody">
+01000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040990"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1040992"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040994"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1040996"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1040998"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1041000"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041002"> </a><p class="pCellBody">
+21
+</p>
+</td>
+    <td><a name="wp1041004"> </a><p class="pCellBody">
+21
+</p>
+</td>
+    <td><a name="wp1041006"> </a><p class="pCellBody">
+21
+</p>
+</td>
+    <td><a name="wp1041008"> </a><p class="pCellBody">
+21
+</p>
+</td>
+    <td><a name="wp1041010"> </a><p class="pCellBody">
+21
+</p>
+</td>
+    <td><a name="wp1041012"> </a><p class="pCellBody">
+00010000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041014"> </a><p class="pCellBody">
+9C
+</p>
+</td>
+    <td><a name="wp1041016"> </a><p class="pCellBody">
+9C
+</p>
+</td>
+    <td><a name="wp1041018"> </a><p class="pCellBody">
+9C
+</p>
+</td>
+    <td><a name="wp1041020"> </a><p class="pCellBody">
+9C
+</p>
+</td>
+    <td><a name="wp1041022"> </a><p class="pCellBody">
+23
+</p>
+</td>
+    <td><a name="wp1041024"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041026"> </a><p class="pCellBody">
+0M
+</p>
+</td>
+    <td><a name="wp1041028"> </a><p class="pCellBody">
+0M
+</p>
+</td>
+    <td><a name="wp1041030"> </a><p class="pCellBody">
+0M
+</p>
+</td>
+    <td><a name="wp1041032"> </a><p class="pCellBody">
+0M
+</p>
+</td>
+    <td><a name="wp1041034"> </a><p class="pCellBody">
+00
+</p>
+</td>
+    <td><a name="wp1041036"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041038"> </a><p class="pCellBody">
+9D
+</p>
+</td>
+    <td><a name="wp1041040"> </a><p class="pCellBody">
+9D
+</p>
+</td>
+    <td><a name="wp1041042"> </a><p class="pCellBody">
+9D
+</p>
+</td>
+    <td><a name="wp1041044"> </a><p class="pCellBody">
+9D
+</p>
+</td>
+    <td><a name="wp1041046"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1041048"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041050"> </a><p class="pCellBody">
+9Z
+</p>
+</td>
+    <td><a name="wp1041052"> </a><p class="pCellBody">
+9Z
+</p>
+</td>
+    <td><a name="wp1041054"> </a><p class="pCellBody">
+9Z
+</p>
+</td>
+    <td><a name="wp1041056"> </a><p class="pCellBody">
+9Z
+</p>
+</td>
+    <td><a name="wp1041058"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1041060"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041062"> </a><p class="pCellBody">
+9E
+</p>
+</td>
+    <td><a name="wp1041064"> </a><p class="pCellBody">
+9E
+</p>
+</td>
+    <td><a name="wp1041066"> </a><p class="pCellBody">
+9E
+</p>
+</td>
+    <td><a name="wp1041068"> </a><p class="pCellBody">
+9E
+</p>
+</td>
+    <td><a name="wp1041070"> </a><p class="pCellBody">
+92
+</p>
+</td>
+    <td><a name="wp1041072"> </a><p class="pCellBody">
+10000000
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1041074"> </a><p class="pBody">
+
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:24" />
+  <title>CODE_MAPPING </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4h.htm">Appendix H: Configuration File Entries</a> &gt; <a href="gt4h3.htm">H.2  Configuration File Entries</a> &gt; </p>
+<a name="wp1168973"> </a><h2 class="pHeading2">
+CODE_MAPPING 
+</h2>
+<a name="wp1168978"> </a><p class="pBody">
+This configuration variable allows you to modify CALL, CHAIN, and CANCEL names at runtime.  This can be particularly useful if you are using AcuServer or AcuConnect.  When this variable is set to &quot;1&quot; (on, true, yes), every CALL, CHAIN, and CANCEL statement checks the current configuration for a name that matches the CALL name.  This is handled in the same way that file name processing is done (the environment is checked for an uppercase version of the name, with any hyphens treated as underscores).  If a matching name is found, its value is substituted.  This is done recursively until no more matching names are found.   
+</p>
+<a name="wp1168979"> </a><p class="pBody">
+After this substitution occurs, the CALL name handling proceeds normally (and includes any effects of CODE_PATH, CODE_SUFFIX, and CODE_CASE).
+</p>
+<a name="wp1168980"> </a><p class="pBody">
+For example, with CODE_MAPPING set to &quot;1&quot;, if your configuration file had the following entry:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MYPROG  @sun:/app/myprog<a name="wp1168981"> </a>
+</pre></div>
+<a name="wp1168982"> </a><p class="pBody">
+Then CALL &quot;MYPROG&quot; would act the same as CALL &quot;@sun:/app/myprog&quot;.  
+</p>
+<a name="wp1168983"> </a><p class="pBody">
+Thin client applications may find the CODE_MAPPING mechanism useful for automatically adding the &quot;@[DISPLAY]:&quot; prefix to the name of the DLL to run on the display host.  For example, if your configuration file includes the entry: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+mylib.dll  @[DISPLAY]:mylib.dll<a name="wp1168984"> </a>
+</pre></div>
+<a name="wp1168985"> </a><p class="pBody">
+Then the statement
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL  &quot;mylib.dll&quot; <a name="wp1168986"> </a>
+</pre></div>
+<a name="wp1168987"> </a><p class="pBody">
+is interpreted as
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;@[DISPLAY]:mylib.dll&quot;	<a name="wp1168988"> </a>
+</pre></div>
+<a name="wp1168989"> </a><p class="pBody">
+causing &quot;mylib.dll&quot; to run on the display host.
+</p>
+<a name="wp1168990"> </a><p class="pBody">
+Those wanting to specify the DLL calling conventions will also find CODE_MAPPING useful.  For example, if you use the following configuration entries:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+funcA=funcA@__stdcall<a name="wp1168991"> </a>
+funcB=funcB@__cdecl <a name="wp1168992"> </a>
+</pre></div>
+<a name="wp1168993"> </a><p class="pBody">
+then the statement
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;funcA&quot;<a name="wp1168994"> </a>
+</pre></div>
+<a name="wp1168995"> </a><p class="pBody">
+calls funcA using the stdcall calling convention and 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;funcB&quot; <a name="wp1168996"> </a>
+</pre></div>
+<a name="wp1168997"> </a><p class="pBody">
+calls funcB using the cdecl convention.
+</p>
+<a name="wp1168998"> </a><p class="pBody">
+For more information about calling DLLs from thin client applications, see section 6.5 of the <em class="cEmphasis">AcuConnect User's Guide</em>.  For information on calling DLLs in general, refer to Chapter 3 of <em style="font-style: italic" class="cEmphasis">A </em><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Guide to Interoperating with ACUCOBOL-GT</span>.
+</p>
+<a name="wp1168999"> </a><p class="pBody">
+The default value for this variable is &quot;0&quot; (off, false, no).
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:12" />
+  <title>7.3.3  Unmasking Mouse Actions</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt27.htm">Chapter 7:  Using the Mouse </a> &gt; <a href="gt274.htm">7.3  How Mouse Actions Are Handled</a> &gt; </p>
+<a name="wp1026223"> </a><h2 class="pHeading2">
+7.3.3  Unmasking Mouse Actions
+</h2>
+<a name="wp1026226"> </a><p class="pBody">
+Normally, you don't want every mouse action to return an exception value to your program.  For example, you usually don't need to know that the user moved the mouse.  Having to program for that case for each ACCEPT statement would be very tedious.  For this reason, ACUCOBOL-GT allows you to mask out (ignore) some or all of the mouse actions in any combination.  By default, all of the mouse actions are masked--you must enable the actions that you want to use.  
+</p>
+<a name="wp1026227"> </a><p class="pBody">
+You control which mouse actions you want to handle by setting the value of the configuration variable &quot;MOUSE-FLAGS&quot;.  &quot;The value you set is actually one or more values added together.  
+</p>
+<a name="wp1026230"> </a><p class="pBody">
+Each numeric value shown on the next page also has a descriptive name (such as arrow-left-down).  Note that these descriptive names come from the file &quot;acugui.def&quot;.  If you use these descriptive names in your program, add this statement to the Working-Storage section of your program:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+copy &quot;acugui.def&quot;   <a name="wp1026231"> </a>
+</pre></div>
+<a name="wp1026232"> </a><p class="pBody">
+The possible values are: 
+</p>
+<a name="wp1026233"> </a><p class="pBody">
+   </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1034037"> </a><p class="pCellBody">
+AUTO-MOUSE-HANDLING<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1034039"> </a><p class="pCellBody">
+Value 1.  Causes ACUCOBOL-GT to use its automatic mouse handling facility.  This is described in detail below.  (default) 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034043"> </a><p class="pCellBody">
+ALLOW-LEFT-DOWN
+</p>
+</td>
+    <td><a name="wp1034045"> </a><p class="pCellBody">
+Value 2.  Enables the &quot;left button pushed&quot; action. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034049"> </a><p class="pCellBody">
+ALLOW-LEFT-UP
+</p>
+</td>
+    <td><a name="wp1034051"> </a><p class="pCellBody">
+Value 4.  Enables the &quot;left button released&quot; action. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034055"> </a><p class="pCellBody">
+ALLOW-LEFT-DOUBLE
+</p>
+</td>
+    <td><a name="wp1034057"> </a><p class="pCellBody">
+Value 8.  Enables the &quot;left button double-clicked&quot; action. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034061"> </a><p class="pCellBody">
+ALLOW-MIDDLE-DOWN
+</p>
+</td>
+    <td><a name="wp1034063"> </a><p class="pCellBody">
+Value 16.  Enables the &quot;middle button pushed&quot; action. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034067"> </a><p class="pCellBody">
+ALLOW-MIDDLE-UP
+</p>
+</td>
+    <td><a name="wp1034069"> </a><p class="pCellBody">
+Value 32.  Enables the &quot;middle button released&quot; action. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034073"> </a><p class="pCellBody">
+ALLOW-MIDDLE-DOUBLE
+</p>
+</td>
+    <td><a name="wp1034075"> </a><p class="pCellBody">
+Value 64.  Enables the &quot;middle button double-clicked&quot; action. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034079"> </a><p class="pCellBody">
+ALLOW-RIGHT-DOWN
+</p>
+</td>
+    <td><a name="wp1034081"> </a><p class="pCellBody">
+Value 128.  Enables the &quot;right button pushed&quot; action. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034085"> </a><p class="pCellBody">
+ALLOW-RIGHT-UP
+</p>
+</td>
+    <td><a name="wp1034087"> </a><p class="pCellBody">
+Value 256.  Enables the &quot;right button released&quot; action. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034091"> </a><p class="pCellBody">
+ALLOW-RIGHT-DOUBLE
+</p>
+</td>
+    <td><a name="wp1034093"> </a><p class="pCellBody">
+Value 512.  Enables the &quot;right button double-clicked&quot; action. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034097"> </a><p class="pCellBody">
+ALLOW-MOUSE-MOVE
+</p>
+</td>
+    <td><a name="wp1034099"> </a><p class="pCellBody">
+Value 1024.  Enables the &quot;mouse moved&quot; action. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034103"> </a><p class="pCellBody">
+ALWAYS-ARROW-CURSOR
+</p>
+</td>
+    <td><a name="wp1034105"> </a><p class="pCellBody">
+Value 2048.  Forces the mouse pointer always to be the default arrow shape when you are using automatic mouse handling.  If this is not set, then the shape of the mouse pointer varies depending on various configuration options.  This is described in detail below.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034109"> </a><p class="pCellBody">
+ALLOW-ALL-SCREEN-ACTIONS
+</p>
+</td>
+    <td><a name="wp1034111"> </a><p class="pCellBody">
+Value 16384.  This causes all enabled mouse actions that occur within your application's window to be acted upon.  If this is not set, then only mouse actions that occur within the current ACUCOBOL-GT window are acted upon. (The current ACUCOBOL-GT window is a window created by your program with the DISPLAY WINDOW verb. 
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1026314"> </a><p class="pBody">
+For example, if you wanted to act on the user's pressing either the left or right buttons, you could do the following in COBOL:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ADD  ALLOW-LEFT-DOWN,  ALLOW-RIGHT-DOWN<a name="wp1026315"> </a>
+     GIVING  MOUSE-SETTING<a name="wp1030581"> </a>
+SET  ENVIRONMENT  &quot;MOUSE-FLAGS&quot; TO  <a name="wp1026316"> </a>
+     MOUSE-SETTING<a name="wp1030583"> </a>
+</pre></div>
+<a name="wp1026317"> </a><p class="pBody">
+You may also set the MOUSE-FLAGS variable directly in the COBOL configuration file.  The following entry in the configuration file would produce the same results as the example shown above:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MOUSE-FLAGS  130<a name="wp1026318"> </a>
+</pre></div>
+<a name="wp1026319"> </a><p class="pBody">
+See the list above for the numeric values associated with each setting.
+</p>
+<a name="wp1026320"> </a><p class="pBody">
+The default setting of MOUSE-FLAGS is 1 (AUTO-MOUSE-HANDLING).  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

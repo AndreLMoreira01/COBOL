@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:41:58" />
+  <title>4.3.8  SECONDARY_TABLE</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl4.htm">Chapter 4:  Using Directives</a> &gt; <a href="4gl44.htm">4.3  Directives Supported by the Acu4GL Interfaces</a> &gt; </p>
+<a name="wp1035687"> </a><h2 class="pHeading2">
+4.3.8  SECONDARY_TABLE
+</h2>
+<a name="wp1034732"> </a><p class="pBody">
+Some RDBMSs, such as Sybase, permit subordinate tables.  When this is the case, you can use the SECONDARY_TABLE directive to indicate that the next data item may be placed into a subordinate table if more than one table is necessary to accommodate the data.  
+</p>
+<a name="wp1034733"> </a><p class="pBody">
+Up to 26 subordinate tables can be created from a single record description.  Each table name is based on the original table name, with a letter from A to Z appended.  For example, if the original table were named my-table,  subsequent subordinate tables would be given these names:
+</p>
+<a name="wp1034735"> </a><p class="pIndented1">
+my-tableA
+</p>
+<a name="wp1034736"> </a><p class="pIndented1">
+my-tableB
+</p>
+<a name="wp1034737"> </a><p class="pIndented1">
+my-tableC
+</p>
+<a name="wp1034738"> </a><p class="pIndented1">
+my-tableD
+</p>
+<a name="wp1034739"> </a><p class="pBody">
+When the runtime accesses the data dictionary, it makes an initial pass through the data, taking all eligible data items for which the SECONDARY_TABLE directive is <em class="cEmphasis">not</em> specified.  
+</p>
+<a name="wp1034740"> </a><p class="pBody">
+SECONDARY_TABLE is ignored for certain data items.  These include:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034741"> </a><div class="pSmartList1"><li>any field that is part of a key</li></div>
+<a name="wp1034742"> </a><div class="pSmartList1"><li>any field that is an indicator for a WHEN directive</li></div>
+</ul></div>
+<a name="wp1034743"> </a><p class="pBody">
+If the table size is not exceeded in the first pass, then, in a second pass, the runtime appends to the original table all items marked SECONDARY_TABLE that can be accommodated.   
+</p>
+<a name="wp1034744"> </a><p class="pBody">
+When the first table reaches a limit (either in total number of columns or total number of characters), that table is created, and a new table is begun.  Items that did not fit into the previous table are placed into a subordinate table, in the order in which they are encountered.  
+</p>
+<a name="wp1034745"> </a><p class="pBody">
+The process repeats until all items have been accommodated.
+</p>
+<a name="wp1034746"> </a><p class="pBody">
+It is permissible to place the SECONDARY_TABLE directive just before a level 01 record definition.  In this case, it applies to all fields underneath the level 01.
+</p>
+<a name="wp1034747"> </a><h3 class="pHeadingRef">
+Syntax
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+$XFD SECONDARY_TABLE<a name="wp1034748"> </a>
+</pre></div>
+<a name="wp1034749"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( XFD SECONDARY_TABLE ))<a name="wp1034750"> </a>
+</pre></div>
+<a name="wp1034751"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+ $xfd secondary_table<a name="wp1034752"> </a>
+  01  description      pic x(80).<a name="wp1034753"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

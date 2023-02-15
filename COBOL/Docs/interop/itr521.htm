@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:58:17" />
+  <title>5.4.3  Using the .NET Proxy and ACUCOBOL-GT COM Server</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr5.htm">Chapter 5: Working With .NET Assemblies</a> &gt; <a href="itr55.htm">5.4  Calling COBOL from .NET</a> &gt; </p>
+<a name="wp1038475"> </a><h2 class="pHeading2">
+5.4.3  Using the .NET Proxy and ACUCOBOL-GT COM Server
+</h2>
+<a name="wp1038476"> </a><p class="pBody">
+An alternate way to provide COBOL services to a .NET assembly is through a .NET proxy for the ACUCOBOL-GT COM server. 
+</p>
+<a name="wp1038479"> </a><p class="pBody">
+The COM server is a COM object containing the ACUCOBOL-GT Windows runtime DLL.  It provides a COM interface between the ACUCOBOL-GT runtime and programs running outside the runtime.  For more information on the COM server, refer to <a  href="itr34.htm#wp1047754">section 3.2.1</a> of this guide.
+</p>
+<a name="wp1038484"> </a><p class="pBody">
+The .NET proxy, called &quot;Interop.AcuGTObjects.dll&quot;, provides an interface between .NET and the ACUCOBOL-GT COM server object.  The .NET proxy gathers data intended for use by the COBOL program and packages it in COM variant formats before sending it to the ACUCOBOL-GT COM server.  This process is known as data marshalling.  The COBOL program uses C$GETVARIANT and C$SETVARIANT to retrieve and update data held by the ACUCOBOL-GT COM server object.  The proxy also unmarshals data received from ACUCOBOL-GT COM server before delivering it back to the .NET program.  The proxy is designed to manage the interchange between the .NET and COBOL worlds. 
+</p>
+<a name="wp1038485"> </a><p class="pBody">
+Invoke an ACUCOBOL-GT program from a .NET assembly as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1038487"> </a><div class="pSmartList1"><li>Install and register the ACUCOBOL-GT COM server on the system running .NET.  Install the COBOL object file there as well.  Instructions are provided in <a  href="itr34.htm#wp1047754">section 3.2.1, &quot;Using the ACUCOBOL-GT COM Server.&quot;</a></li></div>
+<a name="wp1038491"> </a><p class="pIndented1">
+Once the COM server is registered on the .NET system, the ACUCOBOL-GT runtime is then exposed to any program running in that environment.
+</p>
+<a name="wp1038492"> </a><div class="pSmartList1"><li>Place the .NET proxy file, &quot;Interop.AcuGTObjects.dll&quot;, in the directory where the COM server is located.  The proxy file is located in sample\NetToAcuCobol\bin. </li></div>
+<a name="wp1038493"> </a><p class="pIndented1">
+If you don't have access to the sample directory or if you install .NET after ACUCOBOL-GT, you can regenerate the .NET proxy file in Visual Studio .NET by doing the following:
+</p>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1038494"> </a><div class="pSmartList2"><li>In Visual Studio .NET, select a project that needs an ACUCOBOL-GT interface.  (Right mouse click the project name in the Solution Explorer window.)</li></div>
+<a name="wp1038495"> </a><div class="pSmartList2"><li>Select <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">Add Reference</span> from the resulting pop-up menu.</li></div>
+<a name="wp1038496"> </a><div class="pSmartList2"><li>Select the COM tab from the Add Reference dialog box.</li></div>
+<a name="wp1038497"> </a><div class="pSmartList2"><li>Select <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">ACUCOBOL-GT-Library 7.0.0 (Acugt.tlb)</span> from the list and click <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">OK</span>.  This regenerates the proxy known as &quot;Interop.AcuGTObjects.dll&quot;.</li></div>
+<a name="wp1038501"> </a><p class="pBodyRelative">
+<br />
+<img src="images/itr5a2.gif" height="323" width="497" border="0" hspace="0" vspace="0"/>
+<br />
+
+</p>
+</ol></div>
+<a name="wp1038503"> </a><div class="pSmartList1"><li>Add the proxy interface to the .NET application.  For example, if you are using C# or VB, you might provide the following:</li></div>
+<a name="wp1038504"> </a><p class="pIndented1">
+C#:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+AcuGTObjects.AcuGTClass AcugtInterface = new 
+AcuGTObjects.AcuGTClass();<a name="wp1038505"> </a>
+</pre></div>
+<a name="wp1038506"> </a><p class="pIndented1">
+Visual Basic:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Dim AcugtInterface As Object<a name="wp1038507"> </a>
+AcugtInterface = New AcuGTObjects.AcuGTClass<a name="wp1038508"> </a>
+</pre></div>
+<a name="wp1038509"> </a><p class="pIndented1">
+The \Sample\NetToAcuCobol directory contains an example using &quot;AcuGTObjects.AcuGTClass&quot;.
+</p>
+</ol></div>
+<a name="wp1038510"> </a><p class="pBody">
+Run the .NET service.  It automatically invokes the COBOL program when necessary.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

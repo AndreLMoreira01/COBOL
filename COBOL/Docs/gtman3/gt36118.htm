@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>INITIALIZE Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1039368"> </a><h2 class="pHeading2">
+INITIALIZE Statement
+</h2>
+<a name="wp1039370"> </a><p class="pBody">
+The INITIALIZE statement sets selected types of elementary data items to chosen values.  
+</p>
+<a name="wp1039372"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">INITIALIZE</u> { destination } ... [ WITH <u class="cUnderline">FILLER</u> ]<a name="wp1039373"> </a>
+<a name="wp1039374"> </a>
+[ <u class="cUnderline">REPLACING</u> { {<u class="cUnderline">ALPHABETIC</u>         } DATA <u class="cUnderline">BY</u> value }...]<a name="wp1039375"> </a>
+              {<u class="cUnderline">ALPHANUMERIC</u>       }<a name="wp1039376"> </a>
+              {<u class="cUnderline">NUMERIC</u>            }<a name="wp1039377"> </a>
+              {<u class="cUnderline">ALPHANUMERIC-EDITED</u>}<a name="wp1039378"> </a>
+              {<u class="cUnderline">NUMERIC-EDITED</u>     }<a name="wp1039379"> </a>
+</pre></div>
+<a name="wp1039381"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039382"> </a><div class="pSmartList1"><li><em class="cEmphasis">Destination</em> is a data item.</li></div>
+<a name="wp1039383"> </a><div class="pSmartList1"><li><em class="cEmphasis">Value</em> is a literal or a data item.  It must be a legal source for a MOVE to the corresponding category of data.  For example, a <em class="cEmphasis">value</em> appearing in a REPLACING ALPHABETIC BY clause must have a category of alphabetic, alphanumeric, or alphanumeric-edited.  </li></div>
+<a name="wp1039384"> </a><div class="pSmartList1"><li>The same category cannot be repeated in a REPLACING phrase.  </li></div>
+<a name="wp1039386"> </a><div class="pSmartList1"><li><em class="cEmphasis">Destination</em> may not be an index data item.</li></div>
+<a name="wp1039387"> </a><div class="pSmartList1"><li><em class="cEmphasis">Destination</em> may not contain a RENAMES clause.</li></div>
+</ol></div>
+<a name="wp1039389"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039390"> </a><div class="pSmartList1"><li>Whether <em class="cEmphasis">destination</em> references an elementary item or a group item, all operations are performed as if a series of MOVE statements had been written, each of which has an elementary item as its receiving field according to the following rules:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1039391"> </a><div class="pSmartList2"><li>If <em class="cEmphasis">destination</em> is a group item, any elementary item contained in <em class="cEmphasis">destination</em> is initialized only if it belongs to a category specified by the REPLACING phrase.</li></div>
+<a name="wp1039392"> </a><div class="pSmartList2"><li>If <em class="cEmphasis">destination</em> is an elementary item, that item is initialized only if it belongs to a category specified in the REPLACING phrase.</li></div>
+<a name="wp1039393"> </a><div class="pSmartList2"><li>Each data item that is initialized is treated as the receiving operand of an implicit MOVE statement with the corresponding <em class="cEmphasis">value</em> as the sending field.</li></div>
+<a name="wp1039394"> </a><div class="pSmartList2"><li>All elementary receiving fields, including all table occurrences, are affected, except as specified in the following rules.</li></div>
+</ol></div>
+<a name="wp1039395"> </a><div class="pSmartList1"><li>Index data items and elementary FILLER data items are not affected by the INITIALIZE statement, unless the optional WITH FILLER phrase is specified, in which case FILLER data items are initialized.</li></div>
+<a name="wp1039396"> </a><div class="pSmartList1"><li>Any item that is subordinate to <em class="cEmphasis">destination</em> and which contains a REDEFINES clause, or any item that is subordinate to such an item, is excluded from this operation.  <em class="cEmphasis">Destination</em> itself, however, may be subordinate to a REDEFINES clause.</li></div>
+<a name="wp1039397"> </a><div class="pSmartList1"><li>If no REPLACING phrase is specified, alphabetic, alphanumeric, and alphanumeric-edited data items are initialized to SPACES; numeric and numeric-edited data items are initialized to ZEROS.</li></div>
+<a name="wp1039398"> </a><div class="pSmartList1"><li>If multiple <em class="cEmphasis">destinations</em> are specified, they are initialized in the order written.</li></div>
+<a name="wp1195735"> </a><div class="pSmartList1"><li><em class="cEmphasis">Destinations</em> that are or contain OCCURS DEPENDING ON items will use the maximum number of occurrences when being initialized.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

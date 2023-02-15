@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.7.1  File Name Assignments</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt1230.htm">2.7  Runtime Configuration</a> &gt; </p>
+<a name="wp1033524"> </a><h2 class="pHeading2">
+2.7.1  File Name Assignments
+</h2>
+<a name="wp1033530"> </a><p class="pBody">
+File names referenced in an ASSIGN clause can be dynamically reassigned at runtime by configuration variables (this is sometimes referred to as <em class="cEmphasis">name</em> <em class="cEmphasis">aliasing</em>).  Each file's ASSIGN name is searched for in the configuration environment and, if found, replaced by the value of the matching configuration variable.  The exact meaning of this reassignment is detailed in the <a  href="gt1239.htm#wp1033680">section 2.8, &quot;File Name Interpretation.&quot;</a>  
+</p>
+<a name="wp1033531"> </a><p class="pBody">
+For example, if your code contains a SELECT statement like:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+INPUT-OUTPUT SECTION.<a name="wp1033532"> </a>
+FILE-CONTROL.<a name="wp1037629"> </a>
+       SELECT idx-file<a name="wp1037630"> </a>
+       ASSIGN TO DISK &quot;idx.dat&quot;<a name="wp1037631"> </a>
+       BINARY SEQUENTIAL<a name="wp1037632"> </a>
+       STATUS IS idx-status.<a name="wp1037633"> </a>
+</pre></div>
+<a name="wp1033533"> </a><p class="pBody">
+you could define a name alias for &quot;idx.dat&quot; in your runtime configuration file by adding the line:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+idx.dat  usr2/data/idx.dat<a name="wp1033534"> </a>
+</pre></div>
+<a name="wp1033535"> </a><p class="pBody">
+Whenever your application references &quot;idx.dat&quot; in a SELECT statement, the alias &quot;/usr2/data/idx.dat&quot; is substituted.
+</p>
+<a name="wp1063188"> </a><p class="pBody">
+Remote name notation is allowed in file aliases if your runtime is client-enabled (for indexed files, remote name notation requires the Vision file system).  <a  href="gt1520.htm#wp1032454">See <span style="font-family: Arial, Verdana, Helvetica, sans-serif">section 5.2.2, &quot;Remote Name Notation.&quot; </span></a> 
+</p>
+<a name="wp1085843"> </a><p class="pBody">
+Likewise, Internet notation is allowed if you are using AcuXML. For example, to read the XML file &quot;bookfile.xml&quot; over the Internet, you could map the file to its URL in your runtime configuration file:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+BOOKFILE http://myserver.mycomp.com/data/bookfile.xml<a name="wp1085844"> </a>
+</pre></div>
+<a name="wp1085845"> </a><p class="pBody">
+Note that the XFD files required by AcuXML must still be available locally (or via AcuServer) in the named XFD_DIRECTORY, but the data stream will be read from the server myserver.mycomp.com via HTTP. 
+</p>
+<a name="wp1033538"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Aliasing is strongly recommended for accessing physical devices such as printers.  This allows a program to easily adapt to the device naming conventions used at each individual site.  
+<hr />
+</p>
+<a name="wp1033540"> </a><p class="pBody">
+For portability across applications, the following names are recommended for device files:
+</p>
+<a name="wp1033566"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1033543"> </a><p class="pCellBody">
+PRINTER
+</p>
+</td>
+    <td><a name="wp1033545"> </a><p class="pCellBody">
+System spooler, default printer
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1033547"> </a><p class="pCellBody">
+PRINTER1-9
+</p>
+</td>
+    <td><a name="wp1033549"> </a><p class="pCellBody">
+System spooler, printers 1-9
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1033551"> </a><p class="pCellBody">
+FORM
+</p>
+</td>
+    <td><a name="wp1033553"> </a><p class="pCellBody">
+Default special-form printer
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1033555"> </a><p class="pCellBody">
+FORM1-9
+</p>
+</td>
+    <td><a name="wp1033557"> </a><p class="pCellBody">
+Special-form printers 1-9
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1033559"> </a><p class="pCellBody">
+TAPE
+</p>
+</td>
+    <td><a name="wp1033561"> </a><p class="pCellBody">
+Default tape/floppy transport
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1033563"> </a><p class="pCellBody">
+TAPE1-9
+</p>
+</td>
+    <td><a name="wp1033565"> </a><p class="pCellBody">
+Tape/floppy transports 1-9
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1033570"> </a><p class="pBody">
+For example, a COBOL program might assign a print file to the system spooler, printer number 2, with the following line:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ASSIGN TO PRINT &quot;PRINTER2&quot;<a name="wp1033571"> </a>
+</pre></div>
+<a name="wp1033572"> </a><p class="pBody">
+Although the assignment of these names to physical devices is arbitrary, the following conventions are recommended:  
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033573"> </a><div class="pSmartList1"><li>&quot;PRINTER&quot; devices should be assigned to the host operating system's spooler, if applicable.  If the host operating system does not have a spooler, then they should be assigned directly to the print devices.</li></div>
+<a name="wp1033574"> </a><div class="pSmartList1"><li>&quot;FORM&quot; devices should not be assigned to a spooler.  They should, instead, be assigned directly to the printer.  These are intended to be used by programs that need to control the printer directly without intervention by another program.</li></div>
+<a name="wp1033575"> </a><div class="pSmartList1"><li>&quot;TAPE&quot; devices can be assigned in any sensible manner.  </li></div>
+</ol></div>
+<a name="wp1033576"> </a><p class="pBody">
+No names are initially assigned.  The process of assigning names is covered in <a  href="gt1239.htm#wp1033680">section 2.8, &quot;File Name Interpretation.&quot;</a> 
+</p>
+<a name="wp1033577"> </a><p class="pBody">
+For more selective aliasing, for example, changing the name of a single Vision segment, see the &quot;<em class="cEmphasis">filename</em>&quot;, &quot;<em class="cEmphasis">filename</em>_DATA_FMT&quot;, and &quot;<em class="cEmphasis">filename</em>_INDEX_FMT&quot; configuration variables described in Book 4, Appendix H.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>CANCEL Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1037050"> </a><h2 class="pHeading2">
+CANCEL Statement
+</h2>
+<a name="wp1037052"> </a><p class="pBody">
+The CANCEL verb places a program into its initial state.
+</p>
+<a name="wp1037054"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<a name="wp1037056"> </a><h3 class="pHeadingRef">
+Format 1
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">CANCEL</u> {program-name} ...<a name="wp1037057"> </a>
+</pre></div>
+<a name="wp1037058"> </a><h3 class="pHeadingRef">
+Format 2
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">CANCEL</u> <u class="cUnderline">ALL</u> <a name="wp1037059"> </a>
+</pre></div>
+<a name="wp1037060"> </a><h3 class="pHeadingRef">
+Format 3
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">CANCEL</u> <u class="cUnderline">SORT</u> <a name="wp1037061"> </a>
+</pre></div>
+<a name="wp1037062"> </a><h3 class="pHeadingRef">
+Syntax Rule
+</h3>
+<a name="wp1037063"> </a><p class="pBody">
+<em class="cEmphasis">Program-name</em> is a nonnumeric literal or an alphanumeric data item.  It may not be an ALL literal.  
+</p>
+<a name="wp1037064"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1192412"> </a><div class="pSmartList1"><li>After a CANCEL verb executes, the affected programs are placed into their initial states.  This closes any open files contained in the canceled program and ensures that any VALUE clauses are in effect when those programs are called again.  By default, memory used by the programs is released.  If the mechanism for <em class="cEmphasis">logical cancels</em> is enabled, the programs are cached in memory.  For information about the effects and use of logical cancels, see section 6.3, &quot;Memory Management,&quot; in Book 1.</li></div>
+<a name="wp1037066"> </a><div class="pSmartList1"><li>In Format 1, each <em class="cEmphasis">program-name</em> refers to the CALL name of a program to cancel.  For more information, see the entry in this section for the &quot;CALL Statement,&quot; and Book 1,<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><em class="cEmphasis">ACUCOBOL-GT </em><em class="cEmphasis">User's Guide</em>, section 2.9, &quot;Calling Subprograms.&quot; </li></div>
+<a name="wp1037068"> </a><div class="pSmartList1"><li>In Format 2, every program that has been called but is not active is canceled.  A program is active if it has been called (or is the initial program of the run) and has not yet exited.  </li></div>
+<a name="wp1196988"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>The CANCEL_ALL_DLLS configuration variable can be used to exclude DLLs and shared object libraries from the results of the CANCEL ALL statement.  See Appendix H for details.
+<hr />
+</p>
+<a name="wp1037069"> </a><div class="pSmartList1"><li>A CANCEL statement is ignored if it refers to an active program.  A CANCEL statement may also refer to a program that has never been active.  Such a reference has no effect.</li></div>
+<a name="wp1037070"> </a><div class="pSmartList1"><li>A CANCEL statement has no effect on a program that has a RESIDENT phrase in its PROGRAM-ID paragraph.  </li></div>
+<a name="wp1037071"> </a><div class="pSmartList1"><li>When you cancel a program that exists in more than one thread, it is canceled only in the current thread.  CANCEL ALL cancels only programs in the current thread.  If a program is active in any thread that it shares data with, the CANCEL will have no effect.</li></div>
+<a name="wp1037072"> </a><div class="pSmartList1"><li>In Format 3, any active sort is terminated.  Only one sort may be active at a time; using Format 3 guarantees that no sort is active, and thus prepares you to initiate a new sort safely.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

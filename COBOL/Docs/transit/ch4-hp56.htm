@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.3.7.5  Mismatched EXTERNAL data items</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp30.htm">4.3  The &quot;-Cp&quot; HP COBOL Compatibility Switch </a> &gt; <a href="ch4-hp51.htm">4.3.7  Operating System and Runtime Limitations and Differences</a> &gt; </p>
+<a name="wp1050117"> </a><h2 class="pHeading3">
+4.3.7.5  Mismatched EXTERNAL data items
+</h2>
+<a name="wp1050119"> </a><p class="pBody">
+There is a small, but significant incompatibility in the way that HP COBOL and ACUCOBOL-GT treat the indexes of external tables.  In ACUCOBOL-GT, indexes attached to an external table are also external.  As a result, all programs that share an external table must also have matching indexes for the table.  (Note that the 1985 ANSI standard leaves the handling of INDEXED BY data items up to the implementor.)
+</p>
+<a name="wp1050121"> </a><p class="pBody">
+The incompatibility exhibits itself at runtime.  HP COBOL programs compiled with ACUCOBOL-GT using the &quot;-Cp&quot; option, and that share an external table but that do not have identical indexes for that table, will get the following runtime error:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Mismatched EXTERNAL data item: <em class="cEmphasis">data_item_name</em> <a name="wp1050123"> </a>
+</pre></div>
+<a name="wp1050125"> </a><p class="pBody">
+The problem is illustrated by the following example.  If the called program defines:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01 main-01 external.<a name="wp1050127"> </a>
+      03 item-01   pic x occurs 20<a name="wp1050128"> </a>
+                        indexed by idx1.<a name="wp1050129"> </a>
+01 redef1 redefines main-01.<a name="wp1050130"> </a>
+      03 item-01   pic x occurs 20<a name="wp1050131"> </a>
+                        indexed by idx2.<a name="wp1050132"> </a>
+</pre></div>
+<a name="wp1050134"> </a><p class="pBody">
+and the calling program defines:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01 main-01 external. <a name="wp1050136"> </a>
+      03 item-01  pic x occurs 20<a name="wp1050137"> </a>
+                       indexed by idx1.<a name="wp1050138"> </a>
+</pre></div>
+<a name="wp1050140"> </a><p class="pBody">
+the &quot;Mismatched EXTERNAL data item&quot; error is raised at run time.  Although &quot;redef1&quot; is a REDEFINES of &quot;main-01&quot;, &quot;idx2&quot; is still a new data item and it must be present in all of the programs that share &quot;main-01&quot; or the index must be eliminated.  Note that if a SEARCH statement references &quot;redef1&quot;, &quot;idx2&quot; must be present.
+</p>
+<a name="wp1050144"> </a><p class="pBody">
+The following code does not raise the error.  The called program defines:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01 main-01 external.<a name="wp1050146"> </a>
+      03 item-01  pic x occurs 20<a name="wp1050147"> </a>
+                       indexed by idx1.<a name="wp1050148"> </a>
+01 redef1 redefines main-01.<a name="wp1050149"> </a>
+      03 item-01  pic x occurs 20<a name="wp1050150"> </a>
+                       indexed by idx2.<a name="wp1050151"> </a>
+</pre></div>
+<a name="wp1050153"> </a><p class="pBody">
+and the calling program defines:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01 main-01 external.  <a name="wp1050155"> </a>
+      03 item-01  pic x occurs 20<a name="wp1050156"> </a>
+                       indexed by idx1, idx2.<a name="wp1050157"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

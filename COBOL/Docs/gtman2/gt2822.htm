@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:15" />
+  <title>8.10  Pop-up Menus</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt28.htm">Chapter 8:  Menu Bars and Pop-up Menus</a> &gt; </p>
+<a name="wp1026425"> </a><h2 class="pHeading1">
+8.10  Pop-up Menus
+</h2>
+<a name="wp1026427"> </a><p class="pBody">
+Pop-up menus can be created on Windows environments.  Pop-up menus appear over the application in a vertical orientation while the user is selecting an item, and then they disappear from the screen.  You can programmatically invoke a pop-up menu.  In addition, you can arrange for a right mouse-click to automatically invoke a pop-up menu tied to a window or a control.  Each window and control can have its own pop-up menu.  In addition, you can share a single menu between several windows and controls.  
+</p>
+<a name="wp1026428"> </a><p class="pBody">
+To create a pop-up menu, use the &quot;W$MENU&quot; routine with the WMENU-NEW-POPUP operation.  This operation works just like WMENU-NEW, except that the resulting menu is a pop-up menu instead of a menu bar.  Once created, pop-up menus are acted upon just like menu bars.  Adding, changing and deleting items is done in the same manner as for a menu bar, as is enabling or disabling items.  If you want to add a sub-menu to a pop-up menu, you can use either a menu bar or another pop-up menu as the submenu.  
+</p>
+<a name="wp1026433"> </a><p class="pBody">
+To invoke a pop-up menu directly, use the WMENU-POPUP operation of &quot;W$MENU&quot;.  The first operand is the handle of the menu you want to pop up.  The menu is placed at the location of the mouse unless you specify two additional parameters, which are the absolute screen location (first row, then column).  The screen location is expressed in pixels, with (1, 1) being the upper left-hand corner of the screen.  This operation displays the menu, gets the user's selection (if any) and then removes the menu from the screen.  The menu selection is placed into the runtime's input stream for future processing by an ACCEPT statement.  This will appear to the ACCEPT statement just like a menu selection off of the menu bar.  
+</p>
+<a name="wp1026434"> </a><p class="pBody">
+You can automate the handling of pop-up menus by associating them with windows and controls.  Each window and control can have its own pop-up menu associated with it.  To do so, simply specify the menu handle in the POP-UP MENU phrase when you create the window or control.  You can also add, change, or remove the pop-up menu later with the MODIFY statement.  
+</p>
+<a name="wp1026435"> </a><p class="pBody">
+When a window or control has a pop-up menu associated with it, the runtime will automatically display and handle this menu when the user clicks the right mouse button on the owning window or control.  Your program will simply receive the menu selection in the input stream as if it came from the menu bar.  
+</p>
+<a name="wp1026436"> </a><p class="pBody">
+You can also detect pop-up menu selections directly in a control's event procedure.  The following messages are generated as the user goes through the process of selecting a pop-up menu item:
+</p>
+<a name="wp1026438"> </a><h5 class="pHeading4">
+MSG-INIT-MENU
+</h5>
+<a name="wp1030161"> </a><p class="pBody">
+Occurs immediately prior to the display of a control's pop-up menu.  EVENT-DATA-2 contains the control's menu handle.  The control's event procedure can use this event to update any state information in the menu, such as enabling/disabling items or setting/removing check marks.  If the event procedure sets EVENT-ACTION to EVENT-ACTION-FAIL, or sets the control's menu handle to NULL, then the menu is not displayed.  In this case, any host-defined built-in menu for the control class will display instead (<em class="cEmphasis">e.g.</em>, Windows Cut/Copy/Paste/Undo menu associated with entry fields).  If there is no host-defined menu, then no menu is shown.  
+</p>
+<a name="wp1026440"> </a><h5 class="pHeading4">
+MSG-MENU-INPUT 
+</h5>
+<a name="wp1030199"> </a><p class="pBody">
+Occurs when the user has activated a control's pop-up menu and selected an item on the menu.  EVENT-DATA-2 contains the menu item's ID.  Setting EVENT-ACTION to EVENT-ACTION-CONTINUE prevents further processing of the menu selection.  Otherwise, the menu selection is treated as a normal menu selection from the menu bar (<em class="cEmphasis">i.e.</em>, it terminates the ACCEPT with an exception value equal to the menu item's ID).  
+</p>
+<a name="wp1026442"> </a><h5 class="pHeading4">
+MSG-END-MENU
+</h5>
+<a name="wp1030221"> </a><p class="pBody">
+Occurs when a control's pop-up menu has been removed from the screen.  EVENT-DATA-2 contains the control's menu handle.  The only normal reason for processing this event would be to undo some effect created in response to MSG-INIT-MENU.  
+</p>
+<a name="wp1026443"> </a><p class="pBody">
+Using MSG-MENU-INPUT, you can handle all of a control's pop-up menu items directly in the control's event procedure, without terminating any controlling ACCEPT statement.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

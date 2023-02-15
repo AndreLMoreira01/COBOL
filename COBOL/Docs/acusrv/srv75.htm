@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:46:00" />
+  <title>7.2.2  Using FILE_PREFIX and CODE_PREFIX</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv7.htm">Chapter 7: Programming for AcuServer</a> &gt; <a href="srv73.htm">7.2  Accessing Remote Files</a> &gt; </p>
+<a name="wp1035123"> </a><h2 class="pHeading2">
+7.2.2  Using FILE_PREFIX and CODE_PREFIX
+</h2>
+<a name="wp1035124"> </a><p class="pBody">
+The easiest way to enable your applications to use AcuServer is to update the FILE_PREFIX and CODE_PREFIX configuration variables in the runtime and server configuration files.  Because these variables can be used to define multiple search directories, they are powerful tools for accessing both local and remote files.
+</p>
+<a name="wp1035127"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Sites that use FILE_PREFIX to specify multiple directories or multiple servers (either multiple server host machines or multiple instances of the <b class="cBold">acuserve</b> program on a single host) may note a significant performance enhancement using name aliasing instead of FILE_PREFIX.  See <a  href="srv77.htm#wp1035308">Section 7.2.4, &quot;Using Name Aliases,&quot;</a> for more information.
+<hr />
+</p>
+<a name="wp1035128"> </a><p class="pCaution">
+<hr />
+<b>Caution:  </b>When using FILE_PREFIX on Windows NT , Windows 2000, or Windows 2003 machines, it is best to use the full path to the directory, rather than using share names.  Share names can seriously degrade file access performance because Windows NT and Windows 2000/2003 are very slow to resolve them (a share name is the name assigned when a directory is set up for sharing using the &quot;Properties/Share/Share As&quot; dialog box).
+<hr />
+</p>
+<a name="wp1035129"> </a><p class="pBody">
+To add a remote search path, you have two options:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1040735"> </a><div class="pSmartList1"><li>Include the name and path of the remote directory to the variable's definition in the runtime configuration file (which will also include any local object and data directories).  You do not have to make any changes to the server configuration file.</li></div>
+<a name="wp1035130"> </a><p class="pIndented1">
+For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE_PREFIX  .  /usr/data  @condor:/usr/data/ap  @condor:/usr/data/ar<a name="wp1035131"> </a>
+CODE_PREFIX  .  /usr/objects  @condor:/usr/objects/ap  @condor:/usr/objects/ar<a name="wp1035132"> </a>
+</pre></div>
+<a name="wp1040812"> </a><p class="pIndented1">
+In this example, whenever the application attempts to access a data file, it will first look for the file in the current directory (&quot;.&quot;), then in the local &quot;/usr/data&quot; directory, and finally on file server &quot;condor&quot; in the directory &quot;/usr/data/ap&quot; or &quot;/usr/data/ar.&quot;
+</p>
+<a name="wp1041192"> </a><p class="pIndented1">
+To locate an object file, the application look first in the current directory (&quot;.&quot;), then in the local &quot;/usr/objects&quot; directory, and finally on the file server &quot;condor&quot; in the directory &quot;/usr/objects/ap&quot; or  &quot;/usr/objects/ar&quot;.
+</p>
+<a name="wp1040749"> </a><div class="pSmartList1"><li>Specify only the server name for the PREFIX variables in the runtime configuration file (along with any local object and data directories), then specify the complete server path in the server configuration file.  </li></div>
+<a name="wp1040771"> </a><p class="pIndented1">
+For example, the runtime configuration file might contain:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE_PREFIX  .  /usr/data  @condor:<a name="wp1040779"> </a>
+CODE_PREFIX  .  /usr/objects  @condor:<a name="wp1040782"> </a>
+</pre></div>
+<a name="wp1040785"> </a><p class="pIndented1">
+The server configuration file would then include something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE_PREFIX  /usr/data/ap  /usr/data/ar<a name="wp1040786"> </a>
+CODE_PREFIX  /usr/objects/ap  /usr/objects/ar<a name="wp1040787"> </a>
+</pre></div>
+<a name="wp1035133"> </a><p class="pIndented1">
+In this situation, a single network request can search multiple server directories for a file.  (Setting multiple server directories on the client requires multiple network requests to search the directories.)
+</p>
+<a name="wp1041219"> </a><p class="pIndented1">
+Note that you can change the PREFIX variables in the server configuration file after <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> has started using the &quot;-config&quot; utility.
+</p>
+</ol></div>
+<a name="wp1040934"> </a><p class="pBody">
+Note that if you want to specify the root directory on the server as a search path in the runtime configuration file, you must include a forward slash (&quot;/&quot;) after the server name.  To search the root directory on a server called &quot;condor&quot;, for example, you would specify &quot;@condor:/&quot;.
+</p>
+<a name="wp1035134"> </a><p class="pBody">
+Although  FILE_PREFIX and CODE_PREFIX are usually not applied to file names specified with absolute path names, you can force these variables to be used when the path name begins with a forward slash (&quot;/&quot;).  To do this, set the APPLY_FILE_PATH or APPLY_CODE_PATH configuration variables  (either locally or on the server) to &quot;on&quot; (&quot;1&quot;, &quot;true&quot;, &quot;yes&quot;).  For example, if your application specifies the file: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+/usr/bernie/data/ind.dat<a name="wp1035137"> </a>
+</pre></div>
+<a name="wp1035138"> </a><p class="pBody">
+and FILE_PREFIX is set to:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+FILE_PREFIX @condor:<a name="wp1035139"> </a>
+</pre></div>
+<a name="wp1035140"> </a><p class="pBody">
+and APPLY_FILE_PATH is on, the runtime will attempt to access the file at:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+@condor:/usr/bernie/data/ind.dat<a name="wp1035141"> </a>
+</pre></div>
+<a name="wp1035142"> </a><p class="pBody">
+APPLY_FILE_PATH and APPLY_CODE_PATH do not affect file names beginning with a device name (such as &quot;c:&quot;).
+</p>
+<a name="wp1035143"> </a><p class="pBody">
+If the application attempts to access a file in a location (path) that does not exist, the program will terminate displaying an error similar to the following:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+File error 35 on SEQ1.DAT<a name="wp1035144"> </a>
+</pre></div>
+<a name="wp1035145"> </a><p class="pBody">
+(This error also appears if the runtime is not AcuServer-enabled.)  
+</p>
+<a name="wp1035146"> </a><p class="pBody">
+Note that the maximum length of FILE_PREFIX and CODE_PREFIX is restricted by a number of factors.  The ACUCOBOL-GT runtimes restrict runtime configuration variables to a maximum of 4096 characters.  The host operating system may restrict environment variables to less than 4096 characters (refer to your operating system documentation). 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

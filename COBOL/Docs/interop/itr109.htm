@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:01:05" />
+  <title>10.4.1.3  Reading messages from queues</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr10.htm">Chapter 10: Working with Messaging Middleware</a> &gt; <a href="itr105.htm">10.4  Connecting to WebSphere  MQ Applications</a> &gt; <a href="itr106.htm">10.4.1  Adding WebSphere MQ Calls to Your ACUCOBOL-GT Program</a> &gt; </p>
+<a name="wp1054544"> </a><h2 class="pHeading3">
+10.4.1.3  Reading messages from queues
+</h2>
+<a name="wp1054545"> </a><p class="pBody">
+To read messages from a WebSphere MQ queue, use the following code:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &#39;MQGET&#39;<a name="wp1054546"> </a>
+    USING by value HCONN, by value HQUEUE,<a name="wp1054547"> </a>
+    by reference MSGDESC, by reference GETMSGOPTS,<a name="wp1054548"> </a>
+    by value BUFFER-LEN, by reference BUFFER-REP, <a name="wp1054549"> </a>
+    by reference DATA-LEN,<a name="wp1054550"> </a>
+    COMPCODE, REASON<a name="wp1054551"> </a>
+</pre></div>
+<a name="wp1054552"> </a><p class="pBody">
+in the following modes: 
+</p>
+<a name="wp1054584"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">INPUT Mode:</span></p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1054555"> </a>
+Variable
+
+</th>
+    <th><a name="wp1054557"> </a>
+Description
+
+</th>
+    <th><a name="wp1054559"> </a>
+Definition
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054561"> </a><p class="pCellBody">
+HCONN
+</p>
+</td>
+    <td><a name="wp1054563"> </a><p class="pCellBody">
+S9(9) BINARY  handle to queue manager
+</p>
+</td>
+    <td><a name="wp1054565"> </a><p class="pCellBody">
+User-defined
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054567"> </a><p class="pCellBody">
+HQUEUE 
+</p>
+</td>
+    <td><a name="wp1054569"> </a><p class="pCellBody">
+S9(9) BINARY  handle to queue
+</p>
+</td>
+    <td><a name="wp1054571"> </a><p class="pCellBody">
+User-defined
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054573"> </a><p class="pCellBody">
+BUFFER-LEN
+</p>
+</td>
+    <td><a name="wp1054575"> </a><p class="pCellBody">
+S9(9) BINARY  length in bytes of buffer area
+</p>
+</td>
+    <td><a name="wp1054577"> </a><p class="pCellBody">
+User-defined
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054579"> </a><p class="pCellBody">
+DATA-LEN
+</p>
+</td>
+    <td><a name="wp1054581"> </a><p class="pCellBody">
+S9(9) BINARY length in bytes of data in the message 
+</p>
+</td>
+    <td><a name="wp1054583"> </a><p class="pCellBody">
+User-defined
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal"></span>
+</p>
+<a name="wp1054610"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">OUTPUT Mode:</span></p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1054587"> </a>
+Variable
+
+</th>
+    <th><a name="wp1054589"> </a>
+Description
+
+</th>
+    <th><a name="wp1054591"> </a>
+Definition
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054593"> </a><p class="pCellBody">
+BUFFER-REP
+</p>
+</td>
+    <td><a name="wp1054595"> </a><p class="pCellBody">
+Area to contain the message data
+</p>
+</td>
+    <td><a name="wp1054597"> </a><p class="pCellBody">
+User-defined
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054599"> </a><p class="pCellBody">
+COMPCODE
+</p>
+</td>
+    <td><a name="wp1054601"> </a><p class="pCellBody">
+S9(9) BINARY  returns the completion code
+</p>
+</td>
+    <td><a name="wp1054603"> </a><p class="pCellBody">
+User-defined
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054605"> </a><p class="pCellBody">
+REASON
+</p>
+</td>
+    <td><a name="wp1054607"> </a><p class="pCellBody">
+S9(9) BINARY  returns the reason
+</p>
+</td>
+    <td><a name="wp1054609"> </a><p class="pCellBody">
+User-defined
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal"></span>
+</p>
+<a name="wp1054630"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">I-O Mode:</span></p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1054613"> </a>
+Variable
+
+</th>
+    <th><a name="wp1054615"> </a>
+Description
+
+</th>
+    <th><a name="wp1054617"> </a>
+Definition
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054619"> </a><p class="pCellBody">
+MSGDESC
+</p>
+</td>
+    <td><a name="wp1054621"> </a><p class="pCellBody">
+Structure describes the attributes of the message required and the attributes of the message retrieved
+</p>
+</td>
+    <td><a name="wp1054623"> </a><p class="pCellBody">
+cmqmdv.cpy
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054625"> </a><p class="pCellBody">
+GETMSGOPTS 
+</p>
+</td>
+    <td><a name="wp1054627"> </a><p class="pCellBody">
+Options that control the action of MQGET   For example, if you want to read a specific message, then you can specify the option MQMO_MATCH_CORREL_ID which causes only messages with the specified correl-id to be retrieved.
+</p>
+</td>
+    <td><a name="wp1054629"> </a><p class="pCellBody">
+cmqgmov.cpy
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal"></span>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

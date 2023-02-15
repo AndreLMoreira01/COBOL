@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:43:13" />
+  <title>A_MSSQL_EXTRA_PROC</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4glb.htm">Appendix B:  Acu4GL for Microsoft SQL Server Information</a> &gt; <a href="4glb9.htm">B.4  Acu4GL for Microsoft SQL Server Configuration File Variables</a> &gt; </p>
+<a name="wp1039588"> </a><h2 class="pHeading2">
+A_MSSQL_EXTRA_PROC
+</h2>
+<a name="wp1039591"> </a><p class="pBody">
+A_MSSQL_EXTRA_PROC can be used to keep modifications to the AcuLocks table out of transactions.  If these modifications are kept out of transactions, users can READ a record, even if they cannot REWRITE it.  Otherwise, they are locked out.  A_MSSQL_EXTRA_PROC works by creating a separate connection for these modifications.  
+</p>
+<a name="wp1039592"> </a><p class="pBody">
+When this variable is set to a non-zero value, an extra connection is used for the following three procedures:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1039593"> </a><div class="pSmartList1"><li>Modifying the AcuLocks table</li></div>
+<a name="wp1039594"> </a><div class="pSmartList1"><li>Modifying the AcuOpenTables table</li></div>
+<a name="wp1039595"> </a><div class="pSmartList1"><li>Modifying IMAGE or TEXT data.  Note that two connections are required when updating IMAGE or TEXT data.  This is a major reason for setting A_MSSQL_EXTRA_PROC.</li></div>
+</ul></div>
+<a name="wp1039596"> </a><p class="pBody">
+The default value is &quot;0&quot; (off, false, no).  A non-zero value can be represented by &quot;On&quot; (true, yes).
+</p>
+<a name="wp1039597"> </a><p class="pBody">
+If this variable is set to &quot;On,&quot; the extra connection is used to send TEXT or IMAGE data to the server.  The first connection is used to deliver non-TEXT and non-IMAGE data to the server.  When a WRITE or REWRITE is executed, the interface program INSERTs or UPDATEs the non-TEXT and non-IMAGE data by using placeholder data in the TEXT or IMAGE columns.  
+</p>
+<a name="wp1039598"> </a><p class="pBody">
+The TEXT or IMAGE data is then sent using the extra connection established with the A_MSSQL_EXTRA_PROC variable.  If the first connection is inside a transaction, the second connection is locked out of the row that is added or updated.  The result is that it is not possible to WRITE or REWRITE records containing TEXT or IMAGE data while inside a transaction.  
+</p>
+<a name="wp1053745"> </a><p class="pBody">
+If A_MSSQL_EXTRA_PROC is set to &quot;On,&quot; the SQL Server transaction isolation level is set to READ UNCOMMITTED on that connection. Therefore, if the only reason you are crating the sp_acuInit stored procedure is to set the transaction isolation level to READ UNCOMMITTED, there is no need to create the stored procedure because Acu4GL is setting the transaction isolation level for you.  This will allow other usersof a locked record to see the data, even if they cannot modify it.  See <a  href="4glb54.htm#wp1039983">section B.7.2, &quot;Stored Procedures in Acu4GL for Microsoft SQL Server,&quot;</a> for additional information on <b class="cBold">sp_AcuInit</b> and stored procedures.
+</p>
+<a name="wp1039600"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>Large columns cannot be used in conjunction with transaction management because any column larger than 255 bytes (254 characters) is automatically converted to a TEXT or IMAGE column when the table is created.  
+</p>
+<a name="wp1039601"> </a><p class="pNoteEnd">
+If you have TEXT or IMAGE columns in your table, WRITEs and REWRITEs fail unless this variable is set to &quot;On&quot;.
+<hr />
+</p>
+<a name="wp1047588"> </a><h3 class="pHeadingRef">
+See also
+</h3>
+<a name="wp1047589"> </a><p class="pBody">
+<a  href="4glb46.htm#wp1039820"><span style="font-family: Arial, Verdana, Helvetica, sans-serif">Section B.6, &quot;Table Locking&quot;</span></a>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

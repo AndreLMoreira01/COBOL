@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:30" />
+  <title>3.3  Differences</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch3-i.htm">Chapter 3:  ICOBOL Conversions</a> &gt; </p>
+<a name="wp1034775"> </a><h2 class="pHeading1">
+3.3  Differences
+</h2>
+<a name="wp1034777"> </a><p class="pBody">
+ACUCOBOL-GT contains certain differences from ICOBOL, even when you are using ICOBOL compatibility mode.  These differences are detailed here.
+</p>
+<a name="wp1034778"> </a><h3 class="pHeadingRef">
+ASSIGN TO DISPLAY and KEYBOARD 
+</h3>
+<a name="wp1034779"> </a><p class="pBody">
+ICOBOL allows an ASSIGN clause to use the word DISPLAY to refer to the user's screen and KEYBOARD to refer to the user's input device.  ACUCOBOL-GT allows these terms, but when they are used a file name must be specified.  This allows (as ICOBOL does) the specification of a text file.  However, ACUCOBOL-GT does not support the direct assignment to the user's screen or keyboard.  To do this, you will have to add code to identify the device name of the user's terminal and ASSIGN to that name.  You can use the ACCEPT FROM SYSTEM-INFO verb to return the user's station id.  
+</p>
+<a name="wp1034780"> </a><h3 class="pHeadingRef">
+ACCEPT FROM LINE NUMBER 
+</h3>
+<a name="wp1034781"> </a><p class="pBody">
+This form of the ACCEPT statement returns a 3-digit number corresponding to the console device that is controlling the executing program.  Because most of the machines that run ACUCOBOL-GT do not use device numbers, but use alphanumeric names instead, ACUCOBOL-GT computes the device number by the following procedure.  First, the device name is converted to uppercase and hyphens are converted to underscores (on UNIX systems, the initial &quot;/dev/&quot; is removed).  This name is then searched for in the environment (including the configuration file).  If it is found, then the value of the name is returned.  If it is not found, a number is constructed from any digits found in the device name.  If no digits are present, the value &quot;0&quot; is used.  
+</p>
+<a name="wp1034782"> </a><h3 class="pHeadingRef">
+ACCEPT FROM EXCEPTION 
+</h3>
+<a name="wp1034783"> </a><p class="pBody">
+This statement, which returns the reason the last CALL statement failed, is not supported.  A similar function can be coded using the C$CALLERR library routine described in Appendix I of the ACUCOBOL-GT documentation set.
+</p>
+<a name="wp1034784"> </a><h3 class="pHeadingRef">
+Library Routines
+</h3>
+<a name="wp1034785"> </a><p class="pBody">
+ICOBOL contains several library routines that can be called.  These routines start with a &quot;#&quot; character.  ACUCOBOL-GT does not support these routines and will ignore them if you call them with the CALL PROGRAM verb.  You will have to rename the routines and code them in C or COBOL if you want to use them. 
+</p>
+<a name="wp1034434"> </a><p class="pBody">
+
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:09" />
+  <title>3.3.9  Unloading to Binary and Line Sequential Format</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt13.htm"><br />Chapter 3:  Debugger and Utilities</a> &gt; <a href="gt1335.htm">3.3  Vision File Utility - vutil</a> &gt; </p>
+<a name="wp1033454"> </a><h2 class="pHeading2">
+3.3.9  Unloading to Binary and Line Sequential Format
+</h2>
+<a name="wp1033461"> </a><p class="pBody">
+The &quot;unload&quot; option will create a binary sequential file or a line sequential file from a Vision file.  The command is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+vutil  -unload  [ -v ]  [ -b | -t ]  [ -q ]  <em class="cEmphasis">source  destination</em><a name="wp1033462"> </a>
+</pre></div>
+<a name="wp1033463"> </a><p class="pBody">
+The <em class="cEmphasis">source</em> file is the Vision file to unload; the <em class="cEmphasis">destination </em>is the name of the file to create.  If a file with the name <em class="cEmphasis">destination</em> already exists, it is deleted first.  The records in the destination file are ordered by the primary key of the source file.  This can be used to export data to other applications.  <b class="cBold">vutil</b> will not let you unload records from an encrypted file.
+</p>
+<a name="wp1052617"> </a><p class="pBody">
+By default, the destination file is assumed to be a binary sequential file with an alternate format that is not compatible with the ACUCOBOL-GT runtime.
+</p>
+<a name="wp1033464"> </a><p class="pBody">
+These are the destination file format options:
+</p>
+<a name="wp1052639"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1052657"> </a><p class="pCellBody">
+<b class="cBold">-v<br />&#160;&#160;&#160;&#160;&#160;&#160;</b>
+</p>
+</td>
+    <td><a name="wp1052659"> </a><p class="pCellBody">
+This option produces a file that has variable-length records.  Variable-length records occupy only as much disk space as necessary.  Two or four bytes indicating record size are placed in front of each variable-length record when it is written to disk.  (Different machines generate different prefixes.  Thus, files produced with &quot;vutil -unload -v&quot; can be loaded with &quot;vutil -load -v&quot; on the source machine but are not necessarily portable to other machines.)  <em class="cEmphasis">The two- or four-byte field that is added to the record is not specified in your COBOL program, but some programs that access the records need to be aware of the extra bytes. </em>
+</p>
+<a name="wp1091840"> </a><p class="pCellBody">
+If &quot;-v&quot; is not present, fixed-length records are written.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052665"> </a><p class="pCellBody">
+<b class="cBold">-b</b>
+</p>
+</td>
+    <td><a name="wp1052667"> </a><p class="pCellBody">
+This tells &quot;vutil -unload&quot; to produce a binary sequential file that is compatible with the ACUCOBOL-GT runtime.   
+</p>
+<a name="wp1091847"> </a><p class="pCellBody">
+If &quot;-v&quot; is not present, fixed-length records are produced.
+</p>
+<a name="wp1091848"> </a><p class="pCellBody">
+The &quot;-v&quot; option causes <b class="cBold">vutil</b> to produce variable-length records.  The record length is stored in a two-byte record header.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052677"> </a><p class="pCellBody">
+<b class="cBold">-t</b>
+</p>
+</td>
+    <td><a name="wp1052679"> </a><p class="pCellBody">
+This tells &quot;vutil -unload&quot; to produce a file that has line sequential format.  This means that the destination file is a simple text file, with records separated by line feeds.  
+</p>
+<a name="wp1091861"> </a><p class="pCellBody">
+This option implies &quot;-v&quot; (variable-length records), so the &quot;-v&quot; option is not necessary, although it is allowed.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052685"> </a><p class="pCellBody">
+<b class="cBold">-q</b>
+</p>
+</td>
+    <td><a name="wp1052687"> </a><p class="pCellBody">
+This option causes <b class="cBold">vutil</b> to exit (with status 99) if user interaction is required.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

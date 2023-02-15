@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WIN$PLAYSOUND Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1039617"> </a><h2 class="pHeading2">
+WIN$PLAYSOUND Routine
+</h2>
+<a name="wp1200046"> </a><p class="pBody">
+The WIN$PLAYSOUND routine lets you play a &quot;.WAV&quot; file on Microsoft Windows machines (wave-form sound).  You can also play sounds that the user has assigned to system events in the control panel.
+</p>
+<a name="wp1200047"> </a><p class="pBody">
+WIN$PLAYSOUND is supported and can be used by applications deployed in Acucorp's Thin Client environment.  
+</p>
+<a name="wp1039625"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PLAYSOUND&quot; <a name="wp1039627"> </a>
+    USING SOUND-NAME, SOUND-FLAGS<a name="wp1039628"> </a>
+    GIVING SOUND-STATUS<a name="wp1039629"> </a>
+</pre></div>
+<a name="wp1039630"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1039631"> </a><p class="pBody">
+<b class="cBold">SOUND-NAME</b>   PIC X(n)
+</p>
+<a name="wp1039632"> </a><p class="pBody">
+Identifies the sound to play.  This is either the name of a registered system sound or the name of a &quot;.WAV&quot; file.  
+</p>
+<a name="wp1039633"> </a><p class="pBody">
+<b class="cBold">SOUND-FLAGS   </b>numeric parameter
+</p>
+<a name="wp1039636"> </a><p class="pBody">
+One or more optional values added together.  The SOUND-FLAG options are described below.  The option names are contained in the COPY library &quot;acugui.def&quot;.  
+</p>
+<a name="wp1039637"> </a><p class="pBody">
+<b class="cBold">SOUND-STATUS   </b>signed numeric data item
+</p>
+<a name="wp1039638"> </a><p class="pBody">
+Indicates the status of the operation as follows: 
+</p>
+<a name="wp1039653"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1039642"> </a><p class="pCellBody">
+-1
+</p>
+</td>
+    <td><a name="wp1039644"> </a><p class="pCellBody">
+Operation not available - host machine is not Windows
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039646"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1039648"> </a><p class="pCellBody">
+Operation failed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039650"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1039652"> </a><p class="pCellBody">
+Operation succeeded
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1039654"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1039655"> </a><p class="pBody">
+WIN$PLAYSOUND causes the sound specified in SOUND-NAME to be played.  If SOUND-NAME contains the name of a system event, the sound associated with that event is played (the association is made via the Windows Control Panel).  Otherwise, WIN$PLAYSOUND assumes that SOUND-NAME contains the name of a &quot;.WAV&quot; audio file.  
+</p>
+<a name="wp1269393"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>When you are running in a thin client environment, and a file name beginning with &quot;@[DISPLAY]&quot; is passed to this routine, it will attempt to access the file in the display host's file system.  It does not download the file from the server.  For more information, refer to section 6.5, &quot;Using Library Routines and DLLs in Thin Client.&quot; of the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">AcuConnect User's Guide</span>.
+<hr />
+</p>
+<a name="wp1039656"> </a><p class="pBody">
+If SOUND-NAME does not correspond to a system event and the file cannot be found, the default system sound is played.  The default sound is also played when there is not enough memory available to load the specified file.  If a default sound is not available, the routine does nothing and returns &quot;0&quot; in SOUND-STATUS.
+</p>
+<a name="wp1039657"> </a><p class="pBody">
+This routine searches for the specified &quot;.WAV&quot; file in the object libraries, the working directory, and then the directories specified in the PATH environment variable. You can add &quot;.WAV&quot; files to your object library by using the COPY RESOURCE statement or CBLUTIL utility program. For more information about the COPY RESOURCE statement, see section 2.4.1 in Book 3, <em class="cEmphasis">ACUCOBOL-GT Reference Manual</em>.  For more information about the CBLUTIL utility program, see section 3.2 in Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>.  Specifying a SOUND-NAME of spaces stops any sound that is currently playing.  
+</p>
+<a name="wp1039658"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The behavior of this library routine is affected by the setting of the FILENAME_SPACES configuration variable that may or may not allow spaces in a file name.  See the documentation on FILENAME_SPACES in Appendix H, &quot;Configuration File Entries&quot;, for information about the terminating character for path names.
+<hr />
+</p>
+<a name="wp1039659"> </a><p class="pBody">
+System event names are implementation dependent.  The Windows API documents that the following sounds are always available:
+</p>
+<a name="wp1085014"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1085028"> </a><p class="pCellBody">
+SystemAsterisk
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1085030"> </a><p class="pCellBody">
+SystemExclamation
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1085032"> </a><p class="pCellBody">
+SystemExit
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1085034"> </a><p class="pCellBody">
+SystemHand
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1085036"> </a><p class="pCellBody">
+SystemQuestion
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1085038"> </a><p class="pCellBody">
+SystemStart
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1039666"> </a><p class="pBody">
+Other system sound events are defined in the registry under Windows 98.  Use &quot;regedit&quot; to look in the registry location: 
+</p>
+<a name="wp1039667"> </a><p class="pBody">
+HKEY_CURRENT_USER\AppEvents\EventLabels
+</p>
+<a name="wp1039668"> </a><p class="pBody">
+The naming conventions for system sound events is implementation dependent.  
+</p>
+<a name="wp1039669"> </a><p class="pBody">
+The following options can be specified in SOUND-FLAGS.  To use them, add together the values of the options and assign them to SOUND-FLAGS.  The optional values have level 78 names associated with them.  These names are defined in &quot;acugui.def&quot;.  
+</p>
+<a name="wp1039670"> </a><p class="pBody">
+<b class="cBold">SND-SYNC</b>  (value 0) -- This option causes the program to pause while the sound is being played.  WIN$PLAYSOUND will not return until the sound has finished.  
+</p>
+<a name="wp1039671"> </a><p class="pBody">
+<b class="cBold">SND-ASYNC</b>  (value 1) -- This option causes the program to continue to run while the sound is playing.  Note that you can halt a sound that is playing by passing a SOUND-NAME of spaces to a subsequent call to WIN$PLAYSOUND.  
+</p>
+<a name="wp1039672"> </a><p class="pBody">
+<b class="cBold">SND-LOOP</b>  (value 8) -- To work, this option must be used with the SND-ASYNC option.  This option causes the sound to play continuously, restarting from the beginning when the end is reached.  The sound can be stopped by passing a SOUND-NAME of spaces on a subsequent call.  
+</p>
+<a name="wp1039673"> </a><p class="pBody">
+<b class="cBold">SND-NOSTOP</b>  (value 16) -- Normally, any sound playing will be stopped when a new sound is specified.  With NOSTOP, if a sound is already playing, it will continue to play and WIN$PLAYSOUND will return a SOUND-STATUS value of &quot;0&quot;.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>6.2  Matching C Data Items</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; </p>
+<a name="wp1121338"> </a><h2 class="pHeading1">
+6.2  Matching C Data Items
+</h2>
+<a name="wp1121339"> </a><p class="pBody">
+To successfully interoperate with C programs, you need to understand and properly implement data type matching and data exchange between COBOL and C programs.  
+</p>
+<a name="wp1122893"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In addition to the information given here, extensive reference-level information is given in section 5.7.1.8, &quot;USAGE Clause,&quot; in <em class="cEmphasis">ACUCOBOL-GT Reference Manual</em>.  If you are working in a Windows environment, see also <a  href="itr326.htm#wp1082269">section 3.5.3.2, &quot;Data mapping,&quot;</a> in this manual.  
+<hr />
+</p>
+<a name="wp1121340"> </a><h3 class="pHeadingRef">
+Matching simple data items
+</h3>
+<a name="wp1121343"> </a><p class="pBody">
+To match simple C external variables or passed data items, you must choose the appropriate USAGE type.  For example, to share an integer variable with a C routine, declare it in COBOL as:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77  MY-SHARED-INT  SIGNED-INT, EXTERNAL.<a name="wp1121344"> </a>
+</pre></div>
+<a name="wp1121345"> </a><p class="pBody">
+In C, this item is then declared as:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+int my_shared_int;<a name="wp1121346"> </a>
+</pre></div>
+<a name="wp1121347"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You must also name my_shared_int in the table of external identifiers, as described in the &quot;direct.c&quot; file.  
+<hr />
+</p>
+<a name="wp1121348"> </a><p class="pBody">
+Here is an example of passing an &quot;int&quot; value in a portable fashion to a C routine:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+77  MY-INT   SIGNED-INT.<a name="wp1121349"> </a>
+MOVE 123 TO MY-INT.<a name="wp1121350"> </a>
+CALL &quot;C-ROUTINE&quot; USING, BY VALUE, MY-INT.<a name="wp1121351"> </a>
+</pre></div>
+<a name="wp1121352"> </a><p class="pBody">
+The ANSI C routine could then read:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+void c_routine( int param1 )<a name="wp1121353"> </a>
+{<a name="wp1121354"> </a>
+ printf( &quot;This should be &#39;123&#39;: %d\n&quot;, param1 );<a name="wp1121355"> </a>
+}<a name="wp1121356"> </a>
+</pre></div>
+<a name="wp1121357"> </a><h3 class="pHeadingRef">
+Matching complex data items
+</h3>
+<a name="wp1121358"> </a><p class="pBody">
+Matching complex data items such as C structure (struct) items or arrays is more involved.  The challenge arises in trying to match the FILLER that may follow the COBOL data items.  For example, consider the following group item:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  GROUP-1.<a name="wp1121359"> </a>
+    03  DATA-1  PIC X(5).<a name="wp1121360"> </a>
+    03  INT-1   SIGNED-INT.<a name="wp1121361"> </a>
+</pre></div>
+<a name="wp1121362"> </a><p class="pBody">
+Assuming that each item is allocated 4 bytes, this would seem to match the following C structure:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+struct {<a name="wp1121363"> </a>
+    char  data_1[5];<a name="wp1121364"> </a>
+    int   int_1;<a name="wp1121365"> </a>
+} group_1;<a name="wp1145964"> </a>
+</pre></div>
+<a name="wp1145965"> </a><p class="pBody">
+However, it most likely won't match up with the default structure packing due to alignment.  If you must match complex C data types, you can take one of three approaches:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1121376"> </a><div class="pSmartList1"><li>You can use fixed-size COMP-5 COBOL data types that match your C structures.  You will then have to change your COBOL code and recompile when you move to a different target environment.  </li></div>
+<a name="wp1121377"> </a><div class="pSmartList1"><li>You can use the variable-size COBOL data types described in this section and adjust your C structures accordingly.  This approach requires a change to your C code when you move to a new environment.</li></div>
+<a name="wp1121378"> </a><div class="pSmartList1"><li>You can use the variable-size COBOL data types described in this section and select different target architectures with the &quot;-Dw&quot; compile option.  In this scenario, you do not have to change code to go to a new environment; you just have to recompile with a different &quot;-Dw&quot; setting.  For example, you could set up two different directories on the development machine, one for &quot;-Dw32&quot; objects, and one for &quot;-Dw64&quot; objects.  This approach would provide you with COBOL objects for all currently supported machines.</li></div>
+</ol></div>
+<a name="wp1121382"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Most C compilers align structure elements according to their own needs.  The automatic synchronization that occurs with variable-size data items matches the most natural alignment boundaries.  But the automatically synchronized data items may not match with the alignment rules used by a particular C compiler.  As a result, you may find yourself forced to make some code adjustments for a particular machine. 
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

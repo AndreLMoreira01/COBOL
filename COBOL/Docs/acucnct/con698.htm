@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:53:04" />
+  <title>6.5.6.3  Passing pointers in DLL calls</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con6.htm">Chapter 6: Thin Client: Preparing the Server </a> &gt; <a href="con689.htm">6.5  Using Library Routines and DLLs in Thin Client</a> &gt; <a href="con695.htm">6.5.6  Calling Dynamic Link Libraries (DLLs)</a> &gt; </p>
+<a name="wp1051274"> </a><h2 class="pHeading3">
+6.5.6.3  Passing pointers in DLL calls
+</h2>
+<a name="wp1051531"> </a><p class="pBody">
+Passing a pointer as a parameter of a DLL call that executes on the display host requires some special handling in code, because the pointer value refers to a memory address on the application host.  In certain cases, you may safely pass a pointer BY VALUE.  You may never pass a pointer BY REFERENCE.  This section includes some guidelines for passing pointers BY VALUE.
+</p>
+<a name="wp1051493"> </a><h3 class="pHeadingRef">
+Using M$ALLOC
+</h3>
+<a name="wp1051597"> </a><p class="pBody">
+The runtime knows the size of allocated memory and can pass the contents of that memory to the thin client if the pointer is returned by a call to the M$ALLOC library routine.  Then, if the DLL call on the client modifies the memory, the display host returns the modified memory back to the application host.  As an example, assume you have DLL routines named SetData and GetData that take size and pointer arguments.  You may use the following code:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+77  PTR     USAGE POINTER.<a name="wp1051613"> </a>
+77  ITEM-1  PIC X(100).<a name="wp1051614"> </a>
+...<a name="wp1051615"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;M$ALLOC&quot; USING 100, PTR.<a name="wp1051616"> </a>
+CALL &quot;M$PUT&quot; USING PTR, &quot;Hello World&quot;.<a name="wp1051617"> </a>
+CALL &quot;@[DISPLAY]:SetData&quot; USING 100, BY VALUE PTR.<a name="wp1051618"> </a>
+...<a name="wp1051619"> </a>
+CALL &quot;@[DISPLAY]:GetData&quot; USING 100, BY VALUE PTR.<a name="wp1051620"> </a>
+CALL &quot;M$GET&quot; USING PTR, ITEM-1.<a name="wp1051621"> </a>
+CALL &quot;M$FREE&quot; USING PTR.<a name="wp1051622"> </a>
+</pre></div>
+</pre></div>
+<a name="wp1051641"> </a><p class="pBody">
+The application host sends the 100-byte contents of memory to the client on the CALL to SetData.  After the client fills the 100 bytes of memory with GetData, it returns the contents to the server.  
+</p>
+<a name="wp1051650"> </a><h3 class="pHeadingRef">
+Using the &quot;-Zm&quot; compiler option
+</h3>
+<a name="wp1051682"> </a><p class="pBody">
+You can use a new compiler option with the Format 7 SET statement to pass pointers to client-side DLL calls.  Use this option if you don't want to add the WITH MEMORY SIZE phrase for each pointer parameter in a CALL statement.  (WITH MEMORY SIZE is described in the next section.)  If your Format 7 SET statement returns a pointer value and you compile with the &quot;-Zm&quot; option, the compiler generates additional code that provides the runtime with the size of the item specified in the SET statement.  Once the runtime has this information, it can pass the memory contents to the thin client and then retrieve the contents after the thin client modifies them.  Note that the &quot;-Zm&quot; option adds runtime overhead for each Format 7 SET statement.  For information about the SET statement, refer to <em class="cEmphasis">ACUCOBOL-GT Reference Manual</em>, section 6.6, &quot;Procedure Division Statements.&quot;  
+</p>
+<a name="wp1051775"> </a><h3 class="pHeadingRef">
+Using the CALL statement
+</h3>
+<a name="wp1051826"> </a><p class="pBody">
+The USING phrase in the Format 1 CALL statement includes a <em class="cEmphasis">size-phrase</em> item with which you can pass the size of a memory item along with the pointer value.  Use <em class="cEmphasis">size-phrase</em> when the runtime and the thin client cannot automatically determine the size of the memory being pointed to.  This can occur if, for example, a pointer is passed through the Linkage section or is an external item.  The syntax is
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+[ <u class="cUnderline">USING</u> { [ BY {<u class="cUnderline">REFERENCE</u>} ] {parameter} size-phrase ...} ...]<a name="wp1051838"> </a>
+               {<u class="cUnderline">CONTENT</u>  }   {<u class="cUnderline">OMITTED</u>  }<a name="wp1051839"> </a>
+               {<u class="cUnderline">VALUE</u>    }   {<u class="cUnderline">NULL</u>     }<a name="wp1051840"> </a>
+</pre></div>
+<a name="wp1051848"> </a><p class="pBody">
+where <em class="cEmphasis">size-phrase</em> is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+[WITH MEMORY <u class="cUnderline">SIZE</u> { =  } memory-size]<a name="wp1051850"> </a>
+                  { IS }<a name="wp1051851"> </a>
+</pre></div>
+<a name="wp1051854"> </a><p class="pBody">
+<em class="cEmphasis">Memory-size</em> is a numeric literal or data item.  
+</p>
+<a name="wp1051945"> </a><p class="pBody">
+As an example, assume you have pointer PTR that points to 1024 bytes of memory.  You can pass this pointer to a DLL called SetData on the display host with the following code:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;@[DISPLAY]:SetData&quot; USING BY VALUE PTR <a name="wp1051961"> </a>
+       WITH MEMORY SIZE 1024.<a name="wp1051962"> </a>
+</pre></div>
+<a name="wp1062479"> </a><p class="pBody">
+Detailed information about the CALL statement can be found in <em class="cEmphasis">ACUCOBOL-GT Reference Manual</em>, section 6.6, &quot;Procedure Division Statements.&quot;  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

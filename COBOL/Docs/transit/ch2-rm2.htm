@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:25" />
+  <title>2.1 Compile-Time Options</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch2-rm.htm">Chapter 2:  RM/COBOL Conversions</a> &gt; </p>
+<a name="wp1035458"> </a><h2 class="pHeading1">
+2.1 Compile-Time Options
+</h2>
+<a name="wp1034690"> </a><p class="pBody">
+This chapter provides information about how to convert programs written for the RM/COBOL compiler to ACUCOBOL-GT.  This is particularly directed at users who are new to ACUCOBOL-GT and are not familiar with its many options.  The information contained here is specifically directed to programs written for version 2.X of the RM/COBOL 1974 compiler.  Most of this information is also applicable to versions 1.5 and 1.6 of that compiler, as well as to RM/COBOL-85.  See <a  href="ch2-rm5.htm#wp1035245">section 2.4</a> for information about converting RM/COBOL data files.
+</p>
+<a name="wp1034691"> </a><p class="pBody">
+Several compile-time options should be used when you are compiling a program written for RM/COBOL with ACUCOBOL-GT.  You should always use the &quot;-Cr&quot; flag to indicate RM/COBOL compatibility mode.  You will also probably want to use the &quot;-R8vais&quot; flags to cause certain reserved words to be treated as user-defined words.  This will cause all words not reserved by RM/COBOL to be treated as user-defined words.  If you are converting programs from RM/COBOL-85, then you should use &quot;-Rvais&quot; instead.  
+</p>
+<a name="wp1034692"> </a><p class="pBody">
+Many applications will also need to use the &quot;-Ds&quot; flag.  This flag specifies that the PICTURE element &quot;S&quot; for a USAGE DISPLAY item is treated as a separate character.  This is the same as implying the SIGN IS TRAILING SEPARATE clause for that item.  RM/COBOL version 1.6 behaved this way.  RM/COBOL version 2.X can optionally behave this way.  For applications that date from earlier versions of the RM/COBOL compiler, you will probably need to use this flag.  If the application was written originally with version 2.0 or later, then you may or may not need to use this flag.  You will need to examine the source to see if the &quot;S&quot; picture element counts in the size of an item or not.  It is important to determine whether or not this flag should be used, particularly if you plan to convert existing data files.  Otherwise, records loaded from your RM/COBOL files may not match the record layout of your new ACUCOBOL-GT files.
+</p>
+<a name="wp1034693"> </a><p class="pBody">
+You may also want to use either the &quot;-Vh&quot; or &quot;-Vl&quot; flags.  These flags determine the default video intensity to use when it is not explicitly stated in an ACCEPT or DISPLAY statement.  The default action for ACUCOBOL-GT is to use the terminal's default intensity.  The &quot;-Vh&quot; flag causes ACUCOBOL-GT to default to high intensity and the &quot;-Vl&quot; flag to low intensity.  With RM/COBOL, the default intensity for UNIX machines is high intensity and for MS-DOS machines is low intensity.  You may want to match the default intensity used by RM/COBOL for the machine the programs were written for. 
+</p>
+<a name="wp1035038"> </a><p class="pBody">
+By default, in the Identification Division the compiler allows an Area A line to start in column 8 or 9 (ANSI format), or 1 or 2 (terminal format).  The &quot;--noRmMargin&quot; option can be used to apply a more stringent rule.  When specified, lines in Area A of the Identification Division must begin in column 8 (ANSI format) or column 1 (terminal format).
+</p>
+<a name="wp1034694"> </a><p class="pBody">
+The table below shows the RM/COBOL Compatibility Switches (&quot;*&quot; indicates an optional flag).
+</p>
+<a name="wp1034942"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><div class="pPreformatted"><pre class="pPreformatted">
+    <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; vertical-align: baseline"></span><a name="wp1034899"> </a>
+</pre></div>
+</th>
+    <th><a name="wp1034901"> </a>
+Version 1.6
+
+</th>
+    <th><a name="wp1034903"> </a>
+Version 2.x
+
+</th>
+    <th><a name="wp1034905"> </a>
+RM-85
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034907"> </a>
+General 
+
+</td>
+    <td><a name="wp1034909"> </a><p class="pCellBody">
+-Cr
+</p>
+</td>
+    <td><a name="wp1034911"> </a><p class="pCellBody">
+-Cr
+</p>
+</td>
+    <td><a name="wp1034913"> </a><p class="pCellBody">
+-Cr
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034915"> </a>
+Reserved words
+
+</td>
+    <td><a name="wp1034917"> </a><p class="pCellBody">
+-R8vais
+</p>
+</td>
+    <td><a name="wp1034919"> </a><p class="pCellBody">
+-R8vais
+</p>
+</td>
+    <td><a name="wp1034921"> </a><p class="pCellBody">
+-Rvais
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034923"> </a>
+Data storage
+
+</td>
+    <td><a name="wp1034925"> </a><p class="pCellBody">
+-Ds
+</p>
+</td>
+    <td><a name="wp1034927"> </a><p class="pCellBody">
+-Ds*
+</p>
+</td>
+    <td><a name="wp1034929"> </a><p class="pCellBody">
+-Ds*
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034931"> </a>
+Video
+
+</td>
+    <td><a name="wp1034933"> </a><p class="pCellBody">
+-Vh (for UNIX)<br />-Vl (for DOS)
+</p>
+</td>
+    <td><a name="wp1034935"> </a><p class="pCellBody">
+-Vh (for UNIX)<br />-Vl (for DOS)
+</p>
+</td>
+    <td><a name="wp1034937"> </a><p class="pCellBody">
+-Vh (for UNIX)<br />-Vl (for DOS)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035047"> </a>
+Area A
+
+</td>
+    <td><a name="wp1035049"> </a><p class="pCellBody">
+--noRmMargin*
+</p>
+</td>
+    <td><a name="wp1035058"> </a><p class="pCellBody">
+--noRmMargin*
+</p>
+</td>
+    <td><a name="wp1035067"> </a><p class="pCellBody">
+--noRmMargin*
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1034737"> </a><p class="pBody">
+You will probably want to set the COPYPATH environment variable in order to locate your COPY libraries on your system.  For details on how to do this, see the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT </span><em class="cEmphasis">User's Guide </em>Chapter 2, &quot;Compiler and Runtime.&quot;   
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

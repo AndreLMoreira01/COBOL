@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:43:44" />
+  <title>USER_PATH</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4glc.htm">Appendix C:  Acu4GL for Oracle Information</a> &gt; <a href="4glc14.htm">C.4  Acu4GL for Oracle Configuration File Variables</a> &gt; </p>
+<a name="wp1045871"> </a><h2 class="pHeading2">
+USER_PATH
+</h2>
+<a name="wp1045874"> </a><p class="pBody">
+USER_PATH indicates the user name or names to be used when Acu4GL searches for files.  The order of the names is significant.  The syntax for this variable is: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+USER_PATH  <em class="cEmphasis">user1</em> [<em class="cEmphasis">user2</em>]...<a name="wp1045875"> </a>
+</pre></div>
+<a name="wp1045876"> </a><p class="pBody">
+Where the user argument may either be the name of a user on the system, or a period (&quot;.&quot;), which indicates the files owned by yourself.  
+</p>
+<a name="wp1045877"> </a><p class="pBody">
+The type of OPEN being issued for the file determines the effects of this setting.
+</p>
+<a name="wp1045878"> </a><h3 class="pHeadingRef">
+Examples
+</h3>
+<a name="wp1045879"> </a><p class="pBody">
+If an OPEN INPUT or OPEN I/O is issued, and a USER_PATH variable is defined in the runtime configuration file, Acu4GL searches for a user of the named file in the following sequence of places:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1045880"> </a><div class="pSmartList1"><li>The list of users in USER_PATH.  </li></div>
+<a name="wp1045881"> </a><div class="pSmartList1"><li>The public synonyms</li></div>
+</ol></div>
+<a name="wp1045882"> </a><p class="pBody">
+The first valid file is opened.  
+</p>
+<a name="wp1045883"> </a><p class="pBody">
+If USER_PATH is defined and the current user is the owner of the file, the current user must be included as one of the users (as indicated by a &quot;.&quot; in the USER_PATH).  If this is not the case, even though the current user has created the table, it will not be found and a file error &quot;35&quot; will result.  This circumstance can occur if the file were created with the OPEN OUTPUT phrase and &quot;.&quot; is not an element in USER_PATH.  When the table is created, the current user will be the owner of that table.  When the runtime attempts to open the table, the runtime will not look for tables owned by the current user unless USER_PATH is not set, or &quot;.&quot; is part of the USER_PATH setting.
+</p>
+<a name="wp1045884"> </a><p class="pBody">
+If an OPEN INPUT or OPEN I/O is issued, and <em class="cEmphasis">no</em> USER_PATH variable is in the runtime configuration file, Acu4GL searches for a user of the named file in the following sequence of places:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1045885"> </a><div class="pSmartList1"><li>The user named for login (ORA_LOGIN or OPS$<em class="cEmphasis">username</em>)</li></div>
+<a name="wp1045886"> </a><div class="pSmartList1"><li>Public synonyms</li></div>
+</ol></div>
+<a name="wp1045887"> </a><p class="pBody">
+Acu4GL opens the first file that has a valid combination of user and file name.
+</p>
+<a name="wp1045888"> </a><p class="pBody">
+If an OPEN OUTPUT is issued (whether USER_PATH is present or not), a new table is created with the owner being:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1045889"> </a><div class="pSmartList1"><li>The name specified in ORA_LOGIN</li></div>
+<a name="wp1045890"> </a><div class="pSmartList1"><li>The name constructed by automatic login  (see <a  href="4glc8.htm#wp1071647">section C.2.5, &quot;Acu4GL for Oracle: Setting Up a User Account.&quot;</a>)</li></div>
+</ol></div>
+<a name="wp1045891"> </a><h3 class="pHeadingRef">
+See also
+</h3>
+<a name="wp1045892"> </a><p class="pBody">
+Chapter 2 in the <em class="cEmphasis">ACUCOBOL-GT User's Guide </em>contains a discussion of the FILE_PREFIX configuration variable and general guidelines on the use of file search paths.  
+</p>
+<a name="wp1045893"> </a><p class="pBody">
+<a  href="4glc11.htm#wp1045727"><span style="font-family: Arial, Verdana, Helvetica, sans-serif">Section C.2.8, &quot;Acu4GL for Oracle: Setting Up the Search Path&quot;</span></a>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.6  Source Code Control</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; </p>
+<a name="wp1033410"> </a><h2 class="pHeading1">
+2.6  Source Code Control
+</h2>
+<a name="wp1033412"> </a><p class="pBody">
+ACUCOBOL-GT provides a method for conditionally modifying the source program at compile time.  This is accomplished by having lines in the source that can be excluded or included at compile time.  This can be used to maintain different versions of the program, perhaps to support different machine environments.  
+</p>
+<a name="wp1033415"> </a><p class="pBody">
+The &quot;-Si&quot; (include) flag controls the actions of the source code control system.  It must be followed by an argument that specifies a pattern that the compiler will search for in the Identification Area of each source line.  If the pattern is found, then the line will be included in the source program, even if it is a comment line.  However, if the pattern is immediately preceded by an exclamation point, then the line will be <em class="cEmphasis">excluded</em> from the source (i.e., commented out).  The exclamation point here stands for the notion <em class="cEmphasis">not.</em>   Note that the pattern is case sensitive; enclose it in double quotes on systems such as VMS where you need to preserve its case.
+</p>
+<a name="wp1033416"> </a><p class="pBody">
+The &quot;-Sx&quot; (exclude) flag works in the same fashion except that its meaning is reversed (i.e., lines with the pattern will be commented out and lines with a preceding exclamation point will be included).  
+</p>
+<a name="wp1033417"> </a><p class="pBody">
+Here is an example.  Suppose that a source program is being maintained for both the UNIX and VMS environments.  The following piece of code is in the program:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+   MOVE &quot;SYS$HELP:HELPFILE&quot; TO FILE-NAME.   VMS<a name="wp1033418"> </a>
+*  MOVE &quot;/etc/helpfile&quot; TO FILE-NAME.       UNX<a name="wp1037483"> </a>
+   OPEN INPUT HELP-FILE.<a name="wp1037484"> </a>
+</pre></div>
+<a name="wp1033419"> </a><p class="pBody">
+This program fragment is ready to be compiled for the VMS system.  If a UNIX version is desired, then the following command line will correct the source during compilation:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl  -Si  UNX  -Sx  VMS  source<a name="wp1033420"> </a>
+</pre></div>
+<a name="wp1120326"> </a><p class="pBody">
+The first &quot;-Si&quot; flag will cause lines marked with &quot;UNX&quot; to be included in the source.  The second flag will cause lines marked with &quot;VMS&quot; to be excluded from the source.  An alternate way of doing the same thing would be:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+   MOVE &quot;SYS$HELP:HELPFILE&quot; TO FILE-NAME.   !UNX<a name="wp1120327"> </a>
+*  MOVE &quot;/etc/helpfile&quot; TO FILE-NAME.        UNX<a name="wp1120328"> </a>
+   OPEN INPUT HELP-FILE.<a name="wp1037482"> </a>
+</pre></div>
+<a name="wp1033423"> </a><p class="pBody">
+This would be compiled for UNIX systems with: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl  -Si  UNX  source<a name="wp1033424"> </a>
+</pre></div>
+<a name="wp1033425"> </a><p class="pBody">
+The line marked with &quot;!UNX&quot; is commented out when this command is run because of the exclamation point.  This alternate method is particularly appropriate if only two versions are being maintained.  
+</p>
+<a name="wp1033427"> </a><p class="pBody">
+This source code control system can be especially convenient if the source is being maintained for both ACUCOBOL-GT and non-ACUCOBOL-GT environments.  The ACUCOBOL-GT extensions can be commented out and marked with a source-code control flag.  When the program is compiled under ACUCOBOL-GT, these lines can be included.  
+</p>
+<a name="wp1033428"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The patterns maintained in the Identification Area should be in upper case because some systems convert command lines into upper case.  Also note that exclamation points usually need to be quoted on command lines.  As a final note, the entire Identification Area is searched for the pattern; other information may be placed there too. 
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

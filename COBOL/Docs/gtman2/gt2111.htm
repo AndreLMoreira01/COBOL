@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:10" />
+  <title>1.5.1  Incompatibilities Between Graphical and Character Systems</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt21.htm">Chapter 1:  Introduction</a> &gt; <a href="gt2110.htm">1.5  Creating Portable User Interfaces</a> &gt; </p>
+<a name="wp1026520"> </a><h2 class="pHeading2">
+1.5.1  Incompatibilities Between Graphical and Character Systems
+</h2>
+<a name="wp1026522"> </a><p class="pBody">
+Ideally, you could simply modify your program to use graphical features, and that program would then run perfectly under both graphical and character systems.  However, this is usually not the case.  The key problems arise in the different physical traits associated with graphical and character systems.  Let's examine some of the primary differences. 
+</p>
+<a name="wp1026524"> </a><p class="pBody">
+For character systems, you can generally assume that you have a screen area of 24 or 25 lines by 80 columns.  While you can occasionally find larger screens (e.g., many Xterm configurations), designing your programs for 24 by 80 will guarantee nearly universal compatibility.  (Some programmers use 25 lines instead because this is the number of lines normally provided on IBM PC compatibles, as well as many common terminals.  The discussion below uses 24 lines because it is traditionally the most portable value.  If you use 25 lines instead, the discussion still applies, but the problems that arise during the conversion to a graphical system are more obvious.)  
+</p>
+<a name="wp1026525"> </a><p class="pBody">
+The display characteristics of graphical systems are harder to analyze.  Looking at current Microsoft Windows systems, they are usually configured with one of these screen resolutions: 640 x 480, 800 x 600, or 1024 x 768.  You can find other sizes too, but these account for the vast majority.  Now, translate these values into character cells to see how they compare with character systems.  The FIXED-FONT used by ACUCOBOL-GT is usually designed to be 8 pixels wide by 15 pixels high.  On a 640 x 480 screen, this gives exactly 80 characters across (assuming the window borders are placed off of the screen) and 42 characters high (in practice, somewhat less because of space used by the window's title and menu).  This size works fine with a 24 x 80 layout, and so simply running a character-based program under Windows works fine.  
+</p>
+<a name="wp1026526"> </a><p class="pBody">
+However, problems arise when you convert that character-based program to use graphical controls.  Consider what happens when you convert text-based data entry fields into ENTRY-FIELD controls.  Typically, entry fields are <em class="cEmphasis">boxed</em> (have a border around them) in order to match the normal look of a Windows application, and they usually display using the DEFAULT-FONT (a proportional font).  The DEFAULT-FONT is normally 13 pixels high by 7 pixels wide.  Making the entry fields boxed adds 50% to their height, with the result that they are 20 pixels high.  This gives exactly 24 lines on a 640 x 480 screen, but only if you omit all of the window borders, the title and menu, and assuming that you do not include any spacing between the entry fields.  If you want to add a 3-D look to the entry fields, you need at least another 3 pixels, making 24 lines approximately 552 pixels high (again, ignoring the window title, etc.).  In practice, you will usually want to be able to see the window's title, and its menu and toolbar (if any).  This adds approximately 20 to 40 pixels depending on how many elements are present.  As a result of these conditions, you cannot assume that you have 24 lines available on a 640 x 480 system when you include graphical controls.  
+</p>
+<a name="wp1026527"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Switching to the DEFAULT-FONT actually gains horizontal space: it is only 7 pixels wide instead of the 8 used by the FIXED-FONT.  In reality, even more space is gained because DEFAULT-FONT is a proportional font.  Most strings of lower-case letters occupy much less space than 7 pixels per character (upper-case strings, on the other hand, occupy much more space).  
+<hr />
+</p>
+<a name="wp1026528"> </a><p class="pBody">
+Thus, the first major problem can be summarized as follows:
+</p>
+<a name="wp1026529"> </a><h5 class="pHeading4">
+For a given screen resolution, a graphical screen is effectively shorter and wider than the equivalent character-based screen.
+</h5>
+<a name="wp1026531"> </a><p class="pBody">
+Differences in the physical dimensions of controls also cause problems in placing them.  Consider entry fields again.  On a character-based system, entry fields are one line tall.  On a graphical system, they are 1.5 lines tall.  ACUCOBOL-GT has a feature to account for this difference, but there are also problems in horizontal positioning that are harder to account for.  For example, two radio buttons placed side-by-side might look great on a graphical screen, but they may overlap when displayed on a character screen.  This happens because of the effects of shifting from a proportionally sized font to a fixed-size font. 
+</p>
+<a name="wp1026532"> </a><p class="pBody">
+Now consider a FRAME control.  On a graphical system, the frame is drawn around the area that it occupies (except for the top line, which is adjusted to account for the frame's title).  On a character system, the frame is drawn in the middle of the character cells forming the edge of the frame, because that is the best positioning that a character system can perform.  A frame that is two lines high on a graphical system has enough space inside it to hold one line of text.  On a character system, a two line high frame has no space inside it to hold anything. 
+</p>
+<a name="wp1026534"> </a><p class="pBody">
+Thus the second major problem is:
+</p>
+<a name="wp1026535"> </a><h5 class="pHeading4">
+Controls occupy different amounts of space in character and graphical systems.
+</h5>
+<a name="wp1026536"> </a><p class="pBody">
+The following sections discuss various approaches to managing these issues.  While there is no single solution to all the cases, ACUCOBOL-GT offers a variety of ways to handle these problems.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:53:15" />
+  <title>8.7.2   Unexpected User Name</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con8.htm">Chapter 8: Managing the System </a> &gt; <a href="con88.htm">8.7  AcuConnect Distributed Processing: Troubleshooting</a> &gt; </p>
+<a name="wp1036511"> </a><h2 class="pHeading2">
+8.7.2   Unexpected User Name
+</h2>
+<a name="wp1036514"> </a><p class="pBody">
+AcuConnect establishes a connection with the client, but uses an unexpected user name (Local Username)<em class="cEmphasis">. </em>There are two common reasons for getting an unexpected Local Username on the server:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036517"> </a><div class="pSmartList1"><li>The client machine/client user combination isn't matching the expected access record.</li></div>
+<a name="wp1036518"> </a><div class="pSmartList1"><li>The client machine/client user combination matches an access record that specifies an unexpected Local Username (perhaps the name of a group account, or an account with restricted privileges).</li></div>
+</ol></div>
+<a name="wp1036519"> </a><p class="pBody">
+To investigate and correct this situation you must be familiar with AcuConnect server access configuration, and have access to root or Administrator privileges.  We recommend that you work with your AcuConnect system administrator.
+</p>
+<a name="wp1036520"> </a><h3 class="pHeadingRef">
+UNIX diagnostics
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036521"> </a><div class="pSmartList1"><li>Confirm your client user name.</li></div>
+<a name="wp1036522"> </a><p class="pIndented1">
+Log onto the client system using the same user name and UNIX environment that resulted in the unexpected user name.  At the UNIX prompt, enter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+who am i<a name="wp1036523"> </a>
+</pre></div>
+<a name="wp1036524"> </a><p class="pIndented1">
+Is the user name returned the name you expected? 
+</p>
+<a name="wp1036526"> </a><div class="pSmartList1"><li>Confirm the name of the client system.  Enter:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+hostname<a name="wp1036527"> </a>
+</pre></div>
+<a name="wp1036528"> </a><p class="pIndented1">
+The system will return its official network host name.
+</p>
+<a name="wp1036529"> </a><div class="pSmartList1"><li>On the server, examine the server access file for the record that matches the client machine name/client user name combination.  This requires root privileges on a UNIX server, and Administrator group privileges on a Windows server.  It should be done by the AcuConnect system administrator.</li></div>
+<a name="wp1036530"> </a><p class="pIndented1">
+Run the server access file manager utility:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acurcl -access<a name="wp1036531"> </a>
+</pre></div>
+<a name="wp1037336"> </a><p class="pIndented1">
+Be sure to enter the name of the working server access file when prompted.
+</p>
+<a name="wp1037337"> </a><p class="pIndented1">
+Select menu item [4], &quot;Display one/all security records.&quot;  Respond <b class="cBold">N</b> to the &quot;Display all records?&quot; prompt.  To the next two prompts provide the client machine name and client user name respectively.  The matching record will be displayed.  
+</p>
+<a name="wp1036534"> </a><p class="pIndented1">
+The AcuConnect system administrator should be able to determine whether this is the appropriate and expected access record for the client machine name/client user name combination, and take any necessary steps to modify the record, or add a new one.
+</p>
+</ol></div>
+<a name="wp1036535"> </a><h3 class="pHeadingRef">
+Windows diagnostics
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036545"> </a><div class="pSmartList1"><li>Confirm the name of the client system.</li></div>
+<a name="wp1036546"> </a><p class="pIndented1">
+Under Windows 98/ME/XP, the runtime uses the host name that is set in the Control Panel.  In the Control Panel/Network/Configuration menu, select TCP/IP.  Then choose Properties/DNS Configuration/Host.  The name you specify for the &quot;Host&quot; entry is the one that the runtime uses.
+</p>
+<a name="wp1036551"> </a><p class="pIndented1">
+Under Windows NT/2000/2003, navigate to Start/Settings/Control Panel/Network/Protocols.  Select TCP/IP, and then choose Properties/DNS/Host Name.  The name you specify for the &quot;Host Name&quot; entry is the one that the runtime uses.
+</p>
+<a name="wp1036556"> </a><div class="pSmartList1"><li>On the server, examine the server access file for the record that matches the client machine name/client user name combination.  This requires root privileges on a UNIX server, and Administrator group privileges on a Windows server.  It should be done by the AcuConnect system administrator.</li></div>
+<a name="wp1036557"> </a><p class="pIndented1">
+Run the server access file manager utility:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acurcl -access<a name="wp1036558"> </a>
+</pre></div>
+<a name="wp1036559"> </a><p class="pIndented1">
+Be sure to enter the name of the working server access file when prompted.
+</p>
+<a name="wp1036560"> </a><p class="pIndented1">
+Select menu item [4], &quot;Display one/all security records.&quot;  Respond <b class="cBold">N</b> to the &quot;Display all records?&quot; prompt.  To the next two prompts provide the client machine name and client user name respectively.  The matching record will be displayed.  
+</p>
+<a name="wp1036561"> </a><p class="pIndented1">
+The AcuConnect system administrator should be able to determine whether this is the appropriate and expected access record for the client machine name/client user name combination, and take any necessary steps to modify the record, or add a new one.
+</p>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

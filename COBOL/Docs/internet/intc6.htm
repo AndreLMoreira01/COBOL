@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/01/05 10:11:41" />
+  <title>C.4.1  Configuring the Runtime</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Programmer's Guide to the Internet <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="intc.htm">Appendix C: Use the Runtime as a Helper Application or Viewer</a> &gt; <a href="intc5.htm">C.4  Preparing Your ACUCOBOL-GT Application </a> &gt; </p>
+<a name="wp1028254"> </a><h2 class="pHeading2">
+C.4.1  Configuring the Runtime
+</h2>
+<a name="wp1028256"> </a><p class="pBody">
+When used as a helper application or viewer, the ACUCOBOL-GT runtime is invoked to execute a single file.  If your application contains more than a single object file, it must be packaged in a library file that &quot;packages&quot; all of the objects and associated resources of your application into a single file (see <a  href="intc7.htm#wp1028286">section C.4.2, &quot;Packaging Your Application and Resources.&quot;</a>)
+</p>
+<a name="wp1028258"> </a><p class="pBody">
+There are two ways to configure the runtime for use as a helper application:  
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1028261"> </a><div class="pSmartList1"><li>Programmatically, using the SET CONFIGURATION or SET ENVIRONMENT variables, or</li></div>
+<a name="wp1028262"> </a><div class="pSmartList1"><li>Bundling a configuration file into the library file along with the COBOL object files and resources.</li></div>
+</ul></div>
+<a name="wp1028263"> </a><p class="pBody">
+If you choose the library file method and the library contains a configuration file, the client machine must be set up to specify the name of the configuration file when users define the runtime as a helper application in their browser.  Be aware, however, that this will affect all COBOL applications that your users run as a helper application.  (See <a  href="intc12.htm#wp1028339">section C.6.1, &quot;Defining the Runtime as a Helper Application or Viewer,&quot;</a> for instructions.)   
+</p>
+<a name="wp1028266"> </a><p class="pBody">
+If you choose to configure the runtime programmatically, you should use the SET CONFIGURATION (or SET ENVIRONMENT) phrase in your source code.  
+</p>
+<a name="wp1028268"> </a><p class="pBody">
+For example, if your application uses a configuration file with the following entries:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+FILE_PREFIX @hal:/u2/serverfiles<a name="wp1028269"> </a>
+COMPRESS_FILES 1<a name="wp1028270"> </a>
+KEYSTROKE EDIT=PREVIOUS EXCEPTION=52 kl<a name="wp1028271"> </a>
+</pre></div>
+<a name="wp1028272"> </a><p class="pBody">
+Add the following lines to your COBOL initialization code:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SET CONFIGURATION &quot;FILE_PREFIX&quot; TO &quot;@hal:/u2/serverfiles&quot;.<a name="wp1028273"> </a>
+SET CONFIGURATION &quot;COMPRESS_FILES&quot; to &quot;1&quot;.<a name="wp1028274"> </a>
+SET CONFIGURATION &quot;KEYSTROKE&quot; TO &quot;EDIT=PREVIOUS EXCEPTION=52 kl&quot;<a name="wp1028275"> </a>
+</pre></div>
+<a name="wp1028283"> </a><p class="pBody">
+Note that MAX_FILES, MAX_LOCKS, and LOCKS_PER_FILE cannot be modified using the SET verb and that the COBOL program can read environment variables using ACCEPT FROM CONFIGURATION (or ACCEPT FROM ENVIRONMENT).
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

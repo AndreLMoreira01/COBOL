@@ -1,0 +1,115 @@
+      * custsql.prd
+      * custsql.prd is generated from C:\Acucorp\Acucbl720\AcuGT\sample\samplprj\custsql.Psf
+      * This is a generated file. DO NOT modify this file directly.      
+
+       Acu-Initial-Routine.
+      *    Before-Init
+      * get system information
+           ACCEPT System-Information FROM System-Info
+      * get terminal information
+           ACCEPT Terminal-Abilities FROM Terminal-Info
+      * load bitmap
+           PERFORM Acu-Init-Bmp
+      *    After-Init
+           .
+
+       Acu-Init-Bmp.
+      * bitmap loading
+           COPY RESOURCE "smpl-arrows.bmp".
+           CALL "W$BITMAP" USING WBITMAP-LOAD "smpl-arrows.bmp", GIVING 
+              smpl-arrows-bmp
+           .
+
+       Acu-Exit-Rtn.
+      *    After-Program
+           EXIT PROGRAM
+           STOP RUN
+           .
+
+       Acu-CUST-SCREEN-Routine.
+      *    Before-Routine
+           PERFORM Acu-CUST-SCREEN-Scrn
+           PERFORM Acu-CUST-SCREEN-Proc
+      *    After-Routine
+           .
+
+       Acu-CUST-SCREEN-Scrn.
+           PERFORM Acu-CUST-SCREEN-Create-Win
+           PERFORM Acu-CUST-SCREEN-Init-Data
+           .
+
+       Acu-CUST-SCREEN-Create-Win.
+      *    Before-Create
+      * display screen
+              DISPLAY Initial GRAPHICAL WINDOW
+                 SCREEN LINE 1, SCREEN COLUMN 1, 
+                 LINES 28.70, SIZE 39.60, CELL HEIGHT 10, 
+                 CELL WIDTH 10, AUTO-MINIMIZE, COLOR IS 65793, ERASE, 
+                 LABEL-OFFSET 0, LINK TO THREAD, MODELESS, 
+                 WITH SYSTEM MENU, 
+                 TITLE "Customer Information", TITLE-BAR, USER-GRAY, 
+                 USER-WHITE, 
+                 HANDLE IS CUST-SCR-SF-1-Handle
+      * main menu
+           PERFORM Acu-CUST-SCR-MN-1-Menu
+           MOVE Menu-Handle TO CUST-SCR-MN-1-Handle
+           CALL "W$MENU" USING Wmenu-Show, CUST-SCR-MN-1-Handle
+      * toolbar
+           DISPLAY TOOL-BAR CELL HEIGHT 10, CELL WIDTH 10, 
+              LINES 2.20 CELLS, COLOR IS 65793, 
+              CONTROL FONT default-font, 
+              HANDLE IS CUST-SCR-TB-1-Handle
+           DISPLAY CUST-SCR-TB-1-Screen UPON CUST-SCR-TB-1-Handle
+           DISPLAY CUST-SCREEN UPON CUST-SCR-SF-1-Handle
+      *    After-Create
+           .
+
+       Acu-CUST-SCREEN-Init-Data.
+      *    Before-Initdata
+           PERFORM Acu-CUST-SCR-CM-8-Screen-Content
+      *    After-Initdata
+           .
+      * CUST-SCREEN
+       Acu-CUST-SCREEN-Proc.
+           PERFORM UNTIL Exit-Pushed
+              ACCEPT CUST-SCREEN  
+                 ON EXCEPTION PERFORM Acu-CUST-SCREEN-Evaluate-Func
+              END-ACCEPT
+           END-PERFORM
+           DESTROY CUST-SCR-SF-1-Handle
+           INITIALIZE Key-Status
+           .
+
+      * CUST-SCR-CM-8-Screen
+       Acu-CUST-SCR-CM-8-Screen-Content.
+           MODIFY CUST-SCR-CM-8-Screen, MASS-UPDATE = 1, RESET-LIST = 1
+           MODIFY CUST-SCR-CM-8-Screen, ITEM-TO-ADD = TABLE 
+              CUST-SCR-CM-8-Container
+           MODIFY CUST-SCR-CM-8-Screen, MASS-UPDATE = 0
+           MODIFY CUST-SCR-CM-8-Screen, VALUE WS-CUSTOMER-CONTACT
+           .
+
+      * CUST-SCREEN
+       Acu-CUST-SCREEN-Evaluate-Func.
+           EVALUATE TRUE
+              WHEN Exit-Pushed
+                 PERFORM Acu-CUST-SCREEN-Exit
+              WHEN Event-Occurred
+                 IF Event-Type = Cmd-Close
+                    PERFORM Acu-CUST-SCREEN-Exit
+                 END-IF
+           END-EVALUATE
+           MOVE 1 TO Accept-Control
+           . 
+
+       Acu-CUST-SCREEN-Exit.
+      * for main screen
+           MOVE 101 TO Acu-Msg-Id
+           PERFORM Acu-Show-Msg
+           IF Acu-Return-Value = 1
+              SET Exit-Pushed TO TRUE
+           ELSE
+              INITIALIZE Key-Status
+           END-IF
+           .
+

@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:19" />
+  <title>6.3.7  NAME Directive</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb6.htm">Chapter 6: Mapping COBOL Data Items and Database Fields</a> &gt; <a href="odb69.htm">6.3  Using Directives</a> &gt; </p>
+<a name="wp1028900"> </a><h2 class="pHeading2">
+6.3.7  NAME Directive
+</h2>
+<a name="wp1028904"> </a><p class="pBody">
+The NAME directive assigns a database field name to the data item defined on the next line.  You can use the NAME directive to prevent duplicate field names.
+</p>
+<a name="wp1028905"> </a><h3 class="pHeadingRef">
+Syntax
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+$XFD NAME=fieldname<a name="wp1028906"> </a>
+</pre></div>
+<a name="wp1028907"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( XFD NAME=fieldname ))<a name="wp1028908"> </a>
+</pre></div>
+<a name="wp1028909"> </a><p class="pBody">
+This directive has several uses, as shown in the following examples.
+</p>
+<a name="wp1028910"> </a><h3 class="pHeadingRef">
+Example 1 - duplicate names for data items in a single record
+</h3>
+<a name="wp1028914"> </a><p class="pBody">
+Within AcuODBC's &quot;virtual&quot; database file, all field names must be unique.  (Multiple database tables may include the same field name, but duplicates may not exist within a single table.)  Unique field names are not required in COBOL, because names can be qualified by group items.  For example, this is acceptable in COBOL: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+               10  last_visit.<a name="wp1028915"> </a>
+                   15  mm                  pic 99.<a name="wp1028916"> </a>
+                   15  dd                  pic 99.<a name="wp1028917"> </a>
+                   15  yy                  pic 99.<a name="wp1028918"> </a>
+               10  last_payment.  <a name="wp1028919"> </a>
+                   15  mm                  pic 99.<a name="wp1028920"> </a>
+                   15  dd                  pic 99.<a name="wp1028921"> </a>
+                   15  yy                  pic 99.<a name="wp1028922"> </a>
+</pre></div>
+<a name="wp1028923"> </a><p class="pBody">
+It is not, however, acceptable for a database to have a table with two columns with the same name.  In fact, you will not be able to compile and generate a data dictionary with this source code in your program.  
+</p>
+<a name="wp1028924"> </a><p class="pBody">
+You need not change the field names in your COBOL program to make them accessible to your Windows application through ODBC.  Instead, you use the NAME directive to provide unique names for the fields.  
+</p>
+<a name="wp1028925"> </a><p class="pBody">
+Although this is not included in the sample code, here is an example of using the NAME directive when you have duplicate field names:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+               10  last_visit.<a name="wp1028926"> </a>
+                   15  mm                  pic 99.<a name="wp1028927"> </a>
+                   15  dd                  pic 99.<a name="wp1028928"> </a>
+                   15  yy                  pic 99.<a name="wp1028929"> </a>
+               10  last_payment.  <a name="wp1028930"> </a>
+      $XFD NAME=MONTH_PD          <a name="wp1028931"> </a>
+                   15  mm                  pic 99.<a name="wp1028932"> </a>
+      $XFD NAME=DAY_PD<a name="wp1028933"> </a>
+                   15  dd                  pic 99.<a name="wp1028934"> </a>
+      $XFD NAME=YEAR_PD<a name="wp1028935"> </a>
+                   15  yy                  pic 99.<a name="wp1028936"> </a>
+</pre></div>
+<a name="wp1028937"> </a><p class="pBody">
+The &quot;dates&quot; portion of the &quot;virtual&quot; database table will look like this:
+</p>
+<a name="wp1028964"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1028941"> </a>
+mm
+
+</td>
+    <td><a name="wp1028943"> </a>
+dd
+
+</td>
+    <td><a name="wp1028945"> </a>
+yy
+
+</td>
+    <td><a name="wp1028947"> </a>
+MONTH_PD
+
+</td>
+    <td><a name="wp1028949"> </a>
+DAY_PD
+
+</td>
+    <td><a name="wp1028951"> </a>
+YEAR_PD
+
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028953"> </a><p class="pCellBody">
+06
+</p>
+</td>
+    <td><a name="wp1028955"> </a><p class="pCellBody">
+18
+</p>
+</td>
+    <td><a name="wp1028957"> </a><p class="pCellBody">
+02
+</p>
+</td>
+    <td><a name="wp1028959"> </a><p class="pCellBody">
+07
+</p>
+</td>
+    <td><a name="wp1028961"> </a><p class="pCellBody">
+04
+</p>
+</td>
+    <td><a name="wp1028963"> </a><p class="pCellBody">
+02
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1028965"> </a><h3 class="pHeadingRef">
+Example 2 - assigning shorter names
+</h3>
+<a name="wp1028966"> </a><p class="pBody">
+You may want to use the NAME directive to assign shorter names than those used in your COBOL programs.  This makes the formation of interactive SQL queries easier and quicker.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+       FILE SECTION.<a name="wp1028967"> </a>
+       FD  qa-file.<a name="wp1028968"> </a>
+      $XFD COMMENT  This sample file demonstrates directives.<a name="wp1028969"> </a>
+       01  qa-record.<a name="wp1028970"> </a>
+           03  animal-info.<a name="wp1028971"> </a>
+      *(( XFD NAME=PATIENT ))<a name="wp1028972"> </a>
+               05  patient-id                  pic x(5).<a name="wp1028973"> </a>
+               05  atype                       pic x.<a name="wp1028974"> </a>
+               05  ctype redefines atype       pic x.<a name="wp1028975"> </a>
+               05  dtype redefines atype       pic x.<a name="wp1028976"> </a>
+               05  otype redefines atype       pic x.<a name="wp1028977"> </a>
+           03  owner-info.<a name="wp1028978"> </a>
+               05  phone                       pic x(8).<a name="wp1028979"> </a>
+               05  owner                       pic x(30). <a name="wp1028981"> </a>
+           03  financial.<a name="wp1028982"> </a>
+               05  acct_no.<a name="wp1028983"> </a>
+                   10  year                    pic x(2).<a name="wp1028984"> </a>
+                   10  seq_no                  pic x(4).<a name="wp1028985"> </a>
+      *(( XFD DATE=mmddyyyy, USE GROUP ))<a name="wp1028986"> </a>
+               05  last_visit.<a name="wp1028987"> </a>
+                   10  mm                      pic 9(2).<a name="wp1028988"> </a>
+                   10  dd                      pic 9(2).<a name="wp1028989"> </a>
+                   10  yyyy                    pic 9(4).<a name="wp1028990"> </a>
+      $XFD HIDDEN<a name="wp1028991"> </a>
+               05  fee                         pic s9(5)v99.<a name="wp1028992"> </a>
+</pre></div>
+<a name="wp1028993"> </a><p class="pBody">
+This directive causes the data dictionary to map PATIENT-ID to PATIENT in the database.  </p><div><img src="images/name_dir.gif" height="249" width="560" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028995"> </a><h3 class="pHeadingRef">
+Additional examples
+</h3>
+<a name="wp1028996"> </a><p class="pBody">
+Here are some other places where you may consider using the NAME directive.  In all of these instances, note that your COBOL data does not change.  The new name appears only in the &quot;virtual&quot; database and in any tables that result from your COBOL code.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1028997"> </a><div class="pSmartList1"><li>If your COBOL data contains field names that are identical within the first 18 characters.  Each time you compile your program and specify &quot;-Fx&quot; to create data dictionaries, any field names longer than 18 characters are checked for uniqueness within the first 18.  If you have names that are identical within the first 18 characters, or that would not be meaningful if shortened to the first 18 characters, use the NAME directive to assign them different database field names.  </li></div>
+<a name="wp1028998"> </a><div class="pSmartList1"><li>If you map COBOL data items to Windows applications.  If a column name in your Windows application does not match the name used in your COBOL FD, you can use a NAME directive to associate the two names.  </li></div>
+<a name="wp1028999"> </a><div class="pSmartList1"><li>If a field name in your COBOL data begins with a numeric character.  Because a Windows application communicates using SQL, the program typically generates a syntax error when it encounters a column name that begins with a numeric character.  If your COBOL program uses field names that begin with a numeric character, use the NAME directive to assign a different name for use with your Windows applications.  </li></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

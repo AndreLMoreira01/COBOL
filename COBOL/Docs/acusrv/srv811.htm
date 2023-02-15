@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:46:11" />
+  <title>8.4.2  Connection Times Out</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv8.htm">Chapter 8: System Management</a> &gt; <a href="srv89.htm">8.4  Troubleshooting</a> &gt; </p>
+<a name="wp1035308"> </a><h2 class="pHeading2">
+8.4.2  Connection Times Out
+</h2>
+<a name="wp1035311"> </a><p class="pBody">
+Problem: An attempt to connect to AcuServer times out, or your application gets a time-out error during execution.
+</p>
+<a name="wp1035312"> </a><p class="pBody">
+A typical time-out error message looks like:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+File error 9D,14 on @condor:/usr2/bsmith/fio_seq.dat<a name="wp1035313"> </a>
+condor: Timed out<a name="wp1040369"> </a>
+</pre></div>
+<a name="wp1035314"> </a><p class="pBody">
+Time-out errors occur when: the server is down, the server crashes while your program is running, or network conditions produce very protracted response times (the result of an overburdened network, or faulty network hardware/software). 
+</p>
+<a name="wp1035315"> </a><p class="pBody">
+The diagnostic steps are:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035316"> </a><div class="pSmartList1"><li>confirm that the server machine is running and responding to the network</li></div>
+<a name="wp1035317"> </a><div class="pSmartList1"><li>confirm that <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> is running on the server</li></div>
+<a name="wp1035318"> </a><div class="pSmartList1"><li>increase the DEFAULT_TIMEOUT runtime configuration variable to give the client/server pair more time to establish a connection</li></div>
+<a name="wp1035319"> </a><div class="pSmartList1"><li>consult with your network system administrator and Acucorp Technical Support.</li></div>
+</ol></div>
+<a name="wp1035320"> </a><h3 class="pHeadingRef">
+Diagnostics:
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035321"> </a><div class="pSmartList1"><li>Confirm that the server is up and responding to the network.</li></div>
+<a name="wp1035323"> </a><p class="pIndented1">
+From your client system use &quot;ping&quot; to query the server: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ping hostname<a name="wp1035324"> </a>
+</pre></div>
+<a name="wp1035325"> </a><p class="pIndented1">
+Ping will return:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+hostname is alive<a name="wp1035326"> </a>
+</pre></div>
+<a name="wp1035327"> </a><p class="pIndented1">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+no answer from <em class="cEmphasis">hostname</em><a name="wp1035328"> </a>
+</pre></div>
+<a name="wp1035329"> </a><p class="pIndented1">
+If there is no answer from the server, determine the cause of the failure (machine down; network connection faulty) and restore the server.  With &quot;ping&quot;, confirm that the network connection is working.
+</p>
+<a name="wp1035330"> </a><div class="pSmartList1"><li>Confirm that <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> is running on the server.  </li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1041747"> </a><div class="pSmartList2"><li>If you are using the Windows graphical environment, check the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">Services</span> tab in the AcuServer Control Panel.  Services that are running are marked with a green bullet and services that are stopped are marked with a red bullet.</li></div>
+<a name="wp1041761"> </a><p class="pIndented2">
+If the service is not running, click <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">Start</span>.
+</p>
+<a name="wp1041751"> </a><div class="pSmartList2"><li>If you are in a command line environment, enter the command:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acuserve -info<a name="wp1035331"> </a>
+</pre></div>
+<a name="wp1035332"> </a><p class="pIndented2">
+If <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> is running, the command will return a summary of AcuServer's current status.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+0 file(s) in use by acuserve on: <em class="cEmphasis">hostname</em><a name="wp1035333"> </a>
+</pre></div>
+<a name="wp1035334"> </a><p class="pIndented2">
+If <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> is not running the command will return:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acuserve is not running on <em class="cEmphasis">hostname</em><a name="wp1035335"> </a>
+</pre></div>
+<a name="wp1035336"> </a><p class="pIndented2">
+If <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> is not running, start <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> and repeat the &quot;acuserve&#160;-info&quot; test.  
+</p>
+</ul></div>
+<a name="wp1035337"> </a><p class="pIndented1">
+Once <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> is running, rerun your application on the client.  If the connection still times out, proceed to step three.
+</p>
+<a name="wp1035338"> </a><div class="pSmartList1"><li>Set the runtime configuration variable DEFAULT_TIME_OUT to 100 seconds (four times the default value) and run your application.</li></div>
+<a name="wp1035339"> </a><p class="pIndented1">
+If the connection succeeds, analyze your network for the cause of the prolonged connection time.  You should investigate network capacity, collision and retransmission rates, and network hardware or software malfunction.
+</p>
+<a name="wp1035340"> </a><p class="pIndented1">
+If necessary, repair your network and confirm its proper operation. Reset DEFAULT_TIME_OUT to its default setting of 25 seconds and rerun your application.
+</p>
+<a name="wp1035341"> </a><div class="pSmartList1"><li>If the application times out, you will probably need to work with your network system administrator, network hardware and software vendors, and Acucorp Technical Support to resolve the problem.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

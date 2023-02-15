@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:15" />
+  <title>8.5.1  Using genmenu</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt28.htm">Chapter 8:  Menu Bars and Pop-up Menus</a> &gt; <a href="gt2810.htm">8.5  Creating Menus - the Shortcut</a> &gt; </p>
+<a name="wp1026177"> </a><h2 class="pHeading2">
+8.5.1  Using genmenu
+</h2>
+<a name="wp1026178"> </a><p class="pBody">
+To use <b class="cBold">genmenu</b>:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1026179"> </a><div class="pSmartList1"><li>Compile &quot;genmenu.cbl&quot;.  </li></div>
+<a name="wp1026180"> </a><div class="pSmartList1"><li>Create a text file that describes your menu(s).</li></div>
+<a name="wp1026181"> </a><div class="pSmartList1"><li>Run <b class="cBold">genmenu </b>on that text file to create a file of COBOL code. (Used later in Step 5.)</li></div>
+<a name="wp1033937"> </a><div class="pSmartList1"><li>Include the COPY file &quot;acugui.def&quot; somewhere in your Working-Storage section.</li></div>
+<a name="wp1033938"> </a><div class="pSmartList1"><li>Name the generated COBOL file (from Step 2) in a COPY statement in your Procedure Division.</li></div>
+<a name="wp1026184"> </a><div class="pSmartList1"><li>Build the menu: use one PERFORM statement in your application to cause each menu to be built.  </li></div>
+<a name="wp1026185"> </a><div class="pSmartList1"><li>Display the menu: CALL W$MENU to cause one menu to be displayed.</li></div>
+</ol></div>
+<a name="wp1026186"> </a><p class="pBody">
+These steps are described in detail below.
+</p>
+<a name="wp1026187"> </a><h3 class="pHeadingRef">
+Step One
+</h3>
+<a name="wp1026189"> </a><p class="pBody">
+To compile<b class="cBold"> genmenu:</b>  
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl  -x  -o  genmenu  genmenu.cbl<a name="wp1027429"> </a>
+</pre></div>
+<a name="wp1027430"> </a><p class="pNote">
+<hr />
+<b>Note:  </b> If you usually use a suffix on your COBOL object files, you should add that suffix to the command line. 
+<hr />
+</p>
+<a name="wp1026192"> </a><h3 class="pHeadingRef">
+Step Two
+</h3>
+<a name="wp1026193"> </a><p class="pBody">
+The input to<b class="cBold"> genmenu </b>consists of a normal text file that you create using your editor.  This file contains the descriptions of one or more menus.  You may place blank lines freely in this file as well as comment lines that start with either &quot;*&quot; or &quot;#&quot; in column one.  You may use either upper case or lower case when creating menu files.  
+</p>
+<a name="wp1026194"> </a><p class="pBody">
+Each line in a menu file consists of one or more fields.  Fields are separated from each other by spaces.  You may also use commas and tabs as field separators.  Initial spaces in a line are ignored.  Here's a small example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+MENU  main-menu<a name="wp1026195"> </a>
+    &quot;&amp;File&quot;,            0,   submenu<a name="wp1032770"> </a>
+        &quot;&amp;New&quot;,         101<a name="wp1032772"> </a>
+        &quot;&amp;Open&quot;,        103, disabled<a name="wp1032774"> </a>
+        &quot;Save &amp;As...&quot;,  104<a name="wp1032776"> </a>
+        separator<a name="wp1032778"> </a>
+        &quot;E&amp;xit&quot;,        105<a name="wp1032780"> </a>
+        end-menu<a name="wp1032782"> </a>
+</pre></div>
+<a name="wp1026196"> </a><p class="pBody">
+You start a menu by placing the word &quot;MENU&quot; (for a menu bar) or &quot;POPUP&quot; (for a pop-up menu) on a line followed by a menu name.  A menu name may be up to 20 characters long and must be formed like a COBOL identifier (it will be used to build a COBOL paragraph name).  The menu name does <em class="cEmphasis">not</em> appear in the generated menu bar. 
+</p>
+<a name="wp1026197"> </a><p class="pBody">
+Following the &quot;MENU&quot; or &quot;POPUP&quot; line, you enter one line for each menu entry that belongs to that menu.  You end a menu by one of the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1026198"> </a><div class="pSmartList1"><li>ending the file (no more lines), </li></div>
+<a name="wp1026199"> </a><div class="pSmartList1"><li>starting another menu with another &quot;MENU&quot; or &quot;POPUP&quot; line, </li></div>
+<a name="wp1026200"> </a><div class="pSmartList1"><li>placing the word &quot;END-MENU&quot; or &quot;END-POPUP&quot; on a line by itself (these words are treated as synonyms).</li></div>
+</ul></div>
+<a name="wp1026201"> </a><p class="pBody">
+Each item in a menu needs both a label (the text that appears on screen) and a numeric ID.  So, each menu entry consists of the menu label (in quotes) followed by its ID value.  Use lower and upper case in the label so that it appears exactly as you want it to appear on the menu.  The ID value may either be a number or the name of a level 78 that you will define in the final program.  It should be greater than zero and less than or equal to 4095 (exception: it may be zero for submenus or separators).  
+</p>
+<a name="wp1026203"> </a><p class="pBody">
+When you're typing the label, place an &quot;&amp;&quot; character in front of the letter that will be the entry's <em class="cEmphasis">key letter</em>.  The user can access that menu entry quickly by typing the key letter at the keyboard.  The key letter will appear underlined when the menu is displayed (unless you've specified some other appearance--see <a  href="gt2824.htm#wp1026610">section 8.12</a>).  Under the Windows environment, the user must press &lt;Alt&gt; and then type the key letter to make a menu choice with a key letter.   (Menu options can also be selected with the mouse, if one is available and enabled.   <a  href="gt27.htm#wp1033713">See <span style="font-family: Arial, Verdana, Helvetica, sans-serif">Chapter 7.</span></a>)        
+</p>
+<a name="wp1026204"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If you don't select a key letter, then no underline will appear, and the first letter of the label will be used as its key letter.  If two or more key letters are the same, then when the user types that key letter, the system will advance to the next menu item with the chosen key letter, and then wait for the user to press &quot;Enter&quot;.  If you are programming for future delivery on more than one operating system, be aware that key letters may be handled slightly differently on different systems.  See also <a  href="gt2827.htm#wp1026849">section 8.15, &quot;Portability Concerns.&quot;</a>
+<hr />
+</p>
+<a name="wp1026205"> </a><h3 class="pHeadingRef">
+Indicating a shortcut key in the label
+</h3>
+<a name="wp1026208"> </a><p class="pBody">
+A shortcut key is a keyboard key that you have designated in your program to perform the same action as a menu item.  You must create a programmatic association between the menu item and the key.  One easy way to do this is to make the menu item's ID value the same as the exception value of the keystroke.
+</p>
+<a name="wp1026209"> </a><p class="pBody">
+You may display the shortcut key's text next to the menu item in your menu if you want.  To specify the shortcut key's text, place it immediately after the characters &quot;\t&quot; in the item's label.  For example, if you want to create a menu item that has the text &quot;Exit&quot; and you want to display the shortcut key text &quot;Ctl-X&quot; next to it, you would specify &quot;Exit\tCtl-X&quot; as the item's label.  You might think of &quot;\t&quot; as specifying a &quot;tab&quot; character that separates the two columns when they are displayed in the menu.  If you need to include &quot;\t&quot; in your menu label, specify &quot;\\t&quot; to prevent it from being interpreted as a shortcut key indicator.
+</p>
+<a name="wp1026210"> </a><h3 class="pHeadingRef">
+Menu flags
+</h3>
+<a name="wp1034732"> </a><p class="pBody">
+After an entry's ID, you may optionally enter up to three flags.  These flags are these words:         
+</p>
+<a name="wp1034830"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1034836"> </a><p class="pCellBody">
+<b class="cBold">CHECKED</b>
+</p>
+</td>
+    <td><a name="wp1034838"> </a><p class="pCellBody">
+The menu entry starts with a check mark placed by it (enabled).
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034840"> </a><p class="pCellBody">
+<b class="cBold">DISABLED</b>
+</p>
+</td>
+    <td><a name="wp1034842"> </a><p class="pCellBody">
+The menu entry starts disabled.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034844"> </a><p class="pCellBody">
+<b class="cBold">SUBMENU</b>
+</p>
+</td>
+    <td><a name="wp1034846"> </a><p class="pCellBody">
+The menu entry leads to a submenu.  Subsequent menu entries refer to items that will be placed in that submenu.  You complete a submenu by placing the word &quot;END-MENU&quot; on a line by itself.  After completing a submenu, resume listing menu entries that appear on the parent menu.     
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1026217"> </a><h3 class="pHeadingRef">
+Separators
+</h3>
+<a name="wp1026218"> </a><p class="pBody">
+Finally, you may enter a separator menu item by using the word &quot;SEPARATOR&quot; (without quotes) in place of the menu's label and then optionally listing a menu ID for it (if you omit the ID value, it will be treated as zero).     
+</p>
+<a name="wp1026221"> </a><p class="pBody">
+For example, the following menu file would describe one menu that consists of two items, each one of which has a submenu:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+MENU main-menu<a name="wp1026222"> </a>
+    &quot;&amp;File&quot;,    0,  submenu<a name="wp1032784"> </a>
+        &quot;&amp;New&quot;,                    101<a name="wp1032786"> </a>
+        &quot;&amp;Open&quot;,                   102<a name="wp1032788"> </a>
+        &quot;&amp;Save&quot;,                   103<a name="wp1032790"> </a>
+        &quot;Save &amp;As...&quot;,             104<a name="wp1032792"> </a>
+        separator<a name="wp1032794"> </a>
+        &quot;E&amp;xit&quot;,                   105<a name="wp1032796"> </a>
+    end-menu<a name="wp1032798"> </a>
+    &quot;&amp;Options&quot;,                    0,   submenu<a name="wp1032802"> </a>
+        &quot;&amp;Save Settings on Exit&quot;,  201, checked<a name="wp1032804"> </a>
+        &quot;&amp;Password Protect&quot;,       202, checked<a name="wp1032806"> </a>
+        &quot;Confirm Deletions&quot;,       203<a name="wp1032808"> </a>
+        end-menu<a name="wp1032810"> </a>
+</pre></div>
+<a name="wp1026225"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The blank lines and the indenting are not required, but make the menu file easier to read.  
+<hr />
+</p>
+<a name="wp1026226"> </a><h3 class="pHeadingRef">
+Step Three
+</h3>
+<a name="wp1026228"> </a><p class="pBody">
+When your text file is complete, you can use <b class="cBold">genmenu</b> to create the COBOL source code that builds the menu.  Use the following command:    
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+RUNCBL  genmenu  menu-file  copy-file<a name="wp1026229"> </a>
+</pre></div>
+<a name="wp1026230"> </a><p class="pBody">
+where menu-file is the name of your text file that describes the menu and copy-file is the name of the file that will hold the generated source code.  You may omit copy-file, or both menu-file and copy-file.  If you do, <b class="cBold">genmenu</b> will prompt you for these names.  Note that because <b class="cBold">genmenu </b>is a COBOL program, it will use any FILE-PREFIX and FILE-SUFFIX variables that you have set in your configuration file.  
+</p>
+<a name="wp1026235"> </a><p class="pBody">
+Under graphical systems,<b class="cBold"> </b><b class="cBold">genmenu </b>will pause when it is done and will give you an opportunity to view its output.  Press &lt;Enter&gt; to continue.  If you are running <b class="cBold">genmenu </b>from a batch file or a makefile and do not want to see the output on a graphical system, specify &quot;-1&quot; on the command line.  On a character-based system,<b class="cBold"> genmenu</b> is designed to run as a quiet utility that has no screen output. 
+</p>
+<a name="wp1026236"> </a><p class="pBody">
+If<b class="cBold"> genmenu</b> detects any errors, it will display them, along with the line number of <em class="cEmphasis">menu-file</em> that caused the problem.  Otherwise, it will simply place the generated source code in <em class="cEmphasis">copy-file</em>.  
+</p>
+<a name="wp1026237"> </a><h3 class="pHeadingRef">
+Step Four
+</h3>
+<a name="wp1026238"> </a><p class="pBody">
+Somewhere in your Working-Storage section, include the line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY &quot;acugui.def&quot;<a name="wp1026239"> </a>
+</pre></div>
+<a name="wp1026240"> </a><h3 class="pHeadingRef">
+Step Five
+</h3>
+<a name="wp1026241"> </a><p class="pBody">
+Somewhere in the Procedure Division of your application, include the line:     
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY &quot;copy-file&quot;<a name="wp1026242"> </a>
+</pre></div>
+<a name="wp1026243"> </a><h3 class="pHeadingRef">
+Step Six
+</h3>
+<a name="wp1026245"> </a><p class="pBody">
+The COPY file created by <b class="cBold">genmenu </b>will contain a paragraph called &quot;BUILD-<em class="cEmphasis">MENU-NAME</em>&quot; where <em class="cEmphasis">MENU-NAME</em> is replaced by the name you gave in the &quot;MENU&quot; line of your text file.  This paragraph contains all the code necessary to produce the menu you described in your file.  If you have more than one menu in your text file, then the COPY file will have a paragraph for each of these menus.     
+</p>
+<a name="wp1026247"> </a><p class="pBody">
+You execute each one of these paragraphs with a PERFORM statement.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PERFORM  BUILD-MAIN-MENU.<a name="wp1026248"> </a>
+</pre></div>
+<a name="wp1026251"> </a><p class="pBody">
+When the PERFORM returns, it will have set the data item &quot;MENU-HANDLE&quot; to a value that uniquely identifies the created menu.  MENU-HANDLE is declared in &quot;acugui.def&quot; as a numeric data item.     
+</p>
+<a name="wp1026252"> </a><p class="pBody">
+If MENU-HANDLE is set to zero, then it indicates that an error has occurred in the creation of the menu.  This is typically due to the system's running out of memory.  Otherwise, &quot;MENU-HANDLE&quot; contains a valid identifying value.  This value is called the menu's <em class="cEmphasis">handle.  </em>
+</p>
+<a name="wp1026253"> </a><p class="pBody">
+If you plan to use more than one menu, move MENU-HANDLE to another variable so that you don't lose the menu's unique identifier when you PERFORM the code that constructs the other menus.  The variable you use must be declared as PIC S9(9) COMP-4.  
+</p>
+<a name="wp1026254"> </a><p class="pBody">
+For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MOVE MENU-HANDLE TO FILE-MENU-HANDLE.<a name="wp1026255"> </a>
+</pre></div>
+<a name="wp1026256"> </a><h3 class="pHeadingRef">
+Step Seven
+</h3>
+<a name="wp1026258"> </a><p class="pBody">
+To display a menu in your application, be sure that MENU-HANDLE does not have a zero value (zero indicates an error).  Then:      
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;W$MENU&quot; USING WMENU-SHOW, MENU-HANDLE<a name="wp1026259"> </a>
+</pre></div>
+<a name="wp1026260"> </a><p class="pBody">
+The variables in this call are declared in &quot;acugui.def&quot;.  This call will cause your menu to be displayed to the user.  The user may immediately begin entering menu commands.      
+</p>
+<a name="wp1026261"> </a><p class="pBody">
+In the following code fragment, two menus are created and, if the build is successful, the main menu is displayed:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PERFORM BUILD-MAIN-MENU.<a name="wp1026262"> </a>
+MOVE MENU-HANDLE TO MAIN-HANDLE.<a name="wp1032812"> </a>
+PERFORM BUILD-MAIL-SYSTEM-MENU.<a name="wp1032814"> </a>
+MOVE MENU-HANDLE TO <a name="wp1032816"> </a>
+        MAIL-SYSTEM-HANDLE.<a name="wp1032818"> </a>
+<a name="wp1032820"> </a>
+IF MAIN-HANDLE NOT = ZERO<a name="wp1032822"> </a>
+    CALL &quot;W$MENU&quot; USING <a name="wp1032824"> </a>
+        WMENU-SHOW, MAIN-HANDLE.<a name="wp1032826"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

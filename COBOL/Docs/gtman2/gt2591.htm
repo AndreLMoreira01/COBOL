@@ -1,0 +1,358 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:34" />
+  <title>5.20.2  Tree View: Special Properties </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt25.htm">Chapter 5:  Control Types Reference</a> &gt; <a href="gt2589.htm">5.20  Tree View </a> &gt; </p>
+<a name="wp1029783"> </a><h2 class="pHeading2">
+5.20.2  Tree View: Special Properties 
+</h2>
+<a name="wp1029791"> </a><h5 class="pHeading4">
+BITMAP-HANDLE   (numeric)  
+</h5>
+<a name="wp1083488"> </a><p class="pBody">
+Identifies the handle of a loaded bitmap, so that images from that bitmap can be shown in items in the tree view.  You obtain the bitmap handle by calling the library routine W$BITMAP with the WBITMAP-LOAD option.  The bitmap is treated as a bitmap strip - a series of fixed-width images laid out side-by-side in a single bitmap.  The images are numbered sequentially, starting at &quot;1&quot;.  Note that you have only one bitmap strip for the entire control, although you can select individual images out of this strip for each item.  See BITMAP-NUMBER.  (<em class="cEmphasis">create, modify</em>, <em class="cEmphasis">inquire</em>)
+</p>
+<a name="wp1029794"> </a><h5 class="pHeading4">
+BITMAP-NUMBER   (numeric)  
+</h5>
+<a name="wp1083489"> </a><p class="pBody">
+Identifies the bitmap image that will be displayed for the item identified by ITEM.   If you do not specify a bitmap number for a particular item, that item will use bitmap number &quot;1&quot;.  Note that you can show different bitmaps for expanded or collapsed items by changing an item's BITMAP-NUMBER in response to the MSG-TV-EXPANDING event.   (<em class="cEmphasis">create, modify, inquire</em>)
+</p>
+<a name="wp1029797"> </a><h5 class="pHeading4">
+BITMAP-WIDTH   (numeric)  
+</h5>
+<a name="wp1083505"> </a><p class="pBody">
+Sets the width of the images in the bitmap strip described by BITMAP-HANDLE.  If not set, then the images default to 16-pixels wide.  You should set this to match the actual width of the images that make up the bitmap strip.  (<em class="cEmphasis">create, modify, inquire</em>)
+</p>
+<a name="wp1029800"> </a><h5 class="pHeading4">
+ENSURE-VISIBLE   (numeric)  
+</h5>
+<a name="wp1083506"> </a><p class="pBody">
+When set to a valid item ID, ensures that that item is visible in the control.  This may expand collapsed items and may cause scrolling.  (<em class="cEmphasis">create, modify</em>)  
+</p>
+<a name="wp1029803"> </a><h5 class="pHeading4">
+EXPAND   (numeric)  
+</h5>
+<a name="wp1083507"> </a><p class="pBody">
+Programmatically expands or collapses the item identified by the ITEM property.  If you set EXPAND to TVFLAG-EXPAND, the item is expanded.  To collapse the item, set EXPAND to TVFLAG-COLLAPSE. These constants are defined in &quot;acugui.def&quot;.  Set to zero when you want no action to occur.  (<em class="cEmphasis">create, modify</em>)  
+</p>
+<a name="wp1029806"> </a><h5 class="pHeading4">
+HIDDEN-DATA   (alphanumeric)  
+</h5>
+<a name="wp1083508"> </a><p class="pBody">
+Allows the program to store data that is not displayed in an item.  Hidden data is limited to 255 bytes per item.  Hidden data may be any format, including non-printing characters.  This property acts on the item identified by the ITEM property.  (<em class="cEmphasis">create, modify, inquire</em>)
+</p>
+<a name="wp1122275"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>As with all properties that take a text value, when the value of HIDDEN-DATA is stored, the runtime automatically strips trailing spaces and low-values.
+<hr />
+</p>
+<a name="wp1029809"> </a><h5 class="pHeading4">
+HAS-CHILDREN   (numeric)  
+</h5>
+<a name="wp1083509"> </a><p class="pBody">
+When set to a non-zero value, indicates that the item identified by ITEM has child items even if there are no child items in the control.  When set to zero (the default), an item has children only if they are physically present in the control.  This property is useful when it is impractical to place all of a tree's items in the control all at once.  In this approach, you do not place child items in the tree, but you mark which items have children via this property.  Then, when the user expands a particular item, you have the program respond to the MSG-TV-EXPANDING event by adding the appropriate child items to the control.  The HAS-CHILDREN property informs the control which items can be expanded.  (<em class="cEmphasis">create, modify</em>)  
+</p>
+<a name="wp1029812"> </a><h5 class="pHeading4">
+ITEM   (numeric)  
+</h5>
+<a name="wp1083510"> </a><p class="pBody">
+This property is used in conjunction with other properties to identify which item to affect.  Typically, you set ITEM to the ID of the item to act on and then set another property to perform the action.  Note that you must set ITEM before the other property to get the desired results.  ITEM is the &quot;index&quot; for the tree view control (see the MODIFY and INQUIRE statements for a description of indexes).  
+</p>
+<a name="wp1029813"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b> The Windows API does not guard against invalid settings of this property.  As a result, setting this property to a value that does not correspond to a valid item ID can result in a general protection fault under Windows.  (<em class="cEmphasis">create, modify, inquire</em>)
+<hr />
+</p>
+<a name="wp1029816"> </a><h5 class="pHeading4">
+ITEM-TEXT   (alphanumeric)  
+</h5>
+<a name="wp1083536"> </a><p class="pBody">
+When set, changes the text of the item identified by ITEM to match the value assigned.  When queried, returns the text of the item identified by ITEM.  (<em class="cEmphasis">create, modify, inquire</em>)
+</p>
+<a name="wp1029819"> </a><h5 class="pHeading4">
+ITEM-TO-ADD   (alphanumeric)  
+</h5>
+<a name="wp1083541"> </a><p class="pBody">
+Places a new item in the tree view control.  The text assigned to ITEM-TO-ADD is placed as a new item in the control.  Its position in the hierarchy is determined by the PARENT and PLACEMENT special properties.  The return value from this property is the ID of the new item.  If the new item is successfully added, the ITEM property is set to point to this item (this makes attaching a bitmap or hidden data to the item easier - see BITMAP-NUMBER and HIDDEN-DATA).  (<em class="cEmphasis">create, modify</em>)
+</p>
+<a name="wp1029822"> </a><h5 class="pHeading4">
+ITEM-TO-DELETE   (numeric)  
+</h5>
+<a name="wp1083546"> </a><p class="pBody">
+When set, deletes the item whose ID matches the assigned value.  If you place this in the Screen Section, then set this value to NULL to ensure that you do not accidentally delete items.  (<em class="cEmphasis">create, modify</em>)  
+</p>
+<a name="wp1029825"> </a><h5 class="pHeading4">
+ITEM-TO-EMPTY   (numeric)  
+</h5>
+<a name="wp1083551"> </a><p class="pBody">
+Deletes all child items of the item whose ID is assigned to this property.  When set to NULL, has no effect.  (<em class="cEmphasis">create, modify</em>)  
+</p>
+<a name="wp1029828"> </a><h5 class="pHeading4">
+NEXT-ITEM   (numeric)  
+</h5>
+<a name="wp1083556"> </a><p class="pBody">
+Setting this property returns a specific item ID.  The new item found depends on the value used:
+</p>
+<a name="wp1119540"> </a><p class="pBodyRelative">
+     </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1083607"> </a>
+Value
+
+</th>
+    <th><a name="wp1083609"> </a>
+Item Found
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083611"> </a><p class="pCellBody">
+TVNI-CHILD
+</p>
+</td>
+    <td><a name="wp1083613"> </a><p class="pCellBody">
+First child of the current ITEM
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083615"> </a><p class="pCellBody">
+TVNI-FIRST-VISIBLE
+</p>
+</td>
+    <td><a name="wp1083617"> </a><p class="pCellBody">
+First item currently visible in control
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083619"> </a><p class="pCellBody">
+TVNI-NEXT
+</p>
+</td>
+    <td><a name="wp1083621"> </a><p class="pCellBody">
+Next sibling of the current ITEM
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083623"> </a><p class="pCellBody">
+TVNI-NEXT-VISIBLE
+</p>
+</td>
+    <td><a name="wp1083625"> </a><p class="pCellBody">
+Next visible item after ITEM
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083627"> </a><p class="pCellBody">
+TVNI-PARENT
+</p>
+</td>
+    <td><a name="wp1083629"> </a><p class="pCellBody">
+Parent item of the current ITEM
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083631"> </a><p class="pCellBody">
+TVNI-PREVIOUS
+</p>
+</td>
+    <td><a name="wp1083633"> </a><p class="pCellBody">
+Previous sibling of ITEM
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083635"> </a><p class="pCellBody">
+TVNI-PREVIOUS-VISIBLE
+</p>
+</td>
+    <td><a name="wp1083637"> </a><p class="pCellBody">
+Previous visible item before ITEM
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083639"> </a><p class="pCellBody">
+TVNI-ROOT
+</p>
+</td>
+    <td><a name="wp1083641"> </a><p class="pCellBody">
+Topmost item in the entire control
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative"> 
+</p>
+<a name="wp1029868"> </a><p class="pBody">
+These values are defined in &quot;acugui.def&quot;.  
+</p>
+<a name="wp1029869"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>ITEM must refer to a visible item when you are using TVNI-NEXT-VISIBLE or TVNI-PREVIOUS-VISIBLE.  The return value from setting this property is the item ID if successful, or zero if the specified item does not exist.  Set NEXT-ITEM to zero when no action is wanted.  (<em class="cEmphasis">create, modify</em>)  
+<hr />
+</p>
+<a name="wp1029872"> </a><h5 class="pHeading4">
+PARENT   (numeric)  
+</h5>
+<a name="wp1083770"> </a><p class="pBody">
+Helps to determine the placement of a new item in the control.  When this is set to an ID of an item already in the control, the newly added item will be a child of the PARENT item.  If PARENT is set to zero, then newly added items are placed at the top level.  PARENT is set to zero when the control is created. (<em class="cEmphasis">create, modify</em>, <em class="cEmphasis">inquire</em>)
+</p>
+<a name="wp1083826"> </a><p class="pBody">
+In the following example, four items are added to a tree view control.  The first item is a parent to the next two items, and the last item is on the top level like the first:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77  ID-1             USAGE POINTER.<a name="wp1083827"> </a>
+<a name="wp1083848"> </a>
+MODIFY TREE-VIEW-1, ITEM-TO-ADD = &quot;Item 1&quot;, <a name="wp1083855"> </a>
+       GIVING ID-1,<a name="wp1243859"> </a>
+       PARENT = ID-1, <a name="wp1116048"> </a>
+       ITEM-TO-ADD = &quot;Item 1-A&quot;,<a name="wp1116050"> </a>
+       ITEM-TO-ADD = &quot;Item 1-B&quot;,<a name="wp1116052"> </a>
+       PARENT = 0,<a name="wp1116054"> </a>
+       ITEM-TO-ADD = &quot;Item 2&quot;.<a name="wp1116056"> </a>
+<a name="wp1029875"> </a><p class="pIndented1">
+The resulting tree looks like this:<br />
+<img src="ch5_trea.gif" height="190" width="330" border="0" hspace="0" vspace="0"/>
+<br />
+
+</p>
+</pre></div>
+<a name="wp1140476"> </a><h5 class="pHeading4">
+PLACEMENT   (numeric)  
+</h5>
+<a name="wp1083903"> </a><p class="pBody">
+Works in conjunction with PARENT to determine where new items are located in the hierarchy.  The PLACEMENT value affects the location within a given sub-level (<em class="cEmphasis">i.e., </em>the list of items that have the same parent).  If PLACEMENT is set to a valid item ID (whose parent is PARENT), then the new item is placed immediately after this item.  Alternatively, you can use any one of the following special values (defined in &quot;acugui.def&quot;):
+</p>
+<a name="wp1029880"> </a><p class="pBodyRelative">
+   </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1029883"> </a><p class="pCellBody">
+TVPLACE-FIRST
+</p>
+</td>
+    <td><a name="wp1029885"> </a><p class="pCellBody">
+Item placed first in the list
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029887"> </a><p class="pCellBody">
+TVPLACE-LAST
+</p>
+</td>
+    <td><a name="wp1029889"> </a><p class="pCellBody">
+Item placed last in the list
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029891"> </a><p class="pCellBody">
+TVPLACE-SORT
+</p>
+</td>
+    <td><a name="wp1029893"> </a><p class="pCellBody">
+Item sorted alphabetically in the list
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1029895"> </a><p class="pIndented1">
+The default setting is TVPLACE-LAST.  
+</p>
+<a name="wp1029896"> </a><p class="pBody">
+In the following example, items are sorted alphabetically except at the top level:  
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77  ID-1        USAGE POINTER.<a name="wp1029897"> </a>
+77  ID-2        USAGE POINTER.<a name="wp1084032"> </a>
+<a name="wp1243903"> </a>
+MODIFY TREE-VIEW-1, ITEM-TO-ADD = &quot;Ordinals&quot;, GIVING ID-1<a name="wp1243904"> </a>
+    PARENT = ID-1, PLACEMENT = TVPLACE-SORT,<a name="wp1243910"> </a>
+    ITEM-TO-ADD = ( &quot;First&quot;, &quot;Second&quot;, &quot;Third&quot;, &quot;Fourth&quot; )<a name="wp1243911"> </a>
+    PARENT = 0, PLACEMENT = TVPLACE-LAST,<a name="wp1243912"> </a>
+    ITEM-TO-ADD = &quot;Cardinals&quot;, GIVING ID-2,<a name="wp1084077"> </a>
+    PARENT = ID-2, PLACEMENT = TVPLACE-SORT,<a name="wp1243915"> </a>
+    ITEM-TO-ADD = ( &quot;One&quot;, &quot;Two&quot;, &quot;Three&quot;, &quot;Four&quot; ).<a name="wp1243916"> </a>
+</pre></div>
+<a name="wp1243917"> </a><p class="pBody">
+The resulting tree looks like this:</p><div><img src="ch5_treb.gif" height="257" width="330" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1029900"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>The &quot;Ordinals&quot; and &quot;Cardinals&quot; appear in the order added (TVPLACE-LAST), although the items under each are sorted alphabetically (TVPLACE-SORT).  (<em class="cEmphasis">create, modify, inquire</em>)  
+<hr />
+</p>
+<a name="wp1029903"> </a><h5 class="pHeading4">
+RESET-LIST   (numeric)  
+</h5>
+<a name="wp1084160"> </a><p class="pBody">
+When set to a non-zero value, this removes all items from the control.  Has no effect when set to zero.  (<em class="cEmphasis">create, modify</em>)
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

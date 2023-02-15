@@ -1,0 +1,565 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID.    PRJ-REL-LOG.
+       AUTHOR.        HIGOR.
+
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+           DECIMAL-POINT IS COMMA.
+
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+
+           COPY "PRJ_LOG.SL".
+
+           SELECT SORTER ASSIGN TO 'SORTER.ARQ'
+                  FILE STATUS   IS ST-SORTER.
+
+           SELECT PRINTF ASSIGN TO PRINTER
+                  FILE STATUS IS ST-PRINTF.
+
+
+
+       DATA DIVISION.
+       FILE SECTION.
+
+       COPY "PRJ_LOG.FD".
+
+       FD  PRINTF LABEL RECORD OMITTED.
+ 
+       01  PRINTF-R                       PIC X(255).
+       
+       SD  SORTER.
+
+       01  SORT-REGISTR-1.
+           03  SORT-HORA-1       PIC 9(08).
+	   03  SORT-DIA-1        PIC 9(08).
+           03  SORT-USU-1        PIC X(10).
+	   03  SORT-TIPO-1       PIC 9(1).
+	   03  SORT-REG-1        PIC X(60).
+	   03  SORT-ARQ-1        PIC X(15).
+	   03  SORT-DESC-1       PIC 9(1).
+	   03  SORT-PERC-1       PIC 9(2).
+
+       WORKING-STORAGE SECTION.
+       77  SMALL-FONT                     HANDLE.
+       78  EXCEPTION-IMPRIMIR             VALUE 02.
+
+       01  CAMPOS-W.
+           03  ST-LOG                PIC  X(02).
+               88 VAL-LOG            VALUE '00' THRU '09'.
+           03  ST-SORTER             PIC  X(02).
+               88 VAL-SORTER         VALUE '00' THRU '09'.
+           03  ST-PRINTF             PIC  X(02).
+               88 VAL-PRINTF         VALUE '00' THRU '09'.
+
+           03  CAMPOS-TELA-W.
+               05 W-DATAINI               PIC  99/99/9999.
+               05 W-DATAFIN               PIC  99/99/9999.
+	       05 W-FROTAINI              PIC 9(3).
+	       05 W-FROTAFIN              PIC 9(3).
+
+               05 W-DATAUXI               PIC  9(08).
+               05 REDEFINES W-DATAUXI.  
+                  07 W-DIAAUXI            PIC  9(02).
+                  07 W-MESAUXI            PIC  9(02).
+                  07 W-ANOAUXI            PIC  9(04).
+               05 REDEFINES W-DATAUXI.  
+                  07 W-ANOAUXI-I          PIC  9(04).
+                  07 W-MESAUXI-I          PIC  9(02).
+                  07 W-DIAAUXI-I          PIC  9(02).
+
+               05 W-DATAINI-I             PIC  9(08).
+               05 W-DATAFIN-I             PIC  9(08).
+               05 W-DATAMOV-I             PIC  9(08).
+	       05 W-DATAREL               PIC  9(8).
+
+               05 W-NROPAGI               PIC  9(05) VALUE 0.
+               05 W-CONTLIN               PIC  9(03) VALUE 0.
+               05 W-DATA-SISTEMA          PIC  9(08) VALUE 0.
+               05 W-TIPO-ANT              PIC  9(03) VALUE 0.
+               05 W-DATA-ANT              PIC  9(08) VALUE 0.
+	       05 W-HORA                  PIC  9(8).
+	       05 REDEFINES W-HORA.
+	          07 W-HR		  PIC 9(2).
+		  07 W-MIN		  PIC 9(2).
+		  07 W-SEG		  PIC 9(2).
+		  07 W-MM		  PIC 9(2).
+	       05 W-HR-CER                PIC 9(4).
+               05 W-TOTDIA                PIC  9(10)V99 VALUE 0.
+               05 W-TOTFRO                PIC  9(10)V99 VALUE 0.
+               05 W-TOTGERAL              PIC  9(10)V99 VALUE 0.
+
+               |LINHAS PARA IMPRESSÃO
+               05 W-LINHA-1.
+	          07 FILLER    PIC X(10) VALUE 'HORA   : '.
+		  07 W-L1-HORA PIC 99.99.
+		  07 FILLER    PIC X(10) VALUE SPACES.
+		  07 FILLER    PIC X(10) VALUE 'USUARIO : '.
+		  07 W-L1-USU  PIC X(10).
+
+	       05 W-LINHA-2.
+	          07 FILLER    PIC X(10) VALUE 'ARQUIVO:  '.
+		  07 W-L2-ARQ  PIC X(15).
+		  07 FILLER    PIC X(10) VALUE 'REGISTRO: '.
+		  07 W-L2-REG  PIC X(60).
+
+	       05 W-LINHA-3.
+	          07 FILLER    PIC X(10) VALUE 'DESCONTO: '.
+		  07 W-L3-DESC PIC X(03).
+		  07 FILLER    PIC X(10) VALUE SPACES.
+		  07 FILLER    PIC X(12) VALUE 'PERCENTUAL: '.
+		  07 W-L3-PER  PIC 9(02).
+
+	       05 W-CAB-1.
+                  07 FILLER               PIC  X(74) VALUE
+                     'RELATORIO DE MOVIMENTAÇÕES NO SISTEMA'.
+                  07 W-CAB-DTSIS          PIC  99/99/9999B(4).
+                  07 FILLER               PIC  X(05) VALUE 'PAG.'.
+                  07 W-CAB-NPAG           PIC  ZZ.ZZ9B.
+	      
+	       05 W-CAB-TIPO.
+                  07 FILLER             PIC  X(7) VALUE 'TIPO : '.
+                  07 W-C-TIPO           PIC  X(10).
+               
+               05 W-CAB-DATA.   
+                  07 FILLER             PIC  X(7) VALUE 'DATA : '.
+                  07 W-C-DATA           PIC  99/99/9999.
+
+               05 W-OPC-MOV             PIC  9(02) VALUE 1.
+
+       01  CAMPOS-ERRO-ARQUIVO-W.
+           03  WS-EXTEND-STATUS           PIC  X(10).
+           03  W-FSTATUS                  PIC  X(02).
+           03  W-EXTSTAT                  PIC  X(08).
+           03  W-ARQUIVO                  PIC  X(150).
+
+       01  CAMPOS-CONTROLE-TELA-GRAFICA.
+           03  EVENT-STATUS IS SPECIAL-NAMES EVENT STATUS.
+               05 EVENT-TYPE              PIC X(4) COMP-X.
+                  88 CA-CMD-CLOSE         VALUE 1.
+                  88 CA-CMD-TABCHANGED    VALUE 7.
+               05 EVENT-WINDOW-HANDLE     HANDLE OF WINDOW.
+               05 EVENT-CONTROL-HANDLE    HANDLE.
+               05 EVENT-CONTROL-ID        PIC XX COMP-X.
+               05 EVENT-DATA-1            SIGNED-SHORT.
+               05 EVENT-DATA-2            SIGNED-LONG.
+               05 EVENT-ACTION            PIC X COMP-X.
+
+           03  TECLA-ESCAPE IS SPECIAL-NAMES CRT STATUS
+                                          PIC 9(4) VALUE 0.
+               88 TECLOU-ESC              VALUE 27.
+
+       01  JANELA-PRINCIPAL             PIC X(10) EXTERNAL.
+
+           COPY "MAINRTN.MSG".
+           COPY "ACUGUI.DEF".
+           COPY "DATASW.CPY".
+
+       
+        
+  
+       SCREEN SECTION.
+       01  TELA-PRINCIPAL.
+           03 LABEL       LINE 02 COL 05
+                          TITLE "Logs de:"
+                          ID 1
+                          TRANSPARENT.
+
+           03 ENTRY-FIELD USING W-DATAINI
+                          LINE 02
+                          COL 13
+                          3-D
+                          BOXED
+                          AUTO
+                          ID 2
+                          FONT SMALL-FONT.
+
+           03 LABEL       LINE 02 COL 25
+                          TITLE "a"
+                          ID 3
+                          TRANSPARENT.
+
+           03 ENTRY-FIELD USING W-DATAFIN
+                          LINE 02
+                          COL 27
+                          3-D
+                          BOXED
+                          AUTO
+                          ID 4
+                          FONT SMALL-FONT.
+
+           
+
+           03 FRAME    LINE 02,75
+                       COL 49
+                       LINES 09
+                       SIZE 22
+                       TITLE "Tipo de movimentação "
+                       TITLE-POSITION 1
+                       ENGRAVED
+                       FONT SMALL-FONT.
+
+           03 RADIO-BUTTON
+                       TITLE "&Inserção"
+                       LINE 4
+                       COL 50
+                       GROUP 1
+                       GROUP-VALUE 1
+                       USING W-OPC-MOV
+                       ID 5
+                       FONT SMALL-FONT
+                       NOTIFY.
+
+           03 RADIO-BUTTON
+                       TITLE "&Alteração"
+                       LINE 06
+                       COL 50
+                       GROUP 1
+                       GROUP-VALUE 2
+                       USING W-OPC-MOV
+                       ID 6
+                       FONT SMALL-FONT
+                       NOTIFY.
+
+           03 RADIO-BUTTON
+                       TITLE "&Exclusão"
+                       LINE 08
+                       COL 50
+                       GROUP 1
+                       GROUP-VALUE 3
+                       USING W-OPC-MOV
+                       ID 7
+                       FONT SMALL-FONT
+                       NOTIFY.
+
+           03 RADIO-BUTTON
+                       TITLE "Todas"
+                       LINE 10
+                       COL 50
+                       GROUP 1
+                       GROUP-VALUE 4
+                       USING W-OPC-MOV
+                       ID 7
+                       FONT SMALL-FONT
+                       NOTIFY.
+
+           03 PUSH-BUTTON TITLE "&Imprimir"
+                          LINE 12
+                          COL 2
+                          SIZE 12
+                          ID 7
+                          EXCEPTION-VALUE EXCEPTION-IMPRIMIR.
+
+           03 PUSH-BUTTON TITLE "&Sair"
+                          LINE 12
+                          COL 17
+                          SIZE 13
+                          SELF-ACT
+                          ID 6
+                          EXCEPTION-VALUE 27.
+
+       PROCEDURE DIVISION.
+       INICIO.
+
+           OPEN INPUT CLOG
+           IF NOT VAL-LOG
+              PERFORM ERRO-ARQUIVO.
+
+           ACCEPT SMALL-FONT FROM STANDARD OBJECT "SMALL-FONT".
+           
+           DISPLAY FLOATING GRAPHICAL WINDOW
+                           SIZE 90 LINES 14
+                           CONTROL FONT SMALL-FONT
+                           COLOR 257
+                           TITLE "Relatório de Logs"
+                           NO SCROLL
+                           SYSTEM MENU
+                           AUTO-RESIZE
+                           BACKGROUND-LOW
+                           HANDLE JANELA-PRINCIPAL.
+
+           INITIALIZE W-DATAINI W-DATAFIN.
+
+           DISPLAY TELA-PRINCIPAL.
+
+           PERFORM TEST AFTER UNTIL TECLOU-ESC
+              ACCEPT TELA-PRINCIPAL
+                     ON EXCEPTION PERFORM TRATA-EXCEPTION-TELA-PRINCIPAL
+              END-ACCEPT
+           END-PERFORM.
+
+       FIM.
+           CLOSE WINDOW JANELA-PRINCIPAL.
+
+           CANCEL SORT.
+
+           EXIT PROGRAM
+           STOP RUN.
+
+       TRATA-EXCEPTION-TELA-PRINCIPAL.
+           IF EVENT-TYPE = CMD-CLOSE
+              SET TECLOU-ESC TO TRUE
+              EXIT PARAGRAPH
+	   END-IF
+
+
+           EVALUATE TECLA-ESCAPE
+             WHEN EXCEPTION-IMPRIMIR
+                  |* validacao das datas antes de iniciar a impressao
+                  IF W-DATAINI <> '00/00/0000'
+                     MOVE W-DATAINI TO W-DATA-CRIT
+                     PERFORM CRITICA-DATA
+                     IF NOT DATA-OK
+                        INITIALIZE CA-MESSAGE-LINK
+                        MOVE 'Data inicial inválida.' TO CA-MESSAGE-1
+                        PERFORM MOSTRA-MSG-ERRO
+                        EXIT PARAGRAPH
+                     END-IF
+                  END-IF
+                  IF W-DATAFIN = '00/00/0000'
+                     MOVE 99999999 TO W-DATAFIN
+                     DISPLAY TELA-PRINCIPAL
+                  END-IF
+                  IF W-DATAFIN <> '99/99/9999'
+                     MOVE W-DATAFIN TO W-DATA-CRIT
+                     PERFORM CRITICA-DATA
+                     IF NOT DATA-OK
+                        INITIALIZE CA-MESSAGE-LINK
+                        MOVE 'Data final inválida.' TO CA-MESSAGE-1
+                        PERFORM MOSTRA-MSG-ERRO
+                        EXIT PARAGRAPH
+                     END-IF
+                  END-IF
+                  |* inverte a data inicial
+                  MOVE W-DATAINI TO W-DATAUXI
+                  COMPUTE W-DATAINI-I = W-ANOAUXI * 10000 +
+                                        W-MESAUXI * 100 +
+                                        W-DIAAUXI
+                  |* inverte a data final
+                  MOVE W-DATAFIN TO W-DATAUXI
+                  COMPUTE W-DATAFIN-I = W-ANOAUXI * 10000 +
+                                        W-MESAUXI * 100 +
+                                        W-DIAAUXI
+                  |* compara o range de data
+                  IF W-DATAFIN-I < W-DATAINI-I
+                     INITIALIZE CA-MESSAGE-LINK
+                     MOVE 'Range de data inválido.' TO CA-MESSAGE-1
+                     PERFORM MOSTRA-MSG-ERRO
+                     EXIT PARAGRAPH
+                  END-IF
+
+
+                  INITIALIZE W-NROPAGI  W-TOTGERAL W-TOTFRO
+                  MOVE 800 TO W-CONTLIN
+
+                  OPEN OUTPUT PRINTF
+                  INITIALIZE LOG-REG-1
+                  START CLOG KEY >= LOG-RK-1
+                  IF VAL-LOG
+                        SORT SORTER ASCENDING KEY SORT-TIPO-1
+                                                  SORT-DIA-1
+                             INPUT  PROCEDURE INPUTPROCE
+                             OUTPUT PROCEDURE OUTPUTPROC
+                  END-IF
+                  CLOSE PRINTF
+           END-EVALUATE.
+
+       INPUTPROCE.
+           PERFORM UNTIL NOT VAL-LOG
+	   READ CLOG NEXT AT END
+                               EXIT PERFORM
+              END-READ
+              IF NOT VAL-LOG
+                 PERFORM ERRO-ARQUIVO
+              END-IF
+
+              |* inverte a data 
+              MOVE LOG-DIA TO W-DATAUXI
+              COMPUTE W-DATAMOV-I = W-ANOAUXI * 10000 +
+                                    W-MESAUXI * 100 +
+                                    W-DIAAUXI
+
+	      INITIALIZE             SORT-REGISTR-1
+
+              IF W-DATAMOV-I >= W-DATAINI-I AND <= W-DATAFIN-I
+	         INITIALIZE             SORT-REGISTR-1  
+	         IF W-OPC-MOV <> 4
+			 IF (LOG-TIPO = W-OPC-MOV)
+				                 
+				 MOVE LOG-HORA     TO SORT-HORA-1
+				 MOVE W-DATAMOV-I  TO SORT-DIA-1
+				 MOVE LOG-USU      TO SORT-USU-1
+				 MOVE LOG-TIPO     TO SORT-TIPO-1
+				 MOVE LOG-REG      TO SORT-REG-1
+				 MOVE LOG-ARQ      TO SORT-ARQ-1
+				 RELEASE SORT-REGISTR-1
+			 END-IF
+	         ELSE
+			 MOVE LOG-HORA     TO SORT-HORA-1
+			 MOVE W-DATAMOV-I  TO SORT-DIA-1
+			 MOVE LOG-USU      TO SORT-USU-1
+			 MOVE LOG-TIPO     TO SORT-TIPO-1
+			 MOVE LOG-REG      TO SORT-REG-1
+			 MOVE LOG-ARQ      TO SORT-ARQ-1
+			 RELEASE SORT-REGISTR-1
+	         END-IF
+		 
+              END-IF
+           END-PERFORM.
+
+       OUTPUTPROC.
+           PERFORM UNTIL 1 = 2
+              RETURN SORTER AT END
+                            EXIT PERFORM
+              END-RETURN
+
+               IF SORT-TIPO-1 <> W-TIPO-ANT
+	           MOVE 800 TO W-CONTLIN
+	       END-IF
+
+	      PERFORM TESTA-QUEBRA-PAGINA
+
+              IF SORT-DIA-1 <> W-DATA-ANT
+		 | IMPRIME APENAS CABEÇALHO DA DATA
+		    MOVE SORT-DIA-1 TO W-DATAUXI
+			COMPUTE W-DATAREL = W-ANOAUXI-I +
+                                       W-MESAUXI-I * 10000 +
+                                       W-DIAAUXI-I * 1000000
+		    MOVE W-DATAREL TO W-C-DATA
+		    WRITE PRINTF-R FROM W-CAB-DATA AFTER 1
+		    MOVE ALL SPACES TO PRINTF-R
+		    WRITE PRINTF-R AFTER 1
+		    ADD 2 TO W-CONTLIN
+              END-IF
+
+              |IMPRESSÃO 
+              MOVE SORT-HORA-1 TO W-HORA
+	      COMPUTE W-HR-CER = (W-HR * 100) + W-MIN
+	      MOVE W-HR-CER TO W-L1-HORA
+	      MOVE SORT-USU-1 TO W-L1-USU
+	      WRITE PRINTF-R FROM W-LINHA-1 AFTER 1
+	      ADD 1 TO W-CONTLIN
+	      MOVE SORT-REG-1 TO W-L2-REG
+	      MOVE SORT-ARQ-1 TO W-L2-ARQ
+              WRITE PRINTF-R FROM W-LINHA-2 AFTER 1
+	      ADD 1 TO W-CONTLIN
+	      IF SORT-ARQ-1 = 'BILHETE.ARQ'
+	          IF SORT-DESC-1 = 1
+		      MOVE 'SIM' TO W-L3-DESC
+		  ELSE
+		      MOVE 'NÃO' TO W-L3-DESC
+		  END-IF
+		  MOVE SORT-PERC-1 TO W-L3-PER
+		  WRITE PRINTF-R FROM W-LINHA-3 AFTER 1
+                  ADD 1 TO W-CONTLIN
+	      END-IF
+	      MOVE SPACES TO PRINTF-R
+	      WRITE PRINTF-R AFTER 1
+              ADD 1 TO W-CONTLIN
+	      MOVE SORT-TIPO-1 TO W-TIPO-ANT
+	      MOVE SORT-DIA-1 TO W-DATA-ANT
+           END-PERFORM.
+
+            
+
+       TESTA-QUEBRA-PAGINA.
+           IF W-CONTLIN > 63
+
+              PERFORM IMPRIME-CABECALHO
+
+              MOVE SPACES TO PRINTF-R
+              WRITE PRINTF-R AFTER 1
+
+              ADD 2 TO W-CONTLIN
+           END-IF.
+
+
+
+
+       IMPRIME-CABECALHO.
+           MOVE SPACES TO PRINTF-R
+           MOVE ALL '-' TO PRINTF-R(1:132)
+           IF W-NROPAGI = 0
+              ACCEPT W-DATA-SISTEMA FROM CENTURY-DATE
+              MOVE W-DATA-SISTEMA TO W-DATAUXI
+              COMPUTE W-DATA-SISTEMA = W-ANOAUXI-I +
+                                       W-MESAUXI-I * 10000 +
+                                       W-DIAAUXI-I * 1000000
+
+              WRITE PRINTF-R AFTER 0
+           ELSE
+              WRITE PRINTF-R AFTER PAGE.
+
+           ADD 1 TO W-NROPAGI
+           MOVE W-NROPAGI      TO W-CAB-NPAG
+           MOVE W-DATA-SISTEMA TO W-CAB-DTSIS
+           WRITE PRINTF-R FROM W-CAB-1 AFTER 1
+
+           MOVE SPACES TO PRINTF-R
+           MOVE ALL '-' TO PRINTF-R(1:132)
+           WRITE PRINTF-R AFTER 1.
+
+           MOVE 3 TO W-CONTLIN
+           
+           
+           MOVE SPACES TO PRINTF-R
+           WRITE PRINTF-R AFTER 1
+	   EVALUATE SORT-TIPO-1
+              WHEN 1
+                MOVE 'INSERÇÃO' TO W-C-TIPO
+              WHEN 2
+                MOVE 'ALTERAÇÃO' TO W-C-TIPO
+	      WHEN 3
+                MOVE 'EXCLUSÃO' TO W-C-TIPO
+	   END-EVALUATE
+           WRITE PRINTF-R FROM W-CAB-TIPO AFTER 1
+           ADD 2 TO W-CONTLIN.
+
+       ERRO-ARQUIVO.
+           CALL "C$RERR" USING WS-EXTEND-STATUS
+           MOVE WS-EXTEND-STATUS(1:2) TO W-FSTATUS
+           MOVE WS-EXTEND-STATUS(3:)  TO W-EXTSTAT
+           CALL "C$RERRNAME" USING W-ARQUIVO.
+
+           INITIALIZE CA-MESSAGE-LINK
+           MOVE W-FSTATUS TO CA-MESSAGE-ID CONVERT
+           MOVE W-ARQUIVO TO CA-ERR-FILE
+           MOVE SPACES    TO CA-ERR-BUF
+           MOVE 1 TO CA-MESSAGE-TYPE CA-MESSAGE-RESP
+           CALL "CAMESSAG"
+           CANCEL "CAMESSAG".
+
+           PERFORM FIM.
+
+       MOSTRA-MSG-ERRO.
+           MOVE 1 TO CA-MESSAGE-TYPE CA-MESSAGE-RESP
+           CALL "CAMESSAG"
+           CANCEL "CAMESSAG".
+
+       MOSTRA-MSG-ATENCAO.
+           MOVE 2 TO CA-MESSAGE-TYPE
+           MOVE 1 TO CA-MESSAGE-RESP
+           CALL "CAMESSAG"
+           CANCEL "CAMESSAG".
+
+       MOSTRA-MSG-MENSAGEM.
+           MOVE 3 TO CA-MESSAGE-TYPE
+           MOVE 1 TO CA-MESSAGE-RESP
+           CALL "CAMESSAG"
+           CANCEL "CAMESSAG".
+
+       PERGUNTA-INICIALIZA.
+           CALL "C$RERRNAME" USING W-ARQUIVO.
+
+           INITIALIZE CA-MESSAGE-LINK
+           MOVE 'Deseja inicializar o arquivo' TO CA-MESSAGE-1
+           MOVE W-ARQUIVO TO CA-MESSAGE-2
+           MOVE 2 TO CA-MESSAGE-TYPE
+           MOVE 22 TO CA-MESSAGE-RESP
+           CALL 'CAMESSAG'
+           CANCEL 'CAMESSAG'
+           IF CA-MESSAGE-RESP = 2
+              PERFORM ERRO-ARQUIVO.
+
+       COPY "DATASP.CPY".

@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.1.18  Help, Version Information, and Communication With C Programs</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt122.htm">2.1 Using the Compiler</a> &gt; </p>
+<a name="wp1033095"> </a><h2 class="pHeading2">
+2.1.18  Help, Version Information, and Communication With C Programs
+</h2>
+<a name="wp1033099"> </a><p class="pBody">
+You can get a summary of compiler options with the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl  -help<a name="wp1033100"> </a>
+</pre></div>
+<a name="wp1033101"> </a><p class="pBody">
+You can display the copyright notice and version information with this command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl  -v<a name="wp1033102"> </a>
+</pre></div>
+<a name="wp1033103"> </a><p class="pBody">
+You can get configuration information with the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl -vv<a name="wp1089182"> </a>
+</pre></div>
+<a name="wp1089557"> </a><p class="pBody">
+On UNIX systems, you can get additional port configuration information with:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl -vvv<a name="wp1089558"> </a>
+</pre></div>
+<a name="wp1089183"> </a><p class="pBody">
+The information displayed with &quot;-vvv&quot; varies depending on the UNIX system and is subject to change from release to release.  
+</p>
+<a name="wp1089753"> </a><p class="pBody">
+You can find all of the level 78s in a COPY library and create equivalent C-language &quot;#define&quot; statements with the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl  -defines  <em class="cEmphasis">filename</em><a name="wp1033106"> </a>
+</pre></div>
+<a name="wp1033107"> </a><p class="pBody">
+You can use the &quot;-defines&quot; option to simplify communication between COBOL and C programs.  
+</p>
+<a name="wp1033109"> </a><p class="pBody">
+One specific use of this option is to simplify the creation of Windows Help files when you are building context-sensitive help.  Use this option to map context ID <em class="cEmphasis">strings</em> to context <em class="cEmphasis">numbers</em> for use with Windows Help files.  First create a COPY library with level 78s that map the context IDs (strings) from your help file to unique context numbers (the Windows Help API function WinHelp requires a number as the context ID parameter).  Then when you specify &quot;ccbl -defines,&quot; the compiler creates a file containing &quot;#defines&quot; that correspond to the level 78s in the COPY library you created. 
+</p>
+<a name="wp1033110"> </a><p class="pBody">
+The &quot;-defines&quot; option must be followed (as the next separate argument) by the name of the COPY library.   <em class="cEmphasis">acurfap</em> syntax can be used to specify a file on a system being served by AcuServer or AcuConnect (see <a  href="gt1218.htm#wp1033061">section 2.1.15.1, &quot;Remote file name handling&quot;</a>).  
+</p>
+<a name="wp1062959"> </a><p class="pBody">
+By default &quot;-defines&quot; creates a file having the same base name as the specified file and the extension &quot;.h&quot;.  For example, if your COPY library is named &quot;PRHELP.DEF,&quot; you could use this command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CCBL -DEFINES PRHELP.DEF<a name="wp1033111"> </a>
+</pre></div>
+<a name="wp1033112"> </a><p class="pBody">
+to create the file &quot;PRHELP.H&quot; that contains one &quot;#define&quot; for each level 78 in &quot;PRHELP.DEF.&quot;  
+</p>
+<a name="wp1033113"> </a><p class="pBody">
+Be aware that any hyphens in the level 78 names are converted to underscores in the corresponding &quot;#define.&quot;  Although hyphens are allowed in COBOL and in the help file, hyphens are not allowed in C names.  See section 10.4 in Book 2, <em class="cEmphasis">User Interface Programming</em>, for more information about Windows Help files. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

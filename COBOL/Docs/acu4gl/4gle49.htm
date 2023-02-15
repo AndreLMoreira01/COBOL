@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:40" />
+  <title>A_SYB_USE_DROPDOWN_QUERIES</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gle.htm">Appendix E:  Acu4GL for Sybase Information </a> &gt; <a href="4gle17.htm">E.4  Acu4GL for Sybase Configuration File Variables</a> &gt; </p>
+<a name="wp1049715"> </a><h2 class="pHeading2">
+A_SYB_USE_DROPDOWN_QUERIES
+</h2>
+<a name="wp1049718"> </a><p class="pBody">
+Setting A_SYB_USE_DROPDOWN_QUERIES to a non-zero value causes select queries sent to the database to be of the drop-down variety, instead of a single large query.  This variable is accessed only during a positioning operation, so you can set it at different times for different tables.  For example, if you have a file with three fields in the primary key (keyseg1, keyseg2, keyseg3), and your COBOL program does a START, the following query is sent to the database:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+select (columns) from (table) where <a name="wp1049719"> </a>
+((keyseg1 = value1 and keyseg2 = value2 and <a name="wp1049720"> </a>
+keyseg3 &gt; value3) or (keyseg1 = value1 and <a name="wp1056895"> </a>
+keyseg2 &gt; value2) or (keyseg1 &gt; value1)) <a name="wp1056896"> </a>
+order by keyseg1, keyseg2, keyseg3<a name="wp1056897"> </a>
+</pre></div>
+<a name="wp1049721"> </a><p class="pBody">
+If you use drop-down queries, the following collection of queries is sent instead: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+select (columns) from (table) where (keyseg1<a name="wp1049722"> </a>
+= value1 and keyseg2 = value2 and keyseg3 &gt;<a name="wp1049723"> </a>
+value3) order by keyseg1, keyseg2, keyseg3<a name="wp1056898"> </a>
+</pre></div>
+<a name="wp1049724"> </a><p class="pBody">
+When that set is finished, the interface sends:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+select (columns) from (table) where (keyseg1 <a name="wp1049725"> </a>
+= value1 and keyseg2 &gt; value2) order by <a name="wp1049726"> </a>
+keyseg1, keyseg2, keyseg3<a name="wp1056911"> </a>
+</pre></div>
+<a name="wp1049727"> </a><p class="pBody">
+And when that set is finished, the interface sends:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+select (columns) from (table) where (keyseg1<a name="wp1049728"> </a>
+&gt; value1) order by keyseg1, keyseg2, keyseg3<a name="wp1049729"> </a>
+</pre></div>
+<a name="wp1049730"> </a><p class="pBody">
+There are advantages and disadvantages to each method.  If you use the A4GL_WHERE_CONSTRAINT variable, you should probably set A_SYB_USE_DROPDOWN_QUERIES to &quot;0&quot;, since the WHERE constraint limits the result set sufficiently that the larger query will be more efficient.  See <a  href="4gl98.htm#wp1036752">Section 9.1.2, &quot;The WHERE Constraint,&quot;</a> for additional information.
+</p>
+<a name="wp1049731"> </a><p class="pBody">
+If you usually START files and read to the end, you should set A_SYB_USE_DROPDOWN_QUERIES to &quot;0&quot;, since a fewer number of queries need to be sent to the database.  On the other hand, if you START files and stop reading after some condition, but haven't used the WHERE constraint, then you may get more efficient access by setting this variable to &quot;1&quot;, and using the drop-down style of query.  In either case, it is recommended that you run some tests to see which value of this variable makes the most sense for your application.  While the default value is &quot;0&quot; (off, false, no), this configuration variable can also take the value of &quot;On&quot; (true, yes).  
+</p>
+<a name="wp1049732"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+A_SYB_USE_DROPDOWN_QUERIES <em class="cEmphasis">number</em><a name="wp1049733"> </a>
+</pre></div>
+<a name="wp1049734"> </a><p class="pBody">
+where <em class="cEmphasis">number</em> is a zero or non-zero value.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WIN$PRINTER Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1039711"> </a><h2 class="pHeading2">
+WIN$PRINTER Routine
+</h2>
+<a name="wp1039719"> </a><p class="pBody">
+The WIN$PRINTER library routine is designed to enhance the ability of COBOL to take advantage of the Windows print spooler.  This routine is available on all systems that run ACUCOBOL-GT, but is useful only with Microsoft Windows.   Not all printer drivers are supported by this routine. 
+</p>
+<a name="wp1039720"> </a><p class="pBody">
+WIN$PRINTER configures the Windows print spooler only and cannot be used to configure the printer directly. 
+</p>
+<a name="wp1039721"> </a><p class="pBody">
+You must assign your print file to &quot;-P&#160;SPOOLER&quot; or to &quot;-Q&#160;&lt;<em class="cEmphasis">printername</em>&gt;&quot; in the configuration file to access the Windows print spooler.   This is described in the previous section, &quot;<em class="cEmphasis">Routine to Handle the Windows Print Spooler</em>.&quot;
+</p>
+<a name="wp1039722"> </a><p class="pBody">
+If you have assigned your print file to &quot;-P&#160;SPOOLER-DIRECT&quot; or to &quot;-Q&#160;&lt;<em class="cEmphasis">printername</em>&gt;&quot; using the &quot;DIRECT=ON&quot; option, then you retain control over the format of the pages.  In this situation, WIN$PRINTER can be used to select a printer, but not to print bitmaps or determine paper size, page orientation, fonts, margins, and the like.  The information returned by WIN$PRINTER about the numbers of lines and columns on the page may not be accurate in this situation and should not be used.
+</p>
+<a name="wp1039723"> </a><h3 class="pHeadingRef">
+CAUTIONS
+</h3>
+<a name="wp1039724"> </a><p class="pBody">
+Just as with changes to fonts and menus, modifications to Windows printer settings are global for a specific instance of the runtime. Settings established in one COBOL application will affect subsequent COBOL applications performed in the same runtime instance.  If you do not want settings to apply globally in this case, you must reverse the settings manually within the program.  However, these modified printer settings will not affect later executions unless you store the settings and reactivate them at the next instance of the runtime. Windows global settings, other windows applications and other instances of the runtime are not affected by changes made by the WIN$PRINTER library routine.
+</p>
+<a name="wp1039725"> </a><p class="pBody">
+When you change Windows settings in general, and printer settings in particular, Windows posts a message informing its subsystems of the change.  The runtime looks for these messages and passes that information on to the WIN$PRINTER operation codes when they are called.  This may cause inconsistencies between the information stored in the COBOL program and the runtime, such as the order of printers in the internal printer list.  To avoid this problem, always use the printer name, rather than the printer number, when calling op-codes that require a printer identity.  The name will always be unique, while the number is relative to the internal printer list and may not be accurate.
+</p>
+<a name="wp1039726"> </a><p class="pBody">
+WIN$PRINTER always performs the printer number test before the printer name test. This means that if WINPRINTER-NO-OF-PRINTERS is a positive number, the function will look for that printer number before looking for the printer name. This could result in a WPRTERR-BAD-ARG error. To overrule this ranking and use the printer name, set the argument WINPRINT-NO-OF-PRINTERS to zero before accessing printer-specific information. 
+</p>
+<a name="wp1039727"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1039728"> </a>
+    USING OP-CODE, parameters,<a name="wp1039729"> </a>
+    GIVING RESULT<a name="wp1039730"> </a>
+</pre></div>
+<a name="wp1039731"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1039732"> </a><h3 class="pHeadingRef">
+OP-CODE 
+</h3>
+<a name="wp1039733"> </a><p class="pBody">
+A numeric value that selects which WIN$PRINTER function to perform.  The op-codes are defined in &quot;winprint.def&quot; and described in the WIN$PRINTER op-codes section below.  
+</p>
+<a name="wp1039734"> </a><h3 class="pHeadingRef">
+RESULT   
+</h3>
+<a name="wp1039735"> </a><p class="pBody">
+A signed numeric data item that returns the status of the operation.  The data type of the returned value is SIGNED-INT or PIC S9(9) COMP-5.  Unless otherwise stated below, &quot;1&quot; indicates success, and a zero or negative result indicates failure.
+</p>
+<a name="wp1039736"> </a><h3 class="pHeadingRef">
+OP-CODE Parameters 
+</h3>
+<a name="wp1039741"> </a><p class="pBody">
+The remaining parameters vary depending on the operation code chosen.  They provide information and hold results for the operations specified.  Parameters may be omitted from those operations that do not require them. The parameters that apply to WIN$PRINTER op-codes are WINPRINT-DATA, WINPRINT-SELECTION, WINPRINT-COLUMN, WINPRINT-MEDIA, WINPRINT-JOB-STATUS and data defined in WORKING-STORAGE by the user. These are all defined in &quot;winprint.def&quot;.  The parameters correspond to each of the op-codes as follows:
+</p>
+<a name="wp1039889"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1085074"> </a>
+OP-CODE
+
+</th>
+    <th><a name="wp1085076"> </a>
+Parameter
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039749"> </a><p class="pCellBody">
+WINPRINT-SUPPORTED 
+</p>
+</td>
+    <td><a name="wp1039751"> </a><p class="pCellBody">
+none
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039753"> </a><p class="pCellBody">
+WINPRINT-SETUP 
+</p>
+</td>
+    <td><a name="wp1039755"> </a><p class="pCellBody">
+none
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1413737"> </a><p class="pCellBody">
+WINPRINT-SETUP-USE-MARGINS
+</p>
+</td>
+    <td><a name="wp1413735"> </a><p class="pCellBody">
+none
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039757"> </a><p class="pCellBody">
+WINPRINT-GET-SETTINGS-SIZE  
+</p>
+</td>
+    <td><a name="wp1039759"> </a><p class="pCellBody">
+none
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039761"> </a><p class="pCellBody">
+WINPRINT-GET-SPOOL-ERR
+</p>
+</td>
+    <td><a name="wp1039763"> </a><p class="pCellBody">
+none
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039765"> </a><p class="pCellBody">
+WINPRINT-SET-JOB
+</p>
+</td>
+    <td><a name="wp1039767"> </a><p class="pCellBody">
+none
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039769"> </a><p class="pCellBody">
+WINPRINT-GET-SETTINGS 
+</p>
+</td>
+    <td><a name="wp1039771"> </a><p class="pCellBody">
+user defined
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039774"> </a><p class="pCellBody">
+WINPRINT-SET-SETTINGS 
+</p>
+</td>
+    <td><a name="wp1039776"> </a><p class="pCellBody">
+user defined
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039778"> </a><p class="pCellBody">
+WINPRINT-SET-DATA-COLUMNS
+</p>
+</td>
+    <td><a name="wp1039780"> </a><p class="pCellBody">
+WINPRINT-COLUMN
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039782"> </a><p class="pCellBody">
+WINPRINT-CLEAR-DATA-COLUMNS 
+</p>
+</td>
+    <td><a name="wp1039784"> </a><p class="pCellBody">
+WINPRINT-COLUMN
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039786"> </a><p class="pCellBody">
+WINPRINT-SET-PAGE-COLUMN 
+</p>
+</td>
+    <td><a name="wp1039788"> </a><p class="pCellBody">
+WINPRINT-COLUMN
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039790"> </a><p class="pCellBody">
+WINPRINT-CLEAR-PAGE-COLUMNS 
+</p>
+</td>
+    <td><a name="wp1039792"> </a><p class="pCellBody">
+WINPRINT-COLUMN
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039794"> </a><p class="pCellBody">
+WINPRINT-GET-PAGE-COLUMN 
+</p>
+</td>
+    <td><a name="wp1039796"> </a><p class="pCellBody">
+WINPRINT-COLUMN
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039798"> </a><p class="pCellBody">
+WINPRINT-SET-STD-FONT
+</p>
+</td>
+    <td><a name="wp1039800"> </a><p class="pCellBody">
+WINPRINT-DATA
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039802"> </a><p class="pCellBody">
+WINPRINT-GET-PAGE-LAYOUT 
+</p>
+</td>
+    <td><a name="wp1039804"> </a><p class="pCellBody">
+WINPRINT-DATA
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039806"> </a><p class="pCellBody">
+WINPRINT-SET-FONT   
+</p>
+</td>
+    <td><a name="wp1039808"> </a><p class="pCellBody">
+WINPRINT-DATA
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039810"> </a><p class="pCellBody">
+WINPRINT-SET-LINES-PER-PAGE 
+</p>
+</td>
+    <td><a name="wp1039812"> </a><p class="pCellBody">
+WINPRINT-DATA
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039814"> </a><p class="pCellBody">
+WINPRINT-GET-CAPABILITIES   
+</p>
+</td>
+    <td><a name="wp1039816"> </a><p class="pCellBody">
+WINPRINT-DATA
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039818"> </a><p class="pCellBody">
+WINPRINT-PRINT-BITMAP  
+</p>
+</td>
+    <td><a name="wp1039820"> </a><p class="pCellBody">
+WINPRINT-DATA
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039822"> </a><p class="pCellBody">
+WINPRINT-SET-MARGINS  
+</p>
+</td>
+    <td><a name="wp1039824"> </a><p class="pCellBody">
+WINPRINT-DATA
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1413761"> </a><p class="pCellBody">
+WINPRINT-GET-MARGINS 
+</p>
+</td>
+    <td><a name="wp1413759"> </a><p class="pCellBody">
+WINPRINT-DATA
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039826"> </a><p class="pCellBody">
+WINPRINT-GRAPH-BRUSH 
+</p>
+</td>
+    <td><a name="wp1039828"> </a><p class="pCellBody">
+WINPRINT-DATA
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039830"> </a><p class="pCellBody">
+WINPRINT-GRAPH-PEN  
+</p>
+</td>
+    <td><a name="wp1039832"> </a><p class="pCellBody">
+WINPRINT-DATA
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039834"> </a><p class="pCellBody">
+WINPRINT-GRAPH-DRAW 
+</p>
+</td>
+    <td><a name="wp1039836"> </a><p class="pCellBody">
+WINPRINT-DATA
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039838"> </a><p class="pCellBody">
+WINPRINT-SET-CURSOR 
+</p>
+</td>
+    <td><a name="wp1039840"> </a><p class="pCellBody">
+WINPRINT-DATA
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039842"> </a><p class="pCellBody">
+WINPRINT-SET-TEXT-COLOR
+</p>
+</td>
+    <td><a name="wp1039844"> </a><p class="pCellBody">
+WINPRINT-DATA
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039846"> </a><p class="pCellBody">
+WINPRINT-GET-JOB-STATUS
+</p>
+</td>
+    <td><a name="wp1039848"> </a><p class="pCellBody">
+WINPRINT-JOB-STATUS
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039850"> </a><p class="pCellBody">
+WINPRINT-SET-JOB-STATUS 
+</p>
+</td>
+    <td><a name="wp1039852"> </a><p class="pCellBody">
+WINPRINT-JOB-STATUS
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039854"> </a><p class="pCellBody">
+WINPRINT-GET-PRINTER-MEDIA  
+</p>
+</td>
+    <td><a name="wp1039856"> </a><p class="pCellBody">
+WINPRINT-MEDIA
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039858"> </a><p class="pCellBody">
+WINPRINT-GET-NO-PRINTERS
+</p>
+</td>
+    <td><a name="wp1039860"> </a><p class="pCellBody">
+WINPRINT-SELECTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039862"> </a><p class="pCellBody">
+WINPRINT-GET-PRINTER-INFO
+</p>
+</td>
+    <td><a name="wp1039864"> </a><p class="pCellBody">
+WINPRINT-SELECTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039866"> </a><p class="pCellBody">
+WINPRINT-SET-PRINTER 
+</p>
+</td>
+    <td><a name="wp1039868"> </a><p class="pCellBody">
+WINPRINT-SELECTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039870"> </a><p class="pCellBody">
+WINPRINT-GET-CURRENT-INFO 
+</p>
+</td>
+    <td><a name="wp1039872"> </a><p class="pCellBody">
+WINPRINT-SELECTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039874"> </a><p class="pCellBody">
+WINPRINT-GET-PRINTER-INFO-EX
+</p>
+</td>
+    <td><a name="wp1039876"> </a><p class="pCellBody">
+WINPRINT-SELECTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039878"> </a><p class="pCellBody">
+WINPRINT-SET-PRINTER-EX 
+</p>
+</td>
+    <td><a name="wp1039880"> </a><p class="pCellBody">
+WINPRINT-SELECTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039882"> </a><p class="pCellBody">
+WINPRINT-GET-CURRENT-INFO-EX
+</p>
+</td>
+    <td><a name="wp1039884"> </a><p class="pCellBody">
+WINPRINT-SELECTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039886"> </a><p class="pCellBody">
+WINPRINT-GET-PRINTER-STATUS 
+</p>
+</td>
+    <td><a name="wp1039888"> </a><p class="pCellBody">
+WINPRINT-SELECTION
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1200911"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1200912"> </a><p class="pBody">
+To use this library routine you must include the COPY file &quot;winprint.def&quot;.  You will need to copy this file into the Working-Storage section of any program that calls WIN$PRINTER.  You must also assign the print file to either &quot;-P SPOOLER&quot; or to &quot;-Q &lt;printername&gt;&quot;, as described in your Getting Started booklet.
+</p>
+<a name="wp1200913"> </a><p class="pBody">
+WIN$PRINTER takes one or more parameters.  The first parameter is a mandatory operation code that indicates which sub-function of WIN$PRINTER to perform.  The operation codes are described under WIN$PRINTER op-codes, below.  
+</p>
+<a name="wp1200914"> </a><p class="pBody">
+The other  parameters are optional data items defined in &quot;winprint.def&quot; or defined by the user in Working-Storage.  You use these data items to pass data to and from WIN$PRINTER.  The specific data passed depends on the particular operation being called.  Some operations do not use a data item, in which case it can be omitted.  
+</p>
+<a name="wp1039895"> </a><p class="pBody">
+The definitions of WINPRINT-DATA, WINPRINT-SELECTION, WINPRINT-COLUMN, WINPRINT-MEDIA, and WINPRINT-JOB-STATUS are included in &quot;winprint.def&quot;. These definitions may change in future versions as capabilities are added to WIN$PRINTER.  However, ACUCOBOL-GT will continue to support the existing formats. 
+</p>
+<a name="wp1200899"> </a><p class="pBody">
+When WIN$PRINTER is called, it sets a return value to indicate whether the call succeeded or failed.  A positive value indicates success.  A zero or a negative value indicates an error.  The error codes are defined in the section on error<b class="cBold"> </b>handling, below.  
+</p>
+<a name="wp1039896"> </a><p class="pBody">
+If the call to WIN$PRINTER does not include a GIVING item for the return value, the return value is placed in the special register RETURN-CODE.  
+</p>
+<a name="wp1298735"> </a><p class="pBody">
+See &quot;graphprn.cbl&quot; and &quot;prndemox.cbl&quot; for examples of many of the WIN$PRINTER functions. 
+</p>
+<a name="wp1298810"> </a><p style="font-family: Arial, Verdana, Helvetica, sans-serif">
+<hr />
+<b>Tip:  </b> Several operations accept parameters that have values measured in the dots-per-inch (DPI) resolution of the output device.  Using the Windows <em class="cEmphasis">graphical device interface</em> (GDI), a program can get DPI information for a given printer on the system.  A demonstration program written in COBOL is available in the Support area of the Acucorp Web site.  To download the program, open your Web browser and navigate to: www.acucorp.com/support/public/sample_programs/index.php.  Select &quot;Graphical User Interface Sample Programs&quot; from the drop down list and click on &quot;GetPrinterResolution.cbl&quot;.
+<hr />
+</p>
+<a name="wp1039898"> </a><h3 class="pHeadingRef">
+Error Handling
+</h3>
+<a name="wp1085128"> </a><p class="pBody">
+When you call WIN$PRINTER, it returns a status value.  This numeric value is returned in the CALL statement's GIVING data item, or the special register RETURN-CODE if no GIVING item is specified.  A positive value indicates that the routine succeeded.  A value of zero or less indicates that an error or exception occurred.  These situations have level 78 values defined for them in &quot;winprint.def&quot;.  The defined values include:
+</p>
+<a name="wp1039903"> </a><p class="pBody">
+<b class="cBold">WPRTERR-BAD-ARG</b> --  This code indicates an unknown operation code or illegal value for any of the WIN$PRINTER functions.  
+</p>
+<a name="wp1039904"> </a><p class="pBody">
+<b class="cBold">WPRTERR-BAD-DRIVER</b> -- This code is returned when the spooler can't find a device driver that corresponds to the selected printer.
+</p>
+<a name="wp1039905"> </a><p class="pBody">
+<b class="cBold">WPRTERR-BUFFER-TOO-SMALL</b> --  This code is returned when the data item passed to the WINPRINT-GET-SETTINGS operation is too small to hold the spooler's current configuration.  
+</p>
+<a name="wp1039906"> </a><p class="pBody">
+<b class="cBold">WPRTERR-CANCELLED</b> --  This code is returned when you use the WINPRINT-SETUP or WINPRINT-SETUP-USE-MARGINS operation to display the printer setup dialog box and the user presses the &quot;Cancel&quot; button or closes the dialog box without pressing the &quot;OK&quot; button.  This status can usually be ignored because the runtime automatically restores the prior configuration.  
+</p>
+<a name="wp1039907"> </a><p class="pBody">
+<b class="cBold">WPRTERR-DEVICE-INCAPABLE</b> -- This code is returned when you try to print a bitmap and the printer you are using cannot print bitmaps.
+</p>
+<a name="wp1039908"> </a><p class="pBody">
+<b class="cBold">WPRTERR-DRV-LOADFAIL</b> -- This code is returned when WIN$PRINTER failed to load the driver information for the chosen printer.  This could be caused by a corrupted file, bad registry settings, or a remote printer being offline. 
+</p>
+<a name="wp1039909"> </a><p class="pBody">
+<b class="cBold">WPRTERR-ENUM-FAIL -- </b>This code is returned when one of the WIN$PRINTER functions does not find any available printers on the system.
+</p>
+<a name="wp1039910"> </a><p class="pBody">
+<b class="cBold">WPRTERR-NO-MEMORY</b> -- This code indicates that the system ran out of memory when trying to perform the requested operation.
+</p>
+<a name="wp1039911"> </a><p class="pBody">
+<b class="cBold">WPRTERR-SPOOLER-CLOSED</b> -- This code is returned when you attempt to print a bitmap on a closed print file.
+</p>
+<a name="wp1039912"> </a><p class="pBody">
+<b class="cBold">WPRTERR-SPOOLER-OPEN</b> -- This code indicates that the program tried to change the spooler's configuration while a spooled print file was open.
+</p>
+<a name="wp1039913"> </a><p class="pBody">
+<b class="cBold">WPRTERR-SPOOL-ERR</b> -- This code is returned when there is an error in the Graphical Device Interface (GDI) layer that is not listed in &quot;winprint.def&quot;.  Use the operation WINPRINT-GET-SPOOL-ERR to obtain the exact Windows API code and refer to your Windows SDK documentation for a description.
+</p>
+<a name="wp1039914"> </a><p class="pBody">
+<b class="cBold">WPRTERR-UNSUPPORTED</b> --  This code is returned whenever WIN$PRINTER is called on a machine that is not a Windows machine.  
+</p>
+<a name="wp1039915"> </a><h3 class="pHeadingRef">
+WIN$PRINTER op-codes
+</h3>
+<a name="wp1039916"> </a><p class="pBody">
+The following is a list of WIN$PRINTER operation codes and their affects.  These level 78 items are all defined in &quot;winprint.def&quot;.
+</p>
+<a name="wp1085233"> </a><p class="pBody">
+Printer Information op-codes
+</p>
+<a name="wp1085166"> </a><p class="pBody">
+WINPRINT-DATA op-codes
+</p>
+<a name="wp1085167"> </a><p class="pBody">
+WINPRINT-SELECTION op-codes
+</p>
+<a name="wp1085168"> </a><p class="pBody">
+WINPRINT-COLUMN op-codes
+</p>
+<a name="wp1085169"> </a><p class="pBody">
+WINPRINT-JOB-STATUS op-codes
+</p>
+<a name="wp1085170"> </a><p class="pBody">
+WINPRINT-MEDIA op-codes
+</p>
+<a name="wp1085171"> </a><p class="pBody">
+USER-DATA op-codes
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

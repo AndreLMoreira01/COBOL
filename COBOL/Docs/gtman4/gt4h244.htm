@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:24" />
+  <title>SPOOL_FILE </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4h.htm">Appendix H: Configuration File Entries</a> &gt; <a href="gt4h3.htm">H.2  Configuration File Entries</a> &gt; </p>
+<a name="wp1037447"> </a><h2 class="pHeading2">
+SPOOL_FILE 
+</h2>
+<a name="wp1037450"> </a><p class="pBody">
+This configuration variable allows you to hold a <em class="cEmphasis">pipe</em> open when you close the named file with the CLOSE WITH NO REWIND verb.  This enables you to gather multiple reports into a single job for the print spooler.  For additional details about pipes and file name interpretation, see the <em class="cEmphasis">ACUCOBOL-GT User's&#160;Guide</em>, section 2.8, &quot;File Name Interpretation.&quot;
+</p>
+<a name="wp1037451"> </a><p class="pBody">
+The value given to the SPOOL_FILE variable must be the ASSIGN name of a sequential file that has been attached to a pipe.  The pipe must be attached to the ASSIGN name in the COBOL configuration file via the &quot;-P&quot; option.  For example, suppose you have a file defined as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT PRINT_FILE<a name="wp1037452"> </a>
+ASSIGN TO PRINT &quot;PRINTER&quot;<a name="wp1099516"> </a>
+</pre></div>
+<a name="wp1037453"> </a><p class="pBody">
+and that you have the following pipe defined in the COBOL configuration file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PRINTER  -P  lp  -s<a name="wp1037454"> </a>
+</pre></div>
+<a name="wp1037455"> </a><p class="pBody">
+Then, to specify that you want to keep the pipe open when the file is closed WITH NO REWIND, you would add the following line to the COBOL configuration file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SPOOL_FILE PRINTER<a name="wp1037456"> </a>
+</pre></div>
+<a name="wp1037457"> </a><p class="pBody">
+The name specified for SPOOL_FILE is processed in the same way as the external file name specified in the file's ASSIGN clause.
+</p>
+<a name="wp1037458"> </a><p class="pBody">
+When the corresponding file is closed with a NO REWIND option, the pipe is not closed.  Instead, if the file is later opened again, the same pipe is used.  The pipe is not closed until a CLOSE verb without the NO REWIND option is executed on that file, or until the run unit finishes.  Only one pipe can be held open in this manner.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

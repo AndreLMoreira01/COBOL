@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.3.5.2  CALL statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp30.htm">4.3  The &quot;-Cp&quot; HP COBOL Compatibility Switch </a> &gt; <a href="ch4-hp44.htm">4.3.5  Procedure Division Statements</a> &gt; </p>
+<a name="wp1041665"> </a><h2 class="pHeading3">
+4.3.5.2  CALL statement
+</h2>
+<a name="wp1041667"> </a><p class="pBody">
+The ACUCOBOL-GT compiler in its HP&#160;e3000 compatibility mode supports the following <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic; font-weight: bold">HP COBOL</span> extensions to the CALL statement.
+</p>
+<a name="wp1041668"> </a><p class="pNote">
+<hr />
+<b>Note:  </b><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">Format 4</span> is the number given to the HP CALL statement extensions.  Format 4 is described below.  Other CALL statement formats are described in section 6.6, &quot;Procedure Division Statements,&quot; in the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT Reference Manual</span>.  
+<hr />
+</p>
+<a name="wp1041669"> </a><h3 class="pHeadingRef">
+Format 4                 (HP COBOL)
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">CALL</u> { identifier-1            } [ <u class="cUnderline">USING</u> { \\             } ... ]<a name="wp1041670"> </a>
+     { [ INTRINSIC ] literal-1 }         { @identifier-2  }<a name="wp1049556"> </a>
+                                         { identifier-2   }<a name="wp1049557"> </a>
+                                         { literal-2      }<a name="wp1049558"> </a>
+                                         { \identifier-2\ }<a name="wp1049559"> </a>
+                                         { \literal-2\    }<a name="wp1049560"> </a>
+     [ <u class="cUnderline">GIVING</u> identifier-n ]<a name="wp1041671"> </a>
+<a name="wp1060309"> </a>
+     [ ON {<u class="cUnderline">EXCEPTION</u>} statement-1 ]<a name="wp1060311"> </a>
+          {<u class="cUnderline">OVERFLOW</u> }<a name="wp1049561"> </a>
+<a name="wp1060323"> </a>
+     [ <u class="cUnderline">NOT</u> ON {<u class="cUnderline">EXCEPTION</u>} statement-2 ]<a name="wp1060330"> </a>
+              {<u class="cUnderline">OVERFLOW</u> }<a name="wp1060332"> </a>
+<a name="wp1060321"> </a>
+     [ <u class="cUnderline">END-CALL</u> ] ]<a name="wp1059147"> </a>
+</pre></div>
+<a name="wp1041676"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041677"> </a><div class="pSmartList1"><li><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Identifier-1</span> is an alphanumeric data item whose value is a program name.  See General Rules (below) for a description of conditions that may occur when you use this operation.</li></div>
+<a name="wp1041678"> </a><div class="pSmartList1"><li><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Literal-1</span> is a nonnumeric literal whose value is either an operating system intrinsic name or a program name.  When you are naming an intrinsic, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">literal-1</span> must be preceded by the keyword INTRINSIC.</li></div>
+<a name="wp1041679"> </a><div class="pSmartList1"><li>&quot;\\&quot; represents a null value passed as a parameter to an intrinsic or to a System Programming Language (SPL) program that includes the OPTION VARIABLE clause.  When the intrinsic option is not specified, the compiler assumes a one-word parameter.</li></div>
+<a name="wp1041680"> </a><div class="pSmartList1"><li><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">@identifier-2</span> indicates that the byte address of the data item represented by <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">identifier-2</span> is to be passed as a parameter.  These types of parameters may be passed only to non-COBOL programs.</li></div>
+<a name="wp1041681"> </a><div class="pSmartList1"><li><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Identifier-2</span> is the name of any data item in the calling program, or is a file named in an FD-level entry in the File Section of your program. </li></div>
+<a name="wp1041682"> </a><div class="pSmartList1"><li><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Identifier-2</span> cannot be a function-identifier (i.e., it cannot reference an intrinsic function).</li></div>
+</ol></div>
+<a name="wp1041683"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041684"> </a><div class="pSmartList1"><li>When you use the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">identifier-1</span> form of the CALL statement, the value of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">identifier-1</span> determines which subprogram is called.  When the program is executed, an attempt is made to load the subprogram.  If the load fails, an exception condition occurs.</li></div>
+<a name="wp1041685"> </a><div class="pSmartList1"><li><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Identifier-2</span> must be described in the File, Working-Storage, or Linkage section of your program.  When this value is passed to another program, it is passed by reference.</li></div>
+<a name="wp1041686"> </a><div class="pSmartList1"><li>If <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">identifier-2</span> names a file, the called program must not be a COBOL program.</li></div>
+<a name="wp1041687"> </a><div class="pSmartList1"><li><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">\identifier-2\</span> and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">\literal-2\</span> indicate that the literal or data item enclosed in backslashes is to be passed by value to the called program or intrinsic.  This may be used only when the called program is not a COBOL program.  If an identifier is used in this way, it must represent a numeric data item of not more than 18 digits.</li></div>
+<a name="wp1041688"> </a><div class="pSmartList1"><li><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Identifier-n</span> is the name of a binary data item in the calling program.  It is used in calls to non-COBOL programs and in calls to COBOL programs that return a value in the RETURN-CODE special register.  <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Identifier-n</span> cannot be a function-identifier (i.e., it cannot reference an intrinsic function).</li></div>
+</ol></div>
+<a name="wp1041691"> </a><h3 class="pHeadingRef">
+CALLing intrinsics
+</h3>
+<a name="wp1041695"> </a><p class="pBody">
+The INTRINSIC phrase is used to indicate that the CALL statement is calling an operating system intrinsic function, rather than a subprogram.  When the INTRINSIC phrase is used, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">literal-1</span> must be used and must name an operating system intrinsic.  The USING phrase specifies the various parameters to be passed to the intrinsic.  When the intrinsic is a &quot;typed procedure,&quot; the GIVING phrase specifies the parameter to be returned by the intrinsic.
+</p>
+<a name="wp1041696"> </a><p class="pBody">
+As with subprograms, the parameters passed to intrinsics are specified by position.  If a parameter of an intrinsic is optional, and you do not want to pass a value for that parameter, you must specify two consecutive backslashes (&quot;\\&quot;) in the position within the USING phrase of the CALL statement that corresponds to that parameter's position.
+</p>
+<a name="wp1041697"> </a><p class="pBody">
+Unlike subprograms, if an intrinsic expects a parameter to be passed by value rather than by reference, you don't need to enclose the literal or identifier in backslashes.  The intrinsic automatically assumes that the parameter is being passed by value.
+</p>
+<a name="wp1059142"> </a><p class="pBody">
+The special register CONDITION-CODE holds the condition code returned by the intrinsic function.  The following special relation operators can be used after the call to check the condition code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+mnemonic-name { [ <u class="cUnderline">NOT</u> ] { &lt;  } } 0<a name="wp1041699"> </a>
+              {         { =  } }<a name="wp1049582"> </a>
+              {         { &gt;  } }<a name="wp1049592"> </a>
+              {         { &gt;= } }<a name="wp1049605"> </a>
+              {         { &lt;= } }<a name="wp1049618"> </a>
+              {         { &lt;&gt; } }<a name="wp1049631"> </a>
+</pre></div>
+<a name="wp1041700"> </a><p class="pBody">
+When CALL INTRINSIC is used for intrinsics in a system file:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1041701"> </a><div class="pSmartList1"><li>the special symbols &quot;@&quot; and &quot;\&quot; are optional.</li></div>
+<a name="wp1064464"> </a><div class="pSmartList1"><li>data conversions for parameters passed by value are performed automatically.</li></div>
+</ul></div>
+<a name="wp1064465"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>On the HP e3000, ACUCOBOL-GT supports calls to most system intrinsic functions.  Nothing in ACUCOBOL-GT&#39;s CALL interface limits support for intrinsics.  However, Acucorp has not tested support for all intrinsic functions.  In particular we have not tested the more obscure functions or variants of functions that take unusual or undocumented parameter types.  Should you encounter unexpected behavior, please contact Acucorp <a  href="ch1-int4.htm#wp1036496">Technical Support</a>.
+<hr />
+</p>
+<a name="wp1058895"> </a><h3 class="pHeadingRef">
+USING phrase (non-COBOL subprograms) 
+</h3>
+<a name="wp1041716"> </a><p class="pBody">
+Data is passed from the calling program to the called program on a positional basis, rather than by name.  Therefore, the third name in a USING phrase of a calling program corresponds to the third name in the arguments of the called program.
+</p>
+<a name="wp1041717"> </a><p class="pBody">
+This positional correspondence extends to non-COBOL called programs.  Thus, for example, if the called program is a Pascal program, then the names in the parameter list of the procedure declaration in that program are identified with those data items whose names appear in the corresponding position of the USING phrase in the calling program. 
+</p>
+<a name="wp1041718"> </a><p class="pBody">
+As stated above in the description of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">identifier-2</span>, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">identifier-3</span>, and so forth, these identifiers may name files to be passed to a called program.  Furthermore, although you can enclose such a file identifier between backslashes (which are ignored), preceding it with an &quot;@&quot; symbol results in an error.
+</p>
+<a name="wp1041719"> </a><p class="pBody">
+If the file name from the FD is passed, the file number of that file is passed by value.  If the subprogram is an SPL procedure, the procedure parameter corresponding to the file name must be declared as type INTEGER or LOGICAL, and it must be specified as a value parameter.  The file must be opened in the calling program.
+</p>
+<a name="wp1041720"> </a><p class="pBody">
+To pass a data item by value, you must enclose the associated identifier in backslashes.  If the value passed is a literal, the backslashes are optional.  Passing a data item by value leaves the data item in the calling program unchanged following execution of the called program.
+</p>
+<a name="wp1041721"> </a><p class="pBody">
+If an identifier is not passed by value (that is, is not enclosed in backslashes), it is passed as a byte pointer (that is, by reference).  Thus, the data in the calling program can be altered by the called program if it is passed in this manner.  In calls to COBOL programs, this is the standard method of referencing common data.
+</p>
+<a name="wp1041722"> </a><p class="pBody">
+Two consecutive backslashes (&quot;\\&quot;) may be specified in a USING phrase of a CALL statement if the called program is a Pascal procedure with OPTION DEFAULT_PARMS or EXTENSIBLE.  Using two consecutive backslashes indicates that a parameter is not being sent and should not be expected.  
+</p>
+<a name="wp1041723"> </a><p class="pBody">
+Whenever an OPTION VARIABLE SPL procedure is called, an additional parameter must be added to the end of the USING parameter list.  This parameter is called a <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">bit mask</span> and is used to tell the SPL procedure which parameters are being passed.  The bit mask consists of one or two 16-bit binary words, where a &quot;0&quot; represents a missing parameter and a &quot;1&quot; represents an existing parameter (this allows up to 32 parameters to be passed).  A parameter in the bit mask must be a numeric data item, and it represents the value derived from the bit mask.  
+</p>
+<a name="wp1041724"> </a><p class="pBody">
+Parameters are matched, starting from the right, in both the bit mask and the USING list, excluding the value in the USING list used for the bit mask parameter.  For example, 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;SPLPROC&quot; USING \TESTER\ \\ @RESULT \ERROR\ \%13\<a name="wp1041725"> </a>
+</pre></div>
+<a name="wp1041726"> </a><p class="pBody">
+The bit mask in this case is 0000000000001011, which is represented by the octal value &quot;\%13\&quot;, showing that the fourth, third, and first parameters are being passed, while the second parameter is not being passed.
+</p>
+<a name="wp1041727"> </a><p class="pBody">
+The bit mask is generated automatically by the compiler if you specify the INTRINSIC option.
+</p>
+<a name="wp1041731"> </a><h3 class="pHeadingRef">
+Passing file handles to subroutines
+</h3>
+<a name="wp1041735"> </a><p class="pBody">
+In HP COBOL compatibility mode, you can pass the operating system's file handle for an open COBOL file to a subroutine by referring to that file's SELECT name in the CALL statement.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ENVIRONMENT DIVISION.<a name="wp1041736"> </a>
+FILE-CONTROL.<a name="wp1049640"> </a>
+SELECT MY-FILE<a name="wp1049649"> </a>
+ASSIGN TO DISK<a name="wp1049658"> </a>
+SEQUENTIAL.<a name="wp1049667"> </a>
+<a name="wp1049676"> </a>
+DATA DIVISION.<a name="wp1049685"> </a>
+FILE SECTION.<a name="wp1049694"> </a>
+FD MY-FILE.<a name="wp1049703"> </a>
+01 RECORD-1     PIC X(80).<a name="wp1049712"> </a>
+<a name="wp1049716"> </a>
+PROCEDURE DIVISION.<a name="wp1049722"> </a>
+MAIN-LOGIC.<a name="wp1049731"> </a>
+   OPEN INPUT MY-FILE.<a name="wp1049740"> </a>
+   CALL &quot;SUB&quot; USING MY-FILE.<a name="wp1049749"> </a>
+   CLOSE MY-FILE.<a name="wp1049758"> </a>
+</pre></div>
+<a name="wp1041737"> </a><p class="pBody">
+One reason for doing this is to call an operating system function that allows the file to retrieve some information that is not available through COBOL.  
+</p>
+<a name="wp1041738"> </a><p class="pBody">
+Several special rules apply:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041739"> </a><div class="pSmartList1"><li>For compatibility with HP COBOL, a file handle is automatically passed BY VALUE unless it is immediately preceded by a BY REFERENCE or BY CONTENT specification.  You will need to do this if you pass an open file handle to a COBOL subroutine because COBOL routines cannot take BY VALUE parameters.  </li></div>
+<a name="wp1041742"> </a><div class="pSmartList1"><li>If the called subroutine is a COBOL routine, the handle passed is PIC S9(4) COMP-5.  You can override this with the compiler option &quot;--fileIdSize=#&quot; where &quot;#&quot; is either &quot;2&quot;,&quot;4&quot; or &quot;8&quot; to specify the number of bytes you want in the passed integer.  </li></div>
+<a name="wp1041743"> </a><div class="pSmartList1"><li>If the called subroutine is not COBOL, the handle is passed as a signed native integer using the host's default integer size.</li></div>
+<a name="wp1041744"> </a><div class="pSmartList1"><li>The file handle passed is the host file system's identifying value for the open file.  For all current implementations, this is the value returned by the C &quot;open&quot; function.  This may change in a future implementation.  </li></div>
+<a name="wp1041745"> </a><div class="pSmartList1"><li>If the host file system does not have this information available, then &quot;-1&quot; is used instead.  This can happen if the host system is not a file (e.g. Acu4GL<sup class="cSuperscript">®</sup> for Oracle) or the host system does not provide a way of obtaining the handle (e.g. C-ISAM interface).  Files served by AcuServer<sup class="cSuperscript">®</sup> also use &quot;-1&quot; since there is no useful way to use a remote process' open file handle.  </li></div>
+<a name="wp1041746"> </a><div class="pSmartList1"><li>For Vision files in the multi-file format, the handle used is the handle of the first data segment (this is the same file specified by the file name used when opening the file).  </li></div>
+<a name="wp1041747"> </a><div class="pSmartList1"><li>It is best to avoid performing actual I/O on the file using this file handle because the COBOL file system will be unaware of any state changes to the file and may perform incorrectly.  It is possible to corrupt data this way.  </li></div>
+</ol></div>
+<a name="wp1060078"> </a><h3 class="pHeadingRef">
+Recursive CALLs
+</h3>
+<a name="wp1060134"> </a><p class="pBody">
+In ACUCOBOL-GT, as in HP COBOL, a program may directly or indirectly call itself.  Such a CALL statement is termed a <em class="cEmphasis">recursive call</em>.  By default, ACUCOBOL-GT creates a new copy of data for each instance of the program.  To share the initial data with all recursive calls, as is the default with HP COBOL, set the RECURSION_DATA_GLOBAL configuration variable.  For more information, see the descriptions of the RECURSION and RECURSION_DATA_GLOBAL configuration variables in Appendix H of the ACUCOBOL-GT documentation set.  See also section 2.9 in the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT </span><em class="cEmphasis">User's Guide.  </em>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

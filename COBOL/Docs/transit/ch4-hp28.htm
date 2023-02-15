@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.2.6  Terminal Configuration with VPLUS</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp3.htm">4.2  ACUCOBOL-GT in MPE/iX Environments</a> &gt; </p>
+<a name="wp1067741"> </a><h2 class="pHeading2">
+4.2.6  Terminal Configuration with VPLUS
+</h2>
+<a name="wp1067746"> </a><p class="pBody">
+As in all environments, what the operating system and program know about the display device affects the handling of screen I/O.  This is equally true for HP e3000 COBOL applications that use VPLUS.  To enable VPLUS applications to override some of its default values, VPLUS employs an environment control file, &quot;VENVCNTL&quot;.  When VPLUS starts up, VPLUS checks for the existence of VENVCNTL.PUB.SYS or a file equated to the formal file designator. If no VENVCNTL file exists, the standard VPLUS defaults are used. 
+</p>
+<a name="wp1041411"> </a><p class="pBody">
+VENVCNTL is a simple text file that contains only one line of data. Each override option may be activated by setting the option byte number to 1. For example, in the VENVCNTL file below, option 6 is set.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:PRINT VENVCNTL.PUB.SYS<a name="wp1041412"> </a>
+000001<a name="wp1049423"> </a>
+</pre></div>
+<a name="wp1041413"> </a><p class="pBody">
+Option 6 tells VPLUS to extend terminal status reads to ensure that an input termination character is accounted for. 
+</p>
+<a name="wp1041414"> </a><p class="pBody">
+If you are using a VT-MGR connection you should set option 6.  If you don't set option 6, the keyboard might become locked.
+</p>
+<a name="wp1041415"> </a><p class="pBody">
+If you are using a TELNET or DTC  connection you should <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">not</span> set option 6.  If you do, a call to VCLOSETERM might result in an error 10.
+</p>
+<a name="wp1041416"> </a><p class="pBody">
+If you are using ACUCOBOL-GT VPLUS programs with a variety of terminal types, you might want to create environment control files for each terminal type and then use a FILE equation to match the terminal type with the correct environment control file.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:FILE VENVCNTL.PUB.SYS=<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">file.group.account</span><a name="wp1041417"> </a>
+</pre></div>
+<a name="wp1041418"> </a><p class="pBody">
+where &quot;VENVCNTL.PUB.SYS&quot; is always fully specified and &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">file.group.account</span>&quot; is the name of the file containing your connection specific settings.
+</p>
+<a name="wp1041419"> </a><p class="pBody">
+For HP documentation on this topic, see http://docs.hp.com/mpeix/onlinedocs/32209-90024/32209-90024.html and navigate to Application Notes/Using the VPLUS Environment Control File (VENVCNTL).
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

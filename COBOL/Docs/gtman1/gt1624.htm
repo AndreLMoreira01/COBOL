@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.3  Memory Management</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; </p>
+<a name="wp1066713"> </a><h2 class="pHeading1">
+6.3  Memory Management
+</h2>
+<a name="wp1067003"> </a><p class="pBody">
+This section discusses how ACUCOBOL-GT manages runtime memory, the tools available to you to help manage program memory, and the facilities available to help find and correct memory management problems.  
+</p>
+<a name="wp1067005"> </a><p class="pBody">
+When <b class="cBold">runcbl</b> initiates, it loads the main program into memory and begins execution.  As other programs are called they are also loaded into memory.  Once loaded, a program remains in memory until it is canceled (typically with the CANCEL statement).  Canceling a program:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1067006"> </a><div class="pSmartList1"><li>	places the program in its initial state</li></div>
+<a name="wp1067007"> </a><div class="pSmartList1"><li>	closes its open files</li></div>
+<a name="wp1067008"> </a><div class="pSmartList1"><li>	ensures that any VALUE clauses are in effect when the program is called again</li></div>
+<a name="wp1067009"> </a><div class="pSmartList1"><li>	removes the program from memory, by default</li></div>
+</ul></div>
+<a name="wp1067011"> </a><p class="pBody">
+This handling allows for a full ANSI implementation of subprograms (variables retain their previous values when a subprogram is re-entered, files can be left open in a subprogram, and so forth).  
+</p>
+<a name="wp1067013"> </a><p class="pBody">
+If subprograms are never canceled, a large system can eventually occupy very substantial amounts of memory.  This is a common problem with large menu driven applications where the master menu calls programs for the various menu selections.  
+</p>
+<a name="wp1067666"> </a><p class="pBody">
+There are several mechanisms for managing runtime memory, including the CANCEL verb and the INITIAL and RESIDENT clauses of the PROGRAM-ID paragraph.  To provide more flexibility, you can also enable a caching system in which canceled programs are not removed from memory until a specified memory limit is reached (see CANCEL below). 
+</p>
+<a name="wp1067017"> </a><h3 class="pHeadingRef">
+CANCEL
+</h3>
+<a name="wp1067505"> </a><p class="pBody">
+The CANCEL statement places the specified program in its initial state (see above). By default, the program is removed from memory.  Subsequent calls to the program cause it to be reloaded from disk.  This type of cancel, in which the program is removed from memory, is called a <em class="cEmphasis">physical cancel</em>.  Alternatively, as an aid to tuning system performance, you can set up a system in which canceled programs are placed in their initial state but are left in memory until a specified memory limit is reached.  Such cancels are called <em class="cEmphasis">logical cancels</em>.  Subsequent calls to these programs start very quickly because the programs are already in memory.  When the memory limit is reached, all logically canceled programs are removed from memory.  Two runtime configuration variables are used to set up this system.  See the entries for DYNAMIC_MEMORY_LIMIT and LOGICAL_CANCELS in Appendix H of Book 4.  See also the CANCEL verb in section 6.6 of Book 3.
+</p>
+<a name="wp1067506"> </a><p class="pBody">
+When using logical cancels, replacing an object file on disk does not necessarily mean that subsequent calls to the program will use the new object.  To force a subsequent call to load the new object file from disk, you must configure ACUCOBOL-GT to perform a physical cancel on that program.
+</p>
+<a name="wp1067519"> </a><p class="pBody">
+Also, the use of logical cancels has some implications on debugging.  The ACUCOBOL-GT debugger periodically reads source code from the object file on disk.  When program code is cached by a logical cancel, the object file is closed and could be replaced or deleted.  For the debugger to function correctly, it needs to keep the object file open and ensure that the object code in the disk file is identical to the code in memory.  If the program is cached, the debugger accomplishes this by unloading the program from the cache, reopening the object file, and reloading the object code into memory.  Because this effectively turns off logical cancels and the code caching feature when the debugger is active, the runtime configuration variable DEBUG_NEWCOPY can be used to control the runtime's behavior.  See Book 4, Appendix H. 
+</p>
+<a name="wp1067021"> </a><h3 class="pHeadingRef">
+CANCEL ALL
+</h3>
+<a name="wp1067023"> </a><p class="pBody">
+Because it can be inconvenient to individually CANCEL every subprogram, ACUCOBOL-GT includes an extension to the CANCEL verb: CANCEL ALL.  When executed, CANCEL ALL cancels every subprogram that is not active.  (A program is active if it is either the main program or it has been called, but not yet exited.)  Executing a CANCEL ALL after a menu selection completes is an easy way to free the memory used by that program.
+</p>
+<a name="wp1067025"> </a><h3 class="pHeadingRef">
+INITIAL clause
+</h3>
+<a name="wp1067027"> </a><p class="pBody">
+The INITIAL clause in the PROGRAM-ID paragraph causes a subprogram to be automatically canceled whenever it exits.  The program is removed from memory, regardless of whether the logical cancel feature is enabled. This can be used to help manage memory or to ensure that VALUE clauses are set whenever a subprogram is called.  Note that the compiler will automatically apply this clause to a program compiled with the &quot;-Zi&quot; option.  This can be particularly useful when you are converting programs from RM/COBOL version 2.
+</p>
+<a name="wp1067029"> </a><p class="pBody">
+In RM/COBOL, the status of a program that exits is not precisely defined.  Subprograms remain in memory until either their caller exits or until inadequate memory remains to load another subprogram.  This occurs at fairly unpredictable times.  Because their fate in memory is unclear, most RM/COBOL subprograms are treated as if they have been canceled when they exit.  By applying the &quot;-Zi&quot; option at compile time, the ACUCOBOL-GT programmer can simulate this behavior.  Note, however, that utility subprograms that are called repeatedly should not be compiled with &quot;-Zi&quot;, because this introduces extra overhead each time they are called.  Also, any subprogram that depends on retaining variables between calls should not be compiled with &quot;-Zi&quot;.  
+</p>
+<a name="wp1067031"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>RM/COBOL treats spooled print files specially in that they are not closed when a subprogram exits (all other files are closed).  ACUCOBOL-GT does not treat spooled files specially, so if this feature of RM/COBOL is used, the subprogram that does this should not be compiled with &quot;-Zi&quot;.  
+<hr />
+</p>
+<a name="wp1067852"> </a><h3 class="pHeadingRef">
+RESIDENT clause
+</h3>
+<a name="wp1067853"> </a><p class="pBody">
+The RESIDENT clause in the PROGRAM-ID paragraph causes the program to remain resident in memory after its first execution.  A program with the RESIDENT clause is not affected by a CANCEL or CANCEL ALL statement.  Should the condition occur where there isn't enough system memory available to load a program, the CALL will fail with a &quot;Inadequate memory available&quot; error.
+</p>
+<a name="wp1067854"> </a><h3 class="pHeadingRef">
+Other memory management tools
+</h3>
+<a name="wp1067035"> </a><p class="pBody">
+The CHAIN verb (section 6.6 in Book 3) and the C$CHAIN library routine (Appendix I in Book 4) can be used to replace the running program with another program.  This can conserve substantial amounts of memory.  Segmentation (overlays) can be used to reduce the size of a single program.  This is described in section 6.5 of Book 3.  Finally, you can adjust the size of ACUCOBOL-GT&#39;s runtime buffers with the V_BUFFERS and SORT_MEMORY configuration options described in Appendix H of Book 4.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

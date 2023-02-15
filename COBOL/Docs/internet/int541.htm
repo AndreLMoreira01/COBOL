@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/01/05 10:10:26" />
+  <title>5.6.2  Using the &lt;EMBED&gt; Tag </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Programmer's Guide to the Internet <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="int5.htm">Chapter 5: Using the ACUCOBOL-GT Web Runtime</a> &gt; <a href="int524.htm">5.6  Invoking Your COBOL Application with the Web Runtime</a> &gt; </p>
+<a name="wp1067111"> </a><h2 class="pHeading2">
+5.6.2  Using the &lt;EMBED&gt; Tag 
+</h2>
+<a name="wp1067113"> </a><p class="pBody">
+You can use the HTML &lt;EMBED&gt; tag to embed your COBOL application in the HTML document.  Using this tag, you define a rectangular area within your Web page that your COBOL application should use as its initial &quot;window.&quot;  
+</p>
+<a name="wp1075434"> </a><p class="pBody">
+When you include a configuration file in the library, you must also specify the name of the file using the OPTIONS attribute of the &lt;EMBED&gt; element.  This ensures that the application uses the correct configuration file rather than defaulting to another that may reside on the user's system.  You can also  specify runtime options using the OPTIONS keyword.  The following options are valid for the Web runtime:   &quot;-c&quot;, &quot;-d&quot;, &quot;-e&quot;, &quot;-l&quot;, &quot;-v&quot;, or  &quot;-x&quot;.  
+</p>
+<a name="wp1075512"> </a><p class="pBody">
+For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;EMBED SRC=&quot;myprog.acu&quot; WIDTH=400 HEIGHT=200 <a name="wp1067117"> </a>
+   OPTIONS=&quot;-c cblconfi -dlex myerrs&quot;&gt;<a name="wp1067118"> </a>
+&lt;/EMBED&gt;<a name="wp1067119"> </a>
+</pre></div>
+<a name="wp1067120"> </a><p class="pBody">
+embeds &quot;myprog.acu&quot; on the Web page and makes it accessible using the Web runtime, with configuration file &quot;cblconfi&quot; and various options.  In this example, &quot;myprog.acu&quot; could be an entire COBOL application, or it could be the initial COBOL object of a distributed application using AcuServer or AcuConnect, or it could be the name of a library file.
+</p>
+<a name="wp1067122"> </a><p class="pBody">
+When a user visits this Web page, the embedded object (&quot;myprog.acu&quot;) is automatically sent from the Web server to the client machine where it immediately starts running inside the user's browser window.  Configuration variables are read from the configuration file &quot;myconfig&quot;, and errors are written to the error file &quot;myerrs&quot;.
+</p>
+<a name="wp1067123"> </a><p class="pBody">
+While the COBOL object or library is downloading and after the COBOL program exits, the control displays a splash screen in the browser window.  You can disable this feature by setting the AcuShowLogo property to FALSE.  For complete information on the methods and properties of the Web runtime object interface, refer to <a  href="int528.htm#wp1064530">section 5.6.1.3</a>.
+</p>
+<a name="wp1067127"> </a><p class="pBody">
+Please note that your application is not able to display its own main window menu bar when running inside a browser window.  If you choose to use this method, you must program another way for your users to access your menu functions.  
+</p>
+<a name="wp1070760"> </a><p class="pBody">
+When invoking the Web runtime with the &lt;EMBED&gt; element, you can also specify runtime options and other properties using the AcuOptions attribute of the object interface.  
+</p>
+<a name="wp1070761"> </a><p class="pBody">
+If, for example, you want to specify both a configuration file and error file for the Web runtime, you could use:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;EMBED SRC=&quot;myprog.acu&quot; WIDTH=400 HEIGHT=200 <a name="wp1070762"> </a>
+   AcuOptions=&quot;-c cblconfi -e errors.txt&quot;&gt;<a name="wp1070763"> </a>
+&lt;/EMBED&gt;<a name="wp1070764"> </a>
+</pre></div>
+<a name="wp1070765"> </a><p class="pBody">
+The following code demonstrates using the property for instant debugging with the Web runtime:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;EMBED SRC=&quot;http://server.acucorp.com/activex/<a name="wp1070766"> </a>
+   webinfo.acu&quot; <a name="wp1070767"> </a>
+   HEIGHT=384 WIDTH=512 AcuOptions=&quot;-d&quot;&gt;<a name="wp1070768"> </a>
+&lt;/EMBED&gt;<a name="wp1070769"> </a>
+</pre></div>
+<a name="wp1070770"> </a><p class="pBody">
+These examples assume that the Web runtime has been installed and registered.  When you use the &lt;EMBED&gt; tag, the Web runtime is not automatically downloaded, as it may be when you specify the CODEBASE attribute and a valid URL with the &lt;OBJECT&gt; element.
+</p>
+<a name="wp1070771"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Do not use the AcuProgram property when the ACUCOBOL-GT object is accessed via a URL.  See <a  href="int528.htm#wp1064530">section 5.6.1.3</a> for more information.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

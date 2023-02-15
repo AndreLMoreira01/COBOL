@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:57:47" />
+  <title>4.3.2  Using COBOL Data Types as ActiveX and COM Object Parameters </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr4.htm">Chapter 4: Using ActiveX Controls and COM Objects</a> &gt; <a href="itr46.htm">4.3  Properties, Styles, and Methods</a> &gt; </p>
+<a name="wp1037757"> </a><h2 class="pHeading2">
+4.3.2  Using COBOL Data Types as ActiveX and COM Object Parameters 
+</h2>
+<a name="wp1037759"> </a><p class="pBody">
+When programming with ActiveX controls and COM objects, you can MODIFY property values using COBOL data items, literals, and figurative constants.  You can also pass them as parameters to methods using MODIFY.
+</p>
+<a name="wp1037761"> </a><p class="pBody">
+When passing parameters to an ActiveX control or COM object method, the ACUCOBOL-GT runtime converts the COBOL parameters into variant parameters.  Variant parameters have a data type associated with them.  More than 40 different variant types exist.  Each type name starts with &quot;VT_&quot;.  For example, VT_I4 is a 4-byte signed integer.  VT_R8 is an 8-byte real (floating point) number.  VT_BSTR is a string.  The rules applied by the runtime to determine the variant type are given at the end of this section.  
+</p>
+<a name="wp1037763"> </a><p class="pBody">
+A method or property can act differently depending on the type of data passed to it in a variant.  For example, a type of variant parameter called VT_UNKNOWN is commonly used to represent COM objects.  A property or method might expect either VT_I4 or VT_UNKNOWN (i.e., IUnknown pointer) and will act differently depending on which one it receives (see <a  href="itr426.htm#wp1038410">section 4.20.1, &quot;AXDEFGEN COPY Files,&quot;</a> for more information about IUnknown).  If the runtime converts a COM object handle to a VT_I4 instead of a VT_UNKNOWN, the property or method being called might not act as expected.  The runtime determines which of the two variant types to pass based on the USAGE parameters of the COBOL data item.
+</p>
+<a name="wp1037768"> </a><p class="pBody">
+Some ActiveX and COM methods and properties take VT_VARIANT parameters, a generic variant type.  This usually means that these methods accept more than one type of variant parameter.  For example, you could pass a VT_I4, VT_R8, or a VT_BSTR as a VT_VARIANT parameter.  The ActiveX or COM property or method could convert the passed parameter into a specific variant type.  It could also act differently depending on the type of variant that was passed.  For example, suppose an ActiveX or COM object had a table where rows could be referred to by a character string name or by their numeric index.  A method that returns a row in the table could take either the name or index of the row as a parameter.  The method could assume that if the parameter is a VT_BSTR, it is a row name; and if the parameter is a VT_I4, it is a numeric index.
+</p>
+<a name="wp1037769"> </a><p class="pBody">
+If the ActiveX control or COM object property or method parameter is one of the standard variant types, ACUCOBOL-GT attempts to convert the COBOL data to the expected type.  For example, if an ActiveX control property is type VT_I4 (i.e., 4-byte integer), and the COBOL data type is PIC X(10), ACUCOBOL-GT tries to convert the value of the PIC X(10) item into a number and pass it as a VT_I4 type variant.
+</p>
+<a name="wp1037770"> </a><p class="pBody">
+If the property or method parameter type is VT_VARIANT, then ACUCOBOL-GT converts the COBOL data item into a specific variant type parameter using the following rules:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037771"> </a><div class="pSmartList1"><li>The PICTURE and USAGE clauses determine the type. </li></div>
+<a name="wp1037772"> </a><div class="pSmartList1"><li>If the data item is alphabetic, alphanumeric, or alphanumeric edited, it is passed as a VT_BSTR. </li></div>
+<a name="wp1037773"> </a><div class="pSmartList1"><li>If the data item is USAGE HANDLE or POINTER, and the property or method parameter type is VT_VARIANT, it is passed as a VT_UNKNOWN.  If the data item is another binary (USAGE COMP-..., BINARY, HANDLE, POINTER, etc.), it is passed as a VT_I4. </li></div>
+<a name="wp1037774"> </a><div class="pSmartList1"><li>If the data item is USAGE FLOAT or DOUBLE, it is passed as a VT_R8. </li></div>
+<a name="wp1037775"> </a><div class="pSmartList1"><li>If the data item is another numeric type, it is passed as a VT_I4. </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

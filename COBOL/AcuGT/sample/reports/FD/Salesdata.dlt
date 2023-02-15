@@ -1,0 +1,210 @@
+; CASEMaker AcuBench Layout Structure File, Version 7.2
+; WARNING: DO NOT MODIFY THIS FILE!
+
+[DATALAYOUT_CONTENT]
+[DSNENTITY_]
+[CStoAcucobolFileDefinition_]
+m_nType=1
+m_bBlockRecords=1
+m_bRecordFixed=1
+m_bStandard=1
+m_strPrefix=Salesdat
+{{@FD_m_strDescription
+
+@}}
+[FDITEM0_]
+m_strName=Sales-Record
+m_nItemLevel=1
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM0_
+
+@}}
+[FDITEM1_]
+m_strName=Sales-Key
+m_nItemLevel=3
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM1_
+
+@}}
+[FDITEM2_]
+m_strName=Sales-State
+m_strRawPic=XX
+m_strPic=XX
+m_nItemLevel=10
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM2_
+
+@}}
+[FDITEM3_]
+m_strName=Sales-Branch-No
+m_strRawPic=X(3)
+m_strPic=X(3)
+m_nItemLevel=10
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM3_
+
+@}}
+[FDITEM4_]
+m_strName=Sales-Name
+m_nItemLevel=10
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM4_
+
+@}}
+[FDITEM5_]
+m_strName=Sales-LastName
+m_strRawPic=X(25)
+m_strPic=X(25)
+m_nItemLevel=15
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM5_
+
+@}}
+[FDITEM6_]
+m_strName=Sales-FirstName
+m_strRawPic=X(25)
+m_strPic=X(25)
+m_nItemLevel=15
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM6_
+
+@}}
+[FDITEM7_]
+m_strName=Sales-Gender
+m_strRawPic=X
+m_strPic=X
+m_nItemLevel=3
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM7_
+
+@}}
+[FDITEM8_]
+m_strName=Heavy-Equipment-Sales
+m_strRawPic=9(5)V99
+m_strPic=9(5)V99
+m_nItemLevel=3
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM8_
+
+@}}
+[FDITEM9_]
+m_strName=Supplies-Sales
+m_strRawPic=9(5)V99
+m_strPic=9(5)V99
+m_nItemLevel=3
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM9_
+
+@}}
+[FDITEM10_]
+m_strName=Sales-Quota
+m_strRawPic=9(5)V99
+m_strPic=9(5)V99
+m_nItemLevel=3
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM10_
+
+@}}
+[FDITEM11_]
+m_strName=Notes
+m_nItemLevel=3
+m_nSync=-1
+m_bOccurs=1
+m_bFixed=1
+m_strRawSize=8
+m_nSize=8
+{{@DataItem_m_strDescriptionFDITEM11_
+
+@}}
+[FDITEM12_]
+m_strName=Note-Date
+m_strRawPic=X(10)
+m_strPic=X(10)
+m_nItemLevel=5
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM12_
+
+@}}
+[FDITEM13_]
+m_strName=Note-Initials
+m_strRawPic=X(3)
+m_strPic=X(3)
+m_nItemLevel=5
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM13_
+
+@}}
+[FDITEM14_]
+m_strName=Note-Text
+m_strRawPic=X(60)
+m_strPic=X(60)
+m_nItemLevel=5
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM14_
+
+@}}
+[CStoAcucobolSL_]
+m_nType=1
+m_strAssignToName="Sales.DAT"
+m_nFormat=4
+m_nAccessMode=3
+m_strFileStatus=salesdata-status
+m_nNumber=1
+m_nCompression=70
+{{@SL_m_strDescription
+
+@}}
+[SLPKEY_]
+m_strName=Sales-Key
+m_bUnique=1
+{{@Key_m_strDescription
+
+@}}
+[SLKEYATOM0_]
+m_strName=Sales-Key
+
+
+[IO_HANDLING_CONTENT]
+GENERATE_IO_FUNCTION=1
+
+[IO_FUNCTION_CONTENT:1]
+CONDITION=Before Master Print Loop
+VALUE=Before-Master-Print-Loop
+
+[IO_FUNCTION_CONTENT:2]
+CONDITION=End Master Print Loop
+VALUE=End-Master-Print-Loop
+
+{{@PARAGRAPH:
+      *
+       Before-Master-Print-Loop.
+            MOVE LOW-VALUES TO SALES-KEY.
+            START Salesdata KEY > SALES-KEY.
+            READ Salesdata NEXT RECORD
+              AT END
+                MOVE "10" TO SALESDATA-STATUS
+            END-READ
+           .
+      *
+       End-Master-Print-Loop.
+            READ Salesdata NEXT RECORD
+              AT END
+                MOVE "10" TO SALESDATA-STATUS
+            END-READ
+           .
+
+@}}

@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:52:56" />
+  <title>3.3.2  The Server Access File</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con3.htm">Chapter 3:  Distributed Processing: Preparing the Server</a> &gt; <a href="con38.htm">3.3  Establishing System Security</a> &gt; </p>
+<a name="wp1029016"> </a><h2 class="pHeading2">
+3.3.2  The Server Access File
+</h2>
+<a name="wp1029018"> </a><p class="pBody">
+The foundation of AcuConnect system security is the server access file, an encrypted Vision file named &quot;AcuAccess&quot; by default.  AcuConnect searches for this file in the /etc directory on UNIX servers and the OS drive:\etc directory on Windows servers.  You may rename the file if you like.  The server access file contains one or more access records.  These records define which users of which machines are allowed to use AcuConnect.
+</p>
+<a name="wp1029020"> </a><p class="pBody">
+The server access file is designed to support a wide range of access security, from very permissive to very restrictive.  You choose the level of security appropriate for your application.
+</p>
+<a name="wp1029021"> </a><p class="pBody">
+Access records may include wild cards that allow all clients or all users (except root under UNIX and Administrator under Windows) access to AcuConnect.  Or you can create individual access records for each user of each client.  By having individual access records, you can restrict access to only those users specifically named in the access file.
+</p>
+<a name="wp1029022"> </a><p class="pBody">
+The individual access records allow you to specify the user ID that AcuConnect will use when executing requests for users matching the given record.  In this way you can assign a user ID that has exactly the privileges needed, and no more (typical of group access accounts).  
+</p>
+<a name="wp1029023"> </a><p class="pBody">
+In addition, every access record can include a password entry that the application or user must match before AcuConnect establishes a connection.  (However, if the SECURITY_METHOD configuration variable is set to &quot;LOGON&quot;, the local account password can be used instead.)  
+</p>
+<a name="wp1043565"> </a><p class="pBody">
+The security system is almost completely transparent to the end user.  Only when remote file access requires interactive password authentication is the user made aware of the security system.
+</p>
+<a name="wp1029026"> </a><p class="pBody">
+On UNIX servers, the access file must be owned by root.  The access file cannot be writable by anyone other than root.  If the access file does not exist, is not owned by root, or is writable by users other than root, AcuConnect does not start.
+</p>
+<a name="wp1029028"> </a><p class="pBody">
+On Windows servers, you should protect the access file by allowing only the Administrator or someone in the Administrators group to have write access to it.  If the access file does not exist, is not owned by Administrator or the Administrators group, or is writable by users other than Administrator or the Administrators group, AcuConnect does not start.
+</p>
+<a name="wp1029029"> </a><h3 class="pHeadingRef">
+Using an existing AcuAccess file 
+</h3>
+<a name="wp1029030"> </a><p class="pBody">
+The server access file for AcuConnect is structured the same and named the same as the server access file for AcuServer<sup class="cSuperscript">®</sup>.  If you are using AcuServer for UNIX, you can use your existing AcuAccess file in conjunction with AcuConnect, or you can set up a separate file for AcuConnect if desired.  If you do not want to modify your AcuServer AcuAccess file, you can set up a separate file for AcuConnect.  
+</p>
+<a name="wp1043637"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Note that the Version 6.<em class="cEmphasis">x</em> or later AcuAccess file may not be shared with product Version 5.<em class="cEmphasis">x</em> or earlier of AcuConnect or AcuServer.  AcuAccess file format for Version 6.<em class="cEmphasis">x</em> and later is different from the format for Version 5.<em class="cEmphasis">x</em> and earlier.  The Version 6.<em class="cEmphasis">x</em> or later server detects the old format the first time the file is opened and converts it to the new format.  If you want to continue to use Version 5.<em class="cEmphasis">x</em> or earlier server access files, you must maintain separate AcuAccess files for the two formats.  
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

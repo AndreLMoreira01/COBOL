@@ -1,0 +1,25 @@
+function BookData_Search(x,y)
+{
+if(x.t("resources"))y.f("91,2,90,1,89,2,311,1,182,1,92,1");
+if(x.t("difference"))y.f("210,1,91,1,90,1");
+if(x.t("gear"))y.f("92,1");
+if(x.t("linear"))y.f("92,1");
+if(x.t("consist"))y.f("100,1,95,1");
+if(x.t("higher"))y.f("99,1,105,2,313,2");
+if(x.t("clean"))y.f("254,2,107,2,186,2");
+if(x.t("resolutions"))y.f("118,7");
+if(x.t("sysindexes"))y.f("118,1");
+if(x.t("199"))y.f("123,1,122,1");
+if(x.t("2005"))y.f("127,1");
+if(x.t("seconds"))y.f("141,1,273,1,151,2,276,3,145,3,282,2");
+if(x.t("254"))y.f("144,1,332,2,205,1,275,1");
+if(x.t("8.09"))y.f("276,1,145,1");
+if(x.t("boost"))y.f("276,1,145,1");
+if(x.t("negative"))y.f("159,1,236,2,289,1");
+if(x.t("remains"))y.f("311,1,182,1");
+if(x.t("ora_inst"))y.f("186,4");
+if(x.t("popular"))y.f("211,1");
+if(x.t("devices"))y.f("335,3");
+if(x.t("lan"))y.f("335,1");
+if(x.t("comprising"))y.f("335,1");
+}

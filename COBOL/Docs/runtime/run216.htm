@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:20:41" />
+  <title>2.3.2.1  The KEYBOARD variable </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run2.htm"><br />Chapter 2: Setting Up Your Terminals</a> &gt; <a href="run210.htm">2.3  The Keyboard Interface</a> &gt; <a href="run215.htm">2.3.2  Redefining the Keyboard</a> &gt; </p>
+<a name="wp1042714"> </a><h2 class="pHeading3">
+2.3.2.1  The KEYBOARD variable 
+</h2>
+<a name="wp1042717"> </a><p class="pBody">
+You can specify one or more KEYBOARD variables.  Attributes that you can set are identified by one or more sets of <em class="cEmphasis">keywords</em> and associated <em class="cEmphasis">values</em>, separated from each other by spaces or tabs.  The syntax is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+KEYBOARD <em class="cEmphasis">keyword=value [keyword=value]...</em><a name="wp1042718"> </a>
+</pre></div>
+<a name="wp1042719"> </a><p class="pBody">
+Keywords are:
+</p>
+<a name="wp1042721"> </a><h5 class="pHeading4">
+AUTO-RETURN=value
+</h5>
+<a name="wp1042722"> </a><p class="pBody">
+Some ACCEPT statements terminate automatically when the input field is filled.  When this occurs, the termination key value is the <em class="cEmphasis">value</em> (a decimal number) defined by the AUTO-RETURN keyword.  This value is returned in the CONTROL KEY clause of the ACCEPT statement.  The default value is zero.  You may also specify this option with the configuration variable KBD_AUTO_RETURN.
+</p>
+<a name="wp1042726"> </a><h5 class="pHeading4">
+CASE=value
+</h5>
+<a name="wp1042727"> </a><p class="pBody">
+The CASE option on the KEYBOARD configuration entry allows you to cause all entries to be automatically converted to upper or lowercase.  <em class="cEmphasis">Value</em> may be set to &quot;Upper&quot;, &quot;Lower&quot; or &quot;Both&quot;:
+</p>
+<a name="wp1042728"> </a><p class="pBody">
+<b class="cBold">Upper</b>: all ACCEPT statements convert keystrokes to upper case.
+</p>
+<a name="wp1042729"> </a><p class="pBody">
+<b class="cBold">Lower</b>: all ACCEPT statements convert keystrokes to lowercase. 
+</p>
+<a name="wp1042730"> </a><p class="pBody">
+<b class="cBold">Both</b>: (default) causes no translation.  
+</p>
+<a name="wp1042731"> </a><p class="pBody">
+CASE may be overridden with the settings of the &quot;UPPER&quot; and &quot;LOWER&quot; keywords on individual ACCEPT statements.  See Book 3, <em class="cEmphasis">Reference Guide</em>, section 6.4.9, &quot;Common Screen Options.&quot;
+</p>
+<a name="wp1042733"> </a><p class="pBody">
+The configuration variable KBD_CASE is also supported.
+</p>
+<a name="wp1042734"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>The value of KEYBOARD CASE does not affect controls.  To effect the same result on controls, use the UPPER or LOWER phrase on the ACCEPT statement.  
+<hr />
+</p>
+<a name="wp1042736"> </a><h5 class="pHeading4">
+CHECK-NUMBERS=value
+</h5>
+<a name="wp1042737"> </a><p class="pBody">
+Normally, ACUCOBOL-GT requires that numeric data be entered for numeric and numeric-edited fields that have the CONVERT phrase specified for them.  If <em class="cEmphasis">value</em> is &quot;No&quot;, then any data can be entered and the runtime system will remove the non-numeric data from the user's input prior to converting.  If <em class="cEmphasis">value</em> is set to &quot;Yes&quot; (the default), then a non-numeric entry will cause an error message to print and will force the user to re-enter the field.  If <em class="cEmphasis">value</em> is set to &quot;Validate&quot;, the runtime also checks to make sure that the numbers entered are valid, as described by the PICTURE clause for that field.  The configuration variable KBD_CHECK_NUMBERS can also be used to set this value.
+</p>
+<a name="wp1042740"> </a><h5 class="pHeading4">
+CURSOR-PAST-END=value
+</h5>
+<a name="wp1042741"> </a><p class="pBody">
+By default, ACUCOBOL-GT does not let the cursor leave the field where data is being entered.  When the final position is entered, the cursor remains there and further entry is inhibited except for editing keys.  Setting <em class="cEmphasis">value</em> to &quot;Yes&quot; allows the cursor to move one character past the end of the field instead.  Input is still inhibited.  The difference between the two modes is essentially cosmetic and CURSOR-PAST-END can be set to suit the user's taste.  The default <em class="cEmphasis">value</em> is &quot;No&quot;.  This value may also be specified with KBD_CURSOR_PAST_END.
+</p>
+<a name="wp1042744"> </a><h5 class="pHeading4">
+DATA-RANGE=value
+</h5>
+<a name="wp1042745"> </a><p class="pBody">
+<em class="cEmphasis">Value</em> defines the range of legal ASCII input values.  Any character received that falls outside of this range will not be accepted into the input field, but may define other actions such as field editing or input termination.  Two decimal numbers, separated by a comma, express the lower and upper bounds of the range.  The maximum range is &quot;1,255&quot;.  The default range is &quot;32,255&quot;.  This value may also be set using the configuration variables KBD_DATA_RANGE_HIGH and KBD_DATA_RANGE_LOW.
+</p>
+<a name="wp1042748"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>If the same number(s) is included in both the DATA-RANGE and EXCEPTION-RANGE, then DATA-RANGE takes precedence.
+<hr />
+</p>
+<a name="wp1042750"> </a><h5 class="pHeading4">
+EXCEPTION-RANGE=value
+</h5>
+<a name="wp1042751"> </a><p class="pBody">
+This is similar to the DATA-RANGE keyword except that <em class="cEmphasis">value</em> defines the range of characters that generate default exception handling.  A key whose ASCII value falls within that range will terminate input with an exception condition value which matches the ASCII value of the key.  That value is returned in the EXCEPTION clause or the CONTROL KEY clause of the ACCEPT statement.  The default range is &quot;1,31&quot;.  A character in this range that is also defined by a KEYSTROKE variable acts as defined by that KEYSTROKE variable, and may or may not terminate the input.  The configuration variables KBD_EXCEPTION_RANGE_HIGH and KBD_EXCEPTION_RANGE_LOW may also be used to set this value.
+</p>
+<a name="wp1042756"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>If the same number(s) is included in both the DATA-RANGE and EXCEPTION-RANGE, then DATA-RANGE takes precedence.
+<hr />
+</p>
+<a name="wp1042758"> </a><h5 class="pHeading4">
+IMPLIED-DECIMAL=value 
+</h5>
+<a name="wp1042759"> </a><p class="pBody">
+If <em class="cEmphasis">value</em> is &quot;Yes&quot;, an implied decimal point is inserted in certain fields when the user does not explicitly type a decimal point.  The last <em class="cEmphasis">n</em> digits of the user's input will be to the right of the decimal point, where <em class="cEmphasis">n</em> is the number of decimal places specified in the receiving field.  For example, if the program is accepting a field with two decimal places, and the user types &quot;1535&quot;, the value accepted (and echoed to the screen) will be  &quot;15.35&quot;.  This is only done for numeric or numeric-edited fields that are input with conversion, either explicit or implicit.  It never occurs for floating-point items.  The default <em class="cEmphasis">value</em> is &quot;No&quot;.  The configuration variable KBD_IMPLIED_DECIMAL is also supported.
+</p>
+<a name="wp1042763"> </a><h5 class="pHeading4">
+RM-2-DEFAULT-HANDLING=value
+</h5>
+<a name="wp1042764"> </a><p class="pBody">
+RM/COBOL versions 2.1 and 2.2 have a configuration option that allows for ACCEPT fields that do not receive any input (e.g., the user just types Return) to leave the receiving field unchanged.  Normally, the receiving field would be filled with spaces.  If the RM-2-DEFAULT-HANDLING <em class="cEmphasis">value</em> is &quot;Yes&quot;, then ACUCOBOL-GT will behave in this alternate fashion.  You may also set this value using the variable KBD_RM_2_DEFAULT_HANDLING.
+</p>
+<a name="wp1042766"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>This option is recommended only if you are converting programs written using this feature of RM/COBOL.  Note that RM/COBOL-85 does not contain this feature, so only programs written for RM/COBOL version 2 should need to use it. 
+<hr />
+</p>
+<a name="wp1042768"> </a><h5 class="pHeading4">
+SCREEN-DEFAULT=value 
+</h5>
+<a name="wp1042769"> </a><p class="pBody">
+If <em class="cEmphasis">value</em> is &quot;Yes&quot;, default data is taken from the screen for any ACCEPT statement that does not have a default value specified for it (either explicitly or implicitly).  This will also allow for updating of the current screen contents.  The default <em class="cEmphasis">value</em> is &quot;No&quot;.  This option can also be specified using the configuration variable KBD_SCREEN_DEFAULT.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:09" />
+  <title>3.1.9  Using the Abend Diagnostic Report (ADR)</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt13.htm"><br />Chapter 3:  Debugger and Utilities</a> &gt; <a href="gt132.htm">3.1 Runtime Debugger</a> &gt; </p>
+<a name="wp1096941"> </a><h2 class="pHeading2">
+3.1.9  Using the Abend Diagnostic Report (ADR)
+</h2>
+<a name="wp1096970"> </a><p class="pBody">
+The Abend Diagnostic Report is divided into three sections:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1096971"> </a><div class="pSmartList1"><li>The first contains general information about the program, such as command-line parameters, the reason for the shutdown, and the line number of the operation that caused the shutdown.</li></div>
+<a name="wp1096972"> </a><p class="pIndented1">
+This section of the report appears as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Dump created: Tue Dec 28 15:00:32 2004<a name="wp1096973"> </a>
+<a name="wp1096974"> </a>
+Reason for dump:<a name="wp1096975"> </a>
+Index out of bounds, upper bound = 10, index = 11<a name="wp1096976"> </a>
+COBOL error at 000014 in TwoTables.acu<a name="wp1096977"> </a>
+(&quot;TwoTables.cbl&quot;, line 42)<a name="wp1096978"> </a>
+<a name="wp1096979"> </a>
+Runtime version: 7.2.0 (2004-12-23)<a name="wp1096980"> </a>
+Command line arguments: -c Cfg.txt TwoTables.acu<a name="wp1096981"> </a>
+</pre></div>
+<a name="wp1096982"> </a><div class="pSmartList1"><li>The second section contains a call stack summary for each thread being run, including information about inactive programs.  Inactive programs are those programs which have been loaded into memory but which are not currently executing.</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Process ID: 1128<a name="wp1096983"> </a>
+<a name="wp1096984"> </a>
+1 thread(s) active<a name="wp1096985"> </a>
+<a name="wp1096986"> </a>
+** Thread 487 **<a name="wp1096987"> </a>
+Call stack:<a name="wp1096988"> </a>
+000014 TwoTables.acu<a name="wp1096989"> </a>
+<a name="wp1096990"> </a>
+Inactive programs:<a name="wp1096991"> </a>
+(none)<a name="wp1096992"> </a>
+</pre></div>
+<a name="wp1096993"> </a><div class="pSmartList1"><li>The third and largest section contains detailed information about each program, including the value of all data items.  Programs are listed in CALL order, starting with the program executing at the time of shutdown and working backward to the start of the thread (usually the main program).</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1096994"> </a><div class="pSmartList2"><li>All data items and their values are listed in the order they are declared in the program.  </li></div>
+<a name="wp1096995"> </a><div class="pSmartList2"><li>Group items are named, but have the phrase &quot;(group)&quot; listed as their value to avoid duplicate information in the report. </li></div>
+<a name="wp1096996"> </a><div class="pSmartList2"><li> Individual elements in a group are listed with their values. </li></div>
+<a name="wp1096997"> </a><div class="pSmartList2"><li>Table items are expanded to show each element of the table.  </li></div>
+<a name="wp1096998"> </a><div class="pSmartList2"><li>Data is shown in both the appropriate numeric/non-numeric format and as raw hexadecimal data.</li></div>
+</ul></div>
+</ol></div>
+<div class="pPreformatted"><pre class="pPreformatted">
+*** DETAIL FOR THREAD 487 ***<a name="wp1096999"> </a>
+<a name="wp1097000"> </a>
+*** PROGRAMS IN THE CALL STACK ***<a name="wp1097001"> </a>
+<a name="wp1097002"> </a>
+*** PROGRAM &quot;TwoTables.acu&quot; ***<a name="wp1097003"> </a>
+<a name="wp1097004"> </a>
+Current address: 000014<a name="wp1097005"> </a>
+<a name="wp1097006"> </a>
+01 ONE-TOO-MANY                   = 11             h30303031 31<a name="wp1097007"> </a>
+<a name="wp1097008"> </a>
+01 MY-TABLE                       = (group)<a name="wp1097009"> </a>
+05 FILLER                         = &quot;    1&quot;        h20202020 31<a name="wp1097010"> </a>
+05 FILLER                         = &quot;    2&quot;        h20202020 32<a name="wp1097011"> </a>
+.<a name="wp1097012"> </a>
+.<a name="wp1097013"> </a>
+.<a name="wp1097014"> </a>
+00 SPECIAL REGISTERS              = &quot;&quot;             h<a name="wp1097015"> </a>
+<a name="wp1097016"> </a>
+*** END OF PROGRAM &quot;TwoTables.acu&quot; ***<a name="wp1097017"> </a>
+<a name="wp1097018"> </a>
+*** END OF THREAD 487 ***<a name="wp1097019"> </a>
+<a name="wp1097020"> </a>
+*** END OF DUMP ***<a name="wp1097021"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

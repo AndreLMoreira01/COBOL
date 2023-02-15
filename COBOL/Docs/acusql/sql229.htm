@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:35:43" />
+  <title>2.11  Detecting and Handling NULL Values</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql2.htm">Chapter 2: Program Preparation</a> &gt; </p>
+<a name="wp1034788"> </a><h2 class="pHeading1">
+2.11  Detecting and Handling NULL Values
+</h2>
+<a name="wp1034790"> </a><p class="pBody">
+Many SQL-conversant data sources allow a NULL (empty) value in a data field.  COBOL and ACUCOBOL-GT do not recognize or support the NULL value.  When the value of a field returned from a query is NULL, the contents of the bound variable are undefined.  As a result, the ESQL programmer must make provisions for detecting and handling NULL when it is retrieved from or must be stored in the database.  
+</p>
+<a name="wp1034792"> </a><p class="pBody">
+To identify a NULL value, ESQL offers the indicator variable.  The indicator variable is a host variable that is used for the special purpose of indicating whether the value of a field is NULL or some other value.  In the COBOL program, indicator variables are declared in an SQL DECLARE section of Working-Storage (the same as other host variables).  Indicator variables take the form: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  indicator_name  pic s9(5) usage comp-5.<a name="wp1034793"> </a>
+</pre></div>
+<a name="wp1034794"> </a><p class="pBody">
+where <em class="cEmphasis">indicator_name</em> is a user-defined name such as &quot;myind&quot; (used in the example below).
+</p>
+<a name="wp1034795"> </a><p class="pBody">
+In an ESQL statement, the indicator variable is paired with the bound variable and together they indicate a value.  In the ESQL statement, the indicator variable immediately follows the bound variable and must be preceded with a colon (&quot;:&quot;).  The ESQL reserved word &quot;indicator&quot; is optional.  For example:    
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+exec sql fetch next from mytable into :myfield indicator :myind ...<a name="wp1034796"> </a>
+</pre></div>
+<a name="wp1046503"> </a><p class="pBody">
+The value of the indicator valuable is checked to determine if the value of the field is NULL or some other value.
+</p>
+<a name="wp1034797"> </a><p class="pBody">
+For input variables, such as those found in an INSERT or UPDATE statement:
+</p>
+<a name="wp1047671"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1047674"> </a>
+If the value of the indicator variable is ...
+
+</th>
+    <th><a name="wp1047676"> </a>
+Then ...
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1047678"> </a><p class="pCellBody">
+-1
+</p>
+</td>
+    <td><a name="wp1047680"> </a><p class="pCellBody">
+AcuSQL attempts to set the value of the column to NULL.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1047682"> </a><p class="pCellBody">
+&gt;=0
+</p>
+</td>
+    <td><a name="wp1047684"> </a><p class="pCellBody">
+AcuSQL attempts to set the value of the column to that of the host variable, or to the number that appears.  This behavior is database dependent, and Acucorp strongly recommends that you test your data source to understand the values that are returned.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1046511"> </a><p class="pBody">
+For output variables, such as those found in SELECT statements:
+</p>
+<a name="wp1046442"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1046445"> </a>
+If the value of the indicator variable is ... 
+
+</th>
+    <th><a name="wp1046447"> </a>
+Then ... 
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1046449"> </a><p class="pCellBody">
+-1
+</p>
+</td>
+    <td><a name="wp1046451"> </a><p class="pCellBody">
+The selected column's value is NULL.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1046453"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1046455"> </a><p class="pCellBody">
+The column's value is assigned to the host variable.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1046457"> </a><p class="pCellBody">
+&gt;0
+</p>
+</td>
+    <td><a name="wp1046459"> </a><p class="pCellBody">
+The column's value is assigned to the host variable, but that value is truncated.  The indicator variable is set to the number of characters read by the program.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1034803"> </a><p class="pBody">
+Consult the ESQL chapter of your SQL reference manual for more information about the use of the indicator variable and the handling of NULL values.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

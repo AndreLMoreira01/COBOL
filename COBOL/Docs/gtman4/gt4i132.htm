@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>Routine to Handle the Windows Print Spooler</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1039676"> </a><h2 class="pHeading2">
+Routine to Handle the Windows Print Spooler
+</h2>
+<a name="wp1039681"> </a><p class="pBody">
+In Windows, there are two ways that your application can print something.  It can either send data directly to an output device (by opening the appropriate port), or it can use the Windows print spooler.  Most applications use the spooler because it allows the user to queue-up a series of documents and then print them out <em class="cEmphasis">in the background</em>, while performing other tasks.  In this regard, the Windows print spooler works much like spoolers common to other operating systems (for example, the lp program on UNIX machines).  
+</p>
+<a name="wp1039682"> </a><p class="pBody">
+In other ways, however, the Windows print spooler is very different from classical spoolers.  These differences derive from the graphical nature of Windows and Windows applications and can affect what you can accomplish from COBOL.  This section discusses how the Windows print spooler works and how it affects your programs.  It includes information on using the &quot;-Q&quot; and &quot;-P&quot; configuration options to assign printers to the print spooler and details for using these options with the WIN$PRINTER library routine.
+</p>
+<a name="wp1039684"> </a><p class="pBody">
+Programs that use traditional spoolers usually work like this:  
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039685"> </a><div class="pSmartList1"><li>The program sends text, data, and printer-control sequences to the spooler.</li></div>
+<a name="wp1039686"> </a><div class="pSmartList1"><li>The spooler saves the data on disk.  As resources become available, the spooler sends the information on to the port driver that manages the system's printer.</li></div>
+<a name="wp1039687"> </a><div class="pSmartList1"><li>The port driver delivers the data stream to the printer, which produces the document.</li></div>
+</ol></div>
+<a name="wp1039688"> </a><p class="pBody">
+In this scenario, the program provides all of the printer-control coding.  The spooler and port driver simply coordinate transfer of the data to the printer.
+</p>
+<a name="wp1039692"> </a><p class="pBody">
+The print spooling method under Windows is different.  The sequence of operations typically works like this:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039693"> </a><div class="pSmartList1"><li>The program calls the Windows graphical Application Programming Interface (API) to describe a logical image of each page in the document.  This Windows graphical API is called the Graphical Device Interface (GDI).  </li></div>
+<a name="wp1039694"> </a><div class="pSmartList1"><li>The GDI subsystem constructs a low-level description of each page, which is passed to the print driver.  The print driver and GDI work together to construct the data stream needed to produce the proper output on the printer.  This data stream is temporarily stored on disk.  </li></div>
+<a name="wp1039695"> </a><div class="pSmartList1"><li>As resources become available, the spooler sends the disk data to the port driver for the printer.  From this point on, the process is the same as for a traditional spooler.  </li></div>
+</ol></div>
+<a name="wp1039696"> </a><p class="pBody">
+The operation of the spooler itself is very similar under both scenarios.  What is different is that, under Windows, the GDI and print driver are responsible for producing the printer-control sequences, while in the traditional model, the program produces the control sequences.  
+</p>
+<a name="wp1039697"> </a><p class="pBody">
+This approach to the printing process allows Windows applications to produce graphical output without knowing how to drive specific types of printers.  This greatly simplifies the printing task for sophisticated programs such as word processors and drawing programs.  
+</p>
+<a name="wp1039698"> </a><p class="pBody">
+However, for simple reports, this is much more complicated than the traditional approach.  Instead of simply sending text data and carriage control codes, the application must go through an involved process of getting a <em class="cEmphasis">device context</em>, selecting and measuring an appropriate font, formatting lines of text and drawing them to the device context, and maintaining the necessary line and position information.  
+</p>
+<a name="wp1039699"> </a><p class="pBody">
+Fortunately, ACUCOBOL-GT simplifies this work.  The runtime system contains print drivers that know how to simulate traditional style printing using the Windows spooler.  To take advantage of these drivers, simply assign the print file to &quot;-Q &lt;<em class="cEmphasis">printername</em>&gt;&quot; or to &quot;-P SPOOLER&quot;, as described in the following sections.  You can change fonts in the middle of a report when using the Windows spooler.  Simply select the new font via the W$FONT library routine while the print file is open.  You can change fonts at any time, even mid-line.  Make sure that WFDEVICE_WIN_PRINTER is set to TRUE before you call W$FONT.  When advancing lines, the runtime uses the height of the selected font to determine the height of the line, and the font must be associated with the selected printer.
+</p>
+<a name="wp1039703"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The process used by Windows to print (via the GDI) interferes with programs that attempt to control the printer directly.  Programs that embed control codes in their print data (to perform various functions such as changing the printer's pitch, shifting to <em class="cEmphasis">compressed print</em> mode, or drawing a form on a laser printer) will not work under Windows because the GDI does not understand the control codes.  Instead, it tries to treat the codes as regular text data to be drawn.
+<hr />
+</p>
+<a name="wp1039704"> </a><p class="pBody">
+The process used by Windows has the advantage that an application does not need to know how to drive an individual printer, but has the disadvantage that an application cannot choose to drive the printer directly.  
+</p>
+<a name="wp1039705"> </a><p class="pBody">
+If you have an application that needs to control the printer directly, you have three choices:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039706"> </a><div class="pSmartList1"><li>Examine the WIN$PRINTER routine described below.  It allows you to perform some basic control operations directly from COBOL.  </li></div>
+<a name="wp1039707"> </a><div class="pSmartList1"><li>Send the report directly to the printer by assigning the print file to the printer's device.  This allows you to directly control the printer, but you lose the advantages of using the Windows print spooler.</li></div>
+<a name="wp1039708"> </a><div class="pSmartList1"><li>Use the GDI to describe the print image you want.  This generally involves calling an external function written in C or some other language that has direct GDI support.  This choice provides the greatest flexibility, but can be a large amount of work.  </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

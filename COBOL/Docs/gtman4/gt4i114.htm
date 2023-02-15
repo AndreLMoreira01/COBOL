@@ -1,0 +1,586 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>R$IO Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1286168"> </a><h2 class="pHeading2">
+R$IO Routine
+</h2>
+<a name="wp1286169"> </a><p class="pBody">
+The R$IO routine provides an interface to the relative file handler.  Calls to the routine require an operation code and a variable number of parameters, depending on the operation called.  The return code is set automatically after the call.  The external variable &quot;F-ERRNO&quot; is set according to any errors found.  &quot;F-ERRNO&quot; may not be reset on entry to R$IO, and should be checked only if R$IO returns an error condition.
+</p>
+<a name="wp1286170"> </a><h3 class="pHeadingRef">
+USAGE
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;R$IO&quot; <a name="wp1286171"> </a>
+    USING OP-CODE, PARAMETERS<a name="wp1481674"> </a>
+</pre></div>
+<a name="wp1286172"> </a><h3 class="pHeadingRef">
+PARAMETERS
+</h3>
+<a name="wp1286173"> </a><p class="pBody">
+<b class="cBold">OP-CODE</b>     Numeric parameter
+</p>
+<a name="wp1286174"> </a><p class="pBody">
+Specifies the file handling routine to be performed.  The following table lists each op-code and its corresponding operation.  The operations are detailed below:
+</p>
+<a name="wp1289515"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1289521"> </a>
+Code
+
+</th>
+    <th><a name="wp1289523"> </a>
+Operation
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1289525"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1289527"> </a><p class="pCellBody">
+R-OPEN-FUNCTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1289529"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1289531"> </a><p class="pCellBody">
+R-CLOSE-FUNCTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1289533"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1289535"> </a><p class="pCellBody">
+R-MAKE-FUNCTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1289537"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1289539"> </a><p class="pCellBody">
+R-READ-FUNCTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1289541"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1289543"> </a><p class="pCellBody">
+R-NEXT-FUNCTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1289545"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1289547"> </a><p class="pCellBody">
+R-PREVIOUS-FUNCTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1289549"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1289551"> </a><p class="pCellBody">
+R-START-FUNCTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1289553"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1289555"> </a><p class="pCellBody">
+R-WRITE-FUNCTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1289557"> </a><p class="pCellBody">
+9
+</p>
+</td>
+    <td><a name="wp1289559"> </a><p class="pCellBody">
+R-REWRITE-FUNCTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1289561"> </a><p class="pCellBody">
+10
+</p>
+</td>
+    <td><a name="wp1289563"> </a><p class="pCellBody">
+R-DELETE-FUNCTION
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1289565"> </a><p class="pCellBody">
+11
+</p>
+</td>
+    <td><a name="wp1289567"> </a><p class="pCellBody">
+R-UNLOCK-FUNCTION
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1286189"> </a><p class="pBody">
+<b class="cBold">PARAMETERS</b>     vary depending on op-code
+</p>
+<a name="wp1286190"> </a><p class="pBody">
+The remaining parameters vary depending on the operation selected.  They provide information and hold results for the operations specified.  Parameters may be omitted from those operations that do not require them.  The parameters are detailed below.
+</p>
+<a name="wp1286191"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1286192"> </a><p class="pBody">
+All parameters passed to R$IO are passed by reference.  This applies even to parameters that are integer values in the corresponding file handling routines.  
+</p>
+<a name="wp1286193"> </a><p class="pBody">
+R$IO automatically terminates PIC X filename parameters with a LOW-VALUES byte.  
+</p>
+<a name="wp1292012"> </a><p class="pBody">
+You do not have to specify SYNC for level 01 or level 77 parameters because they are automatically synchronized by ACUCOBOL-GT.
+</p>
+<a name="wp1292013"> </a><p class="pBody">
+The &quot;filesys.def&quot; COPY file contains many useful definitions for use with R$IO.  It contains definitions for the R$IO op-codes as well as the &quot;F-ERRNO&quot; error values.  It also includes many useful pre-declared variables that are of the proper type and usage.
+</p>
+<a name="wp1292021"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The behavior of this routine is affected by the setting of the FILENAME_SPACES configuration variable that may or may not allow spaces in a file name.  See the entry for <a  href="gt4h132.htm#wp1035905">FILENAME_SPACES</a> in Appendix&#160;H, for information about the terminating character for path names.
+<hr />
+</p>
+<a name="wp1286197"> </a><p class="pBody">
+The runtime configuration variables FILE_PREFIX and FILE_SUFFIX are ignored by the R$IO routine.
+</p>
+<a name="wp1286198"> </a><h3 class="pHeadingRef">
+OP-CODES and PARAMETERS
+</h3>
+<a name="wp1286199"> </a><h3 class="pHeadingRef">
+R-OPEN-FUNCTION (op-code 1)
+</h3>
+<a name="wp1286200"> </a><p class="pBody">
+This routine opens an existing relative file.  If it is successful, the value in RETURN-CODE should be moved to a data item that is USAGE HANDLE.  This data item is passed as the open file handle to the other file handling routines.  If it fails, RETURN-CODE is set to a NULL value.
+</p>
+<a name="wp1286201"> </a><p class="pBody">
+The R-OPEN-FUNCTION routine takes four required parameters, and one optional parameter: <em class="cEmphasis">filename</em>, <em class="cEmphasis">mode</em>, <em class="cEmphasis">maxsize</em>, <em class="cEmphasis">minsize</em>, and <em class="cEmphasis">blocks</em>.
+</p>
+<a name="wp1286202"> </a><p class="pBody">
+<span class="cBoldItalic">Filename</span> is the name of the file to open.  It does not need to be null-terminated.
+</p>
+<a name="wp1286203"> </a><p class="pBody">
+<span class="cBoldItalic">Mode</span> is one of the following values (defined in &quot;filesys.def&quot;):
+</p>
+<a name="wp1292074"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1292112"> </a><p class="pCellBody">
+Finput
+</p>
+</th>
+    <th><a name="wp1292114"> </a><p class="pCellBody">
+open for input only
+</p>
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1292116"> </a><p class="pCellBody">
+Foutput
+</p>
+</td>
+    <td><a name="wp1292118"> </a><p class="pCellBody">
+open for output only
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1292120"> </a><p class="pCellBody">
+Fio
+</p>
+</td>
+    <td><a name="wp1292122"> </a><p class="pCellBody">
+open for input and output
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1292124"> </a><p class="pCellBody">
+Fextend
+</p>
+</td>
+    <td><a name="wp1292126"> </a><p class="pCellBody">
+open for output only (same as Foutput)
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1286208"> </a><p class="pBody">
+&quot;Foutput&quot; does not delete the current file (this behavior differs from the OPEN OUTPUT statement in COBOL).
+</p>
+<a name="wp1286209"> </a><p class="pBody">
+This routine only opens files that already exist.  If the file does not exist, the routine fails, even when opening with mode &quot;Foutput&quot;.
+</p>
+<a name="wp1286210"> </a><p class="pBody">
+<em class="cEmphasis">Mode</em> may furthermore have one of the following flags added to it to indicate file locking options (defined in &quot;filesys.def&quot;):
+</p>
+<a name="wp1292131"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1292137"> </a><p class="pCellBody">
+Fread_lock
+</p>
+</td>
+    <td><a name="wp1292139"> </a><p class="pCellBody">
+locks file against other updaters
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1292141"> </a><p class="pCellBody">
+Fwrite_lock
+</p>
+</td>
+    <td><a name="wp1292143"> </a><p class="pCellBody">
+locks file against all others
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1292145"> </a><p class="pCellBody">
+Fmass_update
+</p>
+</td>
+    <td><a name="wp1292147"> </a><p class="pCellBody">
+locks file against all others (same as Fwrite_lock)
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1286214"> </a><p class="pBody">
+If &quot;Fmass_update&quot; is used,  the file system is directed to emphasize speed of updates over file security.
+</p>
+<a name="wp1286215"> </a><p class="pBody">
+Additionally, &quot;Fmulti_lock&quot; may be added to mode to request that more than one record lock be maintained in the file by this process.  If this option is not specified, then any I/O operation on the file will first release any currently locked record.  This results in only one record lock being set in the file at any time.  When this option is used, locked records are released only when the file is closed or when the UNLOCK routine is called.
+</p>
+<a name="wp1286216"> </a><p class="pBody">
+<span class="cBoldItalic">Maxsize</span> is the maximum record size.
+</p>
+<a name="wp1286217"> </a><p class="pBody">
+<span class="cBoldItalic">Minsize</span> is the minimum record size.  If maxsize is not equal to minsize, the records are considered variable length.
+</p>
+<a name="wp1286218"> </a><p class="pBody">
+<span class="cBoldItalic">Blocks</span> is the size of a block in bytes.  This parameter is optional and defaults to zero (&quot;0&quot;), meaning that a block is the size of a record.
+</p>
+<a name="wp1286219"> </a><h3 class="pHeadingRef">
+R-CLOSE-FUNCTION (op-code 2)
+</h3>
+<a name="wp1286220"> </a><p class="pBody">
+This routine closes an open file.  It also removes currently held locks on the file.  R-CLOSE-FUNCTION has only one parameter, <em class="cEmphasis">file_handle</em>, the file handle of the file to close.  The file handle is a handle returned by the R-OPEN-FUNCTION.  For some file systems, it is possible that R-CLOSE-FUNCTION will write additional records that had been previously buffered by the system.  For this reason, it is possible that a &quot;disk full&quot; condition can occur.
+</p>
+<a name="wp1286221"> </a><h3 class="pHeadingRef">
+R-MAKE-FUNCTION (op-code 3)
+</h3>
+<a name="wp1286222"> </a><p class="pBody">
+This routine creates a new relative file.  It will overwrite any existing file of the same name.  However, it will not overwrite a file that is currently in use.  If the file is in use, the error E_FILE_LOCKED is returned.  
+</p>
+<a name="wp1286223"> </a><p class="pBody">
+The R-MAKE-FUNCTION routine has two required parameters and one optional parameter: <em class="cEmphasis">filename</em>, <em class="cEmphasis">l_params</em>, <em class="cEmphasis">blocks</em>.
+</p>
+<a name="wp1286224"> </a><p class="pBody">
+<span class="cBoldItalic">Filename</span> is the name of the file to create.  The name need not be null-terminated.
+</p>
+<a name="wp1286225"> </a><p class="pBody">
+<span class="cBoldItalic">L_parms</span> is a string that describes logical characteristics of the file.  The string consists of two numeric fields separated by a comma.  The string must be null-terminated.  The fields are as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1286226"> </a><div class="pSmartList1"><li>Maximum record size.  This is the size in bytes of the largest record to be placed in the file.  This can range from 1 to 67,108,864.</li></div>
+<a name="wp1286227"> </a><div class="pSmartList1"><li>Minimum record size.</li></div>
+</ol></div>
+<a name="wp1286228"> </a><p class="pBody">
+<span class="cBoldItalic">Blocks</span> is the size of a block of records in bytes.  The default is zero (&quot;0&quot;).
+</p>
+<a name="wp1286229"> </a><h3 class="pHeadingRef">
+R-READ-FUNCTION (op-code 4)
+</h3>
+<a name="wp1286230"> </a><p class="pBody">
+This routine reads a record out of the relative file.  The R-READ-FUNCTION routine has three parameters: <em class="cEmphasis">file_handle</em>, <em class="cEmphasis">record_area</em>, and <em class="cEmphasis">keyval</em>.  
+</p>
+<a name="wp1286231"> </a><p class="pBody">
+<span class="cBoldItalic">File_handle</span> must be a valid file handle returned by R-OPEN-FUNCTION.  
+</p>
+<a name="wp1286232"> </a><p class="pBody">
+<span class="cBoldItalic">Record_area</span> points to the area to hold the record read.  It must be at least MAXSIZE bytes in length.
+</p>
+<a name="wp1286233"> </a><p class="pBody">
+<span class="cBoldItalic">Keyval</span> is the record number of the record to read.  It is a long value.
+</p>
+<a name="wp1286234"> </a><p class="pBody">
+If R-READ-FUNCTION succeeds, RETURN-CODE is set to the size of the record read, plus one.  If it fails, RETURN-CODE is set to zero.  However, if the function fails because the record is locked, the file pointer is set to the locked record.
+</p>
+<a name="wp1286235"> </a><p class="pBody">
+Records read in a file open for input only are not locked.  Furthermore, most file systems do not block the reading of locked records in a file open for input (this feature depends on the host file system - not all support it).  Records read from a file open for I/O are automatically locked unless the external variable &quot;f-no-lock&quot; is set to a non-zero value, in which case they are treated in the same manner as files open for input.
+</p>
+<a name="wp1286236"> </a><h3 class="pHeadingRef">
+R-NEXT-FUNCTION (op-code 5)
+</h3>
+<a name="wp1286237"> </a><p class="pBody">
+This routine reads the next record in the sequence of records in a relative file.  The R-NEXT-FUNCTION routine has two parameters: <em class="cEmphasis">file_handle</em> and <em class="cEmphasis">record_area</em>.  
+</p>
+<a name="wp1286238"> </a><p class="pBody">
+<span class="cBoldItalic">File_handle</span> must be a valid file handle returned by R-OPEN-FUNCTION.  
+</p>
+<a name="wp1286239"> </a><p class="pBody">
+<span class="cBoldItalic">Record_area</span> points to the area to hold the record read.  It must be at least MAXSIZE bytes in length.
+</p>
+<a name="wp1286240"> </a><p class="pBody">
+If R-NEXT-FUNCTION succeeds, RETURN-CODE is set to the size of the record read, plus one.  If it fails, RETURN-CODE is set to zero.  However, if the function fails because the record is locked, the file pointer is set to the locked record.
+</p>
+<a name="wp1286241"> </a><p class="pBody">
+Records read in a file open for input only are not locked.  Furthermore, most file systems do not block the reading of locked records in a file open for input (this feature depends on the host file system - not all support it).  Records read from a file open for I/O are automatically locked unless the external variable &quot;f-no-lock&quot; is set to a non-zero value, in which case they are treated in the same manner as files open for input.
+</p>
+<a name="wp1286242"> </a><h3 class="pHeadingRef">
+R-PREVIOUS-FUNCTION (op-code 6)
+</h3>
+<a name="wp1286243"> </a><p class="pBody">
+This routine reads the previous record in the sequence of records in a relative file.  The R-PREVIOUS-FUNCTION routine has two parameters: <em class="cEmphasis">file_handle</em> and <em class="cEmphasis">record_area</em>.  
+</p>
+<a name="wp1286244"> </a><p class="pBody">
+<span class="cBoldItalic">File_handle</span> must be a valid file handle returned by R-OPEN-FUNCTION.  
+</p>
+<a name="wp1286245"> </a><p class="pBody">
+<span class="cBoldItalic">Record_area</span> points to the area to hold the record read.  It must be at least MAXSIZE bytes in length.
+</p>
+<a name="wp1286246"> </a><p class="pBody">
+If R-PREVIOUS-FUNCTION succeeds, RETURN-CODE is set to the size of the record read, plus one.  If it fails, RETURN-CODE is set to zero.  However, if the function fails because the record is locked, the file pointer is set to the locked record.
+</p>
+<a name="wp1286247"> </a><p class="pBody">
+Records read in a file open for input only are not locked.  Furthermore, most file systems do not block the reading of locked records in a file open for input (this feature depends on the host file system - not all support it).  Records read from a file open for I/O are automatically locked unless the external variable &quot;f-no-lock&quot; is set to a non-zero value, in which case they are treated in the same manner as files open for input.
+</p>
+<a name="wp1286248"> </a><h3 class="pHeadingRef">
+R-START-FUNCTION (op-code 7)
+</h3>
+<a name="wp1286249"> </a><p class="pBody">
+This routine positions the file pointer for the next R-NEXT-FUNCTION or R-PREVIOUS-FUNCTION.  The R-START-FUNCTION routine has three parameters: <em class="cEmphasis">file_handle</em>, <em class="cEmphasis">keyval</em>, and <em class="cEmphasis">mode</em>.  
+</p>
+<a name="wp1286250"> </a><p class="pBody">
+<span class="cBoldItalic">File_handle</span> must be a valid file handle returned by R-OPEN-FUNCTION.  
+</p>
+<a name="wp1286251"> </a><p class="pBody">
+<span class="cBoldItalic">Keyval</span> is the record position at which to start.  It is a long value.
+</p>
+<a name="wp1286252"> </a><p class="pBody">
+<span class="cBoldItalic">Mode</span> is a direction.  Valid values are as defined in &quot;filesys.def&quot;.  They include:
+</p>
+<a name="wp1292328"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1294769"> </a><p class="pCellBody">
+F-EQUALS (0)
+</p>
+</td>
+    <td><a name="wp1294771"> </a><p class="pCellBody">
+start at the specified key
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1294773"> </a><p class="pCellBody">
+F-NOT-LESS (1)
+</p>
+</td>
+    <td><a name="wp1294775"> </a><p class="pCellBody">
+start at the specified key, or the one after
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1294777"> </a><p class="pCellBody">
+F-GREATER (2)
+</p>
+</td>
+    <td><a name="wp1294779"> </a><p class="pCellBody">
+start at the record beyond the specified key
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1294781"> </a><p class="pCellBody">
+F-LESS (3)
+</p>
+</td>
+    <td><a name="wp1294783"> </a><p class="pCellBody">
+start at the record before the specified key
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1294785"> </a><p class="pCellBody">
+F-NOT-GREATER (4)
+</p>
+</td>
+    <td><a name="wp1294787"> </a><p class="pCellBody">
+start at the specified key, or the one before
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1286258"> </a><p class="pBody">
+The F_EQUALS mode is usually used to test for the existence of a record or to position a file when the key value is known.  The F_NOT_LESS and F_GREATER modes are used to position the file for a series of NEXT calls and the F_LESS and F_NOT_GREATER modes are used to prepare for a series of PREVIOUS calls.
+</p>
+<a name="wp1286259"> </a><p class="pBody">
+After a successful START, the current key of reference is set to keyval.  The next READ, NEXT or PREVIOUS call returns the record selected by the START routine.  Note that in this case, READ, NEXT and PREVIOUS will all return the same record.
+</p>
+<a name="wp1286260"> </a><p class="pBody">
+If the START routine fails, the current key of reference is placed in the &quot;undefined&quot; state.
+</p>
+<a name="wp1286261"> </a><p class="pBody">
+Some file systems cannot perform the F_LESS or F_NOT_GREATER modes.  On these file systems, specifying these modes causes START to return an error and set the E_NO_SUPPORT condition. 
+</p>
+<a name="wp1286262"> </a><h3 class="pHeadingRef">
+R-WRITE-FUNCTION (op-code 8)
+</h3>
+<a name="wp1286263"> </a><p class="pBody">
+This routine adds a new record to the file.  It has four parameters: <em class="cEmphasis">file_handle</em>, <em class="cEmphasis">record</em>, <em class="cEmphasis">length</em>, and <em class="cEmphasis">keyval</em>.
+</p>
+<a name="wp1286264"> </a><p class="pBody">
+<span class="cBoldItalic">File_handle</span> must be a valid file handle returned by R-OPEN-FUNCTION.  
+</p>
+<a name="wp1286265"> </a><p class="pBody">
+<span class="cBoldItalic">Record</span> is the record data to write to the file.
+</p>
+<a name="wp1286266"> </a><p class="pBody">
+<span class="cBoldItalic">Length</span> is the number of bytes to write (for variable-length files).
+</p>
+<a name="wp1286267"> </a><p class="pBody">
+<span class="cBoldItalic">Keyval</span> is the record number to write.  A keyval of &quot;-1&quot; means to write at the end of the file.
+</p>
+<a name="wp1286268"> </a><p class="pBody">
+The R-WRITE-FUNCTION routine does not change the current file position.
+</p>
+<a name="wp1286269"> </a><h3 class="pHeadingRef">
+R-REWRITE-FUNCTION (op-code 9)
+</h3>
+<a name="wp1286270"> </a><p class="pBody">
+This routine replaces an existing record in the file.  It has four parameters: <em class="cEmphasis">file_handle</em>, <em class="cEmphasis">record</em>, <em class="cEmphasis">length</em>, and <em class="cEmphasis">keyval</em>.
+</p>
+<a name="wp1286271"> </a><p class="pBody">
+<span class="cBoldItalic">File_handle</span> must be a valid file handle returned by R-OPEN-FUNCTION.  
+</p>
+<a name="wp1286272"> </a><p class="pBody">
+<span class="cBoldItalic">Record</span> is the record data to write to the file.
+</p>
+<a name="wp1286273"> </a><p class="pBody">
+<span class="cBoldItalic">Length</span> is the number of bytes to write (for variable-length files).
+</p>
+<a name="wp1286274"> </a><p class="pBody">
+<span class="cBoldItalic">Keyval</span> is the record number to write.  A value of &quot;-1&quot; is invalid with the REWRITE function.
+</p>
+<a name="wp1286275"> </a><p class="pBody">
+The R-WRITE-FUNCTION routine does not change the current file position.
+</p>
+<a name="wp1286276"> </a><h3 class="pHeadingRef">
+R-DELETE-FUNCTION (op-code 10)
+</h3>
+<a name="wp1286277"> </a><p class="pBody">
+This routine deletes the specified record.  It does not affect the current file position.  The DELETE routine has two parameters: <em class="cEmphasis">file_handle</em> and <em class="cEmphasis">keyval</em>.  
+</p>
+<a name="wp1286278"> </a><p class="pBody">
+<span class="cBoldItalic">File_handle</span> must be a valid file handle returned by R-OPEN-FUNCTION.  
+</p>
+<a name="wp1286279"> </a><p class="pBody">
+<span class="cBoldItalic">Keyval</span> specifies the position of the record to delete.
+</p>
+<a name="wp1286280"> </a><h3 class="pHeadingRef">
+R-UNLOCK-FUNCTION (op-code 11)
+</h3>
+<a name="wp1286281"> </a><p class="pBody">
+This routine unlocks any locked records held by the current process in the specified file.  It is not an error to call this routine when there are no locked records.  This routine does not affect the current file position.  This routine will not unlock any records if it is called during a transaction.  &quot;Commit&quot; should be used instead.  
+</p>
+<a name="wp1286282"> </a><p class="pBody">
+R-UNLOCK-FUNCTION has only one parameter: <em class="cEmphasis">file_handle</em>.  File_handle must be a valid file handle returned by R-OPEN-FUNCTION. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

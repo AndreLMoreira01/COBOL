@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:01:15" />
+  <title>5.2.12  DISPLAY UPON SYSPUNCH</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch5-dosv.htm">Chapter 5:  IBM DOS/VS COBOL Conversions</a> &gt; <a href="ch5-dos3.htm">5.2  ACUCOBOL-GT and IBM DOS/VS COBOL-Specific Features</a> &gt; </p>
+<a name="wp1034827"> </a><h2 class="pHeading2">
+5.2.12  DISPLAY UPON SYSPUNCH
+</h2>
+<a name="wp1034830"> </a><p class="pBody">
+The IBM DOS/VS COBOL SYSPUNCH (or SYSPCH) option refers to punchcards, which are obsolete.  The ACUCOBOL-GT compiler redirects punchcard output to a special file called SYSPUNCH.TXT.
+</p>
+<a name="wp1034831"> </a><p class="pBody">
+Format 9 of the DISPLAY statement (ANSI DISPLAY) is in most cases treated in a slightly different manner by IBM DOS/VS COBOL.
+</p>
+<a name="wp1034832"> </a><p class="pBody">
+IBM DOS/VS COBOL has special names for card punch output, which may appear after the reserved word UPON either as SYSPUNCH (or SYSPCH) or as a &quot;mnemonic&quot; associated with one of these in the SPECIAL-NAMES paragraph. 
+</p>
+<a name="wp1034833"> </a><p class="pBody">
+In the IBM DOS/VS COBOL compatibility mode, ACUCOBOL-GT accepts these names, or their mnemonics, and it emulates a card punch by writing the card images to a disk file (or a device that looks like a disk file to the operating system).  The default file specification is SYSPUNCH.TXT (in the current directory), but you may specify another file by putting a line of the following form in the runtime configuration file:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SYSPUNCH = &lt;file specification used instead of SYSPUNCH.TXT&gt;<a name="wp1034834"> </a>
+</pre></div>
+<a name="wp1034835"> </a><p class="pBody">
+Each card image is 80 characters wide, and is terminated in the manner appropriate for the runtime environment (carriage return and line feed for Windows, line feed for UNIX).
+</p>
+<a name="wp1034836"> </a><p class="pBody">
+The leftmost 72 columns contain data from the DISPLAY UPON SYSPUNCH statement.  If the data is longer than this, excess characters spill over to the next card image.  If the data is shorter than this, it is padded with blanks at the right end to make it 72 characters long.
+</p>
+<a name="wp1034837"> </a><p class="pBody">
+The other 8 columns of each card image contain the program name from the PROGRAM-ID phrase of the IDENTIFICATION division.  If the program name is more or less than eight characters long, it is truncated or padded with spaces at the right end.
+</p>
+<a name="wp1034838"> </a><p class="pBody">
+If the file specified for card images already exists, the card images are added to the end of the file. 
+</p>
+<a name="wp1034839"> </a><p class="pBody">
+The WITH NO ADVANCING phrase may be used with DISPLAY UPON SYSPUNCH, although it is not part of IBM DOS/VS COBOL.  It may cause subsequent text to go into the same card image, if it fits. 
+</p>
+<a name="wp1034840"> </a><p class="pBody">
+DISPLAY UPON CONSOLE, DISPLAY UPON SYSLST, DISPLAY UPON SYSLIST and DISPLAY UPON SYSOUT behave in a slightly different manner when the IBM DOS/VS COBOL compatibility mode is in effect.  In this mode, each line must be 100 characters long for DISPLAY UPON CONSOLE, and 120 characters long for the other forms.  A line that is too short is padded with blanks at the right end, and a line that is too long spills over to the next line.
+</p>
+<a name="wp1034841"> </a><p class="pBody">
+The IBM DOS/VS COBOL compatibility mode has no effect on the DISPLAY UPON SYSERR statement.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

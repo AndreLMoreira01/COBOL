@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:20:41" />
+  <title>2.6.7   Graphical Window and Control Emulation</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run2.htm"><br />Chapter 2: Setting Up Your Terminals</a> &gt; <a href="run232.htm">2.6  The Terminal Database File</a> &gt; </p>
+<a name="wp1045199"> </a><h2 class="pHeading2">
+2.6.7   Graphical Window and Control Emulation
+</h2>
+<a name="wp1045204"> </a><p class="pBody">
+The character-based version of the runtime emulates graphical windows and controls by displaying characters with particular attributes that approximate the look and feel of a graphical system.
+</p>
+<a name="wp1045205"> </a><p class="pBody">
+The following standard characters are used by default to represent various graphical components:  
+</p>
+<a name="wp1045207"> </a><p class="pBody">
+&quot;-&quot;, &quot;|&quot;, &quot;+&quot;, &quot;=&quot;, &quot;*&quot;, &quot;.&quot;, 
+</p>
+<a name="wp1045208"> </a><p class="pBody">
+&quot;^&quot;, &quot;v&quot;, &quot;&lt;&quot;, &quot;&gt;&quot;, &quot; &quot;, &quot;#&quot;
+</p>
+<a name="wp1045209"> </a><p class="pBody">
+Terminals that support a <em class="cEmphasis">line drawing</em> set or a special <em class="cEmphasis">extended</em> character set, or both, can be configured to use these special characters.  The configuration method is similar to the one used for line drawing, described in <a  href="run240.htm#wp1045157">section 2.6.6, &quot;Line Drawing.&quot;</a>
+</p>
+<a name="wp1045213"> </a><p class="pBody">
+To support the substitution of line drawing characters and extended characters, there are two terminal database (&quot;a_termcap&quot;) functions: GO-GUI-MAP and GF-GUI-MAP.
+</p>
+<a name="wp1045215"> </a><p class="pBody">
+The <b class="cBold">GO-GUI-MAP</b> function uses a list of standard characters that correspond to line segments and other special characters when displayed in the terminal's <em class="cEmphasis">graphics</em> mode.  This is similar to the GM function used for line drawing.  The Terminal Manager turns the terminal's <em class="cEmphasis">graphics</em> mode on by sending the GO code.  The GO code is followed by normal characters which are interpreted by the terminal into their corresponding special characters.  When all of the special character elements have been displayed, the terminal is set back to <em class="cEmphasis">normal</em> mode with GF.
+</p>
+<a name="wp1045217"> </a><p class="pBody">
+The <b class="cBold">GF-GUI-MAP</b> function provides a method for specifying substitute <em class="cEmphasis">standard</em> characters for some or all of the graphical components.  When these characters are used, they are displayed in normal (not <em class="cEmphasis">graphics</em>) mode.  The Terminal Manager gives preference to the characters specified in GO-GUI-MAP.  If a character in the list is preceded with &quot;\0&quot; (backslash, zero), the Terminal Manager uses the corresponding character in the GF-GUI-MAP.  If the character cannot be determined from the GO-GUI-MAP or GF-GUI-MAP functions (either list may be incomplete or there may be a &quot;\0&quot; in the same position in both lists), the Terminal Manager uses the default character.  For more information about defining the list of special characters, see the entry for GUI_CHARS in Book 4, <em class="cEmphasis">Appendices</em>, Appendix H.
+</p>
+<a name="wp1045218"> </a><p class="pBody">
+The characters listed in the GO-GUI-MAP and GF-GUI-MAP correspond, in order, to the following graphical components.  The character in parentheses is the default character:
+</p>
+<a name="wp1045304"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1045221"> </a><p class="pCellBody">
+1.
+</p>
+</td>
+    <td><a name="wp1045223"> </a><p class="pCellBody">
+System menu button
+</p>
+</td>
+    <td><a name="wp1045225"> </a><p class="pCellBody">
+(*)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045227"> </a><p class="pCellBody">
+2.
+</p>
+</td>
+    <td><a name="wp1045229"> </a><p class="pCellBody">
+Floating window title left corner
+</p>
+</td>
+    <td><a name="wp1045231"> </a><p class="pCellBody">
+(+)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045233"> </a><p class="pCellBody">
+3.
+</p>
+</td>
+    <td><a name="wp1045235"> </a><p class="pCellBody">
+Floating window title right corner
+</p>
+</td>
+    <td><a name="wp1045237"> </a><p class="pCellBody">
+(+)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045239"> </a><p class="pCellBody">
+4.
+</p>
+</td>
+    <td><a name="wp1045241"> </a><p class="pCellBody">
+Floating window title fill character
+</p>
+</td>
+    <td><a name="wp1045243"> </a><p class="pCellBody">
+(=)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045245"> </a><p class="pCellBody">
+5.
+</p>
+</td>
+    <td><a name="wp1045247"> </a><p class="pCellBody">
+Minimizer
+</p>
+</td>
+    <td><a name="wp1045249"> </a><p class="pCellBody">
+(.)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045251"> </a><p class="pCellBody">
+6.
+</p>
+</td>
+    <td><a name="wp1045253"> </a><p class="pCellBody">
+Maximizer
+</p>
+</td>
+    <td><a name="wp1045255"> </a><p class="pCellBody">
+(^)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045257"> </a><p class="pCellBody">
+7.
+</p>
+</td>
+    <td><a name="wp1045259"> </a><p class="pCellBody">
+Scroll bar up button
+</p>
+</td>
+    <td><a name="wp1045261"> </a><p class="pCellBody">
+(^)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045263"> </a><p class="pCellBody">
+8.
+</p>
+</td>
+    <td><a name="wp1045265"> </a><p class="pCellBody">
+Scroll bar down button
+</p>
+</td>
+    <td><a name="wp1045267"> </a><p class="pCellBody">
+(v)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045269"> </a><p class="pCellBody">
+9.
+</p>
+</td>
+    <td><a name="wp1045271"> </a><p class="pCellBody">
+Scroll bar left button
+</p>
+</td>
+    <td><a name="wp1045273"> </a><p class="pCellBody">
+(&lt;)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045275"> </a><p class="pCellBody">
+10.
+</p>
+</td>
+    <td><a name="wp1045277"> </a><p class="pCellBody">
+Scroll bar right button
+</p>
+</td>
+    <td><a name="wp1045279"> </a><p class="pCellBody">
+(&gt;)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045281"> </a><p class="pCellBody">
+11.
+</p>
+</td>
+    <td><a name="wp1045283"> </a><p class="pCellBody">
+Scroll bar page area
+</p>
+</td>
+    <td><a name="wp1045285"> </a><p class="pCellBody">
+( )
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045287"> </a><p class="pCellBody">
+12.
+</p>
+</td>
+    <td><a name="wp1045289"> </a><p class="pCellBody">
+Scroll bar thumb
+</p>
+</td>
+    <td><a name="wp1045291"> </a><p class="pCellBody">
+(#)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045293"> </a><p class="pCellBody">
+13.
+</p>
+</td>
+    <td><a name="wp1045295"> </a><p class="pCellBody">
+Left entry field box and check box character
+</p>
+</td>
+    <td><a name="wp1045297"> </a><p class="pCellBody">
+([)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045299"> </a><p class="pCellBody">
+14.
+</p>
+</td>
+    <td><a name="wp1045301"> </a><p class="pCellBody">
+Right entry field box and check box character
+</p>
+</td>
+    <td><a name="wp1045303"> </a><p class="pCellBody">
+(])
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1045305"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Some of these graphic components may not be used in the current version of ACUCOBOL-GT.
+<hr />
+</p>
+<a name="wp1045308"> </a><p class="pBody">
+When a program executes, the runtime evaluates the terminal's display capabilities and determines the special display attributes to apply to select control elements.  These control elements include the control's <em class="cEmphasis">key letter</em>, push-button text, and a key letter that is part of the push-button text when the user presses the button with the mouse.  The runtime applies the first supported capability to each element as follows.
+</p>
+<a name="wp1045309"> </a><p class="pBody">
+Key letter:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1045310"> </a><div class="pSmartList1"><li>Underline</li></div>
+<a name="wp1045311"> </a><div class="pSmartList1"><li>Intensity toggle (opposite intensity - for example, if the control is displayed in high intensity, the key letter is displayed in low intensity)</li></div>
+<a name="wp1045312"> </a><div class="pSmartList1"><li>Reverse video</li></div>
+</ol></div>
+<a name="wp1045313"> </a><p class="pBody">
+Selected push-button text:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1045314"> </a><div class="pSmartList1"><li>Reverse video</li></div>
+<a name="wp1045315"> </a><div class="pSmartList1"><li>Underline</li></div>
+<a name="wp1045316"> </a><div class="pSmartList1"><li>Intensity toggle</li></div>
+</ol></div>
+<a name="wp1045317"> </a><p class="pBody">
+Key letter in selected push-button text:
+</p>
+<a name="wp1045318"> </a><p class="pBody">
+If the selected push-button text attribute is <em class="cEmphasis">reverse video</em>, apply to the key letter:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1045319"> </a><div class="pSmartList1"><li>Intensity toggle</li></div>
+<a name="wp1045320"> </a><div class="pSmartList1"><li>Underline</li></div>
+<a name="wp1045321"> </a><div class="pSmartList1"><li>Reverse video (the key letter is indistinguishable from the other text)</li></div>
+</ol></div>
+<a name="wp1045322"> </a><p class="pBody">
+If the selected text attribute is <em class="cEmphasis">underline</em>, apply to the key letter:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1045323"> </a><div class="pSmartList1"><li>Intensity toggle</li></div>
+<a name="wp1045324"> </a><div class="pSmartList1"><li>Underline (the key letter is indistinguishable from the other text)</li></div>
+</ol></div>
+<a name="wp1045325"> </a><p class="pBody">
+If the selected text attribute is <em class="cEmphasis">intensity toggle</em>, apply to the key letter:
+</p>
+<a name="wp1045326"> </a><p class="pBody">
+Intensity toggle (key letter is indistinguishable from the other text)
+</p>
+<a name="wp1045327"> </a><h3 class="pHeadingRef">
+Reconstructing the screen
+</h3>
+<a name="wp1045330"> </a><p class="pBody">
+On a character-based system, during program execution when a control is resized, moved, hidden, or removed (destroyed), the runtime applies the following procedure to reconstruct and display the screen:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1045331"> </a><div class="pSmartList1"><li>The screen is reconstructed in memory, in a <em class="cEmphasis">virtual screen,</em> before being displayed to the physical screen.</li></div>
+<a name="wp1045332"> </a><div class="pSmartList1"><li>The portion of the screen <em class="cEmphasis">underneath</em> the affected control is redrawn to the virtual screen with the attributes and colors of the owning window (this usually results in that area of the screen being filled with the owning window's background color).</li></div>
+<a name="wp1045333"> </a><div class="pSmartList1"><li>Any controls that overlap the affected area are redrawn in the order in which they were originally created.</li></div>
+<a name="wp1045334"> </a><div class="pSmartList1"><li>The changed portions of the screen (constructed in memory) are displayed to the physical screen.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:09" />
+  <title>C.17  Changes Affecting Version 2.1</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4c.htm">Appendix C:  Changes Affecting Previous Versions</a> &gt; </p>
+<a name="wp1034854"> </a><h2 class="pHeading1">
+C.17  Changes Affecting Version 2.1
+</h2>
+<a name="wp1034856"> </a><p class="pBody">
+The following section details changes that can affect programs originally written for the Version 2.1 ACUCOBOL-85 compiler.  
+</p>
+<a name="wp1034857"> </a><h3 class="pHeadingRef">
+Compiler changes
+</h3>
+<a name="wp1034858"> </a><h3 class="pHeadingRef">
+MS-DOS requirements
+</h3>
+<a name="wp1034859"> </a><p class="pBody">
+For machines using MS-DOS, ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>Version 3.0 requires MS-DOS version 3.0 or later.  ACUCOBOL-85<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>Version 2.1 required only MS-DOS version 2.0.
+</p>
+<a name="wp1034860"> </a><h3 class="pHeadingRef">
+Support for 64-bit architectures
+</h3>
+<a name="wp1034862"> </a><p class="pBody">
+Beginning with Version 3.0, ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>fully supports 64-bit machines without restriction.  At the current time, the only machine that fits this classification is the DEC Alpha machine running OSF (Open/VMS also runs on the Alpha machine, but it runs in 32-bit mode).  Version 2.1 of ACUCOBOL-85 also runs on 64-bit machines, but it contains some restrictions.  
+</p>
+<a name="wp1034865"> </a><p class="pBody">
+In Version 2.1, the following items are restricted:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034867"> </a><div class="pSmartList1"><li>Since RETURN-CODE is only 32 bits in size, it cannot hold a &quot;long&quot; value properly.  This makes it inappropriate for receiving &quot;pointer&quot; or &quot;long&quot; return values from a C subroutine.</li></div>
+<a name="wp1034869"> </a><div class="pSmartList1"><li>USAGE POINTER data items are also 32 bits, and so cannot actually hold a real machine address.</li></div>
+<a name="wp1034870"> </a><div class="pSmartList1"><li>The direct C interface cannot be used for &quot;pointer&quot; or &quot;long&quot; parameters since the 2.1 compiler does not allow you to pass a 64-bit item BY VALUE.  </li></div>
+</ul></div>
+<a name="wp1034871"> </a><p class="pBody">
+Beginning with Version 3.0, these restrictions do not apply.  We made certain changes to the rules of ACUCOBOL-85, beginning with Version 2.3.  These changes affect only a few existing COBOL programs, but they have the potential of causing a working program to stop working.  Because of this, there is a method available to inhibit these changes.  See the &quot;-Dw&quot; option in section 2.1.9 of the <em class="cEmphasis">ACUCOBOL-GT User's Guide. </em>
+</p>
+<a name="wp1034872"> </a><p class="pBody">
+The specific changes are:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034874"> </a><div class="pSmartList1"><li>USAGE POINTER data items now occupy 8 bytes instead of 4 bytes.  This allows a USAGE POINTER item to hold a full address on any machine architecture.  On a machine that is smaller than 64-bits, only the first 32 bits of the POINTER item are used.  The rest of the item is treated as FILLER.  </li></div>
+<a name="wp1034875"> </a><p class="pIndented1">
+This is the change that is most likely to affect existing programs.  You can be affected if you have POINTER data items as part of a group item, since the group item's size will change.  If you have this case, then either allow the size of the group to change and adjust any external references or redefinitions of it, or use the option described below to keep POINTER items in 4 bytes.  
+</p>
+<a name="wp1034877"> </a><div class="pSmartList1"><li>The special register RETURN-CODE was changed from PIC S9(9) COMP-5 to USAGE SIGNED-LONG.  For a description of SIGNED-LONG, see the <em class="cEmphasis">ACUCOBOL-GT Reference Manual </em>section 5.7.1.8, &quot;USAGE clause.&quot;  This change allows RETURN-CODE to hold 64-bit values on 64-bit machines, and so it can be used to hold any return value from a called routine.  This change should not affect any existing program.  </li></div>
+<a name="wp1034879"> </a><div class="pSmartList1"><li>You may now pass 8-byte data items BY VALUE to a called routine.  If you are on a 16- or 32-bit machine, then only the low-order 32 bits are actually passed.  On a 64-bit machine, all 64 bits are passed.  This provides a portable solution to the problem of passing &quot;long&quot; data.  This change does not affect any existing programs.  </li></div>
+</ul></div>
+<a name="wp1034880"> </a><p class="pBody">
+For related topics, see the
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034881"> </a><div class="pSmartList1"><li>&quot;-Dw&quot; option in section 2.1.9 of the <em class="cEmphasis">ACUCOBOL-GT User's Guide. </em></li></div>
+<a name="wp1034882"> </a><div class="pSmartList1"><li>&quot;USAGE clause,&quot; section 5.7.1.8 of the <em class="cEmphasis">ACUCOBOL-GT Reference Manual.</em></li></div>
+<a name="wp1034883"> </a><div class="pSmartList1"><li>CALL RETURNING syntax in the entry for the CALL statement in section 6.6 of the <em class="cEmphasis">ACUCOBOL-GT Reference Manual.</em></li></div>
+<a name="wp1034884"> </a><div class="pSmartList1"><li>next section on &quot;RETURN-CODE Changes.&quot;</li></div>
+</ul></div>
+<a name="wp1034885"> </a><h3 class="pHeadingRef">
+RETURN-CODE changes
+</h3>
+<a name="wp1034886"> </a><p class="pBody">
+As discussed in the previous section, the special register RETURN-CODE has changed.  In versions of ACUCOBOL-85<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>prior to 2.3, RETURN-CODE was implicitly defined as:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77  RETURN-CODE   PIC S9(9)  COMP-5, EXTERNAL.<a name="wp1034887"> </a>
+</pre></div>
+<a name="wp1034888"> </a><p class="pBody">
+In Version 2.3 and later, it is defined as:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77  RETURN-CODE   SIGNED-LONG, EXTERNAL.<a name="wp1034889"> </a>
+</pre></div>
+<a name="wp1034890"> </a><p class="pBody">
+This change should have no noticeable effect on existing code, but it allows RETURN-CODE to be used sensibly on 64-bit machines.  This change is inhibited if you compile for compatibility with a prior version of ACUCOBOL-85.  For example, if you use &quot;-C21&quot; to maintain source compatibility with Version 2.1, then this change does not take place.
+</p>
+<a name="wp1034892"> </a><p class="pBody">
+There is also a special register that redefines RETURN-CODE called RETURN-UNSIGNED.  Its definition is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77  RETURN-UNSIGNED <a name="wp1034893"> </a>
+    REDEFINES RETURN-CODE  UNSIGNED-LONG, EXTERNAL.<a name="wp1035418"> </a>
+</pre></div>
+<a name="wp1034894"> </a><p class="pBody">
+You should use RETURN-UNSIGNED when handling pointer or &quot;unsigned long&quot; data types that are returned from an external routine.  If you use RETURN-CODE in these cases, you can get errors if the value is large enough to set the high-order bit of RETURN-CODE.  The problem is that these values are negative when interpreted as signed values, therefore COBOL will remove the sign if you move them to an unsigned destination.  
+</p>
+<a name="wp1034895"> </a><p class="pBody">
+The RETURN-UNSIGNED special register is not defined if you compile for compatibility with prior versions of ACUCOBOL-85.
+</p>
+<a name="wp1034896"> </a><h3 class="pHeadingRef">
+Runtime changes
+</h3>
+<a name="wp1034897"> </a><p class="pBody">
+For machines using MS-DOS, ACUCOBOL-GT Version 3.1 and later versions do not run under standard 16-bit DOS but do support 32-bit Extended DOS.<span style="font-family: Arial, Verdana, Helvetica, sans-serif">  </span>Version 3.0 requires MS-DOS version 3.0 or later.  ACUCOBOL-85<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>Version 2.1 required only MS-DOS version 2.0.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

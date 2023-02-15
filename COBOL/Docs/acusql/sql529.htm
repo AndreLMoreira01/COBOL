@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:36:12" />
+  <title>5.7.4  Putting It All Together</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql5.htm">Chapter 5: Sample Programs</a> &gt; <a href="sql525.htm">5.7  Updating Data - update.sqb</a> &gt; </p>
+<a name="wp1034911"> </a><h2 class="pHeading2">
+5.7.4  Putting It All Together
+</h2>
+<a name="wp1034912"> </a><p class="pBody">
+This section showed how to use a cursor to update a table in the database.  The following code:  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    EXEC SQL<a name="wp1034913"> </a>
+        DECLARE COBCUR1 CURSOR FOR <a name="wp1034914"> </a>
+        SELECT C_FIRST_NAME, C_LAST_NAME<a name="wp1034915"> </a>
+            FROM CUSTOMER<a name="wp1034916"> </a>
+            WHERE C_LAST_NAME = &#39;Snead&#39;<a name="wp1034918"> </a>
+        FOR UPDATE<a name="wp1034919"> </a>
+    END-EXEC.<a name="wp1034920"> </a>
+<a name="wp1034921"> </a>
+    EXEC SQL <a name="wp1034922"> </a>
+        OPEN COBCUR1 <a name="wp1034923"> </a>
+    END-EXEC.<a name="wp1034924"> </a>
+<a name="wp1034925"> </a>
+perform until SQLCODE not equal 0<a name="wp1034927"> </a>
+<a name="wp1034928"> </a>
+    EXEC SQL<a name="wp1034929"> </a>
+        FETCH COBCUR1<a name="wp1034930"> </a>
+        INTO :C-FIRST-NAME, :C-LAST-NAME<a name="wp1034931"> </a>
+    END-EXEC<a name="wp1034932"> </a>
+    IF sqlcode EQUAL 0<a name="wp1034933"> </a>
+          <a name="wp1034934"> </a>
+        DISPLAY &quot;Updating &quot; C-FIRST-NAME , C-LAST-NAME <a name="wp1034935"> </a>
+        EXEC SQL<a name="wp1034936"> </a>
+            UPDATE CUSTOMER SET C_INFO = &#39;Revised&#39; <a name="wp1034937"> </a>
+            WHERE CURRENT OF COBCUR1<a name="wp1034938"> </a>
+        END-EXEC<a name="wp1034939"> </a>
+    end-if<a name="wp1034940"> </a>
+end-perform.<a name="wp1034941"> </a>
+<a name="wp1034942"> </a>
+EXEC SQL <a name="wp1034944"> </a>
+    CLOSE COBCUR1 <a name="wp1034945"> </a>
+END-EXEC.<a name="wp1034946"> </a>
+</pre></div>
+<a name="wp1034947"> </a><p class="pBody">
+instructs the program to perform these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034948"> </a><div class="pSmartList1"><li>Declare a cursor to SELECT the values of C_FIRST_NAME and C_LAST_NAME from the &quot;customer&quot; table in those rows where C_LAST-NAME equals &quot;Snead&quot;.  These rows will be updated.</li></div>
+<a name="wp1034949"> </a><div class="pSmartList1"><li>Open the cursor.</li></div>
+<a name="wp1034950"> </a><div class="pSmartList1"><li>Fetch the values and insert them into the host variables :C_FIRST_NAME and :C_LAST-NAME.</li></div>
+<a name="wp1034951"> </a><div class="pSmartList1"><li>If the program doesn't encounter an error condition, display a message indicating that the fields are being updated.</li></div>
+<a name="wp1034952"> </a><div class="pSmartList1"><li>Change the value of the C_INFO field to &quot;Revised&quot; for those rows that meet the condition set in the cursor (C_LAST_NAME equals &quot;Snead&quot;).  </li></div>
+<a name="wp1034953"> </a><div class="pSmartList1"><li>Close the cursor.</li></div>
+</ol></div>
+<a name="wp1034954"> </a><p class="pBody">
+The figure in <a  href="sql525.htm#wp1034738">section 5.7</a> showed the output of the &quot;update&quot; program.  If you want, run the &quot;select3&quot; program to see the contents of the updated fields.
+</p>
+<a name="wp1047460"> </a><p class="pBodyRelative">
+</p><div><img src="images/revised_.gif" height="144" width="405" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

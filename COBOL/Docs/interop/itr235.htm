@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:25" />
+  <title>2.4  Mapping Java Data Types</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr2.htm">Chapter 2: Working with Java Technology</a> &gt; </p>
+<a name="wp1066559"> </a><h2 class="pHeading1">
+2.4  Mapping Java Data Types
+</h2>
+<a name="wp1066560"> </a><p class="pBody">
+When interfacing with external Java systems, it is often necessary to map COBOL data types to Java data types.  Following are the Java primitive types: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+boolean - 8 bits, unsigned 
+byte - 8 bits, signed 
+char - 16 bits, unsigned 
+short - 16 bits, signed 
+int - 32 bits, signed 
+float - 32 bits, signed, floating point 
+long - 64 bits, signed 
+double - 64 bits, signed, floating point <a name="wp1066561"> </a>
+</pre></div>
+<a name="wp1066364"> </a><p class="pBody">
+All other types are objects that are composed of other objects or primitive types.  For example, the String type is an object.  Note that encoding of native Java strings and numbers in memory may be different from way you represent data in COBOL.
+</p>
+<a name="wp1066631"> </a><p class="pBody">
+Even on 32-bit platforms, Java represents longs as 64 bits.  On 32-bit platforms, the ACUCOBOL-GT runtime truncates longs to 32 bits regardless of whether the &quot;-Dw32&quot; or &quot;-Dw64&quot; flags are used for compilation.  In order to effectively interoperate using Java longs and use all 64 bits on a 32-bit platform, you must use the PIC S9(18) COMP-5 declaration shown below.  Also, in order to use the entire range available to Java shorts and ints (short 32767 to -32768 int 2147483647 to -2147483648) with USAGE IS SIGNED-INT and USAGE IS SIGNED-SHORT declarations, the &quot;-Dw32&quot; flag must be specified at compile time.
+</p>
+<a name="wp1066365"> </a><p class="pBody">
+The following sample declarations have been used to test COBOL/Java interoperability. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01 FIELD-INT USAGE IS SIGNED-INT. 
+01 FIELD-BOOL pic 9. 
+01 FIELD-BYTE pic x. 
+01 FIELD-CHAR pic x. 
+01 FIELD-SHORT USAGE IS SIGNED-SHORT. 
+01 FIELD-LONG PIC S9(18) COMP-5. 
+01 FIELD-FLOAT USAGE IS FLOAT. 
+01 FIELD-DOUBLE USAGE IS DOUBLE. 
+01 FIELD-STRING PIC X(80). <a name="wp1066366"> </a>
+</pre></div>
+<a name="wp1066367"> </a><p class="pBody">
+Another method of declaring ints and shorts is shown below.  With these two declarations, the use of the &quot;--TruncANSI&quot; compiler switch is required so that the range checking is correct for the range the native platform allows.  (Refer to Chapter 2 in <em class="cEmphasis">ACUCOBOL-GT User's Guide</em> for information about the &quot;--TruncANSI&quot; option.)
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01 FIELD-INT PIC S9(9) COMP-5. 
+01 FIELD-SHORT PIC S9(5) COMP-5. <a name="wp1066806"> </a>
+</pre></div>
+<a name="wp1066808"> </a><p class="pBody">
+Currently, ACUCOBOL-GT converts Unicode UTF-16 Java strings to UTF-8 for representation in PIC X variables.  If your program uses code points that require more than 16 bits to represent supplementary characters or if it uses UTF-32, then you should use arrays of Java ints to represent the data. 
+</p>
+<a name="wp1067078"> </a><p class="pBody">
+Note that Java implementations represent data in big endian format regardless of platform.  For considerations on moving data between big endian and little endian hosts, refer to the documentation for C$SOCKET in Appendix I in <em class="cEmphasis">ACUCOBOL-GT Appendices</em>, and for the Usage Clause in section 5.7.1.8 of <em class="cEmphasis">ACUCOBOL-GT Reference Manual</em>.  
+</p>
+<a name="wp1066357"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Be careful when sending numeric data across the network via sockets, because some machines use different byte ordering than others, and native numeric data can appear swapped on different machines. COMP-4 data is in the order that most network servers expect binary data to be in, so if you are communicating with a non-COBOL client or server, you should use COMP-4 data of the correct size for the machine in question.  If your client and server are both COBOL, you can use standard COBOL types. 
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

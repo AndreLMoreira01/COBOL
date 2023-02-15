@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.8.3.1  SEND and RECEIVE</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt1641.htm">6.8  Multiple Execution Threads </a> &gt; <a href="gt1646.htm">6.8.3  Thread Communication</a> &gt; </p>
+<a name="wp1033191"> </a><h2 class="pHeading3">
+6.8.3.1  SEND and RECEIVE
+</h2>
+<a name="wp1033192"> </a><p class="pBody">
+A thread sends a message to another thread with the SEND statement.  A thread receives a message from another thread with the RECEIVE statement.  Messages can either be <em class="cEmphasis">broadcast</em>, in which case they are sent to all threads, or <em class="cEmphasis">directed</em>, in which case the message is sent to a particular thread or set of threads.  
+</p>
+<a name="wp1033193"> </a><p class="pBody">
+For example, suppose you have a thread that updates a complicated display in response to a message.  Another thread receives user input and sends messages to the update thread.  The code might look like this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+77  H-DISPLAY-THREAD    HANDLE OF THREAD.<a name="wp1033194"> </a>
+77  RECORD-NUMBER       PIC 9(5).<a name="wp1033195"> </a>
+77  UPDATE-RECORD-NO    PIC 9(5).<a name="wp1033196"> </a>
+<a name="wp1033197"> </a>
+MAIN-LOGIC.<a name="wp1033198"> </a>
+    PERFORM INITIALIZE<a name="wp1033199"> </a>
+    PERFORM CREATE-MAIN-SCREEN						    <a name="wp1033200"> </a>
+    PERFORM THREAD DISPLAY-THREAD, <a name="wp1033201"> </a>
+            HANDLE IN H-DISPLAY-THREAD<a name="wp1033202"> </a>
+    PERFORM UNTIL DONE<a name="wp1033203"> </a>
+        PERFORM ENTER-MAIN-SCREEN<a name="wp1033204"> </a>
+        IF NOT DONE<a name="wp1033205"> </a>
+            SEND RECORD-NUMBER TO <a name="wp1033206"> </a>
+                 THREAD H-DISPLAY-THREAD<a name="wp1033207"> </a>
+        END-IF<a name="wp1033208"> </a>
+    END-PERFORM<a name="wp1033209"> </a>
+    PERFORM SHUT-DOWN<a name="wp1033210"> </a>
+    STOP RUN.<a name="wp1033211"> </a>
+<a name="wp1033212"> </a>
+DISPLAY-THREAD.<a name="wp1033213"> </a>
+    PERFORM CREATE-STATUS-SCREEN<a name="wp1033214"> </a>
+    PERFORM UNTIL 1 = 0<a name="wp1033215"> </a>
+        RECEIVE UPDATE-RECORD-NO FROM ANY THREAD<a name="wp1033216"> </a>
+        PERFORM UPDATE-STATUS-SCREEN<a name="wp1033217"> </a>
+    END-PERFORM.<a name="wp1033218"> </a>
+</pre></div>
+<a name="wp1033219"> </a><p class="pBody">
+The thread that updates the screen sits in an infinite loop waiting for messages.  It will terminate when the runtime shuts down.  Because it uses the RECEIVE statement, this thread is very efficient even though it contains an infinite loop.  Note that the program includes two copies of the &quot;record number&quot;:  one sent by the main thread, and one to hold the value received by the update thread.  This isolates the data sharing to the SEND and RECEIVE statements.  If the main thread goes on to change RECORD-NUMBER while the update thread is performing its screen updates, the action will not affect the update thread because it has its own copy in STATUS-RECORD-NO.  
+</p>
+<a name="wp1033220"> </a><p class="pBody">
+The following example expands on the previous one to make the code more robust.  In particular, the new code handles the case where other threads may be sending different types of messages, as well the case where all the sending threads die for some reason.  Note that some of the code from the first example has been omitted for brevity:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+77  H-DISPLAY-THREAD        HANDLE OF THREAD.<a name="wp1033221"> </a>
+77  RECORD-NUMBER           PIC 9(5).<a name="wp1033222"> </a>
+<a name="wp1033223"> </a>
+78  UPDATE-MSG-TYPE         VALUE 1.<a name="wp1033224"> </a>
+<a name="wp1033225"> </a>
+01  SENDING-RECORD.<a name="wp1033226"> </a>
+    03  SENDING-MSG-TYPE    PIC 99.<a name="wp1033227"> </a>
+    03  SENDING-REC-NO      PIC 9(5).<a name="wp1033228"> </a>
+<a name="wp1033229"> </a>
+01  UPDATE-RECORD.<a name="wp1033230"> </a>
+    03  FILLER              PIC 99.<a name="wp1033231"> </a>
+       88  IS-UPDATE-MSG    VALUE UPDATE-MSG-TYPE.<a name="wp1033232"> </a>
+    03  UPDATE-RECORD-NO    PIC 9(5).<a name="wp1033233"> </a>
+<a name="wp1033234"> </a>
+<a name="wp1033235"> </a>
+MAIN-LOGIC.<a name="wp1033236"> </a>
+    PERFORM THREAD DISPLAY-THREAD, <a name="wp1033237"> </a>
+            HANDLE IN H-DISPLAY-THREAD<a name="wp1033238"> </a>
+    PERFORM UNTIL DONE<a name="wp1033239"> </a>
+        PERFORM ENTER-MAIN-SCREEN<a name="wp1033240"> </a>
+        IF NOT DONE<a name="wp1033241"> </a>
+           MOVE UPDATE-MSG-TYPE TO SENDING-MSG-TYPE<a name="wp1033242"> </a>
+           MOVE RECORD-NUMBER TO SENDING-REC-NO<a name="wp1033243"> </a>
+           SEND SENDING-RECORD TO <a name="wp1033244"> </a>
+                        THREAD H-DISPLAY-THREAD<a name="wp1033245"> </a>
+           END-SEND<a name="wp1033246"> </a>
+        END-IF<a name="wp1033247"> </a>
+    END-PERFORM.<a name="wp1033248"> </a>
+<a name="wp1033249"> </a>
+DISPLAY-THREAD.<a name="wp1033250"> </a>
+    PERFORM CREATE-STATUS-SCREEN<a name="wp1033251"> </a>
+    PERFORM UNTIL 1 = 0<a name="wp1033252"> </a>
+        RECEIVE UPDATE-RECORD FROM ANY THREAD<a name="wp1033253"> </a>
+           ON EXCEPTION<a name="wp1033254"> </a>
+              PERFORM SENDING-THREADS-DIED-ERROR<a name="wp1033255"> </a>
+        END-RECEIVE<a name="wp1033256"> </a>
+        IF IS-UPDATE-MSG<a name="wp1033257"> </a>
+            PERFORM UPDATE-STATUS-SCREEN<a name="wp1033258"> </a>
+        END-IF<a name="wp1033259"> </a>
+    END-PERFORM.<a name="wp1033260"> </a>
+</pre></div>
+<a name="wp1033261"> </a><p class="pBody">
+The preceding example assumes that all messages in the program will be formatted with a two-digit type code as the first element.  The <em class="cEmphasis">update</em> thread checks the message received to see if it contains a type that it knows how to respond to.  If it does not, it simply ignores the message.  This check is a good idea because the update thread uses the ANY THREAD option in its RECEIVE statement.  If some other thread broadcasts a message (SEND TO ALL THREADS), the update thread would receive the message even though it might not be an &quot;update&quot; message.  Adding the message-type code resolves this issue.  It also makes debugging easier if you have more than one message type in your program.  
+</p>
+<a name="wp1033262"> </a><p class="pBody">
+Messages can also interrupt a thread that is in an ACCEPT statement.  However, to allow that you must declare that the ACCEPT statement may be interrupted.  This is specified with the ALLOWING MESSAGES phrase in the ACCEPT statement.  The next section includes an example that illustrates when this capability may be useful.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

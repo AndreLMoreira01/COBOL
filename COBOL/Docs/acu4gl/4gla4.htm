@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:57" />
+  <title>A.1.2  Installing the Acu4GL for Informix Product</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gla.htm">Appendix A:  Acu4GL for Informix Information </a> &gt; <a href="4gla2.htm">A.1  Getting Started with Acu4GL for Informix</a> &gt; </p>
+<a name="wp1037047"> </a><h2 class="pHeading2">
+A.1.2  Installing the Acu4GL for Informix Product
+</h2>
+<a name="wp1037048"> </a><p class="pBody">
+To install the Acu4GL for Informix product, perform the following steps:
+</p>
+<a name="wp1037049"> </a><h3 class="pHeadingRef">
+Step 1: Install Informix.
+</h3>
+<a name="wp1037050"> </a><p class="pBody">
+Install the Informix RDBMS and make sure it is operational.  Acucorp does not provide this product.  Make sure you install the libraries in the appropriate directories, based on the Informix documentation.
+</p>
+<a name="wp1037052"> </a><p class="pBody">
+We recommend that you obtain Interactive SQL (<b class="cBold">ISQL</b>) or <b class="cBold">dbaccess</b> if possible.  This is not mandatory, but it will give you quite a bit of flexibility.  <b class="cBold">ISQL</b> allows you to do database work outside of COBOL, including interactive queries and reports.  ACUCOBOL-GT's standard file utility, vutil, cannot be used on Informix tables.
+</p>
+<a name="wp1037053"> </a><p class="pBody">
+One way to test the installation of Informix is to access Interactive SQL and examine the stores database.
+</p>
+<a name="wp1037054"> </a><h3 class="pHeadingRef">
+Step 2: Create a new runtime.
+</h3>
+<a name="wp1037059"> </a><p class="pBody">
+Create a new runtime system that includes the Informix Acu4GL product.  
+</p>
+<a name="wp1061763"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In the following directions, the term &quot;runtime system&quot; refers to the runtime shared object on systems where the ACUCOBOL-GT runtime is a shared object and to <b class="cBold">runcbl</b> on other systems, where the runtime is static.  The runtime is a shared object on the following systems:  AIX 5.1 and later, HP-UX 11 and later , and Solaris 7 and later.  To check, look at the contents of the &quot;lib&quot; subdirectory of your ACUCOBOL-GT installation.  If the files &quot;libruncbl.so&quot; or &quot;libruncbl.sl&quot; reside in that directory, the runtime is a shared object on your system.
+<hr />
+</p>
+<a name="wp1037061"> </a><h3 class="pHeadingRef">
+2a.  Backup
+</h3>
+<a name="wp1037062"> </a><p class="pBody">
+Make a backup copy of your newly installed <b class="cBold">runcbl</b> or <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">libruncbl.so</span>.  
+</p>
+<a name="wp1037063"> </a><h3 class="pHeadingRef">
+2b. Creating a &quot;Makefile.inf&quot; file
+</h3>
+<a name="wp1037070"> </a><p class="pBody">
+The &quot;inf_inst&quot; program can be run to create a &quot;Makefile.inf&quot; file.  
+</p>
+<a name="wp1037071"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Please read the reference section at the start of the &quot;inf_inst&quot; script for the latest information regarding the &quot;Makefile.ini&quot; and database or platform differences.
+<hr />
+</p>
+<a name="wp1037072"> </a><p class="pBody">
+First, create the Makefile.inf file by entering the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+sh inf_inst  <a name="wp1037073"> </a>
+</pre></div>
+<a name="wp1037074"> </a><p class="pBody">
+in the .../install directory. 
+</p>
+<a name="wp1037075"> </a><p class="pBody">
+Next, you are asked to enter the directory where ACUCOBOL-GT is installed.  Type the information and press <b class="cBold">Enter</b>.
+</p>
+<a name="wp1037076"> </a><p class="pBody">
+After that, you are asked which version of Informix you have installed.  You have four choices:  
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1037077"> </a><div class="pSmartList1"><li>For version 5.x1, enter &quot;5&quot;.</li></div>
+<a name="wp1037078"> </a><div class="pSmartList1"><li>For version 7.2 32-bit, enter &quot;7&quot;.</li></div>
+<a name="wp1037079"> </a><div class="pSmartList1"><li>For version 7.3 or for version 9, enter &quot;3&quot;.</li></div>
+<a name="wp1037080"> </a><div class="pSmartList1"><li>For version 7.3 64-bit, type &quot;4&quot;.</li></div>
+</ul></div>
+<a name="wp1037081"> </a><p class="pBody">
+Once you have entered the version, add the names of your C routines (&quot;.o&quot;), if any,  to the line starting with &quot;SUBS=&quot;.
+</p>
+<a name="wp1037082"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The &quot;if_inst&quot; script generates a makefile that may require slight modifications. Make sure that the FSI_LIBS line in your makefile is correct. 
+<hr />
+</p>
+<a name="wp1037083"> </a><p class="pBody">
+Now you are ready to relink your ACUCOBOL-GT runtime.
+</p>
+<a name="wp1037084"> </a><h3 class="pHeadingRef">
+2c.  Link the runtime system
+</h3>
+<a name="wp1061233"> </a><p class="pBody">
+Make sure you are in the directory containing the ACUCOBOL-GT runtime system.  Then, at the UNIX prompt, enter the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+make clean<a name="wp1061234"> </a>
+</pre></div>
+<a name="wp1061235"> </a><p class="pBody">
+to ensure that you have a clean directory in which to build your runtime.
+</p>
+<a name="wp1061236"> </a><p class="pBody">
+Now enter the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+make -f Makefile.inf <a name="wp1061237"> </a>
+</pre></div>
+<a name="wp1062016"> </a><p class="pBody">
+or 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+makerun <a name="wp1062017"> </a>
+</pre></div>
+<a name="wp1037089"> </a><p class="pBody">
+This compiles &quot;sub.c&quot; and &quot;filetbl.c&quot; and then links the runtime system. 
+</p>
+<a name="wp1037093"> </a><h3 class="pHeadingRef">
+ 2d.  Verify the link
+</h3>
+<a name="wp1037094"> </a><p class="pBody">
+Enter the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+runcbl -vv <a name="wp1037095"> </a>
+</pre></div>
+<a name="wp1037096"> </a><p class="pBody">
+Check to see that the version of the Informix Acu4GL is reported to your screen.  This will verify that the link was successful.  
+</p>
+<a name="wp1037097"> </a><p class="pBody">
+If no Acu4GL version number is displayed, this means that something isn't set up properly.  Check filetbl.c to make sure that USE_INFORMIX is set to &quot;1&quot; (Step 2b).  Then check Makefile for accuracy (see Step 2c), and relink (Step 2d).
+</p>
+<a name="wp1037098"> </a><h3 class="pHeadingRef">
+Shared libraries
+</h3>
+<a name="wp1037103"> </a><p class="pBody">
+If you have relinked the ACUCOBOL-GT runtime and receive an error message of this type when you try to execute it:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Could not load library; no such file or directory<a name="wp1037104"> </a>
+<a name="wp1044412"> </a>
+Can't open shared library . . . <a name="wp1037105"> </a>
+</pre></div>
+<a name="wp1037106"> </a><p class="pBody">
+this may mean that your operating system is using shared libraries and cannot find them.  This can occur even if the shared libraries reside in the same directory where you are currently located.
+</p>
+<a name="wp1037107"> </a><p class="pBody">
+Different versions of the UNIX operating system resolve this in different ways, so it is important that you consult your UNIX documentation to resolve this error.
+</p>
+<a name="wp1037108"> </a><p class="pBody">
+Some versions of UNIX require that you set an environment variable that points to shared libraries on your system.  For example, on an IBM®&#160;RS/6000® running AIX® 4.1, the environment variable LIBPATH must point to the directory where the shared libraries are located.  On HP/UX, the environment variable that must be set to point to shared libraries is SHLIB_PATH.  On UNIX SVR4, the environment variable is LD_LIBRARY_PATH.
+</p>
+<a name="wp1037111"> </a><p class="pBody">
+Be sure to read the system documentation for your operating system to determine the appropriate way to locate shared libraries. 
+</p>
+<a name="wp1037112"> </a><p class="pBody">
+A second way to resolve this type of error is to link the libraries into the runtime with a static link.  Different versions of the C development system use different flags to accomplish this link.  Please consult the documentation for your C compiler to determine the correct flag for your environment.
+</p>
+<a name="wp1037113"> </a><h3 class="pHeadingRef">
+Step 3: Copy runcbl to the correct directory. 
+</h3>
+<a name="wp1037114"> </a><p class="pBody">
+If the runtime is a statically linked <b class="cBold">runcbl</b>, copy the new executable to a directory mentioned in your execution path.  This file needs to have execute permission for everyone who will be using the compiler or runtime.  This step is not necessary when the runtime system is a shared library.
+</p>
+<a name="wp1037115"> </a><p class="pBody">
+The ACUCOBOL-GT license file for the runtime (&quot;runcbl.alc&quot;) and the license file for the Acu4GL product to Informix (&quot;runcbl.ilc&quot;) must be copied into the same directory as the runtime executable.  
+</p>
+<a name="wp1037116"> </a><p class="pBody">
+If you rename your runtime executable, be sure to rename your license files to use the same base name, with the extensions unchanged.  For example, if you rename your runtime to be &quot;myprog&quot;, then the license file for the Acu4GL product for Informix should be renamed &quot;myprog.ilc&quot;, and the license file for the runtime should be renamed &quot;myprog.alc&quot;.
+</p>
+<a name="wp1037117"> </a><p class="pBody">
+The remaining files can be left in the directory where they were unloaded.  
+</p>
+<a name="wp1037118"> </a><h3 class="pHeadingRef">
+Step 4: Compile the sample program. 
+</h3>
+<a name="wp1037124"> </a><p class="pBody">
+If you are using the C-shell, enter the command <b class="cBold">rehash</b>.  
+</p>
+<a name="wp1037125"> </a><p class="pBody">
+Now try compiling and running the sample program with the following commands:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl   -Zd -Fx  demo.cbl<a name="wp1037126"> </a>
+runcbl demo.acu<a name="wp1037128"> </a>
+</pre></div>
+<a name="wp1037129"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You can also run the sample program using runtime flags if necessary.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

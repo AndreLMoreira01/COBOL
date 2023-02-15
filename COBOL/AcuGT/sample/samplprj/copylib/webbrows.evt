@@ -1,0 +1,191 @@
+      * webbrows.evt
+      * webbrows.evt is generated from C:\Acucorp\Acucbl720\AcuGT\sample\samplprj\webbrows.Psf
+      * This is a generated file. DO NOT modify this file directly.
+      
+
+       Acu-CUST-Screen-Event-Extra.
+           EVALUATE Event-Type
+           WHEN Msg-Close
+              PERFORM Acu-CUST-Screen-Msg-Close
+           END-EVALUATE
+           .
+
+       Acu-CUST-Screen-Msg-Close.
+           ACCEPT Quit-Mode-Flag FROM ENVIRONMENT "QUIT_MODE"
+           IF Quit-Mode-Flag = ZERO
+              PERFORM Acu-CUST-Screen-Exit
+              IF Exit-Pushed
+                 PERFORM Acu-Exit-Rtn
+              ELSE
+                 MOVE Event-Action-Fail TO Event-Action
+              END-IF
+           END-IF
+           .
+
+       EXCEPTION-PROC.
+           PERFORM CUST-Screen-Ex-Other
+           .
+
+       WB-1-Event-Proc.
+      * 
+           EVALUATE Event-Type
+           WHEN Msg-Wb-Navigate-Complete
+              PERFORM Wb1-Nav-Complete
+           WHEN Msg-Wb-Status-Text-Change
+              PERFORM Wb1-Status-Change
+           WHEN Msg-Wb-Title-Change
+              PERFORM Wb1-Title-Change
+           END-EVALUATE
+           .
+      ***   start event editor code   ***
+      *
+       WB1-NAV-COMPLETE.
+           INQUIRE WB-1 VALUE IN WB-1-URL.
+           IF WB-1-URL IS NOT = URLEF-VALUE 
+             MOVE WB-1-URL TO URLEF-VALUE
+             MODIFY URL-EF, VALUE URLEF-VALUE             
+           END-IF.
+     
+      *
+       WB1-STATUS-CHANGE.
+           INQUIRE WB-1 STATUS-TEXT IN WB1-STATUS.
+           MODIFY WBSTATUS-LABEL TITLE WB1-STATUS.       
+      *
+       WB1-TITLE-CHANGE.
+           INQUIRE WB-1 TITLE IN WB-1-TITLE.
+           DISPLAY WB-1-TITLE UPON GLOBAL WINDOW TITLE.
+      *
+       CUST-Screen-Ex-Other.
+           EVALUATE TRUE
+             WHEN FIRST-RECORD
+               MOVE 0 TO CUSTOMER-NAME-ENABLED
+               MODIFY COMPANYNAME-EF, ENABLED CUSTOMER-NAME-ENABLED
+               MOVE LOW-VALUES TO CUSTOMER-NAME
+               START CUSTOMER-FILE KEY > CUSTOMER-NAME
+               READ CUSTOMER-FILE NEXT RECORD
+                 AT END 
+                   DISPLAY MESSAGE BOX 
+                           "NO RECORDS IN FILE"
+                           TITLE "CUSTOMER-FILE ERROR"
+                 NOT AT END
+                   PERFORM UPDATE-SCREEN-FIELDS
+                   PERFORM UPDATE-SCREEN
+               END-READ
+               
+             WHEN PREVIOUS-RECORD
+               MOVE 0 TO CUSTOMER-NAME-ENABLED
+               MODIFY COMPANYNAME-EF, ENABLED CUSTOMER-NAME-ENABLED
+               READ CUSTOMER-FILE PREVIOUS RECORD
+                 AT END 
+                   DISPLAY MESSAGE BOX 
+                           "AT BEGINNING OF FILE"
+                           TITLE "CUSTOMER-FILE ERROR"
+                   READ CUSTOMER-FILE KEY IS CUSTOMER-NAME END-READ
+                 NOT AT END  
+                   PERFORM UPDATE-SCREEN-FIELDS
+                   PERFORM UPDATE-SCREEN
+               END-READ
+               
+             WHEN NEXT-RECORD
+               MOVE 0 TO CUSTOMER-NAME-ENABLED
+               MODIFY COMPANYNAME-EF, ENABLED CUSTOMER-NAME-ENABLED
+               READ CUSTOMER-FILE NEXT RECORD
+                 AT END 
+                   DISPLAY MESSAGE BOX 
+                           "AT END OF FILE"
+                           TITLE "CUSTOMER-FILE ERROR"
+                   READ CUSTOMER-FILE KEY IS CUSTOMER-NAME END-READ
+                 NOT AT END  
+                   PERFORM UPDATE-SCREEN-FIELDS
+                   PERFORM UPDATE-SCREEN
+               END-READ 
+               
+             WHEN LAST-RECORD
+               MOVE 0 TO CUSTOMER-NAME-ENABLED
+               MODIFY COMPANYNAME-EF, ENABLED CUSTOMER-NAME-ENABLED
+               MOVE HIGH-VALUES TO CUSTOMER-NAME
+               START CUSTOMER-FILE KEY < CUSTOMER-NAME
+               READ CUSTOMER-FILE PREVIOUS RECORD
+                 AT END DISPLAY MESSAGE BOX 
+                                   "NO RECORDS IN FILE"
+                                   TITLE "CUSTOMER-FILE ERROR"
+               END-READ
+               PERFORM UPDATE-SCREEN-FIELDS
+               PERFORM UPDATE-SCREEN
+               
+             WHEN NEW-RECORD
+               MOVE 1 TO CUSTOMER-NAME-ENABLED
+               MODIFY COMPANYNAME-EF, ENABLED CUSTOMER-NAME-ENABLED
+      *         DISPLAY CUST-SCREEN
+               
+             WHEN DELETE-RECORD
+               DISPLAY MESSAGE BOX 
+                 "Are you sure?"
+                 TITLE "DELETING RECORD..."
+                 TYPE IS MB-YES-NO,
+                 DEFAULT IS MB-NO,
+                 ICON IS MB-WARNING-ICON
+                 GIVING MB-VALUE
+              
+               IF MB-VALUE = MB-YES 
+                 DELETE CUSTOMER-FILE RECORD
+                 MOVE LOW-VALUES TO CUSTOMER-NAME
+                 START CUSTOMER-FILE KEY > CUSTOMER-NAME
+                 PERFORM UPDATE-SCREEN-FIELDS
+                 PERFORM UPDATE-SCREEN
+               END-IF  
+               
+             WHEN WRITE-RECORD 
+               PERFORM WRITE-CURRENT-RECORD
+               READ CUSTOMER-FILE KEY IS CUSTOMER-NAME  
+               PERFORM UPDATE-SCREEN-FIELDS
+               PERFORM UPDATE-SCREEN
+                                  
+             WHEN REFRESH-BROWSER
+               MOVE "http://www.acucorp.com" TO WB-1-URL
+               MODIFY URL-EF, VALUE WB-1-URL
+               MODIFY WB-1 VALUE WB-1-URL  
+               
+             WHEN SEND-MAIL
+               MOVE "mailto:info@acucorp.com" TO WB-1-URL
+               MODIFY URL-EF, VALUE WB-1-URL
+               MODIFY WB-1, VALUE WB-1-URL
+       
+             WHEN PLAY-AVI
+               INITIALIZE OPENSAVE-DATA, START-DIR 
+               MOVE "C:\ACUCORP\ACUCBL720\ACUBENCH" TO START-DIR
+               MOVE AVI-FILES TO OPNSAV-FILTERS
+               PERFORM OPENSAVE-DIALOG
+       
+             WHEN SHOWHTML-PRESSED
+               INITIALIZE OPENSAVE-DATA, START-DIR
+               MOVE "C:\ACUCORP\ACUCBL720\ACUGT" TO START-DIR
+               MOVE HTML-FILES TO OPNSAV-FILTERS
+               PERFORM OPENSAVE-DIALOG
+                     
+             WHEN BACKBTN-PRESSED
+               MODIFY WB-1 GO-BACK=1
+               
+             WHEN FORWARDBTN-PRESSED
+               MODIFY WB-1 GO-FORWARD=1
+       
+             WHEN EVENT-OCCURRED
+               EVALUATE EVENT-TYPE
+                  WHEN NTF-RESIZED
+                    COMPUTE CURRENT-SCREEN-LINES = EVENT-DATA-1/100
+                    COMPUTE CURRENT-SCREEN-SIZE = EVENT-DATA-2/100
+                    PERFORM ADJUST-CONTROLS
+
+               END-EVALUATE
+           END-EVALUATE.
+      *
+       Customer-After-Read.
+           PERFORM UPDATE-SCREEN-FIELDS           
+           .
+      *
+       CUST-Screen-Aft-Create.
+           MOVE LOW-VALUES TO CUSTOMER-NAME.
+           START CUSTOMER-FILE KEY > CUSTOMER-NAME.
+           PERFORM Acu-Customer-Read-Next
+           .
+       

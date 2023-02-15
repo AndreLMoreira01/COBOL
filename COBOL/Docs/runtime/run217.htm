@@ -1,0 +1,841 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:20:41" />
+  <title>2.3.2.2  The KEYSTROKE variable </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run2.htm"><br />Chapter 2: Setting Up Your Terminals</a> &gt; <a href="run210.htm">2.3  The Keyboard Interface</a> &gt; <a href="run215.htm">2.3.2  Redefining the Keyboard</a> &gt; </p>
+<a name="wp1042771"> </a><h2 class="pHeading3">
+2.3.2.2  The KEYSTROKE variable 
+</h2>
+<a name="wp1042774"> </a><p class="pBody">
+The KEYSTROKE variable defines the actions to be taken for a single keystroke.  You need to add one KEYSTROKE line for each key that you wish to redefine.  The maximum number of allowed KEYSTROKE entries is 170.
+</p>
+<a name="wp1042775"> </a><p class="pBody">
+KEYSTROKE entries consist of <em class="cEmphasis">keywords</em> and associated <em class="cEmphasis">values</em> that describe the action to be taken, plus the <em class="cEmphasis">key code</em> (a two-character name) of the key, or key combination, being defined.  All definable keys have such a name.  The key code is case sensitive, although the rest of the KEYSTROKE line is not.  The ASCII value of the key (decimal) may be used instead of the key code.  Note that this is the <em class="cEmphasis">only</em> way to assign a value to the DEL key (ASCII value 127).  The syntax of the KEYSTROKE line is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+KEYSTROKE keyword=value [keyword=value] key-code<a name="wp1042776"> </a>
+</pre></div>
+<a name="wp1042779"> </a><p class="pBody">
+The <em class="cEmphasis">key-code</em> argument is one of the two-character codes shown in <a  href="run218.htm#wp1043161">section 2.3.2.3, &quot;Table of keys.&quot;</a>  Keywords are separated from each other by spaces or tabs.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+KEYSTROKE     EDIT=Next    TERMINATE=13    ^M<a name="wp1042781"> </a>
+</pre></div>
+<a name="wp1042782"> </a><p class="pBody">
+The following keywords may be used:
+</p>
+<a name="wp1042784"> </a><h5 class="pHeading4">
+AT-END=value
+</h5>
+<a name="wp1042785"> </a><p class="pBody">
+If <em class="cEmphasis">value</em> is &quot;Yes&quot;, the key becomes a termination key that also causes the AT END condition.  This keyword may not be specified along with either the TERMINATE or EXCEPTION keywords.  The AT END condition always returns a termination value of &quot;-1&quot; in the CONTROL KEY clause.  AT-END keystrokes are always allowed, but will cause no action unless an AT END, EXCEPTION, or CONTROL KEY clause is present in the ACCEPT verb.  The default keyboard defines no AT-END keys.  See also the AT END phrase of the ACCEPT verb in the ACUCOBOL-GT <em class="cEmphasis">Reference Manual</em>, Procedure Division.
+</p>
+<a name="wp1042787"> </a><h5 class="pHeading4">
+DATA=value
+</h5>
+<a name="wp1042788"> </a><p class="pBody">
+This keyword is used to assign special characters to keys.  DATA associates a decimal ASCII <em class="cEmphasis">value</em> with a key; the Terminal Manager will return this value to the COBOL program when the key is pressed.  If the DATA keyword is used, no other keywords may be specified for this key.
+</p>
+<a name="wp1042790"> </a><h5 class="pHeading4">
+EDIT=value
+</h5>
+<a name="wp1042791"> </a><p class="pBody">
+EDIT is used to define an editing action for a key.  It must be assigned one of the following <em class="cEmphasis">values</em>:
+</p>
+<a name="wp1042869"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1042794"> </a><p class="pCellBody">
+Alt
+</p>
+</td>
+    <td><a name="wp1042796"> </a><p class="pCellBody">
+Left
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042798"> </a><p class="pCellBody">
+Auto-Insert
+</p>
+</td>
+    <td><a name="wp1042800"> </a><p class="pCellBody">
+Menu
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042802"> </a><p class="pCellBody">
+Backspace
+</p>
+</td>
+    <td><a name="wp1042804"> </a><p class="pCellBody">
+Next
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042806"> </a><p class="pCellBody">
+Default-Entry
+</p>
+</td>
+    <td><a name="wp1042808"> </a><p class="pCellBody">
+Next-All
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042810"> </a><p class="pCellBody">
+Default-Next
+</p>
+</td>
+    <td><a name="wp1042812"> </a><p class="pCellBody">
+Next-Line
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042814"> </a><p class="pCellBody">
+Delete
+</p>
+</td>
+    <td><a name="wp1042816"> </a><p class="pCellBody">
+Numeric-Default
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042818"> </a><p class="pCellBody">
+Down
+</p>
+</td>
+    <td><a name="wp1042820"> </a><p class="pCellBody">
+Numeric-Next
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042822"> </a><p class="pCellBody">
+End
+</p>
+</td>
+    <td><a name="wp1042824"> </a><p class="pCellBody">
+Page-Down
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042826"> </a><p class="pCellBody">
+Erase-All
+</p>
+</td>
+    <td><a name="wp1042828"> </a><p class="pCellBody">
+Page-Up
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042830"> </a><p class="pCellBody">
+Erase-EOS
+</p>
+</td>
+    <td><a name="wp1042832"> </a><p class="pCellBody">
+Previous
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042834"> </a><p class="pCellBody">
+Erase Field
+</p>
+</td>
+    <td><a name="wp1042836"> </a><p class="pCellBody">
+Previous-All
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042838"> </a><p class="pCellBody">
+Erase-Next
+</p>
+</td>
+    <td><a name="wp1042840"> </a><p class="pCellBody">
+Previous-Line
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042842"> </a><p class="pCellBody">
+Erase-to-End
+</p>
+</td>
+    <td><a name="wp1042844"> </a><p class="pCellBody">
+Right
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042846"> </a><p class="pCellBody">
+First
+</p>
+</td>
+    <td><a name="wp1042848"> </a><p class="pCellBody">
+Switch-Window
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042850"> </a><p class="pCellBody">
+Home
+</p>
+</td>
+    <td><a name="wp1042852"> </a><p class="pCellBody">
+System-Menu
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042854"> </a><p class="pCellBody">
+Insert-Off
+</p>
+</td>
+    <td><a name="wp1042856"> </a><p class="pCellBody">
+Toggle-Edit-Mode
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042858"> </a><p class="pCellBody">
+Insert-On
+</p>
+</td>
+    <td><a name="wp1042860"> </a><p class="pCellBody">
+Toggle-Insert
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042862"> </a><p class="pCellBody">
+Insert-Space
+</p>
+</td>
+    <td><a name="wp1042864"> </a><p class="pCellBody">
+Up
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042866"> </a><p class="pCellBody">
+Last
+</p>
+</td>
+    <td><a name="wp1042868"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1042870"> </a><p class="pBody">
+
+</p>
+<a name="wp1042871"> </a><p class="pBody">
+The EDIT keyword values specify various editing functions, described below.  EDIT keys may also be designated as termination keys.  When they are, the EDIT is applied and then the input is terminated.  This rule is slightly changed for the actions that move the cursor.  With these actions, the field terminates only if the cursor cannot be moved farther in the requested direction.  This is detailed in the descriptions of each of the EDIT values.  
+</p>
+<a name="wp1042872"> </a><p class="pBody">
+In the following descriptions, the order of fields is the order in which they appear in the Screen Section.  Thus, the &quot;next&quot; field may not necessarily be the next one on the physical display.  This feature can be used to design special purpose screens.  
+</p>
+<a name="wp1042874"> </a><p class="pBody">
+EDIT keyword values can be:
+</p>
+<a name="wp1043095"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1042878"> </a><p class="pCellBody">
+<b class="cBold">Alt&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;  </b>
+</p>
+</td>
+    <td><a name="wp1042880"> </a><p class="pCellBody">
+The character-based version of the runtime supports the use of key letters in controls.  The user can activate a particular control by pressing a predesignated key in combination with the control's key letter.  
+</p>
+<a name="wp1042881"> </a><p class="pCellBody">
+Use the Alt function to designate the key to be pressed in combination with the control's key letter.  On Windows systems the user presses the &quot;Alt&quot; key in conjunction with the key letter.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042885"> </a><p class="pCellBody">
+<b class="cBold">Auto-Insert</b>  
+</p>
+</td>
+    <td><a name="wp1042887"> </a><p class="pCellBody">
+Auto-Insert causes all following characters to be entered in insert mode.  Auto insert mode is automatically reset when the input terminates, or when any other editing key is typed.  This style of insertion is the RM/COBOL-85 default method.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042890"> </a><p class="pCellBody">
+<b class="cBold">Backspace</b>  
+</p>
+</td>
+    <td><a name="wp1042892"> </a><p class="pCellBody">
+The Backspace function moves the cursor to the left one character and deletes the character found there.  If the Backspace function occurs at the left-most field position, it is ignored unless a TERMINATE or EXCEPTION value has been assigned to the key, in which case it is treated as a termination key.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042895"> </a><p class="pCellBody">
+<b class="cBold">Default-Entry</b>   
+</p>
+</td>
+    <td><a name="wp1042897"> </a><p class="pCellBody">
+The Default-Entry action erases the remainder of the field starting at the cursor position<em class="cEmphasis"> provided that </em>the cursor is not in the first position of the field.  If the cursor <em class="cEmphasis">is</em> in the first position, this action does nothing.  This editing action is intended to be tied to a termination key (such as the &quot;Return&quot; key or the &quot;Tab&quot; key), and to be used as a reasonable method of handling fields that contain default values.  If the default is correct, then this key is typed (which does nothing to the field).  If the default is wrong, then the correct value is entered and this key is typed (erasing the part of the old field after the new input). 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042900"> </a><p class="pCellBody">
+<b class="cBold">Default-Next</b>   
+</p>
+</td>
+    <td><a name="wp1042902"> </a><p class="pCellBody">
+Default-Next combines the Default-Entry action and the Next (described below) action.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042905"> </a><p class="pCellBody">
+<b class="cBold">Delete</b>  
+</p>
+</td>
+    <td><a name="wp1042907"> </a><p class="pCellBody">
+Deletes the character that the cursor is on (if any).
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042910"> </a><p class="pCellBody">
+<b class="cBold">Down</b>  
+</p>
+</td>
+    <td><a name="wp1042912"> </a><p class="pCellBody">
+If there are fields below the current cursor location, the cursor moves to the one on the closest lower line.  If there is more than one field on this line, the cursor will move to the one closest to its current horizontal location.  The cursor will try to stay in the same column.  If there are no fields beneath the current line, then this action does nothing unless an EXCEPTION or TERMINATE value has been assigned to it, in which case it acts as a termination key.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042915"> </a><p class="pCellBody">
+<b class="cBold">End</b>  
+</p>
+</td>
+    <td><a name="wp1042917"> </a><p class="pCellBody">
+The cursor is moved to the end of the current field, excluding any trailing prompt characters.  If the cursor is already at the end of the field, then this key is ignored unless it has a TERMINATE or EXCEPTION value, in which case it is treated as a termination key. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042920"> </a><p class="pCellBody">
+<b class="cBold">Erase-All</b>  
+</p>
+</td>
+    <td><a name="wp1042922"> </a><p class="pCellBody">
+All fields controlled by the ACCEPT statement are erased and the cursor is moved to the home position of the first field.  This key may not be assigned a TERMINATE or EXCEPTION value.
+</p>
+<a name="wp1042923"> </a><p class="pCellBody">
+Under Windows, the field in which the cursor is currently positioned is erased, instead of all fields controlled by the ACCEPT statement being erased.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042926"> </a><p class="pCellBody">
+<b class="cBold">Erase-EOS</b>  
+</p>
+</td>
+    <td><a name="wp1042928"> </a><p class="pCellBody">
+The current field is erased from the cursor location to the end of the field, and all fields following the current one are erased.  The definition of &quot;following field&quot; is based on the order of fields in the Screen Section.  This action may not be assigned a TERMINATE or EXCEPTION value.  
+</p>
+<a name="wp1042929"> </a><p class="pCellBody">
+Under Windows, the current field is erased from the cursor location to the end of the field, but the fields following the current one are not erased.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042932"> </a><p class="pCellBody">
+<b class="cBold">Erase-Field</b>  
+</p>
+</td>
+    <td><a name="wp1042934"> </a><p class="pCellBody">
+The field is erased, and the cursor is moved to the first position of the field.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042937"> </a><p class="pCellBody">
+<b class="cBold">Erase-Next</b>  
+</p>
+</td>
+    <td><a name="wp1042939"> </a><p class="pCellBody">
+This action combines the functions of the Erase-to-End action and the Next (described below) action.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042942"> </a><p class="pCellBody">
+<b class="cBold">Erase-to-End</b>  
+</p>
+</td>
+    <td><a name="wp1042944"> </a><p class="pCellBody">
+This function erases the field from the current cursor position to the end of the field.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042947"> </a><p class="pCellBody">
+<b class="cBold">First</b>  
+</p>
+</td>
+    <td><a name="wp1042949"> </a><p class="pCellBody">
+The cursor is moved to the beginning of the first field controlled by the ACCEPT statement.  If the cursor is already in the first field, and the key has been assigned a TERMINATE or EXCEPTION value, then the ACCEPT terminates.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042952"> </a><p class="pCellBody">
+<b class="cBold">Home</b>
+</p>
+</td>
+    <td><a name="wp1042954"> </a><p class="pCellBody">
+The cursor is moved to the beginning of the field.  If the cursor is already at the beginning and this key has been assigned a TERMINATE or EXCEPTION value, the ACCEPT terminates.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042957"> </a><p class="pCellBody">
+<b class="cBold">Insert-Off</b>  
+</p>
+</td>
+    <td><a name="wp1042959"> </a><p class="pCellBody">
+If insertion mode is currently in effect, it is turned off; otherwise does nothing.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042962"> </a><p class="pCellBody">
+<b class="cBold">Insert-On</b>  
+</p>
+</td>
+    <td><a name="wp1042964"> </a><p class="pCellBody">
+This causes all following characters to be entered in insert mode.  This causes any trailing characters to be moved one space to the right before the added character is printed.  Insertion mode stays in effect until explicitly reset by an Insert-Off, an Auto-Insert, or a Toggle-Insert action.  Note that insertion mode stays in effect across multiple ACCEPT statements.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042967"> </a><p class="pCellBody">
+<b class="cBold">Insert-Space</b>  
+</p>
+</td>
+    <td><a name="wp1042969"> </a><p class="pCellBody">
+A space character is inserted at the cursor position, moving trailing characters over one position.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042972"> </a><p class="pCellBody">
+<b class="cBold">Last</b>  
+</p>
+</td>
+    <td><a name="wp1042974"> </a><p class="pCellBody">
+The cursor moves to the end of the last field controlled by the ACCEPT statement.  Trailing prompt characters in the last field are ignored in determining the end of the field.  If this key has been assigned a TERMINATE or EXCEPTION value and the cursor is already in the last field, the ACCEPT terminates.  
+</p>
+<a name="wp1042975"> </a><p class="pCellBody">
+Under Windows, with TERMINATE and EXCEPTION value, if the cursor is at the last field, the ACCEPT does not terminate and the cursor stays at the current field.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042978"> </a><p class="pCellBody">
+<b class="cBold">Left</b>  
+</p>
+</td>
+    <td><a name="wp1042980"> </a><p class="pCellBody">
+The cursor is moved one position to the left; if it is already in the left-most field position, it moves to the end of the previous field.  If the cursor is in the left-most position of the first field, the key is ignored unless it also has been assigned a TERMINATE or EXCEPTION value, in which case the ACCEPT terminates.  
+</p>
+<a name="wp1042981"> </a><p class="pCellBody">
+In the case of Windows, the left and right arrow keys move the cursor inside a field but do not act as terminators.  Without TERMINATE and EXCEPTION value, if the cursor is in the leftmost position of the first field, the key is not ignored and the cursor is moved to the last field. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042984"> </a><p class="pCellBody">
+<b class="cBold">Menu</b>  
+</p>
+</td>
+    <td><a name="wp1042986"> </a><p class="pCellBody">
+The key is defined as a Menu key.  Pressing this key will cause a program-defined menu to appear on the screen.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042989"> </a><p class="pCellBody">
+<b class="cBold">Next</b>  
+</p>
+</td>
+    <td><a name="wp1042991"> </a><p class="pCellBody">
+Under Windows, without TERMINATE and EXCEPTION value, if the cursor is in the last field, it moves to the first field, instead of moving to the end of the field.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042994"> </a><p class="pCellBody">
+<b class="cBold">Next-All</b>  
+</p>
+</td>
+    <td><a name="wp1042996"> </a><p class="pCellBody">
+The cursor moves to the beginning of the next field regardless of whether or not the next field has a Tab-Stop.  Thus a key with the &quot;Next&quot; action will skip controls with the NO-TAB style, while a key with the &quot;Next-All&quot; action will not.  
+</p>
+<a name="wp1042997"> </a><p class="pCellBody">
+By default, the Down key is assigned the Next-All action.  This makes the Down key behave more like it does in a common Windows program.  Assign the Down keyword (described above) for a more traditional, text-mode behavior.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043000"> </a><p class="pCellBody">
+<b class="cBold">Next-Line</b>  
+</p>
+</td>
+    <td><a name="wp1043002"> </a><p class="pCellBody">
+Next-Line functions the same as the Down action, except that the cursor always moves to the beginning of the left-most field on the new line (instead of maintaining the current cursor column). 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043005"> </a><p class="pCellBody">
+<b class="cBold">Numeric-Default</b>
+</p>
+</td>
+    <td><a name="wp1043007"> </a><p class="pCellBody">
+If the field is numeric, then this key acts just like the Default-Entry key.  Typing this key at the first character position of a numeric field leaves the field unchanged and accepts the default value.  Typing this key when the cursor is <em class="cEmphasis">not </em>in the first position causes erasure of the field from the cursor position to the end.  This key allows the user either to accept the default or type over it without having to worry about blanking out the trailing portion of the field. 
+</p>
+<a name="wp1043008"> </a><p class="pCellBody">
+If the field is alphanumeric, then this action does not affect the field.  Numeric-Default is usually made a termination key, so that typing it causes the ACCEPT to finish. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043011"> </a><p class="pCellBody">
+<b class="cBold">Numeric-Next</b>  
+</p>
+</td>
+    <td><a name="wp1043013"> </a><p class="pCellBody">
+If the field is numeric, then this key acts just like the Default-Next key.  Typing this key at the first character position of a numeric field leaves the field unchanged, accepts the default value, and advances to the beginning of the next field.  Typing this key when the cursor is <em class="cEmphasis">not</em> in the first position causes erasure of the field from the cursor position to the end.  The cursor is then advanced to the beginning of the next field.  This key allows the user either to accept the default or type over it without having to worry about blanking out the trailing portion of the field.  
+</p>
+<a name="wp1043014"> </a><p class="pCellBody">
+If the field is alphanumeric, then this key acts just like the Next key.  It advances the cursor to the beginning of the next field and does not affect the current field. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043017"> </a><p class="pCellBody">
+<b class="cBold">Page-Down</b>  
+</p>
+</td>
+    <td><a name="wp1043019"> </a><p class="pCellBody">
+This keyword sets the key that pages down a multiline entry field, list box, and combo box.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043022"> </a><p class="pCellBody">
+<b class="cBold">Page-Left</b>
+</p>
+</td>
+    <td><a name="wp1043024"> </a><p class="pCellBody">
+This keyword sets the key that scrolls left one page.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043027"> </a><p class="pCellBody">
+<b class="cBold">Page-Right</b>
+</p>
+</td>
+    <td><a name="wp1043029"> </a><p class="pCellBody">
+This keyword sets the key that scrolls right one page.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043032"> </a><p class="pCellBody">
+<b class="cBold">Page-Up</b>  
+</p>
+</td>
+    <td><a name="wp1043034"> </a><p class="pCellBody">
+This keyword sets the key that pages up a multiline entry field, list box, and combo box.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043037"> </a><p class="pCellBody">
+<b class="cBold">Previous</b>  
+</p>
+</td>
+    <td><a name="wp1043039"> </a><p class="pCellBody">
+The cursor moves to the beginning of the previous field.  If the cursor is in the first field, it moves to the beginning of the field unless the key has been assigned a TERMINATE or EXCEPTION value, in which case it acts as a termination key instead.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043042"> </a><p class="pCellBody">
+<b class="cBold">Previous-All</b>  
+</p>
+</td>
+    <td><a name="wp1043044"> </a><p class="pCellBody">
+The cursor moves to the beginning of the previous field regardless of whether or not the previous field has a Tab-Stop.  Thus a key with the &quot;Previous&quot; action will skip controls with the NO-TAB style, while a key with the &quot;Previous-All&quot; action will not.  
+</p>
+<a name="wp1043045"> </a><p class="pCellBody">
+By default, the Up key is assigned the Previous-All action.  This makes the Up key behave more like it does in a common Windows program.  Assign the Up keyword (described below) for a more traditional, text-mode behavior.
+</p>
+<a name="wp1043046"> </a><p class="pCellBody">
+Under Windows, without TERMINATE and EXCEPTION value, if the cursor is in the first field, it moves to the last field, instead of moving to the beginning of the field.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043049"> </a><p class="pCellBody">
+<b class="cBold">Previous-Line</b>  
+</p>
+</td>
+    <td><a name="wp1043051"> </a><p class="pCellBody">
+The cursor moves to the beginning of the left-most field on the next higher line.  If there are no fields above the current one, this action does nothing unless it has an EXCEPTION or TERMINATE value, in which case it acts as a termination key.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043054"> </a><p class="pCellBody">
+<b class="cBold">Right</b>  
+</p>
+</td>
+    <td><a name="wp1043056"> </a><p class="pCellBody">
+This function moves the cursor one position to the right.  This will not move the cursor onto any trailing prompt characters (exception: if the prompt character is a space and the field is being updated, the cursor will move over the trailing spaces).  
+</p>
+<a name="wp1043057"> </a><p class="pCellBody">
+If the cursor is as far right as it is allowed to go, it will move to the beginning of the next field.  If there is no following field, this key is ignored unless a TERMINATE or EXCEPTION value has been assigned, in which case the ACCEPT terminates. 
+</p>
+<a name="wp1043058"> </a><p class="pCellBody">
+In the case of Windows, the left and right arrow keys move the cursor inside a field but do not act as terminators.  Without TERMINATE and EXCEPTION value, if the cursor is as far right as it is allowed to go, the key is not ignored and moves to the first field.  (See Book 2, <em class="cEmphasis">User Interface Programming</em>, section 11.4, &quot;Regarding Configuration Variables&quot;)  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043061"> </a><p class="pCellBody">
+<b class="cBold">Scroll-Left</b>
+</p>
+</td>
+    <td><a name="wp1043063"> </a><p class="pCellBody">
+This keyword sets the key that scrolls left one column.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043066"> </a><p class="pCellBody">
+<b class="cBold">Scroll-Right</b>
+</p>
+</td>
+    <td><a name="wp1043068"> </a><p class="pCellBody">
+This keyword sets the key that scrolls right one column.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043071"> </a><p class="pCellBody">
+<b class="cBold">Switch-Window</b>  
+</p>
+</td>
+    <td><a name="wp1043073"> </a><p class="pCellBody">
+This keyword defines the key that, when pressed, causes the system to enter &quot;switch window mode.&quot;  In this mode, the user can press any key to cycle through the modeless windows, with each window border highlighted until the &quot;Return&quot; key is pressed.  Window switching order is from top to bottom.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043077"> </a><p class="pCellBody">
+<b class="cBold">System-Menu</b>  
+</p>
+</td>
+    <td><a name="wp1043079"> </a><p class="pCellBody">
+Use the System-Menu function to define the key used to activate a floating window's <em class="cEmphasis">system </em>menu on a text-mode system.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043082"> </a><p class="pCellBody">
+<b class="cBold">Toggle-Edit-Mode </b> 
+</p>
+</td>
+    <td><a name="wp1043084"> </a><p class="pCellBody">
+This keyword defines the key that can be used to toggle the presence of the combo box's drop-down list and the paged list box's search box. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043087"> </a><p class="pCellBody">
+<b class="cBold">Toggle-Insert  </b>
+</p>
+</td>
+    <td><a name="wp1043089"> </a><p class="pCellBody">
+If insertion mode is currently in effect, it is turned off.  Otherwise, insertion mode is turned on.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043092"> </a><p class="pCellBody">
+<b class="cBold">Up</b>
+</p>
+</td>
+    <td><a name="wp1043094"> </a><p class="pCellBody">
+If there are fields above the current cursor location, the cursor moves to the one on the closest higher line.  If there is more than one field on this line, the cursor moves to the field closest to its current location.  The cursor will try to stay in its current column.  If there are no lines above the current line with active fields, then this key is ignored unless it has a TERMINATE or EXCEPTION value, in which case it acts as a termination key.  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1043097"> </a><h5 class="pHeading4">
+EXCEPTION=value
+</h5>
+<a name="wp1043099"> </a><p class="pBody">
+	The purpose of this keyword is to create an exception key.  EXCEPTION assigns a decimal ASCII <em class="cEmphasis">value</em> to a key; the key becomes a termination key that also causes an exception condition.  The assigned value is returned in the EXCEPTION clause or the CONTROL KEY clause of the ACCEPT statement.  See the TERMINATE keyword below if you want to terminate input <em class="cEmphasis">without</em> causing an exception condition.  Note that ACUCOBOL-GT inhibits exception keys when no EXCEPTION or CONTROL KEY clause is present in the ACCEPT statement, unless the program was compiled with the &quot;-Vx&quot; option.
+</p>
+<a name="wp1043103"> </a><h5 class="pHeading4">
+HOT-KEY=value
+</h5>
+<a name="wp1043105"> </a><p class="pBody">
+	ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>offers two methods for assigning hot keys:  the KEYSTROKE keyword HOT-KEY described here, and the HOT-KEY runtime configuration variable described in Appendix H.  Either or both may be used, but the results are undefined if you assign the same key using both formats.  The total number of hot-key entries defined by both methods cannot exceed 16.
+</p>
+<a name="wp1043107"> </a><p class="pBody">
+	A <em class="cEmphasis">hot key</em> is a key that is associated with a program, so that when the key is pressed, the corresponding program is run.  <em class="cEmphasis">Value</em> is the program name, which must be specified in single or double quotes if it is lowercase.  The full configuration file entry looks like this: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+KEYSTROKE HOT-KEY=program-name <em class="cEmphasis">key-code</em> <a name="wp1043108"> </a>
+</pre></div>
+<a name="wp1043109"> </a><p class="pBody">
+Pressing the key specified in <em class="cEmphasis">key-code</em> initiates execution of the program just as if it were named in a CALL statement.  The <em class="cEmphasis">key-code</em> argument is one of the two-character key codes shown in <a  href="run218.htm#wp1043161">section 2.3.2.3, &quot;Table of keys.&quot;</a>
+</p>
+<a name="wp1043113"> </a><p class="pBody">
+For example, there is a screen printing sample program named PRNTSCRN provided with ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif">.</span><span style="font-family: Arial, Verdana, Helvetica, sans-serif">  </span>If you want to be able to initiate that program just by pressing the keyboard's &quot;F11&quot; key, add the following line to your configuration file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+KEYSTROKE HOT-KEY=F11 U1<a name="wp1043114"> </a>
+</pre></div>
+<a name="wp1043116"> </a><p class="pBody">
+	Hot keys are active only during Format 1 and Format 2 ACCEPT statements (these are the forms of the ACCEPT verb that allow the user to enter data at the keyboard).  When the user presses a hot key, the current program status is saved, and the program associated with the hot key is run.  When the hot-key program exits (via the EXIT PROGRAM statement), control is returned to the program that was running when the hot key was pressed.  The hot-key function does not save the original contents of the screen.  You can accomplish this by popping up a window in your hot-key program, and then closing the window just before you exit the hot-key program.
+</p>
+<a name="wp1043117"> </a><p class="pBody">
+A hot-key program is automatically passed two parameters.  The first parameter is PIC X(200).  It contains an image of the data in the field that was being entered at the time the hot key was pressed.  The second parameter is a COMP-1 field that contains the length of the field being entered.  You can define the first parameter as a table that depends on the second parameter like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+LINKAGE SECTION.<a name="wp1043118"> </a>
+01  CURRENT-FIELD.<a name="wp1043119"> </a>
+    03  OCCURS 1 TO 200 TIMES <a name="wp1043120"> </a>
+        DEPENDING ON FIELD-SIZE   PIC X.<a name="wp1043121"> </a>
+<a name="wp1043122"> </a>
+01  FIELD-SIZE   PIC S9(4) COMP-1.<a name="wp1043123"> </a>
+<a name="wp1043124"> </a>
+</pre></div>
+<a name="wp1043125"> </a><p class="pBody">
+You are not required to declare or use either of these parameters in your hot-key program--they are provided for convenience.
+</p>
+<a name="wp1043126"> </a><p class="pBody">
+The hot-key program may modify its first parameter.  Any modifications made are reflected in the field that was being entered when the hot-key program was called.  You might use this capability to perform a look-up function and then return the value found to the field being entered.  If you want to pass additional data to the hot-key program, use EXTERNAL DATA ITEMS.
+</p>
+<a name="wp1043127"> </a><p class="pBody">
+When a hot-key program is started, the value of the RETURN-CODE special register is saved and then set to zero.  The hot-key program may alter this value.  When the hot-key program exits, the value of RETURN-CODE is checked.  The following table shows the possible values and the action that the calling program will take:
+</p>
+<a name="wp1043145"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1043130"> </a>
+Value
+
+</th>
+    <th><a name="wp1043132"> </a>
+Action
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043134"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1043136"> </a><p class="pCellBody">
+continue ACCEPT
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043138"> </a><p class="pCellBody">
+&gt;0
+</p>
+</td>
+    <td><a name="wp1043140"> </a><p class="pCellBody">
+generate exception if allowed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1043142"> </a><p class="pCellBody">
+-1
+</p>
+</td>
+    <td><a name="wp1043144"> </a><p class="pCellBody">
+activate &quot;next field&quot; logic
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1043146"> </a><p class="pBody">
+
+</p>
+<a name="wp1043147"> </a><p class="pBody">
+If the value of RETURN-CODE is zero, then the calling program continues to a normal completion of the ACCEPT statement that was active when the hot key was pressed.  
+</p>
+<a name="wp1043148"> </a><p class="pBody">
+If the value is greater than zero, then the calling program acts as if an exception key (with that value) was pressed.  This will terminate the ACCEPT statement if it is of a format that allows exception keys.  
+</p>
+<a name="wp1043149"> </a><p class="pBody">
+If the value is &quot;-1&quot;, then the ACCEPT statement will act as if a &quot;next field&quot; key were pressed by the user.  This will cause the ACCEPT statement to proceed to the next field.  If there are no more fields (or if there is only one field), then the ACCEPT statement will terminate with a termination value of zero.  <em class="cEmphasis">The hot-key program should not set RETURN-CODE to any negative value other than  &quot;-1&quot;.  Other negative values are reserved for future use by ACUCOBOL-GT.  </em>
+</p>
+<a name="wp1043150"> </a><p class="pBody">
+In any case, after the RETURN-CODE value established by the hot-key program has been acted upon by the calling program, RETURN-CODE is restored to the value it held before the hot-key program was called.  
+</p>
+<a name="wp1043151"> </a><p class="pBody">
+If a hot-key program cannot be executed, an error message is displayed to the user, and control returns to the ACCEPT statement.
+</p>
+<a name="wp1043152"> </a><p class="pBody">
+Up to two hot-key programs per process may be active at once. 
+</p>
+<a name="wp1043154"> </a><h5 class="pHeading4">
+INVALID=value
+</h5>
+<a name="wp1043155"> </a><p class="pBody">
+If <em class="cEmphasis">value</em> is &quot;Yes&quot;, the key is ignored when it is typed.  This keyword may not be specified with any other keywords.
+</p>
+<a name="wp1043157"> </a><h5 class="pHeading4">
+TERMINATE=value
+</h5>
+<a name="wp1043158"> </a><p class="pBody">
+This keyword is used to create a termination key.  TERMINATE assigns a decimal ASCII <em class="cEmphasis">value</em> to a key; when the key is pressed, the ACCEPT is terminated and the assigned value is returned in the CONTROL KEY clause of the ACCEPT statement.  TERMINATE does <em class="cEmphasis">not</em> cause the key to generate an exception condition when pressed; to define an exception key, use the EXCEPTION keyword instead. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

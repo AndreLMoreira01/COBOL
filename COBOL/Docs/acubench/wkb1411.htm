@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:14:50" />
+  <title>14.2.2  Create and Refine Your Data Layout File (&quot;.dlt&quot;) in the Workspace Data view</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuBench User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="wkb14a.htm">Chapter 14: Working with Reports</a> &gt; <a href="wkb149.htm">14.2  Graphical Sample Reports</a> &gt; </p>
+<a name="wp1036459"> </a><h2 class="pHeading2">
+14.2.2  Create and Refine Your Data Layout File (&quot;.dlt&quot;) in the Workspace Data view
+</h2>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036460"> </a><div class="pSmartList1"><li>Create a data layout.  In the workspace Data view, right-click on the project name, and select <b class="cBold">New FD/SL</b>.  Change the FD/SL name from FD1 to <b class="cBold">Salesdata</b>.  Select <b class="cBold">Import from files </b>and click <b class="cBold">OK</b>.    </li></div>
+<a name="wp1036461"> </a><div class="pSmartList1"><li>In the Import FD/SL Files dialog, click on the browse button with the FD File Path entry field.  By default, AcuBench browses the FD subdirectory of your project. Select <b class="cBold">SalesData.fd</b> and click <b class="cBold">Open</b>.  Control returns to the Import FD/SL Files dialog box, which is automatically pre-filled with &quot;SalesData.sl&quot;.  Click <b class="cBold">OK</b> to open the selected FD/SL in the File Designer interface.</li></div>
+<a name="wp1036462"> </a><div class="pSmartList1"><li>In the File Designer interface, select the IO Handling tab.  Here, you define the I/O paragraphs associated with your data layout file and code them in the Event Editor.  For our sample reports, this means adding two paragraphs-Before Master Print Loop and End Master Print Loop.  </li></div>
+<a name="wp1036463"> </a><div class="pSmartList1"><li>To create a new I/O paragraph, click the <b class="cBold">Add</b> push button to create a paragraph title area at the bottom of the listed paragraphs. This push button has a sunburst icon and is located at the top of the User-defined I/O Paragraphs section.  </li></div>
+<a name="wp1036464"> </a><div class="pSmartList1"><li>The newly created Item cell has the title &quot;Start-1&quot;.  Double-click this cell and type <b class="cBold">Before Master Print Loop</b>.  </li></div>
+<a name="wp1036465"> </a><div class="pSmartList1"><li>The new Value cell also has the title &quot;Start-1&quot;.  Double-click this cell and type <b class="cBold">Before-Master-Print-Loop</b>.  This is the name of the paragraph that is generated in the &quot;.evt&quot; COPY file.  Click the ellipsis button at the end of the Value cell to open the Event Editor with the cursor positioned in the named paragraph.  </li></div>
+<a name="wp1036466"> </a><div class="pSmartList1"><li>The purpose of the Before-Master-Print-Loop<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold"> </span>in a report is to START the file and perform the first READ.  Enter the following code for this paragraph: </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MOVE LOW-VALUES TO SALES-KEY.<a name="wp1036467"> </a>
+START SALESDATA KEY &gt; SALES-KEY<a name="wp1036468"> </a>
+READ SALESDATA NEXT RECORD<a name="wp1036469"> </a>
+     AT END MOVE &quot;10&quot; TO SALESDATA-STATUS<a name="wp1036470"> </a>
+END-READ.<a name="wp1036471"> </a>
+</pre></div>
+<a name="wp1036472"> </a><div class="pSmartList1"><li>Repeat steps 4-7 for the creation of the End-Master-Print-Loop paragraph.  The purpose of the End-Master-Print-Loop in a report is to drive the report with READ NEXT statements.  Enter the following code:  </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+READ SALESDATA NEXT RECORD<a name="wp1036473"> </a>
+     AT END MOVE &quot;10&quot; TO SALESDATA-STATUS<a name="wp1036474"> </a>
+END-READ<a name="wp1036475"> </a>
+</pre></div>
+<a name="wp1036476"> </a><div class="pSmartList1"><li>Select the <b class="cBold">Use User-defined I/O Paragraphs</b> radio button to ensure that your newly coded I/O paragraphs are included with the data set code generation.</li></div>
+</ol></div>
+<a name="wp1036451"> </a><p class="pBody">
+The following sections describe the creation of these sample reports and provide tips for some of the report generation functions.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuBench-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

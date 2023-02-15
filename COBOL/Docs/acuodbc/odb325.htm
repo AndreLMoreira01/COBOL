@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:28:27" />
+  <title>Null Processing</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb3.htm">Chapter 3: Creating Data Sources</a> &gt; <a href="odb311.htm">3.3  Advanced Options</a> &gt; </p>
+<a name="wp1059298"> </a><h2 class="pHeading2">
+Null Processing
+</h2>
+<a name="wp1059301"> </a><p class="pBody">
+COBOL does not have a concept that corresponds directly to SQL's NULL.  The closest candidates in COBOL are data items that contain either SPACES or LOW-VALUES.  In SQL, NULL is often used for no data.
+</p>
+<a name="wp1029348"> </a><p class="pBody">
+To maintain the integrity of the source data and to ensure that any data written from your application back to the COBOL source is accurate, you must provide a representational mapping between COBOL's SPACES and LOW-VALUES and the corresponding SQL column values.  Use this control to indicate which COBOL data should be represented as NULL and how SQL NULLs should be translated into COBOL data.  
+</p>
+<a name="wp1029355"> </a><p class="pBody">
+For data coming in to your application (READs), if a field contains either SPACES or LOW-VALUES in alphanumeric data in the COBOL files, you can instruct the application to represent it as either NULL or an empty string.  If a field contains either SPACES or LOW-VALUES in numeric data in the COBOL files, instruct the system to represent it as either a NULL or a zero.  
+</p>
+<a name="wp1029356"> </a><h3 class="pHeadingRef">
+Alphanumeric Input
+</h3>
+<a name="wp1029361"> </a><p class="pBody">
+AcuODBC follows these rules for alphanumeric data coming into an ODBC-enabled application.
+</p>
+<a name="wp1029362"> </a><p class="pBodyRelative">
+  </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1034796"> </a>
+If an alphanumeric field contains ...
+
+</th>
+    <th><a name="wp1034798"> </a>
+Then that field ...
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029369"> </a><p class="pCellBody">
+All SPACES or all LOW-VALUES
+</p>
+</td>
+    <td><a name="wp1029371"> </a><p class="pCellBody">
+Comes into the application as either NULL or as an empty string, depending on the setting for variables for the data source on the Advanced tab of the AcuODBC Configuration property sheet.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029373"> </a><p class="pCellBody">
+Any other values
+</p>
+</td>
+    <td><a name="wp1029375"> </a><p class="pCellBody">
+Comes into the application unchanged.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1048983"> </a><h3 class="pHeadingRef">
+Numeric Input
+</h3>
+<a name="wp1029383"> </a><p class="pBody">
+Numeric fields present a slightly more complicated scenario, because LOW-VALUES and SPACES are valid values for many numeric types, as shown in the following examples:
+</p>
+<a name="wp1029384"> </a><p class="pBodyRelative">
+   </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1034714"> </a>
+If the numeric type is  ...
+
+</th>
+    <th><a name="wp1034716"> </a>
+LOW-VALUES is equal to ...
+
+</th>
+    <th><a name="wp1034718"> </a>
+SPACES is equal to ...
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029393"> </a><p class="pCellBody">
+PIC 9(4) COMP-3
+</p>
+</td>
+    <td><a name="wp1029395"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1029397"> </a><p class="pCellBody">
+2020
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029399"> </a><p class="pCellBody">
+PIC 9(2) COMP-5
+</p>
+</td>
+    <td><a name="wp1029401"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1029403"> </a><p class="pCellBody">
+8192
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029405"> </a><p class="pCellBody">
+PIC 9(4) COMP-2
+</p>
+</td>
+    <td><a name="wp1029407"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1029409"> </a><p class="pCellBody">
+INVALID
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1029411"> </a><p class="pBody">
+Therefore, AcuODBC follows these rules for numeric data coming in to the ODBC-enabled application:
+</p>
+<a name="wp1029439"> </a><p class="pBodyRelative">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1031330"> </a>
+If a field contains ...
+
+</th>
+    <th><a name="wp1031332"> </a>
+And ...
+
+</th>
+    <th><a name="wp1031334"> </a>
+Then ...
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1031336"> </a><p class="pCellBody">
+All LOW-VALUES
+</p>
+</td>
+    <td><a name="wp1031338"> </a><p class="pCellBody">
+LOW-VALUES is an invalid value for the numeric type
+</p>
+</td>
+    <td><a name="wp1031340"> </a><p class="pCellBody">
+The field comes into the application based on the setting for numeric variables for the data source on the Advanced tab of the AcuODBC Configuration property sheet.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1031342"> </a><p class="pCellBody">
+All SPACES
+</p>
+</td>
+    <td><a name="wp1031344"> </a><p class="pCellBody">
+SPACES is an invalid value for the numeric type
+</p>
+</td>
+    <td><a name="wp1031346"> </a><p class="pCellBody">
+The field comes into the application based on the setting for numeric variables for the data source on the Advanced tab of the AcuODBC Configuration property sheet.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1031348"> </a><p class="pCellBody">
+Any other values
+</p>
+</td>
+    <td><a name="wp1031350"> </a><p class="pCellBody">
+The value is invalid for the numeric type
+</p>
+</td>
+    <td><a name="wp1031352"> </a><p class="pCellBody">
+Undefined data may come in to the application
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1029441"> </a><p class="pNote">
+<hr />
+<b>Note:  </b> SPACES or LOW-VALUES will not be converted to NULL or zero in a numeric data item where SPACES or LOW-VALUES, respectively, are valid numeric values.
+<hr />
+</p>
+<a name="wp1029450"> </a><p class="pBody">
+For data <em class="cEmphasis">returned</em> to the COBOL files (WRITEs), you can indicate that the NULLs in alphanumeric data be interpreted as SPACES or LOW-VALUES.  NULLs in numeric data can be interpreted as SPACES, LOW-VALUES, or zero.  These choices are disabled if your data source is read-only.
+</p>
+<a name="wp1029451"> </a><p class="pBody">
+The following table shows the default settings:
+</p>
+<a name="wp1029472"> </a><p class="pBodyRelative">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1031283"> </a>
+</pre></div>
+</th>
+    <th><a name="wp1031285"> </a>
+On Input (to your ODBC-enabled application)
+
+</th>
+    <th><a name="wp1031287"> </a>
+On Output (to the COBOL source)
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029461"> </a><p class="pCellBody">
+Alphanumeric
+</p>
+</td>
+    <td><a name="wp1029463"> </a><p class="pCellBody">
+NULL
+</p>
+</td>
+    <td><a name="wp1029465"> </a><p class="pCellBody">
+Spaces
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029467"> </a><p class="pCellBody">
+Numeric
+</p>
+</td>
+    <td><a name="wp1029469"> </a><p class="pCellBody">
+Zero
+</p>
+</td>
+    <td><a name="wp1029471"> </a><p class="pCellBody">
+Zero   
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

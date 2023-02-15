@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>SEND Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1041550"> </a><h2 class="pHeading2">
+SEND Statement
+</h2>
+<a name="wp1041556"> </a><p class="pBody">
+The SEND statement sends a message to other threads. 
+</p>
+<a name="wp1041558"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">SEND</u> src-item <u class="cUnderline">TO</u> { { THREAD dest-thread } ... }<a name="wp1041559"> </a>
+                 { <u class="cUnderline">LAST</u> <u class="cUnderline">THREAD</u>                }<a name="wp1041560"> </a>
+                 { <u class="cUnderline">ALL</u> <u class="cUnderline">THREADS</u>                }<a name="wp1041561"> </a>
+</pre></div>
+<a name="wp1041563"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041564"> </a><div class="pSmartList1"><li><em class="cEmphasis">Src-item</em> is a literal or data item.</li></div>
+<a name="wp1041565"> </a><div class="pSmartList1"><li><em class="cEmphasis">Dest-thread</em> is a USAGE HANDLE or HANDLE OF THREAD data item.</li></div>
+</ol></div>
+<a name="wp1041567"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041568"> </a><div class="pSmartList1"><li>The SEND statement sends a message containing the data in <em class="cEmphasis">src-item</em> to one or more threads.  Which threads receive the message depends on the following:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1041569"> </a><div class="pSmartList2"><li>THREAD <em class="cEmphasis">dest-thread</em> causes the message to be sent to the thread identified by <em class="cEmphasis">dest-thread.  </em>More than one <em class="cEmphasis">dest-thread</em> can be specified.</li></div>
+<a name="wp1041570"> </a><div class="pSmartList2"><li>LAST THREAD causes the message to be sent to the <em class="cEmphasis">last</em> thread (see section 6.8.1, Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide</em> for a discussion of the <em class="cEmphasis">last</em> thread).</li></div>
+<a name="wp1041571"> </a><div class="pSmartList2"><li>ALL THREADS causes the message to be sent to all currently existing threads, except the sending thread.</li></div>
+</ol></div>
+<a name="wp1041572"> </a><div class="pSmartList1"><li>The size of the message is equal to the size of <em class="cEmphasis">src-item</em>.</li></div>
+<a name="wp1041573"> </a><div class="pSmartList1"><li>The THREAD <em class="cEmphasis">dest-thread</em> and LAST THREAD options create a <em class="cEmphasis">directed</em> message.  Directed messages are sent to the specified threads or last thread and are guaranteed to be delivered to the specified threads.  Directed messages are held in a queue.  If there is not enough space in the queue to place the message (because of other messages that have not yet been received), the sending thread suspends until space becomes available in the queue.  Messages are received in the order sent.  See the MESSAGE-QUEUE-SIZE runtime configuration variable for options on setting the queue size.  </li></div>
+<a name="wp1041576"> </a><div class="pSmartList1"><li>The ALL THREADS option creates a <em class="cEmphasis">broadcast</em> message.  Broadcast messages can be picked up by any thread.  Receiving a broadcast message does not remove it from the message queue, it remains queued to be received by other threads.  Broadcast messages are removed from the queue when either </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1041577"> </a><div class="pSmartList2"><li>all threads have received it, or </li></div>
+<a name="wp1041578"> </a><div class="pSmartList2"><li>there is not enough space to hold the next broadcast message.  In this case, broadcast messages are removed from the queue (oldest first) until there is enough space to place the new message in the queue.  This allows the queue to empty when there are threads that never look for messages.  It also means that a broadcast message may not be delivered to a particular thread if other broadcast messages are sent before the first is received.  To avoid this problem, use broadcast messages sparingly.   </li></div>
+</ol></div>
+<a name="wp1041579"> </a><div class="pSmartList1"><li>Broadcast messages can be missed under certain circumstances.  To track which messages a thread has read, each thread remembers the number of the last broadcast message it has read.  Messages are numbered sequentially starting at one.  If a thread skips an earlier broadcast message (because the message does not meet the thread's delivery requirements) and then receives a later broadcast message, the earlier message will never be received because it has an earlier message number.  For example, MESSAGE-1 will be missed in the following sequence of events:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SEND MESSAGE-1 TO ALL THREADS    (in thread A)<a name="wp1041580"> </a>
+SEND MESSAGE-2 TO ALL THREADS    (in thread B)<a name="wp1041581"> </a>
+RECEIVE MSG-2 FROM THREAD B      (in thread C)<a name="wp1041582"> </a>
+RECEIVE MSG-1 FROM ANY THREAD    (in thread C)<a name="wp1041583"> </a>
+</pre></div>
+<a name="wp1041584"> </a><p class="pIndented1">
+The last RECEIVE in this example does not receive MESSAGE-1 because it was sent earlier than the last broadcast message it received (MESSAGE-2 in this case).  This is caused by the first RECEIVE which picked up a broadcast message while asking for messages from a particular thread.  To avoid this, pick up broadcast messages with the RECEIVE FROM ANY THREAD phrase.  This will prevent you from skipping a message.  
+</p>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:34" />
+  <title>5.5.2  Bitmap: Special Properties </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt25.htm">Chapter 5:  Control Types Reference</a> &gt; <a href="gt2518.htm">5.5  Bitmap</a> &gt; </p>
+<a name="wp1156094"> </a><h2 class="pHeading2">
+5.5.2  Bitmap: Special Properties 
+</h2>
+<a name="wp1156097"> </a><h5 class="pHeading4">
+BITMAP-HANDLE (numeric)   
+</h5>
+<a name="wp1156098"> </a><p class="pBody">
+This property indicates the bitmap to display.  The value must correspond to the bitmap handle returned by the WBITMAP-LOAD option of W$BITMAP.  If this value is omitted, then the control uses the bitmap most recently loaded by W$BITMAP.  
+</p>
+<a name="wp1156101"> </a><h5 class="pHeading4">
+BITMAP-NUMBER (numeric)   
+</h5>
+<a name="wp1156102"> </a><p class="pBody">
+Use this property to display an image from a bitmap strip.  A bitmap strip is a series of images of equal width that are strung together horizontally in a single bitmap file.  The value of this property is the number of the image in the strip, beginning on the left with &quot;1&quot;.  You can identify a particular image if you specify the width of the logical image with the SIZE phrase and the number of the image with the BITMAP-NUMBER property.  The default value for this property is &quot;1&quot;.
+</p>
+<a name="wp1156103"> </a><p class="pBody">
+BITMAP-NUMBER is updated by the runtime to reflect the current image shown when an animated bitmap is displayed.  You can retrieve this value with the INQUIRE verb.  
+</p>
+<a name="wp1156108"> </a><h5 class="pHeading4">
+BITMAP-START, BITMAP-END (both numeric)   
+</h5>
+<a name="wp1156109"> </a><p class="pBody">
+These properties are used when you want to animate a bitmap.  Like BITMAP-NUMBER, the value of BITMAP-START is the number of a particular image in a bitmap strip, specifically, the first one to use during animation.  Animation runs sequentially in the strip from BITMAP-START to BITMAP-END, looping back to BITMAP-START.  If BITMAP-START is not set smaller than BITMAP-END, the control sets BITMAP-START equal to BITMAP-END.  The default value for each property is &quot;1&quot;.
+</p>
+<a name="wp1156112"> </a><h5 class="pHeading4">
+BITMAP-TIMER (numeric)   
+</h5>
+<a name="wp1156113"> </a><p class="pBody">
+This property is used for bitmap animation.  Its value is the amount of time each bitmap image is displayed during animation, in hundredths of seconds.  When this property is set to &quot;0&quot;, the bitmap is not animated.  Setting the property to a negative value has an undefined effect. 
+</p>
+<a name="wp1156116"> </a><h5 class="pHeading4">
+TRANSPARENT-COLOR (numeric)
+</h5>
+<a name="wp1156117"> </a><p class="pBody">
+Use this property to designate &quot;transparent regions&quot; in a bitmap. This is done by reserving one of the colors in the bitmap as the &quot;transparent&quot; color. Any points in the bitmap that contain this color will not be displayed when the bitmap is drawn, allowing the background to show through.  This can be useful if you want to integrate a logo onto a screen in a way that accommodates the user's choice of desktop colors.
+</p>
+<a name="wp1156118"> </a><p class="pBody">
+To designate a transparent region, choose one color in the bitmap to be the &quot;transparent&quot; color.  Then, set the TRANSPARENT-COLOR property to the RGB color value of this color.  The RGB color value is computed by the following formula:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+   (<em class="cEmphasis">red</em> * 65536) + (<em class="cEmphasis">green</em> * 256) + <em class="cEmphasis">blue</em><a name="wp1156119"> </a>
+</pre></div>
+<a name="wp1156120"> </a><p class="pBody">
+where <em class="cEmphasis">red</em>, <em class="cEmphasis">green,</em> and <em class="cEmphasis">blue</em> are values between 0 and 255. You can<b class="cBold"> </b>use a hexadecimal numeric literal to express this value since each component of the color occupies one byte in a binary value.  For example, the following literal expresses an orange color with red at 255, green at 128, and blue at 0:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+   78  orange    value x#FF8000.<a name="wp1156121"> </a>
+</pre></div>
+<a name="wp1156122"> </a><p class="pBody">
+The first byte (x `FF') is the red value, the second byte (x`80') is the green value, and the last byte (x`00') is the blue value.  
+</p>
+<a name="wp1156123"> </a><p class="pBody">
+If you set TRANSPARENT-COLOR to &quot;-1&quot; (the default), then the transparency property is turned off and all colors display normally.  
+</p>
+<a name="wp1156124"> </a><p class="pBody">
+Setting TRANSPARENT-COLOR to the hex value &quot;x#1000000&quot; will automatically specify the pixel in the upper-left corner of a bitmap as the &quot;transparent&quot; color. (This is the level 78 constant &quot;BM-CORNER-COLOR&quot; in &quot;acugui.def&quot;.)  You do not need to know the exact color of that pixel to use this value.
+</p>
+<a name="wp1156125"> </a><p class="pBody">
+In order to avoid flashing, the runtime will not update the region &quot;under&quot; a transparent bitmap once it is in place.  One effect of this is that if you animate a bitmap with transparent regions, you must ensure that those regions are the same in each frame of the animation, or the image will blur.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

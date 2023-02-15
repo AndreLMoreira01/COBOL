@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:44" />
+  <title>2.4.1  The COPY Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt32.htm"><br />Chapter 2:  Program Structure</a> &gt; <a href="gt3219.htm">2.4  Source Management Statements</a> &gt; </p>
+<a name="wp1034633"> </a><h2 class="pHeading2">
+2.4.1  The COPY Statement
+</h2>
+<a name="wp1034637"> </a><p class="pBody">
+The COPY statement copies text or a resource (static data such as a bitmap) into the source program from the specified file immediately prior to compilation.  The text or resource is <em class="cEmphasis">inserted</em> for compilation only and does not permanently replace the COPY statement in the program source.  Resources and COPY files that are inserted in this way into the object code are loaded from the object file at runtime.  If you change the resource (such as a bitmap) or the COPY file, you must recompile in order for the change to be reflected in the object code. 
+</p>
+<a name="wp1034638"> </a><p class="pBody">
+The REPLACING phrase allows word and substring substitutions to be made in the inserted text prior to compilation.
+</p>
+<a name="wp1037909"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This manual entry includes code examples and highlights for first-time users following the General Rules section.
+<hr />
+</p>
+<a name="wp1034640"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<a name="wp1034641"> </a><h3 class="pHeadingRef">
+Format 1
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">COPY</u> INDEXED library-name [ {<u class="cUnderline">IN</u>} path-name ] [ <u class="cUnderline">SUPPRESS</u> ]<a name="wp1034642"> </a>
+                            {<u class="cUnderline">OF</u>}<a name="wp1034643"> </a>
+<a name="wp1036882"> </a>
+[ <u class="cUnderline">REPLACING</u> { {  old-text <u class="cUnderline">BY</u> new-text               } } ... ] .<a name="wp1034644"> </a>
+            { { {<u class="cUnderline">LEADING</u> } literal-1 <u class="cUnderline">BY</u> {literal-2} } }<a name="wp1034645"> </a>
+            { { {<u class="cUnderline">TRAILING</u>}              {<u class="cUnderline">SPACE</u>    } } }<a name="wp1034646"> </a>
+            { {                         {<u class="cUnderline">SPACES</u>   } } }<a name="wp1034647"> </a>
+</pre></div>
+<a name="wp1034648"> </a><h3 class="pHeadingRef">
+Format 2
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">COPY</u> <u class="cUnderline">RESOURCE</u> resource-name [  {<u class="cUnderline">IN</u>} path-name ] .<a name="wp1034649"> </a>
+                               {<u class="cUnderline">OF</u>}<a name="wp1034650"> </a>
+</pre></div>
+<a name="wp1034651"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034653"> </a><div class="pSmartList1"><li>The COPY statement must be terminated by a period.  The period is part of the COPY statement and does not otherwise affect the program. </li></div>
+<a name="wp1034654"> </a><div class="pSmartList1"><li><em class="cEmphasis">Library-name</em> must be a nonnumeric literal or user-defined word.  <em class="cEmphasis">Path-name</em> must be a nonnumeric literal or a user-defined word.  Note that a nonnumeric literal may reference an environment variable by placing a &quot;$&quot; in the name, as described in General Rule 2.  To preserve the case of <em class="cEmphasis">library-name</em> and <em class="cEmphasis">path-name</em>, you must place them within quotation marks, otherwise they will be treated as uppercase by case sensitive operating systems.  For more information, see the <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>, section 2.5, &quot;COPY Libraries.&quot;</li></div>
+<a name="wp1034655"> </a><div class="pSmartList1"><li>The COPY statement may be used anywhere a separator may occur.  It may be placed in Area A or Area B.  </li></div>
+<a name="wp1034656"> </a><div class="pSmartList1"><li>Old-text and new-text may be any of the following:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1034657"> </a><div class="pSmartList2"><li>A series of text words placed between &quot;==&quot; delimiters.  For example &quot;==WORD-1 WORD-2==&quot; specifies a two-word sequence.  In <em class="cEmphasis">old-text</em>, at least one word must be specified.  In <em class="cEmphasis">new-text</em>, zero words may be used.  </li></div>
+<a name="wp1034658"> </a><div class="pSmartList2"><li>A numeric or nonnumeric literal.</li></div>
+<a name="wp1034659"> </a><div class="pSmartList2"><li>A data name, including qualifiers, subscripts and reference modification.  </li></div>
+<a name="wp1034660"> </a><div class="pSmartList2"><li>Any single text word.  </li></div>
+</ol></div>
+<a name="wp1034661"> </a><div class="pSmartList1"><li>For purposes of the COPY statement, a &quot;text word&quot; is a contiguous sequence of characters in Area A or Area B that form one of the following:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1034662"> </a><div class="pSmartList2"><li>A separator, except for: space, a pseudo-text delimiter (&quot;==&quot;), and the opening and closing delimiters for nonnumeric literals.</li></div>
+<a name="wp1034663"> </a><div class="pSmartList2"><li>A numeric or nonnumeric literal.</li></div>
+<a name="wp1034664"> </a><div class="pSmartList2"><li>Any of a sequence of characters except comment lines and the word &quot;COPY&quot;, bounded by separators, which is neither a separator nor a literal.  </li></div>
+</ol></div>
+<a name="wp1034665"> </a><div class="pSmartList1"><li><em class="cEmphasis">Literal-1</em> and <em class="cEmphasis">literal-2</em> are nonnumeric literals.</li></div>
+<a name="wp1034666"> </a><div class="pSmartList1"><li>The phrases SPACE and SPACES are equivalent. When one of these is used instead of <em class="cEmphasis">literal-2</em>, <em class="cEmphasis">literal-1</em> is deleted and no spaces are actually substituted.</li></div>
+<a name="wp1034667"> </a><div class="pSmartList1"><li>The format of the COPY file must conform to one of the allowed ACUCOBOL-GT source formats (either terminal or ANSI).  This format need not be the same as that used in the rest of the program.  Book 1, section 2.5, contains details about which source format is used for COPY files.  </li></div>
+<a name="wp1034668"> </a><div class="pSmartList1"><li><em class="cEmphasis">Resource-name</em> must be an alphanumeric literal or a user-defined word.  A resource name with a hyphen is equivalent to the same name with an underscore in place of the hyphen.  For example, &quot;MY-FILE&quot; is treated as being identical to &quot;MY_FILE&quot;.  To preserve the case of <em class="cEmphasis">resource-name</em>, you must place it within quotation marks, otherwise it will be treated as uppercase by case sensitive operating systems.  </li></div>
+<a name="wp1034669"> </a><div class="pSmartList1"><li>COPY statements may be nested in other COPY libraries.  Any one of the COPY statements in this structure can include the REPLACING phrase. </li></div>
+<a name="wp1034670"> </a><p class="pIndented1">
+Depending on the scope of each statement, the REPLACING phrases might affect subsidiary COPY statements. For example, if &quot;program-a.cbl&quot; contains a copy/replace as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY &quot;program-b.cpy&quot;<a name="wp1034671"> </a>
+   REPLACING ==genericitems== BY ==myitems==.<a name="wp1034672"> </a>
+</pre></div>
+<a name="wp1034673"> </a><p class="pIndented1">
+and &quot;program-b.cpy&quot; contains a nested copy/replace statement:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY &quot;program-c.cpy&quot;<a name="wp1034674"> </a>
+   REPLACING ==variabledata== BY == specificdata==.<a name="wp1034675"> </a>
+</pre></div>
+<a name="wp1034676"> </a><p class="pIndented1">
+The replace performed in &quot;program-b.cpy,&quot; by the copy/replace statement in &quot;program-a.cbl,&quot; will affect &quot;program-c.cpy.&quot;  If you do not want the copy/replace statement in &quot;program-a.cbl&quot; to cascade to &quot;program-c.cpy&quot; you must add the following statement to &quot;program-b.cpy&quot; so that the copy/replace performed in &quot;program-b.cpy&quot; will not be performed in &quot;program-c.cpy.&quot;
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY &quot;program-c.cpy&quot;<a name="wp1034677"> </a>
+   REPLACING ==genericitems== BY ==genericitems==.<a name="wp1034678"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1034679"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034680"> </a><div class="pSmartList1"><li><em class="cEmphasis">Library-name</em> and <em class="cEmphasis">path-name</em> identify a source file to be included at the location of the COPY statement.  The text of the source file logically replaces the COPY statement, including the terminating period.  The rules for interpreting these names are described in Book 1, section 2.5.  The &quot;-Ce&quot; compile option can be used to specify an alternate default filename extension.  See Book 1, section 2.1.5.</li></div>
+<a name="wp1034681"> </a><div class="pSmartList1"><li>You may use operating system environment variables in the OF phrase of a COPY statement.  To reference an environment variable, place a &quot;$&quot; in front of it.  For example, if you assign &quot;MYLIB&quot; to &quot;C:\MYFILES\MYLIB&quot;, then the statement:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY &quot;FILE1&quot; OF &quot;$MYLIB&quot;<a name="wp1034682"> </a>
+</pre></div>
+<a name="wp1034683"> </a><p class="pIndented1">
+would use the file C:\MYFILES\MYLIB\FILE1&quot;.  
+</p>
+<a name="wp1034684"> </a><p class="pIndented1">
+You may use multiple environment variables by preceding each one with a $ symbol.  Symbol names may contain alphanumeric characters, hyphens, underscores and dollar signs.  If the symbol name is not found in the environment, then it is left unchanged (including the initial $ symbol).  Symbols are not processed recursively--if the value of a symbol contains a $, the dollars sign is used literally in the final file name. 
+</p>
+<a name="wp1034685"> </a><div class="pSmartList1"><li>When INDEXED appears after the word COPY, it is ignored by the compiler. It may be included to provide compatibility with some older COBOL dialects.</li></div>
+<a name="wp1034688"> </a><div class="pSmartList1"><li>If the word SUPPRESS appears after <em class="cEmphasis">library-name </em>and <em class="cEmphasis">path-name</em>, then the program listing file will not include the contents of the COPY file or any other COPY files that may be nested within.  This word provides compatibility with one feature of IBM DOS/VS COBOL.  It is not a reserved word in ACUCOBOL-GT and may be used in other contexts as a user-defined name.</li></div>
+<a name="wp1034689"> </a><div class="pSmartList1"><li>The text of the COPY file is copied unchanged into the source program unless the REPLACING option is used.  If the REPLACING option is used, then elements of the COPY file that match <em class="cEmphasis">old-text</em> or <em class="cEmphasis">literal-1</em> are replaced by <em class="cEmphasis">new-text </em>or <em class="cEmphasis">literal-2</em>.  The comparison operation that determines text replacement is done as follows:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1034690"> </a><div class="pSmartList2"><li>The leftmost library text word that is not a separator comma or semicolon is the first text word used for comparison.  Starting with this word, and the first <em class="cEmphasis">old-text</em> specified, the entire <em class="cEmphasis">old-text</em> sequence is compared with an equivalent number of contiguous library text words.</li></div>
+<a name="wp1034691"> </a><div class="pSmartList2"><li><em class="cEmphasis">Old-text</em> matches the library text only if the ordered sequence of text words of <em class="cEmphasis">old-text</em> is identical to the ordered sequence of library text words.  For purposes of matching, a separator semicolon, comma, or space is considered a space, and a sequence of one or more spaces is considered a single space.  Also, lower-case characters are considered the same as upper-case characters in all text words except for nonnumeric literals.  </li></div>
+<a name="wp1034692"> </a><div class="pSmartList2"><li>If no match occurs, the comparison is repeated for each <em class="cEmphasis">old-text</em> specified until a match is found or each <em class="cEmphasis">old-text</em> has been tried.</li></div>
+<a name="wp1034693"> </a><div class="pSmartList2"><li>After all <em class="cEmphasis">old-text</em> comparisons have been tried and no match has occurred, the leftmost library text word is copied into the source program.  The next text word is then considered as the leftmost word and the cycle is repeated.  </li></div>
+<a name="wp1034694"> </a><div class="pSmartList2"><li>Whenever a match occurs between the library text and <em class="cEmphasis">old-text</em>, the corresponding <em class="cEmphasis">new-text</em> is placed in the source program.  The library text word that follows the rightmost word that participated in the match then becomes the new leftmost word for subsequent cycles.</li></div>
+<a name="wp1037801"> </a><div class="pSmartList2"><li>When you are using the LEADING/TRAILING option, the replacement process differs slightly.  When a match occurs between library text and <em class="cEmphasis">literal-1</em>, the only characters replaced by <em class="cEmphasis">literal-2 </em>are the specific LEADING or TRAILING characters indicated in the COPY statement. These characters can be a substring or a whole word. If a SPACE or SPACES phrase is used, the LEADING or TRAILING characters are deleted.  For example, if you have the following COPY library named &quot;MY-COPY.CPY&quot;:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    01 dummy-rec.<a name="wp1037802"> </a>
+        03 dummy-number-null    PIC X(10)<a name="wp1037803"> </a>
+</pre></div>
+<a name="wp1036948"> </a><p class="pIndented2">
+and you used this COPY statement:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    COPY &quot;MY-COPY.CPY&quot; REPLACING <a name="wp1034699"> </a>
+        LEADING &quot;dummy&quot; by &quot;employee&quot;<a name="wp1034700"> </a>
+        TRAILING &quot;null&quot; by SPACES.<a name="wp1034701"> </a>
+</pre></div>
+<a name="wp1034702"> </a><p class="pIndented2">
+Then the replacement will result in:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    01 employee-rec.<a name="wp1034703"> </a>
+        03 employee-number    PIC X(10)<a name="wp1034704"> </a>
+</pre></div>
+<a name="wp1034705"> </a><div class="pSmartList2"><li>The comparison cycle continues until the rightmost text word in the library has either participated in a match or has been the leftmost word of a comparison cycle.</li></div>
+</ol></div>
+<a name="wp1034706"> </a><div class="pSmartList1"><li>Comment lines and blank lines occurring in the library or in <em class="cEmphasis">old-text</em> are ignored for purposes of matching.  Comment lines and blank lines occurring in library text that is matched by a REPLACING operand are not copied into the source program.</li></div>
+<a name="wp1034707"> </a><div class="pSmartList1"><li>Debugging lines may appear within the library text and in <em class="cEmphasis">old-text</em>.  Text words appearing in a debugging line participate in the matching rules as if the line were a normal text line.</li></div>
+<a name="wp1034708"> </a><div class="pSmartList1"><li>When <em class="cEmphasis">new-text</em> is copied into the source program, the first word of <em class="cEmphasis">new-text</em> is copied into the same Area as the leftmost word of the replaced text.  Subsequent words of <em class="cEmphasis">new-text</em> are copied into Area B.  </li></div>
+<a name="wp1034709"> </a><div class="pSmartList1"><li>It is possible to use the REPLACING phrase to replace substrings.  This allows you to construct COPY libraries in which several strings have a uniform substring that you plan to modify.  </li></div>
+<a name="wp1034710"> </a><p class="pIndented1">
+For example, the substring &quot;individual&quot; might occur in the COPY library in &quot;individual&quot;-name, &quot;individual&quot;-address, &quot;individual&quot;-state, &quot;individual&quot;-city, &quot;individual&quot;-zip, and &quot;individual&quot;-title.  The REPLACING phrase could be used to replace &quot;individual&quot; with specific substrings such as employee, owner, student, teacher, professor, or advisor.
+</p>
+<a name="wp1034711"> </a><p class="pIndented1">
+To make use of this, delimit the substring that will be replaced in the COPY library with quotes.  Then use the standard COPY syntax to replace the quoted substring by another substring.  The resulting sequence of characters is re-evaluated by the compiler to make a new string.  
+</p>
+<a name="wp1034712"> </a><p class="pIndented1">
+For example, suppose you have a COPY library (called &quot;MYLIB&quot;) that contains the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77  MY-&#39;DUMMY&#39;-DATA-ITEM  PIC X(10).<a name="wp1034713"> </a>
+</pre></div>
+<a name="wp1034714"> </a><p class="pIndented1">
+and you used this COPY statement:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY &quot;MYLIB&quot; REPLACING ==&#39;DUMMY&#39;== BY ==REAL==.<a name="wp1034715"> </a>
+</pre></div>
+<a name="wp1034716"> </a><p class="pIndented1">
+Then the text of &quot;MYLIB&quot; is effectively treated as:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77  MY-REAL-DATA-ITEM  PIC X(10).<a name="wp1034717"> </a>
+</pre></div>
+<a name="wp1034718"> </a><p class="pIndented1">
+You should use hyphens rather than underscores in this instance. 
+</p>
+<a name="wp1034719"> </a><p class="pIndented1">
+In addition to the use of single and double quotes to delimit the substring, the following delimiters are also allowed:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ ==(XYZ)==<a name="wp1038397"> </a>
+ ==|XYZ|==  (in HP COBOL compatibility mode)<a name="wp1038455"> </a>
+==*XYZ*==<a name="wp1038401"> </a>
+==XYZ*==<a name="wp1038431"> </a>
+==XYZ&amp;==<a name="wp1038466"> </a>
+==XYZ#==<a name="wp1038470"> </a>
+</pre></div>
+<a name="wp1034720"> </a><div class="pSmartList1"><li><em class="cEmphasis">Resource-name</em> and <em class="cEmphasis">path-name</em> identify a resource file to be included in the resulting object file.  The rules for interpreting these names are described in Book 1, section 2.5.  Note that the compiler's &quot;COPY path&quot; applies to resources (Format 2) as well as to source files (Format&#160;1).  </li></div>
+<a name="wp1038036"> </a><div class="pSmartList1"><li>The effect of a COPY RESOURCE statement is to add <em class="cEmphasis">resource-name</em> to a list of resources that the compiler embeds into the resulting COBOL object file.  The resources are added to the end of the COBOL object in the same order as the corresponding COPY statements.  Because the resources are added to the end of the object, the location of the corresponding COPY RESOURCE statement in the COBOL program is irrelevant.  Conventionally, COPY RESOURCE statements are placed either in Working-Storage or at the end of the program, but any location is acceptable.  </li></div>
+<a name="wp1038037"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">resource-name</em> resolves to a COBOL object or library file, the compiler includes this object or library in the resulting object in a manner similar to &quot;cblutil -lib&quot;.  These are not considered resources, but are embedded COBOL objects.  Note that Acucorp recommends using &quot;cblutil -lib&quot; to create libraries containing multiple COBOL objects instead of using COPY RESOURCE.  There are two advantages to using &quot;cblutil&quot;.  The first is that you do not need to worry about the order in which COBOL objects are compiled (if you use COPY RESOURCE, you must ensure that the copied object is compiled first), and &quot;cblutil&quot; also checks for duplicated program names; COPY RESOURCE does not.  </li></div>
+</ol></div>
+<a name="wp1034723"> </a><h3 class="pHeadingRef">
+Code Examples
+</h3>
+<a name="wp1034724"> </a><p class="pBody">
+Assume the existence of disk directory CODELIB.  In directory CODELIB is file ENROLLREC.  The contents of ENROLLREC are: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  ENROLLMENT-RECORD.<a name="wp1034726"> </a>
+    05 STUDENT-NAME     PIC X(30).<a name="wp1034727"> </a>
+    05 STUDENT-ADDR     PIC X(50).<a name="wp1034728"> </a>
+    05 STUDENT-GPA      PIC 99V9.<a name="wp1034729"> </a>
+    05 SID              PIC 9(7).<a name="wp1034730"> </a>
+</pre></div>
+<a name="wp1034731"> </a><h3 class="pHeadingRef">
+Code example 1:
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+IDENTIFICATION DIVISION.<a name="wp1034732"> </a>
+PROGRAM-ID.  COPY-EXAMPLE-1.<a name="wp1034733"> </a>
+...<a name="wp1034734"> </a>
+DATA DIVISION.<a name="wp1034735"> </a>
+FILE SECTION.<a name="wp1034736"> </a>
+FD  SCIENCE-DEPT-ENROLLMENT-FILE.<a name="wp1034737"> </a>
+COPY ENROLLREC IN &quot;LIBRARY/CODELIB&quot;.<a name="wp1034738"> </a>
+...<a name="wp1034739"> </a>
+</pre></div>
+<a name="wp1034740"> </a><p class="pBody">
+Code compiled after COPY substitutions:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+...<a name="wp1034741"> </a>
+DATA DIVISION.<a name="wp1034742"> </a>
+FILE SECTION.<a name="wp1034743"> </a>
+FD  SCIENCE-DEPT-ENROLLMENT-FILE.<a name="wp1034744"> </a>
+01  ENROLLMENT-RECORD.<a name="wp1034745"> </a>
+    05 STUDENT-NAME     PIC X(30).<a name="wp1034746"> </a>
+    05 STUDENT-ADDR     PIC X(30).<a name="wp1034747"> </a>
+    05 STUDENT-GPA      PIC 99V9.<a name="wp1034748"> </a>
+    05 SID              PIC 9(7).<a name="wp1034749"> </a>
+...<a name="wp1034750"> </a>
+</pre></div>
+<a name="wp1034751"> </a><h3 class="pHeadingRef">
+Code example 2:
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+IDENTIFICATION DIVISION.<a name="wp1034752"> </a>
+PROGRAM-ID.  COPY-EXAMPLE-2.<a name="wp1034753"> </a>
+...<a name="wp1034754"> </a>
+DATA DIVISION.<a name="wp1034755"> </a>
+FILE SECTION.<a name="wp1034756"> </a>
+FD  SCIENCE-DEPT-ENROLLMENT-FILE.<a name="wp1034757"> </a>
+COPY ENROLLREC <a name="wp1034758"> </a>
+   IN &quot;LIBRARY/CODELIB&quot;<a name="wp1034759"> </a>
+      REPLACING ==SID==  BY ==STUDENT-ID==,<a name="wp1034760"> </a>
+                ==9(7)== BY ==9(9)==.<a name="wp1034761"> </a>
+...<a name="wp1034762"> </a>
+</pre></div>
+<a name="wp1034763"> </a><p class="pBody">
+Compiled code after COPY/REPLACING substitutions:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+...<a name="wp1034764"> </a>
+DATA DIVISION.<a name="wp1034765"> </a>
+FILE SECTION.<a name="wp1034766"> </a>
+FD  SCIENCE-DEPT-ENROLLMENT-FILE.<a name="wp1034767"> </a>
+01  ENROLLMENT-RECORD.<a name="wp1034768"> </a>
+    05  STUDENT-NAME     PIC X(30).<a name="wp1034769"> </a>
+    05  STUDENT-ADDR     PIC X(30).<a name="wp1034770"> </a>
+    05  STUDENT-GPA      PIC 99V9.<a name="wp1034771"> </a>
+    05  STUDENT-ID       PIC 9(9).<a name="wp1034772"> </a>
+...<a name="wp1034773"> </a>
+</pre></div>
+<a name="wp1034775"> </a><h3 class="pHeadingRef">
+Highlights for first-time users
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034776"> </a><div class="pSmartList1"><li>COPY will always import the <em class="cEmphasis">entire</em> contents of the named COPY file.</li></div>
+<a name="wp1034777"> </a><div class="pSmartList1"><li>The REPLACING text does <em class="cEmphasis">not</em> appear in the listing produced by the ACUCOBOL-GT compiler (&quot;-Lo <em class="cEmphasis">filename</em>&quot; compiler argument).  This is a common source of confusion for users who check the compilation listing file for verification that the replacing action occurred.  You can, however, use the &quot;-Lp&quot; compiler option to create an output file that includes the REPLACING text.  See &quot;-Lp&quot; in section 2.1.3 of Book 1.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

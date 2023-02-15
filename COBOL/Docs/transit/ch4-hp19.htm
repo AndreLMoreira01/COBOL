@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.2.4.1  The ACUCOBOL-GT MPE file system interface</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp3.htm">4.2  ACUCOBOL-GT in MPE/iX Environments</a> &gt; <a href="ch4-hp18.htm">4.2.4  Accessing MPE KSAM, Relative, and Sequential Files</a> &gt; </p>
+<a name="wp1076611"> </a><h2 class="pHeading3">
+4.2.4.1  The ACUCOBOL-GT MPE file system interface
+</h2>
+<a name="wp1041164"> </a><p class="pBody">
+On the HP e3000, ACUCOBOL-GT uses the MPE file system by default for KSAM, relative, and sequential files.  ACUCOBOL-GT also comes with its own indexed file system called Vision.  See <a  href="ch4-hp20.htm#wp1041169">section 4.2.4.2</a> for more information on selecting a file system.  
+</p>
+<a name="wp1076774"> </a><p class="pBody">
+The MPE file system interface routines are linked into the runtime system and are automatically invoked whenever you execute your programs.  This method allows for improved portability of your application because no file system-specific commands need to be embedded in your COBOL code.
+</p>
+<a name="wp1041165"> </a><p class="pBody">
+Depending on file system version, Vision and KSAM use either one or two disk files for storage. Vision Version 3 files are stored in a single disk file.  This can simplify system maintenance and reduce the size of directories.  Vision Version&#160;4 and 5 files use a dual-file format, which facilitates the management of very large files.  One disk file, or <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">segment</span>, contains the data records, and the other segment contains indexing information.  As each segment approaches the configurable segment size limit, Vision automatically generates additional segments to hold the data or index information.  Like Vision 4 and 5, KSAM/3000 files are stored in two disk files-one for indexes and one for data records.  Like Vision Version 3, KSAM XL and KSAM64 use a single disk file.  KSAM file size limits are fixed at the time of file creation.  The default KSAM file size is limited to 10,000 records.  A different file size limit can be established when the file is created by setting the file size parameter in the ASSIGN clause (this is an HP COBOL extension to the ASSIGN clause that requires compilation for HP compatibility (&quot;-Cp&quot;)).
+</p>
+<a name="wp1041167"> </a><p class="pBody">
+KSAM/3000 supports variable-length records.  KSAM XL and KSAM64 support only fixed length records. Vision supports variable-length records, and also record locking, data compression, and data encryption.
+</p>
+<a name="wp1041168"> </a><p class="pBody">
+The ACUCOBOL-GT MPE file system interface creates KSAM XL files by default.  A KSAM/3000 file is created if variable-length records are specified in the File Descriptor (FD).  The KSAM file is created with the name specified in the ASSIGN clause.  The name is limited to eight characters.  The KSAM/3000 index file has the same name as the data file but with a `K' appended to the end (if the ASSIGN name is eight characters, only the first seven are used and a `K' is appended to the index file name).
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

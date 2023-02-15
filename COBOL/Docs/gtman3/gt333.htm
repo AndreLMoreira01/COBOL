@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:47" />
+  <title>3.2  PROGRAM-ID Paragraph</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt33.htm"><br />Chapter 3:  Identification Division</a> &gt; </p>
+<a name="wp1034372"> </a><h2 class="pHeading1">
+3.2  PROGRAM-ID Paragraph
+</h2>
+<a name="wp1034373"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+[ <u class="cUnderline">PROGRAM-ID</u>.  program-name [ IS {<u class="cUnderline">INITIAL</u> } PROGRAM ] . ]<a name="wp1034374"> </a>
+                                 {<u class="cUnderline">RESIDENT</u>}<a name="wp1034721"> </a>
+</pre></div>
+<a name="wp1034375"> </a><h3 class="pHeadingRef">
+Syntax Rule
+</h3>
+<a name="wp1034377"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Program-name</span> is a user-defined word or a reserved word.  It must be unique among separately compiled programs.  If a reserved word is used, it is treated as if it were not reserved.
+</p>
+<a name="wp1034378"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034379"> </a><div class="pSmartList1"><li>The <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">program-name</span> identifies the name of the program.  It is used by the ACUCOBOL-GT runtime system and debugger to identify a program.  </li></div>
+<a name="wp1034381"> </a><div class="pSmartList1"><li>The INITIAL PROGRAM clause specifies an initial program.  Whenever an initial program is called, it is placed in its initial state.  Data contained in an initial program is set to its starting value every time the program is called.  </li></div>
+<a name="wp1034383"> </a><div class="pSmartList1"><li>Files contained in the program are not in the open mode:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1034384"> </a><div class="pSmartList2"><li>the first time the program is called,</li></div>
+<a name="wp1034385"> </a><div class="pSmartList2"><li>the first time the program is called after it has been the target of a CANCEL statement,</li></div>
+<a name="wp1034386"> </a><div class="pSmartList2"><li>every time the program is called if it is an INITIAL program.</li></div>
+</ol></div>
+<a name="wp1034387"> </a><div class="pSmartList1"><li>On all other entries, the files contained in the program are in the same state and position as when the program last exited.  </li></div>
+<a name="wp1034388"> </a><div class="pSmartList1"><li>INITIAL programs are removed from memory when they exit.  Non-initial programs remain in memory until they are the targets of a CANCEL statement. </li></div>
+<a name="wp1034391"> </a><div class="pSmartList1"><li>The RESIDENT clause specifies that the program is to remain resident in memory after its first execution.  A program with the RESIDENT clause cannot be affected by a CANCEL statement.  Note that the RESIDENT clause shields selected programs from the effects of a CANCEL ALL statement.</li></div>
+<a name="wp1034392"> </a><div class="pSmartList1"><li>The IBM DOS/VS COBOL &quot;-Cv&quot; compatibility mode allows the name to be enclosed in quotation marks.  See the IBM DOS/VS COBOL chapter in <em class="cEmphasis">Transitioning to ACUCOBOL-GT</em> for more information.  </li></div>
+<a name="wp1034393"> </a><div class="pSmartList1"><li>If you omit the PROGRAM-ID paragraph, the program's name is derived from the source file name as follows:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1034394"> </a><div class="pSmartList2"><li>All directory information is removed from the file name and only the base file name is used.</li></div>
+<a name="wp1034395"> </a><div class="pSmartList2"><li>If the file name includes a period (&quot;.&quot;) or space, that portion of the file name (including the period or space) is truncated.</li></div>
+<a name="wp1034396"> </a><div class="pSmartList2"><li>The name is translated to upper case for letters in the ASCII alphabet range.  </li></div>
+<a name="wp1034397"> </a><div class="pSmartList2"><li>Characters not in the ASCII alphabet are left unchanged.</li></div>
+</ol></div>
+<a name="wp1034398"> </a><div class="pSmartList1"><li>If the PROGRAM-ID paragraph is omitted, the program does not have an INITIAL or RESIDENT state.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

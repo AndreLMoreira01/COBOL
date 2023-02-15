@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:25" />
+  <title>2.3.1.5  Using Java logging from COBOL</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr2.htm">Chapter 2: Working with Java Technology</a> &gt; <a href="itr220.htm">2.3  Calling Java from COBOL</a> &gt; <a href="itr221.htm">2.3.1  Calling the C$JAVA Routine</a> &gt; </p>
+<a name="wp1075885"> </a><h2 class="pHeading3">
+2.3.1.5  Using Java logging from COBOL
+</h2>
+<a name="wp1075886"> </a><p class="pBody">
+With the C$JAVA routine, you can also <a  href="itr226.htm#wp1075887">log Java messages</a> and <a  href="itr226.htm#wp1075917">configure the Java log</a>.
+</p>
+<a name="wp1075887"> </a><h3 class="pHeadingRef">
+Logging messages
+</h3>
+<a name="wp1075889"> </a><p class="pBody">
+If you want to log Java messages from a COBOL program, use the CJAVA-LOGMESSAGE op-code as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$JAVA&quot; USING CJAVA-LOGMESSAGE, &quot;Message to log&quot;.<a name="wp1075891"> </a>
+</pre></div>
+<a name="wp1075893"> </a><p class="pBody">
+The advantage of using the Java log is that it is thread-safe, and all of the messages from a given thread of execution are written to the same log whether that thread is executing COBOL or Java.  Also, logs in Java are highly configurable.  Note that the sample log output shown below is formatted to report date, time, class, method, and log level before the message.  
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM acu_cobol INFO --&gt; COBOL LOG --&gt; Entered 
+TestJavaToCobol<a name="wp1075895"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM acu_cobol INFO --&gt; COBOL LOG --&gt; Exiting 
+TestJavaToCobol<a name="wp1075896"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM acu_cobol INFO --&gt; call.error = 0, 
+exit.code = 0, signal.number = 0<a name="wp1075897"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM acu_cobol INFO --&gt; exit message = <a name="wp1075898"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM cblLog INFO --&gt; Call error: 0<a name="wp1075899"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM cblLog INFO --&gt; Exit code: 0<a name="wp1075900"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM cblLog INFO --&gt; Signal number: 0<a name="wp1075901"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM cblLog INFO --&gt; Exit message: <a name="wp1075902"> </a>
+11/30/04 2:13:57 PM acuCobolGT.CAcuCobol cblLog INFO --&gt; CobolCallingJavaTest: Complete<a name="wp1075903"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM acu_cobol INFO --&gt; 
+CobolCallingJavaReentrantTest ()V<a name="wp1075904"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM acu_cobol INFO --&gt; call.error = 0, 
+exit.code = 0, signal.number = 0<a name="wp1075905"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM acu_cobol INFO --&gt; exit message = <a name="wp1075906"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM cblLog INFO --&gt; Call error: 0<a name="wp1075907"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM cblLog INFO --&gt; Exit code: 0<a name="wp1075908"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM cblLog INFO --&gt; Signal number: 0<a name="wp1075909"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM cblLog INFO --&gt; Exit message: <a name="wp1075910"> </a>
+11/30/04 2:13:57 PM com.acucorp.acucobolgt.CVM acu_shutdown INFO --&gt; shutdown called - 
+shutdown param: 0<a name="wp1075911"> </a>
+11/30/04 2:13:57 PM acuUtilities.AcuJavaTest main INFO --&gt; shutdown complete<a name="wp1075912"> </a>
+11/30/04 2:13:57 PM acuUtilities.AcuJavaTest main INFO --&gt; calling cobol end<a name="wp1075913"> </a>
+</pre></div>
+<a name="wp1075917"> </a><h3 class="pHeadingRef">
+Configuring the Java log
+</h3>
+<a name="wp1102150"> </a><p class="pBody">
+To configure the Java log created with the CJAVA-LOGMESSAGE op-code, modify the &quot;logging.properties&quot; file that is located in the runtime directory.  The output location of the log (console or file) can be specified, as well as the log level, for example, INFO or SEVERE.  Below is a sample of the &quot;logging.properties&quot; file:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+# setting to limit messages printed to the console.<a name="wp1075921"> </a>
+.level= INFO<a name="wp1075922"> </a>
+#.level= FINEST<a name="wp1075923"> </a>
+<a name="wp1075924"> </a>
+############################################################<a name="wp1075925"> </a>
+# Handler specific properties.<a name="wp1075926"> </a>
+# Describes specific configuration info for Handlers.<a name="wp1075927"> </a>
+############################################################<a name="wp1075928"> </a>
+<a name="wp1075929"> </a>
+# default file output is in user&#39;s home directory.<a name="wp1075930"> </a>
+#java.util.logging.FileHandler.pattern = %h/java%u.log<a name="wp1075931"> </a>
+java.util.logging.FileHandler.pattern = CVM.log<a name="wp1075932"> </a>
+java.util.logging.FileHandler.limit = 500000<a name="wp1075933"> </a>
+java.util.logging.FileHandler.count = 1<a name="wp1075934"> </a>
+java.util.logging.FileHandler.append = false<a name="wp1075935"> </a>
+java.util.logging.FileHandler.level = INFO<a name="wp1075936"> </a>
+#java.util.logging.FileHandler.formatter = 
+java.util.logging.XMLFormatter<a name="wp1075937"> </a>
+#java.util.logging.FileHandler.formatter = 
+java.util.logging.SimpleFormatter<a name="wp1075938"> </a>
+java.util.logging.FileHandler.formatter = 
+com.acucorp.acucobolgt.logFormat<a name="wp1075939"> </a>
+<a name="wp1075940"> </a>
+# Limit the message that are printed on the console to INFO and 
+above.<a name="wp1075941"> </a>
+#java.util.logging.ConsoleHandler.level = INFO<a name="wp1075942"> </a>
+java.util.logging.ConsoleHandler.level = INFO<a name="wp1075943"> </a>
+#java.util.logging.ConsoleHandler.formatter = 
+java.util.logging.SimpleFormatter<a name="wp1075944"> </a>
+java.util.logging.ConsoleHandler.formatter = 
+com.acucorp.acucobolgt.logFormat<a name="wp1075945"> </a>
+<a name="wp1075947"> </a>
+############################################################<a name="wp1075948"> </a>
+# Facility specific properties.<a name="wp1075949"> </a>
+# Provides extra control for each logger.<a name="wp1075950"> </a>
+############################################################<a name="wp1075951"> </a>
+<a name="wp1075952"> </a>
+# For example, set the com.acucorp.acucobolgt.CVM logger to 
+only log SEVERE<a name="wp1075953"> </a>
+# messages:<a name="wp1075954"> </a>
+#com.acucorp.acucobolgt.CVM.level = SEVERE<a name="wp1075955"> </a>
+com.acucorp.acucobolgt.CVM.level = INFO<a name="wp1075956"> </a>
+#acuCobolGT.CAcuCobol.level = SEVERE<a name="wp1075957"> </a>
+acuCobolGT.CAcuCobol.level = INFO<a name="wp1075958"> </a>
+#acuUtilities.AcuJavaTest.level = SEVERE<a name="wp1075959"> </a>
+acuUtilities.AcuJavaTest.level = INFO<a name="wp1075960"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,139 @@
+      * List-Box.prd
+      * List-Box.prd is generated from C:\Acucorp\Acucbl720\AcuGT\sample\samplprj\List-Box.Psf
+      * This is a generated file. DO NOT modify this file directly.      
+
+       Acu-Initial-Routine.
+      *    Before-Init
+      * get system information
+           ACCEPT System-Information FROM System-Info
+      * get terminal information
+           ACCEPT Terminal-Abilities FROM Terminal-Info
+      *    After-Init
+           .
+
+       Acu-Exit-Rtn.
+      *    After-Program
+           EXIT PROGRAM
+           STOP RUN
+           .
+
+       Acu-Screen-1-Routine.
+      *    Before-Routine
+           PERFORM Acu-Screen-1-Scrn
+           PERFORM Acu-Screen-1-Proc
+      *    After-Routine
+           .
+
+       Acu-Screen-1-Scrn.
+           PERFORM Acu-Screen-1-Create-Win
+           PERFORM Acu-Screen-1-Init-Data
+           .
+
+       Acu-Screen-1-Create-Win.
+      *    Before-Create
+      * display screen
+              DISPLAY Standard GRAPHICAL WINDOW
+                 LINES 27.00, SIZE 52.00, CELL HEIGHT 10, 
+                 CELL WIDTH 10, AUTO-MINIMIZE, COLOR IS 65793, 
+                 CONTROL FONT Default-Font, ERASE, LABEL-OFFSET 0, 
+                 MODELESS, WITH SYSTEM MENU, 
+                 TITLE "List Box Sample - listbox.cbl", TITLE-BAR, 
+                 USER-GRAY, USER-WHITE, 
+                 HANDLE IS Form1-Handle
+      * toolbar
+           DISPLAY Screen-1 UPON Form1-Handle
+      *    After-Create
+           .
+
+       Acu-Screen-1-Init-Data.
+      *    Before-Initdata
+           PERFORM Acu-Default-Listbox-Content
+           PERFORM Acu-UnSorted-Listbox-Content
+           PERFORM Acu-NoBox-Listbox-Content
+           PERFORM Acu-3D-Listbox-Content
+      *    After-Initdata
+           .
+      * Screen-1
+       Acu-Screen-1-Proc.
+           PERFORM UNTIL Exit-Pushed
+              ACCEPT Screen-1  
+                 ON EXCEPTION PERFORM Acu-Screen-1-Evaluate-Func
+              END-ACCEPT
+           END-PERFORM
+           DESTROY Form1-Handle
+           INITIALIZE Key-Status
+           .
+
+      * Default-Listbox
+       Acu-Default-Listbox-Content.
+           MODIFY Default-Listbox, MASS-UPDATE = 1, RESET-LIST = 1
+           MODIFY Default-Listbox, ITEM-TO-ADD = TABLE LB-Data
+           MODIFY Default-Listbox, MASS-UPDATE = 0
+           MODIFY Default-Listbox, VALUE List-Data-1
+           .
+
+      * UnSorted-Listbox
+       Acu-UnSorted-Listbox-Content.
+           MODIFY UnSorted-Listbox, MASS-UPDATE = 1, RESET-LIST = 1
+           MODIFY UnSorted-Listbox, ITEM-TO-ADD = TABLE LB-Data
+           MODIFY UnSorted-Listbox, MASS-UPDATE = 0
+           MODIFY UnSorted-Listbox, VALUE List-Data-2
+           .
+
+      * NoBox-Listbox
+       Acu-NoBox-Listbox-Content.
+           MODIFY NoBox-Listbox, MASS-UPDATE = 1, RESET-LIST = 1
+           MODIFY NoBox-Listbox, ITEM-TO-ADD = TABLE LB-Data
+           MODIFY NoBox-Listbox, MASS-UPDATE = 0
+           MODIFY NoBox-Listbox, VALUE List-Data-3
+           .
+
+      * 3D-Listbox
+       Acu-3D-Listbox-Content.
+           MODIFY 3D-Listbox, MASS-UPDATE = 1, RESET-LIST = 1
+           MODIFY 3D-Listbox, ITEM-TO-ADD = TABLE LB-Data
+           MODIFY 3D-Listbox, MASS-UPDATE = 0
+           MODIFY 3D-Listbox, VALUE List-Data-4
+           .
+
+      * Screen-1
+       Acu-Screen-1-Evaluate-Func.
+           EVALUATE TRUE
+              WHEN Exit-Pushed
+                 PERFORM Acu-Screen-1-Exit
+              WHEN Event-Occurred
+                 IF Event-Type = Cmd-Close
+                    PERFORM Acu-Screen-1-Exit
+                 END-IF
+      * DefaultDisabled-PB Link To
+              WHEN Key-Status = 1004
+                 PERFORM Toggle-Default-Enable
+      * DefaultInvisible-PB Link To
+              WHEN Key-Status = 1005
+                 PERFORM Toggle-Default-Visible
+      * UnSortedDisabled-PB Link To
+              WHEN Key-Status = 1006
+                 PERFORM Toggle-Unsorted-Enable
+      * UnSortedInvisible-PB Link To
+              WHEN Key-Status = 1007
+                 PERFORM Toggle-Unsorted-Visible
+      * NoBoxDisabled-PB Link To
+              WHEN Key-Status = 1008
+                 PERFORM Toggle-NoBox-Enable
+      * NoBoxInvisible-PB Link To
+              WHEN Key-Status = 1009
+                 PERFORM Toggle-NoBox-Visible
+      * 3DDisabled-PB Link To
+              WHEN Key-Status = 1010
+                 PERFORM Toggle-3D-Enable
+      * 3DInvisible-PB Link To
+              WHEN Key-Status = 1011
+                 PERFORM Toggle-3D-Visible
+           END-EVALUATE
+           MOVE 1 TO Accept-Control
+           . 
+
+       Acu-Screen-1-Exit.
+           SET Exit-Pushed TO TRUE
+           .
+

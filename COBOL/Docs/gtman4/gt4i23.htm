@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>CBL_SWAP_SCR_CHATTRS </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1429760"> </a><h2 class="pHeading2">
+CBL_SWAP_SCR_CHATTRS 
+</h2>
+<a name="wp1429761"> </a><p class="pBody">
+The CBL_SWAP_SCR_CHATTRS routine is one of a set of library routines that facilitate reading and writing attributes on the screen.  This routine writes a string of characters and their attributes over another character string on the screen.
+</p>
+<a name="wp1429762"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;CBL_SWAP_SCR_CHATTRS&quot; <a name="wp1429763"> </a>
+    USING SCREEN-POSITION, CHARACTER-BUFFER, ATTRIBUTE-BUFFER,<a name="wp1472375"> </a>
+        STRING-LENGTH <a name="wp1473690"> </a>
+    RETURNING STATUS-CODE<a name="wp1429765"> </a>
+</pre></div>
+<a name="wp1429766"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1429767"> </a><p class="pBody">
+<b class="cBold">SCREEN-POSITION</b>   Group item
+</p>
+<a name="wp1429768"> </a><p class="pBody">
+Group item is defined as follows: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  SCREEN-POSITION.<a name="wp1429769"> </a>
+    03  ROW-NUMBER      PIC X COMP-X.<a name="wp1429770"> </a>
+    03  COLUMN-NUMBER   PIC X COMP-X.<a name="wp1429771"> </a>
+</pre></div>
+<a name="wp1429772"> </a><p class="pBody">
+On entry, contains the screen position to start writing (the top left corner is row 0, column 0)
+</p>
+<a name="wp1429773"> </a><p class="pBody">
+<b class="cBold">CHARACTER-BUFFER</b>   PIC X(N).
+</p>
+<a name="wp1429774"> </a><p class="pBody">
+On entry, contains the characters to write  
+</p>
+<a name="wp1429775"> </a><p class="pBody">
+On exit, this data item contains the characters overwritten on the screen.  It must be at least the length specified by STRING-LENGTH.  Positions in the data item beyond that length are unchanged.
+</p>
+<a name="wp1429776"> </a><p class="pBody">
+<b class="cBold">ATTRIBUTE-BUFFER</b>   PIC X(N).
+</p>
+<a name="wp1429777"> </a><p class="pBody">
+On entry, contains the attributes to write
+</p>
+<a name="wp1429778"> </a><p class="pBody">
+On exit, this data item contains the attributes overwritten on the screen.  It must be at least the length specified by STRING-LENGTH.  Positions in the data item beyond that length are unchanged.
+</p>
+<a name="wp1429779"> </a><p class="pBody">
+<b class="cBold">STRING-LENGTH</b>   PIC XX COMP-X.
+</p>
+<a name="wp1429780"> </a><p class="pBody">
+On entry, this item contains the length of the string to write.  Note that the write stops at the end of the screen.  
+</p>
+<a name="wp1429781"> </a><p class="pBody">
+On exit, this item contains the length of the overwritten string (in cells, that is character-attribute pairs).
+</p>
+<a name="wp1429782"> </a><p class="pBody">
+<b class="cBold">STATUS-CODE</b>   Any numeric type
+</p>
+<a name="wp1429783"> </a><p class="pBody">
+Returns &quot;1&quot; if successful, or &quot;0&quot; if not successful
+</p>
+<a name="wp1469459"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1469520"> </a><p class="pBody">
+This library routine uses SCREEN-POSITION (in row and column coordinates) to determine where to begin the write operation.  On entry, CHARACTER-BUFFER and ATTRIBUTE-BUFFER contain the characters to write and their corresponding attributes, respectively, and STRING-LENGTH contains that string's length.  On exit, CHARACTER-BUFFER and ATTRIBUTE-BUFFER contain the characters that were replaced on the screen and their corresponding attributes, respectively.  STRING-LENGTH is the length of the string that was overwritten.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

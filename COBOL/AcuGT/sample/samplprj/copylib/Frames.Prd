@@ -1,0 +1,103 @@
+      * Frames.prd
+      * Frames.prd is generated from C:\Acucorp\Acucbl720\AcuGT\sample\samplprj\Frames.Psf
+      * This is a generated file. DO NOT modify this file directly.      
+
+       Acu-Initial-Routine.
+      *    Before-Init
+      * get system information
+           ACCEPT System-Information FROM System-Info
+      * get terminal information
+           ACCEPT Terminal-Abilities FROM Terminal-Info
+      *    After-Init
+           .
+
+       Acu-Exit-Rtn.
+      *    After-Program
+           EXIT PROGRAM
+           STOP RUN
+           .
+
+       Acu-Screen-1-Routine.
+      *    Before-Routine
+           PERFORM Acu-Screen-1-Scrn
+           PERFORM Acu-Screen-1-Proc
+      *    After-Routine
+           .
+
+       Acu-Screen-1-Scrn.
+           PERFORM Acu-Screen-1-Create-Win
+           PERFORM Acu-Screen-1-Init-Data
+           .
+
+       Acu-Screen-1-Create-Win.
+      *    Before-Create
+      * display screen
+              DISPLAY Standard GRAPHICAL WINDOW
+                 LINES 30.00, SIZE 52.50, CELL HEIGHT 10, 
+                 CELL WIDTH 10, AUTO-MINIMIZE, COLOR IS 65793, 
+                 CONTROL FONT Default-Font, ERASE, LABEL-OFFSET 0, 
+                 MODELESS, WITH SYSTEM MENU, 
+                 TITLE "Frame Styles - frames.cbl", TITLE-BAR, 
+                 USER-GRAY, USER-WHITE, 
+                 HANDLE IS Form1-Handle
+      * toolbar
+           DISPLAY Screen-1 UPON Form1-Handle
+      *    After-Create
+           .
+
+       Acu-Screen-1-Init-Data.
+      *    Before-Initdata
+      *    After-Initdata
+           .
+      * Screen-1
+       Acu-Screen-1-Proc.
+           PERFORM UNTIL Exit-Pushed
+              ACCEPT Screen-1  
+                 ON EXCEPTION PERFORM Acu-Screen-1-Evaluate-Func
+              END-ACCEPT
+           END-PERFORM
+           DESTROY Form1-Handle
+           INITIALIZE Key-Status
+           .
+
+      * Screen-1
+       Acu-Screen-1-Evaluate-Func.
+           EVALUATE TRUE
+              WHEN Exit-Pushed
+                 PERFORM Acu-Screen-1-Exit
+              WHEN Event-Occurred
+                 IF Event-Type = Cmd-Close
+                    PERFORM Acu-Screen-1-Exit
+                 END-IF
+      * Gray-RB Link To
+              WHEN Key-Status = 2
+                 PERFORM GraySelected
+      * Blue-RB Link To
+              WHEN Key-Status = 3
+                 PERFORM BlueSelected
+      * Green-RB Link To
+              WHEN Key-Status = 4
+                 PERFORM GreenSelected
+      * Cyan-RB Link To
+              WHEN Key-Status = 5
+                 PERFORM CyanSelected
+      * Red-RB Link To
+              WHEN Key-Status = 6
+                 PERFORM RedSelected
+      * Magenta-RB Link To
+              WHEN Key-Status = 7
+                 PERFORM MagentaSelected
+      * Brown-RB Link To
+              WHEN Key-Status = 8
+                 PERFORM BrownSelected
+      * Titles-PB Link To
+              WHEN Key-Status = 1
+                 PERFORM TitlesSelected
+           END-EVALUATE
+           MOVE 1 TO Accept-Control
+           . 
+
+       Acu-Screen-1-Exit.
+           SET Exit-Pushed TO TRUE
+           .
+

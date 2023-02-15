@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:36:12" />
+  <title>5.8  Full SQL Program</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql5.htm">Chapter 5: Sample Programs</a> &gt; </p>
+<a name="wp1047467"> </a><h2 class="pHeading1">
+5.8  Full SQL Program
+</h2>
+<a name="wp1047796"> </a><p class="pBody">
+The following program performs a simple ESQL CONNECT, DROP, CREATE, INSERT, SELECT, UPDATE, DELETE and DISCONNECT statement.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+IDENTIFICATION DIVISION.<a name="wp1047795"> </a>
+       PROGRAM-ID.                         t006146.<a name="wp1047468"> </a>
+<a name="wp1047469"> </a>
+*****************************************************************<a name="wp1047470"> </a>
+       ENVIRONMENT DIVISION.<a name="wp1047471"> </a>
+       INPUT-OUTPUT SECTION.<a name="wp1047472"> </a>
+       FILE-CONTROL.<a name="wp1047473"> </a>
+           SELECT CUSTFILE<a name="wp1047474"> </a>
+               ASSIGN TO &quot;customer&quot;<a name="wp1047475"> </a>
+               ORGANIZATION IS LINE SEQUENTIAL<a name="wp1047476"> </a>
+               FILE STATUS IS CUSTFILE-STATUS.<a name="wp1047477"> </a>
+<a name="wp1047478"> </a>
+       DATA DIVISION.<a name="wp1047479"> </a>
+       FILE SECTION.<a name="wp1047480"> </a>
+       FD  CUSTFILE.<a name="wp1047481"> </a>
+       01  CUST-RECORD.<a name="wp1047482"> </a>
+           05  CUST-NUMBER                     PIC 9(3).<a name="wp1047483"> </a>
+           05  CUST-FIRST-NAME                 PIC X(20).<a name="wp1047484"> </a>
+           05  CUST-LAST-NAME                  PIC X(20).<a name="wp1047485"> </a>
+           05  CUST-BIRTHDAY.<a name="wp1047486"> </a>
+              07 SYEAR                         PIC X(4).<a name="wp1047487"> </a>
+              07 SMONTH                        PIC X(2).<a name="wp1047488"> </a>
+              07 SDAY                          PIC X(2).<a name="wp1047489"> </a>
+<a name="wp1047490"> </a>
+       WORKING-STORAGE SECTION.<a name="wp1047491"> </a>
+       01  CUSTFILE-STATUS                     PIC XX.<a name="wp1047492"> </a>
+<a name="wp1047493"> </a>
+       EXEC SQL INCLUDE SQLCA END-EXEC.<a name="wp1047494"> </a>
+<a name="wp1047495"> </a>
+       EXEC SQL BEGIN DECLARE SECTION END-EXEC.<a name="wp1047496"> </a>
+       01  C-RECORD.<a name="wp1047497"> </a>
+           05  C-NUMBER                        PIC S9(3) COMP-5.<a name="wp1047498"> </a>
+           05  C-FIRST-NAME                    PIC X(20).<a name="wp1047499"> </a>
+           05  C-LAST-NAME                     PIC X(20).<a name="wp1047500"> </a>
+           05  C-BIRTHDAY                      PIC X(10).<a name="wp1047501"> </a>
+           05  C-INFO                          PIC X(10).<a name="wp1047502"> </a>
+<a name="wp1047503"> </a>
+       01  servername                          pic x(30).<a name="wp1047504"> </a>
+       01  userid                              pic x(8).<a name="wp1047505"> </a>
+       01  passwd.<a name="wp1047506"> </a>
+           49 passwd-length                    PIC s9(4) comp-5 value 0.<a name="wp1047507"> </a>
+           49 passwd-name                      PIC x(18).<a name="wp1047508"> </a>
+       EXEC SQL END DECLARE SECTION END-EXEC.<a name="wp1047509"> </a>
+<a name="wp1047510"> </a>
+<a name="wp1047511"> </a>
+       01  pyyyymmdd.<a name="wp1047512"> </a>
+           03 syear                             pic 9(4).<a name="wp1047513"> </a>
+           03 smonth                            pic 9(2).<a name="wp1047514"> </a>
+           03 sday                              pic 9(2).<a name="wp1047515"> </a>
+<a name="wp1047516"> </a>
+       01  e-yyyymmdd.<a name="wp1047517"> </a>
+           03 syear                             pic 9(4).<a name="wp1047518"> </a>
+           03 filler                            pic x value &quot;-&quot;.<a name="wp1047519"> </a>
+           03 smonth                            pic 9(2).<a name="wp1047520"> </a>
+           03 filler                            pic x value &quot;-&quot;.<a name="wp1047521"> </a>
+           03 sday                              pic 9(2).<a name="wp1047522"> </a>
+<a name="wp1047523"> </a>
+      
+******************************************************************<a name="wp1047524"> </a>
+       PROCEDURE DIVISION.<a name="wp1047525"> </a>
+       Main Section.<a name="wp1047526"> </a>
+           EXEC SQL WHENEVER SQLERROR GO TO Error-Exit END-EXEC.<a name="wp1047527"> </a>
+           PERFORM initialization-routine.<a name="wp1047528"> </a>
+           PERFORM make-connection.<a name="wp1047529"> </a>
+           PERFORM drop-table.<a name="wp1047530"> </a>
+           PERFORM create-table.<a name="wp1047531"> </a>
+           PERFORM load-table<a name="wp1047532"> </a>
+           DISPLAY &quot;Table created with 15 rows.&quot;<a name="wp1047533"> </a>
+           DISPLAY &quot;Press Enter to retrieve and display these rows.&quot;<a name="wp1047534"> </a>
+           ACCEPT OMITTED.<a name="wp1047535"> </a>
+           PERFORM list-rows.<a name="wp1047536"> </a>
+           DISPLAY &quot;Press Enter to perform a UPDATE on table row.&quot;<a name="wp1047537"> </a>
+           ACCEPT OMITTED.<a name="wp1047538"> </a>
+           PERFORM update-row.<a name="wp1047539"> </a>
+           DISPLAY &quot;Press Enter to perform to DISPLAY updated list.&quot;<a name="wp1047540"> </a>
+           ACCEPT OMITTED.<a name="wp1047541"> </a>
+           PERFORM list-rows.<a name="wp1047542"> </a>
+           DISPLAY &quot;Press Enter to DELETE row 15.&quot;<a name="wp1047543"> </a>
+           ACCEPT OMITTED.<a name="wp1047544"> </a>
+           PERFORM delete-row.<a name="wp1047545"> </a>
+           DISPLAY &quot;Press Enter to display all remaining rows.&quot;<a name="wp1047546"> </a>
+           ACCEPT OMITTED.<a name="wp1047547"> </a>
+           PERFORM list-rows.<a name="wp1047548"> </a>
+           DISPLAY &quot;Press Enter to DISCONNECT and Exit program.&quot;<a name="wp1047549"> </a>
+           PERFORM disconnect-connection.<a name="wp1047550"> </a>
+           ACCEPT OMITTED.<a name="wp1047551"> </a>
+           STOP RUN.<a name="wp1047552"> </a>
+<a name="wp1047553"> </a>
+       drop-table.<a name="wp1047554"> </a>
+           DISPLAY &quot;Dropping existing table if it exists...&quot;.<a name="wp1047555"> </a>
+           EXEC SQL WHENEVER SQLERROR CONTINUE END-EXEC.<a name="wp1047556"> </a>
+           EXEC SQL<a name="wp1047557"> </a>
+               DROP TABLE CUSTOMER<a name="wp1047558"> </a>
+           END-EXEC.<a name="wp1047559"> </a>
+      * Ignore SQLCODE as we do not expect table to exist at this point<a name="wp1047560"> </a>
+           EXEC SQL WHENEVER SQLERROR GO TO Error-Exit END-EXEC.<a name="wp1047561"> </a>
+<a name="wp1047562"> </a>
+       create-table.<a name="wp1047563"> </a>
+           DISPLAY &quot;Creating CUSTOMER table...&quot;.<a name="wp1047564"> </a>
+           EXEC SQL<a name="wp1047565"> </a>
+              CREATE TABLE CUSTOMER (<a name="wp1047566"> </a>
+                   C_NUMBER        INTEGER NOT NULL,<a name="wp1047567"> </a>
+                   C_FIRST_NAME    CHAR(20),<a name="wp1047568"> </a>
+                   C_LAST_NAME     CHAR(20),<a name="wp1047569"> </a>
+                   C_BIRTHDAY      DATETIME,<a name="wp1047570"> </a>
+                   C_INFO          CHAR(10),<a name="wp1047571"> </a>
+                   PRIMARY KEY     (C_NUMBER))<a name="wp1047572"> </a>
+           END-EXEC.<a name="wp1047573"> </a>
+           IF SQLCODE &lt; 0 PERFORM error-exit.<a name="wp1047574"> </a>
+<a name="wp1047575"> </a>
+       load-table.<a name="wp1047576"> </a>
+           DISPLAY &quot;Loading CUSTOMER table with data...&quot;.<a name="wp1047577"> </a>
+           OPEN INPUT CUSTFILE.<a name="wp1047578"> </a>
+           PERFORM UNTIL CUSTFILE-STATUS = &quot;10&quot;<a name="wp1047579"> </a>
+               READ CUSTFILE NEXT RECORD<a name="wp1047580"> </a>
+                   AT END<a name="wp1047581"> </a>
+                       CONTINUE<a name="wp1047582"> </a>
+                   NOT AT END<a name="wp1047583"> </a>
+                       PERFORM insert-record<a name="wp1047584"> </a>
+               END-READ<a name="wp1047585"> </a>
+           END-PERFORM.<a name="wp1047586"> </a>
+           CLOSE CUSTFILE.<a name="wp1047587"> </a>
+<a name="wp1047588"> </a>
+       insert-record.<a name="wp1047589"> </a>
+           MOVE CUST-NUMBER TO  C-NUMBER.<a name="wp1047590"> </a>
+           MOVE CUST-FIRST-NAME TO C-FIRST-NAME.<a name="wp1047591"> </a>
+           MOVE CUST-LAST-NAME TO C-LAST-NAME.<a name="wp1047592"> </a>
+           MOVE &quot;New&quot; TO C-INFO.<a name="wp1047593"> </a>
+<a name="wp1047594"> </a>
+           MOVE CORRESPONDING CUST-BIRTHDAY TO E-YYYYMMDD.<a name="wp1047595"> </a>
+           MOVE E-YYYYMMDD TO C-BIRTHDAY.<a name="wp1047596"> </a>
+<a name="wp1047597"> </a>
+           EXEC SQL<a name="wp1047599"> </a>
+               INSERT INTO CUSTOMER VALUES<a name="wp1047600"> </a>
+                   (:C-NUMBER, :C-FIRST-NAME,<a name="wp1047601"> </a>
+                    :C-LAST-NAME, :C-BIRTHDAY, :C-INFO)<a name="wp1047602"> </a>
+           END-EXEC.<a name="wp1047603"> </a>
+           MOVE LOW-VALUES TO CUST-RECORD.<a name="wp1047604"> </a>
+           MOVE LOW-VALUES TO C-RECORD.<a name="wp1047605"> </a>
+ <a name="wp1047606"> </a>
+<a name="wp1047607"> </a>
+       initialization-routine.<a name="wp1047608"> </a>
+           DISPLAY &quot;Enter MS SQL Servername or ODBC DSN:&quot;, no.<a name="wp1047609"> </a>
+           ACCEPT servername.<a name="wp1047610"> </a>
+           DISPLAY &quot;Enter your user id (default none): &quot;, no.<a name="wp1047611"> </a>
+           ACCEPT userid.<a name="wp1047612"> </a>
+           DISPLAY &quot;Enter your password : &quot;, no.<a name="wp1047613"> </a>
+           ACCEPT passwd-name.<a name="wp1047614"> </a>
+           IF userid = spaces then <a name="wp1047615"> </a>
+               DISPLAY &quot;Using NT Authentication...&quot;.<a name="wp1047616"> </a>
+<a name="wp1047617"> </a>
+           INSPECT passwd-name TALLYING passwd-length FOR CHARACTERS<a name="wp1047618"> </a>
+              BEFORE INITIAL &quot; &quot;.<a name="wp1047619"> </a>
+<a name="wp1047620"> </a>
+       make-connection.<a name="wp1047621"> </a>
+           EXEC SQL CONNECT TO :servername as C1<a name="wp1047622"> </a>
+                   USER :userid USING :passwd<a name="wp1047623"> </a>
+           END-EXEC.<a name="wp1047624"> </a>
+           IF SQLCODE &lt; 0 PERFORM error-exit.<a name="wp1047625"> </a>
+           IF SQLCODE = 0 DISPLAY &quot;Connection successful&quot;.<a name="wp1047626"> </a>
+<a name="wp1047627"> </a>
+       disconnect-connection.<a name="wp1047629"> </a>
+           EXEC SQL COMMIT END-EXEC.<a name="wp1047630"> </a>
+           EXEC SQL DISCONNECT ALL END-EXEC.<a name="wp1047631"> </a>
+           IF SQLCODE &lt; 0 PERFORM error-exit.<a name="wp1047632"> </a>
+<a name="wp1047633"> </a>
+       Error-Exit.<a name="wp1047634"> </a>
+           EXEC SQL WHENEVER SQLERROR CONTINUE END-EXEC.<a name="wp1047635"> </a>
+           DISPLAY &quot;SQL Error: SQLCODE  &quot; SQLCODE of SQLCA.<a name="wp1047636"> </a>
+           DISPLAY &quot;           SQLSTATE &quot; SQLSTATE of SQLCA.<a name="wp1047637"> </a>
+           DISPLAY SQLERRMC OF SQLCA.<a name="wp1047638"> </a>
+           ACCEPT OMITTED.<a name="wp1047639"> </a>
+           EXEC SQL DISCONNECT ALL END-EXEC.<a name="wp1047640"> </a>
+           STOP RUN.<a name="wp1047641"> </a>
+<a name="wp1047642"> </a>
+       list-rows.<a name="wp1047643"> </a>
+           EXEC SQL<a name="wp1047644"> </a>
+              DECLARE COBCUR1 CURSOR FOR <a name="wp1047645"> </a>
+                  SELECT<a name="wp1047646"> </a>
+                       C_NUMBER,<a name="wp1047647"> </a>
+                       C_FIRST_NAME,<a name="wp1047648"> </a>
+                       C_LAST_NAME,<a name="wp1047649"> </a>
+                       C_BIRTHDAY,<a name="wp1047650"> </a>
+                       C_INFO<a name="wp1047651"> </a>
+                  FROM CUSTOMER<a name="wp1047652"> </a>
+                       WHERE C_NUMBER &gt; 0<a name="wp1047653"> </a>
+           END-EXEC.<a name="wp1047654"> </a>
+<a name="wp1047656"> </a>
+           EXEC SQL <a name="wp1047657"> </a>
+               OPEN COBCUR1 <a name="wp1047658"> </a>
+           END-EXEC.<a name="wp1047659"> </a>
+<a name="wp1047661"> </a>
+           PERFORM UNTIL SQLCODE NOT EQUAL 0<a name="wp1047662"> </a>
+<a name="wp1047663"> </a>
+              EXEC SQL<a name="wp1047664"> </a>
+                   FETCH COBCUR1 INTO :C-RECORD<a name="wp1047665"> </a>
+              END-EXEC<a name="wp1047666"> </a>
+              IF SQLCODE EQUAL 0<a name="wp1047667"> </a>
+                   DISPLAY c-number, &quot;: &quot;,c-first-name, <a name="wp1047668"> </a>
+                           c-last-name, c-info<a name="wp1047669"> </a>
+              END-IF<a name="wp1047670"> </a>
+           END-PERFORM.<a name="wp1047671"> </a>
+<a name="wp1047672"> </a>
+           EXEC SQL <a name="wp1047673"> </a>
+               CLOSE COBCUR1 <a name="wp1047674"> </a>
+           END-EXEC.<a name="wp1047675"> </a>
+<a name="wp1047676"> </a>
+       update-row.<a name="wp1047677"> </a>
+           EXEC SQL<a name="wp1047678"> </a>
+              DECLARE COBCUR2 CURSOR FOR <a name="wp1047679"> </a>
+              SELECT C_FIRST_NAME,<a name="wp1047680"> </a>
+                        C_LAST_NAME<a name="wp1047681"> </a>
+                   FROM CUSTOMER<a name="wp1047682"> </a>
+                       WHERE C_NUMBER = 002<a name="wp1047683"> </a>
+                   FOR UPDATE<a name="wp1047684"> </a>
+           END-EXEC.<a name="wp1047685"> </a>
+<a name="wp1047686"> </a>
+           EXEC SQL <a name="wp1047687"> </a>
+               OPEN COBCUR2 <a name="wp1047688"> </a>
+           END-EXEC.<a name="wp1047689"> </a>
+<a name="wp1047690"> </a>
+           PERFORM UNTIL SQLCODE NOT EQUAL 0<a name="wp1047692"> </a>
+<a name="wp1047693"> </a>
+              EXEC SQL<a name="wp1047694"> </a>
+                   FETCH COBCUR2<a name="wp1047695"> </a>
+                   INTO :C-FIRST-NAME,<a name="wp1047696"> </a>
+                        :C-LAST-NAME<a name="wp1047697"> </a>
+              END-EXEC<a name="wp1047698"> </a>
+              IF SQLCODE EQUAL 0<a name="wp1047699"> </a>
+          <a name="wp1047700"> </a>
+                   DISPLAY &quot;Updating &quot; C-FIRST-NAME , C-LAST-NAME <a name="wp1047701"> </a>
+                   EXEC SQL<a name="wp1047702"> </a>
+                      UPDATE CUSTOMER SET C_INFO = &#39;Revised&#39; <a name="wp1047703"> </a>
+                         WHERE CURRENT OF COBCUR2<a name="wp1047704"> </a>
+                   END-EXEC<a name="wp1047705"> </a>
+              END-IF<a name="wp1047706"> </a>
+           END-PERFORM.<a name="wp1047707"> </a>
+<a name="wp1047708"> </a>
+           EXEC SQL <a name="wp1047709"> </a>
+               CLOSE COBCUR2 <a name="wp1047710"> </a>
+           END-EXEC.<a name="wp1047711"> </a>
+<a name="wp1047712"> </a>
+       delete-row.<a name="wp1047714"> </a>
+           DISPLAY &quot;Deleting row 15...&quot;<a name="wp1047715"> </a>
+           EXEC SQL<a name="wp1047716"> </a>
+                DELETE FROM CUSTOMER<a name="wp1047717"> </a>
+                       WHERE C_FIRST_NAME = &#39;OOOOO&#39; <a name="wp1047718"> </a>
+           END-EXEC<a name="wp1047719"> </a>
+           .<a name="wp1047720"> </a>
+<a name="wp1047721"> </a>
+<a name="wp1047461"> </a>
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif"></span><a name="wp1035082"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

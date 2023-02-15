@@ -1,0 +1,625 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>W$FONT Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1038449"> </a><h2 class="pHeading2">
+W$FONT Routine
+</h2>
+<a name="wp1038454"> </a><p class="pBody">
+The W$FONT routine provides general support for selecting fonts and determining their characteristics.  
+</p>
+<a name="wp1038456"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;W$FONT&quot;<a name="wp1038457"> </a>
+    USING OP-CODE, FONT-HANDLE, WFONT-DATA<a name="wp1038458"> </a>
+    GIVING WFONT-STATUS<a name="wp1038459"> </a>
+</pre></div>
+<a name="wp1038461"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1038462"> </a><p class="pBody">
+<b class="cBold">OP-CODE   </b>Numeric value
+</p>
+<a name="wp1038463"> </a><p class="pBody">
+Selects the W$FONT function to perform.  These operations are described below.
+</p>
+<a name="wp1038464"> </a><p class="pBody">
+<b class="cBold">FONT-HANDLE   </b>USAGE HANDLE or HANDLE OF FONT
+</p>
+<a name="wp1038465"> </a><p class="pBody">
+When retrieving a font from the system, the system stores a handle to the font in this item.  With other operations, this value specifies the font to act on.  
+</p>
+<a name="wp1038468"> </a><p class="pBody">
+<b class="cBold">WFONT-DATA</b>   Group item as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 WFONT-DATA.<a name="wp1038469"> </a>
+   03 WFONT-FACE-DATA.<a name="wp1038470"> </a>
+      05 WFONT-DEVICE                  HANDLE, VALUE NULL.<a name="wp1038471"> </a>
+         88 WFDEVICE-CONSOLE           VALUE NULL.<a name="wp1038472"> </a>
+         88 WFDEVICE-WIN-PRINTER       VALUE 1.<a name="wp1038473"> </a>
+      05 WFONT-NAME                    PIC X(33).<a name="wp1038474"> </a>
+      05 WFONT-CHAR-SET                PIC X COMP-X.<a name="wp1038475"> </a>
+         88 WFCHARSET-DONT-CARE        VALUE 0.<a name="wp1038476"> </a>
+         88 WFCHARSET-DEFAULT          VALUE 1.<a name="wp1038477"> </a>
+         88 WFCHARSET-WIN-OEM          VALUE 2.<a name="wp1038478"> </a>
+         88 WFCHARSET-WIN-SYMBOL       VALUE 3.<a name="wp1038479"> </a>
+         88 WFCHARSET-WIN-SHIFTJIS     VALUE 4.<a name="wp1038480"> </a>
+         88 WFCHARSET-WIN-HANGUL       VALUE 5.<a name="wp1038481"> </a>
+         88 WFCHARSET-WIN-GB2312       VALUE 6.<a name="wp1038482"> </a>
+         88 WFCHARSET-WIN-CHINESEBIG5  VALUE 7.<a name="wp1038483"> </a>
+         88 WFCHARSET-WIN-JOHAB        VALUE 8.<a name="wp1038484"> </a>
+         88 WFCHARSET-WIN-HEBREW       VALUE 9.<a name="wp1038485"> </a>
+         88 WFCHARSET-WIN-ARABIC       VALUE 10.<a name="wp1038486"> </a>
+         88 WFCHARSET-WIN-GREEK        VALUE 11.<a name="wp1038487"> </a>
+         88 WFCHARSET-WIN-TURKISH      VALUE 12.<a name="wp1038488"> </a>
+         88 WFCHARSET-WIN-VIETNAMESE   VALUE 13.<a name="wp1038489"> </a>
+         88 WFCHARSET-WIN-THAI         VALUE 14.<a name="wp1038490"> </a>
+         88 WFCHARSET-WIN-EASTEUROPE   VALUE 15.<a name="wp1038491"> </a>
+         88 WFCHARSET-WIN-RUSSIAN      VALUE 16.<a name="wp1038492"> </a>
+         88 WFCHARSET-WIN-MAC          VALUE 17.<a name="wp1038493"> </a>
+         88 WFCHARSET-WIN-BALTIC       VALUE 18.<a name="wp1038494"> </a>
+      05 WFONT-SIZE                    PIC X COMP-X.<a name="wp1038495"> </a>
+      05 WFONT-BOLD-STATE              PIC X COMP-X.<a name="wp1038496"> </a>
+         88 WFONT-BOLD                 VALUE 1, FALSE 0.<a name="wp1038497"> </a>
+      05 WFONT-ITALIC-STATE            PIC X COMP-X.<a name="wp1038498"> </a>
+         88 WFONT-ITALIC               VALUE 1, FALSE 0. <a name="wp1038499"> </a>
+      05 WFONT-UNDERLINE-STATE         PIC X COMP-X.<a name="wp1038500"> </a>
+         88 WFONT-UNDERLINE            VALUE 1, FALSE 0.<a name="wp1038501"> </a>
+      05 WFONT-STRIKEOUT-STATE         PIC X COMP-X.<a name="wp1038502"> </a>
+         88 WFONT-STRIKEOUT            VALUE 1, FALSE 0.<a name="wp1038503"> </a>
+      05 WFONT-PITCH-STATE             PIC X COMP-X.<a name="wp1038504"> </a>
+         88 WFONT-FIXED-PITCH          VALUE 1, FALSE 0.<a name="wp1038505"> </a>
+      05 WFONT-FAMILY                  PIC X COMP-X.<a name="wp1038506"> </a>
+         88 WFFAMILY-DONT-CARE         VALUE 0.<a name="wp1038507"> </a>
+         88 WFFAMILY-MODERN            VALUE 1.<a name="wp1038508"> </a>
+         88 WFFAMILY-ROMAN             VALUE 2.<a name="wp1038509"> </a>
+         88 WFFAMILY-SWISS             VALUE 3.<a name="wp1038510"> </a>
+         88 WFFAMILY-SCRIPT            VALUE 4.<a name="wp1038511"> </a>
+         88 WFFAMILY-DECORATIVE        VALUE 5.<a name="wp1038512"> </a>
+   03 WFONT-CHOOSE-DATA.<a name="wp1038513"> </a>
+      05 WFONT-CHOOSE-FLAGS            PIC X COMP-X.<a name="wp1038514"> </a>
+      05 WFONT-CHOOSE-MIN-SIZE         PIC X COMP-X.<a name="wp1038515"> </a>
+      05 WFONT-CHOOSE-MAX-SIZE         PIC X COMP-X.<a name="wp1038516"> </a>
+      05 WFONT-CHOOSE-RED              PIC X COMP-X.<a name="wp1038517"> </a>
+      05 WFONT-CHOOSE-GREEN            PIC X COMP-X.<a name="wp1038518"> </a>
+      05 WFONT-CHOOSE-BLUE             PIC X COMP-X.<a name="wp1038519"> </a>
+      05 WFONT-CHOOSE-COLOR-NUM        PIC X COMP-X.<a name="wp1038520"> </a>
+   03 WFONT-ANGLE                      PIC X(2) COMP-X.<a name="wp1262445"> </a>
+</pre></div>
+<a name="wp1038521"> </a><p class="pBody">
+WFONT-DATA contains parameters that are used by the various W$FONT operations.  The descriptions below detail how each operation uses this data item.  
+</p>
+<a name="wp1038522"> </a><p class="pBody">
+<b class="cBold">WFONT-STATUS   </b>Signed numeric data item
+</p>
+<a name="wp1038523"> </a><p class="pBody">
+WFONT-STATUS returns the status of the operation.  Unless otherwise specified below, a value of &quot;1&quot; indicates success and &quot;0&quot; or a negative value indicates failure.  
+</p>
+<a name="wp1038526"> </a><p class="pBody">
+All of the data items and definitions required by this routine can be found in the COPY library &quot;fonts.def&quot;.  To avoid problems should the format of WFONT-DATA change in a future version of ACUCOBOL-GT, it is recommended that you always use the &quot;fonts.def&quot; COPY file.  
+</p>
+<a name="wp1038528"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1038529"> </a><p class="pBody">
+W$FONT performs a variety of operations depending on the specified op-code.  The operations are as follows:
+</p>
+<a name="wp1038531"> </a><h3 class="pHeadingRef">
+ WFONT-SUPPORTED  (op-code 1) 
+</h3>
+<a name="wp1329793"> </a><p class="pBody">
+This operation returns a value that indicates whether the host system supports W$FONT.  If it does not, WFONT-STATUS is set to WFONTERR-UNSUPPORTED (value &quot;0&quot;).  This indicates that the host system does not use fonts (as would be normal for a non-graphical host).  A return value of WFONT-FONT-SUPPORT (value &quot;1&quot;) indicates that fonts are supported, but the WFONT-CHOOSE-FONT operation is not available.  Finally, a value of WFONT-FULL-SUPPORT (value &quot;2&quot;) indicates that all W$FONT operations are supported on the system.  
+</p>
+<a name="wp1038536"> </a><p class="pBody">
+The FONT-HANDLE and WFONT-DATA parameters are not used with this op-code and should be omitted.  
+</p>
+<a name="wp1038538"> </a><h3 class="pHeadingRef">
+WFONT-GET-FONT  (op-code 101) 
+</h3>
+<a name="wp1329802"> </a><p class="pBody">
+This operation returns a font on the system that matches the specifications in WFONT-DATA.  If a matching font is found, its handle is returned in FONT-HANDLE and WFONT-STATUS is set to &quot;1&quot;.  If no matching font is found, FONT-HANDLE is set to NULL and WFONT-STATUS returns the WFONTERR-FONT-NOT-FOUND error condition.  
+</p>
+<a name="wp1038543"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Fonts occupy memory.  If you no longer need a font, you can free the memory used by the font by using the DESTROY verb on the font's handle.  The runtime automatically destroys all fonts when it terminates.  
+<hr />
+</p>
+<a name="wp1038544"> </a><p class="pBody">
+In WFONT-GET-FONT, the WFONT-DATA fields are used to describe the desired font. These fields are described in detail below.  You should always INITIALIZE the group item WFONT-FACE-DATA prior to filling in these fields to ensure that unused fields contain the proper default values.  
+</p>
+<a name="wp1038545"> </a><p class="pBody">
+If you do not specify WFONT-NAME, WFONT-CHAR-SET, or WFONT-SIZE, the corresponding aspect of the font will be arbitrary.  In general, you should always specify WFONT-NAME and WFONT-SIZE to get useful results.   
+</p>
+<a name="wp1038547"> </a><h3 class="pHeadingRef">
+WFONT-GET-CLOSEST-FONT (op-code 102) 
+</h3>
+<a name="wp1329810"> </a><p class="pBody">
+This operation is identical to WFONT-GET-FONT, except that it doesn't fail if it cannot find the specified font.  Instead, it returns the closest matching font.  Note that only Windows systems are capable of performing this operation.  On other systems, this call is treated as being identical to WFONT-GET-FONT.  You should specify WFONT-CHAR-SET with this function to ensure that the returned font is useful.  Also, specifying WFONT-FAMILY can help in locating a suitable font.  
+</p>
+<a name="wp1038554"> </a><h3 class="pHeadingRef">
+WFONT-DESCRIBE-FONT  (op-code 106)  
+</h3>
+<a name="wp1329818"> </a><p class="pBody">
+This operation returns the characteristics of the font described by FONT-HANDLE in WFONT-DATA.  All of the fields contained in the subgroup WFONT-FACE-DATA are returned, within the capabilities of the host system.  
+</p>
+<a name="wp1038560"> </a><h3 class="pHeadingRef">
+WFONT-CHOOSE-FONT  (op-code 2)  
+</h3>
+<a name="wp1329826"> </a><p class="pBody">
+This operation presents the user with a dialog box that allows for the direct selection of a font.  If the user cancels the dialog box, W$FONT returns a status of WFONTERR-CANCELLED.  Otherwise, W$FONT returns a status of &quot;1&quot; and sets WFONT-FACE-DATA to a description of the chosen font.  FONT-HANDLE is not used and should be passed as &quot;NULL&quot;.  To generate a font handle for the user's choice, take the WFONT-FACE-DATA values returned by this operation and pass them to the WFONT-GET-FONT operation.  
+</p>
+<a name="wp1038565"> </a><p class="pBody">
+Values contained in WFONT-CHOOSE-DATA modify the behavior of the dialog box and return additional information.  These fields are described below.  You should always INITIALIZE the group item WFONT-DATA prior to filling any fields.  This ensures that you have the correct default values for unused fields.  
+</p>
+<a name="wp1090657"> </a><p class="pBody">
+Not all systems that support fonts support this function.  See the WFONT-SUPPORTED operation above for details.  
+</p>
+<a name="wp1090662"> </a><h3 class="pHeadingRef">
+WFONT-DATA
+</h3>
+<a name="wp1038572"> </a><p class="pBody">
+The fields of WFONT-DATA are used as follows:
+</p>
+<a name="wp1038573"> </a><p class="pBody">
+<b class="cBold">WFONT-DEVICE</b> -- This item identifies the device that a font is associated with.  When a font is associated with a particular device, it should not be used on another device, because these results are undefined.  Under Windows, fonts can be shared between devices, but the size is incorrect, because Windows fonts are internally stored with their sizes represented in pixels/device-units instead of points.  For example, using a screen font that is 15 pixels high on a laser printer (with 300 or 600 dpi) produces tiny letters.  All settings of WFONT-DEVICE are machine-dependent except for the following:
+</p>
+<a name="wp1081784"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1081814"> </a><p class="pCellBody">
+<b class="cBold">WFDEVICE-CONSOLE</b>
+</p>
+</td>
+    <td><a name="wp1081816"> </a><p class="pCellBody">
+This setting (default value &quot;NULL&quot;) associates the font with the user's screen.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1081818"> </a><p class="pCellBody">
+<b class="cBold">WFDEVICE-WIN-PRINTER</b>
+</p>
+</td>
+    <td><a name="wp1081820"> </a><p class="pCellBody">
+This setting (default value &quot;1&quot;) is meaningful only under Windows systems.  It associates the font with the currently selected printer for the Windows spooler.   If you are using WIN$PRINTER, this item must be set to &quot;true&quot; before you call W$FONT.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1038577"> </a><p class="pBody">
+<b class="cBold">WFONT-NAME</b> -- This item holds the face name of the font.  This name is case-sensitive and may contain internal spaces.  When asking for a font, you must match its name exactly.  If this item is set to spaces, then any font is allowed to match.  Under Windows, some common True Type font names are &quot;Courier New&quot;, &quot;Times New Roman&quot;, and &quot;Arial&quot;.  
+</p>
+<a name="wp1403819"> </a><p class="pBody">
+<b class="cBold">WFONT-SIZE</b> -- This item holds the size, in points, of the font's characters.  A value of zero allows for any size font.  In that case, the size chosen by the system may or may not be useful.  If you are not certain which size to choose, start with &quot;10&quot; and adjust from there.  
+</p>
+<a name="wp1403820"> </a><p class="pBody">
+<b class="cBold">WFONT-BOLD</b> -- When this item is set to TRUE, the font is a boldface font.
+</p>
+<a name="wp1403821"> </a><p class="pBody">
+<b class="cBold">WFONT-ITALIC</b> -- When this item is set to TRUE, the font is italic.  Note that under Windows, most controls have difficulty displaying italic fonts correctly.  
+</p>
+<a name="wp1403827"> </a><p class="pBody">
+<b class="cBold">WFONT-UNDERLINE</b> -- When this item is set to TRUE, the font is underlined.
+</p>
+<a name="wp1398796"> </a><p class="pBody">
+
+</p>
+<a name="wp1391676"> </a><p class="pBody">
+<b class="cBold">WFONT-CHAR-SET</b> -- This item defines the character set to use.  A font's character set includes the internal representations used for each character.  The possible settings are as follows:
+</p>
+<a name="wp1082497"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1082530"> </a><p class="pCellBody">
+<b class="cBold">WFCHARSET-DONT-CARE</b>
+</p>
+</td>
+    <td><a name="wp1082532"> </a><p class="pCellBody">
+This allows for any character set.  When returned by a call to WFONT-DESCRIBE-FONT, it indicates that the font's character set is unknown or does not correspond to one of the following settings.  When requesting a specific font, use this setting only if you are certain that the face name you are requesting uses the character set you want.  This may be necessary when you are asking for a font that uses a character set other than any of the following (as might be true for some oriental character sets).  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082534"> </a><p class="pCellBody">
+<b class="cBold">WFCHARSET-DEFAULT</b>
+</p>
+</td>
+    <td><a name="wp1082536"> </a><p class="pCellBody">
+This setting corresponds to a host-dependent default character set.  This is the character set most commonly used by the host system.  Under Windows, this is the ANSI character set.  If you are not certain which setting of WFONT-CHAR-SET to use, use this one.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082538"> </a><p class="pCellBody">
+<b class="cBold">WFCHARSET-WIN-OEM</b>
+</p>
+</td>
+    <td><a name="wp1082540"> </a><p class="pCellBody">
+This setting is meaningful only under Windows.  It corresponds to the host hardware's &quot;OEM&quot; character set.  For IBM-style PCs, this is the traditional MS-DOS character set.  This is the same character set used by the built-in font &quot;TRADITIONAL-FONT&quot;.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082542"> </a><p class="pCellBody">
+<b style="font-weight: bold" class="cBold">WFCHARSET-WIN-</b><em style="font-weight: normal" class="cEmphasis">name</em>
+</p>
+</td>
+    <td><a name="wp1082544"> </a><p class="pCellBody">
+The following settings are meaningful only in a Windows environment.  They correspond to various character sets supported by Windows fonts (where <em class="cEmphasis">name</em> is the supported font name from the list below). You may select the character set directly in the &quot;script&quot; portion of the font chooser dialog box.   Note that most fonts only support a subset of these character sets.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082546"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082548"> </a><p class="pCellBody">
+WFCHARSET-WIN-SYMBOL
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082550"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082552"> </a><p class="pCellBody">
+WFCHARSET-WIN-SHIFTJIS    
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082554"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082556"> </a><p class="pCellBody">
+WFCHARSET-WIN-HANGUL    
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082558"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082560"> </a><p class="pCellBody">
+WFCHARSET-WIN-GB2312
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082562"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082564"> </a><p class="pCellBody">
+WFCHARSET-WIN-<br />CHINESEBIG5
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082566"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082568"> </a><p class="pCellBody">
+WFCHARSET-WIN-JOHAB
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082570"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082572"> </a><p class="pCellBody">
+WFCHARSET-WIN-HEBREW    
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082574"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082576"> </a><p class="pCellBody">
+WFCHARSET-WIN-ARABIC    
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082578"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082580"> </a><p class="pCellBody">
+WFCHARSET-WIN-GREEK    
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082582"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082584"> </a><p class="pCellBody">
+WFCHARSET-WIN-TURKISH    
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082586"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082588"> </a><p class="pCellBody">
+WFCHARSET-WIN-<br />VIETNAMESE    
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082590"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082592"> </a><p class="pCellBody">
+WFCHARSET-WIN-THAI
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082594"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082596"> </a><p class="pCellBody">
+WFCHARSET-WIN-<br />EASTEUROPE
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082598"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082600"> </a><p class="pCellBody">
+WFCHARSET-WIN-RUSSIAN
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082602"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082604"> </a><p class="pCellBody">
+WFCHARSET-WIN-MAC    
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1082606"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1082608"> </a><p class="pCellBody">
+WFCHARSET-WIN-BALTIC  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1038603"> </a><p class="pBody">
+<b class="cBold">WFONT-STRIKEOUT -- </b>When this item is set to TRUE, the font is struck-out (i.e., has a line running horizontally through the middle of the characters).  
+</p>
+<a name="wp1038604"> </a><p class="pBody">
+<b class="cBold">WFONT-FIXED-PITCH</b> -- When this item is set to TRUE, the font is fixed-pitch.  This means that each character in the font is the same width.  
+</p>
+<a name="wp1038605"> </a><p class="pBody">
+<b class="cBold">WFONT-FAMILY</b> -- This item describes the look of the font in very general terms.  It is used to aid in selecting a font when WFONT-NAME is not specified or not found.  No font is ever rejected because it does not match the requested family.  Usually this field can be set to WFFAMILY-DONT-CARE, but specifying other choices can be useful when you don't know what fonts are on a system and you want to find one close to a specific font.  Some graphical systems do not have the concept of font families.  On these systems, the value of this field is ignored.  The possible values of WFONT-FAMILY are:
+</p>
+<a name="wp1083046"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1083074"> </a><p class="pCellBody">
+<b class="cBold">WFFAMILY-DONT-CARE</b>
+</p>
+</td>
+    <td><a name="wp1083076"> </a><p class="pCellBody">
+This setting allows for any font family.  When set by WFONT-DESCRIBE-FONT, it indicates that the font family is unknown or does not match any of the following possibilities.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083078"> </a><p class="pCellBody">
+<b class="cBold">WFFAMILY-MODERN</b>
+</p>
+</td>
+    <td><a name="wp1083080"> </a><p class="pCellBody">
+This setting indicates a font with a constant stroke width.  These fonts are typically fixed-pitch, but need not be.  Example fonts are &quot;Courier&quot; and &quot;Elite&quot;.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083082"> </a><p class="pCellBody">
+<b class="cBold">WFFAMILY-ROMAN</b>
+</p>
+</td>
+    <td><a name="wp1083084"> </a><p class="pCellBody">
+This setting indicates a font with variable stroke width and serifs.  Example fonts include &quot;Times Roman&quot; and &quot;New Century Schoolbook&quot;.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083086"> </a><p class="pCellBody">
+<b class="cBold">WFFAMILY-SWISS</b>
+</p>
+</td>
+    <td><a name="wp1083088"> </a><p class="pCellBody">
+This setting indicates a font with variable stroke width and no serifs.  Example fonts include &quot;Helvetica&quot; and &quot;MS Sans Serif&quot;.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083090"> </a><p class="pCellBody">
+<b class="cBold">WFFAMILY-SCRIPT</b>
+</p>
+</td>
+    <td><a name="wp1083092"> </a><p class="pCellBody">
+This setting indicates a font designed to look like handwriting.  Example fonts are &quot;Script&quot; and &quot;Comic Sans MS&quot;.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083094"> </a><p class="pCellBody">
+<b class="cBold">WFFAMILY-DECORATIVE</b>
+</p>
+</td>
+    <td><a name="wp1083096"> </a><p class="pCellBody">
+This setting indicates a font for decorative or novelty purposes.  &quot;Old English&quot; is an example of such a font.  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1083052"> </a><p class="pBody">
+<b class="cBold">WFONT-ANGLE </b>-- This item holds a value specifying the angle at which the font will print. The value can range from the default of &quot;0&quot;, which is the normal horizontal orientation, to &quot;360&quot;, which is the same as &quot;0&quot;.  For example, to print at a 45-degree angle, set WFONT-ANGLE to &quot;45&quot;.  To print upside down, set it to &quot;180&quot;.   Any font supported by the destination printer can be loaded with this setting. This feature works only when printing a font, not when displaying a font on screen.
+</p>
+<a name="wp1262480"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You should use the WINPRINT-SET-CURSOR operation of W$PRINTER to set the position of the cursor prior to making a WRITE statement using this feature.
+<hr />
+</p>
+<a name="wp1262446"> </a><p class="pBody">
+The following fields are part of the subgroup WFONT-CHOOSE-DATA and are used only with the WFONT-CHOOSE-FONT operation.  
+</p>
+<a name="wp1083053"> </a><p class="pBody">
+<b class="cBold">WFONT-CHOOSE-FLAGS -- </b>This item modifies the behavior of WFONT-CHOOSE-FONT based on the following settings.  You can set any combination of these by adding together the corresponding values (all contained in &quot;fonts.def&quot;):
+</p>
+<a name="wp1083331"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1083349"> </a><p class="pCellBody">
+<b class="cBold">WFCHOOSE-FIXED-ONLY</b>
+</p>
+</td>
+    <td><a name="wp1083351"> </a><p class="pCellBody">
+This setting allows the user to select only a fixed-pitch font.  Otherwise, any font can be chosen.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083353"> </a><p class="pCellBody">
+<b class="cBold">WFCHOOSE-INITIALIZE</b>
+</p>
+</td>
+    <td><a name="wp1083355"> </a><p class="pCellBody">
+This setting causes the various fields of the dialog box to be initialized based on the values contained in WFONT-FACE-DATA.  Otherwise, the fields will have no initial value.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083357"> </a><p class="pCellBody">
+<b class="cBold">WFCHOOSE-EFFECTS-OK</b>
+</p>
+</td>
+    <td><a name="wp1083359"> </a><p class="pCellBody">
+This setting causes the special-effects section of the dialog box to appear.  This section allows the user to select the following traits: underline, strike-out, and color.  If it's not set, then this section does not appear in the dialog box.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1038617"> </a><p class="pBody">
+<b class="cBold">WFONT-CHOOSE-MIN-SIZE -- </b>This item, when set to a positive value, specifies the minimum font size (in points) that the user can choose.  
+</p>
+<a name="wp1038618"> </a><p class="pBody">
+<b class="cBold">WFONT-CHOOSE-MAX-SIZE</b> -- This item, when set to a positive value, specifies the maximum font size (in points) that the user can choose.  When it's set to zero, no maximum is established.  
+</p>
+<a name="wp1038619"> </a><p class="pBody">
+<b class="cBold">WFONT-CHOOSE-RED</b> -- This item is used only when the WFCHOOSE-EFFECTS-OK flag is set.  It returns the red component of the color chosen.  This is a number in the range of &quot;0&quot; to &quot;255&quot;.  See the W$PALETTE Routine for ways to use this value.  On systems that do not support palettes, this value is always zero.
+</p>
+<a name="wp1038620"> </a><p class="pBody">
+<b class="cBold">WFONT-CHOOSE-GREEN</b> -- This item is similar to WFONT-CHOOSE-RED, except it returns the green component of the color.
+</p>
+<a name="wp1038621"> </a><p class="pBody">
+<b class="cBold">WFONT-CHOOSE-BLUE</b> -- This item is similar to WFONT-CHOOSE-RED, except it returns the blue component of the color.
+</p>
+<a name="wp1038622"> </a><p class="pBody">
+<b class="cBold">WFONT-CHOOSE-COLOR-NUM</b> -- This item is used only when the WFCHOOSE-EFFECTS-OK flag is set.  It returns the ACUCOBOL-GT color number (in the range of &quot;1&quot; to &quot;16&quot;) if the color chosen by the user corresponds to a color in the current window's palette.  If it does not, then this value is set to zero.  Non-zero values can be used directly in the COLOR phrase of a screen item to get the correct color.  
+</p>
+<a name="wp1038624"> </a><h3 class="pHeadingRef">
+Error Handling
+</h3>
+<a name="wp1038627"> </a><p class="pBody">
+The following values are returned by various operations when an error occurs.  All error values are less than or equal to zero.  
+</p>
+<a name="wp1038628"> </a><p class="pBody">
+<b class="cBold">WFONTERR-UNSUPPORTED</b> -- This error indicates that the current host system does not use fonts and the W$FONT routine is not supported.
+</p>
+<a name="wp1038629"> </a><p class="pBody">
+<b class="cBold">WFONTERR-CANCELLED</b> -- This error indicates that the dialog box used by WFONT-CHOOSE-FONT was canceled by the user.
+</p>
+<a name="wp1038630"> </a><p class="pBody">
+<b class="cBold">WFONTERR-FONT-NOT-FOUND</b> -- This error indicates that no font was found that matched the requested font.
+</p>
+<a name="wp1038631"> </a><p class="pBody">
+<b class="cBold">WFONTERR-INVALID-HANDLE -- </b>This error indicates that the value in FONT-HANDLE does not correspond to an existing font.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

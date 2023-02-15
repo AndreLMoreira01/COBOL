@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:01:17" />
+  <title>11.2.6.11  C$XML examples</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr11.htm">Chapter 11: Working with Non-Vision Data</a> &gt; <a href="itr113.htm">11.2  Working with XML Data</a> &gt; <a href="itr1120.htm">11.2.6  Using the C$XML Routine</a> &gt; </p>
+<a name="wp1046371"> </a><h2 class="pHeading3">
+11.2.6.11  C$XML examples
+</h2>
+<a name="wp1046372"> </a><h3 class="pHeadingRef">
+Sample 1: Open, parse, and read weather file
+</h3>
+<a name="wp1046373"> </a><p class="pBody">
+The following sample program calls an XML file from the National Weather Service Web site and retrieves weather data for use in a COBOL program.  (It does not modify or write to the file in any way.)
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*Retrieve the xml data and parse it
+   call &quot;C$XML&quot; using CXML-PARSE-FILE
+       &quot;http://www.nws.noaa.gov/data/current_obs/KMYF.xml <a name="wp1047418"> </a>
+   move return-code to parser-handle<a name="wp1047419"> </a>
+<a name="wp1047420"> </a>
+*Move to the data item of the record, which is a <a name="wp1047649"> </a>
+*child of the record name element.
+   call &quot;C$XML&quot; using CXML-GET-FIRST-CHILD
+                      parser-handle.
+   move return-code to ele-1-handle<a name="wp1047421"> </a>
+<a name="wp1047422"> </a>
+*Get the desired fields, which are all siblings of the first 
+*child.  Get the handle to the desired sibling, then get the 
+*data for that element using that handle. <a name="wp1047650"> </a>
+<a name="wp1047425"> </a>
+*General outlook field <a name="wp1047651"> </a>
+   call &quot;C$XML&quot; using CXML-GET-SIBLING-BY-NAME
+                      ele-1-handle
+                      &quot;weather&quot;
+                      0
+   move return-code to ele-2-handle
+   call &quot;C$XML&quot; using CXML-GET-DATA
+                      ele-2-handle
+                      throw-away
+                       weather-val.<a name="wp1051210"> </a>
+<a name="wp1051211"> </a>
+*Temperature field <a name="wp1047656"> </a>
+   call &quot;C$XML&quot; using CXML-GET-SIBLING-BY-NAME
+                      ele-1-handle
+                      &quot;temperature_str&quot;
+                      0
+   move return-code to ele-2-handle
+   call &quot;C$XML&quot; using CXML-GET-DATA
+                      ele-2-handle
+                      throw-away
+                      temp-val.
+
+*Relative humidity field <a name="wp1047428"> </a>
+   call &quot;C$XML&quot; using CXML-GET-SIBLING-BY-NAME
+                      ele-1-handle
+                      &quot;relative_humidi&quot;
+                      0
+   move return-code to ele-2-handle
+   call &quot;C$XML&quot; using CXML-GET-DATA
+                      ele-2-handle
+                      throw-away
+                      humid-val.
+
+*Wind direction field <a name="wp1047429"> </a>
+   call &quot;C$XML&quot; using CXML-GET-SIBLING-BY-NAME
+                      ele-1-handle
+                      &quot;wind_dir&quot;
+                       0
+   move return-code to ele-2-handle
+   call &quot;C$XML&quot; using CXML-GET-DATA
+                      ele-2-handle
+                      throw-away
+                       wind-dir.<a name="wp1047430"> </a>
+<a name="wp1047431"> </a>
+*Wind speed field <a name="wp1047716"> </a>
+   call &quot;C$XML&quot; using CXML-GET-SIBLING-BY-NAME
+                      ele-1-handle
+                      &quot;wind_mph&quot;
+                      0
+move return-code to ele-2-handle
+   call &quot;C$XML&quot; using CXML-GET-DATA
+                      ele-2-handle
+                      throw-away
+                       wind-mph.<a name="wp1047432"> </a>
+<a name="wp1047433"> </a>
+*Visibility field <a name="wp1047717"> </a>
+   call &quot;C$XML&quot; using CXML-GET-SIBLING-BY-NAME
+                      ele-1-handle
+                      &quot;visibility&quot;
+                      0
+   move return-code to ele-2-handle
+   call &quot;C$XML&quot; using CXML-GET-DATA
+                      ele-2-handle
+                      throw-away
+                       vis-val.<a name="wp1046440"> </a>
+</pre></div>
+<a name="wp1046441"> </a><h3 class="pHeadingRef">
+Sample 2: Create file, add elements and attributes, write data to file
+</h3>
+<a name="wp1046442"> </a><p class="pBody">
+The following sample shows how to create an XML file, add elements to it, and write data to the elements. 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp1046443"> </a>
+program-id. test.
+working-storage section.
+01 parser-handle usage is handle.
+01 element-handle usage is handle.
+COPY &quot;acucobol.def&quot;.
+procedure division.
+main-logic. <a name="wp1047727"> </a>
+*Create a new XML file 
+   call &quot;C$XML&quot; using CXML-NEW-PARSER
+   move return-code to parser-handle. <a name="wp1047728"> </a>
+<a name="wp1047994"> </a>
+*Add a top element (using the name of the file)
+   call &quot;C$XML&quot; using CXML-ADD-CHILD 
+                  parser-handle
+                  &quot;custRec&quot; 
+   move return-code to element-handle. <a name="wp1047729"> </a>
+<a name="wp1048003"> </a>
+*Add some namespace information <a name="wp1047730"> </a>
+   call &quot;C$XML&quot; using CXML-ADD-ATTRIBUTE
+                  element-handle
+                  &quot;xmlns:xsi&quot;<a name="wp1047731"> </a>
+                  &quot;http://www.w3.org/2001/XMLSchema-instance&quot;.
+                     
+*Add the first field of the record, which will be a child of 
+*the last element.
+   call &quot;C$XML&quot; using CXML-ADD-CHILD 
+                  element-handle
+                  &quot;cus-key&quot;
+                  &quot;555-55-5555&quot;
+   move return-code to element-handle.
+
+*Add the rest of the record
+   call &quot;C$XML&quot; using CXML-ADD-SIBLING 
+                  element-handle
+                  &quot;cus-name&quot;
+                  &quot;Acucorp&quot;
+   move return-code to element-handle.
+
+   call &quot;C$XML&quot; using CXML-ADD-SIBLING 
+                  element-handle
+                  &quot;cus-addr&quot;
+                  &quot;8515 Miralani Drive&quot;
+   move return-code to element-handle.
+
+   call &quot;C$XML&quot; using CXML-ADD-SIBLING 
+                  element-handle
+                  &quot;cus-city&quot;
+                  &quot;San Diego&quot;
+   move return-code to element-handle.
+
+   call &quot;C$XML&quot; using CXML-ADD-SIBLING 
+                  element-handle
+                  &quot;cus-state&quot;
+                  &quot;CA&quot;
+   move return-code to element-handle.
+
+   call &quot;C$XML&quot; using CXML-ADD-SIBLING 
+                  element-handle
+                  &quot;cus-zip&quot;
+                  &quot;92126&quot;
+
+*write the file 
+   call &quot;C$XML&quot; using CXML-WRITE-FILE,
+                  parser-handle
+                  &quot;custRec.xml&quot;. <a name="wp1052375"> </a>
+   call &quot;C$XML&quot; using CXML-RELEASE-PARSER,
+                  parser-handle.
+   stop run.<a name="wp1046617"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

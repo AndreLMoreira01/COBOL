@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.8.2.2  Example 2: Accessing printers</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt1239.htm">2.8  File Name Interpretation</a> &gt; <a href="gt1241.htm">2.8.2  File Name Examples</a> &gt; </p>
+<a name="wp1033757"> </a><h2 class="pHeading3">
+2.8.2.2  Example 2: Accessing printers
+</h2>
+<a name="wp1033759"> </a><p class="pBody">
+ACUCOBOL-GT's name translation rules make it particularly easy to access a site's printers (and other devices) in a machine-independent fashion.  
+</p>
+<a name="wp1033761"> </a><p class="pBody">
+We recommend that you use some pre-designated names in your ASSIGN statements for files that are to be directed to a printer.  Using these names will simplify the installation of runtime systems for sites using several ACUCOBOL-GT applications.  The ASSIGN name for standard print files should be &quot;PRINTER&quot;, or one of its variants &quot;PRINTER1&quot;, &quot;PRINTER2&quot;, etc.  By convention, &quot;PRINTER&quot; is associated with the default printer on the host system, while the alternate names are associated with additional printers.  For print files where you need direct control over the printer (to align special forms, for example), you should use one of the names: &quot;FORM&quot;, &quot;FORM1&quot;, &quot;FORM2&quot;, etc.  By convention, &quot;FORM&quot; devices are directly attached to the printer and &quot;PRINTER&quot; devices access printers through the system spooler (if available).  
+</p>
+<a name="wp1033763"> </a><p class="pBody">
+Each site can then place the appropriate definitions of these names in the configuration file (see <a  href="gt1230.htm#wp1033431">section 2.7, &quot;Runtime Configuration&quot;</a>).  The installation of &quot;FORM&quot; devices is easy--simply name the device using the &quot;-D&quot; flag.  For example, to associate the name &quot;FORM&quot; with the &quot;/dev/lp&quot; device on a UNIX system, place the following line in the configuration file:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+FORM    -D  /dev/lp<a name="wp1033764"> </a>
+</pre></div>
+<a name="wp1033765"> </a><p class="pBody">
+It is important to ensure that the users have access permissions to the named devices.  For more information about print spooler issues, see the<em class="cEmphasis"> Getting Started </em>book and Appendix I, the WIN$PRINTER library routine, in Book 4, <em class="cEmphasis">Appendices</em>.  
+</p>
+<a name="wp1033766"> </a><p class="pBody">
+The installation of &quot;PRINTER&quot; devices is only slightly more complicated.  Because these should be spooled (if possible), you will usually need to use the &quot;-P&quot; flag to specify a program to receive the print output.  The following notes give examples for various operating systems:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033767"> </a><div class="pSmartList1"><li>On UNIX systems, the name should be translated to the appropriate system spooler.  This is usually either &quot;lp&quot; (for System V) or &quot;lpr&quot; (for Berkeley UNIX).  You will usually need to specify additional flags to access devices other than the default one.  If you are using the &quot;lp&quot; spooler, you should also specify the &quot;-s&quot; flag to prevent the &quot;request id is . . .&quot; message from appearing in the middle of your program.  </li></div>
+<a name="wp1033768"> </a><p class="pIndented1">
+For example, suppose the site has two printers, a high-speed line printer (the default) and a laser printer.  Furthermore, suppose System V UNIX is being used and the laser printer is accessed with the flag &quot;-dlaser&quot;.  
+</p>
+<a name="wp1033769"> </a><p class="pIndented1">
+The following two lines should then be placed in the configuration file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PRINTER...   -P  lp  -s<a name="wp1033770"> </a>
+PRINTER1     -P  lp  -s  -dlaser<a name="wp1072395"> </a>
+</pre></div>
+<a name="wp1033771"> </a><div class="pSmartList1"><li>On VMS systems the usual way to print files is with the PRINT system command.   One recommended way of doing this is to enter the following line in the configuration file:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PRINTER  -P %TMP%  PRINT  /NOIDENT  /DELETE  %TMP%<a name="wp1033772"> </a>
+</pre></div>
+<a name="wp1033773"> </a><p class="pIndented1">
+Be sure to use the options shown above (NOIDENT and DELETE), and feel free to add other options as desired.
+</p>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

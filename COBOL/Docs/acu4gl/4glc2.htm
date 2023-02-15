@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:43:44" />
+  <title>C.1 Oracle Concepts Overview</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4glc.htm">Appendix C:  Acu4GL for Oracle Information</a> &gt; </p>
+<a name="wp1045361"> </a><h2 class="pHeading1">
+C.1 Oracle Concepts Overview
+</h2>
+<a name="wp1045365"> </a><p class="pBody">
+A quick overview of some basic design concepts underlying the Oracle Database Management System will help you interface your COBOL program to it.
+</p>
+<a name="wp1045366"> </a><h3 class="pHeadingRef">
+Transactions
+</h3>
+<a name="wp1045367"> </a><p class="pBody">
+The Oracle RDBMS is a transaction-based system.  All of the work that you perform while using Oracle must occur within a transaction,<b class="cBold"> </b>whether that work is being done through Acu4GL for Oracle, or another 4GL application<b class="cBold">.</b>  When you use Acu4GL for Oracle, a transaction is implicitly started for you by the database engine itself with the first file I/O operation performed on a file associated with Oracle.  Because all operations with Acu4GL for Oracle occur within a transaction, any record locked during processing remains locked until either a COMMIT WORK or ROLLBACK WORK is issued.  This action results in behavior similar to the LOCK ON MULTIPLE RECORDS clause in COBOL. 
+</p>
+<a name="wp1045368"> </a><p class="pBody">
+The benefits of a transaction management system are best illustrated by an example.  A COBOL application that handles order entry might perform these steps to accept an order:  
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1045369"> </a><div class="pSmartList1"><li>Write an invoice record.</li></div>
+<a name="wp1045370"> </a><div class="pSmartList1"><li>Update a customer record.</li></div>
+<a name="wp1045371"> </a><div class="pSmartList1"><li>Write a payroll record for sales commissions.</li></div>
+<a name="wp1045372"> </a><div class="pSmartList1"><li>Update an inventory record.</li></div>
+</ol></div>
+<a name="wp1045373"> </a><p class="pBody">
+This series of four file operations is a logical unit.  If the program were interrupted, and completed only some of the four file operations, then the files would be in an inconsistent state.  For example, if the program terminated unexpectedly after it updated the customer record, but before it updated the inventory record, then a subsequent run might access non-existent inventory.
+</p>
+<a name="wp1045374"> </a><p class="pBody">
+The solution to this problem is to provide a method for the programmer to define a set of operations that should either all occur or all not occur.  Then, if the program encounters an error or terminates, the files are left in a consistent state.
+</p>
+<a name="wp1045375"> </a><p class="pBody">
+All file operations that are part of a transaction are logged.  Once logged, they can either be committed or rolled back (undone) by the program.  
+</p>
+<a name="wp1045376"> </a><p class="pBody">
+If a program dies, or the system fails, the log file can be used to reconstruct complete transactions, thus returning all files to a consistent state.  Transaction logging thus offers these two facilities:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1045377"> </a><div class="pSmartList1"><li>It provides the programmer with the ability to define transactions, and the ability to commit them or &quot;undo&quot; them (usually in response to an error condition).  This &quot;undo&quot; facility is called a &quot;rollback.&quot;</li></div>
+<a name="wp1045378"> </a><div class="pSmartList1"><li>It provides the ability to reconstruct files into a consistent state after a program dies or system failure occurs.  This operation is called &quot;recovery.&quot;</li></div>
+</ul></div>
+<a name="wp1045380"> </a><h3 class="pHeadingRef">
+Record-locking issues in transactions
+</h3>
+<a name="wp1045385"> </a><p class="pBody">
+Applications that are written for transaction management systems, or that perform work in small &quot;operation-based&quot; logical units, benefit greatly from Oracle's transaction management systems.  Applications that are not written for transaction management encounter difficulty with record locking when operating against a system that enforces transaction management.
+</p>
+<a name="wp1045386"> </a><p class="pBody">
+The difficulty can occur with an application that is performing more than one logical task at a time.  Any operation that modifies or reads data in an I/O mode without the WITH NO LOCK phrase causes a lock to be placed in the database system.  As a result, the application may have many more record locks present than would be expected by the normal rule of COBOL file locking.  The application would act similarly as to when the LOCKS ON MULTIPLE RECORDS clause in COBOL is used.  This can best be illustrated by an example:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1045387"> </a><div class="pSmartList1"><li>The user is entering a customer's order.</li></div>
+<a name="wp1045388"> </a><div class="pSmartList1"><li>As each line item is entered into the order, the inventory file is modified to reflect that items have been removed from the stock on hand.</li></div>
+<a name="wp1045389"> </a><div class="pSmartList1"><li>The user must switch to a different part of the application to perform a different task, perhaps as a result of a phone call from a new customer.</li></div>
+<a name="wp1045390"> </a><div class="pSmartList1"><li>All of the records that were locked, or modified, by the application before the switch remain locked because the first order is not complete.  No COMMIT or ROLLBACK has been issued to complete the transaction.  All of the records locked by the transaction remain locked until the application ends the transaction.</li></div>
+<a name="wp1045391"> </a><div class="pSmartList1"><li>Because one order is open and not yet committed, other applications may be locked out of certain order items if they are still locked by the processing of the first order.  The second order entry may be held up until the first order is completed.</li></div>
+<a name="wp1045392"> </a><div class="pSmartList1"><li>Note that the first application is not locked out.  A process can read its own locked records.</li></div>
+</ol></div>
+<a name="wp1045393"> </a><h3 class="pHeadingRef">
+Acu4GL and record locking
+</h3>
+<a name="wp1045397"> </a><p class="pBody">
+Acu4GL provides semi-automated ways to handle transaction logging based on the setting of the <a  href="4glc19.htm#wp1049104"><span style="font-family: Arial, Verdana, Helvetica, sans-serif">COMMIT_COUNT</span></a> environment variable.  You can also directly alter your source code to deal with this issue.  Individual users determine how much work they wish to do to conform to the Oracle transaction management system by choosing the method that best fits their needs and resources.  The following methods are listed in order of increasing amount of work:
+</p>
+<a name="wp1045398"> </a><h3 class="pHeadingRef">
+COMMIT_COUNT = 0 (Default)  
+</h3>
+<a name="wp1051427"> </a><p class="pBody">
+When you set this variable to zero, the runtime tracks the number of logical locks that are currently in effect.  When the number of logical locks reaches zero, the runtime assumes that a transaction is complete and issues a COMMIT statement.  
+</p>
+<a name="wp1045401"> </a><h3 class="pHeadingRef">
+COMMIT_COUNT = n
+</h3>
+<a name="wp1051446"> </a><p class="pBody">
+When you set this variable to a nonzero value, the runtime tracks the number of WRITE, REWRITE, and DELETE operations, until the value of COMMIT_COUNT is reached, at which time the runtime issues a COMMIT statement.  The READ, START, and READ NEXT operations do not count toward this total because the runtime is tracking data-altering operations rather than logical record locks.  The disadvantage of this method is that when a COMMIT is issued, any record locks held by the runtime are released. 
+</p>
+<a name="wp1045403"> </a><h3 class="pHeadingRef">
+COMMIT_COUNT = -1
+</h3>
+<a name="wp1051453"> </a><p class="pBody">
+No commit is issued by the Acu4GL product.  When COMMIT_COUNT is set to &quot;-1&quot;, two alternate ways to perform a commit or rollback are available:  
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1045405"> </a><div class="pSmartList1"><li>Call <b class="cBold">sql.acu</b> with COMMIT WORK or ROLLBACK WORK. </li></div>
+<a name="wp1045406"> </a><div class="pSmartList1"><li>Use the COBOL verbs COMMIT and ROLLBACK, available in ACUCOBOL-GT.  </li></div>
+</ol></div>
+<a name="wp1045407"> </a><p class="pBody">
+COMMIT_COUNT is set to &quot;-1&quot; automatically when you use the transaction management facilities available in the ACUCOBOL-GT compiler.  A COMMIT WORK is, however, issued on exit from the runtime (for example, on execution of a STOP RUN).
+</p>
+<a name="wp1045408"> </a><h3 class="pHeadingRef">
+COMMIT VERB IN COBOL
+</h3>
+<a name="wp1051457"> </a><p class="pBody">
+This method forces a COMMIT to be sent to Oracle.  It can be used in conjunction with other modes of COMMIT handling.  For non-ORACLE files, this is equivalent to the UNLOCK ALL verb.
+</p>
+<a name="wp1045411"> </a><h3 class="pHeadingRef">
+EXPLICITLY CODED TRANSACTIONS 
+</h3>
+<a name="wp1051461"> </a><p class="pBody">
+This method provides the greatest flexibility in that transactions are specifically tailored for the user's application.  This method also requires the most work for traditional COBOL programs in which transaction modules may not be clearly defined.
+</p>
+<a name="wp1045412"> </a><h3 class="pHeadingRef">
+Acu4GL for Oracle
+</h3>
+<a name="wp1045416"> </a><p class="pBody">
+The Oracle system parameter open_cursors should be set to enhance communication with Acu4GL.  See <a  href="4glc7.htm#wp1045602">Section C.2.4, &quot;Acu4GL for Oracle: Checking System Parameters,&quot;</a> for more information. 
+</p>
+<a name="wp1045417"> </a><h3 class="pHeadingRef">
+Table ownership
+</h3>
+<a name="wp1045422"> </a><p class="pBody">
+Table names in Oracle have the form <em class="cEmphasis">owner.table_name</em>.  If you are the owner of a given table, you can refer to it as just <em class="cEmphasis">table_name</em>.  If you are not the owner, you must refer to it with the owner of the table as a prefix.  Acu4GL for Oracle provides a user-configurable method (the <a  href="4glc22.htm#wp1045871">USER_PATH</a> configuration variable) for implementing this.  
+</p>
+<a name="wp1045423"> </a><h3 class="pHeadingRef">
+Security
+</h3>
+<a name="wp1045427"> </a><p class="pBody">
+Security is implemented in the Oracle RDBMS.  A user is required to log in to the RDBMS before any file processing can occur.  Acu4GL for Oracle provides both a default and a user-configurable method for implementing this.  Oracle's security considerations pose several challenges for COBOL programmers.  Because of the various levels of permissions, certain operations are not allowed unless you have Database Administrator (DBA) privileges.  These restricted operations include:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1045428"> </a><div class="pSmartList1"><li>creating a table under another user's name</li></div>
+<a name="wp1045429"> </a><div class="pSmartList1"><li>dropping a table owned by another user</li></div>
+</ul></div>
+<a name="wp1045430"> </a><p class="pBody">
+Oracle versions 9<em class="cEmphasis">i</em> and later also provide additional security levels; however, you must consult the Oracle documentation to determine if any of these permission levels are appropriate for your site.
+</p>
+<a name="wp1045431"> </a><p class="pBody">
+Generally, it is best for someone with DBA privileges to create and drop the tables, allowing others only the permissions to process information contained in them.  A table can be referenced either by <em class="cEmphasis">owner.table_name</em> or by a public synonym that you have created for the table.  See the Oracle documentation for more details on DBA privileges and public synonyms.
+</p>
+<a name="wp1045432"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>By default, Acu4GL for Oracle always checks to see if a public synonym is available for a file at open time regardless of what the <a  href="4glc22.htm#wp1045871">USER_PATH</a> is set to.  If the name of a table owned by a current user is the same as a public synonym, the user-owned table is chosen.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

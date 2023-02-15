@@ -1,0 +1,861 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$XML Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1314261"> </a><h2 class="pHeading2">
+C$XML Routine
+</h2>
+<a name="wp1314264"> </a><p class="pBody">
+This routine lets you retrieve and parse precise information from an XML document.  It also lets you add, modify, or delete data in an XML document. Please refer to <em style="font-style: italic" class="cEmphasis">A Guide</em><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic"> to Interoperating with ACUCOBOL-GT</span> section 11.2.6 for practical instructions on using this routine.  
+</p>
+<a name="wp1314265"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$XML&quot; <a name="wp1314266"> </a>
+    USING OP-CODE, parameters...<a name="wp1474831"> </a>
+</pre></div>
+<a name="wp1314267"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1314268"> </a><p class="pBody">
+<b class="cBold">OP-CODE  </b> Numeric parameter
+</p>
+<a name="wp1314269"> </a><p class="pBody">
+Specifies the operation to perform. These are defined in the description below. There are constants defined for the op-codes in &quot;acucobol.def&quot;.
+</p>
+<a name="wp1314270"> </a><p class="pBody">
+<b class="cBold">Parameters</b>   Vary depending on the op-code chosen.
+</p>
+<a name="wp1314271"> </a><p class="pBody">
+The parameters vary depending on the operation selected. They provide information and hold results for the operations specified.  These are described below.
+</p>
+<a name="wp1314272"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1314273"> </a><p class="pBody">
+Unless otherwise noted, the return code is &quot;0&quot; if an error has occurred. The return code is positive if everything went correctly.  Possible operations include:
+</p>
+<a name="wp1314274"> </a><h3 class="pHeadingRef">
+CXML-PARSE-FILE (op-code 1)
+</h3>
+<a name="wp1314275"> </a><p class="pBody">
+Parses the specified file, returning a parser handle as the return-code.  This operation takes one parameter:  
+</p>
+<a name="wp1314276"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">filename</em>	name of the XML document to parse 
+</p>
+<a name="wp1314277"> </a><p class="pBody">
+To read a file from the Internet and parse it, you can pass the filename with URL syntax.  For example, you could pass the following filename:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+http://myserver.mycomp.com/xmldata/bookfile.xml<a name="wp1314278"> </a>
+</pre></div>
+<a name="wp1314279"> </a><h3 class="pHeadingRef">
+CXML-RELEASE-PARSER (op-code 2)
+</h3>
+<a name="wp1314280"> </a><p class="pBody">
+Releases memory allocated by parsing.  The passed handle is zeroed by this call.  This operation takes one parameter:  
+</p>
+<a name="wp1314281"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em>	the parser handle returned by CXML-PARSE-FILE, CXML-OPEN-FILE, CXML-PARSE-STRING, or CXML-NEW-PARSER
+</p>
+<a name="wp1314282"> </a><h3 class="pHeadingRef">
+CXML-GET-FIRST-CHILD (op-code 3)
+</h3>
+<a name="wp1314283"> </a><p class="pBody">
+Retrieves the handle of the first child element of the handle passed. The return-code is a handle of the first child element, or &quot;0&quot; if there are no children.  (The case of no children is not considered an error, even though CXML-GET-LAST-ERROR will return &quot;10&quot;.)  This operation takes one parameter:  
+</p>
+<a name="wp1314284"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em>	a parser handle or an element handle.  If a parser handle, returns the first child of the top-level element. 
+</p>
+<a name="wp1314285"> </a><h3 class="pHeadingRef">
+CXML-GET-NEXT-SIBLING  (op-code 4)
+</h3>
+<a name="wp1314286"> </a><p class="pBody">
+Retrieves the handle of the next sibling element of the handle passed. The return-code is a handle of the next sibling element, or &quot;0&quot; if no more siblings.  (The case of no next sibling is not considered an error, even though CXML-GET-LAST-ERROR will return &quot;11&quot;.)  This operation takes one parameter:
+</p>
+<a name="wp1314287"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em>	an element handle
+</p>
+<a name="wp1314288"> </a><h3 class="pHeadingRef">
+CXML-GET-PARENT  (op-code 5)
+</h3>
+<a name="wp1314289"> </a><p class="pBody">
+Retrieves the handle of the parent element of the handle passed.  This enables you to go through the XML tree without keeping track of all the handles received from C$XML.  The return-code contains the handle of the parent element of that element, or &quot;0&quot; if this is the top-level element or some other error.  This operation takes one parameter:
+</p>
+<a name="wp1314290"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	an element handle
+</p>
+<a name="wp1314291"> </a><h3 class="pHeadingRef">
+CXML-GET-DATA  (op-code 6)
+</h3>
+<a name="wp1314292"> </a><p class="pBody">
+Retrieves the name and value of that element. This operation takes four parameters, the fourth parameter is optional:
+</p>
+<a name="wp1314293"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em>	is an element handle or parser handle.  If handle is a parser handle, it is first set to the handle of the top-level element of the parsed file.
+</p>
+<a name="wp1314294"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">item-name</em>	is returned as the name of the element
+</p>
+<a name="wp1314295"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">item-value</em>	is returned as the CDATA of that element (the data outside of the XML tags)
+</p>
+<a name="wp1314296"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">item-value-length</em>	 (optional) is set to the length of the data returned in item-value.  
+</p>
+<a name="wp1314297"> </a><h3 class="pHeadingRef">
+CXML-GET-ATTRIBUTE-COUNT  (op-code 7)
+</h3>
+<a name="wp1314298"> </a><p class="pBody">
+Retrieves the number of attributes in that element.  This operation takes one parameter.  
+</p>
+<a name="wp1314299"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em>	an element handle or parser handle.  If it is a parser handle, it is first set to the handle of the top-level element of the parsed file.
+</p>
+<a name="wp1314300"> </a><h3 class="pHeadingRef">
+CXML-GET-ATTRIBUTE  (op-code 8)
+</h3>
+<a name="wp1314301"> </a><p class="pBody">
+Retrieves the name and value of the attributes in that element.  This operation takes five parameters, the fifth parameter is optional:
+</p>
+<a name="wp1314302"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em>	an element handle or parser handle.  If it is a parser handle, it is first set to the handle of the top-level element of the parsed file.
+</p>
+<a name="wp1314303"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">attr-num</em>	the attribute to get (starting at 1)
+</p>
+<a name="wp1314304"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">attr-name</em>	the name of the attribute 
+</p>
+<a name="wp1314305"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">attr-value</em>	the value of the attribute
+</p>
+<a name="wp1314306"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">attr-value-len  </em>	(optional) the length of the attribute value (a numeric item)
+</p>
+<a name="wp1314307"> </a><p class="pBody">
+If the return-code is &quot;0&quot;, it can mean that there are no elements, or that the passed handle is not a valid handle.  
+</p>
+<a name="wp1314308"> </a><h3 class="pHeadingRef">
+CXML-GET-LAST-ERROR  (op-code 9)
+</h3>
+<a name="wp1314309"> </a><p class="pBody">
+Any C$XML call that fails will generate an error code, both a numeric value and a string value that describes the error.  If return-code from any other function is &quot;0&quot; or &quot;-1&quot;, call this operation to get the error.  This function returns the numeric value of the last error.  This function takes one parameter:
+</p>
+<a name="wp1314310"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">text-val</em>	the text value of the error code
+</p>
+<a name="wp1314311"> </a><p class="pBody">
+These errors are listed as a level 78 data item in &quot;acucobol.def&quot;.  The possible errors are:</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1314314"> </a>
+Numeric value
+
+</th>
+    <th><a name="wp1314316"> </a>
+Text Value
+
+</th>
+    <th><a name="wp1314318"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314320"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1314322"> </a><p class="pCellBody">
+CXML-NO-MEMORY 
+</p>
+</td>
+    <td><a name="wp1314324"> </a><p class="pCellBody">
+Unable to create parser due to low memory
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314326"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1314328"> </a><p class="pCellBody">
+CXML-EXPAT-ERROR 
+</p>
+</td>
+    <td><a name="wp1314330"> </a><p class="pCellBody">
+Unable to create parser - expat error
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314332"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1314334"> </a><p class="pCellBody">
+CXML-FILE-OPEN-ERROR
+</p>
+</td>
+    <td><a name="wp1314336"> </a><p class="pCellBody">
+Unable to open named file
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314338"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1314340"> </a><p class="pCellBody">
+CXML-PARSE-ERROR
+</p>
+</td>
+    <td><a name="wp1314342"> </a><p class="pCellBody">
+Invalid XML file or other parsing error
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314344"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1314346"> </a><p class="pCellBody">
+CXML-INVALID-PARSER-HANDLE
+</p>
+</td>
+    <td><a name="wp1314348"> </a><p class="pCellBody">
+The passed handle is not a valid parser handle
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314350"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1314352"> </a><p class="pCellBody">
+CXML-INVALID-ELEMENT-HANDLE
+</p>
+</td>
+    <td><a name="wp1314354"> </a><p class="pCellBody">
+The passed handle is not a valid element handle
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314356"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1314358"> </a><p class="pCellBody">
+CXML-INVALID-ATTRIBUTE-NUMBER
+</p>
+</td>
+    <td><a name="wp1314360"> </a><p class="pCellBody">
+Invalid attribute number
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314362"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1314364"> </a><p class="pCellBody">
+CXML-URL-ERROR
+</p>
+</td>
+    <td><a name="wp1314366"> </a><p class="pCellBody">
+The URL given could not be accessed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314368"> </a><p class="pCellBody">
+9
+</p>
+</td>
+    <td><a name="wp1314370"> </a><p class="pCellBody">
+CXML-NOT-AVAILABLE
+</p>
+</td>
+    <td><a name="wp1314372"> </a><p class="pCellBody">
+The XML parser is not available on this machine
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314374"> </a><p class="pCellBody">
+10
+</p>
+</td>
+    <td><a name="wp1314376"> </a><p class="pCellBody">
+CXML-NO-CHILDREN
+</p>
+</td>
+    <td><a name="wp1314378"> </a><p class="pCellBody">
+The specified element has no children
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314380"> </a><p class="pCellBody">
+11
+</p>
+</td>
+    <td><a name="wp1314382"> </a><p class="pCellBody">
+CXML-NO-SIBLINGS
+</p>
+</td>
+    <td><a name="wp1314384"> </a><p class="pCellBody">
+The specified element has no siblings
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314386"> </a><p class="pCellBody">
+12
+</p>
+</td>
+    <td><a name="wp1314388"> </a><p class="pCellBody">
+CXML-NO-PARENT
+</p>
+</td>
+    <td><a name="wp1314390"> </a><p class="pCellBody">
+The specified element is a top-level element
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314392"> </a><p class="pCellBody">
+13
+</p>
+</td>
+    <td><a name="wp1314394"> </a><p class="pCellBody">
+CXML-NO-VALUE
+</p>
+</td>
+    <td><a name="wp1314396"> </a><p class="pCellBody">
+The specified element has no value
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314398"> </a><p class="pCellBody">
+14
+</p>
+</td>
+    <td><a name="wp1314400"> </a><p class="pCellBody">
+CXML-NO-ATTRIBUTES
+</p>
+</td>
+    <td><a name="wp1314402"> </a><p class="pCellBody">
+The specified element has no attributes
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314404"> </a><p class="pCellBody">
+15
+</p>
+</td>
+    <td><a name="wp1314406"> </a><p class="pCellBody">
+CXML-REGEXP-ERROR
+</p>
+</td>
+    <td><a name="wp1314408"> </a><p class="pCellBody">
+The regular expression given caused an error
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1314410"> </a><p class="pCellBody">
+16
+</p>
+</td>
+    <td><a name="wp1314412"> </a><p class="pCellBody">
+CXML-TOP-LEVEL
+</p>
+</td>
+    <td><a name="wp1314414"> </a><p class="pCellBody">
+The specified parser already has a top-level element
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1314415"> </a><h3 class="pHeadingRef">
+CXML-OPEN-FILE  (op-code 10) 
+</h3>
+<a name="wp1314416"> </a><p class="pBody">
+Opens the named file with an XML parser, positioning it at the top-level element.  (Use CXML-PARSE-NEXT-RECORD to get more data).  The returned handle is a parser handle.  This operation takes one parameter:
+</p>
+<a name="wp1314417"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">filename</em>	the name of the file to open with the parser
+</p>
+<a name="wp1314418"> </a><h3 class="pHeadingRef">
+CXML-PARSE-STRING   (op-code 11) 
+</h3>
+<a name="wp1314419"> </a><p class="pBody">
+Parses the specified string as XML, returning a parser handle.  This operation takes one parameter:
+</p>
+<a name="wp1314420"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">string</em>	the string to be parsed as XML
+</p>
+<a name="wp1314421"> </a><h3 class="pHeadingRef">
+CXML-PARSE-NEXT-RECORD   (op-code 12)
+</h3>
+<a name="wp1314422"> </a><p class="pBody">
+Parses the next record in the element of the specified handle.  This operation takes one parameter:
+</p>
+<a name="wp1314423"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is a parser handle returned by CXML-OPEN-FILE
+</p>
+<a name="wp1314424"> </a><p class="pBody">
+No data is returned, but now more data is available for retrieval by other op-codes.  Return-code is &quot;0&quot; on error (including end-of-file) or non-zero if everything worked.
+</p>
+<a name="wp1314425"> </a><h3 class="pHeadingRef">
+CXML-GET-PREV-SIBLING  (op-code 13)
+</h3>
+<a name="wp1314426"> </a><p class="pBody">
+Retrieves the previous sibling element of the handle passed. The return-code is a handle of the previous sibling element, or &quot;0&quot; if no previous siblings.  (The case of no previous sibling is not considered an error, even though CXML-GET-LAST-ERROR will return &quot;11&quot;.)  This operation takes one parameter:
+</p>
+<a name="wp1314427"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em>	an element handle 
+</p>
+<a name="wp1314428"> </a><h3 class="pHeadingRef">
+CXML-NEW-PARSER   (op-code 14)
+</h3>
+<a name="wp1314429"> </a><p class="pBody">
+Creates an empty XML parser and returns the parser handle.  You must pass this to CXML-RELEASE-PARSER to free the data.  This operation takes no arguments.
+</p>
+<a name="wp1314430"> </a><h3 class="pHeadingRef">
+CXML-GET-ATTRIBUTE-BY-NAME  (op-code 15) 
+</h3>
+<a name="wp1314431"> </a><p class="pBody">
+Retrieves the named attribute from an element.  This operation takes seven parameters.  The last three, <em class="cEmphasis">attr-name</em>, <em class="cEmphasis">attr-value</em>, and <em class="cEmphasis">attr-len</em> are all optional.   
+</p>
+<a name="wp1314432"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle
+</p>
+<a name="wp1314433"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">attr-regex-name</em> 	is a regular expression matching the name of the attribute returned.  This regular expression must be null-terminated, or fewer than 1024 bytes.    
+</p>
+<a name="wp1370454"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">attr-regex-flags</em> 	is a collection of flags to apply to the regular expression.  The valid flags are listed in &quot;acucobol.def&quot; and described under <a  href="gt4i71.htm#wp1347300">C$REGEXP op-code 2</a>.  They can be added 	together to get more than one flag.  
+</p>
+<a name="wp1370455"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">attr-idx </em>	is one less than the starting index of attributes to search (use &quot;0&quot; to start at the first attribute).  Is also the index of the attribute actually returned if successful.  
+</p>
+<a name="wp1314436"> </a><p style="text-align: left" class="pListOptions">
+	This returned attribute number can be used in the next call to GET-ATTRIBUTE-BY-NAME to continue searching where you left off.
+</p>
+<a name="wp1314437"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">attr-name</em>	(optional) is the name of the actual attribute returned
+</p>
+<a name="wp1314438"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">attr-value</em>	(optional) is the value of that attribute 
+</p>
+<a name="wp1314439"> </a><p style="text-align: left" class="pListOptions">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">attr-len</span> 	(optional) is the length of the attribute value
+</p>
+<a name="wp1314440"> </a><p class="pBody">
+If desired, <em class="cEmphasis">attr-name</em>, <em class="cEmphasis">attr-value</em>, and <em class="cEmphasis">attr-len</em> can be retrieved by calling CXML-GET-ATTRIBUTE (op-code 8) with the index returned from this call.  Not getting these values can be useful if all you want to do is test for the existence of a particular named attribute.
+</p>
+<a name="wp1314441"> </a><h3 class="pHeadingRef">
+CXML-GET-CHILD-BY-NAME  (op-code 16) 
+</h3>
+<a name="wp1314442"> </a><p class="pBody">
+Retrieves the named child element.  This operation takes three parameters:
+</p>
+<a name="wp1314443"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle
+</p>
+<a name="wp1314444"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">regex</em> 	is a regular expression of the child to locate.  This regular expression must be null-terminated, or fewer than 1024 bytes.
+</p>
+<a name="wp1314445"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">flags</em> 	is flags for the regular expression.  See <a  href="gt4i71.htm#wp1347300">C$REGEXP op-code 2</a> for a list of valid flags.
+</p>
+<a name="wp1314446"> </a><h3 class="pHeadingRef">
+CXML-GET-CHILD-BY-CDATA   (op-code 17)
+</h3>
+<a name="wp1314447"> </a><p class="pBody">
+Retrieves the child element whose data matches the regular expression given.  This operation takes three parameters:
+</p>
+<a name="wp1314448"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle
+</p>
+<a name="wp1314449"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">regex</em> 	is a regular expression of the child to locate.  This regular expression must be null-terminated, or fewer than 1024 bytes.
+</p>
+<a name="wp1314450"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">flags</em> 	is flags for the regular expression.  See <a  href="gt4i71.htm#wp1347300">C$REGEXP op-code 2</a> for a list of valid flags.
+</p>
+<a name="wp1314451"> </a><h3 class="pHeadingRef">
+CXML-GET-CHILD-BY-ATTR-NAME   (op-code 18)
+</h3>
+<a name="wp1314452"> </a><p class="pBody">
+Retrieves the child element that has an attribute name that matches the regular expression given.  This operation takes three parameters:
+</p>
+<a name="wp1314453"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle
+</p>
+<a name="wp1314454"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">regex</em> 	is a regular expression of the child to locate.  This regular expression must be null-terminated, or fewer than 1024 bytes.
+</p>
+<a name="wp1314455"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">flags</em> 	is flags for the regular expression.  See <a  href="gt4i71.htm#wp1347300">C$REGEXP op-code 2</a> for a list of valid flags.
+</p>
+<a name="wp1314456"> </a><h3 class="pHeadingRef">
+CXML-GET-CHILD-BY-ATTR-VALUE  (op-code 19)
+</h3>
+<a name="wp1314457"> </a><p class="pBody">
+Retrieves the child element that has an attribute value that matches the regular expression given.  This operation takes three parameters:
+</p>
+<a name="wp1314458"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle
+</p>
+<a name="wp1314459"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">regex</em> 	is a regular expression of the child to locate.  This regular expression must be null-terminated, or fewer than 1024 bytes.
+</p>
+<a name="wp1314460"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">flags</em> 	is flags for the regular expression.  See <a  href="gt4i71.htm#wp1347300">C$REGEXP op-code 2</a> for a list of valid flags.
+</p>
+<a name="wp1314461"> </a><h3 class="pHeadingRef">
+CXML-GET-SIBLING-BY-NAME  (op-code 20)
+</h3>
+<a name="wp1314462"> </a><p class="pBody">
+Retrieves the named sibling element.  This operation takes three parameters:
+</p>
+<a name="wp1314463"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle
+</p>
+<a name="wp1314464"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">regex</em> 	is a regular expression of the sibling to locate.  This regular expression must be null-terminated, or fewer than 1024 bytes.
+</p>
+<a name="wp1314465"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">flags</em> 	is flags for the regular expression.  See <a  href="gt4i71.htm#wp1347300">C$REGEXP op-code 2</a> for a list of valid flags.
+</p>
+<a name="wp1314466"> </a><h3 class="pHeadingRef">
+CXML-GET-SIBLING-BY-CDATA   (op-code 21)
+</h3>
+<a name="wp1314467"> </a><p class="pBody">
+Retrieves the sibling element whose data matches the regular expression given.  This operation takes three parameters:
+</p>
+<a name="wp1314468"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle
+</p>
+<a name="wp1314469"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">regex</em> 	is a regular expression of the sibling to locate.  This regular expression must be null-terminated, or fewer than 1024 bytes.
+</p>
+<a name="wp1314470"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">flags</em> 	is flags for the regular expression.  See <a  href="gt4i71.htm#wp1347300">C$REGEXP op-code 2</a> for a list of valid flags.
+</p>
+<a name="wp1314471"> </a><h3 class="pHeadingRef">
+CXML-GET-SIBLING-BY-ATTR-NAME  (op-code 22)
+</h3>
+<a name="wp1314472"> </a><p class="pBody">
+Retrieves the sibling element that has an attribute name that matches the regular expression given.  This operation takes three parameters:
+</p>
+<a name="wp1314473"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle
+</p>
+<a name="wp1314474"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">regex</em> 	is a regular expression of the sibling to locate.  This regular expression must be null-terminated, or fewer than 1024 bytes.
+</p>
+<a name="wp1314475"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">flags</em> 	is flags for the regular expression.  See <a  href="gt4i71.htm#wp1347300">C$REGEXP op-code 2</a> for a list of valid flags.
+</p>
+<a name="wp1314476"> </a><h3 class="pHeadingRef">
+CXML-GET-SIBLING-BY-ATTR-VALUE  (op-code 23)  
+</h3>
+<a name="wp1314477"> </a><p class="pBody">
+Retrieves the sibling element that has an attribute value that matches the regular expression given.  This operation takes three parameters:
+</p>
+<a name="wp1314478"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle
+</p>
+<a name="wp1314479"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">regex</em> 	is a regular expression of the sibling to locate.  This regular expression must be null-terminated, or fewer than 1024 bytes.
+</p>
+<a name="wp1314480"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">flags</em> 	is flags for the regular expression.  See <a  href="gt4i71.htm#wp1347300">C$REGEXP op-code 2</a> for a list of valid flags.
+</p>
+<a name="wp1314481"> </a><h3 class="pHeadingRef">
+CXML-GET-COMMENT  (op-code 24)
+</h3>
+<a name="wp1314482"> </a><p class="pBody">
+Retrieves the comment for the specified handle.  This operation takes three parameters. The third is optional.
+</p>
+<a name="wp1314483"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle or a parser handle
+</p>
+<a name="wp1314484"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">data</em> 	is returned as the comment for the handle
+</p>
+<a name="wp1314485"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">len</em> 	(if provided) is the length of the comment
+</p>
+<a name="wp1314486"> </a><h3 class="pHeadingRef">
+CXML-MODIFY-CDATA   (op-code 25)
+</h3>
+<a name="wp1314487"> </a><p class="pBody">
+Modifies data in the specified element.  This operation takes five parameters. The last three, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">len</span>, <em class="cEmphasis">start-pos</em> and <em class="cEmphasis">end-pos</em>, are optional.
+</p>
+<a name="wp1314488"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em>	is an element handle to modify
+</p>
+<a name="wp1314489"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">data</em> 	is the new value of that element 
+</p>
+<a name="wp1314490"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">len</em>	is the length of data (the variable).  If omitted, it defaults to the size of the variable.   
+</p>
+<a name="wp1314491"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">start-pos</em>	the starting position of the data to modify
+</p>
+<a name="wp1314492"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">end-pos</em>	the ending position of the data to modify
+</p>
+<a name="wp1314493"> </a><p class="pBody">
+If <em class="cEmphasis">end-pos</em> is omitted, it defaults to the end of the data.  If <em class="cEmphasis">start-pos</em> is omitted, it defaults to the start of the data.
+</p>
+<a name="wp1314494"> </a><h3 class="pHeadingRef">
+CXML-MODIFY-ATTRIBUTE-VALUE  (op-code 26)
+</h3>
+<a name="wp1314495"> </a><p class="pBody">
+Modifies the specified attribute value of an element.  This operation takes four parameters. The last one is optional.
+</p>
+<a name="wp1314496"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle
+</p>
+<a name="wp1314497"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">attr-num </em>	is the attribute number whose value you want to modify
+</p>
+<a name="wp1314498"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">new-attr-value</em> 	is the new value (of length <em class="cEmphasis">new-attr-len</em>) of that attribute
+</p>
+<a name="wp1314499"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">new-attr-len</em>	(optional) is the length of the new attribute value
+</p>
+<a name="wp1314500"> </a><p class="pBody">
+If <em class="cEmphasis">new-attr-len</em> is omitted, it defaults to the length of the data element given for <em class="cEmphasis">new-attr-value</em>.
+</p>
+<a name="wp1314501"> </a><h3 class="pHeadingRef">
+CXML-ADD-CHILD   (op-code 27)
+</h3>
+<a name="wp1314502"> </a><p class="pBody">
+Adds a new child element to the list of children already in the specified element.  The new element will be the last in the list.  This operation takes four parameters:
+</p>
+<a name="wp1314503"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle
+</p>
+<a name="wp1314504"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">element-name</em> 	is the name of the new child element  
+</p>
+<a name="wp1314505"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">element-data</em> 	(optional) is the value of the new child element.  By default, this is blank.
+</p>
+<a name="wp1314506"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">data-len</em>	(optional) is the length of the new child element.  If omitted, it defaults to the size of the data item.
+</p>
+<a name="wp1314507"> </a><p class="pBody">
+Return code is the new element handle, or &quot;0&quot; on error.
+</p>
+<a name="wp1314508"> </a><h3 class="pHeadingRef">
+CXML-ADD-SIBLING    (op-code 28)
+</h3>
+<a name="wp1314509"> </a><p class="pBody">
+Adds a new sibling element to the specified element.  The new element will be the next element of this sibling.  This operation takes four parameters:
+</p>
+<a name="wp1314510"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle
+</p>
+<a name="wp1314511"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">element-name</em> 	is the name of the new sibling element
+</p>
+<a name="wp1314512"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">element-data</em> 	(optional) is the value of the new sibling element.  By default, this is blank.
+</p>
+<a name="wp1314513"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">data-len</em>	(optional) is the length of the new sibling element.  If omitted, it defaults to the size of the data element.
+</p>
+<a name="wp1314514"> </a><p class="pBody">
+Return code is the new element handle, or &quot;0&quot; on error.
+</p>
+<a name="wp1314515"> </a><h3 class="pHeadingRef">
+CXML-ADD-ATTRIBUTE  (op-code 29)
+</h3>
+<a name="wp1314516"> </a><p class="pBody">
+Adds a new attribute to the specified element.  This operation takes four parameters. The last one is optional:
+</p>
+<a name="wp1314517"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle
+</p>
+<a name="wp1314518"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">attr-name</em> 	is the new attribute name
+</p>
+<a name="wp1314519"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">attr-value</em> 	is the new attribute value, of length <em class="cEmphasis">attr-value-len</em> (if given) or the length of the data element given as the <em class="cEmphasis">attr-name</em>. 
+</p>
+<a name="wp1314520"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">attr-value-len</em>	 (optional) length of the new attribute value
+</p>
+<a name="wp1314521"> </a><p class="pBody">
+Return code is the index of the new attribute, or &quot;0&quot; on error.
+</p>
+<a name="wp1314522"> </a><h3 class="pHeadingRef">
+CXML-ADD-COMMENT   (op-code 30)
+</h3>
+<a name="wp1314523"> </a><p class="pBody">
+Adds a new comment to the specified element handle or parser handle.  This operation takes three parameters. The last one is optional.
+</p>
+<a name="wp1314524"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle or a parser handle
+</p>
+<a name="wp1314525"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">data</em> 	is the comment to add to the handle
+</p>
+<a name="wp1314526"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">len</em> 	(if provided) is the length of the comment
+</p>
+<a name="wp1314527"> </a><h3 class="pHeadingRef">
+CXML-APPEND-COMMENT    (op-code 31)
+</h3>
+<a name="wp1314528"> </a><p class="pBody">
+Appends a comment to the specified element handle or parser handle.  This operation takes three parameters. The last one is optional.
+</p>
+<a name="wp1314529"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle or a parser handle
+</p>
+<a name="wp1314530"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">data</em> 	is the comment to append to the handle
+</p>
+<a name="wp1314531"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">len</em> 	(if provided) is the length of the comment
+</p>
+<a name="wp1323419"> </a><p class="pBody">
+Note that comments are associated with the element that follows them, as in: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!-- comment assoc with elem-1 --&gt;<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1323420"> </a>
+&lt;elem-1&gt;<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1328084"> </a>
+data for elem1<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1328085"> </a>
+&lt;/elem-1&gt;<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1328086"> </a>
+</pre></div>
+<a name="wp1314532"> </a><h3 class="pHeadingRef">
+CXML-DELETE-ATTRIBUTE    (op-code 32)
+</h3>
+<a name="wp1314533"> </a><p class="pBody">
+Deletes the specified attribute from an element.  This operation takes two parameters:
+</p>
+<a name="wp1314534"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle
+</p>
+<a name="wp1314535"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">attr-num </em>	is the index of the attribute to delete (starting at 1).
+</p>
+<a name="wp1314536"> </a><h3 class="pHeadingRef">
+CXML-DELETE-ELEMENT     (op-code 33)
+</h3>
+<a name="wp1314537"> </a><p class="pBody">
+Deletes the specified element. This operation takes one parameter:
+</p>
+<a name="wp1314538"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is the handle of the element to delete
+</p>
+<a name="wp1314539"> </a><p class="pBody">
+If this element has any children, all children are also deleted.
+</p>
+<a name="wp1314540"> </a><h3 class="pHeadingRef">
+CXML-DELETE-COMMENT   (op-code 34)
+</h3>
+<a name="wp1314541"> </a><p class="pBody">
+Deletes the comment from the specified element handle or parser handle.  This operation takes one parameter:
+</p>
+<a name="wp1314542"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is an element handle or a parser handle 
+</p>
+<a name="wp1314543"> </a><p class="pBody">
+There is no return code (errors are silent).
+</p>
+<a name="wp1314544"> </a><h3 class="pHeadingRef">
+CXML-WRITE-FILE   (op-code 35)
+</h3>
+<a name="wp1314545"> </a><p class="pBody">
+Writes the specified file to the data tree.  This operation takes two parameters:
+</p>
+<a name="wp1314546"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">handle</em> 	is a parser handle
+</p>
+<a name="wp1314547"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">filename</em>	is the file to which to write the data tree
+</p>
+<a name="wp1314548"> </a><h3 class="pHeadingRef">
+Comments
+</h3>
+<a name="wp1314549"> </a><p class="pBody">
+This utility gives you low-level control over the parsing of XML data.  If you do not require such precise control or if you would prefer to use a transparent interface to map XML to COBOL, you can use AcuXML to parse the XML data instead. AcuXML is a file system interface that is designed to map XML data to COBOL based on eXtended File Descriptors (XFDs) created at compile time. (See <em class="cEmphasis">A Guide to Interoperating with ACUCOBOL-GT</em>, section 11.2, for more information.)
+</p>
+<a name="wp1314550"> </a><p class="pBody">
+The C$XML routine is useful for parsing all XML files, including non-records-based XML files such as XFDs or configuration files that you have formatted in XML.  AcuXML is not able to parse XML documents such as these, because it quits after the close of the first top-level element, considering that to be the end of the file. AcuXML is useful strictly for records-based XML files.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

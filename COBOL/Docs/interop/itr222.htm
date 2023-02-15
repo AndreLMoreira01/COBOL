@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:25" />
+  <title>2.3.1.1  Method signatures</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr2.htm">Chapter 2: Working with Java Technology</a> &gt; <a href="itr220.htm">2.3  Calling Java from COBOL</a> &gt; <a href="itr221.htm">2.3.1  Calling the C$JAVA Routine</a> &gt; </p>
+<a name="wp1075702"> </a><h2 class="pHeading3">
+2.3.1.1  Method signatures
+</h2>
+<a name="wp1075706"> </a><p class="pBody">
+Parameter signatures are used by the JNI functions to get the method ID of a method in a Java class so that it can be called by non-Java programs.  Two examples are &quot;(I)I&quot; and &quot;(Z)Z&quot;.  The first one describes a Java method taking an int parameter and returning an int value.  The second is a Java method taking a boolean parameter and returning a boolean value.  For a Java method like this: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+int MyJavaMethod( boolean param1, int param2, long 
+param3, double param4)<a name="wp1081151"> </a>
+</pre></div>
+<a name="wp1081161"> </a><p class="pBody">
+The signature would look like this: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+(ZIJD)I.  <a name="wp1081200"> </a>
+</pre></div>
+<a name="wp1081201"> </a><p class="pBody">
+The return value comes last after the close parenthesis.  &quot;Z&quot; was chosen to represent boolean because &quot;B&quot; is used to describe a byte data value. 
+</p>
+<a name="wp1083651"> </a><p class="pBody">
+<a  href="itr223.htm#wp1075735">Section 2.3.1.2</a> shows a list of the parameter types supported by ACUCOBOL-GT.  An &quot;L&quot; represents some object type.  &quot;J&quot; is used for longs.  Everything else in Java is an object (strings, arrays, etc.), and the signatures look like this: 
+</p>
+<a name="wp1083669"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1083654"> </a>
+Object Types
+
+</th>
+    <th><a name="wp1083656"> </a>
+Signature
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083658"> </a><p class="pCellBody">
+String
+</p>
+</td>
+    <td><a name="wp1083660"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">Ljava/lang/String</span>
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083662"> </a><p class="pCellBody">
+Object
+</p>
+</td>
+    <td><a name="wp1083664"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">Ljava/lang/Object</span>
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083666"> </a><p class="pCellBody">
+Array of strings
+</p>
+</td>
+    <td><a name="wp1083668"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">[Ljava/lang/String</span>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1083670"> </a><p class="pBody">
+Example syntax is shown in the following table:
+</p>
+<a name="wp1075712"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1083768"> </a>
+Signature
+
+</th>
+    <th><a name="wp1083770"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1084347"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">()V</span>
+</p>
+</td>
+    <td><a name="wp1084349"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">Java-defined void method taking no parameters</span>
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083772"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">(Z)I</span>
+</p>
+</td>
+    <td><a name="wp1083774"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">Takes boolean, returns int</span>
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083776"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">(ZISDJ)Z</span>
+</p>
+</td>
+    <td><a name="wp1083778"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">Takes boolean, int, short, double, long, returns boolean</span>
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083780"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">(B[J[I)X</span>
+</p>
+</td>
+    <td><a name="wp1083782"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">Takes byte, long array, int array, returns string</span>
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083784"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">(XLjava/lang/Object;)Ljava/lang/String;</span>
+</p>
+</td>
+    <td><a name="wp1083786"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">Takes string, object, returns string</span>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1075722"> </a><h3 class="pHeadingRef">
+Finding a method signature
+</h3>
+<a name="wp1081333"> </a><p class="pBody">
+A Java utility that comes with the Java JRE produces all the parameter signatures of a given JAR file or class automatically so that it is not necessary to determine the signature manually.  Use this utility, called &quot;javap.exe&quot;, to get the exact signature to use with your CALL &quot;C$JAVA&quot; statement.  
+</p>
+<a name="wp1081357"> </a><p class="pBody">
+Here is the output from running &quot;javap&quot; on &quot;acuUtilities/AcuJavaTest&quot;.  The part following the word &quot;Signature&quot; could be cut and pasted into a CALL &quot;C$JAVA&quot; for a given method.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+D:\cobol7\bin&gt;javap -s acuUtilities/AcuJavaTest<a name="wp1075724"> </a>
+Compiled from &quot;AcuJavaTest.java&quot;<a name="wp1075725"> </a>
+public class acuUtilities.AcuJavaTest extends 
+java.lang.Object{<a name="wp1075726"> </a>
+public acuUtilities.AcuJavaTest();<a name="wp1075727"> </a>
+  Signature: ()V<a name="wp1075728"> </a>
+public static void main(java.lang.String[])   throws 
+java.io.IOException;<a name="wp1075729"> </a>
+  Signature: ([Ljava/lang/String;)V<a name="wp1075730"> </a>
+public static int executeCommand(java.lang.String);<a name="wp1075731"> </a>
+  Signature: (Ljava/lang/String;)I<a name="wp1075732"> </a>
+}<a name="wp1075733"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

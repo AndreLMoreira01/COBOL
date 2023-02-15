@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:09" />
+  <title>C.21  Changes Affecting Version 1.3</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4c.htm">Appendix C:  Changes Affecting Previous Versions</a> &gt; </p>
+<a name="wp1034963"> </a><h2 class="pHeading1">
+C.21  Changes Affecting Version 1.3
+</h2>
+<a name="wp1034965"> </a><p class="pBody">
+If you are upgrading directly from Version 1.3, then several changes affect you.  These changes are the same as those you encounter when you move from Version 1.3 to Version 1.4, except that the current runtime does not support linked object files produced by the Version 1.3 compiler.  
+</p>
+<a name="wp1034966"> </a><h3 class="pHeadingRef">
+Compiler changes
+</h3>
+<a name="wp1034967"> </a><p class="pBody">
+The following changes affect programs when they are re-compiled.  <b class="cBold">You can specify the &quot;-C3&quot; option to suppress these differences.</b>  Note that specifying &quot;-C3&quot; also implies the &quot;-C4&quot; flag discussed above.  You can also produce Version 1.3 object files with the &quot;-Z3&quot; compile-time option.  
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034968"> </a><div class="pSmartList1"><li>Under Version 1.3, a line sequential file accessed by a program compiled with RM/COBOL compatibility mode automatically has short records padded with spaces to fill the record area.  Beginning with Version 2.0, only line sequential files with automatic trailing space removal have their records padded with spaces.  This change was made to accommodate the behavior of RM/COBOL-85.  </li></div>
+<a name="wp1034969"> </a><div class="pSmartList1"><li>A numeric data item that is the object of a DISPLAY statement with the CONVERT option is left-justified when RM/COBOL compatibility mode is used under any version since 2.1.  In Version 1.3, the data item is right-justified.  This change was made to accommodate the behavior of RM/COBOL-85.  </li></div>
+<a name="wp1034970"> </a><div class="pSmartList1"><li>Under Version 1.3, the default SIZE of an ACCEPT field is always equal to the number of assignable character positions in the data item, plus 1 if the data item is signed, and plus another 1 if the data item contains digits to the right of the decimal point.  Beginning with Version 2.0, this amount is used only if the destination is numeric or edited and the CONVERT phrase is used.  Otherwise, the default SIZE is the physical size of the receiving field.  The difference is subtle and is unlikely to affect any current programs.  This change was made to better simulate the behavior of RM/COBOL.  </li></div>
+<a name="wp1034971"> </a><div class="pSmartList1"><li>In RM/COBOL compatibility mode, a field accepted with the ECHO phrase is redisplayed in a converted form only if the UPDATE phrase is also used.  In Version 1.3, the field is redisplayed in a converted form only if the CONVERT phrase is used.  This change was made to better simulate the behavior of RM/COBOL.  </li></div>
+<a name="wp1036543"> </a><div class="pSmartList1"><li>Certain line sequential files now have automatic trailing-space removal applied to them.  This depends on the device type specified in the file's ASSIGN clause.  This will generally not affect existing programs except that files with automatic trailing space removal may not be opened for I/O (due to the unpredictable record size).  This affects only those programs that do REWRITEs on sequential files.  If you have a program that does REWRITEs on a sequential file, you should check to make sure that the device type is not one that specifies automatic trailing space removal.  For more information, see Book 3, <em style="font-style: italic" class="cEmphasis">ACUCOBOL-GT </em><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Reference Manual</span>, section&#160;4.3.1, &quot;FILE-CONTROL Paragraph,&quot; under General Rules.</li></div>
+</ul></div>
+<a name="wp1036544"> </a><h3 class="pHeadingRef">
+Runtime changes
+</h3>
+<a name="wp1034974"> </a><p class="pBody">
+The following changes occur when the latest runtime is installed.  These changes can generally be compensated for by various configuration options.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034975"> </a><div class="pSmartList1"><li>Since Version 3.0, the runtime does not support linked object files produced by the Version 1.3 compiler.  If you have any linked object files, then you must convert them to the library format introduced in Version 1.4.  Note that the normal object files produced by the 1.3 compiler are still supported.  </li></div>
+<a name="wp1034976"> </a><div class="pSmartList1"><li>The default keyboard configuration has changed.  The new default is very similar to the default RM/COBOL configuration.  Also, the KEY-MAP and EDIT-MODE configuration variables are no longer supported.  These have been replaced by the more powerful KEYBOARD and KEYSTROKE entries.  Most users of Version 1.3 ACUCOBOL-85 reconfigured the keyboard with the KEY-MAP variable to simulate the RM/COBOL keyboard.  Most will not need to make any changes since this is the new default.  </li></div>
+<a name="wp1034981"> </a><div class="pSmartList1"><li>Users who used the default ACUCOBOL-85 keyboard under Version 1.3 will have to reconfigure the keyboard to meet the Version 1.3 standard.  Other users may need to make minor changes to match their previous configuration.  For details on the new default configuration and the KEYBOARD and KEYSTROKE variables, see the <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>, section&#160;4.3.2, &quot;Redefining the keyboard.&quot;  Also, see the sample configuration file supplied with the compiler.  </li></div>
+<a name="wp1034982"> </a><div class="pSmartList1"><li>Under Version 1.3, files opened with the EXTEND phrase are automatically created if they do not exist.  Beginning with Version 2.1, they are not.  This change was made to match the ANSI standard.  You can maintain the Version 1.3 behavior by setting the configuration variable &quot;EXTEND-CREATES&quot; to &quot;1&quot; in the configuration file.</li></div>
+<a name="wp1034986"> </a><div class="pSmartList1"><li>In VAX COBOL compatibility mode, a missing file opened for I/O is not automatically created.  Under Version 1.3, it was.  This change was made because the most recent release of the VAX COBOL compiler was changed this way.  </li></div>
+<a name="wp1034987"> </a><div class="pSmartList1"><li>Several VAX COBOL file status codes have been changed.  This change was made to match changes made to the VAX COBOL compiler.  </li></div>
+<a name="wp1034988"> </a><div class="pSmartList1"><li>When you are using the RM/COBOL-85 or RM/COBOL version 2 file status codes, a corrupted indexed file is now returned as file error &quot;98&quot; instead of file error &quot;30&quot;.  </li></div>
+<a name="wp1034989"> </a><div class="pSmartList1"><li>A single DISPLAY may now wrap around more than one screen row.  Under Version 1.3, lines are truncated.  If the 1.3 behavior is desired, set the configuration variable &quot;WRAP&quot; to the value &quot;0&quot;.  </li></div>
+<a name="wp1034992"> </a><div class="pSmartList1"><li>An ACCEPT or DISPLAY statement that references a row past the bottom edge of the window now causes that window to scroll.  Under Version 1.3, the statement is (largely) ignored.  You can cause a similar effect by setting the configuration variable &quot;SCROLL&quot; to &quot;0&quot;.  </li></div>
+<a name="wp1034997"> </a><div class="pSmartList1"><li>The syntax of the COLOR-MAP configuration variable has changed slightly.  See the <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>, section 4.4.1, &quot;Adding Color.&quot;</li></div>
+<a name="wp1034998"> </a><div class="pSmartList1"><li>Object files produced by versions of ACUCOBOL-85 <em class="cEmphasis">prior</em> to Version 1.3 may not be executed by the latest runtime system.  These programs must be recompiled with a 1.3 (or later) compiler.  This change was made to reduce the size of the runtime system and to improve its performance.  You can use the &quot;-info&quot; option of &quot;ccbl&quot; to locate object files created by a pre-1.3 version of ACUCOBOL-85.  These will be object files that contain a &quot;vers&quot; value of &quot;2&quot; or less.</li></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

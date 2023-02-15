@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$DISCONNECT Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1035414"> </a><h2 class="pHeading2">
+C$DISCONNECT Routine
+</h2>
+<a name="wp1211174"> </a><p class="pBody">
+C$DISCONNECT disconnects the executing AcuServer client from the specified server at the time of the call.  
+</p>
+<a name="wp1211247"> </a><p class="pBody">
+Under normal circumstances, the AcuServer client disconnects from the server automatically (without requiring you to call the C$DISCONNECT routine) at shutdown.  Also, whenever a server loses its connection to a client, before a new connection is made, all old client connections are automatically closed.
+</p>
+<a name="wp1211175"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$DISCONNECT&quot; <a name="wp1035419"> </a>
+    USING SERVER-NAME, PORT-NUMBER<a name="wp1035420"> </a>
+    GIVING STATUS<a name="wp1035421"> </a>
+</pre></div>
+<a name="wp1035422"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1035423"> </a><p class="pBody">
+<b class="cBold">SERVER-NAME</b>    PIC X(n)
+</p>
+<a name="wp1035424"> </a><p class="pBody">
+Contains the name of the server computer from which you are disconnecting. The name will be terminated at the first space character.
+</p>
+<a name="wp1035425"> </a><p class="pBody">
+<b class="cBold">PORT-NUMBER</b>    PIC 9(n) (optional)
+</p>
+<a name="wp1035426"> </a><p class="pBody">
+Specifies the port number of SERVER-NAME. If omitted, this parameter defaults to the value of the configuration variable ACUSERVER-PORT. 
+</p>
+<a name="wp1035427"> </a><p class="pBody">
+<b class="cBold">STATUS</b>    PIC 9(n)
+</p>
+<a name="wp1035428"> </a><p class="pBody">
+This routine returns the one of the following status codes after the operation has been performed:
+</p>
+<a name="wp1035442"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1168976"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1168978"> </a><p class="pCellBody">
+Client is now disconnected from the server
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1168980"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1168982"> </a><p class="pCellBody">
+Server/port combination was not found; no such connection
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1168984"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1168986"> </a><p class="pCellBody">
+Client access is not enabled
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1035443"> </a><h3 class="pHeadingRef">
+Comments
+</h3>
+<a name="wp1035444"> </a><p class="pBody">
+Any open files on the server should be closed before calling this routine. When these files are reopened, it is as if the original connection had never existed.  In particular, any passwords needed to connect to the server will need to be reentered by the user.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

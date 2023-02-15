@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:09" />
+  <title>C.7  Changes Affecting Version 5.1</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4c.htm">Appendix C:  Changes Affecting Previous Versions</a> &gt; </p>
+<a name="wp1041431"> </a><h2 class="pHeading1">
+C.7  Changes Affecting Version 5.1
+</h2>
+<a name="wp1041432"> </a><p class="pBody">
+The following paragraphs describe changes that can affect programs originally written with ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>Version 5.1.
+</p>
+<a name="wp1034698"> </a><h3 class="pHeadingRef">
+Licensing changes
+</h3>
+<a name="wp1034699"> </a><p class="pBody">
+Acucorp's licensing mechanism changed with the release of Version 5.0.  In Version 5.2, this mechanism has been simplified:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034700"> </a><div class="pSmartList1"><li>Node IDs are no longer used.</li></div>
+<a name="wp1034701"> </a><div class="pSmartList1"><li>When the license is installed, the Windows version of the Activator creates a separate license file for each Acucorp product, in the same manner as UNIX.  </li></div>
+<a name="wp1034702"> </a><div class="pSmartList1"><li>The Activator utility is not backwards compatible.  You must use the version of the Activator utility that corresponds to the version of the product you are installing in order to create a proper license file. </li></div>
+</ul></div>
+<a name="wp1034703"> </a><p class="pBody">
+A complete description of the current licensing mechanism is available in the <em class="cEmphasis">Getting Started</em> book.
+</p>
+<a name="wp1034704"> </a><h3 class="pHeadingRef">
+Compiler changes
+</h3>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034705"> </a><div class="pSmartList1"><li>Two compilation switches provide compatibility with Version 5.1:</li></div>
+<a name="wp1035768"> </a><p class="pBodyRelative">
+<div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1035777"> </a><p class="pCellBody">
+-C51
+</p>
+</td>
+    <td><a name="wp1035779"> </a><p class="pCellBody">
+Causes the compiler to generate code according to the rules used by Version 5.1. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035781"> </a><p class="pCellBody">
+-Z51
+</p>
+</td>
+    <td><a name="wp1035783"> </a><p class="pCellBody">
+Creates object code that can be run with a Version 5.1 runtime.
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1034708"> </a><div class="pSmartList1"><li>Compiler switch &quot;-Zt&quot; is not supported in Version 5.2.</li></div>
+<a name="wp1034709"> </a><div class="pSmartList1"><li>In versions prior to 5.2, the grid would not pass a MSG-GOTO-CELL-MOUSE event to the program when the user clicked on the cell containing the grid cursor.  This was done to prevent extraneous messages from being sent to the program.  However, this message can be useful in some cases, for example, to allow a user to deselect something that is already selected.  Therefore, in Version 5.2 and later, the runtime no longer filters out MSG-GOTO-CELL-MOUSE messages just because the destination cell is the same as the current cell.  </li></div>
+<a name="wp1034710"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>This change is active only for programs compiled for Version 5.2 or later.  This means that the Version 5.2 runtime will use the old behavior when executing programs compiled with versions prior to 5.2, or compiled with the &quot;-C51&quot; or the &quot;-Z51&quot; switch.   You can disable the new behavior by setting the configuration variable &quot;V52_GRID_GOTO&quot; to &quot;0&quot;. 
+<hr />
+</p>
+<a name="wp1034711"> </a><div class="pSmartList1"><li>Version 5.2 introduces &quot;ENTRY&quot; as a new reserved word in ACUCOBOL-GT.  A program that compiled with a previous version of the compiler will not compile with Version 5.2 if it uses &quot;entry&quot; in certain places.  For example:</li></div>
+<a name="wp1034712"> </a><p class="pIndented1">
+If &quot;entry&quot; appears in a paragraph name in your program, the compiler returns the error:
+</p>
+<a name="wp1034713"> </a><p class="pIndented1">
+&quot;<b class="cBold">Identifier expected, ENTRY found</b>&quot; 
+</p>
+</ul></div>
+<a name="wp1034714"> </a><p class="pBody">
+If &quot;entry&quot; appears in a variable in your program, the compiler returns the error:
+</p>
+<a name="wp1034715"> </a><p class="pIndented1">
+<b class="cBold">&quot;syntax error scanning ENTRY&quot;</b>
+</p>
+<a name="wp1034716"> </a><p class="pIndented1">
+See Book 3, <em class="cEmphasis">ACUCOBOL-GT Reference Manual</em>, section 6.6, &quot;Procedure Division Statements,&quot; ENTRY Statement, for usage syntax and rules.
+</p>
+<a name="wp1034717"> </a><h3 class="pHeadingRef">
+Runtime changes
+</h3>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034718"> </a><div class="pSmartList1"><li>The ACUCOBOL-GT Version 5.2 runtime on SCO UNIX systems runs in the ELF binary format.  Prior to Version 5.2, the runtime ran in the COFF format, but COFF does not support calling shared libraries so it was changed to ELF.  If you have your own C routines that you used to link to the runtime, you will need to recompile those C routines to create ELF objects to link to the 5.2 runtime.  For details on calling shared library routines in UNIX environments, see Chapter 6 of <em class="cEmphasis">A Guide to Interoperating with ACUCOBOL-GT</em>.</li></div>
+<a name="wp1034719"> </a><div class="pSmartList1"><li>In versions prior to 5.2, the runtime would eliminate requests to resize a screen control if the new size and position matched the control's current size and position on the screen.  With the current version, the runtime optimizes the control resize request using the SIZE and LINES indicated (or implied) by your program instead of the current size and position.  </li></div>
+<a name="wp1034720"> </a><p class="pIndented1">
+These two ways of optimizing control resize requests produce nearly identical results.  However, there are a few cases where the results can differ.  For example, if you change the size of the subwindow that contains the control in such a way that the control would crop differently, then a comparison of the &quot;actual&quot; size shows a difference, while a comparison of the &quot;requested&quot; size does not.  In this case, earlier versions of the runtime would resize the control, while the current version will not.  
+</p>
+<a name="wp1034721"> </a><p class="pIndented1">
+This change was made to provide more predictable behavior and to improve efficiency when the display service is on a remote machine.  
+</p>
+<a name="wp1034722"> </a><p class="pIndented1">
+If necessary, you can disable this behavior by setting OPTIMIZE_CONTROL_RESIZE to &quot;0&quot; (off, false, no).  This prevents any optimization of control resizing operations.  Note that this can result in additional screen painting (in which controls may appear to flicker) and should be used only as a short-term fix while any required coding changes are made.  
+</p>
+<a name="wp1034723"> </a><div class="pSmartList1"><li>The way the runtime handles mouse click events in COBOL programs that contain both bitmap push buttons and multiple windows under the control of a single thread has changed.</li></div>
+<a name="wp1034724"> </a><p class="pIndented1">
+In Version 5.1 and earlier, in some cases, simply clicking down on the mouse button when a bitmap push button was selected, generated a CMD-CLICK event.  This was not consistent with the way Microsoft Windows handles these events.
+</p>
+<a name="wp1034725"> </a><p class="pIndented1">
+In Version 5.2 and later, clicking down on a bitmap pushbutton on a non-active window running in the same thread will cause the current ACCEPT to terminate with CMD-ACTIVATE event.  The pushbutton is not considered clicked until the COBOL program performs some action that allows it to activate, such as ACCEPTing some control in the newly activated window.  For self-activating pushbuttons, this allows the pushbutton to self activate.  For non-self-activating pushbuttons, the new ACCEPT will terminate with a CMD-GOTO so that the COBOL program can ACCEPT the correct control.
+</p>
+<a name="wp1034726"> </a><p class="pIndented1">
+This change is only available in COBOL objects compiled for Version 5.2 or later and run with a Version 5.2 or later runtime.  COBOL objects compiled with Versions 5.1 or earlier will still exhibit the old behavior, even if they are run with a Version 5.2 or later runtime.
+</p>
+<a name="wp1041340"> </a><div class="pSmartList1"><li>The resolution of the ACCEPT BEFORE TIME timer has been substantially increased in Version 5.2.  In rare cases, this could affect existing programs.  To forestall any such problems, the runtime automatically uses the pre-5.2 resolution when running pre-5.2 objects and objects compiled for pre-5.2 compatibility (e.g. &quot;-C51&quot;).</li></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

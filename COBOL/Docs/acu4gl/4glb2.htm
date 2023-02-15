@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:43:13" />
+  <title>B.1 Microsoft SQL Server Concepts Overview</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4glb.htm">Appendix B:  Acu4GL for Microsoft SQL Server Information</a> &gt; </p>
+<a name="wp1078879"> </a><h2 class="pHeading1">
+B.1 Microsoft SQL Server Concepts Overview
+</h2>
+<a name="wp1039353"> </a><p class="pBody">
+A quick overview of some basic design concepts underlying the Microsoft SQL Server Database Management System will help you interface your COBOL program to it. 
+</p>
+<a name="wp1039354"> </a><h3 class="pHeadingRef">
+Servers 
+</h3>
+<a name="wp1039358"> </a><p class="pBody">
+A Microsoft SQL Server &quot;server&quot; is one copy of the database engine executing on a computer.  A server has a name, and when a program wants to access the database controlled by a server, the program asks for a connection to that server by name.  Multiple servers can be executing on a single machine, controlling different databases.  The default name that Microsoft SQL Server gives to a server is DSQUERY.  Naming of servers is discussed under the configuration variable <a  href="4glb19.htm#wp1050515">A_MSSQL_DEFAULT_CONNECTION</a>.
+</p>
+<a name="wp1039359"> </a><h3 class="pHeadingRef">
+Table ownership
+</h3>
+<a name="wp1039365"> </a><p class="pBody">
+Table names in Microsoft SQL Server have the form <em class="cEmphasis">database.owner.table_name.  </em>Within Microsoft SQL Server, if you are the owner of a given table, you can refer to it as just <em class="cEmphasis">table_name.</em>  If you are <em class="cEmphasis">not</em> the owner, you must refer to it with the <em class="cEmphasis">owner </em>of the table as a prefix.  Different owners can thus have tables of the same name.  However, this is <em class="cEmphasis">not</em> true when you use the Acu4GL<sup class="cSuperscript">®</sup> for Microsoft SQL Server interface.
+</p>
+<a name="wp1039366"> </a><p class="pBody">
+Acu4GL for SQL Server works a little differently.  It automatically determines the owner name it will use to reference a table.  It is therefore essential that there <em class="cEmphasis">not</em> be multiple tables with the same name in a single database, even though the tables have different owners.  If there are, the Acu4GL for Microsoft SQL Server product will not necessarily find the correct one, and no diagnostic will be issued.  
+</p>
+<a name="wp1039367"> </a><p class="pBody">
+Note that table names include dots (.) as separators.  Because of this, you must make sure there are no extensions on COBOL file names that will be converted to table names.  If you were to have a COBOL file named IDX1.DTA, Acu4GL for Microsoft SQL Server would attempt to open a table DTA with owner IDX1.  You can avoid this problem either by renaming your COBOL file in your source program, or by using an ACUCOBOL-GT® runtime configuration file entry to map the file name to an allowable file name, such as:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+IDX1.DTA  IDX1<a name="wp1039368"> </a>
+</pre></div>
+<a name="wp1039369"> </a><p class="pBody">
+In the above example, IDX1.DTA is the name in the ASSIGN clause of the file's SELECT statement.
+</p>
+<a name="wp1039370"> </a><p class="pBody">
+If you map your file name to a new name, we recommend that you simply drop the extension to form the new name.  Here's why.  The compiler uses the base file name--without the extension--to create the XFD file name (IDX1.XFD).  The runtime needs to be able to locate this file.  But if you've mapped the file name to something completely different (such as MYFILE), the runtime will look for an XFD file named MYFILE.XFD.  So you'd have to remember to change the name of IDX1.XFD to MYFILE.XFD in the XFD directory.  Save yourself this extra step by simply dropping the extension when you map the name.  Also, see the configuration variable <a  href="4gl811.htm#wp1036031">4GL_IGNORED_SUFFIX_LIST</a> for an alternate method of removing file extensions.
+</p>
+<a name="wp1039371"> </a><h3 class="pHeadingRef">
+Security
+</h3>
+<a name="wp1039375"> </a><p class="pBody">
+Security is implemented in the Microsoft SQL Server RDBMS.  A user is required to log in to the RDBMS before any file processing can occur.  Acu4GL for Microsoft SQL Server provides both a default and a user configurable method for implementing this.
+</p>
+<a name="wp1039376"> </a><p class="pBody">
+Generally, it is best for someone with Database Administrator (DBA) privileges to create and drop the tables, allowing others only the permissions to add, change, or delete information contained in them.
+</p>
+<a name="wp1039377"> </a><p class="pBody">
+See the Microsoft SQL Server documentation for more details on DBA privileges.
+</p>
+<a name="wp1039378"> </a><h3 class="pHeadingRef">
+Alternate REWRITE method
+</h3>
+<a name="wp1039383"> </a><p class="pBody">
+If the above stored procedure is not available, the update query passed to the database has been optimized to only update dirty columns.  This should improve performance.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

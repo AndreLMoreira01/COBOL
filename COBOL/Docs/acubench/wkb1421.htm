@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:14:50" />
+  <title>14.3  Printing Graphical Reports in a Thin Client Environment</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuBench User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="wkb14a.htm">Chapter 14: Working with Reports</a> &gt; </p>
+<a name="wp1052644"> </a><h2 class="pHeading1">
+14.3  Printing Graphical Reports in a Thin Client Environment
+</h2>
+<a name="wp1052645"> </a><p class="pBody">
+AcuBench users running in a thin client environment with AcuConnect can print graphical reports from a UNIX application host.  This operation is accomplished via AcuConnect's &quot;@[DISPLAY]:&quot; notation in conjunction with the CODE_MAPPING configuration variable and the C$COPY library routine.  The &quot;@[DISPLAY]:&quot; notation gives an application server a path that references a file location on a display host, or client.  With this functionality, you can write a report to a UNIX directory, copy it to the display host, load &quot;AcuBenchPrint.dll&quot; on the display host, and call the functions needed to preview or print the report.  
+</p>
+<a name="wp1052646"> </a><p class="pBody">
+Use the C$COPY library routine to transfer your HTML file from the application host to a location on the display host defined by &quot;@[DISPLAY]:&quot;.  Use &quot;@[DISPLAY]:&quot; with the CODE_MAPPING configuration variable to locate &quot;AcuBenchPrint.dll&quot; on the display host, and to expose the function calls in this dynamic link library (DLL).  Finally, add a line of code to reset the PRT-FULLFILENAME variable, which &quot;AcuBenchPrint.dll&quot; uses to locate the HTML file.  Let's illustrate the use of these features with an example.  
+</p>
+<a name="wp1052647"> </a><p class="pBody">
+Our sample application launches a report from a push button and previews it: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ReportPB-Link.<a name="wp1052806"> </a>
+        IF IS-REMOTE<a name="wp1052807"> </a>
+          PERFORM ACU-REPORT1-THINPREVIEW<a name="wp1052808"> </a>
+        ELSE<a name="wp1052809"> </a>
+          PERFORM ACU-REPORT1-PREVIEW<a name="wp1052810"> </a>
+        END-IF.<a name="wp1052811"> </a>
+*<a name="wp1052812"> </a>
+ ACU-REPORT1-THINPREVIEW.<a name="wp1052813"> </a>
+     PERFORM Acu-Report1-PRINT-TOFILE<a name="wp1052814"> </a>
+*<a name="wp1052815"> </a>
+     CALL &quot;C$COPY&quot; USING  <a name="wp1052816"> </a>
+            &quot;/home/data/Report1.html&quot;, <a name="wp1052817"> </a>
+            &quot;@[DISPLAY]:C:\Localdata\Report1.html&quot;.<a name="wp1052818"> </a>
+*<a name="wp1052819"> </a>
+     PERFORM Acu-Report1-PRINT-PARA  <a name="wp1052820"> </a>
+*<a name="wp1052821"> </a>
+     STRING <a name="wp1052822"> </a>
+       &quot;C:\Localdata\Report1.html&quot;, delimited by size, <a name="wp1052823"> </a>
+       X&quot;00&quot;, delimited by size, <a name="wp1052824"> </a>
+       into PRT-FULLFILENAME.<a name="wp1052825"> </a>
+*<a name="wp1052826"> </a>
+     SET ENVIRONMENT &quot;DLL_CONVENTION&quot; to &quot;1&quot;<a name="wp1052919"> </a>
+     CALL &quot;AcuBenchPrintDummy&quot;<a name="wp1052920"> </a>
+       ON EXCEPTION CALL &quot;AcuBenchPrint.dll&quot; END-CALL<a name="wp1052921"> </a>
+     END-CALL<a name="wp1052922"> </a>
+     CALL &quot;AcuBenchPrintExecWBPreview&quot; USING<a name="wp1052923"> </a>
+        BY CONTENT PRT-FULLFILENAME,<a name="wp1052924"> </a>
+        BY CONTENT PRINT-BROWSER-PARA,<a name="wp1052925"> </a>
+        BY CONTENT ACU-PAPER-HEADER, <a name="wp1052926"> </a>
+        BY CONTENT ACU-PAPER-FOOTER, <a name="wp1052927"> </a>
+        BY CONTENT ACU-PAPER-SIZE, <a name="wp1052928"> </a>
+        BY VALUE ACU-PAPER-ORIENTATIONINT,<a name="wp1052929"> </a>
+        BY CONTENT ACU-PRINTER-NAME<a name="wp1052930"> </a>
+     END-CALL<a name="wp1052931"> </a>
+     . <a name="wp1052932"> </a>
+</pre></div>
+<a name="wp1052933"> </a><p class="pBody">
+The push button code uses the IS-REMOTE flag in the TERMINAL-ABILITIES structure to test whether the program is running locally or on a remote server.  If it is running remotely, a variation of the Acu-Report1-Preview code, called Acu-Report1-ThinPreview, is executed.  We copy the Acu-Report1-Preview paragraph generated by AcuBench into the Acu-Report1-ThinPreview paragraph.  We then add a line of code that calls C$COPY to transfer the HTML file to the local machine.  Finally, we add a STRING statement after the Acu-Report1-Print-Para paragraph to reset the PRT-FULLFILENAME parameter to the location of the HTML file on the client machine.  (Note that the PRT-FULLFILENAME string is terminated by low-values.)  
+</p>
+<a name="wp1053111"> </a><p class="pBody">
+With CODE_MAPPING set to &quot;on&quot;, the configuration file can contain instructions for mapping these calls to &quot;AcuBenchPrint.dll&quot;, which in our sample, is located in the C:\Localdata directory on the client machine, as shown: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CODE_MAPPING ON<a name="wp1053112"> </a>
+DLL_CONVENTION 1<a name="wp1053113"> </a>
+<a name="wp1053114"> </a>
+ACUBENCHPRINT.DLL 
+@[DISPLAY]:C:\Localdata\AcubenchPrint.DLL<a name="wp1053115"> </a>
+ACUBENCHPRINTDUMMY @[DISPLAY]:AcuBenchPrintDummy<a name="wp1053116"> </a>
+ACUBENCHPRINTEXECWBPREVIEW 
+@[DISPLAY]:AcuBenchPrintExecWBPreview<a name="wp1053117"> </a>
+</pre></div>
+<a name="wp1053118"> </a><p class="pBody">
+The complete sample code for this example can be found in the Support section of the Acucorp Web site.  Navigate to www.acucorp.com/support/public/sample_programs/index.php.  Select the &quot;General Programming Techniques&quot; category from the drop-down list, and click on &quot;ThinClientReport.zip&quot;.  For detailed information about the &quot;@[DISPLAY]:&quot; notation and other thin client functions, refer to the <em class="cEmphasis">AcuConnect User&#39;s Guide</em>.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuBench-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

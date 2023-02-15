@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:57:47" />
+  <title>4.3.1  Passing COBOL Data to Methods or Properties as SAFEARRAYs</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr4.htm">Chapter 4: Using ActiveX Controls and COM Objects</a> &gt; <a href="itr46.htm">4.3  Properties, Styles, and Methods</a> &gt; </p>
+<a name="wp1037633"> </a><h2 class="pHeading2">
+4.3.1  Passing COBOL Data to Methods or Properties as SAFEARRAYs
+</h2>
+<a name="wp1037639"> </a><p class="pBody">
+When programming with ActiveX controls and COM objects, you can pass one- or two-dimensional COBOL tables to methods or properties that expect SAFEARRAY parameters.  The runtime automatically converts a one- or two-dimensional COBOL table to a COM SAFEARRAY, as long as it contains only one elementary item that is USAGE HANDLE or USAGE HANDLE OF VARIANT.
+</p>
+<a name="wp1037640"> </a><p class="pBody">
+The COM SAFEARRAY data type can contain elements of any type.  Therefore, you must convert your COBOL data into variant type data before adding it to the array.  Use the C$SETVARIANT library routine to create a new variant that stores the data if the initial value of the handle item passed to it is LOW-VALUES or SPACES.  You need to free this variant using the DESTROY verb.
+</p>
+<a name="wp1037641"> </a><p class="pBody">
+To use SAFEARRAYs, you should do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037642"> </a><div class="pSmartList1"><li>Declare a table in Working-Storage that has one or two OCCURS clauses.  If specified, the second OCCURS clause must be on an item that is subordinate to the item with the first OCCURS clause.  The table must contain only one elementary item that is USAGE HANDLE or USAGE HANDLE OF VARIANT.  (OF VARIANT is optional but makes the code more readable.)</li></div>
+<a name="wp1037643"> </a><div class="pSmartList1"><li>Call C$SETVARIANT for each handle item in the table to convert the COBOL data to variant type data.</li></div>
+<a name="wp1037644"> </a><div class="pSmartList1"><li>Use the name of this table wherever a property or method requires a SAFEARRAY.</li></div>
+</ol></div>
+<a name="wp1037645"> </a><p class="pBody">
+For example, Microsoft Chart Control has a property called ChartData.  The value of this property is a SAFEARRAY.  Each element of the array is a data point value for the chart.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  myTable.<a name="wp1037646"> </a>
+    03  filler occurs 5 times.<a name="wp1037647"> </a>
+        05  chart-data     usage handle of variant.<a name="wp1037648"> </a>
+<a name="wp1037649"> </a>
+screen section.<a name="wp1037650"> </a>
+01  screen-1.<a name="wp1037651"> </a>
+    03  mschart-1 <a name="wp1037652"> </a>
+        MSChart<a name="wp1037653"> </a>
+        line 3, column 5, size 50, lines 16.<a name="wp1037654"> </a>
+<a name="wp1037655"> </a>
+    03  my-button push-button, &quot;E&amp;xit Program&quot;,<a name="wp1037656"> </a>
+        ok-button,<a name="wp1037657"> </a>
+        line 32, cline 23, column 27, size 13.<a name="wp1037658"> </a>
+<a name="wp1037659"> </a>
+procedure division.<a name="wp1037660"> </a>
+Main-Logic.<a name="wp1037661"> </a>
+<a name="wp1037662"> </a>
+    perform varying col-number from 1 by 1 <a name="wp1037663"> </a>
+      until col-number &gt; 5<a name="wp1037664"> </a>
+        call &quot;c$setvariant&quot; <a name="wp1037665"> </a>
+            using col-number, chart-data(col-number)<a name="wp1037666"> </a>
+    end-perform.<a name="wp1037667"> </a>
+<a name="wp1037668"> </a>
+    display standard graphical window, <a name="wp1037669"> </a>
+        title &quot;ActiveX Table MSChart Sample - tblchart.cbl&quot;<a name="wp1037670"> </a>
+        lines 37, size 66, background-low.<a name="wp1037671"> </a>
+<a name="wp1037672"> </a>
+    display screen-1.<a name="wp1037673"> </a>
+<a name="wp1037674"> </a>
+    modify mschart-1<a name="wp1037675"> </a>
+           ChartData = myTable.<a name="wp1037676"> </a>
+ <a name="wp1037677"> </a>
+    perform, with test after, until exit-button-pushed<a name="wp1037678"> </a>
+        accept screen-1<a name="wp1037679"> </a>
+    end-perform.<a name="wp1037680"> </a>
+<a name="wp1037681"> </a>
+    perform varying col-number from 1 by 1 <a name="wp1037682"> </a>
+       until col-number &gt; 5<a name="wp1037683"> </a>
+        destroy chart-data(col-number)<a name="wp1037684"> </a>
+    end-perform.<a name="wp1037685"> </a>
+    destroy screen-1.<a name="wp1037686"> </a>
+    stop run.<a name="wp1037687"> </a>
+</pre></div>
+<a name="wp1037688"> </a><p class="pBody">
+Notice that the initial values of the chart-data table elements are spaces.  When C$SETVARIANT is called with the chart-data items set to spaces, it creates new variant handles and sets the chart-data item to the variant handle.
+</p>
+<a name="wp1037689"> </a><p class="pBody">
+The DESTROY statement destroys these handles and releases the associated memory.  The DESTROY statement also sets the chart-data item to low-values to allow multiple destroys of the same handle item without any negative effects. 
+</p>
+<a name="wp1037690"> </a><p class="pBody">
+The following code is an example of a table with two OCCURS clauses passed as a two-dimensional SAFEARRAY to the ChartData property.  Microsoft Chart Control takes the &quot;string&quot; elements of this array to be the <em class="cEmphasis">x</em>-axis labels and the numeric elements to be two series of chart data.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+77  col-label       pic x(20).<a name="wp1037691"> </a>
+77  series-2-data   pic 99.<a name="wp1037692"> </a>
+<a name="wp1037693"> </a>
+01  myTable.<a name="wp1037694"> </a>
+    03  filler occurs 5 times.<a name="wp1037695"> </a>
+        05  filler occurs 3 times.<a name="wp1037696"> </a>
+            07  chart-data   usage handle of variant.<a name="wp1037697"> </a>
+<a name="wp1037698"> </a>
+screen section.<a name="wp1037699"> </a>
+01  screen-1.<a name="wp1037700"> </a>
+    03  mschart-1 <a name="wp1037701"> </a>
+        MSChart<a name="wp1037702"> </a>
+        line 3, column 5, size 50, lines 16.<a name="wp1037703"> </a>
+<a name="wp1037704"> </a>
+    03  my-button push-button, &quot;E&amp;xit Program&quot;,<a name="wp1037705"> </a>
+        ok-button,<a name="wp1037706"> </a>
+        line 32, cline 23, column 27, size 13.<a name="wp1037707"> </a>
+<a name="wp1037708"> </a>
+procedure division.<a name="wp1037709"> </a>
+Main-Logic.<a name="wp1037710"> </a>
+<a name="wp1037711"> </a>
+    perform varying col-number from 1 by 1 <a name="wp1037712"> </a>
+       until col-number &gt; 5<a name="wp1037713"> </a>
+        string &quot;Label &quot; delimited by size<a name="wp1037714"> </a>
+            col-number delimited by size <a name="wp1037715"> </a>
+            into col-label<a name="wp1037716"> </a>
+        call &quot;c$setvariant&quot; <a name="wp1037717"> </a>
+            using col-label, chart-data(col-number,1)<a name="wp1037718"> </a>
+        call &quot;c$setvariant&quot; <a name="wp1037719"> </a>
+            using col-number, chart-data(col-number,2)<a name="wp1037720"> </a>
+        multiply col-number by 2 giving series-2-data<a name="wp1037721"> </a>
+        call &quot;c$setvariant&quot; <a name="wp1037722"> </a>
+            using series-2-data, chart-data(col-number,3)<a name="wp1037723"> </a>
+    end-perform.<a name="wp1037724"> </a>
+<a name="wp1037725"> </a>
+    display standard graphical window, <a name="wp1037726"> </a>
+        title &quot;ActiveX Table MSChart Sample - tblchart.cbl&quot;<a name="wp1037727"> </a>
+        lines 37, size 66, background-low.<a name="wp1037728"> </a>
+<a name="wp1037729"> </a>
+    display screen-1.<a name="wp1037730"> </a>
+<a name="wp1037731"> </a>
+    modify mschart-1<a name="wp1037732"> </a>
+           ChartData = myTable.<a name="wp1037733"> </a>
+<a name="wp1037734"> </a>
+    perform, with test after, until exit-button-pushed<a name="wp1037735"> </a>
+        accept screen-1<a name="wp1037736"> </a>
+    end-perform.<a name="wp1037737"> </a>
+<a name="wp1037738"> </a>
+    perform varying col-number from 1 by 1 <a name="wp1037739"> </a>
+       until col-number &gt; 5<a name="wp1037740"> </a>
+        destroy chart-data(col-number,1)<a name="wp1037741"> </a>
+        destroy chart-data(col-number,2)<a name="wp1037742"> </a>
+        destroy chart-data(col-number,3)<a name="wp1037743"> </a>
+    end-perform.<a name="wp1037744"> </a>
+    destroy screen-1.<a name="wp1037745"> </a>
+    stop run.<a name="wp1037746"> </a>
+</pre></div>
+<a name="wp1037747"> </a><p class="pBody">
+Some ActiveX and COM objects that use SAFEARRAYs accept that some items in the array may be empty (for example, Microsoft ADO).  Items that are empty are normally passed using the VT_EMPTY variant type.
+</p>
+<a name="wp1037748"> </a><p class="pBody">
+If an element in an array that you want to pass is optional (i.e., it may sometimes be empty), you must tell the runtime this by coding one of the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01 VariantParam.<a name="wp1037749"> </a>
+   03 VariantTable usage handle of variant occurs 5.<a name="wp1037750"> </a>
+<a name="wp1037751"> </a>
+   call &quot;c$setvariant&quot; USING x&quot;00&quot; VariantTable(1)<a name="wp1037752"> </a>
+</pre></div>
+<a name="wp1037753"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+   call &quot;c$setvariant&quot; USING &quot;&quot; VariantTable(1)<a name="wp1037754"> </a>
+</pre></div>
+<a name="wp1037755"> </a><p class="pBody">
+This tells the runtime to convert the content of VariantTable(1) to VT_EMPTY.  If you use the latter approach, you may receive and ignore compiler warnings that an empty literal was encountered.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

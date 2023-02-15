@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:51" />
+  <title>3.5.3.4  Procedure</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr3.htm">Chapter 3: Working with Windows Technologies</a> &gt; <a href="itr321.htm">3.5  Accessing the Windows API</a> &gt; <a href="itr324.htm">3.5.3  Calling a Windows API function from ACUCOBOL-GT</a> &gt; </p>
+<a name="wp1070080"> </a><h2 class="pHeading3">
+3.5.3.4  Procedure
+</h2>
+<a name="wp1070082"> </a><p class="pBody">
+To call a Windows API function:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1075005"> </a><div class="pSmartList1"><li>Determine the name of the desired function and the DLL containing the function by looking at Microsoft's documentation.  Also determine if both ANSI and Unicode versions are supported.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Unicode:  Implemented as GetUserNameW (Unicode) and 
+GetUserNameA (ANSI)<a name="wp1075006"> </a>
+Required DLL:  AdvAPI32.DLL<a name="wp1070087"> </a>
+</pre></div>
+<a name="wp1083327"> </a><div class="pSmartList1"><li>Find the parameters for the desired function in the documentation.  For example, the parameters for GetUserName are:</li></div>
+<a name="wp1083512"> </a><p class="pIndented1">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">lpBuffer</span>:  Pointer to the buffer to receive the null-terminated string containing the user's logon name
+</p>
+<a name="wp1083514"> </a><p class="pIndented1">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">nSize</span>:  On input, this variable specifies the size of the lpBuffer buffer, in TCHARs.  On output, the variable receives the number of TCHARs copied to the buffer, including the terminating null character. 
+</p>
+<a name="wp1083325"> </a><div class="pSmartList1"><li>In your ACUCOBOL-GT program's Working-Storage Section, create a variable for each of the Windows API function parameters.  For example:<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span></li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77 user-name PIC X(40).<a name="wp1070097"> </a>
+77 var-size PIC 9(9) COMP-5.<a name="wp1070831"> </a>
+</pre></div>
+<a name="wp1070833"> </a><div class="pSmartList1"><li>Set the DLL calling convention for the function in your program's Procedure Division.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+set environment &quot;dll_convention&quot; to 1.<a name="wp1070102"> </a>
+</pre></div>
+<a name="wp1070104"> </a><div class="pSmartList1"><li>Load the DLL containing the Windows API function.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Call &quot;advapi32.dll&quot;<a name="wp1070106"> </a>
+On exception go to err-load<a name="wp1070107"> </a>
+</pre></div>
+<a name="wp1070110"> </a><div class="pSmartList1"><li>Call the Windows API function.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Set var-size to size of user-name.<a name="wp1070112"> </a>
+call &quot;GetUserNameA&quot; using<a name="wp1083480"> </a>
+by reference user-name<a name="wp1070113"> </a>
+by reference var-size<a name="wp1070114"> </a>
+</pre></div>
+<a name="wp1084063"> </a><p class="pIndented1">
+Other functions have parameters requiring the use of BY VALUE instead of BY REFERENCE.  Read the Microsoft documentation carefully to make sure you pass parameters the proper way.
+</p>
+<a name="wp1070118"> </a><div class="pSmartList1"><li>Terminate any strings that will be returned by the function.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+inspect user-name replacing all low-values by space.<a name="wp1070120"> </a>
+</pre></div>
+<a name="wp1070122"> </a><div class="pSmartList1"><li>Cancel or unload the DLL if appropriate.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+cancel &quot;advapi32.dll&quot;<a name="wp1070124"> </a>
+</pre></div>
+<a name="wp1084451"> </a><p class="pIndented1">
+Note that DLLs loaded with &quot;-y&quot; or SHARED_LIBRARY_LIST cannot be cancelled or unloaded.
+</p>
+</ol></div>
+<a name="wp1073001"> </a><p class="pBody">
+These general steps should be enough to get you started.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

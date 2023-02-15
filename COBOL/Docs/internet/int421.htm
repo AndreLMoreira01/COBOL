@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/01/05 10:10:06" />
+  <title>Using the C$GETCGI routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Programmer's Guide to the Internet <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="int4.htm">Chapter 4: Launching Applications on a Web Server With CGI</a> &gt; <a href="int418.htm">4.5  Writing a CGI Program</a> &gt; <a href="int419.htm">4.5.1  Reading CGI Input Data</a> &gt; </p>
+<a name="wp1028355"> </a><h2 class="pHeading3">
+Using the C$GETCGI routine
+</h2>
+<a name="wp1028358"> </a><p class="pBody">
+The C$GETCGI library routine retrieves CGI variables from the environment or the standard input stream, &quot;stdin&quot;, like other types of COBOL CGI programs. The C$GETCGI routine should be used by those with existing COBOL CGI programs to retrieve CGI variables as normal while incrementally converting to ACUCOBOL-GT's external form method of CGI data retrieval.  Although &quot;ACCEPT from stdin&quot; and &quot;ACCEPT <em class="cEmphasis">external-form-item</em>&quot; cannot be used together, you may use C$GETCGI instead of or in combination with external forms.  The C$GETCGI routine retrieves the exact size of a CGI variable. 
+</p>
+<a name="wp1028359"> </a><p class="pBody">
+To use C$GETCGI, include a CALL in your CGI program using the following syntax:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;C$GETCGI&quot; <a name="wp1028360"> </a>
+   USING VARIABLE-NAME, DEST-ITEM, VALUE-INDEX<a name="wp1030276"> </a>
+   GIVING VALUE-SIZE<a name="wp1028361"> </a>
+</pre></div>
+<a name="wp1028362"> </a><p class="pBody">
+where the following are defined in the Working-Storage or Data Division sections of your program.
+</p>
+<a name="wp1028363"> </a><p class="pBody">
+   </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1060187"> </a>
+Parameter
+
+</th>
+    <th><a name="wp1060189"> </a>
+Type
+
+</th>
+    <th><a name="wp1060191"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1060194"> </a><p class="pCellBody">
+VARIABLE-NAME
+</p>
+</td>
+    <td><a name="wp1060196"> </a><p class="pCellBody">
+PIC X(n)
+</p>
+</td>
+    <td><a name="wp1060198"> </a><p class="pCellBody">
+Contains the name of the CGI variable.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1060201"> </a><p class="pCellBody">
+DEST-ITEM
+</p>
+</td>
+    <td><a name="wp1060203"> </a><p class="pCellBody">
+PIC X(n)
+</p>
+</td>
+    <td><a name="wp1060205"> </a><p class="pCellBody">
+Receives the value of the given CGI variable.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1060208"> </a><p class="pCellBody">
+VALUE-INDEX
+</p>
+</td>
+    <td><a name="wp1060210"> </a><p class="pCellBody">
+Numeric value
+</p>
+</td>
+    <td><a name="wp1060212"> </a><p class="pCellBody">
+Contains the CGI value index.  This optional parameter contains an index that is used when a CGI variable has multiple values in the CGI input data.   This typically happens when multiple items have been selected from a &quot;choose-many&quot; list box.  For example, to receive the third selected value, pass 3 for VALUE-INDEX.  If VALUE-INDEX is greater than the total number of values in the input stream for the given CGI variable, spaces are moved to DEST-ITEM.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1060215"> </a><p class="pCellBody">
+VALUE-SIZE
+</p>
+</td>
+    <td><a name="wp1060217"> </a><p class="pCellBody">
+Signed numeric value
+</p>
+</td>
+    <td><a name="wp1060219"> </a><p class="pCellBody">
+Receives the size of the resulting value.  This may be &quot;0&quot; to indicate that the variable exists but has no value or &quot;-1&quot; to indicate that the variable does not exist.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1028396"> </a><p class="pBody">
+C$GETCGI automatically determines whether to read the CGI variable from the environment or &quot;stdin&quot; depending on the value of the &quot;REQUEST_METHOD&quot; environment variable, which is set by the Web Server.  The first time C$GETCGI is called, it reads all of the CGI variables and values into a variable-length buffer.  If REQUEST_METHOD is &quot;GET&quot;, the data is read from the QUERY_STRING environment variable.  If the REQUEST_METHOD is &quot;POST&quot;, it is read from &quot;stdin&quot;.
+</p>
+<a name="wp1028400"> </a><p class="pBody">
+Each time C$GETCGI is called, it searches for the variable name passed in the first parameter, translates the value from CGI format into standard format, and moves the result to the destination item passed in the second parameter.  
+</p>
+<a name="wp1028404"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>When some browsers encounter multiple-line entry fields (also known as HTML TEXTAREAs), they send a carriage return line feed sequence to the CGI program.  If carriage returns are not desired, as in operating systems that automatically terminate text lines with line feed characters, you can have them removed by using the CGI_STRIP_CR runtime configuration variable. <span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>Refer to <a  href="int425.htm#wp1036700">section 4.6</a> for details.
+<hr />
+</p>
+<a name="wp1028407"> </a><p class="pBody">
+An optional third parameter specifies a CGI value index.  This index is used when a CGI variable has multiple values in the CGI input data, as in the case where multiple items have been selected from a &quot;choose-many&quot; list.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

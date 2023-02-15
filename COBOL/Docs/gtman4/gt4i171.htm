@@ -1,0 +1,326 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-SET-PAGE-COLUMN</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1040953"> </a><h2 class="pHeading3">
+WINPRINT-SET-PAGE-COLUMN
+</h2>
+<a name="wp1040955"> </a><p class="pBody">
+This operation code describes how the columns appear when printed.  
+</p>
+<a name="wp1040962"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040963"> </a>
+    USING WINPRINT-SET-PAGE-COLUMN, WINPRINT-COLUMN<a name="wp1040964"> </a>
+    GIVING RESULT<a name="wp1040965"> </a>
+</pre></div>
+<a name="wp1040966"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040967"> </a><p class="pBody">
+<b class="cBold">WINPRINT-COLUMN</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  WINPRINT-COLUMN, SYNC.<a name="wp1040968"> </a>
+    03  WINPRINT-COL-START              PIC 9(7)V99 COMP-5.<a name="wp1040969"> </a>
+    03  WINPRINT-COL-INDENT             PIC 9(7)V99 COMP-5.<a name="wp1040970"> </a>
+    03  WINPRINT-COL-SEPARATION         PIC 9(7)V99 COMP-5.<a name="wp1040971"> </a>
+    03  WINPRINT-COL-FONT               HANDLE OF FONT.<a name="wp1040972"> </a>
+    03  WINPRINT-COL-UNITS              PIC 99 COMP-X.<a name="wp1040973"> </a>
+    03  WINPRINT-COL-ALIGNMENT          PIC X.<a name="wp1040974"> </a>
+    03  WINPRINT-TRANSPARENCY           PIC 99 COMP-X.<a name="wp1040975"> </a>
+        88  WINPRINT-TRANSPARENT        VALUE 1, FALSE 0.<a name="wp1040976"> </a>
+<a name="wp1040977"> </a>
+        78  WPRTUNITS-CELLS                     VALUE 0.<a name="wp1040978"> </a>
+        78  WPRTUNITS-INCHES                    VALUE 1.<a name="wp1040979"> </a>
+        78  WPRTUNITS-CENTIMETERS               VALUE 2.<a name="wp1040980"> </a>
+        78  WPRTUNITS-PIXELS                    VALUE 3.<a name="wp1040981"> </a>
+        78  WPRTALIGN-NONE                      VALUE SPACE.<a name="wp1040982"> </a>
+        78  WPRTALIGN-LEFT                      VALUE &quot;L&quot;.<a name="wp1040983"> </a>
+        78  WPRTALIGN-RIGHT                     VALUE &quot;R&quot;.<a name="wp1040984"> </a>
+        78  WPRTALIGN-CENTER                    VALUE &quot;C&quot;.<a name="wp1040985"> </a>
+        78  WPRTALIGN-DECIMAL                   VALUE &quot;D&quot;.<a name="wp1040986"> </a>
+        78  WPRTALIGN-DECIMAL-SUPPRESS          VALUE &quot;S&quot;.<a name="wp1040987"> </a>
+</pre></div>
+<a name="wp1040988"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040989"> </a><p class="pBody">
+This is one of three op-codes that control the &quot;output&quot; by specifying the page layout.  (This is similar to the DISPLAY-COLUMNS property of the LIST-BOX control.)
+</p>
+<a name="wp1040990"> </a><p class="pBody">
+Each column of data is mapped to an output column in the print record: the first data column maps to the leftmost output column, the second data column to the next output column to the right, and so on.  Each time WINPRINT-SET-PAGE-COLUMN is used, a new output column is defined.  To reset the output columns, use WINPRINT-CLEAR-PAGE-COLUMNS as described below.  Once set, output columns remain in effect until explicitly cleared or the runtime process shuts down.  
+</p>
+<a name="wp1040991"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Changing the output device will also reset the columns (this occurs if you use of any of these op-codes: WINPRINT-SETUP, WINPRINT-SETUP-USE-MARGINS, WINPRINT-SET-SETTINGS, WINPRINT-SET-PRINTER). 
+<hr />
+</p>
+<a name="wp1040992"> </a><p class="pBody">
+If you describe a new column that starts in exactly the same position as a previously described column, then the new column replaces the previous column definition (replacement detection is calculated using output device units). 
+</p>
+<a name="wp1040993"> </a><p class="pBody">
+The fields in WINPRINT-COLUMN define the output column.  The fields have the following meaning:
+</p>
+<a name="wp1040994"> </a><p class="pBody">
+<b class="cBold">WINPRINT-COL-START</b> -- Sets the leftmost point of the column on the page.  The units of measurement are defined by WINPRINT-COL-UNITS.  The measurement is made with respect to the left margin of the page.  This position is calculated at the time that the column is defined.  However, it is always relative to the left margin, so changing the left margin will shift the columns.  The column ends at the beginning of the next column or the right margin if there is no next column. 
+</p>
+<a name="wp1414540"> </a><p class="pBody">
+You may use this with WPRTUNITS-CELLS-ABS, WPRT-CENTIMETERS-ABS, or WPRTUNITS-INCHES-ABS to set the start position using an absolute value from the left edge of the paper.
+</p>
+<a name="wp1040995"> </a><p class="pBody">
+<b class="cBold">WINPRINT-COL-INDENT</b> -- Modifies the left edge of the column by adding its value to the WINPRINT-COL-START value.  The units of measurement are defined by WINPRINT-COL-UNITS.  The indent is normally set to zero.  You can use a non-zero value to specify an indented column in a convenient fashion.  You would typically use this when you wanted to indent a column for a particular set of output lines.  Otherwise, you would have to clear all the columns and redefine them in order to change the left edge of one column. 
+</p>
+<a name="wp1414545"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The values of WPRTUNITS-CENTIMETERS-ABS, WPRTUNITS-INCHES-ABS, and WPRTUNITS-CELLS-ABS do not affect this field because the field is always calculated as the given value.
+<hr />
+</p>
+<a name="wp1091378"> </a><p class="pBody">
+<b class="cBold">WINPRINT-COL-SEPARATION</b> -- Defines the width of the separation zone.  This zone appears at the rightmost edge of the column.  This zone is generally kept blank, but see WINPRINT-COL-ALIGNMENT for exceptions.  The value specified is the width of this zone (which must be less than the width of the column).  It is expressed in the units defined by WINPRINT-COL-UNITS.
+</p>
+<a name="wp1414554"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The values of WPRTUNITS-CENTIMETERS-ABS, WPRTUNITS-INCHES-ABS, and WPRTUNITS-CELLS-ABS do not affect this field because the field is always calculated as the given value.
+<hr />
+</p>
+<a name="wp1040997"> </a><p class="pBody">
+<b class="cBold">WINPRINT-COL-FONT</b> --  Sets the handle of the font to be used when printing the column.  Set to NULL to use the font currently selected for the printer (this is the default).  If you place a valid printer font handle in this field, then that font is used when printing this column regardless of the printer's font.  Note that the printer's font still defines the height of the line.
+</p>
+<a name="wp1040998"> </a><p class="pBody">
+<b class="cBold">WINPRINT-COL-UNITS -- </b>Defines the measurement units used for WINPRINT-COL-START, WINPRINT-COL-INDENT and WINPRINT-COL-SEPARATION.  
+</p>
+<a name="wp1414647"> </a><p class="pBody">
+The following values are valid:
+</p>
+<a name="wp1089615"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1089626"> </a><p class="pCellBody">
+WPRTUNITS-CELLS
+</p>
+</td>
+    <td><a name="wp1089628"> </a><p class="pCellBody">
+Values are measured using the &quot;cell size&quot; of the currently selected font.  A font's &quot;cell size&quot; is the size of the `0' digit in the font.  This is roughly equivalent to measuring in &quot;characters&quot;.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1089630"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1089632"> </a><p class="pCellBody">
+If you use a proportional font, it is common for uppercase characters to be wider than this measurement.  If a column contains mostly uppercase data, you will need to make it wider than the number of characters in the data if you do not want to truncate the text.  If a column contains numbers or mixed-case data, you can usually just set the column width to be the same as the number of characters in the data when measuring in cells.  Non-integer values are allowed in the measurements. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1089634"> </a><p class="pCellBody">
+WPRTUNITS-INCHES
+</p>
+</td>
+    <td><a name="wp1089636"> </a><p class="pCellBody">
+Values are measured using inches.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1089638"> </a><p class="pCellBody">
+WPRTUNITS-CENTIMETERS
+</p>
+</td>
+    <td><a name="wp1089640"> </a><p class="pCellBody">
+Values are measured using centimeters.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1089642"> </a><p class="pCellBody">
+WPRTUNITS-PIXELS
+</p>
+</td>
+    <td><a name="wp1089644"> </a><p class="pCellBody">
+Values are measured using the resolution of the output device.  Only integer values are allowed in the measurements.  Note that the device resolution varies from device to device, and so these units are rarely used. 
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1414558"> </a><p class="pBody">
+To measure units using an absolute value from the left edge of the page, you use WPRTUNITS-CELLS-ABS.  To specify an absolute value from the left edge of the page for WINPRINT-COL-START only, you can use the following counterparts:
+</p>
+<a name="wp1414559"> </a><p class="pBody">
+WPRTUNITS-CELLS-ABS
+</p>
+<a name="wp1414560"> </a><p class="pBody">
+WPRTUNITS-INCHES-ABS
+</p>
+<a name="wp1041004"> </a><p class="pBody">
+WPRTUNITS-CENTIMETERS-ABS
+</p>
+<a name="wp1414643"> </a><p class="pBody">
+Other settings of WINPRINT-COL-UNITS are invalid.
+</p>
+<a name="wp1041005"> </a><p class="pBody">
+<b class="cBold">WINPRINT-COL-ALIGNMENT</b> -- Describes how data should be aligned in the column.  The following values are allowed:
+</p>
+<a name="wp1089658"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1089741"> </a><p class="pCellBody">
+WPRTALIGN-NONE
+</p>
+</td>
+    <td><a name="wp1089743"> </a><p class="pCellBody">
+No alignment is performed on the data, it is printed &quot;as is&quot;.  In addition, the data is not truncated to fit the column.  Any data that extends into the next column will be visible if you are printing with transparent text background, otherwise it may not be visible, as it will be overwritten when the following column is written.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1089745"> </a><p class="pCellBody">
+WPRTALIGN-LEFT
+</p>
+</td>
+    <td><a name="wp1089747"> </a><p class="pCellBody">
+Leading and trailing spaces are removed from the data and it is printed left aligned in the column.  The text is truncated so that it does not extend into the separation zone.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1089749"> </a><p class="pCellBody">
+WPRTALIGN-CENTER
+</p>
+</td>
+    <td><a name="wp1089751"> </a><p class="pCellBody">
+Leading and trailing spaces are removed from the data and it is printed centered between the start of the column and the start of the column's separation zone.  Text is truncated so that it does not extend into the separation zone.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1089753"> </a><p class="pCellBody">
+WPRTALIGN-RIGHT
+</p>
+</td>
+    <td><a name="wp1089755"> </a><p class="pCellBody">
+Leading and trailing spaces are removed from the data and it is right aligned with respect to the beginning of the separation zone.  Leading text is truncated so that it does not extend past the left edge of the column.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1283617"> </a><p class="pCellBody">
+WPRTALIGN-RIGHT-SIGN
+</p>
+</td>
+    <td><a name="wp1283648"> </a><p class="pCellBody">
+This is identical to WPRTALIGN-RIGHT, with the additional trait that space padding is automatically added to accommodate a trailing negative sign (&quot;-&quot;).  For example, when printing a variable defined as &quot;PIC ZZZ9-&quot;, WPRTALIGN-RIGHT would align the column as follows:
+</p>
+<a name="wp1283756"> </a><p class="pBody">
+    220
+</p>
+<a name="wp1283757"> </a><p class="pBody">
+   220-
+</p>
+<a name="wp1283758"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">WPRTALIGN-RIGHT-SIGN</span> would align the column as follows:
+</p>
+<a name="wp1283759"> </a><p class="pBody">
+    220
+</p>
+<a name="wp1283760"> </a><p class="pBody">
+    220- 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1089757"> </a><p class="pCellBody">
+WPRTALIGN-DECIMAL
+</p>
+</td>
+    <td><a name="wp1089759"> </a><p class="pCellBody">
+Leading and trailing spaces are removed from the data.  The data is then examined to find the leftmost occurrence of the runtime's current notion of the decimal point character.  The rightmost edge of the decimal point is aligned with the beginning of the separation zone.  If no decimal point is found, the right edge of the data is aligned there instead.  Data may extend into the separation zone and is truncated at the beginning and end of the column.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1089761"> </a><p class="pCellBody">
+WPRTALIGN-DECIMAL-SUPPRESS
+</p>
+</td>
+    <td><a name="wp1089763"> </a><p class="pCellBody">
+This is identical to WPRTALIGN-DECIMAL, with the additional trait that the decimal point used to align the data is replaced by a space when the data is printed.  Columns with this style are limited to 256 data characters.  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1088517"> </a><p class="pBody">
+Any other setting of WINPRINT-COL-ALIGNMENT is invalid.  
+</p>
+<a name="wp1088518"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-TRANSPARENCY -- </b>When the level 88 item WPRTDATA-TRANSARENT is set to &quot;true&quot;, then the column's foreground text is printed, but its background is left alone.  This allows you to print text over something else, such as a bitmap, without erasing it.  When WPRTDATA-TRANSPARENT is set to &quot;false&quot;, then the column's background is also printed, writing over anything else on the page.  Note that only the background behind the actual text printed is affected.  Suppressed leading and trailing spaces are not printed.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

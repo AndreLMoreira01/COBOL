@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:36:12" />
+  <title>5.7.3  Positioning the Cursor for the UPDATE </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql5.htm">Chapter 5: Sample Programs</a> &gt; <a href="sql525.htm">5.7  Updating Data - update.sqb</a> &gt; </p>
+<a name="wp1034863"> </a><h2 class="pHeading2">
+5.7.3  Positioning the Cursor for the UPDATE 
+</h2>
+<a name="wp1034868"> </a><p class="pBody">
+How does the program know which row in the table to update?  
+</p>
+<a name="wp1034869"> </a><p class="pBody">
+In <a  href="sql526.htm#wp1034773">section 5.7.1</a>, you saw that when the cursor was declared, it contained a WHERE condition to indicate which rows were affected by the SQL query.  The WHERE CURRENT OF clause uses this information to position the cursor.  This is called a <em class="cEmphasis">positioned update</em>.
+</p>
+<a name="wp1034870"> </a><h3 class="pHeadingRef">
+Syntax
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+EXEC SQL<a name="wp1034871"> </a>
+    UPDATE tablename SET field = &#39;new_value&#39;<a name="wp1034872"> </a>
+    WHERE CURRENT OF cursorname<a name="wp1034873"> </a>
+END-EXEC<a name="wp1034874"> </a>
+</pre></div>
+<a name="wp1034875"> </a><p class="pBody">
+where <em class="cEmphasis">cursorname</em> is the name of the cursor containing the SQL query. 
+</p>
+<a name="wp1034876"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+EXEC SQL<a name="wp1034877"> </a>
+    UPDATE CUSTOMER SET C_INFO = &#39;Revised&#39; <a name="wp1034878"> </a>
+    WHERE CURRENT OF COBCUR1<a name="wp1034879"> </a>
+END-EXEC<a name="wp1034880"> </a>
+</pre></div>
+<a name="wp1034881"> </a><p class="pBody">
+In section 5.7.1, a cursor was  declared to select the C_FIRST_NAME and C_LAST_NAME fields from the &quot;customer&quot; table in those instances where C_LAST_NAME was equal to &quot;Snead.&quot;  
+</p>
+<a name="wp1034883"> </a><p class="pBody">
+Now, when the cursor gets to a row that meets this condition, the value of the C_INFO field will be updated to &quot;Revised&quot;.
+</p>
+<a name="wp1034884"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You can also use cursors to perform positioned deletes in AcuSQL.  See any commercially available SQL text for information on positioned deletes.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

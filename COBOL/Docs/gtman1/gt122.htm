@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.1 Using the Compiler</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; </p>
+<a name="wp1032218"> </a><h2 class="pHeading1">
+2.1 Using the Compiler
+</h2>
+<a name="wp1032229"> </a><p class="pBody">
+The compiler is called <b class="cBold">ccbl</b>.  It can be run in one of three different modes.  These modes are:
+</p>
+<a name="wp1071743"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1071781"> </a><p class="pCellBody">
+<b class="cBold">Compile</b>
+</p>
+</td>
+    <td><a name="wp1071783"> </a><p class="pCellBody">
+Compiles COBOL programs 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1071785"> </a><p class="pCellBody">
+<b class="cBold">Help</b>       
+</p>
+</td>
+    <td><a name="wp1071787"> </a><p class="pCellBody">
+Prints a command line summary
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1071789"> </a><p class="pCellBody">
+<b class="cBold">Version</b>  
+</p>
+</td>
+    <td><a name="wp1071791"> </a><p class="pCellBody">
+Prints the version and copyright
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1032233"> </a><p class="pBody">
+The compile mode is the default mode.  The other modes are activated by command line options.  The compile mode is discussed here; other modes are described in separate sections in this chapter.
+</p>
+<a name="wp1032234"> </a><p class="pBody">
+To compile a program, enter the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl [<em class="cEmphasis">options</em>] <em class="cEmphasis">program</em><a name="wp1032235"> </a>
+</pre></div>
+<a name="wp1032236"> </a><p class="pBody">
+No options are required.  When no options are specified, the compiler prints an error listing on the user's terminal and names the object file &quot;<em class="cEmphasis">source-name</em>.acu&quot;.  The compiler runs in VAX COBOL compatibility mode by default.
+</p>
+<a name="wp1032237"> </a><p class="pBody">
+Many options are available.  These are all indicated by an initial hyphen (minus sign).  These options are divided into different groups.  Each group (except the first) has a distinguishing letter.  For example, the options that control listings all start with the letter &quot;L&quot;.  Any set of options from the same group may be specified together.  For example, the &quot;-Lo&quot; option and the &quot;-Ls&quot; option may be grouped together as &quot;-Los&quot;.  See below for examples.  Command line options that begin with a hyphen are not case sensitive. For example, &quot;-Lo&quot; and &quot;-lo&quot; are equivalent.
+</p>
+<a name="wp1032238"> </a><p class="pBody">
+Options from the same group that require arguments may also be specified together, as long as the required arguments immediately follow the combined options, in the same order as the options.  For example, 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+-o  <em class="cEmphasis">file1</em>  -e  <em class="cEmphasis">file2</em><a name="wp1032239"> </a>
+</pre></div>
+<a name="wp1032240"> </a><p class="pBody">
+may also be specified as
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+-oe  <em class="cEmphasis">file1</em>  <em class="cEmphasis">file2</em><a name="wp1032241"> </a>
+</pre></div>
+<a name="wp1032242"> </a><p class="pBody">
+The complete list of options is given in the following sections.
+</p>
+<a name="wp1129083"> </a><p class="pBody">
+The options used to compile a COBOL program are automatically embedded in the header of the resulting object file.  Use the &quot;-x&quot; option of the &quot;cblutil -info&quot; command to output these options.
+</p>
+<a name="wp1090149"> </a><p class="pBody">
+The compiler also supports one <em class="cEmphasis">compiler</em> <em class="cEmphasis">directive</em>.  Compiler directives are directly embedded in the source code and cause the compiler to behave as specified by the directive.  For more information, see <a  href="gt1222.htm#wp1090177">section 2.1.19, &quot;Compiler Directives.&quot;</a>  Support for compiler directives is likely to expand in future versions.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

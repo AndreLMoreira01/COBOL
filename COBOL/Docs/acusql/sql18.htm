@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:35:32" />
+  <title>1.5.2  Installation Under UNIX</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql1.htm">Chapter 1:  Getting Started</a> &gt; <a href="sql16.htm">1.5  Installation</a> &gt; </p>
+<a name="wp1033839"> </a><h2 class="pHeading2">
+1.5.2  Installation Under UNIX
+</h2>
+<a name="wp1045662"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In the following directions, the term &quot;runtime system&quot; refers to the runtime shared object on systems where the ACUCOBOL-GT runtime is a shared object and to <b class="cBold">runcbl</b> on other systems, where the runtime is static.  The runtime is a shared object on the following systems:  AIX 5.1 and later, HP/UX 11 and later, and Solaris 7 and later.  To check, look at the contents of the &quot;lib&quot; subdirectory of your ACUCOBOL-GT installation.  If the files &quot;libruncbl.so&quot; or &quot;libruncbl.sl&quot; reside in that directory, the runtime is a shared object on your system.
+<hr />
+</p>
+<a name="wp1033842"> </a><p class="pBody">
+To install AcuSQL on your UNIX host:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033843"> </a><div class="pSmartList1"><li>We recommend that you install AcuSQL into your ACUCOBOL-GT home directory.  When you install in this way, the AcuSQL libraries and executables are added to the existing ACUCOBOL-GT &quot;bin&quot; and &quot;lib&quot; subdirectories.  If you choose to install into a different directory, separate &quot;bin&quot; and &quot;lib&quot; subdirectories are created.  You must include the location of the new &quot;bin&quot; directory in the definition of your &quot;path&quot; environment variable.  No matter which directory you select for your installation, you must make sure that AcuSQL and the ACUCOBOL-GT compiler executable (<b class="cBold">ccbl</b>) are in the same subdirectory.</li></div>
+<a name="wp1033844"> </a><div class="pSmartList1"><li>Insert the installation CD-ROM, floppy disk, or tape into its corresponding device.  The instructions for installing from CD-ROM are provided on a <em class="cEmphasis">Getting Started</em> card supplied with the CD-ROM.  If you are installing from floppy or tape, change (&quot;cd&quot;) into the target directory and extract the AcuSQL software.</li></div>
+<a name="wp1033845"> </a><p class="pIndented1">
+Because the software is in TAR format, you should use a command similar to the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+tar xfv <em class="cEmphasis">device_name</em><a name="wp1033846"> </a>
+</pre></div>
+<a name="wp1033847"> </a><p class="pIndented1">
+where <em class="cEmphasis">device_name</em> is the appropriate hardware device on your system (for example, &quot;/dev/rfd0&quot; or &quot;/dev/rmt0&quot;).  Follow the instructions on the screen, entering your product code and product key when prompted.
+</p>
+<a name="wp1033849"> </a><div class="pSmartList1"><li>Relink the runtime system to include your ODBC API library.  </li></div>
+<a name="wp1033850"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>Relinking the runtime requires access to the C compiler supplied by the vendor of your UNIX software; in some cases the C compiler is offered as an add-on option.  If the C compiler used to build the ODBC libraries creates files that are incompatible with those created by the C compiler used to build the runtime, the link may fail.  
+<hr />
+</p>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1051418"> </a><div class="pSmartList2"><li>In the &quot;lib&quot; subdirectory (of the directory into which you installed AcuSQL), edit &quot;config85.c&quot; and set the value of &quot;NO_ACUSQL&quot; to &quot;0&quot;.</li></div>
+<a name="wp1051419"> </a><div class="pSmartList2"><li>Edit &quot;Makefile&quot; and locate the line that reads:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ACUSQL_ODBC_LIB = <a name="wp1033853"> </a>
+</pre></div>
+<a name="wp1033854"> </a><p class="pIndented2">
+Add the name of your ODBC API library to the end of the line.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ACUSQL_ODBC_LIB = <em class="cEmphasis">ODBC_lib</em><a name="wp1033855"> </a>
+</pre></div>
+<a name="wp1033856"> </a><p class="pIndented2">
+where <em class="cEmphasis">ODBC_lib</em> is the name of your ODBC API library.  If you are working with DB2, the name of the library is &quot;libdb.so&quot;.  If you are working with MySQL, the name of the library is &quot;libmyodbc3&quot;.
+</p>
+<a name="wp1051424"> </a><p class="pIndented2">
+If this library is not statically linked, your operating system must be able to locate this library.  On some systems, this is accomplished by listing the directory in the environment variable LD_LIBRARY_PATH.  (See your operating system documentation for more information on shared libraries.)
+</p>
+<a name="wp1033857"> </a><div class="pSmartList2"><li>Also in &quot;Makefile&quot;, locate the lines:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ACUSQL_FLAGS = -DNO_ACUSQL=1<a name="wp1033858"> </a>
+ACUSQL_LIBS = # no acusql runtime libraries are   necessary<a name="wp1040390"> </a>
+</pre></div>
+<a name="wp1033859"> </a><div class="pSmartList2"><li>Make sure that the above lines are commented out (use the comment character &quot;#&quot;).</li></div>
+<a name="wp1033860"> </a><div class="pSmartList2"><li>Next, locate the lines:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+#ACUSQL_FLAGS =<a name="wp1033861"> </a>
+#ACUSQL_LIBS = $(ACU_LIBDIR)/libesql.a   $(ACUSQL_ODBC_LIB)<a name="wp1040407"> </a>
+</pre></div>
+<a name="wp1033862"> </a><p class="pIndented2">
+Make sure that the above lines are un-commented (remove the comment character &quot;#&quot;).
+</p>
+<a name="wp1033863"> </a><div class="pSmartList2"><li>Save and close &quot;Makefile&quot;.</li></div>
+<a name="wp1033864"> </a><div class="pSmartList2"><li>Relink the runtime system by entering  the following commands:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+make clean<a name="wp1033865"> </a>
+make <a name="wp1052566"> </a>
+</pre></div>
+<a name="wp1045824"> </a><p class="pIndented2">
+The default target of the Makefile is the runtime system, so this relinks <b class="cBold">runcbl</b> on machines that do not have shared objects, and <b class="cBold">libruncbl.so</b> on those that do.
+</p>
+<a name="wp1045839"> </a><p class="pIndented2">
+You can also relink the runtime system by executing the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+make relinkrun<a name="wp1045843"> </a>
+</pre></div>
+<a name="wp1033866"> </a><p class="pIndented2">
+This works on all systems.
+</p>
+<a name="wp1045848"> </a><p class="pIndented2">
+If you get unresolved reference errors that refer to your ODBC library, you will need to further modify the &quot;Makefile&quot; to include the needed libraries (see your ODBC API documentation).  Such libraries can be added to the end of the LDFLAGS lines, or at the end of the list for &quot;runcbl&quot; and &quot;acusql&quot;. 
+</p>
+<a name="wp1045891"> </a><div class="pSmartList2"><li>If the runtime system is a statically linked <b class="cBold">runcbl</b>, move the new executable file into the &quot;bin&quot; directory.  This step is not necessary when the runtime system is a shared library.  In these cases, the shared object runtime, <b class="cBold">lib/libruncbl.so</b>, is already in the correct location.</li></div>
+</ol></div>
+<a name="wp1045902"> </a><div class="pSmartList1"><li> If you plan to use the pre-compiler mode that connects directly to your database engine to verify the SQL syntax, you must relink <b class="cBold">acusql</b> to include your ODBC API libraries.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1033870"> </a><div class="pSmartList2"><li>If you haven't already done so, perform steps &quot;a&quot; and &quot;b&quot; of item&#160;3 above.</li></div>
+<a name="wp1033871"> </a><div class="pSmartList2"><li>Relink the pre-compiler by entering the following command:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+make acusql<a name="wp1033872"> </a>
+</pre></div>
+<a name="wp1033873"> </a><div class="pSmartList2"><li>Move the new <b class="cBold">acusql</b> executable file into the &quot;bin&quot; directory.</li></div>
+</ol></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

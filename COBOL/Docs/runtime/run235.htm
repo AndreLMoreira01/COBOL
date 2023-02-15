@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:20:41" />
+  <title>2.6.3  Video Attributes</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run2.htm"><br />Chapter 2: Setting Up Your Terminals</a> &gt; <a href="run232.htm">2.6  The Terminal Database File</a> &gt; </p>
+<a name="wp1045057"> </a><h2 class="pHeading2">
+2.6.3  Video Attributes
+</h2>
+<a name="wp1045060"> </a><p class="pBody">
+To correctly configure attributes for a terminal, you must first determine which style of attribute setting--ANSI or &quot;magic cookie&quot;--it uses.  You can do this most easily by typing the sequence to turn on reverse video at your terminal.  If the cursor moves one character and a reverse-video bar appears, then you have a &quot;magic cookie&quot; style of terminal.  If nothing happens, then type some characters.  These should show up in reverse video.  If they do, then you have an ANSI style terminal that allows for independent attributes for each screen position.  If you do not get reverse-video at all, then you did something wrong.  
+</p>
+<a name="wp1045061"> </a><p class="pBody">
+If you include RV, UL, BL, RU, or RB in your terminal database file entry, then the HI and LO functions must be included.  These two functions set the terminal to normal video/high intensity and normal video/low intensity, respectively.  If intensity is not being used, then these should both just set normal video.  
+</p>
+<a name="wp1045062"> </a><p class="pBody">
+On all machines except Windows, the runtime system ignores the difference between high-intensity spaces and low-intensity spaces when the background color is black.  If your terminal is set up to run with black-on-white characters (reverse video) as its default, you should add the entry VB (visible background) to the description of that terminal.  This causes spaces to be handled consistently.  
+</p>
+<a name="wp1045063"> </a><p class="pBody">
+If a &quot;magic cookie&quot; style terminal is being used, then HI and LO should not set normal video, but should just set the appropriate intensity.  The function NM should be added to set normal video instead.  Also, the function sg must be included to tell the Terminal Manager that this is a &quot;magic cookie&quot; type terminal.  The sg setting does not take a value, it just has to be present.  
+</p>
+<a name="wp1045064"> </a><p class="pBody">
+A few &quot;magic cookie&quot; terminals ignore HI and LO, so that reverse video fields appear the same regardless of which intensity is used.  If you are experiencing this situation, add RA to the terminal's description.  This sets the terminal into reverse video using the terminal's alternate intensity (usually low intensity).  If RA is used, then RV sets reverse video in the terminal's default intensity.  
+</p>
+<a name="wp1045065"> </a><p class="pBody">
+The function DL should be included in a definition if the default intensity for the terminal is low-intensity.  This function is not set to a value, it is just included in the terminal definition.  
+</p>
+<a name="wp1045066"> </a><p class="pBody">
+On some terminals, a clear screen operation uses the currently selected video attribute.  For example, if reverse-video were the current attribute, then a clear screen would cause the entire screen to become reverse-video.  If the terminal has this property, then AC should be included to indicate this.  ACUCOBOL-GT will use this to optimize certain screen displays.
+</p>
+<a name="wp1045067"> </a><p class="pBody">
+Continuing the example, the VT-100 allows the independent setting of each attribute.  It cannot independently reset the attributes, but that is not required by the Terminal Manager.  Low-intensity, normal-video can be set with &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif">ESC</span>[m&quot;.  High-intensity can be set with &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif">ESC[</span>1m&quot;.  Reverse video is initiated by sending &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif">ESC</span>[7m&quot;, underline with &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif">ESC</span>[4m&quot; and blink with &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif">ESC</span>[5m&quot;.  The terminal normally runs in low-intensity, so the DL flag is used.  All of these modes can be combined by placing the appropriate attribute numbers together in one command string and separating them with semicolons.  Our new entry becomes:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+vt100|vt-100|DEC VT-100 :\<a name="wp1045068"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:cl=\E[;H\E[2J:ce=\E[K:cd=\E[J:\<a name="wp1045069"> </a>
+:cm=\E[%i%d;%dH:nd=\E[C:\<a name="wp1045070"> </a>
+ <b class="cBold">:LO=\E[m:HI=\E[0;1m:RV=\E[7m:\</b><a name="wp1045071"> </a>
+ <b class="cBold">:UL=\E[4m:BL=\E[5m:RU=\E[4;7m:\</b><a name="wp1045072"> </a>
+ <b class="cBold">:RB=\E[5;7m:DL:</b><a name="wp1045073"> </a>
+</pre></div>
+</pre></div>
+<a name="wp1045074"> </a><p class="pBody">
+Note the setting of &quot;\E[0;1m&quot; for HI.  The initial zero ensures that the terminal is set to normal modes before the high-intensity mode is set.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:43:13" />
+  <title>B.2.4  Acu4GL for Microsoft SQL Server: Designating the Host File System</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4glb.htm">Appendix B:  Acu4GL for Microsoft SQL Server Information</a> &gt; <a href="4glb3.htm">B.2  Acu4GL for Microsoft SQL Server Installation and Setup </a> &gt; </p>
+<a name="wp1039487"> </a><h2 class="pHeading2">
+B.2.4  Acu4GL for Microsoft SQL Server: Designating the Host File System
+</h2>
+<a name="wp1039494"> </a><p class="pBody">
+If you are opening an <em class="cEmphasis">existing</em> file, all file systems linked into the runtime will be searched for the named file.  If, however, you are creating a <em class="cEmphasis">new</em> file, you will need to tell the runtime which file system to use.  You accomplish this with one of two runtime configuration file variables:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DEFAULT_HOST <em class="cEmphasis">filesystem</em><a name="wp1039495"> </a>
+</pre></div>
+<a name="wp1039496"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+filename_HOST <em class="cEmphasis">filesystem</em><a name="wp1039497"> </a>
+</pre></div>
+<a name="wp1039498"> </a><h3 class="pHeadingRef">
+DEFAULT_HOST
+</h3>
+<a name="wp1039499"> </a><p class="pBody">
+Use the DEFAULT_HOST variable to designate the file system to be used for newly created files that are not individually assigned.  For example,
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DEFAULT_HOST MSSQL<a name="wp1039500"> </a>
+</pre></div>
+<a name="wp1039501"> </a><p class="pBody">
+means that all new files will be Microsoft SQL Server tables unless otherwise specified by the second configuration variable, filename_HOST.
+</p>
+<a name="wp1039502"> </a><h3 class="pHeadingRef">
+filename_HOST
+</h3>
+<a name="wp1039503"> </a><p class="pBody">
+Use the filename_HOST variable to assign an individual data file to a file system.  Any file so assigned will use the designated file system, and not the one specified by DEFAULT_HOST.  The syntax is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+filename_HOST <em class="cEmphasis">filesystem</em><a name="wp1039504"> </a>
+</pre></div>
+<a name="wp1039505"> </a><p class="pBody">
+where <em class="cEmphasis">filename</em> is the file name, without any extension, named in the ASSIGN TO clause of your SELECT statement.  For example,
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<em class="cEmphasis">myfile</em>_HOST VISION<a name="wp1039506"> </a>
+</pre></div>
+<a name="wp1039507"> </a><p class="pBody">
+means that <em class="cEmphasis">myfile</em> will be under the Vision file system.
+</p>
+<a name="wp1039508"> </a><p class="pBody">
+You can use these runtime configuration file entries in combination to assign your new files in a default with exceptions manner; for example, this set of entries:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+DEFAULT_HOST VISION<a name="wp1039509"> </a>
+<em class="cEmphasis">afile</em>_HOST MSSQL<a name="wp1052919"> </a>
+<em class="cEmphasis">bfile</em>_HOST MSSQL<a name="wp1052931"> </a>
+</pre></div>
+<a name="wp1039510"> </a><p class="pBody">
+means that all new files except <em class="cEmphasis">afile</em> and <em class="cEmphasis">bfile</em> will be assigned to Vision, and those two files will be assigned to Microsoft SQL Server.
+</p>
+<a name="wp1039511"> </a><p class="pBody">
+You can also change the values of these variables during program execution by including in your code: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SET ENVIRONMENT &quot;filename_HOST&quot; TO <em class="cEmphasis">filesystem</em><a name="wp1039512"> </a>
+</pre></div>
+<a name="wp1039513"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SET ENVIRONMENT &quot;DEFAULT_HOST&quot; TO <em class="cEmphasis">filesystem</em><a name="wp1039514"> </a>
+</pre></div>
+<a name="wp1039515"> </a><p class="pBody">
+This enables you to change file systems during the execution of your program.  This is not the typical way to specify a file system; normally it is designated in the runtime configuration file and is not changed in the COBOL program.  
+</p>
+<a name="wp1047027"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The ACUCOBOL-GT interface to Microsoft SQL Server allows you to create a Microsoft SQL Server table with an OPEN OUTPUT statement, just as you can create Vision indexed files.  The Microsoft SQL Server equivalent of a Vision file is a table, not a database.  You must create a database for your Microsoft SQL Server tables before you run the COBOL program that creates the tables, just as you must create a directory for your files before you run a COBOL program that creates Vision files.
+<hr />
+</p>
+<a name="wp1047028"> </a><p class="pBody">
+You are now ready to use the <b class="cBold">sql.acu</b> program, as defined in <a  href="4gl2.htm#wp1038776">Chapter 2</a>.  After you learn about and use this utility, you will next find out about preparing and compiling your COBOL program, followed by learning to use the demonstration program, which can also be found in Chapter 2.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:58:17" />
+  <title>5.4.1.4  Example</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr5.htm">Chapter 5: Working With .NET Assemblies</a> &gt; <a href="itr55.htm">5.4  Calling COBOL from .NET</a> &gt; <a href="itr56.htm">5.4.1  Using the .NET MSIL Compiler Options</a> &gt; </p>
+<a name="wp1037592"> </a><h2 class="pHeading3">
+5.4.1.4  Example
+</h2>
+<a name="wp1037593"> </a><h3 class="pHeadingRef">
+COBOL Source
+</h3>
+<a name="wp1037594"> </a><p class="pBody">
+Following is the COBOL source for a sample program, &quot;TestNetToCobol.cbl&quot;.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+identification division. <a name="wp1037595"> </a>
+program-id. TestNetToCobol. <a name="wp1037596"> </a>
+environment division. <a name="wp1037597"> </a>
+configuration section. <a name="wp1037598"> </a>
+data division. <a name="wp1037599"> </a>
+working-storage section. <a name="wp1037600"> </a>
+<a name="wp1037601"> </a>
+linkage section. <a name="wp1037602"> </a>
+77 string-in-out          pic x(32) value spaces. <a name="wp1037603"> </a>
+77 int-in-out             USAGE IS SIGNED-INT. <a name="wp1037604"> </a>
+<a name="wp1037605"> </a>
+procedure division using string-in-out, int-in-out. <a name="wp1037606"> </a>
+main-logic. <a name="wp1037607"> </a>
+<a name="wp1037608"> </a>
+     move &quot;hey whats doin&quot; to string-in-out. <a name="wp1037609"> </a>
+     entry &quot;int-only&quot; using int-in-out. <a name="wp1037610"> </a>
+     move 9999 to int-in-out. <a name="wp1037611"> </a>
+     exit program. <a name="wp1037612"> </a>
+<a name="wp1037613"> </a>
+</pre></div>
+<a name="wp1037614"> </a><h3 class="pHeadingRef">
+View of Managed Code in Visual Studio .NET Object Browser
+</h3>
+<a name="wp1037615"> </a><p class="pBody">
+Following is a screen that shows what &quot;TestNetToCobol_CVM&quot; looks like to a .NET programmer in the Visual Studio .NET object browser (once you've generated a .NET DLL for this program with the &quot;--netdll&quot; option).  Notice that there are methods other than the COBOL program entry points and main Procedure Division paragraph in this browser.  These ACUCOBOL-GT runtime interfaces are documented in section 3.5.3.2.
+</p>
+<a name="wp1037619"> </a><p class="pBodyRelative">
+</p><div><img src="images/itr5a.gif" height="299" width="409" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1037620"> </a><h3 class="pHeadingRef">
+C# Source
+</h3>
+<a name="wp1037621"> </a><p class="pBody">
+Here is a C# program that makes reference to &quot;TestNetToCobol_CVM&quot;.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+using System;<a name="wp1037622"> </a>
+using System.Drawing;<a name="wp1037623"> </a>
+using System.Collections;<a name="wp1037624"> </a>
+using System.ComponentModel;<a name="wp1037625"> </a>
+using System.Windows.Forms;<a name="wp1037626"> </a>
+using System.Data;<a name="wp1037627"> </a>
+using testnettocobol;<a name="wp1037628"> </a>
+//using testnettocobol_CVM;<a name="wp1037629"> </a>
+<a name="wp1037630"> </a>
+namespace TestDll<a name="wp1037631"> </a>
+{<a name="wp1037632"> </a>
+     /// &lt;summary&gt;<a name="wp1037633"> </a>
+     /// Summary description for Form1.<a name="wp1037634"> </a>
+     /// &lt;/summary&gt;<a name="wp1037635"> </a>
+     public class Form1 : System.Windows.Forms.Form<a name="wp1037636"> </a>
+     {<a name="wp1037637"> </a>
+          testnettocobol.testnettocobol cblObj;<a name="wp1037638"> </a>
+          private System.Windows.Forms.Button button1;<a name="wp1037639"> </a>
+          /// &lt;summary&gt;<a name="wp1037640"> </a>
+          /// Required designer variable.<a name="wp1037641"> </a>
+          /// &lt;/summary&gt;<a name="wp1037642"> </a>
+          private System.ComponentModel.Container components = null;<a name="wp1037643"> </a>
+<a name="wp1037644"> </a>
+          public Form1()<a name="wp1037645"> </a>
+          {<a name="wp1037646"> </a>
+               //<a name="wp1037647"> </a>
+               // Required for Windows Form Designer support<a name="wp1037648"> </a>
+               //<a name="wp1037649"> </a>
+               InitializeComponent();<a name="wp1037650"> </a>
+<a name="wp1037651"> </a>
+               //<a name="wp1037652"> </a>
+               // TODO: Add any constructor code after InitializeComponent call<a name="wp1037653"> </a>
+               //<a name="wp1037654"> </a>
+          }<a name="wp1037655"> </a>
+<a name="wp1037656"> </a>
+          /// &lt;summary&gt;<a name="wp1037657"> </a>
+          /// Clean up any resources being used.<a name="wp1037658"> </a>
+          /// &lt;/summary&gt;<a name="wp1037659"> </a>
+          protected override void Dispose( bool disposing )<a name="wp1037660"> </a>
+          {<a name="wp1037661"> </a>
+               if( disposing )<a name="wp1037662"> </a>
+               {<a name="wp1037663"> </a>
+                    if (components != null) <a name="wp1037664"> </a>
+                    {<a name="wp1037665"> </a>
+                         components.Dispose();<a name="wp1037666"> </a>
+                    }<a name="wp1037667"> </a>
+               }<a name="wp1037668"> </a>
+               base.Dispose( disposing );<a name="wp1037669"> </a>
+          }<a name="wp1037670"> </a>
+<a name="wp1037671"> </a>
+          #region Windows Form Designer generated code<a name="wp1037672"> </a>
+          /// &lt;summary&gt;<a name="wp1037673"> </a>
+          /// Required method for Designer support - do not modify<a name="wp1037674"> </a>
+          /// the contents of this method with the code editor.<a name="wp1037675"> </a>
+          /// &lt;/summary&gt;<a name="wp1037676"> </a>
+          private void InitializeComponent()<a name="wp1037677"> </a>
+          {<a name="wp1037678"> </a>
+               this.button1 = new System.Windows.Forms.Button();<a name="wp1037679"> </a>
+               this.SuspendLayout();<a name="wp1037680"> </a>
+               // <a name="wp1037681"> </a>
+               // button1<a name="wp1037682"> </a>
+               // <a name="wp1037683"> </a>
+               this.button1.Location = new System.Drawing.Point(104, 24);<a name="wp1037684"> </a>
+               this.button1.Name = &quot;button1&quot;;<a name="wp1037685"> </a>
+               this.button1.TabIndex = 0;<a name="wp1037686"> </a>
+               this.button1.Text = &quot;Test&quot;;<a name="wp1037687"> </a>
+               this.button1.Click += new System.EventHandler(this.button1_Click);<a name="wp1037688"> </a>
+               // <a name="wp1037689"> </a>
+               // Form1<a name="wp1037690"> </a>
+               // <a name="wp1037691"> </a>
+               this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);<a name="wp1037692"> </a>
+               this.ClientSize = new System.Drawing.Size(292, 101);<a name="wp1037693"> </a>
+               this.Controls.Add(this.button1);<a name="wp1037694"> </a>
+               this.Name = &quot;Form1&quot;;<a name="wp1037695"> </a>
+               this.Text = &quot;Form1&quot;;<a name="wp1037696"> </a>
+               this.ResumeLayout(false);<a name="wp1037697"> </a>
+<a name="wp1037698"> </a>
+          }<a name="wp1037699"> </a>
+          #endregion<a name="wp1037700"> </a>
+<a name="wp1037701"> </a>
+          /// &lt;summary&gt;<a name="wp1037702"> </a>
+          /// The main entry point for the application.<a name="wp1037703"> </a>
+          /// &lt;/summary&gt;<a name="wp1037704"> </a>
+          [STAThread]<a name="wp1037705"> </a>
+          static void Main() <a name="wp1037706"> </a>
+          {<a name="wp1037707"> </a>
+               Application.Run(new Form1());<a name="wp1037708"> </a>
+          }<a name="wp1037709"> </a>
+<a name="wp1037710"> </a>
+          private void button1_Click(object sender, System.EventArgs e)<a name="wp1037711"> </a>
+          {<a name="wp1037712"> </a>
+               testnettocobol_CVM.errorTypes err = testnettocobol_CVM.errorTypes.CS_OK;<a name="wp1037713"> </a>
+               IntPtr pInfo = IntPtr.Zero;<a name="wp1037714"> </a>
+               int cblReturn = 0;<a name="wp1037715"> </a>
+               string err_msg;<a name="wp1037716"> </a>
+               int some_int = 777;<a name="wp1037717"> </a>
+               string some_string; <a name="wp1037718"> </a>
+               <a name="wp1037719"> </a>
+               // Instantiate COBOL object and CVM, COBOL VIRTUAL MACHINE<a name="wp1037720"> </a>
+               cblObj = new testnettocobol.testnettocobol();<a name="wp1037721"> </a>
+               // Set ACUCOBOL-GT runtime options (properties)<a name="wp1037722"> </a>
+               cblObj.RunPath = &quot;D:\\branch_7_1\\cobolgt\\bin&quot;;<a name="wp1037723"> </a>
+               cblObj.Debug = true;<a name="wp1037724"> </a>
+               cblObj.LinkageLength = true;<a name="wp1037725"> </a>
+               //cblObj.Cache = true;<a name="wp1037726"> </a>
+               // Initialize the ACUCOBOL-GT runtime<a name="wp1037727"> </a>
+               cblObj.Initialize();<a name="wp1037728"> </a>
+<a name="wp1037729"> </a>
+               try<a name="wp1037730"> </a>
+               {<a name="wp1037731"> </a>
+<a name="wp1037732"> </a>
+                    //  The second to last parameter is for options specific<a name="wp1037733"> </a>
+                    //  to a method call.  They may also be set via properties<a name="wp1037734"> </a>
+                    //  before the method call is executed.<a name="wp1037735"> </a>
+                    //  The last parameter is the return code from the COBOL program.<a name="wp1037736"> </a>
+ <a name="wp1037737"> </a>
+                    // call an ENTRY in the ACUCOBOL-GT program<a name="wp1037738"> </a>
+                    some_int = 1111;<a name="wp1037739"> </a>
+                    cblReturn = 0;<a name="wp1037740"> </a>
+  <a name="wp1037741"> </a>
+                    err = cblObj.int_only(ref some_int, null, ref cblReturn);<a name="wp1037742"> </a>
+                    <a name="wp1037743"> </a>
+                    // call the main ENTRY, 1st COBOL line in PROCEDURE DIVISION<a name="wp1037744"> </a>
+                    some_int = 1422;<a name="wp1037745"> </a>
+                    some_string = &quot;The hills are Alive             &quot;;<a name="wp1037746"> </a>
+<a name="wp1037747"> </a>
+                    err = cblObj.testnettocobol_CVM_main(ref some_string,<a name="wp1037748"> </a>
+                                             ref some_int,<a name="wp1037749"> </a>
+                                             null,<a name="wp1037750"> </a>
+                                             ref cblReturn);<a name="wp1037751"> </a>
+               }<a name="wp1037752"> </a>
+               catch (System.Exception e2)<a name="wp1037753"> </a>
+               {<a name="wp1037754"> </a>
+                    Exception innerE = e2.InnerException;<a name="wp1037755"> </a>
+                    if ((innerE != null) &amp;&amp; (innerE.Message.Length &gt; 0))<a name="wp1037756"> </a>
+                         err_msg = innerE.Message;<a name="wp1037757"> </a>
+                    else<a name="wp1037758"> </a>
+                    {<a name="wp1037759"> </a>
+                         if (e2.Message.Length &gt; 0)<a name="wp1037760"> </a>
+                              err_msg = e2.Message;<a name="wp1037761"> </a>
+                         else<a name="wp1037762"> </a>
+                              err_msg = &quot;AcuNet Temp Object Create Error&quot;;     <a name="wp1037763"> </a>
+                    }<a name="wp1037764"> </a>
+                    MessageBox.Show(err_msg);<a name="wp1037765"> </a>
+                    return;<a name="wp1037766"> </a>
+               }<a name="wp1037767"> </a>
+               // test runtime return code<a name="wp1037768"> </a>
+               if (err != testnettocobol_CVM.errorTypes.CS_OK)<a name="wp1037769"> </a>
+               {<a name="wp1037770"> </a>
+                    // get error text property <a name="wp1037771"> </a>
+                    MessageBox.Show(cblObj.LastErrorMsg);<a name="wp1037772"> </a>
+               }<a name="wp1037773"> </a>
+               cblObj.ShutDown(0);<a name="wp1037774"> </a>
+          }<a name="wp1037775"> </a>
+     }<a name="wp1037776"> </a>
+</pre></div>
+<a name="wp1037777"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">}</span>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

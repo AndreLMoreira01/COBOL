@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:46:00" />
+  <title>7.4.2  Other Considerations</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv7.htm">Chapter 7: Programming for AcuServer</a> &gt; <a href="srv79.htm">7.4  Multiple-Record Mode</a> &gt; </p>
+<a name="wp1035476"> </a><h2 class="pHeading2">
+7.4.2  Other Considerations
+</h2>
+<a name="wp1035477"> </a><p class="pBody">
+There are several things of which you should be aware when using multi-record mode:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035478"> </a><div class="pSmartList1"><li>In multi-record mode, the client requires more memory than if it has no files open in this mode.  In particular, the client requires memory for all the records in the cache from the server.  For example, if three files are open in multi-record mode with maximum record sizes of 100, 250 and 800 and MULTI_RECORD_COUNT is set to 10, then the client requires 100 * 10 + 250 * 10 + 800 * 10 bytes of storage for holding all the records from the server.  This is compared to needing only 100 + 250 + 800 bytes of storage if these files were not open in multi-record mode.</li></div>
+<a name="wp1035479"> </a><div class="pSmartList1"><li>The server also requires more memory when you use files in this mode.  This should not be a significant addition to the usual amount of memory that the server needs, because the server reads all the records it sends and then does not save these records.  The server needs only a single large internal buffer to hold the records temporarily.  This buffer should have a size of the largest MAXIMUM_RECORD_SIZE multiplied by the largest MULTI_RECORD_COUNT.  </li></div>
+<a name="wp1035480"> </a><div class="pSmartList1"><li>This mode is inherently subject to race conditions, including those described below.  (Note that these are not the only race conditions that you may encounter.)  If your application is written in such a way that it will experience race conditions, then you should not use multi-record mode.  </li></div>
+<a name="wp1035481"> </a><p class="pIndented1">
+<em class="cEmphasis">Condition 1</em>:  If two users are accessing a single file, and one of those users has the file open in multi-record mode, the following situation could happen.
+</p>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1035482"> </a><div class="pSmartList2"><li>User A opens and reads the first record.  At this time the server sends multiple records to user A. </li></div>
+<a name="wp1035483"> </a><div class="pSmartList2"><li>User B opens the file and writes a record in a location within the record set that the server has already sent to user A.</li></div>
+<a name="wp1035484"> </a><div class="pSmartList2"><li>User A never sees that record unless the file is closed and reopened.</li></div>
+</ul></div>
+<a name="wp1035485"> </a><p class="pIndented1">
+In other words, when the server sends a collection of records to a client, that client now has a snapshot of the records on the server.  The client does not query the server about any new records, since this would remove the performance gain of using multi-record mode.
+</p>
+<a name="wp1035486"> </a><p class="pIndented1">
+<em class="cEmphasis">Condition 2</em>:  Suppose a user opens the file I/O for exclusive access (or allowing only readers) in multi-record mode.  Suppose this user reads the first record, and then writes a record that is after the first record, but before the last record in the client cache.
+</p>
+<a name="wp1035487"> </a><p class="pIndented1">
+As the user executes READ NEXT, that record never appears.  For example, suppose the file has a key that is a PIC 99 data item, and that ten records are sent in each batch.  Also suppose that the file has records with keys 05, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95.  The user opens the file, and executes a READ NEXT.  At this time, the first ten records are in the client cache (records 05, 10, 15, 20, 25, 30, 35, 40, 45, 50) and the COBOL program has record 05 in its record area.  Suppose the user then executes a WRITE to write a record with the key of 08, and then executes another READ NEXT.  The record that the COBOL program has in its record area is now record 10, not record 08.  Again, the client and server will not communicate about this situation, since it would completely remove the performance gain of using multi-record mode.
+</p>
+<a name="wp1035488"> </a><p class="pIndented1">
+<em class="cEmphasis">Condition 3</em>:  Now suppose you have the same file as in the previous case, and that the user has executed the first READ NEXT.  Suppose the user then executes a REWRITE on record 10 to change data in that record, and then executes a READ NEXT.  The COBOL program will now have the original data from the file for record 10, not the data that the COBOL program just rewrote.  
+</p>
+<a name="wp1035489"> </a><p class="pIndented1">
+Since multi-record mode is inherently subject to race conditions, you should use this mode only in situations where you are sure you understand all of the consequences.  
+</p>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

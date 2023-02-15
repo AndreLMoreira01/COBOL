@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:12" />
+  <title>7.6  W$MOUSE Library Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt27.htm">Chapter 7:  Using the Mouse </a> &gt; </p>
+<a name="wp1026438"> </a><h2 class="pHeading1">
+7.6  W$MOUSE Library Routine
+</h2>
+<a name="wp1026443"> </a><p class="pBody">
+The runtime system contains a library routine called &quot;W$MOUSE&quot; that you can use to control the behavior of the mouse.  You use this routine with the CALL statement in your COBOL program.  
+</p>
+<a name="wp1026444"> </a><p class="pBody">
+Before you use &quot;W$MOUSE&quot; to respond to mouse actions, be sure that you have unmasked the actions you want to notice.  
+</p>
+<a name="wp1026445"> </a><p class="pBody">
+The first parameter you pass to &quot;W$MOUSE&quot; is an operation code.  This code tells &quot;W$MOUSE&quot; what to do.  The number and type of the remaining parameters depend on the operation code.  All parameters are passed by REFERENCE (the default in COBOL).  
+</p>
+<a name="wp1026447"> </a><p class="pBody">
+The valid operation codes are defined in the COPY file &quot;acugui.def.&quot;  So if you're going to use the W$MOUSE routine, add this statement to the Working-Storage section of your program:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+copy &quot;acugui.def&quot;   <a name="wp1026448"> </a>
+</pre></div>
+<a name="wp1026449"> </a><p class="pBody">
+The operation code can be one of the following:    
+</p>
+<a name="wp1026450"> </a><h3 class="pHeadingRef">
+ENABLE-MOUSE
+</h3>
+<a name="wp1026452"> </a><p class="pBody">
+Turns on the mouse on character-based systems.  (By default the mouse is invisible.)  The value of RETURN-CODE is set to &quot;1&quot; if a mouse is present, &quot;0&quot; if no mouse is found.  (Takes no additional parameters.) 
+</p>
+<a name="wp1026456"> </a><p class="pBody">
+On some machines there is an appreciable delay when the mouse is enabled.
+</p>
+<a name="wp1026457"> </a><p class="pBody">
+Under graphical environments such as Windows, a call to W$MOUSE using ENABLE-MOUSE is not necessary--it sets the value of RETURN-CODE properly, but no other action occurs, because the mouse is always<em class="cEmphasis"> </em>enabled in these environments.
+</p>
+<a name="wp1026458"> </a><h3 class="pHeadingRef">
+TEST-MOUSE-PRESENCE
+</h3>
+<a name="wp1026460"> </a><p class="pBody">
+Used to detect the presence of a mouse.  The value of RETURN-CODE is set to &quot;1&quot; if a mouse is available on the system.  It is set to &quot;0&quot; if no mouse is present.  (Takes no additional parameters.)  Note that on character-based systems the mouse must be enabled before its presence can be detected.  So if you haven't enabled the mouse (see ENABLE-MOUSE above), RETURN-CODE will have a value of &quot;0&quot;.
+</p>
+<a name="wp1026464"> </a><h3 class="pHeadingRef">
+GET-MOUSE-STATUS
+</h3>
+<a name="wp1026466"> </a><p class="pBody">
+Returns information about the mouse's location and the state of each of its buttons.  You must pass a group item with the following structure:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  MOUSE-INFO.<a name="wp1026470"> </a>
+   03  MOUSE-ROW        PIC 9(4) COMP-4.<a name="wp1030587"> </a>
+   03  MOUSE-COL        PIC 9(4) COMP-4.<a name="wp1030597"> </a>
+   03  LBUTTON-STATUS   PIC 9.<a name="wp1030607"> </a>
+   03  MBUTTON-STATUS   PIC 9.<a name="wp1030617"> </a>
+   03  RBUTTON-STATUS   PIC 9.<a name="wp1030627"> </a>
+</pre></div>
+<a name="wp1026471"> </a><p class="pBody">
+The file &quot;acugui.def&quot; contains a group item with this layout.  The routine fills in this structure with data about the mouse.  Each of the three &quot;status&quot; fields is set to &quot;1&quot; if the corresponding button is depressed.  Otherwise, they are set to zero.  The row and column fields are set to the location of the mouse within the current ACUCOBOL-GT window.  If the mouse is outside of the current window, then these values are set to zero.    
+</p>
+<a name="wp1026472"> </a><p class="pBody">
+Here's an example of a call to &quot;W$MOUSE&quot; that returns the menu item the mouse is pointing to:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+* find-mouse-menu-row - returns (in mouse-row) <a name="wp1026473"> </a>
+* the menu item that the mouse pointer is currently <a name="wp1030637"> </a>
+* on.  If the mouse is not on a menu item, it <a name="wp1030647"> </a>
+* returns zero.<a name="wp1030657"> </a>
+find-mouse-menu-row.<a name="wp1026474"> </a>
+   call &quot;w$mouse&quot; using get-mouse-status, mouse-info<a name="wp1030667"> </a>
+   if<a name="wp1030677"> </a>
+      mouse-row &gt;= menu-row and<a name="wp1030687"> </a>
+      mouse-row &lt; menu-row + num-menu-items * 2 <a name="wp1030697"> </a>
+      compute mouse-row = mouse-row - menu-row + 1<a name="wp1030707"> </a>
+   else<a name="wp1030717"> </a>
+      move zero to mouse-row.<a name="wp1030727"> </a>
+</pre></div>
+<a name="wp1026475"> </a><p class="pBody">
+After an ACCEPT statement is executed, all CALLs to &quot;W$MOUSE&quot; pertain to that ACCEPT statement, until another ACCEPT is executed.  So you always get the right mouse status.  By synchronizing the mouse actions with the appropriate exception values, the runtime ensures that you process the mouse correctly.  
+</p>
+<a name="wp1026476"> </a><h3 class="pHeadingRef">
+GET-MOUSE-SCREEN-STATUS
+</h3>
+<a name="wp1026478"> </a><p class="pBody">
+This function is the same as the GET-MOUSE-STATUS function except that the row and column coordinates are relative to the application's <em class="cEmphasis">virtual screen</em> (the drawing space allocated to the application), instead of the current window.  If the mouse is not located anywhere in the application's window, then the coordinates are set to zero.
+</p>
+<a name="wp1026482"> </a><h3 class="pHeadingRef">
+SET-MOUSE-POSITION
+</h3>
+<a name="wp1026484"> </a><p class="pBody">
+You must pass a group item with the same structure as described under GET-MOUSE-STATUS.  The mouse is placed at the coordinates named by MOUSE-ROW and MOUSE-COL, relative to the current ACUCOBOL-GT window.  The button-status fields are not used.
+</p>
+<a name="wp1026488"> </a><h3 class="pHeadingRef">
+SET-MOUSE-SCREEN-POSITION
+</h3>
+<a name="wp1026490"> </a><p class="pBody">
+This is the same as SET-MOUSE-POSITION, except that the position is relative to the application's virtual screen.  
+</p>
+<a name="wp1026494"> </a><h3 class="pHeadingRef">
+SET-MOUSE-SHAPE
+</h3>
+<a name="wp1026496"> </a><p class="pBody">
+You must pass a second parameter that defines the desired shape of the mouse pointer.  The shape is changed immediately, even if the mouse has not been moved.  The possible values are: 
+</p>
+<a name="wp1026503"> </a><p class="pBody">
+   </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1026506"> </a><p class="pCellBody">
+ARROW-POINTER
+</p>
+</td>
+    <td><a name="wp1026508"> </a><p class="pCellBody">
+The default arrow shape
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1026510"> </a><p class="pCellBody">
+BAR-POINTER
+</p>
+</td>
+    <td><a name="wp1026512"> </a><p class="pCellBody">
+A vertical bar
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1026514"> </a><p class="pCellBody">
+CROSS-POINTER
+</p>
+</td>
+    <td><a name="wp1026516"> </a><p class="pCellBody">
+Cross hairs
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1026518"> </a><p class="pCellBody">
+HELP-POINTER
+</p>
+</td>
+    <td><a name="wp1026520"> </a><p class="pCellBody">
+A question mark
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1026522"> </a><p class="pCellBody">
+WAIT-POINTER
+</p>
+</td>
+    <td><a name="wp1026524"> </a><p class="pCellBody">
+An hourglass
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1026527"> </a><p class="pBody">
+These are defined in &quot;acugui.def.&quot;  
+</p>
+<a name="wp1026528"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The runtime system changes the shape of the mouse when you are using automatic mouse handling.  When an ACCEPT statement finishes execution, the last shape defined by SET-MOUSE-SHAPE is restored.    
+<hr />
+</p>
+<a name="wp1026529"> </a><h3 class="pHeadingRef">
+SET-DELAYED-MOUSE-SHAPE
+</h3>
+<a name="wp1026531"> </a><p class="pBody">
+This is identical to SET-MOUSE-SHAPE, except that the mouse pointer is not changed immediately.  Instead, it is changed as soon as the user moves it.  The automatic mouse handler uses this function to provide a smoother mouse appearance.
+</p>
+<a name="wp1026535"> </a><h3 class="pHeadingRef">
+GET-MOUSE-SHAPE
+</h3>
+<a name="wp1026537"> </a><p class="pBody">
+The value of RETURN-CODE is set to the current mouse shape.  If SET-DELAYED-MOUSE-SHAPE is in effect, waiting for the mouse to move, then the delayed shape is returned.  (Takes no additional parameters.)
+</p>
+<a name="wp1026541"> </a><h3 class="pHeadingRef">
+CAPTURE-MOUSE
+</h3>
+<a name="wp1026543"> </a><p class="pBody">
+Normally, only mouse actions that occur within the application's <em class="cEmphasis">virtual screen</em> are processed by the runtime system.  (The virtual screen is the drawing space allocated to the application.)  Actions that occur outside of this space are handled by other applications or by the environment.  The CAPTURE-MOUSE function causes the runtime to process all mouse messages, regardless of where they occur.  This should be done only in special cases, because it prevents the user from using the mouse in any other application.  Normally, you capture the mouse only when the user is marking or dragging some object on the screen.  By capturing the mouse, you can control the action even if the user accidentally moves the mouse outside of the application.  (Takes no additional parameters.)
+</p>
+<a name="wp1026548"> </a><p class="pBody">
+When the mouse is captured, the GET-MOUSE-STATUS and GET-MOUSE-SCREEN-STATUS functions no longer return zero in the row and column fields if the mouse is outside of the legal boundaries.  Instead, the row and column fields contain the nearest legal coordinate to the mouse's actual position.  
+</p>
+<a name="wp1026552"> </a><h3 class="pHeadingRef">
+RELEASE-MOUSE
+</h3>
+<a name="wp1026554"> </a><p class="pBody">
+This reverses the effects of the CAPTURE-MOUSE function.  You must call this sometime after calling CAPTURE-MOUSE, or the environment will not be able to use the mouse again.  (Takes no additional parameters.)
+</p>
+<a name="wp1026558"> </a><h3 class="pHeadingRef">
+SET-MOUSE-HELP
+</h3>
+<a name="wp1026560"> </a><p class="pBody">
+Depending on the value of the second parameter, this option sets or releases the <em class="cEmphasis">help-mode</em> pointer.  When the value of the second parameter is &quot;1&quot;, the mouse pointer is captured and its shape is changed to a question mark.  When the second parameter is &quot;0&quot;, the mouse is released and the pointer returns to its default shape.  This option is only supported under Microsoft Windows.
+</p>
+<a name="wp1026564"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If you use <em class="cEmphasis">help automation </em>(see <a  href="gt210.htm#wp1028240">Chapter 10</a>), you don't need to use this option.  Help automation automatically manages the help-mode mouse states for you. 
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

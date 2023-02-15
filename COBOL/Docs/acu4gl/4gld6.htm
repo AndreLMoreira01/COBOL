@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:02" />
+  <title>D.1.4  ODBC Structure</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gld.htm">Appendix D:  Acu4GL for ODBC Information </a> &gt; <a href="4gld2.htm">D.1 ODBC Concepts</a> &gt; </p>
+<a name="wp1047624"> </a><h2 class="pHeading2">
+D.1.4  ODBC Structure
+</h2>
+<a name="wp1047629"> </a><p class="pBody">
+A quick overview of the components of ODBC will help you interface your COBOL program to ODBC-compliant data sources.
+</p>
+<a name="wp1088418"> </a><p class="pBody">
+ODBC requires four components:  an ODBC-enabled application, the ODBC driver manager, ODBC database drivers, and data sources.  The following diagram indicates how these components work together in a single-tier environment.
+</p>
+<a name="wp1088432"> </a><p class="pBodyRelative">
+</p><div><img src="images/single_o.gif" height="339" width="397" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1047641"> </a><p class="pBody">
+The following diagram indicates how these components work together in a multiple-tier environment.
+</p>
+<a name="wp1047643"> </a><p class="pBodyRelative">
+</p><div><img src="images/4in_mult.gif" height="527" width="408" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1047645"> </a><h3 class="pHeadingRef">
+Application
+</h3>
+<a name="wp1047649"> </a><p class="pBody">
+The application is your COBOL program, or more precisely, the ACUCOBOL-GT® runtime system together with Acu4GL for ODBC.  The runtime generates the appropriate SQL queries to accomplish the file I/O task that your COBOL program is executing.  This includes all file positioning and record locking.  When the query results are returned to the ACUCOBOL-GT runtime, they are mapped either to a COBOL record or to the appropriate COBOL status code, if one exists.
+</p>
+<a name="wp1047650"> </a><h3 class="pHeadingRef">
+Driver Manager
+</h3>
+<a name="wp1047655"> </a><p class="pBody">
+The driver manager loads the ODBC driver.  The driver manager then passes requests to the driver and returns results to the ACUCOBOL-GT runtime.  For the Microsoft Windows environment, the driver manager is called ODBC32.DLL for 32-bit architectures.
+</p>
+<a name="wp1047656"> </a><p class="pBody">
+The driver manager is typically included with the ODBC driver and is often installed along with the driver.  For some products, such as Microsoft Access and Excel, the driver manager is installed automatically if you choose the ODBC support option while installing the product.  (The ODBC support option tends to be part of the custom install process.)  
+</p>
+<a name="wp1047657"> </a><h3 class="pHeadingRef">
+Driver
+</h3>
+<a name="wp1047661"> </a><p class="pBody">
+The driver processes ODBC requests and returns data to the driver manager and your application.  If necessary, the driver translates the runtime's SQL request into a form that is understood by the target data source.
+</p>
+<a name="wp1047662"> </a><p class="pBody">
+Your application is not limited to communicating through just one driver.  By setting the ACUCOBOL-GT configuration variable <a  href="4gld19.htm#wp1047869">A_ODBC_DATASOURCE</a> you can direct the ACUCOBOL-GT runtime to connect to a different driver for any given file.  Simply set this variable before opening the indexed data file.  The Acu4GL interface for ODBC will then handle connecting to the new data source and performing any operations necessary to open the file.
+</p>
+<a name="wp1047663"> </a><p class="pBody">
+The driver is the most important feature of ODBC.  ODBC drivers for a given data source may be available from many different vendors.  They vary greatly in performance and in the options they provide for a given data source.  Be sure to carefully review a data source driver to determine its level of performance.  
+</p>
+<a name="wp1047664"> </a><p class="pBody">
+Your Acu4GL for ODBC disks include a program that tests your ODBC driver for the various functions the Acu4GL product requires.  This program is called DRVTST32.EXE.  You initiate it by selecting the appropriate icon in the Acu4GL for ODBC program group.  Please refer to <a  href="4gld35.htm#wp1085096">section D.8, &quot;Driver Requirements,&quot;</a> for instructions on using the driver test program.  This section also describes the minimal requirements that your driver must meet to work with Acu4GL for ODBC<span style="font-family: Arial, Verdana, Helvetica, sans-serif">.</span>  
+</p>
+<a name="wp1047665"> </a><h3 class="pHeadingRef">
+Data Sources
+</h3>
+<a name="wp1047670"> </a><p class="pBody">
+Data sources are the files or databases accessed by a driver.  Each data source must be identified during setup. 
+</p>
+<a name="wp1047671"> </a><p class="pBody">
+Some data sources are simple to identify.  For example, to access a text file, you would provide the name and location of the file. Some are more complex.  For example, to access a UNIX-hosted database such as Oracle, you would identify the Windows drivers, Windows applications, network connections, and database information. 
+</p>
+<a name="wp1047672"> </a><p class="pBody">
+In Windows XP, you set up an ODBC data source in the Windows control panel, Administrative Tools dialog.  After you double-click the Data Sources (ODBC) icon, an ODBC Data Source Administrator dialog box is displayed.  You must designate the driver, the data source, and any other information necessary to access the data.  Setup procedures are described in detail in <a  href="4gld7.htm#wp1047686">section D.2, &quot;Acu4GL for ODBC Installation and Setup.&quot;</a>
+</p>
+<a name="wp1047676"> </a><p class="pBody">
+The following diagram shows how the Acu4GL product fits into a <em class="cEmphasis">single-tier </em>environment.
+</p>
+<a name="wp1047678"> </a><p class="pBodyRelative">
+</p><div><img src="images/4in_4gl_.gif" height="466" width="370" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1047683"> </a><p class="pBody">
+The following diagram shows how Acu4GL fits into a <em class="cEmphasis">multiple-tier</em> environment.
+</p>
+<a name="wp1047684"> </a><p class="pBodyRelative">
+</p><div><img src="images/4in_4gla.gif" height="567" width="375" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

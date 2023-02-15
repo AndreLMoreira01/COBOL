@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:45:44" />
+  <title>6.5.1  Passwords</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv6.htm">Chapter 6: System Security</a> &gt; <a href="srv618.htm">6.5  AcuServer Connection Logic</a> &gt; </p>
+<a name="wp1035715"> </a><h2 class="pHeading2">
+6.5.1  Passwords
+</h2>
+<a name="wp1035717"> </a><p class="pBody">
+Regardless of whether you're using AcuServer's built-in security or native system security, defining passwords in the access records of your AcuAccess file can be very useful.
+</p>
+<a name="wp1035718"> </a><p class="pBody">
+If you are using LOGON security, defining the password field to hold the user's current Windows NT domain password can make the login process transparent.  When a requester initiates a connection to AcuServer, AcuServer uses the value of the requester's password field, if defined, to log the requester onto the Windows NT domain.  If the password is not valid, the user is prompted to enter a password.  If the user enters a blank password, that entry counts as one password attempt, but AcuServer does not give an error message, and the user can try again.  Note that the NAMED-PIPE form of security does not use the password field.  See SECURITY_METHOD in section 4.2.2 for more information.
+</p>
+<a name="wp1049085"> </a><p class="pBody">
+If you are using UNIX system security, you can simplify the login process by defining the password field to hold the user's current system password.  
+</p>
+<a name="wp1035719"> </a><p class="pBody">
+If you are using AcuServer's system security, you can use passwords to achieve added security.  When a password is assigned to an entry in the server access file, requesters who match that entry must return a matching password to AcuServer.  The client application has two options for acquiring and sending a password back to AcuServer:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1035720"> </a><div class="pSmartList1"><li>Using the <em class="cEmphasis">Acu_Client_Password</em> program variable </li></div>
+<a name="wp1035721"> </a><div class="pSmartList1"><li>Having the client runtime prompt users to enter a password</li></div>
+</ul></div>
+<a name="wp1035722"> </a><h5 class="pHeading4">
+Option one: program variable
+</h5>
+<a name="wp1035723"> </a><p class="pBody">
+The requesting application may include code which checks for the program variable Acu_Client_Password.  If defined, its value is considered an unencrypted password which is then encrypted and sent to AcuServer for verification.  If the value does not match the value in the access record, the connection is refused.  Using Acu_Client_Password, the COBOL programmer has a great deal of flexibility in setting and acquiring the password.  Using Acu_Client_Password, the programmer can supply a password to AcuServer without requiring any user interaction (the user may remain unaware that a password is required).
+</p>
+<a name="wp1035726"> </a><p class="pBody">
+To use Acu_Client_Password, declare an external pic X variable named Acu_Client_Password in Working-Storage.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ACU_CLIENT_PASSWORD   PIC  X(64) IS EXTERNAL<a name="wp1035727"> </a>
+</pre></div>
+<a name="wp1035728"> </a><p class="pBody">
+Assign (MOVE) a value to the variable before the program's first access to a remote file (or better, before the program's first access to any file).
+</p>
+<a name="wp1035729"> </a><h5 class="pHeading4">
+Option two: user-entered password
+</h5>
+<a name="wp1035730"> </a><p class="pBody">
+If Acu_Client_Password is not defined, the client runtime will open a dialog window requesting that the user enter a password.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+A password is required to connect to host <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">hostname.</span><a name="wp1035731"> </a>
+Please enter a password:<a name="wp1039611"> </a>
+</pre></div>
+<a name="wp1035732"> </a><p class="pBody">
+The user must enter a password.  The characters do not echo on the screen.
+</p>
+<a name="wp1035733"> </a><p class="pBody">
+The password is then encrypted and sent to the server for verification.  If the password matches, a connection is established.  If the password doesn't match, the user is prompted again to enter a password.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Invalid password<a name="wp1035734"> </a>
+Please enter a password:<a name="wp1039616"> </a>
+</pre></div>
+<a name="wp1035735"> </a><p class="pBody">
+The password verification cycle is repeated until a valid password is entered, or the value of the server configuration variable PASSWORD_ATTEMPTS is exceeded (the default value is three).
+</p>
+<a name="wp1045463"> </a><p class="pBody">
+If you have a situation where a client connects to <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> many times in succession, you may want to set the <em class="cEmphasis">server</em>_PASSWORD and <em class="cEmphasis">server</em>_<em class="cEmphasis">port</em>_PASSWORD environment variables on the client.  This allows AcuServer to verify the client password automatically, instead of repeatedly prompting the user to enter a password.  For more information about setting these environment variables, see Appendix H in Book 4 of the ACUCOBOL-GT documentation set<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">.</span>
+</p>
+<a name="wp1035737"> </a><p class="pBody">
+The text displayed by the runtime to prompt for a password and report a failed verification can be modified with the TEXT runtime configuration variable (see <a  href="srv44.htm#wp1040787">section 4.2.1, &quot;Runtime Configuration Variables&quot;</a>).
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

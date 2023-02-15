@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.2.4.6  Enabling and disabling the MPE interface</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp3.htm">4.2  ACUCOBOL-GT in MPE/iX Environments</a> &gt; <a href="ch4-hp18.htm">4.2.4  Accessing MPE KSAM, Relative, and Sequential Files</a> &gt; </p>
+<a name="wp1041279"> </a><h2 class="pHeading3">
+4.2.4.6  Enabling and disabling the MPE interface
+</h2>
+<a name="wp1041281"> </a><p class="pBody">
+In ACUCOBOL-GT, support for KSAM is enabled by default.  However, if for some reason support has been disabled and you want to re-enable it, or if you want to disable support, you can include or remove it from the runtime by performing the following steps.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041282"> </a><div class="pSmartList1"><li>Make a backup copy of your current <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">runcbl</span> file.  </li></div>
+<a name="wp1043766"> </a><div class="pSmartList1"><li>Edit &quot;filetbl.c&quot; (in the &quot;LIB&quot; directory).  In a text editor, look for the list of define statements.  The list contains entries such as:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+#define USE_VISION   1<a name="wp1044233"> </a>
+#define USE_RMS      0<a name="wp1044237"> </a>
+#define USE_CISAM    0<a name="wp1044241"> </a>
+#define USE_BTRIEVE  0<a name="wp1044245"> </a>
+#define USE_INFORMIX 0<a name="wp1044249"> </a>
+#define USE_MPE      1<a name="wp1044253"> </a>
+</pre></div>
+<a name="wp1044124"> </a><p class="pIndented1">
+Set a value in the list to &quot;0&quot; (zero) to disable that system, or to &quot;1&quot; (one) to enable it.  The file systems that are set to &quot;1&quot; are the ones you plan to link and use.  Any or all may be enabled at the same time; the more systems you link, the larger your runtime system becomes.  Only Vision and MPE KSAM, relative, and sequential files are supported on the HP e3000.
+</p>
+<a name="wp1041311"> </a><div class="pSmartList1"><li>Locate and edit the &quot;Makefile&quot; (in the &quot;LIB&quot; directory).  In a text editor, add &quot;ksam.o&quot; to the FSI_SUBS definition.  The line with FSI_SUBS should look like this:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FSI_SUBS  =  ksam.o<a name="wp1041312"> </a>
+</pre></div>
+<a name="wp1041313"> </a><p class="pIndented1">
+To remove support for KSAM, remove &quot;ksam.o&quot; from FSI_SUBS.
+</p>
+<a name="wp1041314"> </a><div class="pSmartList1"><li>Link the runtime system.  Be sure that your current working directory is the &quot;lib&quot; subdirectory of your ACUCOBOL-GT directory.  </li></div>
+<a name="wp1041315"> </a><p class="pIndented1">
+To link the runtime in the  MPE/iX environment enter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:/usr/local/bin/make <a name="wp1041316"> </a>
+</pre></div>
+<a name="wp1041317"> </a><p class="pIndented1">
+To link the runtime in the POSIX environment enter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+make <a name="wp1041318"> </a>
+</pre></div>
+<a name="wp1041319"> </a><p class="pIndented1">
+This compiles &quot;sub.c&quot; and &quot;filetbl.c&quot;, and then links the runtime.
+</p>
+<a name="wp1041320"> </a><div class="pSmartList1"><li>To specify MPE as the default file system, edit &quot;cblconfig&quot; (the runtime configuration file) and add the following line:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DEFAULT_FILESYSTEM MPE<a name="wp1041321"> </a>
+</pre></div>
+<a name="wp1041322"> </a><p class="pIndented1">
+You can override this default in your programs via the SET ENVIRONMENT statement or by setting the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">filename</span>_HOST variable.
+</p>
+<a name="wp1041323"> </a><div class="pSmartList1"><li>Test the system.  </li></div>
+<a name="wp1041324"> </a><p class="pIndented1">
+The interface is now in place.  To ensure that ACUCOBOL-GT is writing and reading records via KSAM, move to the directory containing the sample program <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">iobench</span>.  Create a temporary configuration file named &quot;temp.ttt&quot;.  In this file, place one line:  
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DEFAULT_FILESYSTEM MPE<a name="wp1041325"> </a>
+</pre></div>
+<a name="wp1041326"> </a><p class="pIndented1">
+At the system prompt, type:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:runcbl  &quot;-v&quot;<a name="wp1041327"> </a>
+:ccbl  &quot;-x  -Cp  -Si  ACU  iobench.cbl&quot;<a name="wp1041328"> </a>
+:runcbl  &quot;-c  temp.ttt iobench&quot;<a name="wp1041329"> </a>
+</pre></div>
+<a name="wp1041330"> </a><p class="pIndented1">
+This displays the version number of the interface and then compiles and executes a sample program that generates several file I/O activities.
+</p>
+<a name="wp1073279"> </a><p class="pIndented1">
+We use the file &quot;temp.ttt&quot; to prevent the runtime system from using your usual &quot;cblconfig&quot; file.  This ensures that the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">iobench</span> program creates its files in the current directory. 
+</p>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

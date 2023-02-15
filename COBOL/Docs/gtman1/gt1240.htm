@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.8.1  File Names Starting With a Hyphen</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt1239.htm">2.8  File Name Interpretation</a> &gt; </p>
+<a name="wp1033715"> </a><h2 class="pHeading2">
+2.8.1  File Names Starting With a Hyphen
+</h2>
+<a name="wp1033719"> </a><p class="pBody">
+File names that start with a hyphen are treated specially.  The hyphen and the following character are removed, as are any spaces following that character.  The rest of the name is interpreted depending on the character after the hyphen as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033720"> </a><div class="pSmartList1"><li>If the character is an &quot;F&quot;, then the name is treated as a normal file name.  This differs from the default handling only in that the name is not further translated (i.e., no further searching in the environment and no application of the FILE_PREFIX or FILE_SUFFIX).  This is useful if you want to ensure that a file name is placed in the current directory or remains untranslated.</li></div>
+<a name="wp1033721"> </a><div class="pSmartList1"><li>If the character is a &quot;D&quot;, then the name is treated as the name of a device.  This is treated no differently than the case for &quot;F&quot; above, except that file locking rules are slightly changed for devices.  Devices may be assigned only to SEQUENTIAL files.  </li></div>
+<a name="wp1033723"> </a><div class="pSmartList1"><li>If the character is a &quot;P&quot;, then the name is treated as the name of a program to run.  On UNIX systems, a &quot;pipe&quot; is created between <b class="cBold">runcbl </b>and the named program.  This program will then either receive data written to the file or provide the data read from the file.  </li></div>
+<a name="wp1033727"> </a><p class="pIndented1">
+On Windows and VMS  systems this is handled somewhat differently.  The translation of the name must contain at least two space-separated words.  The first word is treated as the name of a file to write or read.  This name is not further translated and is handled as a standard SEQUENTIAL file.  The second and following words are treated as the program to run.  If the file is being opened for input, the program is run first and then the named file is opened.  If the file is being opened for output, then the named file is first opened normally; when this file is finally closed, the named program is run.  Typically the program should either create or read the named file as is appropriate.  
+</p>
+<a name="wp1033729"> </a><p class="pIndented1">
+On Windows and VMS systems you have the option of using the phrase &quot;%TMP%&quot; in place of a file name.  In this case a unique name is created for you, and that same name is substituted for &quot;%TMP%&quot; every place on the line that the phrase is found.  It is advisable to finish with (or rename) the file within 19 days, to avoid the possibility of name conflicts with names generated in the future. (See the examples below.)
+</p>
+<a name="wp1033731"> </a><p class="pIndented1">
+If you use the &quot;%TMP%&quot; option to assign a file to a simulated pipe (by using &quot;-P&quot; in the assign name), you can specify where the temporary file will reside.  This is done with the TEMP_DIR configuration entry.  It acts just like the SORT_DIR entry, except that it applies only to %TMP% files.
+</p>
+<a name="wp1085944"> </a><p class="pIndented1">
+On Windows systems, if you append an ampersand (&amp;) character to the command line, the program will run asynchronously.  This should not be done for programs providing input files, but is often useful for programs processing output files.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    assign to output &quot;-P %TMP% cmd /c edit %TMP% &amp;&quot;<a name="wp1085945"> </a>
+</pre></div>
+<a name="wp1033736"> </a><p class="pIndented1">
+Program files may be assigned only to SEQUENTIAL files and may not be opened for I/O or EXTEND.  
+</p>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

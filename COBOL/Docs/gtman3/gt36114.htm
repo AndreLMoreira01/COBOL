@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>EXIT Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1039232"> </a><h2 class="pHeading2">
+EXIT Statement
+</h2>
+<a name="wp1039236"> </a><p class="pBody">
+The EXIT statement returns control to a calling program or provides a common logical end point for a series of procedures.
+</p>
+<a name="wp1039237"> </a><h3 class="pHeadingRef">
+Format 1
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">EXIT</u><a name="wp1039238"> </a>
+</pre></div>
+<a name="wp1039239"> </a><h3 class="pHeadingRef">
+Format 2
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">EXIT</u> <u class="cUnderline">PROGRAM</u> [ {RETURNING} return-value ]<a name="wp1039240"> </a>
+               {GIVING   }<a name="wp1039241"> </a>
+</pre></div>
+<a name="wp1039242"> </a><h3 class="pHeadingRef">
+Format 3
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">EXIT</u> <u class="cUnderline">PERFORM</u> [ <u class="cUnderline">CYCLE</u> ]<a name="wp1039243"> </a>
+</pre></div>
+<a name="wp1039244"> </a><h3 class="pHeadingRef">
+Format 4
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">EXIT</u>  {<u class="cUnderline">PARAGRAPH</u>}<a name="wp1039245"> </a>
+      {<u class="cUnderline">SECTION</u>  }<a name="wp1039246"> </a>
+</pre></div>
+<a name="wp1039248"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039249"> </a><div class="pSmartList1"><li>A Format 1 EXIT statement must be in a sentence by itself, and that sentence must be the only sentence in its paragraph.  </li></div>
+<a name="wp1039250"> </a><div class="pSmartList1"><li><em class="cEmphasis">Return-value</em> must be a numeric literal or data item.</li></div>
+<a name="wp1039251"> </a><div class="pSmartList1"><li>An EXIT PERFORM statement must occur within the scope of an in-line PERFORM statement.  </li></div>
+<a name="wp1039252"> </a><div class="pSmartList1"><li>An EXIT SECTION statement must be contained within a section.  </li></div>
+</ol></div>
+<a name="wp1039254"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<a name="wp1039255"> </a><h3 class="pHeadingRef">
+Format 1
+</h3>
+<a name="wp1039256"> </a><p class="pBody">
+A Format 1 EXIT statement associates a paragraph name with a point in the program.  It has no effect on program execution.  A paragraph containing a Format 1 EXIT statement is equivalent to an empty paragraph.
+</p>
+<a name="wp1039258"> </a><h3 class="pHeadingRef">
+Format 2  
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039259"> </a><div class="pSmartList1"><li>An EXIT PROGRAM statement has no effect if executed in a program that is the first program of a thread or any program that was not called by another.  Neither does it have any effect if it is executed within the scope of an EVENT procedure, unless the return point is also within the scope of the EVENT procedure.</li></div>
+<a name="wp1039260"> </a><div class="pSmartList1"><li>In a called program, the EXIT PROGRAM statement causes the current program to exit, and execution resumes at the next executable statement after the CALL statement in the calling program.  </li></div>
+<a name="wp1039262"> </a><div class="pSmartList1"><li>If the exiting program has the initial attribute, it is immediately canceled (see the entry in this section for the &quot;CANCEL Statement&quot;).  If it does not have the initial attribute, it retains its current state the next time it is called.  </li></div>
+<a name="wp1039263"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">return-value</em> is specified, then it is assigned to the special register RETURN-CODE before the program is exited.  This special register is defined as: </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77  RETURN-CODE SIGNED-LONG, EXTERNAL.<a name="wp1039265"> </a>
+</pre></div>
+<a name="wp1039266"> </a><p class="pIndented1">
+It is implicitly shared by all programs of a run unit and is automatically created by the compiler.  The final value of RETURN-CODE is returned to the host operating system when the run unit completes. 
+</p>
+<a name="wp1039268"> </a><p class="pIndented1">
+The compiler also creates an unsigned version of the return code called RETURN-UNSIGNED.  It has the following implied definition:  
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77  RETURN-UNSIGNED<a name="wp1039269"> </a>
+          REDEFINES RETURN-CODE UNSIGNED-LONG, EXTERNAL.<a name="wp1039270"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1039272"> </a><h3 class="pHeadingRef">
+Format 3 
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039273"> </a><div class="pSmartList1"><li>An EXIT PERFORM statement causes control to pass to a point just past the END-PERFORM that matches the innermost PERFORM statement containing the EXIT PERFORM.  This causes the program to jump out of the innermost in-line PERFORM.  </li></div>
+<a name="wp1039274"> </a><div class="pSmartList1"><li>If the CYCLE option is given, then control is passed to a point just <em class="cEmphasis">prior</em> to the matching END-PERFORM instead.  For PERFORM constructs that imply looping, this will cause control to pass to the next iteration of the loop (note that the loop-terminating condition will be tested).  </li></div>
+</ol></div>
+<a name="wp1039277"> </a><h3 class="pHeadingRef">
+Format 4  
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039278"> </a><div class="pSmartList1"><li>An EXIT PARAGRAPH statement causes control to pass to an imaginary CONTINUE statement placed at the end of the current paragraph.  </li></div>
+<a name="wp1039279"> </a><div class="pSmartList1"><li>An EXIT SECTION statement causes control to pass to an imaginary CONTINUE statement placed at the end of the last paragraph in the current section.  </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>STRING Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1158248"> </a><h2 class="pHeading2">
+STRING Statement
+</h2>
+<a name="wp1042281"> </a><p class="pBody">
+The STRING statement concatenates data items.
+</p>
+<a name="wp1042282"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This manual entry includes code examples and highlights for first-time users following the General Rules section.
+<hr />
+</p>
+<a name="wp1158200"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">STRING</u> { {source} ... [<u class="cUnderline">DELIMITED</u> BY {delimiter}] } ...<a name="wp1158201"> </a>
+                      [             {<u class="cUnderline">SIZE</u>     }]<a name="wp1158202"> </a>
+<a name="wp1042287"> </a>
+     <u class="cUnderline">INTO</u> destination<a name="wp1042288"> </a>
+<a name="wp1042289"> </a>
+   [ WITH <u class="cUnderline">POINTER</u> ptr-var ]<a name="wp1042290"> </a>
+<a name="wp1042291"> </a>
+   [ ON <u class="cUnderline">OVERFLOW</u> statement-1 ]<a name="wp1042292"> </a>
+<a name="wp1042293"> </a>
+   [ <u class="cUnderline">NOT</u> ON <u class="cUnderline">OVERFLOW</u> statement-2 ]<a name="wp1042294"> </a>
+<a name="wp1042295"> </a>
+   [ <u class="cUnderline">END-STRING</u> ]<a name="wp1042296"> </a>
+</pre></div>
+<a name="wp1042298"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042300"> </a><div class="pSmartList1"><li><em class="cEmphasis">Source</em> and <em class="cEmphasis">delimiter</em> are nonnumeric literals or data items with USAGE DISPLAY.  The &quot;ALL literal&quot; construct may not be used.  </li></div>
+<a name="wp1199179"> </a><div class="pSmartList1"><li>The compiler allows <em class="cEmphasis">source</em> to be a numeric literal, in which case it treats <em class="cEmphasis">source</em> as a string literal, displaying the following Warning at compilation time:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Warning: Literal is numeric - treated as alphanumeric<a name="wp1194757"> </a>
+</pre></div>
+<a name="wp1199181"> </a><p class="pIndented1">
+In such cases, leading zeros are stripped from the numeric literal to form the string literal.
+</p>
+<a name="wp1042301"> </a><div class="pSmartList1"><li><em class="cEmphasis">Destination</em> is a data item with USAGE DISPLAY.  It may not be JUSTIFIED or edited.  <em class="cEmphasis">Destination</em> may not be reference modified.</li></div>
+<a name="wp1042302"> </a><div class="pSmartList1"><li><em class="cEmphasis">Ptr-var</em> is an integer numeric data item.</li></div>
+<a name="wp1042303"> </a><div class="pSmartList1"><li><em class="cEmphasis">Statement-1</em> and <em class="cEmphasis">statement-2</em> are imperative statements.</li></div>
+<a name="wp1042304"> </a><div class="pSmartList1"><li>The size of <em class="cEmphasis">ptr-var</em> must allow it to contain a value one greater than the size of <em class="cEmphasis">destination</em>.</li></div>
+<a name="wp1158205"> </a><div class="pSmartList1"><li>The DELIMITED phrase may be omitted only immediately before the INTO phrase.  If omitted, DELIMITED BY SIZE is implied.</li></div>
+</ol></div>
+<a name="wp1042306"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042308"> </a><div class="pSmartList1"><li>The STRING statement concatenates the <em class="cEmphasis">source</em> values and places the result in <em class="cEmphasis">destination</em>.  Up to 50 <em class="cEmphasis">source</em> items are allowed. </li></div>
+<a name="wp1042310"> </a><div class="pSmartList1"><li>The STRING statement moves characters from <em class="cEmphasis">source</em> to <em class="cEmphasis">destination</em> according to the rules for alphanumeric to alphanumeric moves.  However, no space filling occurs.</li></div>
+<a name="wp1042311"> </a><div class="pSmartList1"><li>The contents of each <em class="cEmphasis">source</em> item are moved to <em class="cEmphasis">destination</em> in the order they appear.  Data is moved from the left, character by character, until the end of <em class="cEmphasis">source</em> is reached.  The end point of each <em class="cEmphasis">source</em> item is determined by the DELIMITED phrase according to the following rules: </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1042314"> </a><div class="pSmartList2"><li>Transfer stops when the end of <em class="cEmphasis">source</em> is reached.</li></div>
+<a name="wp1042315"> </a><div class="pSmartList2"><li>Transfer stops when the end of <em class="cEmphasis">destination</em> is reached.</li></div>
+<a name="wp1042316"> </a><div class="pSmartList2"><li>If <em class="cEmphasis">delimiter</em> is specified, transfer stops when the characters specified by <em class="cEmphasis">delimiter</em> are found in <em class="cEmphasis">source</em>.  The <em class="cEmphasis">delimiter</em> is not included in the characters transferred.</li></div>
+<a name="wp1042317"> </a><div class="pSmartList2"><li>If the SIZE option is used, transfer ends only when the end of <em class="cEmphasis">source</em> or <em class="cEmphasis">destination</em> is reached.  </li></div>
+<a name="wp1042318"> </a><div class="pSmartList2"><li>When <em class="cEmphasis">source</em> or <em class="cEmphasis">delimiter</em> is a figurative constant, it represents a size of one character.</li></div>
+<a name="wp1042319"> </a><div class="pSmartList2"><li>If <em class="cEmphasis">source</em> is a variable size item, the current size is used to determine the end of <em class="cEmphasis">source</em>.  If the current size is zero characters, no transfer occurs for that <em class="cEmphasis">source</em> item.</li></div>
+</ol></div>
+<a name="wp1042320"> </a><div class="pSmartList1"><li>When the POINTER phrase is specified, <em class="cEmphasis">ptr-var</em> must be set by the program to a value greater than zero before the STRING statement executes.  The transfer to <em class="cEmphasis">destination</em> starts at the character position in <em class="cEmphasis">destination</em> indicated by <em class="cEmphasis">ptr-var</em>.  The leftmost character of <em class="cEmphasis">destination</em> is position &quot;1&quot;.  If no POINTER phrase is used, an implied pointer is created and set to the value &quot;1&quot;. </li></div>
+<a name="wp1042323"> </a><div class="pSmartList1"><li><em class="cEmphasis">Ptr-var</em> (or the implied pointer) is incremented by one for each character transferred to <em class="cEmphasis">destination</em>.  The transfer to <em class="cEmphasis">destination</em> always occurs at the character position indicated by the current pointer value.  </li></div>
+<a name="wp1042324"> </a><div class="pSmartList1"><li>When the STRING statement ends, only those parts of <em class="cEmphasis">destination</em> referenced during execution change.  </li></div>
+<a name="wp1042325"> </a><div class="pSmartList1"><li>Before moving each character to <em class="cEmphasis">destination</em>, the STRING statement tests the value of <em class="cEmphasis">ptr-var</em> (or the implied pointer if <em class="cEmphasis">ptr-var</em> is not specified).  If this value is less than one or greater than the size of <em class="cEmphasis">destination</em>, the overflow condition is set and the following happens:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1042326"> </a><div class="pSmartList2"><li>No more data is transferred to destination.</li></div>
+<a name="wp1042327"> </a><div class="pSmartList2"><li>If the ON OVERFLOW phrase is used, <em class="cEmphasis">statement-1</em> executes.</li></div>
+<a name="wp1042328"> </a><div class="pSmartList2"><li>The STRING statement ends.</li></div>
+</ol></div>
+<a name="wp1042331"> </a><div class="pSmartList1"><li>If the NOT ON OVERFLOW phrase is specified, <em class="cEmphasis">statement-2</em> executes after the STRING statement is finished if the overflow condition has not occurred (see general rule 7).  </li></div>
+<a name="wp1042332"> </a><div class="pSmartList1"><li>Subscripting for <em class="cEmphasis">source</em> and <em class="cEmphasis">delimiter</em> occurs just before the corresponding item is used.</li></div>
+<a name="wp1042333"> </a><div class="pSmartList1"><li>Subscripting for <em class="cEmphasis">ptr-var</em> and <em class="cEmphasis">destination</em> occurs just before the STRING statement executes.</li></div>
+</ol></div>
+<a name="wp1042334"> </a><h3 class="pHeadingRef">
+Code examples
+</h3>
+<a name="wp1042335"> </a><p class="pBody">
+Assume the following data items:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  CLAIM-CODE   PIC X(20).  |destination data item,<a name="wp1042336"> </a>
+                             |initialize before use<a name="wp1042337"> </a>
+01  CUSTOMER-ID  PIC X(8).   |source data item<a name="wp1042338"> </a>
+01  ORDER-NO     PIC X(10).  |source data item<a name="wp1042339"> </a>
+01  ORDER-DATE   PIC 9(6).   |source data item<a name="wp1042340"> </a>
+01  STRING-PTR   PIC 99.     |concatenation pointer,<a name="wp1042341"> </a>
+                             |initialize before use<a name="wp1042342"> </a>
+</pre></div>
+<a name="wp1042343"> </a><p class="pBody">
+Assume the program assigns the following values before the STRING statement executes:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CLAIM-CODE  = SPACES<a name="wp1042344"> </a>
+(destination item gets space filled)<a name="wp1042345"> </a>
+CUSTOMER-ID = C077/W12 <a name="wp1042346"> </a>
+(customer number &quot;/&quot; region code)<a name="wp1042347"> </a>
+ORDER-NO    = W12-A00234<a name="wp1042348"> </a>
+(region code &quot;-&quot; order number)<a name="wp1042349"> </a>
+ORDER-DATE  = 060199<a name="wp1042350"> </a>
+(mmddyy)<a name="wp1042351"> </a>
+</pre></div>
+<a name="wp1042352"> </a><h3 class="pHeadingRef">
+Example 1:
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+STRING ORDER-DATE DELIMITED BY SIZE<a name="wp1042353"> </a>
+       ORDER-NO   DELIMITED BY SIZE<a name="wp1042354"> </a>
+       INTO CLAIM-CODE<a name="wp1042355"> </a>
+END-STRING.<a name="wp1042356"> </a>
+*CLAIM-CODE = &quot;060199W12-A00234    &quot;<a name="wp1042357"> </a>
+*spaces appear at the end of concatenated string<a name="wp1042358"> </a>
+*because CLAIM-CODE was assigned SPACES before the<a name="wp1042359"> </a>
+*STRING concatenation statement executed<a name="wp1042360"> </a>
+</pre></div>
+<a name="wp1042361"> </a><h3 class="pHeadingRef">
+Example 2:
+</h3>
+<a name="wp1042362"> </a><p class="pBody">
+Use POINTER to coordinate multiple STRING statements into a common concatenation object.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SET STRING-PTR TO 1.<a name="wp1042363"> </a>
+MOVE SPACES TO CLAIM-CODE.<a name="wp1042364"> </a>
+STRING ORDER-DATE DELIMITED BY SIZE<a name="wp1042365"> </a>
+    INTO CLAIM-CODE<a name="wp1042366"> </a>
+    POINTER STRING-PTR<a name="wp1042367"> </a>
+END-STRING.<a name="wp1042368"> </a>
+*CLAIM-CODE now contains: &quot;060199&quot;<a name="wp1042369"> </a>
+*Reassign the value of STRING-PTR so as to <a name="wp1042370"> </a>
+*eliminate the year digits by overwriting <a name="wp1042371"> </a>
+*positions 5 &amp; 6 in the destination string<a name="wp1042372"> </a>
+SUBTRACT 2 FROM STRING-PTR.<a name="wp1042373"> </a>
+...<a name="wp1042374"> </a>
+*build the remainder of the string<a name="wp1042375"> </a>
+*start by adding a hyphen delimiter,<a name="wp1042376"> </a>
+*add all characters before &quot;/&quot; in CUSTOMER-ID<a name="wp1042377"> </a>
+*add another hyphen delimiter<a name="wp1042378"> </a>
+*add all of ORDER-NO<a name="wp1042379"> </a>
+STRING &quot;-&quot;,<a name="wp1042380"> </a>
+       CUSTOMER-ID DELIMITED BY &quot;/&quot;,<a name="wp1042381"> </a>
+       &quot;-&quot;,<a name="wp1042382"> </a>
+       ORDER-NO    DELIMITED BY SIZE<a name="wp1042383"> </a>
+   INTO CLAIM-CODE<a name="wp1042384"> </a>
+   POINTER STRING-PTR<a name="wp1042385"> </a>
+   ON OVERFLOW<a name="wp1042386"> </a>
+      DISPLAY &quot;Claim-Code OVERFLOW&quot;<a name="wp1042387"> </a>
+   NOT ON OVERFLOW<a name="wp1042388"> </a>
+      PERFORM PROCESS-CLAIM-CODE<a name="wp1042389"> </a>
+END-STRING.<a name="wp1042390"> </a>
+*CLAIM-CODE = &quot;0601-C077-W12-A00234&quot;<a name="wp1042391"> </a>
+</pre></div>
+<a name="wp1042392"> </a><h3 class="pHeadingRef">
+Highlights for first-time users
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042394"> </a><div class="pSmartList1"><li>A clear, concise description of the concatenation transfer process is contained in entry 3 of the preceding General Rules section.</li></div>
+<a name="wp1042395"> </a><div class="pSmartList1"><li>Use DELIMITED BY to concatenate a portion of the source item up to, but not including, the delimiter.  The delimiter may be a single character or a string.</li></div>
+<a name="wp1042396"> </a><div class="pSmartList1"><li>Use OVERFLOW to do special processing in the event that the size of the concatenation overflows the destination data item.  The OVERFLOW phrase should always be included when an overflow condition is possible.</li></div>
+<a name="wp1042397"> </a><div class="pSmartList1"><li>Use NOT ON OVERFLOW to do special processing in the event that the concatenation succeeds (does not result in an overflow).</li></div>
+<a name="wp1042398"> </a><div class="pSmartList1"><li>Use POINTER to place data into a common destination when concatenation requires multiple STRING statements.  See code example 2, above.</li></div>
+<a name="wp1042399"> </a><div class="pSmartList1"><li>The STRING statement does not space fill the target data item.  You must initialize the destination data item.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01 CLAIM-CODE  PIC X(20)  VALUE ALL SPACES.<a name="wp1042400"> </a>
+</pre></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

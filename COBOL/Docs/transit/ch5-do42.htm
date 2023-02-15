@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:01:15" />
+  <title>5.5.2   The Picture</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch5-dosv.htm">Chapter 5:  IBM DOS/VS COBOL Conversions</a> &gt; <a href="ch5-do40.htm">5.5  External Floating-Point (EFP)</a> &gt; </p>
+<a name="wp1035266"> </a><h2 class="pHeading2">
+5.5.2   The Picture
+</h2>
+<a name="wp1035267"> </a><p class="pBody">
+An external floating-point (EFP) data item is defined by a picture that strongly resembles a floating-point numeric literal:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+{+} mantissa E {+} 99<a name="wp1035268"> </a>
+{-}            {-}<a name="wp1037114"> </a>
+</pre></div>
+<a name="wp1035269"> </a><p class="pBody">
+The mantissa is a string containing:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035270"> </a><div class="pSmartList1"><li>from one to sixteen &quot;9&quot;s, and</li></div>
+<a name="wp1035271"> </a><div class="pSmartList1"><li>one assumed decimal point (that does not appear in the data) represented by the letter &quot;V&quot;, or one actual decimal point (that does appear in the data) represented by a period &quot;<b class="cBold">.</b>&quot;.</li></div>
+</ol></div>
+<a name="wp1035272"> </a><p class="pBody">
+The exponent is always exactly two digits long, so the last two characters of the picture must be &quot;99&quot;.
+</p>
+<a name="wp1035273"> </a><p class="pBody">
+A plus sign &quot;+&quot; in the picture indicates that a nonnegative mantissa or exponent will be preceded by a plus sign; a minus sign &quot;-&quot; indicates that a nonnegative mantissa or exponent will be preceded by a space.
+</p>
+<a name="wp1035274"> </a><p class="pBody">
+A negative mantissa or exponent is always preceded by a minus sign.
+</p>
+<a name="wp1035275"> </a><p class="pBody">
+When a numeric value is converted to EFP format, the result is normalized so that the leftmost digit of the mantissa is nonzero, if this can be done without reducing the exponent below &quot;-99&quot;.  Zero is represented by a mantissa and exponent consisting entirely of zeros.
+</p>
+<a name="wp1035276"> </a><p class="pBody">
+When exponent overflow occurs, the mantissa of the result consists entirely of &quot;9&quot;s, and its exponent is &quot;+99&quot;.
+</p>
+<a name="wp1035277"> </a><p class="pBody">
+When exponent underflow occurs, the result is not normalized, and may be zero if it is too small to be represented in this format.
+</p>
+<a name="wp1038487"> </a><p class="pBody">
+Examples:
+</p>
+<a name="wp1037200"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1037121"> </a>
+picture
+
+</th>
+    <th><a name="wp1037123"> </a>
+value
+
+</th>
+    <th><a name="wp1037125"> </a>
+data
+
+</th>
+    <th><a name="wp1037127"> </a>
+notes
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037129"> </a><p class="pCellBody">
++9.999E+99
+</p>
+</td>
+    <td><a name="wp1037131"> </a><p class="pCellBody">
+123
+</p>
+</td>
+    <td><a name="wp1037133"> </a><p class="pCellBody">
++1.230E+02
+</p>
+</td>
+    <td><a name="wp1037135"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037137"> </a><p class="pCellBody">
++9.999E+99
+</p>
+</td>
+    <td><a name="wp1037139"> </a><p class="pCellBody">
+123.0E99
+</p>
+</td>
+    <td><a name="wp1037141"> </a><p class="pCellBody">
++9.999E+99
+</p>
+</td>
+    <td><a name="wp1038554"> </a><p class="pCellBody">
+exponent overflow
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037145"> </a><p class="pCellBody">
+-9V999E+99
+</p>
+</td>
+    <td><a name="wp1037147"> </a><p class="pCellBody">
+123
+</p>
+</td>
+    <td><a name="wp1037149"> </a><p class="pCellBody">
+1230E+02
+</p>
+</td>
+    <td><a name="wp1037151"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037153"> </a><p class="pCellBody">
+-9V999E-99
+</p>
+</td>
+    <td><a name="wp1037155"> </a><p class="pCellBody">
+123
+</p>
+</td>
+    <td><a name="wp1037157"> </a><p class="pCellBody">
+1230E 02
+</p>
+</td>
+    <td><a name="wp1037159"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037161"> </a><p class="pCellBody">
++V9999E-99
+</p>
+</td>
+    <td><a name="wp1037163"> </a><p class="pCellBody">
+0.0123
+</p>
+</td>
+    <td><a name="wp1037165"> </a><p class="pCellBody">
++1230E-01
+</p>
+</td>
+    <td><a name="wp1037167"> </a><p class="pCellBody">
+note normalization
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037169"> </a><p class="pCellBody">
++V9999E-99
+</p>
+</td>
+    <td><a name="wp1037171"> </a><p class="pCellBody">
+0.01E-99
+</p>
+</td>
+    <td><a name="wp1037173"> </a><p class="pCellBody">
++0100E-99
+</p>
+</td>
+    <td><a name="wp1037175"> </a><p class="pCellBody">
+exponent underflow
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037177"> </a><p class="pCellBody">
+-99999.E+99
+</p>
+</td>
+    <td><a name="wp1037179"> </a><p class="pCellBody">
+123
+</p>
+</td>
+    <td><a name="wp1037181"> </a><p class="pCellBody">
+12300.E-02
+</p>
+</td>
+    <td><a name="wp1037183"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

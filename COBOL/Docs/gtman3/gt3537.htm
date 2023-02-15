@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.7.1.3  REDEFINES clause</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3533.htm">5.7  Record Description Entry</a> &gt; <a href="gt3534.htm">5.7.1  Data Description Entry</a> &gt; </p>
+<a name="wp1035221"> </a><h2 class="pHeading3">
+5.7.1.3  REDEFINES clause
+</h2>
+<a name="wp1035223"> </a><p class="pBody">
+The REDEFINES clause allows the same computer memory area to be described by different data items.   ACUCOBOL-GT extends ANSI-85 COBOL by allowing a REDEFINES phrase to reference an item that is itself a redefinition of an area. 
+</p>
+<a name="wp1035225"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+level-number  [ data-name ]  <u class="cUnderline">REDEFINES</u>  prev-data-name<a name="wp1035226"> </a>
+              [ FILLER    ]<a name="wp1035227"> </a>
+</pre></div>
+<a name="wp1035229"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035230"> </a><div class="pSmartList1"><li>The <em class="cEmphasis">level-number</em>, <em class="cEmphasis">data-name,</em> and FILLER phrases in the General Format are not actually part of the REDEFINE clause.  They are included for clarity.</li></div>
+<a name="wp1035231"> </a><div class="pSmartList1"><li>The level-numbers of the subject of a REDEFINES clause and <em class="cEmphasis">prev-data-name</em> must be the same.  They may not be 66 or 88.</li></div>
+<a name="wp1035232"> </a><div class="pSmartList1"><li>REDEFINES is allowed in a level 01 entry in the File Section, but it will generate a warning message.</li></div>
+<a name="wp1035233"> </a><div class="pSmartList1"><li>The number of character positions described by <em class="cEmphasis">prev-data-name</em> need not be the same as the number of character positions in the subject of the REDEFINES clause.  The compiler generates a warning, however, if the number of character positions is greater in the subject of the REDEFINES clause than in <em class="cEmphasis">prev-data-name</em> and the level-number of the two data items is not 01 or 77 (this case is not allowed under ANSI COBOL).</li></div>
+<a name="wp1035234"> </a><div class="pSmartList1"><li><em class="cEmphasis">Prev-data-name</em> cannot be qualified.  Its reference is unique due to the placement of the REDEFINES clause.</li></div>
+<a name="wp1035235"> </a><div class="pSmartList1"><li>Several data items can redefine the same memory area. </li></div>
+<a name="wp1035236"> </a><div class="pSmartList1"><li>No entry with a level-number lower than that of <em class="cEmphasis">prev-data-name</em> can occur between the data description entry for <em class="cEmphasis">prev-data-name</em> and the redefinition.</li></div>
+<a name="wp1035237"> </a><div class="pSmartList1"><li>All entries redefining the storage area of a data item must immediately follow the entries describing that data item.  No intervening entries that define additional storage may appear. </li></div>
+<a name="wp1035238"> </a><div class="pSmartList1"><li>The IS EXTERNAL clause may not be used with the FILLER or REDEFINES clauses. </li></div>
+</ol></div>
+<a name="wp1035240"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035241"> </a><div class="pSmartList1"><li>Storage allocation for the redefining data item starts at the location of <em class="cEmphasis">prev-data-name</em>.  </li></div>
+<a name="wp1035242"> </a><div class="pSmartList1"><li>Storage allocation continues until it defines the number of character positions described by the redefining entry.</li></div>
+<a name="wp1035243"> </a><div class="pSmartList1"><li><em class="cEmphasis">Prev-data-name</em> may contain the OCCURS clause, although this is not compatible with ANSI COBOL.  If such a situation exists, the compiler will return a &quot;caution&quot; warning indicating a non-ANSI construct.  Cautions are shown only when you compile with the &quot;-a&quot; option.  When you REDEFINE a data item with an OCCURS clause, the redefining item starts at the same memory location as the first occurrence of the redefined item.</li></div>
+<a name="wp1035245"> </a><div class="pSmartList1"><li>In large model programs, certain REDEFINES could cause VALUE clauses to be lost.  This happens when the VALUEs are set in a data item that is not a large data item, and then that data item is redefined as a large data item.  When that occurs, the compiler detects the situation and issues a warning message:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Warning: Large redefines of a regular variable with a<a name="wp1035246"> </a>
+value: desc2 redefines desc1<a name="wp1072078"> </a>
+</pre></div>
+<a name="wp1035247"> </a><p class="pIndented1">
+When you see this warning message, you should modify your COBOL program to add FILLER to the first data item in order to make it a large data item.  For example, the following code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  small-group-item.<a name="wp1035248"> </a>
+  03  small-data-item pic x(100) value &quot;this is a test&quot;.<a name="wp1035249"> </a>
+<a name="wp1072081"> </a>
+01  large-group-item redefines small-group-item.<a name="wp1035251"> </a>
+  03  free-form-text  pic x(100) occurs 1000 times.<a name="wp1035252"> </a>
+</pre></div>
+<a name="wp1035253"> </a><p class="pIndented1">
+will compile, but the value of small-data-item will be spaces when the program starts.  To work around this, add:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+03  filler   pic x(65000).<a name="wp1035254"> </a>
+</pre></div>
+<a name="wp1035255"> </a><p class="pIndented1">
+to the small-group-item after the small-data-item.  The resulting code should look like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  small-group-item.<a name="wp1035256"> </a>
+  03  small-data-item pic x(100) value &quot;this is a test&quot;.<a name="wp1035257"> </a>
+  03  filler          pic x(65000).<a name="wp1035258"> </a>
+</pre></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

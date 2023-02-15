@@ -1,0 +1,476 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>-Q &lt;printername&gt; </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i132.htm">Routine to Handle the Windows Print Spooler</a> &gt; </p>
+<a name="wp1411207"> </a><h2 class="pHeading3">
+-Q &lt;printername&gt; 
+</h2>
+<a name="wp1411208"> </a><p class="pBody">
+If you want the Windows spooler to format the pages of your report, but you want to use a particular printer, assign your print file to:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PRINTER1 -Q \\<em class="cEmphasis">printername</em><a name="wp1411209"> </a>
+</pre></div>
+<a name="wp1411210"> </a><p class="pBody">
+in the configuration file (&quot;CBLCONFI&quot;).  <em class="cEmphasis">Printername</em> is the printer designation as given in the Printers folder under Settings in the Start menu. The name may be up to 80 characters long and contain embedded spaces. The name may not include the semicolon character (;) or be surrounded by single or double quotes.  The pages are printed in the manner described in &quot;-P&#160;SPOOLER&quot; below.  The sample programs  &quot;graphprn.cbl&quot; and &quot;prndemox.cbl&quot; contain examples of these functions. 
+</p>
+<a name="wp1411211"> </a><p class="pBody">
+To determine a valid <em class="cEmphasis">printername</em>, use the WIN$PRINTER library routine to obtain the name of the desired printer. (This is described under the <a  href="gt4i166.htm#wp1040768"><span style="font-family: Arial, Verdana, Helvetica, sans-serif">&quot;WINPRINT-SET-PRINTER&quot;</span></a> operation code in &quot;Specifying a Printer.&quot;) Then add the following line to your code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MOVE &quot;-Q \\<em class="cEmphasis">printername</em>&quot; TO WS-PRINTER-NAME.<a name="wp1411212"> </a>
+</pre></div>
+<a name="wp1411213"> </a><p class="pBody">
+When the runtime opens a file assigned to &quot;-Q &lt;<em class="cEmphasis">printername</em>&gt;&quot; it sets the Windows print spooler to use this printer. The printer driver must be installed on the computer from which you print.  If <em class="cEmphasis">printername</em> is not recognized by the runtime, a dialog box allows you to choose a printer manually.
+</p>
+<a name="wp1411214"> </a><h3 class="pHeadingRef">
+Setting Options
+</h3>
+<a name="wp1411215"> </a><p class="pBody">
+You may also use &quot;-Q &lt;<em class="cEmphasis">printername</em>&gt;&quot; to set several other printing options in the configuration file using the following syntax:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&lt;-Q <em class="cEmphasis">printername</em>&gt;[;option1=x][;option2=x][;option3=x]...<a name="wp1411216"> </a>
+</pre></div>
+<a name="wp1411217"> </a><p class="pBody">
+The following options may appear in any order.  Options not supported by the printer driver are ignored.  <em class="cEmphasis">Printername</em> should appear as shown in WINPRINT-NAME, but the options are case insensitive.  
+</p>
+<a name="wp1411218"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The options PITCH, COLS, LINES, and FONT are all mutually dependent.  Omitting one or more of these options may cause the resulting printout to look wrong.
+<hr />
+</p>
+<a name="wp1411257"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1411221"> </a><p class="pCellBody">
+CHARSET
+</p>
+</td>
+    <td><a name="wp1411223"> </a><p class="pCellBody">
+Specifies one of the character sets defined in &quot;fonts.def&quot;.  Refer to the supported values described in the table below.  If you use CHARSET, you must also use FONT.  
+</p>
+<a name="wp1411224"> </a><p class="pCellBody">
+If CHARSET is not specified, it has the same effect as CHARSET=WIN-DEFAULT.  To specify an alternative character set, the necessary fonts must be present on the computer.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411226"> </a><p class="pCellBody">
+DIRECT
+</p>
+</td>
+    <td><a name="wp1411228"> </a><p class="pCellBody">
+Setting DIRECT to &quot;ON&quot; causes the job to print as if the configuration file was set to &quot;-P SPOOLER-DIRECT&quot; (described later in this section). This option also disables any use of additional options.  Setting DIRECT to the default of &quot;OFF&quot; causes the job to print to the selected printer as if the configuration file was set to &quot;-P&#160;SPOOLER&quot;.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411233"> </a><p class="pCellBody">
+FONT
+</p>
+</td>
+    <td><a name="wp1411235"> </a><p class="pCellBody">
+Use FONT to specify a single font name. The font name may have embedded spaces, but may not contain double or single quotes.  If the font does not exist, the closest matching font is chosen.
+</p>
+<a name="wp1411236"> </a><p class="pCellBody">
+The runtime does not align columns. If you are printing a report containing columns, you should use a fixed-width font.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411238"> </a><p class="pCellBody">
+PITCH
+</p>
+</td>
+    <td><a name="wp1411240"> </a><p class="pCellBody">
+This value specifies the point size of the font.  Pitch does not determine the number of characters per line.  If you use a larger pitch, the characters simply appear more crowded.  For example, when you are printing 132 columns, a pitch of 10 produces better character spacing than a pitch of 12.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411242"> </a><p class="pCellBody">
+COLS
+</p>
+</td>
+    <td><a name="wp1411244"> </a><p class="pCellBody">
+Specifies the number of columns (width) on the page. This number is not validated by the runtime or the spooler.  Choose a number of columns that coordinate with the selected font and pitch when designing the report layout.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411246"> </a><p class="pCellBody">
+LINES 
+</p>
+</td>
+    <td><a name="wp1411248"> </a><p class="pCellBody">
+Specifies the lines (rows of characters) on the page.  This number is not validated by the runtime or the spooler.  Choose a number of lines that is compatible with the selected font and pitch when designing the report layout.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411250"> </a><p class="pCellBody">
+ORIENTATION
+</p>
+</td>
+    <td><a name="wp1411252"> </a><p class="pCellBody">
+If your printer supports this feature, ORIENTATION allows you to specify LANDSCAPE or PORTRAIT orientation for the report.  The default value of ORIENTATION is driver specific.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411254"> </a><p class="pCellBody">
+COPY
+</p>
+</td>
+    <td><a name="wp1411256"> </a><p class="pCellBody">
+If your printer supports this feature, COPY allows you to specify the number of copies to print.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1411258"> </a><h3 class="pHeadingRef">
+CHARSET Values
+</h3>
+<a name="wp1411259"> </a><p class="pBody">
+CHARSET can take one of the following values:
+</p>
+<a name="wp1411375"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1411262"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">Variant 1</span>
+</p>
+</th>
+    <th><a name="wp1411264"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">Variant 2</span>
+</p>
+</th>
+    <th><a name="wp1411266"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">Variant 3</span>
+</p>
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411268"> </a><p class="pCellBody">
+DEFAULT
+</p>
+</td>
+    <td><a name="wp1411270"> </a><p class="pCellBody">
+WFCHARSET-DEFAULT
+</p>
+</td>
+    <td><a name="wp1411272"> </a><p class="pCellBody">
+1
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411274"> </a><p class="pCellBody">
+WIN-OEM
+</p>
+</td>
+    <td><a name="wp1411276"> </a><p class="pCellBody">
+WFCHARSET-WIN-OEM
+</p>
+</td>
+    <td><a name="wp1411278"> </a><p class="pCellBody">
+2
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411280"> </a><p class="pCellBody">
+WIN-SYMBOL
+</p>
+</td>
+    <td><a name="wp1411282"> </a><p class="pCellBody">
+WFCHARSET-WIN-SYMBOL
+</p>
+</td>
+    <td><a name="wp1411284"> </a><p class="pCellBody">
+3
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411286"> </a><p class="pCellBody">
+WIN-SHIFTJIS
+</p>
+</td>
+    <td><a name="wp1411288"> </a><p class="pCellBody">
+WFCHARSET-WIN-SHIFTJIS
+</p>
+</td>
+    <td><a name="wp1411290"> </a><p class="pCellBody">
+4
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411292"> </a><p class="pCellBody">
+WIN-HANGUL
+</p>
+</td>
+    <td><a name="wp1411294"> </a><p class="pCellBody">
+WFCHARSET-WIN-HANGUL
+</p>
+</td>
+    <td><a name="wp1411296"> </a><p class="pCellBody">
+5
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411298"> </a><p class="pCellBody">
+WIN-GB2312
+</p>
+</td>
+    <td><a name="wp1411300"> </a><p class="pCellBody">
+WFCHARSET-WIN-GB2312
+</p>
+</td>
+    <td><a name="wp1411302"> </a><p class="pCellBody">
+6
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411304"> </a><p class="pCellBody">
+WIN-CHINESEBIG5
+</p>
+</td>
+    <td><a name="wp1411306"> </a><p class="pCellBody">
+WFCHARSET-WIN-CHINESEBIG5
+</p>
+</td>
+    <td><a name="wp1411308"> </a><p class="pCellBody">
+7
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411310"> </a><p class="pCellBody">
+WIN-JOHAB
+</p>
+</td>
+    <td><a name="wp1411312"> </a><p class="pCellBody">
+WFCHARSET-WIN-JOHAB
+</p>
+</td>
+    <td><a name="wp1411314"> </a><p class="pCellBody">
+8
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411316"> </a><p class="pCellBody">
+WIN-HEBREW
+</p>
+</td>
+    <td><a name="wp1411318"> </a><p class="pCellBody">
+WFCHARSET-WIN-HEBREW
+</p>
+</td>
+    <td><a name="wp1411320"> </a><p class="pCellBody">
+9
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411322"> </a><p class="pCellBody">
+WIN-ARABIC
+</p>
+</td>
+    <td><a name="wp1411324"> </a><p class="pCellBody">
+WFCHARSET-WIN-ARABIC
+</p>
+</td>
+    <td><a name="wp1411326"> </a><p class="pCellBody">
+10
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411328"> </a><p class="pCellBody">
+WIN-GREEK
+</p>
+</td>
+    <td><a name="wp1411330"> </a><p class="pCellBody">
+WFCHARSET-WIN-GREEK
+</p>
+</td>
+    <td><a name="wp1411332"> </a><p class="pCellBody">
+11
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411334"> </a><p class="pCellBody">
+WIN-TURKISH
+</p>
+</td>
+    <td><a name="wp1411336"> </a><p class="pCellBody">
+WFCHARSET-WIN-TURKISH
+</p>
+</td>
+    <td><a name="wp1411338"> </a><p class="pCellBody">
+12
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411340"> </a><p class="pCellBody">
+WIN-VIETNAMESE
+</p>
+</td>
+    <td><a name="wp1411342"> </a><p class="pCellBody">
+WFCHARSET-WIN-VIETNAMESE
+</p>
+</td>
+    <td><a name="wp1411344"> </a><p class="pCellBody">
+13
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411346"> </a><p class="pCellBody">
+WIN-THAI
+</p>
+</td>
+    <td><a name="wp1411348"> </a><p class="pCellBody">
+WFCHARSET-WIN-THAI
+</p>
+</td>
+    <td><a name="wp1411350"> </a><p class="pCellBody">
+14
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411352"> </a><p class="pCellBody">
+WIN-EASTEUROPE
+</p>
+</td>
+    <td><a name="wp1411354"> </a><p class="pCellBody">
+WFCHARSET-WIN-EASTEUROPE
+</p>
+</td>
+    <td><a name="wp1411356"> </a><p class="pCellBody">
+15
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411358"> </a><p class="pCellBody">
+WIN-RUSSIAN
+</p>
+</td>
+    <td><a name="wp1411360"> </a><p class="pCellBody">
+WFCHARSET-WIN-RUSSIAN
+</p>
+</td>
+    <td><a name="wp1411362"> </a><p class="pCellBody">
+16
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411364"> </a><p class="pCellBody">
+WIN-MAC
+</p>
+</td>
+    <td><a name="wp1411366"> </a><p class="pCellBody">
+WFCHARSET-WIN-MAC
+</p>
+</td>
+    <td><a name="wp1411368"> </a><p class="pCellBody">
+17
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1411370"> </a><p class="pCellBody">
+WIN-BALTIC
+</p>
+</td>
+    <td><a name="wp1411372"> </a><p class="pCellBody">
+WFCHARSET-WIN-BALTIC
+</p>
+</td>
+    <td><a name="wp1411374"> </a><p class="pCellBody">
+18
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1411376"> </a><h3 class="pHeadingRef">
+Examples
+</h3>
+<a name="wp1411377"> </a><p class="pBody">
+To use the Windows spooler with an HP Laserjet printer driver located on SERVER1, and specify the font, font size, width and number of lines in the report, enter the following into &quot;CBLCONFI&quot;:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PRINTER1 -Q \\SERVER1\HP Laserjet IV;FONT=Times New Roman;PITCH=12;COLS=132;LINES=65.<a name="wp1411378"> </a>
+</pre></div>
+<a name="wp1411379"> </a><p class="pBody">
+To print three copies directly to the printer on a server named GUTENBERG in Landscape orientation, enter the following into &quot;CBLCONFI&quot;:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PRINTER1 -Q \\GUTENBERG\HP Laserjet IV;DIRECT=ON;ORIENTATION=LANDSCAPE;COPY=3<a name="wp1411380"> </a>
+</pre></div>
+<a name="wp1411381"> </a><p class="pBody">
+To specify the Greek character set on a server named SERVER5, enter the following into &quot;CBLCONFI&quot;:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PRINTER1 -Q \\SERVER5\Laserjet;FONT=Courier New;PITCH=12;LINES=60;COLS=80;CHARSET=11<a name="wp1411382"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

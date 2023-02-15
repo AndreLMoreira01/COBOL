@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>6.3.6.2  Linking on UNIX and Linux systems</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr64.htm">6.3  Calling C Programs From COBOL</a> &gt; <a href="itr616.htm">6.3.6  Creating a New Runtime System</a> &gt; </p>
+<a name="wp1125928"> </a><h2 class="pHeading3">
+6.3.6.2  Linking on UNIX and Linux systems
+</h2>
+<a name="wp1130353"> </a><p class="pBody">
+On most UNIX and Linux systems, ACUCOBOL-GT provides two ways to relink the runtime.  The first is the traditional <b class="cBold">make</b> facility for which ACUCOBOL-GT includes a Makefile.  The second is with a script named <b class="cBold">makerun</b>.  <b class="cBold">makerun</b> allows you to specify the names of libraries and objects on the command line.  <b class="cBold">make</b> is immediately familiar to most UNIX and Linux developers.  Both facilities are described below.
+</p>
+<a name="wp1130704"> </a><p class="pBody">
+On UNIX and Linux systems where <span class="cBoldItalic">extend</span><sup class="cSuperscript">®</sup> products are delivered as shared object libraries, relinking the runtime requires relinking the appropriate shared object.  In the case of the runtime, this is &quot;libruncbl.so&quot; or &quot;libruncbl.sl&quot;.  On systems where <span class="cBoldItalic">extend</span> products are delivered as statically linked executables, the runtime executable is named <b class="cBold">runcbl</b> by default.
+</p>
+<a name="wp1130200"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>After relinking, be sure to move or copy the new object to the required directory.  The default location is $ACUCOBOL/lib for shared object libraries, and $ACUCOBOL/bin for static libraries.
+<hr />
+</p>
+<a name="wp1126132"> </a><h3 class="pHeadingRef">
+Required software
+</h3>
+<a name="wp1126253"> </a><p class="pBody">
+An ANSI 89-compliant C compiler supplied by the vendor of your UNIX system, either included as part of your UNIX system or as an add-on option.  
+</p>
+<a name="wp1130203"> </a><h3 class="pHeadingRef">
+Using the make utility
+</h3>
+<a name="wp1129441"> </a><p class="pBody">
+On all supported UNIX and Linux platforms, the ACUCOBOL-GT runtime can be relinked with <b class="cBold">make</b> using the Makefile included with the <span class="cBoldItalic">extend</span> distribution.  
+</p>
+<a name="wp1130481"> </a><p class="pBody">
+For your convenience, two environment variables can be used to specify object files and object libraries to be added to the link line of the Makefile.  Set EXTLIBS to a list of libraries, and set EXTOBJS to a list of objects.  For example, the following command links the C routines in the object file &quot;myroutines.o&quot; into the ACUCOBOL-GT runtime:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+EXTOBJS=&quot;myroutines.o&quot; make<a name="wp1129445"> </a>
+</pre></div>
+<a name="wp1130268"> </a><h3 class="pHeadingRef">
+Linking with make
+</h3>
+<a name="wp1130269"> </a><p class="pBody">
+To create a new runtime, <b class="cBold">cd</b> to the lib directory and type:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+   &quot;make&quot;<a name="wp1126555"> </a>
+</pre></div>
+<a name="wp1129988"> </a><h3 class="pHeadingRef">
+Using the makerun script
+</h3>
+<a name="wp1129989"> </a><p class="pBody">
+On most UNIX and Linux systems, ACUCOBOL-GT comes with a <b class="cBold">makerun </b>script that can be used to relink the runtime.  <b class="cBold">makerun</b> is a UNIX Korn shell script that relinks the runtime executable (<b class="cBold">runcbl</b>) or shared object (&quot;libruncbl.so&quot; or &quot;libruncbl.sl&quot;). 
+</p>
+<a name="wp1129993"> </a><p class="pBody">
+The <b class="cBold">makerun</b> command format is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+makerun [ldflags] [objects] [libraries]<a name="wp1129994"> </a>
+</pre></div>
+<a name="wp1129995"> </a><p class="pBody">
+where  ldflags, objects, and libraries are optional arguments passed to the &quot;ld&quot; command as described below.
+</p>
+<a name="wp1130014"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1130003"> </a><p class="pCellBody">
+ldflags 
+</p>
+</td>
+    <td><a name="wp1130005"> </a><p class="pCellBody">
+A list of any valid &quot;ld&quot; options   
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1130007"> </a><p class="pCellBody">
+objects
+</p>
+</td>
+    <td><a name="wp1130009"> </a><p class="pCellBody">
+A list of additional objects to be linked into the runtime.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1130011"> </a><p class="pCellBody">
+libraries
+</p>
+</td>
+    <td><a name="wp1130013"> </a><p class="pCellBody">
+A list of additional libraries to be linked into the runtime.  Instead of specifying absolute paths to library files, you can also use &quot;-L&quot; and &quot;-l&quot; to specify path and library names.  For example, &quot;/home/joe/lib/libacme.so&quot; can be specified as &quot;-L /home/joe/lib -lacme&quot;.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1130015"> </a><p class="pBody">
+For example, the following command links C routines contained in the object file &quot;myroutines.o&quot; into the ACUCOBOL-GT runtime:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+makerun myroutines.o<a name="wp1130016"> </a>
+</pre></div>
+<a name="wp1130017"> </a><p class="pBody">
+You can also execute <b class="cBold">makerun</b> from your own script.  For example, the following script links three object files and three libraries into the ACUCOBOL-GT runtime: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#!/bin/ksh<a name="wp1130018"> </a>
+OBJDIR=/home/appuser/appobj<a name="wp1130019"> </a>
+OBJECTS=&quot;$OBJDIR/a.o \<a name="wp1130020"> </a>
+   $OBJDIR/b.o \<a name="wp1130021"> </a>
+   $OBJDIR/c.o&quot;<a name="wp1130022"> </a>
+LIBDIR=/home/appuser/applib<a name="wp1130023"> </a>
+LIBRARIES=&quot;$LIBDIR/lib1.a \<a name="wp1130024"> </a>
+   $LIBDIR/lib2.a \<a name="wp1130025"> </a>
+   $LIBDIR/lib3.a&quot;<a name="wp1130026"> </a>
+cd /usr/acu/lib<a name="wp1130027"> </a>
+makerun $OBJECTS $LIBRARIES<a name="wp1130028"> </a>
+</pre></div>
+<a name="wp1130029"> </a><p class="pBody">
+The <b class="cBold">makerun</b> script passes the additional linker options in the EXTLIBS environment variable.  Everything specified on the <b class="cBold">makerun</b> command line is passed to the C linker from the Makefile. 
+</p>
+<a name="wp1130515"> </a><h3 class="pHeadingRef">
+Linking with makerun
+</h3>
+<a name="wp1130516"> </a><p class="pBody">
+To use the <b class="cBold">makerun</b> script:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1130517"> </a><div class="pSmartList1"><li>Copy the files from the lib subdirectory of your ACUCOBOL-GT installation into the directory of your choice and <b class="cBold">cd</b> into that directory. </li></div>
+<a name="wp1130506"> </a><div class="pSmartList1"><li>Type the <b class="cBold">makerun</b> command line.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+makerun myroutines.o<a name="wp1130610"> </a>
+</pre></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

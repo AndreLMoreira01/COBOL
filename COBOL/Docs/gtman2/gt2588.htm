@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:34" />
+  <title>5.19.4  Tab: Programming Tips</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt25.htm">Chapter 5:  Control Types Reference</a> &gt; <a href="gt2584.htm">5.19  Tab</a> &gt; </p>
+<a name="wp1029025"> </a><h2 class="pHeading2">
+5.19.4  Tab: Programming Tips
+</h2>
+<a name="wp1029027"> </a><p class="pBody">
+The preferred method of programming the tab control involves defining separate level 01 items in the Screen Section for every individual tab page and using a series DISPLAY statements, in a specific order, to display the control.  The following syntax sample demonstrates this technique.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 TAB-FORM.<a name="wp1029028"> </a>
+   03 MY-TAB,            TAB-CONTROL<a name="wp1115603"> </a>
+      COL                10 PIXELS<a name="wp1115605"> </a>
+      LINE               10 PIXELS<a name="wp1115607"> </a>
+      LINES              200 PIXELS<a name="wp1115609"> </a>
+      SIZE               200 PIXELS<a name="wp1115611"> </a>
+      TAB-TO-ADD         IS (&quot;Page 1&quot;, &quot;Page 2&quot;, &quot;Page 3&quot;)<a name="wp1115613"> </a>
+      EVENT              PROCEDURE TAB-EVENT<a name="wp1115615"> </a>
+      VALUE              WS-ACTIVE-PAGE.<a name="wp1115617"> </a>
+01 TAB-PAGE-1.<a name="wp1029029"> </a>
+   03 LABEL<a name="wp1115619"> </a>
+      COL                30 PIXELS<a name="wp1115621"> </a>
+      LINE               50 PIXELS<a name="wp1115623"> </a>
+      TITLE              &quot;This is page 1&quot;<a name="wp1115625"> </a>
+      LEFT.<a name="wp1115627"> </a>
+01 TAB-PAGE-2.<a name="wp1029030"> </a>
+   03 LABEL<a name="wp1115629"> </a>
+      COL                30 PIXELS<a name="wp1115631"> </a>
+      LINE               50 PIXELS<a name="wp1115633"> </a>
+      TITLE              &quot;This is page 2&quot;<a name="wp1115635"> </a>
+      LEFT.<a name="wp1115637"> </a>
+01  TAB-PAGE-3.<a name="wp1029031"> </a>
+   03 LABEL<a name="wp1115639"> </a>
+      COL                30 PIXELS<a name="wp1115641"> </a>
+      LINE               50 PIXELS<a name="wp1115643"> </a>
+      TITLE              &quot;This is page 3&quot;<a name="wp1115645"> </a>
+      LEFT.<a name="wp1115647"> </a>
+</pre></div>
+<a name="wp1029032"> </a><p class="pBody">
+The Procedure Division syntax uses successive DISPLAY statements to create the control.  In the following example, the first DISPLAY statement creates a standard graphical window as a canvas for the tab control (Fig. 1).  The second DISPLAY statement adds TAB-FORM, defined as a separate level 01 item in the Screen Section (Fig. 2).  Note that TAB-FORM can be defined in the same group item with other controls for the same window.  The third DISPLAY statement adds the content of the first tab, TAB-PAGE-1, defined as another separate level 01 item in the Screen Section (Fig. 3). 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+DISPLAY STANDARD         GRAPHICAL WINDOW<a name="wp1029033"> </a>
+        SCREEN           LINE 1<a name="wp1115649"> </a>
+        SCREEN           COLUMN 1<a name="wp1115655"> </a>
+        LINES            17<a name="wp1115661"> </a>
+        SIZE             37<a name="wp1115667"> </a>
+        CONTROL          FONT IS WS-DISPLAY-FONT<a name="wp1115673"> </a>
+        AUTO-MINIMIZE<a name="wp1115679"> </a>
+        BACKGROUND-LOW<a name="wp1115685"> </a>
+        MODELESS<a name="wp1115691"> </a>
+        NO               SCROLL<a name="wp1115697"> </a>
+        WITH             SYSTEM MENU<a name="wp1115703"> </a>
+        TITLE            &quot;Tab control demo&quot;<a name="wp1115709"> </a>
+        TITLE-BAR<a name="wp1115715"> </a>
+        NO               WRAP<a name="wp1115721"> </a>
+        HANDLE           IS WS-WIN-HANDLE.<a name="wp1115727"> </a>
+DISPLAY TAB-FORM.<a name="wp1029034"> </a>
+DISPLAY TAB-PAGE-1.<a name="wp1029035"> </a>
+<a name="wp1138620"> </a><p class="pBodyRelative">
+<br />
+<img src="ch5_taba.gif" height="241" width="276" border="0" hspace="0" vspace="0"/>
+<br />
+
+</p>
+<a name="wp1138773"> </a><p class="pBodyRelative">
+<br />
+<img src="ch5_tabb.gif" height="239" width="267" border="0" hspace="0" vspace="0"/>
+<br />
+
+</p>
+<a name="wp1139002"> </a><p class="pBodyRelative">
+<br />
+<img src="ch5_tabc.gif" height="238" width="271" border="0" hspace="0" vspace="0"/>
+<br />
+
+</p>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

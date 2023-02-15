@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:34" />
+  <title>5.18.2  Status Bar: Special Properties</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt25.htm">Chapter 5:  Control Types Reference</a> &gt; <a href="gt2580.htm">5.18  Status Bar</a> &gt; </p>
+<a name="wp1165151"> </a><h2 class="pHeading2">
+5.18.2  Status Bar: Special Properties
+</h2>
+<a name="wp1165156"> </a><h5 class="pHeading4">
+PANEL-WIDTHS (numeric)  
+</h5>
+<a name="wp1165157"> </a><p class="pBody">
+You may specify this property's value with an integer data item or literal.  PANEL-WIDTHS allows you to specify:
+</p>
+<div class="pSmartList1"><ol type="a" class="pSmartList1">
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1165158"> </a><div class="pSmartList2"><li>How many panels the status bar should hold:  You may use an array to specify all the panels on one line, and the number of items in the array determines how many panels are created on the status bar; and</li></div>
+<a name="wp1165159"> </a><div class="pSmartList2"><li>The width of each panel on the status bar.  Each number on the array specifies the width of its corresponding panel in characters.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp1165160"> </a><p class="pBody">
+So if you specify your status bar using the following array:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DISPLAY STATUS-BAR<a name="wp1165161"> </a>
+        PANEL-WIDTHS   (50,  20,  20)<a name="wp1165162"> </a>
+        [ ... ].<a name="wp1165163"> </a>
+</pre></div>
+<a name="wp1165164"> </a><p class="pBody">
+you are setting up a status bar with three panels, the first 50 characters wide, the other two at 20 characters each. 
+</p>
+<a name="wp1165165"> </a><p class="pBody">
+If you set PANEL-WIDTHS = 0, you create a status bar with one panel extending across its entire width and no text.
+</p>
+<a name="wp1189392"> </a><p class="pBody">
+If you set PANEL-WIDTHS to a single positive non-zero number greater than the width of the entire status bar (as defined by the width of the host window), the panel gets sized down to fit in the host window and the text is truncated.
+</p>
+<a name="wp1189393"> </a><p class="pBody">
+If you have a status bar composed of several panels, and you specify particular widths for each of them, for example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DISPLAY STATUS-BAR<a name="wp1189394"> </a>
+        PANEL-WIDTHS   (25, 25, 25, 25)<a name="wp1189395"> </a>
+</pre></div>
+<a name="wp1189396"> </a><p class="pBody">
+and this status bar is displayed in a window that is dynamic, when that window shrinks below the size specified by PANEL-WIDTHS, all the panels are reset to an average size small enough so that all panels fit in the window, say &quot;20, 20, 20, 20&quot;.  
+</p>
+<a name="wp1189397"> </a><p class="pBody">
+If you do not want the all of the panels truncated, set the width of the last panel to &quot;-1&quot;, for example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DISPLAY STATUS-BAR<a name="wp1189398"> </a>
+        PANEL-WIDTHS   (25, 25, 25, -1)<a name="wp1189399"> </a>
+</pre></div>
+<a name="wp1189400"> </a><p class="pBody">
+This will cause the last panel to be sized to whatever space is left available on the window after the first panels have been accommodated.  Based on our example if the window was sized to 80 columns, the panels would be &quot;25, 25, 25, 5&quot;
+</p>
+<a name="wp1165167"> </a><p class="pBody">
+The widths of panels with no PANEL-WIDTHS specified will be automatically calculated based on the total available width of the status bar divided by the number of panels, as specified through the use of PANEL-STYLE, PANEL-TEXT, or PANEL-INDEX.
+</p>
+<a name="wp1165168"> </a><p class="pBody">
+When you modify PANEL-WIDTHS, the panel is not visually updated until the text is applied.  This means that a MODIFY using PANEL-WIDTHS and no PANEL-TEXT will never be displayed.  Conversely, any MODIFY statement without PANEL-WIDTHS reflects the changes immediately.
+</p>
+<a name="wp1165169"> </a><p class="pBody">
+To erase the contents of a status bar, use:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MODIFY statusbar-handle PANEL-WIDTHS 0.<a name="wp1165170"> </a>
+</pre></div>
+<a name="wp1165171"> </a><p class="pBody">
+This removes all the panels and sets up the status bar with one panel extending across its entire width.  After this operation, you have one panel with the style of previous panel 1 and no text.
+</p>
+<a name="wp1165174"> </a><h5 class="pHeading4">
+PANEL-STYLE (numeric) 
+</h5>
+<a name="wp1165175"> </a><p class="pBody">
+Allows you to specify the preferred style of the actual panel.  You may specify the value with an integer data item or literal.  Valid values are:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1165176"> </a><div class="pSmartList2"><li>Flat; the panel has the same height as the rest of the window, with no visual borders.  This style is generally used to present information as a guide, displaying different text to inform the user about the status of the program or the cursor's location on the screen, or prompt for action or data entry into a field.  It may also be used to indicate a condition that is temporarily disabled.</li></div>
+<a name="wp1165177"> </a><div class="pSmartList2"><li> Lowered; the panel appears sunken in the host window.  This style is generally used to indicate that an option is active, for instance, the &quot;numlock&quot; is on or the &quot;insert&quot; mode is active.</li></div>
+<a name="wp1165178"> </a><div class="pSmartList2"><li>Raised; the panel appears raised in the host window.  This style is generally used to indicate that an option is deactivated (&quot;capslock&quot; off, etc.) </li></div>
+</ul></div>
+</ul></div>
+<a name="wp1165179"> </a><p class="pBody">
+You must apply the PANEL-STYLE before you apply the PANEL-TEXT, in order to have the text displayed properly.
+</p>
+<a name="wp1165180"> </a><p class="pBody">
+The default is &quot;0&quot; (zero).
+</p>
+<a name="wp1165182"> </a><h5 class="pHeading4">
+PANEL-TEXT (alphanumeric) 
+</h5>
+<a name="wp1165184"> </a><p class="pBody">
+Can be specified with a data item or a literal.  It allows you to specify the text content of a panel.  The property pays attention to the current setting of the TRANSLATE-TO-ANSI environment configuration variable.  The text may not exceed 255 characters, else the right-most text is automatically truncated.  If the text exceeds the size of the panel, the visibility is the same as in any native Windows control, that is, the left-most text is visible.
+</p>
+<a name="wp1165185"> </a><h5 class="pHeading4">
+PANEL-INDEX (numeric) 
+</h5>
+<a name="wp1165188"> </a><p class="pBody">
+An integer data item or literal.  It allows you to specify which panel you want to work with.  General number range is from 1 to 128.  If you specify an index number that is larger than the current number of panels but lower than 128, the status bar attempts to provide the additional panels up to the index number specified. The new panels all have the same width, as determined by the width of the status bar minus the width of the existing panels and divided by the number of additional panels to be generated.  The additional panels inherit their style from the first existing panel.  If the first panel does not exist, the default style &quot;0&quot; (zero) applies.
+</p>
+<a name="wp1165189"> </a><h3 class="pHeadingRef">
+Array and index modes 
+</h3>
+<a name="wp1165191"> </a><p class="pBody">
+There are two modes of specifying the special properties of a status bar:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1165194"> </a><div class="pSmartList1"><li>Array mode, where you specify each property once, in an array, for all the panels:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PANEL-WIDTHS  ( width-1, width-2, width-3, ... )<a name="wp1165195"> </a>
+PANEL-STYLE   ( style-1, style-2, style-3, ... )<a name="wp1165196"> </a>
+PANEL-TEXT    ( text-1, text-2, text-3, ... )<a name="wp1165197"> </a>
+</pre></div>
+<a name="wp1165198"> </a><p class="pIndented1">
+or 
+</p>
+<a name="wp1189537"> </a><div class="pSmartList1"><li>Index mode, where you define each panel separately, property by property, assigning an index number to each panel.  However, the total number of panels must be defined before any panel style or text is defined.  Therefore, you must specify all of the PANEL-WIDTHS first, as in:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PANEL-WIDTHS  width-1<a name="wp1189557"> </a>
+PANEL-WIDTHS  width-2<a name="wp1189681"> </a>
+PANEL-INDEX   id-1<a name="wp1189538"> </a>
+PANEL-STYLE   style-1<a name="wp1165202"> </a>
+PANEL-TEXT    text-1<a name="wp1165203"> </a>
+PANEL-INDEX   id-2<a name="wp1165204"> </a>
+PANEL-STYLE   style-2<a name="wp1165206"> </a>
+PANEL-TEXT    text-2<a name="wp1165207"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1165208"> </a><p class="pBody">
+It is generally recommended that you not mix array mode and index mode, however you can specify PANEL-WIDTHS in array mode, followed by index mode for the remaining properties.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DISPLAY STATUS-BAR<a name="wp1165209"> </a>
+     PANEL-WIDTHS     ( 10,  10,  10 )<a name="wp1165210"> </a>
+     PANEL-INDEX      1<a name="wp1165212"> </a>
+        PANEL-STYLE   0<a name="wp1189729"> </a>
+        PANEL-TEXT    &quot;Text one&quot;<a name="wp1165213"> </a>
+     PANEL-INDEX      2<a name="wp1165214"> </a>
+        PANEL-STYLE   1<a name="wp1189735"> </a>
+        PANEL-TEXT    &quot;Text two&quot;<a name="wp1189715"> </a>
+     PANEL-INDEX      3<a name="wp1189716"> </a>
+        PANEL-STYLE   2<a name="wp1189741"> </a>
+        PANEL-TEXT    &quot;Text three&quot;.<a name="wp1189717"> </a>
+</pre></div>
+<a name="wp1165218"> </a><h3 class="pHeadingRef">
+Sequence order
+</h3>
+<a name="wp1165219"> </a><p class="pBody">
+The Special Properties of the status bar control are reflective of the demands of the underlying Windows API.  Two rules apply in the case when you specify a multi-panel status bar:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1165220"> </a><div class="pSmartList1"><li>The text is the last item processed before the display is performed.  If you do not set the number of panels before you specify the text, the status bar is forced into single panel configuration.</li></div>
+<a name="wp1165221"> </a><div class="pSmartList1"><li>The style of a panel is set in accordance with whatever is active at the moment.  Thus, if you set the style after the text, it has no effect.</li></div>
+</ul></div>
+<a name="wp1165222"> </a><p class="pBody">
+You should, therefore, observe this specific sequence of properties when DISPLAYing or MODIFYing a status bar:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1165223"> </a><div class="pSmartList1"><li>PANEL-WIDTHS, followed by the array;</li></div>
+<a name="wp1165224"> </a><div class="pSmartList1"><li>PANEL-STYLE, followed by the array;</li></div>
+<a name="wp1165225"> </a><div class="pSmartList1"><li>PANEL-TEXT, followed by the array;</li></div>
+<a name="wp1165226"> </a><div class="pSmartList1"><li>GRIP.</li></div>
+</ol></div>
+<a name="wp1165227"> </a><p class="pBody">
+So the syntax will look like this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+DISPLAY STATUS-BAR<a name="wp1165228"> </a>
+  PANEL-WIDTHS  ( 5, 10, 20 )<a name="wp1165229"> </a>
+  PANEL-STYLE   ( 0, 2, 2 )<a name="wp1165230"> </a>
+  PANEL-TEXT    ( &quot;Panel 1&quot;,  &quot;Panel 2&quot;,  &quot;Panel 3&quot; )<a name="wp1165231"> </a>
+  GRIP.<a name="wp1165232"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

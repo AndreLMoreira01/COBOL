@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-SET-STD-FONT</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1040475"> </a><h2 class="pHeading3">
+WINPRINT-SET-STD-FONT
+</h2>
+<a name="wp1040477"> </a><p class="pBody">
+This operation code allows you to select one of a number of predefined fonts to use for the report.  You must make this selection prior to opening the print file.  
+</p>
+<a name="wp1040483"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040484"> </a>
+    USING WINPRINT-SET-STD-FONT, WINPRINT-DATA<a name="wp1040485"> </a>
+    GIVING RESULT<a name="wp1040486"> </a>
+</pre></div>
+<a name="wp1040487"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040488"> </a><p class="pBody">
+<b class="cBold">WINPRINT-DATA</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 WINPRINT-DATA.<a name="wp1040489"> </a>
+   03 WPRTDATA-SET-STD-FONT.<a name="wp1040490"> </a>
+      05 WPRTDATA-STD-FONT            PIC X COMP-X.<a name="wp1040491"> </a>
+      05 FILLER                        PIC X(21).<a name="wp1040492"> </a>
+</pre></div>
+<a name="wp1040493"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040494"> </a><p class="pBody">
+The font selected is used until explicitly changed or the runtime exits.  You specify which font to use by moving one of the following level 78 values to WPRTDATA-STD-FONT before calling WIN$PRINTER:
+</p>
+<a name="wp1040495"> </a><p class="pBody">
+<b class="cBold">WPRTFONT-DEFAULT</b> -- Requests the printer's default font.  This is the initial setting.  
+</p>
+<a name="wp1040496"> </a><p class="pBody">
+<b class="cBold">WPRTFONT-COURIER-12</b> -- Requests a 12-point TrueType Courier font.
+</p>
+<a name="wp1040497"> </a><p class="pBody">
+<b class="cBold">WPRTFONT-COURIER-12-COMP</b>  Requests a 12-point TrueType Courier font and rescales it so that at least 132 columns of print will fit on a page.  This is similar to the <em class="cEmphasis">compressed print</em> mode supported by many printers.
+</p>
+<a name="wp1040498"> </a><p class="pBody">
+<b class="cBold">WPRTFONT-COURIER-10</b> -- Requests a 10-point TrueType Courier font.  
+</p>
+<a name="wp1040499"> </a><p class="pBody">
+<b class="cBold">WPRTFONT-COURIER-10-COMP</b> - Requests a 10-point TrueType Courier font and rescales it so that at least 132 columns of print will fit on a page.  
+</p>
+<a name="wp1040500"> </a><p class="pBody">
+When you are using either of the <em class="cEmphasis">compressed print</em> modes, the rescaling of the font occurs when the print file is opened.  This ensures that the font is scaled correctly for the current page size and orientation.  The rescaling operation normally results in skinny characters, but can actually result in stretched characters if more than 132 characters would naturally fit on a page.  The runtime asks the Windows TrueType font engine to scale the font to fit exactly 132 characters on a line even if more would normally fit.  
+</p>
+<a name="wp1040501"> </a><p class="pBody">
+You should be aware that the TrueType font engine does not always produce exact results, particularly when rescaling a font.  You may end up with a font that fits more than 132 columns on a page.  You may also end up with a font that is a slightly different height when compressed than when not.  You can also end up with a font that is only vaguely related to the requested one if, for example, the user has removed the TrueType fonts or if the print driver cannot handle TrueType fonts.  These effects are due to the internal workings of the TrueType font engine and the way that Windows handles fonts in general.  Under Windows, an application cannot select a particular font.  Instead, it describes the font's characteristics and Windows selects the closest matching font using a weighted-penalty system for deciding which font is the closest match.  Sometimes, no font matches exactly, so Windows substitutes the font that has the closest match.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

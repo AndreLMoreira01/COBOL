@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-GET-PAGE-COLUMN</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1041030"> </a><h2 class="pHeading3">
+WINPRINT-GET-PAGE-COLUMN
+</h2>
+<a name="wp1041032"> </a><p class="pBody">
+This operation code retrieves information about a particular column on the page.
+</p>
+<a name="wp1041039"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1041040"> </a>
+    USING WINPRINT-GET-PAGE-COLUMN, COLUMN-POSITION,<a name="wp1041041"> </a>
+        WINPRINT-COLUMN<a name="wp1481737"> </a>
+    GIVING RESULT<a name="wp1041042"> </a>
+</pre></div>
+<a name="wp1041043"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1041044"> </a><p class="pBody">
+<b class="cBold">COLUMN-POSITION</b>   Numeric value 
+</p>
+<a name="wp1041045"> </a><p class="pBody">
+A numeric value indicating which column to retrieve.
+</p>
+<a name="wp1041046"> </a><p class="pBody">
+<b class="cBold">WINPRINT-COLUMN</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  WINPRINT-COLUMN, SYNC.<a name="wp1041047"> </a>
+    03  WINPRINT-COL-START              PIC 9(7)V99 COMP-5.<a name="wp1041048"> </a>
+    03  WINPRINT-COL-INDENT             PIC 9(7)V99 COMP-5.<a name="wp1041049"> </a>
+    03  WINPRINT-COL-SEPARATION         PIC 9(7)V99 COMP-5.<a name="wp1041050"> </a>
+    03  WINPRINT-COL-FONT               HANDLE OF FONT.<a name="wp1041051"> </a>
+    03  WINPRINT-COL-UNITS              PIC 99 COMP-X.<a name="wp1041052"> </a>
+    03  WINPRINT-COL-ALIGNMENT          PIC X.<a name="wp1041053"> </a>
+    03  WINPRINT-TRANSPARENCY           PIC 99 COMP-X.<a name="wp1041054"> </a>
+        88  WINPRINT-TRANSPARENT        VALUE 1, FALSE 0.<a name="wp1041055"> </a>
+<a name="wp1041056"> </a>
+        78  WPRTUNITS-CELLS                     VALUE 0.<a name="wp1041057"> </a>
+        78  WPRTUNITS-INCHES                    VALUE 1.<a name="wp1041058"> </a>
+        78  WPRTUNITS-CENTIMETERS               VALUE 2.<a name="wp1041059"> </a>
+        78  WPRTUNITS-PIXELS                    VALUE 3.<a name="wp1041060"> </a>
+        78  WPRTALIGN-NONE                      VALUE SPACE.<a name="wp1041061"> </a>
+        78  WPRTALIGN-LEFT                      VALUE &quot;L&quot;.<a name="wp1041062"> </a>
+        78  WPRTALIGN-RIGHT                     VALUE &quot;R&quot;.<a name="wp1041063"> </a>
+        78  WPRTALIGN-CENTER                    VALUE &quot;C&quot;.<a name="wp1041064"> </a>
+        78  WPRTALIGN-DECIMAL                   VALUE &quot;D&quot;.<a name="wp1041065"> </a>
+        78  WPRTALIGN-DECIMAL-SUPPRESS          VALUE &quot;S&quot;.<a name="wp1041066"> </a>
+</pre></div>
+<a name="wp1041067"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1041068"> </a><p class="pBody">
+This is one of three op-codes that control the &quot;output&quot; by specifying the page layout.  (This is similar to the DISPLAY-COLUMNS property of the LIST-BOX control.)  
+</p>
+<a name="wp1041069"> </a><p class="pBody">
+This operation takes two additional parameters.  The first is a numeric parameter that indicates which column to retrieve.  Columns are numbered from left-to-right on the printed page, starting with &quot;1&quot;.  The second parameter retrieves the current definition of the specified column and stores it in WINPRINT-COLUMN.  This is useful if you want to change the characteristics of a particular column.  You can use this operation to get the current settings, change the ones you want, and use WINPRINT-SET-PAGE-COLUMN to apply the changed settings.  
+</p>
+<a name="wp1041070"> </a><p class="pBody">
+The units used for the various measurements are determined by setting WINPRINT-COL-UNITS in the WINPRINT-COLUMN structure passed into the call.  You should set this to the desired units before calling &quot;WIN$PRINTER&quot;.  If WINPRINT-COL-UNITS contains an invalid setting, the units used by default are WPRTUNITS-CELLS.  
+</p>
+<a name="wp1041071"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1041072"> </a><p class="pBody">
+In the following example, the first column is retrieved and its current indent is set to 3 characters.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+MOVE WPRTUNITS-CELLS TO WINPRINT-COL-UNITS<a name="wp1041073"> </a>
+CALL &quot;WIN$PRINTER&quot; <a name="wp1041074"> </a>
+   USING WINPRINT-GET-PAGE-COLUMN, 1, WINPRINT-COLUMN<a name="wp1089968"> </a>
+MOVE 3 TO WINPRINT-COL-INDENT<a name="wp1041075"> </a>
+CALL &quot;WIN$PRINTER&quot; <a name="wp1041076"> </a>
+   USING WINPRINT-SET-PAGE-COLUMN, WINPRINT-COLUMN<a name="wp1089969"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

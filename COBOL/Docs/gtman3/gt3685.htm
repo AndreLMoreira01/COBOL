@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>CLOSE Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1037103"> </a><h2 class="pHeading2">
+CLOSE Statement
+</h2>
+<a name="wp1037105"> </a><p class="pBody">
+The CLOSE statement is used to terminate the processing of a file or files, to change the current video-terminal window, or to close a floating window.  
+</p>
+<a name="wp1037106"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<a name="wp1037107"> </a><h3 class="pHeadingRef">
+Format 1
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">CLOSE</u> { file-name [<u class="cUnderline">REEL</u>] [ WITH {<u class="cUnderline">NO</u> <u class="cUnderline">REWIND</u>} ] } ...<a name="wp1037108"> </a>
+                  [<u class="cUnderline">UNIT</u>]        {<u class="cUnderline">LOCK</u>     }<a name="wp1037109"> </a>
+</pre></div>
+<a name="wp1037110"> </a><h3 class="pHeadingRef">
+Format 2 
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">CLOSE</u> <u class="cUnderline">WINDOW</u> window-handle [ WITH <u class="cUnderline">NO</u> <u class="cUnderline">DISPLAY</u> ]<a name="wp1037111"> </a>
+</pre></div>
+<a name="wp1037112"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037113"> </a><div class="pSmartList1"><li><em class="cEmphasis">File-name</em> must be the name of a file described in the Data Division.  It may not be a sort file.  </li></div>
+<a name="wp1037114"> </a><div class="pSmartList1"><li>If the REEL or UNIT option is used, then <em class="cEmphasis">file-name</em> must refer to a sequential file.  </li></div>
+<a name="wp1037115"> </a><div class="pSmartList1"><li><em class="cEmphasis">Window-handle</em> can be either a PIC X(10) data item or a HANDLE data item.  If used with a SUBWINDOW, <em class="cEmphasis">window-handle</em> must have been the object of a POP-UP AREA phrase in a DISPLAY statement.</li></div>
+</ol></div>
+<a name="wp1037116"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<a name="wp1037117"> </a><h3 class="pHeadingRef">
+Format 1 (CLOSE File)
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037118"> </a><div class="pSmartList1"><li>A file referred to by a CLOSE statement must be in the open state.  After the execution of a successful CLOSE statement, each <em class="cEmphasis">file-name</em> is in the closed state.  All record and file locks held by those files are released. </li></div>
+<a name="wp1037120"> </a><div class="pSmartList1"><li>Any FILE STATUS variables associated with the<em class="cEmphasis"> file-names</em> are updated by the CLOSE verb.  </li></div>
+<a name="wp1037121"> </a><div class="pSmartList1"><li>The NO REWIND option lets you hold a pipe open when closing its corresponding file.  This allows you to gather multiple reports into a single job for the print spooler.  To use NO REWIND in this way, create a configuration file entry as described in Appendix H, Book 4, <em class="cEmphasis">Appendices</em> under SPOOL-FILE.</li></div>
+<a name="wp1037122"> </a><div class="pSmartList1"><li>The LOCK option prevents the affected files from being opened again by this run unit in its current execution.  </li></div>
+<a name="wp1037123"> </a><div class="pSmartList1"><li>If the UNIT or REEL option is specified, then the file remains open and the next reel of the multi-reel file is mounted.  Since ACUCOBOL-GT does not directly support multi-reel files, specifying this option causes the CLOSE statement to have no effect other than to update the FILE STATUS variable.  </li></div>
+</ol></div>
+<a name="wp1037124"> </a><h3 class="pHeadingRef">
+Format 2 (CLOSE WINDOW)
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037126"> </a><div class="pSmartList1"><li>The CLOSE WINDOW verb is used to remove floating windows and subwindows. </li></div>
+<a name="wp1037127"> </a><div class="pSmartList1"><li><em class="cEmphasis">Window-handle</em> must be a handle returned by a DISPLAY FLOATING WINDOW statement, or the object of a POP-UP phrase of a DISPLAY WINDOW statement that executed in the current run unit.  Furthermore, it cannot have been the object of a CLOSE WINDOW verb nor may it have been otherwise modified.  </li></div>
+<a name="wp1037128"> </a><div class="pSmartList1"><li>The CLOSE WINDOW verb restores the contents of the screen covered by the window that is being destroyed.  In other words, the window that was created by that DISPLAY FLOATING WINDOW or DISPLAY WINDOW statement is removed from the screen and replaced by the contents of the screen that was &quot;under&quot; that window.  Any memory associated with the closed window is then freed.  </li></div>
+<a name="wp1037129"> </a><div class="pSmartList1"><li>The window that was current when the terminating window was created becomes the active window.  The cursor is positioned to the location it occupied when the window was created.  </li></div>
+<a name="wp1037130"> </a><div class="pSmartList1"><li>The WITH NO DISPLAY option causes the closed window to remain on the screen.  The effect is the same as a normal CLOSE WINDOW verb, except that no updating of the console takes place.  This can be used to free memory used by a window when you do not want to physically remove it from the screen.  For example, suppose you want to remove a series of nested windows and want to reduce the amount of screen activity that occurs.  In this case, you can close all of the nested windows with the NO DISPLAY option and then close the outermost window in the normal manner.  </li></div>
+<a name="wp1037131"> </a><p class="pIndented1">
+WITH NO DISPLAY is ignored when a floating window is closed.  It is effective only when pop-up windows are closed.
+</p>
+<a name="wp1037132"> </a><div class="pSmartList1"><li>CLOSE WINDOW <em class="cEmphasis">window-handle</em> is synonymous with DESTROY <em class="cEmphasis">window-handle</em>.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

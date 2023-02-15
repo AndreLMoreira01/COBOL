@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.1.4  Record Locking</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt162.htm">6.1 Handling Files</a> &gt; </p>
+<a name="wp1032391"> </a><h2 class="pHeading2">
+6.1.4  Record Locking
+</h2>
+<a name="wp1032393"> </a><p class="pBody">
+Record locking for indexed and relative files is used for all machines.  Currently, record locking is not supported for sequential files.  Only files opened in the I/O mode will actually lock records; input-only files will not lock records they read.  Record locking occurs in one of two modes: <em class="cEmphasis">automatic</em> (the default) and <em class="cEmphasis">manual</em>.  In automatic mode, a record is locked when it is read (unless the WITH NO LOCK or ALLOWING UPDATES phrase of the READ statement is used).  In manual mode, records are locked only when WITH LOCK is specified on the read statement.  Both modes support single and multiple record locks.  When single record locks are used (the default), the currently locked record is released whenever any I/O statement is executed for the file.  When multiple record locks are used, records become unlocked only when an UNLOCK or CLOSE statement is executed for the file (or a COMMIT is executed for a transaction file). 
+</p>
+<a name="wp1032399"> </a><p class="pBody">
+It is possible to get a record locked condition when you are doing a READ, REWRITE, or DELETE on a file.  
+</p>
+<a name="wp1032400"> </a><p class="pBody">
+On most machines, a READ performed without locking will not get a record-locked condition even if another process has the record locked.  This allows report programs to run without hindrance.  Note, however, that on some older UNIX machines, non-locking READs <em class="cEmphasis">will </em>receive the record-locked condition if another process has the record locked.  This is because on these machines, UNIX enforces the record locks.  Most UNIX systems do not enforce record locks (the current system V standard does not allow for it) so this should not continue to be a problem for long.  PC-based environments (i.e., LANs, Windows) also enforce record locks, introducing a portability issue. For unenforced locks in a PC-based environment, you should use indexed files rather than relative files.
+</p>
+<a name="wp1032401"> </a><p class="pBody">
+<b class="cBold">runcbl </b>behaves in one of two fashions when a locked record is encountered.  Normally, the return is immediate and the file status variable is set to the locked condition.  When this happens, the I/O fails.  Unlike most errors, the current record pointer is not changed by a locked condition.  This allows multiple READ NEXTs to be performed in a loop until the lock condition disappears, without losing track of the current record position. 
+</p>
+<a name="wp1032405"> </a><p class="pBody">
+In RM/COBOL compatibility mode, however, this rule changes if the file does not have a Declarative associated with it.  In this case, locked records on REWRITE and DELETE statements are handled as described above.  On READ statements, however, <b class="cBold">runcbl </b>automatically waits until the record becomes unlocked.  This is identical to the behavior of RM/COBOL version&#160;2.  The programmer should beware when using this technique, however.  Deadlocks can occur if two programs end up waiting for each other to unlock a desired record.  For this reason, we recommend against using this technique.  
+</p>
+<a name="wp1032406"> </a><p class="pBody">
+When ROLLBACK is enabled in a file's FILE-CONTROL entry, record and file locking rules are extended for that file.  Every record updated as part of a transaction is locked until that transaction is committed or rolled back.  The COMMIT and ROLLBACK verbs remove these locks.  For more information see <a  href="gt159.htm#wp1032286">section 5.1.4, &quot;Extended Locking Rules.&quot;</a>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

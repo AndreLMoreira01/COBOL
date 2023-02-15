@@ -1,0 +1,341 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:34" />
+  <title>5.13.2  List Box: Special Properties</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt25.htm">Chapter 5:  Control Types Reference</a> &gt; <a href="gt2556.htm">5.13  List Box</a> &gt; </p>
+<a name="wp1164678"> </a><h2 class="pHeading2">
+5.13.2  List Box: Special Properties
+</h2>
+<a name="wp1164681"> </a><h5 class="pHeading4">
+ITEM-TO-ADD (alphanumeric)   
+</h5>
+<a name="wp1164682"> </a><p class="pBody">
+This property provides a way of adding items to the list box.  Any time you create or modify a list box, the ITEM-TO-ADD property is examined.  If it is not spaces, then its value is added to the items in the list box.  The examples below demonstrate how to use this property to initially populate a list box.
+</p>
+<a name="wp1164685"> </a><h5 class="pHeading4">
+RESET-LIST (numeric)   
+</h5>
+<a name="wp1164686"> </a><p class="pBody">
+This property allows you to empty a list.  If this property is &quot;0&quot;, it is ignored.  If it is non-zero, then all the items in the list are deleted.  
+</p>
+<a name="wp1164689"> </a><h5 class="pHeading4">
+MASS-UPDATE (numeric)   
+</h5>
+<a name="wp1164690"> </a><p class="pBody">
+This property improves the efficiency of making large content changes to the list box.  
+</p>
+<a name="wp1164691"> </a><p class="pBody">
+Normally, the runtime immediately repaints a list box when the program adds or removes an item from the box.  If you are making several changes in a row, this process can be slow.  To improve performance, set the MASS-UPDATE property to &quot;1&quot;.  While set to &quot;1&quot;, MASS-UPDATE inhibits repainting of the box due to changes in the box contents.  To repaint after you have finished your changes, set MASS-UPDATE to zero (&quot;0&quot;).  
+</p>
+<a name="wp1164692"> </a><p class="pBody">
+For example, this code could be used to initially populate the contents of a list box:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MODIFY LIST-BOX-1, MASS-UPDATE = 1<a name="wp1164693"> </a>
+PERFORM VARYING IDX FROM 1 BY 1 <a name="wp1164694"> </a>
+   UNTIL IDX &gt; LIST-BOX-SIZE<a name="wp1164695"> </a>
+      MODIFY LIST-BOX-1, <a name="wp1164696"> </a>
+         ITEM-TO-ADD = LIST-BOX-ITEM( IDX )<a name="wp1164697"> </a>
+END-PERFORM<a name="wp1164698"> </a>
+MODIFY LIST-BOX-1, MASS-UPDATE = 0<a name="wp1164699"> </a>
+</pre></div>
+<a name="wp1164700"> </a><p class="pBody">
+In this example, the list box will not be repainted until the last MODIFY statement executes.
+</p>
+<a name="wp1164703"> </a><h5 class="pHeading4">
+ITEM-TO-DELETE (numeric)   
+</h5>
+<a name="wp1164704"> </a><p class="pBody">
+Setting this property to a non-zero value deletes the corresponding item in the list box.  The first item in the list is item number &quot;1&quot; and each item is numbered sequentially thereafter.  Deleting a non-existent item has no effect.  
+</p>
+<a name="wp1164707"> </a><h5 class="pHeading4">
+INSERTION-INDEX (numeric)   
+</h5>
+<a name="wp1164708"> </a><p class="pBody">
+Setting this property to a positive value affects the location of the next item added to the list box.  When it is set to zero (the default), items are added in sort-order, or to the end of the box if the list box has the UNSORTED style.  When INSERTION-INDEX is positive, the next item added is placed immediately before the corresponding item instead.  For example, setting this to &quot;1&quot; causes the next item to be inserted at the top of the list.  You can place an item at the end of the list by specifying an index one greater than the number of items in the list.  When you finish adding the next item, INSERTION-INDEX automatically resets itself to a value of zero.  
+</p>
+<a name="wp1164709"> </a><p class="pBody">
+ In statements that allow for multiple properties, the properties are set in the order specified.  Therefore, you can set both INSERTION-INDEX and ITEM-TO-ADD in the same statement, providing you specify INSERTION-INDEX first.  For example, the following statement will add a new item to the top of a list box:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MODIFY LIST-BOX-1,<a name="wp1164710"> </a>
+   INSERTION-INDEX = 1,<a name="wp1164711"> </a>
+   ITEM-TO-ADD = &quot;New top item&quot;<a name="wp1164712"> </a>
+</pre></div>
+<a name="wp1164715"> </a><h5 class="pHeading4">
+SEARCH-TEXT (alphanumeric)   
+</h5>
+<a name="wp1164716"> </a><p class="pBody">
+This property is used only in conjunction with paged list boxes.  SEARCH-TEXT returns the current value of the user-supplied search text.  Normally, this property is used in an INQUIRE statement when you implement a response to the NTF-PL-SEARCH event (which indicates that the user wants to search for a particular text string in the list box).  See <a  href="gt2314.htm#wp1026402">section 3.8, &quot;Paged List Boxes,&quot;</a> for a complete description and code example.  
+</p>
+<a name="wp1164722"> </a><h5 class="pHeading4">
+DATA-COLUMNS (numeric)   
+</h5>
+<a name="wp1164723"> </a><p class="pBody">
+This property describes where each column begins in the data added to the list.  Columns are defined by character positions in the raw data, with the first character being position &quot;1&quot;.  For example, the following data item:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01 LIST-DATA.<a name="wp1164724"> </a>
+   03  NAME           PIC X(20).<a name="wp1164725"> </a>
+   03  PHONE-NUMBER   PIC X(15).<a name="wp1164726"> </a>
+   03  STATE          PIC X(2).<a name="wp1164727"> </a>
+</pre></div>
+<a name="wp1164728"> </a><p class="pBody">
+would normally be displayed in three columns, one at position &quot;1&quot; (NAME), one at position &quot;21&quot; (PHONE-NUMBER), and one at position &quot;36&quot; (STATE).  Each time you set DATA-COLUMNS to a positive value, a new column is created at that position.  Setting DATA-COLUMNS to zero clears all the existing column definitions.  Note that there is always a column at position &quot;1&quot;, so setting position &quot;1&quot; has no useful effect.  
+</p>
+<a name="wp1164729"> </a><p class="pBody">
+Typically, you specify DATA-COLUMNS by enclosing a list of columns in parentheses.  This causes the compiler to generate code to set each column in turn.  For example, a setting that would match the preceding example would be:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DATA-COLUMNS = ( 21, 36 )<a name="wp1164730"> </a>
+</pre></div>
+<a name="wp1164731"> </a><p class="pBody">
+This can also be specified with the RECORD-POSITION construct. The data item is reference by a numeric literal whose value corresponds to the location of the data item within the record. (This construct is covered in detail in Chapter 5.2.5 of the <em class="cEmphasis">Reference Manual</em>.)  For example, the above example would be:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DATA-COLUMNS = ( <a name="wp1164732"> </a>
+    record-position of PHONE-NUMBER,<a name="wp1164733"> </a>
+    record-position of STATE )<a name="wp1164734"> </a>
+</pre></div>
+<a name="wp1164735"> </a><p class="pBody">
+You must also specify DISPLAY-COLUMNS to get the columns to display correctly.  If you don't, the results are undefined.  
+</p>
+<a name="wp1164738"> </a><h5 class="pHeading4">
+DISPLAY-COLUMNS (numeric)   
+</h5>
+<a name="wp1164739"> </a><p class="pBody">
+This property describes where each DATA-COLUMN will display in the list box.  The first column always displays in column &quot;1&quot;.  Additional columns display at the locations set by DISPLAY-COLUMNS.  Columns are measured with the standard font measure (i.e., the width of the character &quot;0&quot; in the list box's font).  Each time you set DISPLAY-COLUMNS to a positive value, a new display column is defined.  Setting DISPLAY-COLUMNS to &quot;0&quot; clears all of the columns (except column 1).  
+</p>
+<a name="wp1164740"> </a><p class="pBody">
+If you are using a proportionally spaced font, you should provide enough space in each column to allow for wider-than-average data.  You will also want to provide some white space between columns.  To continue the example given under DATA-COLUMNS above, you might code the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DATA-COLUMNS = ( 21, 36 )<a name="wp1164741"> </a>
+DISPLAY-COLUMNS = ( 31, 51 )<a name="wp1164742"> </a>
+</pre></div>
+<a name="wp1164743"> </a><p class="pBody">
+In this example, the first column, which is 30 characters wide in the display, accommodates a 20-character data source, and the second column, which is 20 characters wide, accommodates a 15-character data source.
+</p>
+<a name="wp1164744"> </a><p class="pBody">
+Data contained in a column cannot overflow the allocated space.  If the data is too large to be fully displayed, the data is truncated.  Therefore, you should always set your columns wide enough to hold the largest data item.  
+</p>
+<a name="wp1164745"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>You can also use columns to hide data.  A column set beyond the right side of the list box is not visible on the screen.  You can use this behavior to store information in the list box that your program needs to associate with list items, but that you do not want to be seen by the user.  One potential use for this feature is to store a file record's primary key value in the hidden column so that you can retrieve the full record easily when the user selects an item in the list.  
+<hr />
+</p>
+<a name="wp1164746"> </a><h5 class="pHeading4">
+ALIGNMENT (alphanumeric)  
+</h5>
+<a name="wp1164749"> </a><p class="pBody">
+ This property specifies the alignment of data in each column.  Like DATA-COLUMNS and DISPLAY-COLUMNS, each time you assign this property, you affect a new column.  Allowed values are &quot;L&quot; for left alignment, &quot;R&quot; for right alignment, &quot;C&quot; for centered alignment, and &quot;U&quot; for unaligned.  Equivalent lower-case values are also allowed, as are any words that start with the appropriate letters (thus, you can spell out &quot;left&quot;, &quot;right&quot;, and &quot;center&quot; if you want).  For example, to establish a left-aligned column followed by two right-aligned columns, you would use:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ALIGNMENT = ( &quot;L&quot;,  &quot;R&quot;,  &quot;R&quot; )<a name="wp1164750"> </a>
+</pre></div>
+<a name="wp1164751"> </a><p class="pBody">
+To empty the alignment list (to establish new alignments, for example) assign an alignment value of space (&quot; &quot;).  Left alignment differs from unaligned in that leading spaces are removed from left-aligned data, but not from unaligned data.  Any column that does not have an alignment specified for it is unaligned. 
+</p>
+<a name="wp1164754"> </a><h5 class="pHeading4">
+SEPARATION (numeric)    
+</h5>
+<a name="wp1164755"> </a><p class="pBody">
+This property establishes a blank region at the end of each column.  This has the effect of creating a uniform separation space between each column and prevents data from visually running together.  When data is too large to fit in the allocated space, the data is truncated to the column width minus the separation space.
+</p>
+<a name="wp1164756"> </a><p class="pBody">
+Like DATA-COLUMNS, each time you assign a value to this property, you set the separation amount for a new column.  The separation is expressed in 10ths of characters.  For example, to establish a ½ character separation, use a value of &quot;5&quot;.  On character-based systems, the separation is rounded down to the nearest whole character.  The blank region specified appears at the end of the column.  Data is never displayed in the separation region, it is truncated if need be.  Also, the separation region defines the edge from which right and center justification are computed.  To reset the separation list for a box, assign the value &quot;-1&quot;.  Unspecified columns use a default separation value.  This value is set by the configuration variable COLUMN-SEPARATION.  
+</p>
+<a name="wp1164759"> </a><h5 class="pHeading4">
+DIVIDERS (numeric) 
+</h5>
+<a name="wp1164762"> </a><p class="pBody">
+ When set, this property causes divider bars to be displayed between columns.  Like DATA-COLUMNS, each time you assign a value to this property, you establish the divider for a new column.  The value assigned is the width of the divider, in pixels.  A width of zero means that there will be no divider.  The divider appears after the column, immediately before the beginning of the next column (there is a small space between the divider and the next column's text).  To reset the list of dividers, assign a value of &quot;-1&quot;.  The divider's color is the shadow color of the list box (usually dark gray or black).  
+</p>
+<a name="wp1164763"> </a><h5 class="pHeading4">
+SELECTION-INDEX (numeric)  
+</h5>
+<a name="wp1164766"> </a><p class="pBody">
+ This property, when set, causes the list box selection to change to the indicated item.  Items are numbered sequentially from the top of the list box, starting at &quot;1&quot;.  Setting this value to &quot;-1&quot; clears any selection.  Values beyond the number of list box items are undefined. 
+</p>
+<a name="wp1164767"> </a><p class="pBody">
+When queried, this property returns the item number of the current selection, or &quot;-1&quot; if no item is selected.
+</p>
+<a name="wp1164768"> </a><p class="pBody">
+Using SELECTION-INDEX to change the list box focus causes a faint dotted-line box to appear around the selected item on graphical systems.  On character-based systems, the text cursor is displayed at the end of the selected item.  The end user presses the space bar to choose the item.
+</p>
+<a name="wp1164771"> </a><h5 class="pHeading4">
+THUMB-POSITION (numeric)   
+</h5>
+<a name="wp1164772"> </a><p class="pBody">
+This property, when set, causes the list box to display the line number of the item on top of the list box, scrolling the latter if necessary.  Items are numbered sequentially from the top of the list, starting at &quot;1&quot;.  Setting THUMB-POSITION to a value greater than the actual number of lines in the list box or to a value less than &quot;1&quot; has no effect.
+</p>
+<a name="wp1164773"> </a><p class="pBody">
+When queried, this property returns the line number of the item currently displayed on top of the list box.
+</p>
+<a name="wp1164776"> </a><h5 class="pHeading4">
+QUERY-INDEX (numeric)   
+</h5>
+<a name="wp1164777"> </a><p class="pBody">
+This property is used only in conjunction with the ITEM-VALUE property described below.  This property determines which list box item to return information about.  Items are numbered sequentially from the top of the list box, starting at &quot;1&quot;.  
+</p>
+<a name="wp1164780"> </a><h5 class="pHeading4">
+ITEM-VALUE (alphanumeric)   
+</h5>
+<a name="wp1164781"> </a><p class="pBody">
+This property, when queried, returns the value of a list box item.  The item returned is determined by the current value of QUERY-INDEX (see above).  If QUERY-INDEX does not correspond to a valid item, then nothing is returned.  
+</p>
+<a name="wp1171679"> </a><p class="pBody">
+For example, to determine the value of the first item in a list box, perform the following statements:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MODIFY LIST-BOX-1, QUERY-INDEX = 1<a name="wp1171680"> </a>
+INQUIRE LIST-BOX-1, ITEM-VALUE IN MY-ITEM<a name="wp1171681"> </a>
+</pre></div>
+<a name="wp1164787"> </a><h5 class="pHeading4">
+TERMINATION-VALUE (numeric)   
+</h5>
+<a name="wp1164788"> </a><p class="pBody">
+This property produces the same behavior as the TERMINATION-VALUE push button property, except that it acts on the CMD-DBLCLICK event instead of the CMD-CLICKED event.  This property is used only when the NOTIFY-DBLCLICK style is also used.  The compiler applies the NOTIFY-DBLCLICK style automatically if this property is explicitly named when the control is initially created.  Note that this does not occur if you use the PROPERTY phrase to supply the property value (by giving its identifying number).  
+</p>
+<a name="wp1164791"> </a><h5 class="pHeading4">
+EXCEPTION-VALUE (numeric)   
+</h5>
+<a name="wp1164792"> </a><p class="pBody">
+This property produces the same behavior as the push button property of the same name, except that it acts on the CMD-DBLCLICK event instead of the CMD-CLICKED event.  This property is used only when the NOTIFY-DBLCLICK style is also used.  The compiler applies the NOTIFY-DBLCLICK style automatically if this property is named when the control is initially created.  Note that this does not occur if you use the PROPERTY phrase to supply the property value (by giving its identifying number).  
+</p>
+<a name="wp1164795"> </a><h5 class="pHeading4">
+SORT-ORDER (numeric)   
+</h5>
+<a name="wp1164796"> </a><p class="pBody">
+This property applies to paged list boxes only.  It determines whether the case of the data items will be considered as the user searches for a data item.  It can take one of four values: 
+</p>
+<a name="wp1164822"> </a><p class="pBodyRelative">
+     </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1164799"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1164801"> </a><p class="pCellBody">
+PL-SORT-DEFAULT
+</p>
+</td>
+    <td><a name="wp1164803"> </a><p class="pCellBody">
+Use the default sort order.  (Same as value 3.)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1164805"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1164807"> </a><p class="pCellBody">
+PL-SORT-NONE
+</p>
+</td>
+    <td><a name="wp1164809"> </a><p class="pCellBody">
+Every character the user types results in a notification to the COBOL program.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1164811"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1164813"> </a><p class="pCellBody">
+PL-SORT-NATIVE
+</p>
+</td>
+    <td><a name="wp1164815"> </a><p class="pCellBody">
+The paged list is searched and case is considered.  If the item that the user has entered is on the current page, it is selected.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1164817"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1164819"> </a><p class="pCellBody">
+PL-SORT-NATIVE-IGNORE-CASE<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1164821"> </a><p class="pCellBody">
+The paged list is searched and case is <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">not</span> considered.  If the item that the user has entered is on the current page, it is selected.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1164823"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>If the style is set to UPPER or LOWER, and &quot;SORT-ORDER = 2&quot;, characters will be made UPPER or LOWER case as they are entered in the search box, negating the attempt to do a case sensitive search.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

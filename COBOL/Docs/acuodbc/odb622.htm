@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:19" />
+  <title>6.4  Encrypting XFD Files</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb6.htm">Chapter 6: Mapping COBOL Data Items and Database Fields</a> &gt; </p>
+<a name="wp1029382"> </a><h2 class="pHeading1">
+6.4  Encrypting XFD Files
+</h2>
+<a name="wp1029388"> </a><p class="pBody">
+Under certain circumstances, you may want to encrypt your XFD files so that users do not have direct access to them.  Such circumstances might include the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1029389"> </a><div class="pSmartList1"><li>You've hidden some fields with the HIDDEN directive.</li></div>
+<a name="wp1029390"> </a><div class="pSmartList1"><li>You've made some fields read only with the READ-ONLY directive.</li></div>
+<a name="wp1029391"> </a><div class="pSmartList1"><li>You don't want your users to see certain file formats.</li></div>
+</ul></div>
+<a name="wp1029392"> </a><p class="pBody">
+You can use the <b class="cBold">xfdcrypt</b> utility, which is included with AcuODBC, to encrypt your XFD files.  Otherwise, users can remove these directives to gain access to privileged fields.
+</p>
+<a name="wp1029393"> </a><p class="pBody">
+To encrypt an XFD, use the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+xfdcrypt infile.xfd<a name="wp1029394"> </a>
+</pre></div>
+<a name="wp1029395"> </a><p class="pBody">
+The <b class="cBold">xdfdcrypt</b> utility encrypts the file and places it in the XFD directory, along with the XFD.  
+</p>
+<a name="wp1029396"> </a><p class="pBody">
+You can encrypt multiple files at once by including more than one file name on the command line or by using DOS-style pattern matching.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+xfdcrypt infile1.xfd infile2.xfd infile3.xfd<a name="wp1029397"> </a>
+</pre></div>
+<a name="wp1029398"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+xfdcrypt infile?.xfd<a name="wp1029399"> </a>
+</pre></div>
+<a name="wp1029400"> </a><p class="pBody">
+Distribute only files with the &quot;.efd&quot; extension to your end users (or XFDs that were not encrypted in the first place).  Users cannot modify &quot;.efd&quot; files, so your hidden data remains hidden.  If you need to view or modify the EFDs or XFDs, you can access the original &quot;.xfd&quot; files on the development machine.  The <b class="cBold">xfdcrypt</b> utility can decrypt &quot;.efd&quot; files into readable &quot;.xfd&quot; files.  Therefore, you should not include &quot;xfdcrypt.exe&quot; with your AcuODBC application.
+</p>
+<a name="wp1035539"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Files encrypted with a 4.x or 5.x version of <b class="cBold">xfdcrypt</b> will not work with AcuODBC Version 6.0 or later.  You must run <b class="cBold">xfdcrypt</b> again for compatibility with AcuODBC Version&#160;6.0 or later.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

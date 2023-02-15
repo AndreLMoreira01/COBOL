@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$LIST-DIRECTORY Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1036137"> </a><h2 class="pHeading2">
+C$LIST-DIRECTORY Routine
+</h2>
+<a name="wp1036140"> </a><p class="pBody">
+The C$LIST-DIRECTORY routine lists the contents of a selected directory.  Each operating system has a unique method for performing this task. C$LIST-DIRECTORY provides a single method that will work for all operating systems.
+</p>
+<a name="wp1036141"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$LIST-DIRECTORY&quot; <a name="wp1036142"> </a>
+    USING OP-CODE, parameters <a name="wp1036143"> </a>
+</pre></div>
+<a name="wp1036144"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1036145"> </a><p class="pBody">
+<b class="cBold">OP-CODE   </b>PIC 99 COMP-X 
+</p>
+<a name="wp1036146"> </a><p class="pBody">
+Indicates which C$LIST-DIRECTORY operation to perform.   The operations are described below.
+</p>
+<a name="wp1036147"> </a><p class="pBody">
+<b class="cBold">Parameters</b>   vary depending on the op-code chosen.
+</p>
+<a name="wp1036148"> </a><p class="pBody">
+Provides information and hold results for the operations specified.  These parameters are described below.
+</p>
+<a name="wp1036149"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1036150"> </a><p class="pBody">
+C$LIST-DIRECTORY allows you to get the names of files residing in a given directory.  It accomplishes this through three distinct operations.  The first operation opens the specified directory.  The second operation returns the filenames in the list, one-at-a-time.  The third operation closes the directory and deallocates all memory used by the routine.  C$LIST-DIRECTORY has the following operation codes (defined in &quot;acucobol.def&quot;): 
+</p>
+<a name="wp1036151"> </a><p class="pBody">
+<b class="cBold">LISTDIR-OPEN</b> (VALUE 1) Opens the specified directory.  It has two parameters:
+</p>
+<a name="wp1036152"> </a><h5 class="pHeading4">
+Directoryname PIC X(n)
+</h5>
+<a name="wp1053158"> </a><p class="pBody">
+Contains the name of the directory to open.  This directory must exist, and you must have permissions to read the directory.  You may use remote name syntax if AcuServer is installed on the remote machine.
+</p>
+<a name="wp1036153"> </a><h5 class="pHeading4">
+Pattern PIC X(n)
+</h5>
+<a name="wp1053159"> </a><p class="pBody">
+Specifies the type of filename for which to search.  This routine supports &quot;wildcards,&quot; meaning that the character &quot;*&quot; will match any number of characters, and the character &quot;?&quot; will match any single character.  For example, you can search by file suffix (*.def) or by a common part of a file name (acu*).
+</p>
+<a name="wp1301535"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>On VMS platforms, when searching for all files in a directory, you must specify &quot;*.*&quot; instead of &quot;*&quot;. 
+<hr />
+</p>
+<a name="wp1036154"> </a><p class="pBody">
+If the call to LISTDIR-OPEN is successful, RETURN-CODE contains a handle to the list.  The value in RETURN-CODE should be moved to a data item that is USAGE HANDLE.  That data item should be passed as the directory handle to the other C$LIST-DIRECTORY operations.  If the call to LISTDIR-OPEN fails (if the directory does not exist, contains no files, or you do not have permission to read the directory), RETURN-CODE is set to a NULL handle. 
+</p>
+<a name="wp1094036"> </a><p class="pBody">
+<b class="cBold">LISTDIR-NEXT</b> (VALUE 2) Reads each filename from the open directory.  It has two parameters:
+</p>
+<a name="wp1094057"> </a><h5 class="pHeading4">
+Handle&#160;USAGE&#160;HANDLE
+</h5>
+<a name="wp1094059"> </a><p class="pBody">
+The handle returned in the LISTDIR-OPEN operation.
+</p>
+<a name="wp1094061"> </a><h5 class="pHeading4">
+Filename PIC X(n)
+</h5>
+<a name="wp1094063"> </a><p class="pBody">
+The location of the next filename to be returned.  If the directory listing is finished, it is filled with spaces.
+</p>
+<a name="wp1106753"> </a><p class="pBody">
+The call to LISTDIR-NEXT can include an additional argument, LISTDIR-FILE-INFORMATION (defined in &quot;acucobol.def&quot;), which receives information about the returned file name.  This is an optional group item which returns information about the following data items:
+</p>
+<a name="wp1106775"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1106756"> </a><p class="pCellBody">
+LISTDIR-FILE-TYPE 
+</p>
+</td>
+    <td><a name="wp1106758"> </a><p class="pCellBody">
+The file type can be one of the following:<br />B = block device<br />C = character device<br />D = directory<br />F = regular file<br />P = pipe (FIFO)<br />S = socket<br />U = unknown
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1106760"> </a><p class="pCellBody">
+LISTDIR-FILE-<br />CREATION-TIME 
+</p>
+</td>
+    <td><a name="wp1106762"> </a><p class="pCellBody">
+The creation time is the date (and time) that the file was originally created.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1106764"> </a><p class="pCellBody">
+ LISTDIR-FILE-LAST-<br />ACCESS-TIME 
+</p>
+</td>
+    <td><a name="wp1106766"> </a><p class="pCellBody">
+The last access time is the date (and time) that the file was last accessed by some application (usually when the file was queried in some way). 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1106768"> </a><p class="pCellBody">
+LISTDIR-FILE-LAST-<br />MODIFICATION-TIME
+</p>
+</td>
+    <td><a name="wp1106770"> </a><p class="pCellBody">
+ The last modification time is the date (and time) the file was last written to. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1106772"> </a><p class="pCellBody">
+LISTDIR-FILE-SIZE 
+</p>
+</td>
+    <td><a name="wp1106774"> </a><p class="pCellBody">
+The size of the file is given in bytes.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1106776"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Because the supported file types vary by operating system, These data items have slightly different meanings depending on your operating system.  Even on operating systems that support these values, some file systems may not.  Some versions of the UNIX® operating system may change these values when permissions are changed.  Refer to your operating system documentation for specific definitions. 
+<hr />
+</p>
+<a name="wp1102689"> </a><p class="pBody">
+<b class="cBold">LISTDIR-CLOSE</b> (VALUE 3) Releases the resources used by the other operations.  It must be called to avoid memory leaks.  It has one parameter, <em class="cEmphasis">handle</em>, which is the same data item used by the LISTDIR-NEXT operation.
+</p>
+<a name="wp1036159"> </a><h5 class="pHeading4">
+Handle USAGE HANDLE
+</h5>
+<a name="wp1053189"> </a><p class="pBody">
+The handle returned in the LISTDIR-OPEN operation.
+</p>
+<a name="wp1036160"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1036161"> </a><p class="pBody">
+The following example lists the contents of a directory with repeated calls C$LIST-DIRECTORY:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+WORKING-STORAGE SECTION.<a name="wp1036162"> </a>
+copy &quot;def/acucobol.def&quot;.<a name="wp1036163"> </a>
+01  pattern       pic x(5) value &quot;*.vbs&quot;.<a name="wp1036164"> </a>
+01  directory     pic x(20) value &quot;/virusscan&quot;.<a name="wp1036165"> </a>
+01  filename      pic x(128).<a name="wp1036166"> </a>
+01  mydir         usage handle.<a name="wp1036167"> </a>
+PROCEDURE DIVISION.<a name="wp1036168"> </a>
+MAIN.<a name="wp1036169"> </a>
+* CALL LISTDIR-OPEN to get a directory handle.<a name="wp1036170"> </a>
+    call &quot;C$LIST-DIRECTORY&quot; <a name="wp1036171"> </a>
+       using listdir-open, directory, pattern.<a name="wp1062003"> </a>
+    move return-code to mydir.<a name="wp1036172"> </a>
+    if mydir = 0<a name="wp1036173"> </a>
+       stop run<a name="wp1036174"> </a>
+    end-if.<a name="wp1036175"> </a>
+* CALL LISTDIR-NEXT to get the names of the files.  <a name="wp1036176"> </a>
+* Repeat this operation until a filename containing only <a name="wp1036177"> </a>
+* spaces is returned.  The filenames are not necessarily <a name="wp1036178"> </a>
+* returned in any particular order.  Filenames may be <a name="wp1036179"> </a>
+* sorted on some machines and not on others.<a name="wp1036180"> </a>
+    perform with test after until filename = spaces<a name="wp1036181"> </a>
+       call &quot;C$LIST-DIRECTORY&quot; <a name="wp1036182"> </a>
+          using listdir-next, mydir, filename<a name="wp1062004"> </a>
+    end-perform.<a name="wp1036183"> </a>
+* CALL LISTDIR-CLOSE to close the directory and deallocate<a name="wp1036184"> </a>
+* memory. Omitting this call will result in memory leaks.<a name="wp1062005"> </a>
+    call &quot;C$LIST-DIRECTORY&quot; using listdir-close, mydir.<a name="wp1036186"> </a>
+    stop run.<a name="wp1036187"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

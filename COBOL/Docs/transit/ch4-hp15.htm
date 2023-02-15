@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.2.3.1  Enabling the MPE file system</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp3.htm">4.2  ACUCOBOL-GT in MPE/iX Environments</a> &gt; <a href="ch4-hp14.htm">4.2.3  Using ACUCOBOL-GT with MPE/iX Emulators</a> &gt; </p>
+<a name="wp1079328"> </a><h2 class="pHeading3">
+4.2.3.1  Enabling the MPE file system
+</h2>
+<a name="wp1079330"> </a><p class="pBody">
+Off of the HP e3000, the ACUCOBOL-GT runtime does <em class="cEmphasis">not</em> come pre-configured to support the MPE file system.  Therefore, if you want to access MPE files you must first enable the MPE file system in the runtime. This requires relinking the runtime.  The steps for doing this are given below.  
+</p>
+<a name="wp1079331"> </a><p class="pBody">
+Before starting, it is helpful to verify the version and configuration of your ACUCOBOL-GT runtime.  On the system, enter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+runcbl  -vv<a name="wp1079332"> </a>
+</pre></div>
+<a name="wp1079333"> </a><p class="pBody">
+The &quot;-vv&quot; option causes the runtime to display detailed version and configuration information.  On an HP-UX system the output is similar to:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ACUCOBOL-GT runtime version 7.1.0<a name="wp1079334"> </a>
+Serial number 999999<a name="wp1079335"> </a>
+Licensed for 1 user(s)<a name="wp1079336"> </a>
+AcuServer client<a name="wp1079337"> </a>
+Vision version 5 file system<a name="wp1079338"> </a>
+XML version expat_1.95.4 file system<a name="wp1079339"> </a>
+Copyright (c) 1985-2005 Acucorp, Inc.<a name="wp1079340"> </a>
+</pre></div>
+<a name="wp1079341"> </a><p class="pBody">
+The end of the first line of output indicates the version of the runtime.  To get MPE file system support, you must have Version 7.0.0, or later.  
+</p>
+<a name="wp1079342"> </a><p class="pBody">
+To enable MPE file system support, follow the steps below.  The steps include relinking the runtime.  Relinking requires that you have access to the host system's native C compiler.  For complete information on relinking, see section 4.3.6 in <em class="cEmphasis">A Guide to Interoperating with ACUCOBOL-GT</em>.  
+</p>
+<a name="wp1079343"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>By default, the ACUCOBOL-GT files needed to relink the runtime are located in the &quot;lib&quot; subdirectory of your ACUCOBOL-GT installation. 
+<hr />
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1079344"> </a><div class="pSmartList1"><li>Make a backup copy of your current <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">runcbl</span> file.  </li></div>
+<a name="wp1079345"> </a><div class="pSmartList1"><li>Optionally, include other libraries.  See section 4.3 in <em class="cEmphasis">A Guide to Interoperating with ACUCOBOL-GT</em>. </li></div>
+<a name="wp1079346"> </a><div class="pSmartList1"><li>Enable (or disable) the MPE file system.  Edit &quot;filetbl.c&quot; (in the &quot;lib&quot; subdirectory of your ACUCOBOL-GT installation) and look for the list of define statements.  The list contains entries such as:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+#define USE_VISION   1<a name="wp1082771"> </a>
+#define USE_RMS      0<a name="wp1082772"> </a>
+#define USE_CISAM    0<a name="wp1082773"> </a>
+#define USE_BTRIEVE  0<a name="wp1082774"> </a>
+#define USE_MPE      0<a name="wp1082825"> </a>
+</pre></div>
+<a name="wp1082848"> </a><p class="pIndented1">
+Locate USE_MPE and set the value to &quot;1&quot;.   The file systems that are set to &quot;1&quot; are those that are enabled and linked.  Those set to &quot;0&quot; are disabled and not linked.  Any or all file systems may be enabled at the same time; the more systems you link, the larger your runtime system becomes.
+</p>
+<a name="wp1079370"> </a><div class="pSmartList1"><li>Edit &quot;Makefile&quot; (in the &quot;lib&quot; subdirectory of your ACUCOBOL-GT installation) and add &quot;ksam.o&quot; to the FSI_SUBS definition.  The line for FSI_SUBS should look like:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FSI_SUBS = ksam.o<a name="wp1079371"> </a>
+</pre></div>
+<a name="wp1079372"> </a><p class="pIndented1">
+To remove support for MPE, remove &quot;ksam.o&quot; from FSI_SUBS.
+</p>
+<a name="wp1079373"> </a><div class="pSmartList1"><li>Relink the runtime.  Make your current working directory the &quot;lib&quot; subdirectory of your ACUCOBOL-GT installation (AcuGT/lib) and enter:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+make <a name="wp1079374"> </a>
+</pre></div>
+<a name="wp1079375"> </a><p class="pIndented1">
+This compiles &quot;sub.c&quot; and &quot;filetbl.c&quot;, and links the runtime.
+</p>
+</ol></div>
+<a name="wp1079376"> </a><p class="pBody">
+To verify that MPE file system support is enabled, enter &quot;runcbl -vv&quot;.  The output should now include the line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+KSAM version MPE/iX native and compatibility<a name="wp1079377"> </a>
+   mode file system<a name="wp1079378"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

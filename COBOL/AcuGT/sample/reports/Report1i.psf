@@ -1,0 +1,314 @@
+; CASEMaker AcuBench Program Structure File, Version 7.2
+; WARNING: DO NOT MODIFY THIS FILE!
+
+[PROGRAM_CONTENT]
+QUIT_CONFIRM=0
+
+{{@DESCRIPTION:
+Report1i illustrates an alternative usage of the Report Grid
+Control.  
+
+If you wish to run a simple report, in which consecutive detail 
+lines are added to a Report Grid Control, then you can build 
+your Master Loop into the Grid Tabbody code.
+
+In this report, code is added around the tags slightly differently- 
+note the way the code straddles the GridLoop tag.  Note also 
+that when using this device, you do not have access to the 
+Before-Print paragraph of the Grid, so MOVEs to formatted fields 
+must be entered into the code outside of the tags as well.
+@}}
+
+[WORKING_STORAGE]
+m_nType=1
+m_strName=Working Storage
+m_bBlockRecords=1
+m_bRecordFixed=1
+m_bStandard=1
+{{@FD_m_strDescriptionWK
+
+@}}
+[FDITEM0_WK]
+m_nType=11
+m_strName=salesdata-status
+m_strRawPic=X(2)
+m_strPic=X(2)
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM0_WK
+
+@}}
+[FDITEM1_WK]
+m_nType=11
+m_strName=Valid-Salesdata
+m_nItemLevel=88
+m_nSync=-1
+m_bFixed=1
+m_strTrue="00" THRU "09"
+{{@DataItem_m_strDescriptionFDITEM1_WK
+
+@}}
+[FDITEM2_WK]
+m_nType=10
+m_strName=PR-Heavy-Sales
+m_strRawPic=$ZZZ,ZZ9.99
+m_strPic=$ZZZ,ZZ9.99
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM2_WK
+
+@}}
+[FDITEM3_WK]
+m_nType=10
+m_strName=PR-Quota
+m_strRawPic=$ZZZ,ZZ9.99
+m_strPic=$ZZZ,ZZ9.99
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM3_WK
+
+@}}
+[FDITEM4_WK]
+m_nType=10
+m_strName=PR-Supplies-Sales
+m_strRawPic=$ZZZ,ZZ9.99
+m_strPic=$ZZZ,ZZ9.99
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM4_WK
+
+@}}
+
+
+[LINKAGE_SECTION]
+m_nType=1
+m_strName=Linkage Section
+m_bBlockRecords=1
+m_bRecordFixed=1
+m_bStandard=1
+{{@FD_m_strDescriptionLK
+
+@}}
+
+
+[DATASET_CONTENT:DS1]
+DATASET_NAME=SalesdataDS
+DATA_LAYOUT=Salesdata
+KEY=Sales-Key
+
+[SEL_LAYOUT_FILE_CONTENT:DATALAYOUT1]
+DATA_LAYOUT=Salesdata
+MODE=0
+DECLARATIVES=
+BEFORE_OPEN=
+AFTER_OPEN=
+BEFORE_COMMIT=
+AFTER_COMMIT=
+BEFORE_ROLLBACK=
+AFTER_ROLLBACK=
+BEFORE_DELETEFILE=
+AFTER_DELETEFILE=
+
+[SEL_LAYOUT_FILE_CONTENT:DATALAYOUT1-IO_FUNCTION_CONTENT]
+GENERATE_IO_FUNCTION1=Declaratives
+GENERATE_IO_FUNCTION2=Read File Key Is
+GENERATE_IO_FUNCTION3=Read File Next
+GENERATE_IO_FUNCTION4=Read File Previous
+GENERATE_IO_FUNCTION5=Delete File
+GENERATE_IO_FUNCTION6=Close File
+
+{{@SCREEN:
+*   Screen Painter Data
+*   Schema 6.0
+*
+BEGIN-SPDATA
+
+END-SPDATA
+
+@}}
+
+{{@REPORT:
+*   Report Writer Data
+*   Schema 6.0
+*
+BEGIN-RWDATA-6.0A
+
+GRAPHICAL-REPORT
+REPORT-FACTOR-10000
+
+Begin Report Report1i
+   PREFIX            = Report1i
+   LOCK-CONTROL      = TRUE
+   (Name)            = Report1i
+   Num Columns (N-Top) = 1
+   Output File Name  = Report1i.html
+   Paper Size        = ( Paper = Letter, Width = 85000, Height = 110000, RealW = 0, RealH = 0 )
+   Paper Size        = ( Header = &w&bPage &p of &P, Footer = &u&b&d, Left = 7500, Right = 7500, Top = 7500, Bottom = 7500 )
+   Report Style      = Standard
+   Target Browser    = Specify Internet Explorer
+   Watermark Style   = None
+   Begin Section Page-Header
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 1771
+      SECTION-LINES     = 5000
+      SECTION-SIZE      = 125521
+      SECTION-GROUPTYPE = 0
+      SECTION-INDEX     = -1
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1i-PH-1
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 5000
+      Size              = 125521
+      Visible           = 1:TRUE
+   End
+   Begin Section Detail
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 8542
+      SECTION-LINES     = 12500
+      SECTION-SIZE      = 125521
+      SECTION-GROUPTYPE = 0
+      SECTION-INDEX     = -1
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1i-Dtl-1
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 12500
+      Size              = 125521
+      Skip Page after Print = FALSE
+      Visible           = 1:TRUE
+      Zebra             = 0
+      Begin Rpt.Grid Report1i-RwGd-1
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1i-RwGd-1
+         Auto Resize       = TRUE
+         Border Color      = 0
+         Border Style      = Boxed
+         Border Width      = 1
+         Color             = 513
+         Column            = 1563
+         Column Headings   = TRUE
+         Columns' Setting  = ( X = 1, Name = Sales-State )
+         Columns' Setting  = ( Head = State )
+         Columns' Setting  = ( PIC = XX, Width = 5000, Alig = 3)
+         Columns' Setting  = ( Font = Default Font )
+         Columns' Setting  = ( X = 2, Name = Sales-Branch-No )
+         Columns' Setting  = ( Head = Branch )
+         Columns' Setting  = ( PIC = X(3), Width = 5000, Alig = 3)
+         Columns' Setting  = ( Font = Default Font )
+         Columns' Setting  = ( X = 3, Name = Sales-LastName )
+         Columns' Setting  = ( Head = Last Name )
+         Columns' Setting  = ( PIC = X(25), Width = 10000, Alig = 3)
+         Columns' Setting  = ( Font = Default Font )
+         Columns' Setting  = ( X = 4, Name = Sales-FirstName )
+         Columns' Setting  = ( Head = First Name )
+         Columns' Setting  = ( PIC = X(25), Width = 10000, Alig = 3)
+         Columns' Setting  = ( Font = Default Font )
+         Columns' Setting  = ( X = 5, Name = Sales-Gender )
+         Columns' Setting  = ( Head = Gender )
+         Columns' Setting  = ( PIC = X, Width = 5000, Alig = 3)
+         Columns' Setting  = ( Font = Default Font )
+         Columns' Setting  = ( X = 6, Name = PR-Heavy-Sales )
+         Columns' Setting  = ( Head = Heavy Sales )
+         Columns' Setting  = ( PIC = $ZZZ,ZZ9.99, Width = 10000, Alig = 2)
+         Columns' Setting  = ( Font = Default Font )
+         Columns' Setting  = ( X = 7, Name = PR-Supplies-Sales )
+         Columns' Setting  = ( Head = Supplies Sales )
+         Columns' Setting  = ( PIC = $ZZZ,ZZ9.99, Width = 10000, Alig = 2)
+         Columns' Setting  = ( Font = Default Font )
+         Columns' Setting  = ( X = 8, Name = PR-Quota )
+         Columns' Setting  = ( Head = Quota )
+         Columns' Setting  = ( PIC = $ZZZ,ZZ9.99, Width = 10000, Alig = 2)
+         Columns' Setting  = ( Font = Default Font )
+         Font              = Default Font
+         Heading Color     = 336
+         Line              = 1250
+         Lines             = 10416
+         Show Grid Line    = TRUE
+         Size              = 65208
+         Visible           = 1:TRUE
+      End
+   End
+   Begin Section Page-Footer
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 22813
+      SECTION-LINES     = 5000
+      SECTION-SIZE      = 125521
+      SECTION-GROUPTYPE = 0
+      SECTION-INDEX     = -1
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1i-PF-1
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 5000
+      Size              = 125521
+      Visible           = 1:TRUE
+   End
+End
+
+END-RWDATA
+
+@}}
+
+{{@PARAGRAPH:
+
+@}}
+
+[KEY_STATUS_FIELD_FORMAT]
+PIC=9(4)
+USAGE=[None]
+
+[KEYSTATUS_CONTENT:KS1]
+CONDITION=Exit-Pushed
+VALUE=27
+
+[KEYSTATUS_CONTENT:KS2]
+CONDITION=Message-Received
+VALUE=95
+
+[KEYSTATUS_CONTENT:KS3]
+CONDITION=Event-Occurred
+VALUE=96
+
+[KEYSTATUS_CONTENT:KS4]
+CONDITION=Screen-No-Input-Field
+VALUE=97
+
+[KEYSTATUS_CONTENT:KS5]
+CONDITION=Screen-Time-Out
+VALUE=99
+
+[CODE_GENERATION_OPTIONS]
+FOLLOW_PROJECT_OPTIONS=1
+GENERATE_PROGRAM_FILE=1
+GENERATE_WORKING_STORAGE=1
+GENERATE_EVENT_PARAGRAPH=1
+GENERATE_SCREEN_SECTION=1
+GENERATE_REPORT_SECTION=1
+GENERATE_PROCEDURE_DIVISION=1
+GENERATE_MENU_PARAGRAPH=1
+GENERATE_LINKAGE_SECTION=1
+REPLACE_REMARK_PART=1
+EXCLUDE_PROGRAM_VARIABLE=1
+EXCLUDE_PROGRAM_PARAGRAPH=1
+PROGRAM_EXTENSION=.cbl
+WORKINGSTORAGE_EXTENSION=.wrk
+EVENT_EXTENSION=.evt
+SCREEN_EXTENSION=.scr
+REPORT_EXTENSION=.rpt
+PROCEDURE_EXTENSION=.prd
+MENU_EXTENSION=.mnu
+LINKAGE_EXTENSION=.lks
+PROGRAM_FILE_READ_ONLY=0
+LINK_CLOSE_TO_OPEN=0
+COPYBOOK_READ_ONLY=1
+GENERATE_COPY_FILES=1
+ACCEPT_CONTROL=1
+ANSI_DOCUMENT_FORMAT=1

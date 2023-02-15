@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.5.3  Syntax</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt1633.htm">6.5  Screen Section </a> &gt; </p>
+<a name="wp1032834"> </a><h2 class="pHeading2">
+6.5.3  Syntax
+</h2>
+<a name="wp1032837"> </a><p class="pBody">
+Each <em class="cEmphasis">screen description entry</em> must start with a level-number from level 01 through level 49.  At the top level (01), the <em class="cEmphasis">screen</em> is given a name.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  employee-info-screen.<a name="wp1032838"> </a>
+</pre></div>
+<a name="wp1032839"> </a><p class="pBody">
+The other levels of a screen description entry (level 03 and so forth) can either name subscreens within the top-level screen, or:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1032840"> </a><div class="pSmartList1"><li>provide literals that prompt the end user for entries</li></div>
+<a name="wp1032841"> </a><div class="pSmartList1"><li>position the cursor</li></div>
+<a name="wp1032842"> </a><div class="pSmartList1"><li>identify the data items that will store the information the end user types into each field</li></div>
+</ul></div>
+<a name="wp1032843"> </a><p class="pBody">
+A complete description of Screen Section <em class="cEmphasis">screen description entry</em> formats, their syntax and general rules can be found in section 5.9 in Book 3, <em class="cEmphasis">Reference Manual</em>.
+</p>
+<a name="wp1032845"> </a><p class="pBody">
+When your program DISPLAYs a screen or ACCEPTs entries for a screen, the screen-name you reference in the DISPLAY or ACCEPT statement determines which fields are included.  Everything subordinate to the screen-name is affected.  For example, if you display a screen-name that's defined as a level 03 with two subscreens defined as level 05s below it, then all of the fields subordinate to the level 03 are displayed, and both of the subordinate level 05 screens and their attributes are also displayed.
+</p>
+<a name="wp1032846"> </a><p class="pBody">
+Here are some examples.
+</p>
+<a name="wp1032850"> </a><p class="pBody">
+This is an entry that names the screen and provides one literal:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  employee-info-screen.<a name="wp1032851"> </a>
+    03  emp-number-prompt value is &quot;EMPLOYEE NUMBER: &quot;.<a name="wp1032852"> </a>
+</pre></div>
+<a name="wp1032853"> </a><p class="pBody">
+This entry positions the cursor:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    03  column plus 1 <a name="wp1032854"> </a>
+        line plus 2.<a name="wp1032855"> </a>
+</pre></div>
+<a name="wp1032856"> </a><p class="pBody">
+This entry identifies a data item to receive a typed entry:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    03  PIC  9(9) to emp-number.<a name="wp1032857"> </a>
+</pre></div>
+<a name="wp1032858"> </a><p class="pBody">
+This defines a subscreen:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    03  pay-period-dates.<a name="wp1032859"> </a>
+        05  PIC 9(6) USING period-start.<a name="wp1032860"> </a>
+        05  PIC 9(6) USING period-end.<a name="wp1032861"> </a>
+</pre></div>
+<a name="wp1032862"> </a><p class="pBody">
+Here's a complete program example for a table.  It accepts a simple table on one line: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+IDENTIFICATION DIVISION.<a name="wp1032863"> </a>
+PROGRAM-ID. TABLE-SAMPLE-1.<a name="wp1032864"> </a>
+<a name="wp1032865"> </a>
+DATA DIVISION.<a name="wp1032866"> </a>
+WORKING-STORAGE SECTION.<a name="wp1032867"> </a>
+<a name="wp1032868"> </a>
+01  TABLE-1.<a name="wp1032869"> </a>
+    03  TABLE-ITEM OCCURS 5 TIMES     PIC X(5).<a name="wp1032870"> </a>
+<a name="wp1032871"> </a>
+SCREEN SECTION.<a name="wp1032872"> </a>
+<a name="wp1032873"> </a>
+01  SCREEN-1.<a name="wp1032874"> </a>
+    03 &quot;TABLE ITEMS:&quot;.<a name="wp1032875"> </a>
+    03 OCCURS 5 TIMES USING TABLE-ITEM, COLUMN + 2.<a name="wp1032876"> </a>
+<a name="wp1032877"> </a>
+PROCEDURE DIVISION.<a name="wp1032878"> </a>
+<a name="wp1032879"> </a>
+MAIN-LOGIC.			<a name="wp1032880"> </a>
+<a name="wp1032881"> </a>
+    DISPLAY WINDOW ERASE.<a name="wp1032882"> </a>
+    DISPLAY SCREEN-1.<a name="wp1032883"> </a>
+    ACCEPT SCREEN-1.<a name="wp1032884"> </a>
+    STOP RUN.<a name="wp1032885"> </a>
+</pre></div>
+<a name="wp1032886"> </a><p class="pBody">
+For additional examples that use tables, see Book 3, <em class="cEmphasis">Reference Manual</em>, section 5.9.3, &quot;OCCURS Clause.&quot;
+</p>
+<a name="wp1032887"> </a><p class="pBody">
+The name that you give to a screen or subscreen in your Data Division must be referenced by the DISPLAY and ACCEPT statements that use the screen.  Here's how that works.
+</p>
+<a name="wp1032888"> </a><p class="pBody">
+First, you display the screen with a Format 2 DISPLAY statement.  When this type of DISPLAY is executed, the screen-name in the DISPLAY statement tells <em class="cEmphasis">which group of literals</em> <em class="cEmphasis">and data items</em> should be displayed at the terminal.  All of the literals in and subordinate to that screen-name definition are displayed in their appropriate positions.  These typically serve as the prompts on the screen, guiding the end user.  So the end user sees a <em class="cEmphasis">form</em> on the terminal, with multiple locations to enter data.  That's why a Format 2 DISPLAY is said to be a <em class="cEmphasis">form-level</em> DISPLAY.  Typical literals in a payroll program might be &quot;Employee Name:  &quot;, &quot;Employee Number:  &quot;, and &quot;Pay Period Ending Date:  &quot;.  The DISPLAY statement <em class="cEmphasis">ignores</em> the data items in the screen definition that are entry-only (TO) fields.
+</p>
+<a name="wp1032889"> </a><p class="pBody">
+Second, you accept data into the screen with a Format 2 ACCEPT statement.  When an ACCEPT statement of this type is executed, the screen-name that it references tells which <em class="cEmphasis">screen</em> of data items will be accepted.  The ACCEPT statement <em class="cEmphasis">ignores</em> the literals in the screen definition as well as display-only (FROM) fields.  The cursor moves to the position you've assigned to the first (non-literal) data item in the group, and waits for an entry.  The end user can move around on the screen, from field to field and back again, with the tab and arrow keys (or other keys if you have customized the keyboard).  When all items have been entered, the user presses a termination key to indicate that the screen is complete.  
+</p>
+<a name="wp1032890"> </a><p class="pBody">
+There are three types of screen description entries:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1032891"> </a><div class="pSmartList1"><li>If a VALUE clause is specified, then the entry is a display literal.  The word VALUE may or may not appear in a Screen Section VALUE clause.</li></div>
+<a name="wp1032892"> </a><div class="pSmartList1"><li>If a PICTURE clause is specified, then the entry is a data field.  The word PICTURE may or may not appear in a Screen Section PICTURE clause.</li></div>
+<a name="wp1032893"> </a><div class="pSmartList1"><li>If neither a VALUE nor a PICTURE clause is specified, the entry is either a screen-name or an attribute.</li></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

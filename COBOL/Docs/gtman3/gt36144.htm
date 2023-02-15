@@ -1,0 +1,345 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>UNSTRING Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1042510"> </a><h2 class="pHeading2">
+UNSTRING Statement
+</h2>
+<a name="wp1042512"> </a><p class="pBody">
+The UNSTRING statement separates a data item into one or more receiving fields. Delimiters may be used to specify the ends of fields.  Substring values are assigned to unique destination data items.
+</p>
+<a name="wp1042513"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This manual entry includes code examples and highlights for first-time users following the General Rules section.
+<hr />
+</p>
+<a name="wp1042515"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">UNSTRING</u> source<a name="wp1042516"> </a>
+<a name="wp1042517"> </a>
+   [ <u class="cUnderline">DELIMITED</u> BY [<u class="cUnderline">ALL</u>] delim <a name="wp1042518"> </a>
+<a name="wp1042519"> </a>
+                  [ <u class="cUnderline">OR</u> [<u class="cUnderline">ALL</u>] delim ] ... ]<a name="wp1042520"> </a>
+<a name="wp1042521"> </a>
+     <u class="cUnderline">INTO</u> { dest [ <u class="cUnderline">DELIMITER</u> in delim-dest ] <a name="wp1042522"> </a>
+<a name="wp1042523"> </a>
+                 [ <u class="cUnderline">COUNT</u> IN counter ] } ...<a name="wp1042524"> </a>
+<a name="wp1042525"> </a>
+   [ WITH <u class="cUnderline">POINTER</u> ptr-var ]<a name="wp1042526"> </a>
+<a name="wp1042527"> </a>
+   [ <u class="cUnderline">TALLYING</u> IN tally-var ]<a name="wp1042528"> </a>
+<a name="wp1042529"> </a>
+   [ ON <u class="cUnderline">OVERFLOW</u> statement-1 ]<a name="wp1042530"> </a>
+<a name="wp1042531"> </a>
+   [ <u class="cUnderline">NOT</u> ON <u class="cUnderline">OVERFLOW</u> statement-2 ]<a name="wp1042532"> </a>
+<a name="wp1042533"> </a>
+   [ <u class="cUnderline">END-UNSTRING</u> ]<a name="wp1042534"> </a>
+</pre></div>
+<a name="wp1198812"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1198814"> </a><div class="pSmartList1"><li><em class="cEmphasis">Source</em> is an alphanumeric data item.  <em class="cEmphasis">Source</em> may be reference modified.  </li></div>
+<a name="wp1198815"> </a><div class="pSmartList1"><li><em class="cEmphasis">Dest</em> is a USAGE DISPLAY data item.  It may not be edited.</li></div>
+<a name="wp1194840"> </a><div class="pSmartList1"><li><em class="cEmphasis">Delim</em> is a nonnumeric literal or an alphanumeric data item.  The &quot;ALL literal&quot; construct may not be used.  </li></div>
+<a name="wp1194867"> </a><div class="pSmartList1"><li>The compiler allows <em class="cEmphasis">source</em> and <em class="cEmphasis">delim</em> to be numeric literals, in which case it treats them as string literals, displaying the following Warning at compile time:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Warning: Literal is numeric - treated as alphanumeric<a name="wp1194868"> </a>
+</pre></div>
+<a name="wp1199265"> </a><p class="pIndented1">
+In such cases, leading zeros are stripped from the numeric literal to form the string literal.
+</p>
+<a name="wp1194842"> </a><div class="pSmartList1"><li><em class="cEmphasis">Delim-dest</em> is an alphanumeric data item.</li></div>
+<a name="wp1042541"> </a><div class="pSmartList1"><li><em class="cEmphasis">Counter</em>, <em class="cEmphasis">ptr-var,</em> and <em class="cEmphasis">tally-var</em> are integer numeric data items.  </li></div>
+<a name="wp1042542"> </a><div class="pSmartList1"><li><em class="cEmphasis">Statement-1</em> and <em class="cEmphasis">statement-2</em> are imperative statements.</li></div>
+<a name="wp1042543"> </a><div class="pSmartList1"><li><em class="cEmphasis">Ptr-var</em> must be large enough to contain a value one greater than the size of <em class="cEmphasis">source</em>.</li></div>
+<a name="wp1042544"> </a><div class="pSmartList1"><li>The DELIMITER IN and COUNT IN phrases can appear only if there is a DELIMITED BY phrase.</li></div>
+</ol></div>
+<a name="wp1042546"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042548"> </a><div class="pSmartList1"><li>UNSTRING breaks up <em class="cEmphasis">source</em> into the various <em class="cEmphasis">dest</em> fields.  <em class="cEmphasis">Source</em> is the sending field and <em class="cEmphasis">dest</em> is the receiving field.   Up to 50 <em class="cEmphasis">dest</em> items are allowed.</li></div>
+<a name="wp1042549"> </a><div class="pSmartList1"><li><em class="cEmphasis">Counter</em> represents the count of the number of characters within <em class="cEmphasis">source</em> isolated by the delimiters for the move to <em class="cEmphasis">dest</em>.  This does not include a count of the delimiter characters.</li></div>
+<a name="wp1042550"> </a><div class="pSmartList1"><li><em class="cEmphasis">Ptr-var</em> represents the relative character position within <em class="cEmphasis">source</em> to move from.  The leftmost position is position &quot;1&quot;.  If no POINTER phrase is specified, examination begins with the leftmost character position.  </li></div>
+<a name="wp1042551"> </a><div class="pSmartList1"><li><em class="cEmphasis">Tally-var</em> is a counter which is incremented by 1 for each <em class="cEmphasis">dest</em> item accessed during the UNSTRING operation.</li></div>
+<a name="wp1042552"> </a><div class="pSmartList1"><li>Neither <em class="cEmphasis">ptr-var</em> nor <em class="cEmphasis">tally-var</em> is initialized by the UNSTRING statement.</li></div>
+<a name="wp1042553"> </a><div class="pSmartList1"><li>Each <em class="cEmphasis">delim</em> represents one delimiter.  When a delimiter contains two or more characters, all the characters must be present in contiguous positions in <em class="cEmphasis">source</em> to be recognized as a delimiter.  When <em class="cEmphasis">delim</em> is a figurative constant, it stands for a single nonnumeric literal.  </li></div>
+<a name="wp1042554"> </a><div class="pSmartList1"><li>When the ALL phrase is specified, one or more contiguous occurrences of <em class="cEmphasis">delim</em> in <em class="cEmphasis">source</em> are treated as if they were only one occurrence for the remaining General Rules.  Only one occurrence of <em class="cEmphasis">delim</em> is moved to <em class="cEmphasis">delim-dest</em> in this case.</li></div>
+<a name="wp1042555"> </a><div class="pSmartList1"><li>When two or more delimiters are specified, an OR condition exists between them.  Each delimiter is compared to the sending field in the order written.  If a match occurs, the characters in the sending field are considered to be a single delimiter.  No characters in <em class="cEmphasis">source</em> can be considered a part of more than one delimiter.  </li></div>
+<a name="wp1042556"> </a><div class="pSmartList1"><li>When an examination encounters two contiguous delimiters, the current receiving area is space-filled if it is alphabetic or alphanumeric, or zero-filled if it is numeric.  </li></div>
+<a name="wp1042557"> </a><div class="pSmartList1"><li>When the UNSTRING statement initiates, the current receiving area is the first <em class="cEmphasis">dest</em> item.  Data is transferred from <em class="cEmphasis">source</em> to the receiving area according to the following rules:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1042558"> </a><div class="pSmartList2"><li>Examination starts at the character position indicated by <em class="cEmphasis">ptr-var</em>, or the leftmost position if <em class="cEmphasis">ptr-var</em> is not specified.  </li></div>
+<a name="wp1042559"> </a><div class="pSmartList2"><li>If the DELIMITED BY phrase is specified, the examination proceeds left-to-right until a delimiter is encountered.  If the DELIMITED BY phrase is not specified, the number of characters examined is equal to the size of the receiving area.  The sign character of the receiving item (if any) is not included in the size.  If the end of <em class="cEmphasis">source</em> is encountered before the delimiting condition is met, the examination stops with the last character of <em class="cEmphasis">source</em>.  </li></div>
+<a name="wp1042560"> </a><div class="pSmartList2"><li>The characters examined (excluding the delimiting characters, if any) are treated as an elementary alphanumeric item.  These characters are moved to the current receiving field according to the rules for the MOVE statement, including space filling.  </li></div>
+<a name="wp1042561"> </a><div class="pSmartList2"><li>If the DELIMITER IN phrase is specified, the delimiting characters are moved to <em class="cEmphasis">delim-dest</em> as if they were the alphanumeric source of a MOVE statement.  If the delimiting condition is the end of <em class="cEmphasis">source</em>, then <em class="cEmphasis">delim-dest</em> is space-filled.</li></div>
+<a name="wp1042562"> </a><div class="pSmartList2"><li>If the COUNT IN phrase is specified, the number of characters examined (excluding the delimiter) is moved to <em class="cEmphasis">counter</em> as if the count were the numeric source of a MOVE statement.  </li></div>
+<a name="wp1042563"> </a><div class="pSmartList2"><li>If the DELIMITED BY phrase is specified, the <em class="cEmphasis">source</em> item is further examined beginning with the first character to the right of the delimiter found.  If the DELIMITED BY phrase is not specified, the <em class="cEmphasis">source</em> item is further examined beginning with the character to the right of the last character examined.</li></div>
+<a name="wp1042564"> </a><div class="pSmartList2"><li>The current receiving area is then set to the next <em class="cEmphasis">dest</em> item and the cycle specified in steps (b) through (g) is repeated until either all the characters in <em class="cEmphasis">source</em> are examined or there are no more <em class="cEmphasis">dest</em> items.  </li></div>
+</ol></div>
+<a name="wp1042565"> </a><div class="pSmartList1"><li>The <em class="cEmphasis">ptr-var</em> (if any) is incremented by 1 for each character in <em class="cEmphasis">source</em> examined.  </li></div>
+<a name="wp1042568"> </a><div class="pSmartList1"><li>An overflow condition occurs in either of the following situations: </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1042569"> </a><div class="pSmartList2"><li>The value of <em class="cEmphasis">ptr-var</em> is less than one or greater than the size of <em class="cEmphasis">source</em> when the UNSTRING statement starts.</li></div>
+<a name="wp1042570"> </a><div class="pSmartList2"><li>During execution, all <em class="cEmphasis">dest</em> items have been acted upon and <em class="cEmphasis">source</em> contains unexamined characters.  </li></div>
+</ol></div>
+<a name="wp1042571"> </a><div class="pSmartList1"><li>When the overflow condition exists, <em class="cEmphasis">statement-1</em> (if any) executes and the UNSTRING statement terminates.</li></div>
+<a name="wp1042572"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">statement-2</em> is specified, it executes after the UNSTRING statement has finished if the overflow condition has not occurred.</li></div>
+</ol></div>
+<a name="wp1042573"> </a><h3 class="pHeadingRef">
+Code examples
+</h3>
+<a name="wp1042575"> </a><p class="pBody">
+Use UNSTRING to decompose strings containing multiple data elements.  For example, a string data item might contain a person's name, using commas to separate the name fields: &quot;last-name,first-name,middle-initial&quot;.  Using UNSTRING, and specifying &quot;,&quot; (comma) as the delimiter, you could separate the name string into three data items, each containing an element of the full name.
+</p>
+<a name="wp1042576"> </a><h3 class="pHeadingRef">
+Example 1:
+</h3>
+<a name="wp1042577"> </a><p class="pBody">
+Assume the following data items:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  CUSTOMER-NAME    PIC X(40)  VALUE ALL SPACES.<a name="wp1042578"> </a>
+01  LAST-NAME        PIC X(25)  VALUE ALL SPACES.<a name="wp1042579"> </a>
+01  FIRST-NAME       PIC X(14)  VALUE ALL SPACES.<a name="wp1042580"> </a>
+01  MIDDLE-I         PIC X      VALUE ALL SPACES.<a name="wp1042581"> </a>
+{ . . . }<a name="wp1042582"> </a>
+PROCEDURE DIVISION.<a name="wp1042583"> </a>
+{ . . . }<a name="wp1042584"> </a>
+ DISPLAY &#39;Enter name: LAST,FIRST,MIDDLE-INITIAL&#39;.<a name="wp1042585"> </a>
+ DISPLAY &#39;Use a comma to separate each name entry&#39;.<a name="wp1042586"> </a>
+    ACCEPT CUSTOMER-NAME.<a name="wp1042587"> </a>
+<a name="wp1042588"> </a>
+{ . . . }<a name="wp1042589"> </a>
+<a name="wp1042590"> </a>
+UNSTRING CUSTOMER-NAME<a name="wp1042591"> </a>
+   DELIMITED BY &quot;,&quot;<a name="wp1042592"> </a>
+   INTO LAST-NAME,   |characters to first comma<a name="wp1042593"> </a>
+        FIRST-NAME,  |characters to second comma<a name="wp1042594"> </a>
+        MIDDLE-I     |gets only the first character<a name="wp1042595"> </a>
+                     |of the remaining string.  No<a name="wp1042596"> </a>
+                     |overflow is raised. <a name="wp1042597"> </a>
+                     |See general rule 12.<a name="wp1042598"> </a>
+   ON OVERFLOW<a name="wp1042599"> </a>
+      DISPLAY &#39;OVERFLOW on UNSTRING&#39;<a name="wp1042600"> </a>
+END-UNSTRING.<a name="wp1042601"> </a>
+</pre></div>
+<a name="wp1042602"> </a><p class="pBody">
+For code examples 2 and 3 assume the following data items:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  COLOR-LIST  PIC X(22) VALUE &quot;RED:BLUE/GREEN  YELLOW&quot;.<a name="wp1042603"> </a>
+01  COLOR-1     PIC X(6)  VALUE ALL SPACES.<a name="wp1042604"> </a>
+01  COLOR-2     PIC X(6)  VALUE ALL SPACES.<a name="wp1042605"> </a>
+01  COLOR-3     PIC X(6)  VALUE ALL SPACES.<a name="wp1042606"> </a>
+01  COLOR-4     PIC X(6)  VALUE ALL SPACES.<a name="wp1042607"> </a>
+01  DELIMIT-1   PIC X(3)  VALUE ALL SPACES.<a name="wp1042608"> </a>
+01  COUNT-1     PIC 9     VALUE 0.<a name="wp1042609"> </a>
+</pre></div>
+<a name="wp1042610"> </a><h3 class="pHeadingRef">
+Example 2:
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+UNSTRING COLOR-LIST <a name="wp1042611"> </a>
+   DELIMITED BY &quot;:&quot; OR &quot;/&quot; OR ALL SPACE<a name="wp1042612"> </a>
+*ALL SPACE treats contiguous spaces <a name="wp1042613"> </a>
+*as one delimiter.<a name="wp1042614"> </a>
+   INTO COLOR-1,<a name="wp1042615"> </a>
+        COLOR-2,<a name="wp1042616"> </a>
+        COLOR-3,<a name="wp1042617"> </a>
+        COLOR-4 <a name="wp1042618"> </a>
+END-UNSTRING.<a name="wp1042619"> </a>
+*COLOR-1 = &quot;RED   &quot;<a name="wp1042620"> </a>
+*COLOR-2 = &quot;BLUE  &quot;<a name="wp1042621"> </a>
+*COLOR-3 = &quot;GREEN &quot;<a name="wp1042622"> </a>
+*COLOR-4 = &quot;YELLOW&quot;<a name="wp1042623"> </a>
+</pre></div>
+<a name="wp1042624"> </a><h3 class="pHeadingRef">
+Example 3:
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+MOVE 0 TO COUNT-1.<a name="wp1042625"> </a>
+<a name="wp1042626"> </a>
+UNSTRING COLOR-LIST<a name="wp1042627"> </a>
+   DELIMITED BY &quot;:&quot; OR &quot;/&quot; OR ALL SPACE<a name="wp1042628"> </a>
+*DELIMIT-1 and COUNT-1 will hold only<a name="wp1042629"> </a>
+*the values associated with COLOR-1.<a name="wp1042630"> </a>
+   INTO COLOR-1<a name="wp1042631"> </a>
+         DELIMITER IN DELIMIT-1<a name="wp1042632"> </a>
+         COUNT IN COUNT-1,<a name="wp1042633"> </a>
+         COLOR-2,<a name="wp1042634"> </a>
+         COLOR-3,<a name="wp1042635"> </a>
+         COLOR-4<a name="wp1042636"> </a>
+   ON OVERFLOW <a name="wp1042637"> </a>
+      DISPLAY &quot;overflow: unstring colors&quot;<a name="wp1042638"> </a>
+   NOT ON OVERFLOW<a name="wp1042639"> </a>
+*do when UNSTRING succeeds.<a name="wp1042640"> </a>
+      PERFORM SORT-COLORS<a name="wp1042641"> </a>
+END-UNSTRING.<a name="wp1042642"> </a>
+*COLOR-1 = &quot;RED   &quot;<a name="wp1042643"> </a>
+*COLOR-2 = &quot;BLUE  &quot;<a name="wp1042644"> </a>
+*COLOR-3 = &quot;GREEN &quot;<a name="wp1042645"> </a>
+*COLOR-4 = &quot;YELLOW&quot;<a name="wp1042646"> </a>
+*DELIMIT-1 = &quot;:  &quot;<a name="wp1042647"> </a>
+*COUNT-1 = 3 count-1 holds the number of characters in RED<a name="wp1042648"> </a>
+</pre></div>
+<a name="wp1042649"> </a><h3 class="pHeadingRef">
+Example 4:
+</h3>
+<a name="wp1042650"> </a><p class="pBody">
+When the string does not contain delimiters between the data elements, but the size and position of each string data element is known, the string can be deconstructed without a DELIMITED BY phrase.
+</p>
+<a name="wp1042651"> </a><p class="pBody">
+Assume the following data items:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  COLOR-LIST   PIC X(7) VALUE &quot;REDBLUE&quot;.<a name="wp1042652"> </a>
+01  COLOR-1      PIC X(3) VALUE ALL SPACES.<a name="wp1042653"> </a>
+01  COLOR-2      PIC X(4) VALUE ALL SPACES.<a name="wp1042654"> </a>
+{ . . . }<a name="wp1042655"> </a>
+PROCEDURE DIVISION.<a name="wp1042656"> </a>
+{ . . . }<a name="wp1042657"> </a>
+UNSTRING COLOR-LIST<a name="wp1042658"> </a>
+   INTO COLOR-1,<a name="wp1042659"> </a>
+*first substring must be three characters.<a name="wp1042660"> </a>
+        COLOR-2<a name="wp1042661"> </a>
+*second substring must be four characters.<a name="wp1042662"> </a>
+END-UNSTRING.<a name="wp1042663"> </a>
+*COLOR-1 = &quot;RED&quot;<a name="wp1042664"> </a>
+*COLOR-2 = &quot;BLUE&quot;<a name="wp1042665"> </a>
+</pre></div>
+<a name="wp1042666"> </a><h3 class="pHeadingRef">
+Example 5:
+</h3>
+<a name="wp1042667"> </a><p class="pBody">
+Use POINTER and a PERFORM loop to extract and process string elements.
+</p>
+<a name="wp1042668"> </a><p class="pBody">
+Assume the following data items:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  COLOR-LIST       PIC X(21)  VALUE &quot;RED BLUE GREEN YELLOW&quot;.<a name="wp1042669"> </a>
+01  COLOR-LIST-SIZE  PIC 999.<a name="wp1042670"> </a>
+01  COLOR-1          PIC X(6)   VALUE SPACES.<a name="wp1042671"> </a>
+01  STRING-PTR       PIC 99.<a name="wp1042672"> </a>
+01  FLAGS.<a name="wp1042673"> </a>
+    05  COLOR-STRING-EMPTY   PIC X VALUE &quot;N&quot;.<a name="wp1042674"> </a>
+        88 NO-MORE-COLORS          VALUE &quot;Y&quot;.<a name="wp1042675"> </a>
+{ . . . }<a name="wp1042676"> </a>
+PROCEDURE DIVISION.<a name="wp1042677"> </a>
+{ . . . }<a name="wp1042678"> </a>
+*string pointer must be initialized<a name="wp1042679"> </a>
+MOVE 1 TO STRING-PTR.<a name="wp1042680"> </a>
+SET COLOR-LIST-SIZE TO SIZE OF COLOR-LIST.<a name="wp1042681"> </a>
+PERFORM PROCESS-COLOR UNTIL NO-MORE-COLORS.<a name="wp1042682"> </a>
+{ . . . }<a name="wp1042683"> </a>
+PROCESS-COLOR.<a name="wp1042684"> </a>
+   UNSTRING COLOR-LIST <a name="wp1042685"> </a>
+      DELIMITED BY ALL SPACE<a name="wp1042686"> </a>
+      INTO COLOR-1<a name="wp1042687"> </a>
+      POINTER STRING-PTR<a name="wp1042688"> </a>
+      ON OVERFLOW<a name="wp1042689"> </a>
+*An OVERFLOW condition will be raised every time<a name="wp1042690"> </a>
+*through the loop, except when extracting the last<a name="wp1042691"> </a>
+*substring.  When the overflow is the result of<a name="wp1042692"> </a>
+*having unexamined characters at the end of the<a name="wp1042693"> </a>
+*input string, take no action.  When the overflow<a name="wp1042694"> </a>
+*is due to the pointer value exceeding the length<a name="wp1042695"> </a>
+*of the string, set COLOR-STRING-EMPTY.<a name="wp1042696"> </a>
+         IF STRING-PTR &gt; COLOR-LIST-SIZE THEN<a name="wp1042697"> </a>
+            MOVE &quot;Y&quot; TO COLOR-STRING-EMPTY<a name="wp1042698"> </a>
+         END-IF<a name="wp1042699"> </a>
+*process the value<a name="wp1042700"> </a>
+   PERFORM STORE-COLOR-1<a name="wp1042701"> </a>
+*initialize COLOR1 before fetching the next color<a name="wp1042702"> </a>
+   MOVE SPACES INTO COLOR-1<a name="wp1042703"> </a>
+   END-UNSTRING.<a name="wp1042704"> </a>
+</pre></div>
+<a name="wp1042705"> </a><h3 class="pHeadingRef">
+Highlights for first-time users
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042707"> </a><div class="pSmartList1"><li>UNSTRING is best suited for separating string components that share a common delimiter.  The delimiter must not appear as an element of the components' values.</li></div>
+<a name="wp1042708"> </a><div class="pSmartList1"><li>DELIMITED BY is optional.  If it's omitted, each destination data item is completely filled. Effectively, the respective size of each destination data item is the respective delimiter.</li></div>
+<a name="wp1042709"> </a><div class="pSmartList1"><li>Assignment to the destination data item is done with an implied MOVE.  The MOVE operation will truncate the substring or space fill the destination data item, as required.  Truncation of the substring, or space filling of the destination data item resulting from the implicit MOVE, does not raise an OVERFLOW condition.</li></div>
+<a name="wp1042710"> </a><div class="pSmartList1"><li>The OVERFLOW condition is raised if: (a) all destination data items are used and characters still remain in the source data item; or (b) POINTER is used and the value of the pointer variable is less than 1 or greater than the length of the source data item.</li></div>
+<a name="wp1042711"> </a><div class="pSmartList1"><li>Use the ALL option to treat contiguous occurrences of a delimiter, such as spaces, as a single occurrence.</li></div>
+<a name="wp1042712"> </a><div class="pSmartList1"><li>Use DELIMITER IN to place the delimiting character(s) of the current substring into the named data item.</li></div>
+<a name="wp1042713"> </a><div class="pSmartList1"><li>Use the COUNT IN option to save the length of the current substring into the named data item.</li></div>
+<a name="wp1042714"> </a><div class="pSmartList1"><li>Use TALLYING to tally the number of destination data items assigned by the UNSTRING statement.</li></div>
+<a name="wp1042715"> </a><div class="pSmartList1"><li>Use the POINTER option to specify a numeric holder <em class="cEmphasis">(ptr-var)</em> for the current position in the source data item.  By pre-assigning a value to the pointer variable you can start the examination of the source data item at any position in the string.  <em class="cEmphasis">Ptr-var</em> is incremented by one for each character in the source data item that is examined.  POINTER allows the programmer to use multiple UNSTRING statements to process the source data item.  Note, however, that an overflow condition will be raised if the value of <em class="cEmphasis">ptr-var</em> is less than the length of the string when the UNSTRING statement terminates.</li></div>
+<a name="wp1042716"> </a><p class="pIndented1">
+You must initialize the tallying and pointer variables or results are unpredictable.
+</p>
+<a name="wp1042717"> </a><div class="pSmartList1"><li>Use the OVERFLOW option to do special processing when the UNSTRING process does not examine every character in the source data item, or when the pointer variable has a value of less than one or more than the length of the source data item.  When the overflow condition exists, the associated imperative statement (if any) executes and program execution continues immediately after the UNSTRING statement.</li></div>
+<a name="wp1042718"> </a><div class="pSmartList1"><li>Use the NOT ON OVERFLOW option to do special processing when the UNSTRING statement processes the entire source data item.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

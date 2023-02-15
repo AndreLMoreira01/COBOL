@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$RECOVER Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1036503"> </a><h2 class="pHeading2">
+C$RECOVER Routine
+</h2>
+<a name="wp1036508"> </a><p class="pBody">
+This routine opens the transaction log file defined in the LOG-FILE configuration variable and replays all of the file operations recorded in it on the appropriate data files.   
+</p>
+<a name="wp1036509"> </a><p class="pBody">
+Note that file systems other than Vision may require you to use their own recovery routines, instead of C$RECOVER.  Please refer to your file system manufacturer's documentation to learn how the file system handles recovery procedures.
+</p>
+<a name="wp1036510"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$RECOVER&quot;<a name="wp1036511"> </a>
+</pre></div>
+<a name="wp1036512"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1036513"> </a><p class="pBody">
+This routine allows you to recover from a hardware failure or power outage that may have left your data files in a corrupt state.  C$RECOVER is helpful for recovering from error 98s and from any error that leaves your data damaged or possibly destroyed.
+</p>
+<a name="wp1036514"> </a><p class="pBody">
+In order to use this routine, you need to have been logging transactions with the START TRANSACTION and COMMIT TRANSACTION verbs.  These cause file operations to be logged in log files that you designate with the LOG-FILE and other configuration variables.  
+</p>
+<a name="wp1036515"> </a><p class="pBody">
+You also need a good backup of your data files.  This backup should have been created just before you cleared or deleted the log file.  You use your backup to restore the damaged files.  Then you use C$RECOVER to read the log and recreate all of the file operations in the log, in the same sequence they were logged.  These file operations are replayed on the data files.
+</p>
+<a name="wp1036516"> </a><p class="pBody">
+The result is that your data files are brought up to date.  After recovery, all files will be in a consistent state, because only committed (completed) transactions will be replayed from the log.  
+</p>
+<a name="wp1036517"> </a><p class="pBody">
+One way to use this routine is described here.  First get everyone off the system.  Then restore your clean backup files to their original locations.  (It's a good idea to have more than one backup, because you will need a clean backup in order to recover.)  Then run a COBOL program that calls the C$RECOVER routine (for example, CALL &quot;C$RECOVER&quot;).  Make sure that the LOG-FILE configuration variable is set correctly.  Repeat this procedure for each log file.
+</p>
+<a name="wp1036518"> </a><p class="pBody">
+To make sure that your data can be recovered, follow these guidelines:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036519"> </a><div class="pSmartList1"><li>Commit all transactions before you make your data file backups.</li></div>
+<a name="wp1036520"> </a><div class="pSmartList1"><li>Clear (or delete) your old log files as soon as your backup is complete and you know you have a good backup.</li></div>
+<a name="wp1036521"> </a><div class="pSmartList1"><li>Don't permit any file activity between the time you make your backup and the time you clear or delete the logs.</li></div>
+<a name="wp1036522"> </a><div class="pSmartList1"><li>It's all right to have multiple log files.  You may periodically back up the log file and start a new one, if you are careful not to do this while there is any activity on the log or data files.  Just be sure to run C$RECOVER on each log file in the same order in which they were written.</li></div>
+<a name="wp1036523"> </a><div class="pSmartList1"><li>Don't permit any activity on the data files during recovery.</li></div>
+<a name="wp1148634"> </a><div class="pSmartList1"><li>If any log file gets corrupted or destroyed, immediately make data file backups and clear or delete the old log.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

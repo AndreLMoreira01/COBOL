@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:24" />
+  <title>FILE_ALIAS_PREFIX </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4h.htm">Appendix H: Configuration File Entries</a> &gt; <a href="gt4h3.htm">H.2  Configuration File Entries</a> &gt; </p>
+<a name="wp1238597"> </a><h2 class="pHeading2">
+FILE_ALIAS_PREFIX 
+</h2>
+<a name="wp1245474"> </a><p class="pBody">
+This variable allows you to specify a list of strings to prefix to a file name before searching for that name in the configuration file or environment.  Data and code file search paths are described in more detail in section 2.7.2 of the <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>.
+</p>
+<a name="wp1240818"> </a><p class="pBody">
+When searching for a file alias:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1240819"> </a><div class="pSmartList1"><li>The runtime constructs the file alias name by prepending the first string listed in FILE_ALIAS_PREFIX to the file name and searches for that name in the environment or configuration file. </li></div>
+<a name="wp1240820"> </a><div class="pSmartList1"><li>If the name is not found, the runtime constructs a new name by prepending the second string in FILE_ALIAS_PREFIX to the file name and searches for that alias. </li></div>
+</ol></div>
+<a name="wp1240821"> </a><p class="pBody">
+This process is repeated with each string in FILE_ALIAS_PREFIX until a file alias name is found or the end of the list is reached.
+</p>
+<a name="wp1248867"> </a><p class="pBody">
+For example, with: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT file1-name ASSIGN TO &quot;FILE1&quot;.<a name="wp1248868"> </a>
+</pre></div>
+<a name="wp1248869"> </a><p class="pBody">
+by default, the runtime looks for a configuration or environment variable named &quot;FILE1&quot; and, if found, substitutes its value for the file name.  If you specify:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+FILE_ALIAS_PREFIX &quot;&quot;:DD_<a name="wp1248870"> </a>
+</pre></div>
+<a name="wp1248871"> </a><p class="pBody">
+the runtime first looks for &quot;FILE1&quot; and, if not found, looks for  &quot;DD_FILE1&quot;.
+</p>
+<a name="wp1250170"> </a><p class="pBody">
+The default value of FILE_ALIAS_PREFIX is an empty string (&quot;&quot;).  Specifying an empty string as an entry in FILE_ALIAS_PREFIX causes the runtime to search for the file name itself as an alias name.  Up to 4096 characters can be specified for the value of this variable. 
+</p>
+<a name="wp1249942"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Separate strings by one or more spaces.  A space is a valid separator on all systems.  On UNIX systems, you can also separate entries with a colon.  On Windows systems, a semicolon can be used and on VMS systems, a comma can be used.  Strings can be enclosed in quotation marks.   You can specify an empty string using two consecutive quotation marks. 
+<hr />
+</p>
+<a name="wp1253604"> </a><h3 class="pHeadingRef">
+Note on using with EXPAND_ENV_VARS: 
+</h3>
+<a name="wp1253948"> </a><p class="pBody">
+If you use the <a  href="gt4h108.htm#wp1166857">EXPAND_ENV_VARS</a> configuration variable and the file name includes a dollar sign ($), the FILE_ALIAS_PREFIX logic is applied to the environment variable name.  For example, if  EXPAND_ENV_VARS is set to&quot;1&quot; (on, true, yes), &quot;$FILE1&quot; and &quot;FILE1&quot; are treated the same.
+</p>
+<a name="wp1253605"> </a><p class="pBody">
+For example, with:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+EXPAND_ENV_VARS=1<a name="wp1253606"> </a>
+FILE_ALIAS_PREFIX=DD_<a name="wp1253607"> </a>
+</pre></div>
+<a name="wp1253608"> </a><p class="pBody">
+the following statement,
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT file1-name ASSIGN TO &quot;DIR1/$DIR2/FILE1&quot;.<a name="wp1253609"> </a>
+</pre></div>
+<a name="wp1253610"> </a><p class="pBody">
+causes the runtime to search for an environment or configuration variable named &quot;DD_DIR2&quot; (instead of &quot;DIR2&quot;) and, if found, substitute its value for &quot;$DIR2&quot;. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

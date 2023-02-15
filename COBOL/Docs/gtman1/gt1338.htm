@@ -1,0 +1,443 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:09" />
+  <title>3.3.3  Rebuilding Files</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt13.htm"><br />Chapter 3:  Debugger and Utilities</a> &gt; <a href="gt1335.htm">3.3  Vision File Utility - vutil</a> &gt; </p>
+<a name="wp1033242"> </a><h2 class="pHeading2">
+3.3.3  Rebuilding Files
+</h2>
+<a name="wp1055974"> </a><p class="pBody">
+The &quot;rebuild&quot; option is used to rebuild or recreate an indexed file.  You should rebuild a file that has become corrupt, or one that contains a large number of deleted records that you want to remove from the file.  The command is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+vutil -rebuild  [&#160;--slow&#160;]  [&#160;-l&#160;]  [&#160;-t&#160;<em class="cEmphasis">tmpfile&#160;</em>]  [&#160;-b&#160;#&#160;]<a name="wp1055976"> </a>
+  [&#160;-2345&#160;]  [&#160;-ac&#160;]  [&#160;+ce&#160;]  [&#160;-k&#160;<em class="cEmphasis">keynum&#160;</em>]  [&#160;-d&#160;<em class="cEmphasis">dir&#160;</em>]<a name="wp1055977"> </a>
+  [&#160;-f&#160;<em class="cEmphasis">factor&#160;</em>]  [&#160;-s&#160;<em class="cEmphasis">spoolfile&#160;</em>[&#160;-r&#160;]&#160;[-m&#160;<em class="cEmphasis">size</em>]&#160;]<a name="wp1045327"> </a>
+  [&#160;-p <em class="cEmphasis">pre_factor</em>&#160;]  [&#160;-g&#160;<em class="cEmphasis">ext_factor</em>&#160;]  [&#160;-q&#160;]  [&#160;<em class="cEmphasis">files&#160;</em>]<a name="wp1045330"> </a>
+</pre></div>
+<a name="wp1033249"> </a><p class="pBody">
+Each file listed on the command line will be rebuilt.  If no files are listed, then the standard input is read for the list.  If, under UNIX, the named file is a symbolic link, the link is removed and the restored file is put in its place.
+</p>
+<a name="wp1033251"> </a><p class="pBody">
+This option by default applies a read lock to the file that is rebuilt.  The &quot;-l&quot; option applies a write lock instead.
+</p>
+<a name="wp1054596"> </a><p class="pBody">
+When a file is rebuilt, a temporary file is created and each record from the original file is written to it.  The &quot;-t&quot; option allows you to specify the name of the temporary file used during the rebuild.  (You may not specify a directory, just a file name.)  When &quot;-t&quot; is not specified, the temporary file's name begins with &quot;VTMP&quot;, followed by a six-character system-generated sequence.  On Windows systems, the file's name begins with &quot;V&quot;.  The rebuilding process reports the number of records found and the number of deleted records that were skipped.  After the rebuild is complete, you are given the option of replacing the original file with the new one.  If you do not replace it, you can examine the temporary file for correctness and replace it manually later.  This is recommended if you suspect any difficulties. 
+</p>
+<a name="wp1033254"> </a><p class="pBody">
+When doing a rebuild, <b class="cBold">vutil</b> places records that are rejected due to illegal duplicate keys into a file.  Should this happen, <b class="cBold">vutil</b> will report the name of the file that contains the rejected records.  The format of this file is the same as a COBOL binary sequential file with variable-size records.
+</p>
+<a name="wp1050708"> </a><p class="pBodyRelative">
+
+</p>
+<a name="wp1051153"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1051549"> </a><p class="pCellBody">
+<b class="cBold">-a<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</b>
+</p>
+</td>
+    <td><a name="wp1051551"> </a><p class="pCellBody">
+This option may be used to specify automatic replacement of the original file by the newly created one.  This is useful when you are calling <b class="cBold">vutil </b>from a program or a script. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051553"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1051555"> </a><p class="pCellBody">
+When used once, this option causes automatic replacement only if no records are skipped.  If any records are skipped, you are prompted before file replacement takes place.  When used more than once, this option causes automatic replacement of the file even if records were lost in the process.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051557"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1051559"> </a><p class="pCellBody">
+The multiple specification of option &quot;-a&quot; may be given in the following syntax formats:
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051561"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1051563"> </a><p class="pCellBody">
+-aa
+</p>
+<a name="wp1079202"> </a><p class="pCellBody">
+-a -a
+</p>
+<a name="wp1079214"> </a><p class="pCellBody">
+-a <em class="cEmphasis">(other options)</em> -a
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051573"> </a><p class="pCellBody">
+<b class="cBold">-b </b><em class="cEmphasis">#</em>
+</p>
+</td>
+    <td><a name="wp1056566"> </a><p class="pCellBody">
+This option sets a new blocking factor for the file.  The blocking factor specifies the size of the blocks to be used by the file.  Blocks are sized in 512 byte increments.  Vision 5 files support blocking factors from 1 to 16 (16 = 8192 bytes).  Vision 2, 3, and 4 files support blocking factors from 1 to 2.  
+</p>
+<a name="wp1056553"> </a><p class="pCellBody">
+When you rebuild a file, if the file is very large, or has a tree height of more than five, or key lengths in excess of 40 bytes, you may want to experiment with larger blocking factors.  You will need to perform some benchmarking to determine if a larger block size improves performance.  For more about how block size can affect performance, see <a  href="gt1612.htm#wp1032381">section 6.1.3.7</a>.
+</p>
+<a name="wp1056510"> </a><p class="pCellBody">
+If you specify a blocking factor greater than 2 for a Vision 2, 3, or 4 file, the factor is automatically and silently reduced to the maximum of 2.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051577"> </a><p class="pCellBody">
+<b class="cBold">-c</b>
+</p>
+</td>
+    <td><a name="wp1051579"> </a><p class="pCellBody">
+This option removes record compression from the file.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051581"> </a><p class="pCellBody">
+<b class="cBold">+c</b>
+</p>
+</td>
+    <td><a name="wp1051583"> </a><p class="pCellBody">
+This option adds record compression to the file.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051585"> </a><p class="pCellBody">
+<b style="font-weight: bold" class="cBold">-d </b><em style="font-weight: normal" class="cEmphasis">dir</em>
+</p>
+</td>
+    <td><a name="wp1051587"> </a><p class="pCellBody">
+This option specifies an alternate directory for placing the rebuilt file.  <em class="cEmphasis">Dir</em> should be the name of a directory on the host machine other than the directory containing the files to be rebuilt.  When this option is used, the original files are not modified or destroyed.  The rebuilt files are placed in <em class="cEmphasis">dir </em>with the same base name as the original files.  This option can be useful if you do not have enough disk space on the device holding the files to rebuild them, but you do have space on another disk.  This option implies the &quot;-a&quot; option because you are not prompted before the rebuild completes.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051589"> </a><p class="pCellBody">
+<b class="cBold">+e</b>
+</p>
+</td>
+    <td><a name="wp1051591"> </a><p class="pCellBody">
+This option adds record encryption.  It is not possible to remove record encryption (this would make encryption pointless).  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051593"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1051595"> </a><p class="pCellBody">
+Record compression and encryption may be added to a file, and compression may be removed from a file, regardless of the presence or absence of the WITH COMPRESSION and WITH ENCRYPTION phrases in the file's SELECT.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051597"> </a><p class="pCellBody">
+<b style="font-weight: bold" class="cBold">-f </b><em style="font-weight: normal" class="cEmphasis">factor</em>
+</p>
+</td>
+    <td><a name="wp1051599"> </a><p class="pCellBody">
+This option allows you to specify a compression factor.  The <em class="cEmphasis">factor</em> must be an integer that specifies how much of the space saved by compression is actually to be removed from the record.  Zero means no compression.  A value of 1 means use the default factor (70).
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051601"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1051603"> </a><p class="pCellBody">
+For factors from 2 through 100, the factor is considered to be a percentage.  It specifies how much of the space saved by compression is actually to be removed from each record.  For example, suppose an 80-byte record is compressed to 30 bytes.  Then the compression factor is used to determine how much of the 50 bytes of saved space is actually to be removed from the record.  A compression factor of 70 would mean that 70% of the 50 bytes (35 bytes total) will be removed.  This leaves 15 bytes for future expansion, and results in a compressed record size of 45 bytes (30 compressed size plus 15 extra for growth).  The larger the compression factor, the more of the saved space is removed.  A compression factor of 100 removes all saved space and allows no room for expansion. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051605"> </a><p class="pCellBody">
+<b style="font-weight: bold" class="cBold">-g </b><em style="font-weight: normal" class="cEmphasis">ext_factor</em>
+</p>
+</td>
+    <td><a name="wp1051607"> </a><p class="pCellBody">
+This option sets a new <em class="cEmphasis">extension factor</em> for the file.  This is the number of blocks that are added to a file's size when the file needs to be expanded.  The default is one block.  Specifying more than one enables you to take advantage of contiguous disk space, and thus may help to prevent fragmentation of the file as it grows.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051609"> </a><p class="pCellBody">
+<b style="font-weight: bold" class="cBold">-k </b><em style="font-weight: normal" class="cEmphasis">keynum</em>
+</p>
+</td>
+    <td><a name="wp1051611"> </a><p class="pCellBody">
+This option specifies that you want to rebuild the file in key order.  The &quot;-k&quot; must be followed (as the next separate argument) by the number of the key that you want to use, with zero indicating the primary key, one indicating the first alternate key, and so forth.  For example, to rebuild &quot;file1&quot; in primary key order, you would specify:
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051613"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+vutil -rebuild -k 0 file1<a name="wp1051615"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051617"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1051619"> </a><p class="pCellBody">
+There are two situations in which the &quot;-k&quot; option is particularly valuable.  If you are repeatedly processing a file along a particular key, then you can improve performance by rebuilding the file in key order.  This is particularly true if you do a great deal of sequential processing (common in reports).  When you rebuild in key order, records that are logically adjacent (according to their key values) are placed next to each other on the disk.  This maximizes the runtime's ability to improve performance with its read caching capabilities.  It also minimizes the distance that the disk must seek when you are reading records sequentially by that key.  Write performance also improves in applications that write large numbers of records in keyed sequence. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051621"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1051623"> </a><p class="pCellBody">
+A second situation in which the &quot;-k&quot; option is valuable is when the default rebuild method fails to recover a file fully.  This can occur if the chain of data records has been corrupted.  When &quot;-k&quot; is specified, <b class="cBold">vutil</b> will use the index you provide to try to locate the records, and will often find more records this way.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1061662"> </a><p class="pCellBody">
+<b class="cBold">-p</b> <em class="cEmphasis">pre_factor</em>
+</p>
+</td>
+    <td><a name="wp1061821"> </a><p class="pBody">
+This option allows you to specify the number of blocks that <b class="cBold">vutil</b> is to pre-allocate to the file.  <em class="cEmphasis">pre_factor</em>  must be a numeric value between one and 2,097,152.  The maximum pre-allocation factor varies with Vision version.  Vision 5 files accept the upper limit of 2,097,152 blocks.  Vision 2, 3, and 4 files are restricted to a maximum of 65,535 blocks.   If a larger pre-allocation factor is specified than the Vision version allows, the factor is automatically and silently reduced to the allowable limit.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051625"> </a><p class="pCellBody">
+<b class="cBold">-q</b>
+</p>
+</td>
+    <td><a name="wp1051627"> </a><p class="pCellBody">
+This option causes <b class="cBold">vutil</b> to exit (with status 99) if user interaction is required.   
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051629"> </a><p class="pCellBody">
+<b style="font-weight: bold" class="cBold">-s </b><em style="font-weight: normal" class="cEmphasis">spoolfile</em>
+</p>
+</td>
+    <td><a name="wp1051631"> </a><p class="pCellBody">
+This option indicates that you want to use the spooling form of rebuild.  This is especially helpful if you do not have adequate disk space to hold the new file.  This option spools the records to removable media and then rebuilds the file over the existing file.  This keeps only one copy of the file on disk and thus allows you to rebuild even when free disk space is limited.  Note that the spooled file is <em class="cEmphasis">not </em>compressed. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051633"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1051635"> </a><p class="pCellBody">
+The &quot;-s&quot; option must be followed by the name of the file to which you want to spool records.   This can be any file but is usually the name of a tape or diskette device.  For example, you might specify
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051637"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+vutil -rebuild -s /dev/rmt0 badfile<a name="wp1051639"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051641"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1051643"> </a><p class="pCellBody">
+to rebuild the file &quot;badfile&quot; by spooling records to the tape device &quot;/dev/rmt0&quot;.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051645"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1051647"> </a><p class="pCellBody">
+When &quot;-s&quot; is specified, <b class="cBold">vutil</b> writes all the records it can recover from the corrupt file to the spool file, and then rebuilds the file using these records.  You will be prompted to change media if the spool file gets full.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051649"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1051651"> </a><p class="pCellBody">
+There are two additional options that can be used with the &quot;-s&quot; option:
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051653"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1051655"> </a><p class="pCellBody">
+<b class="cBold">-r    </b>allows you to recover an interrupted rebuild.  When &quot;-r&quot; is specified, <b class="cBold">vutil</b> skips the step of writing records to the spool device.  Instead, it prompts you to mount the first volume of the spool file before it begins the rebuilding process.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051657"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1051659"> </a><p class="pCellBody">
+<b style="font-weight: bold" class="cBold">-m </b><em style="font-style: italic; font-weight: normal" class="cEmphasis">size</em><b style="font-style: normal" class="cBold">   </b>allows you to specify the size of the spool media.  It is followed by the number of 1024-byte records that can fit on the media.  This is useful when the spool device driver does not handle the end-of-media condition correctly.  For example, if you were spooling to a 1.2 MB floppy disk, you could specify: 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1051661"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+-m 1200<a name="wp1051663"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051665"> </a><p class="pCellBody">
+<b class="cBold">--slow</b>
+</p>
+</td>
+    <td><a name="wp1051667"> </a><p class="pCellBody">
+This option causes <b class="cBold">vutil</b> to open the file for &quot;mass update&quot; instead of for &quot;bulk addition.&quot;  This usually causes <b class="cBold">vutil</b> to run slower.  The only reason for using this option is as a possible work-around to some difficulty with using bulk addition.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051669"> </a><p class="pCellBody">
+<b class="cBold">-#</b>
+</p>
+</td>
+    <td><a name="wp1051671"> </a><p class="pCellBody">
+This option causes <b class="cBold">vutil</b> to rebuild the file in the Vision file format specified by the integer.  Valid values include 2, 3, 4, and 5.  If the &quot;-#&quot; option is not included, the file is rebuilt in the same format as the original file.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1051204"> </a><p class="pBody">
+When you perform &quot;vutil -rebuild&quot;, one of the following status values is returned to the host operating system when <b class="cBold">vutil</b> quits:
+</p>
+<a name="wp1050397"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1050403"> </a><p class="pCellBody">
+<b class="cBold">  0</b>
+</p>
+</td>
+    <td><a name="wp1050405"> </a><p class="pCellBody">
+file successfully rebuilt
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050407"> </a><p class="pCellBody">
+  <b class="cBold">1</b>
+</p>
+</td>
+    <td><a name="wp1050409"> </a><p class="pCellBody">
+rebuild not performed because the file is locked
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050411"> </a><p class="pCellBody">
+  <b class="cBold">2</b>
+</p>
+</td>
+    <td><a name="wp1050413"> </a><p class="pCellBody">
+rebuild not fully performed because some records were not recovered
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050415"> </a><p class="pCellBody">
+<b class="cBold"> 99</b>
+</p>
+</td>
+    <td><a name="wp1050417"> </a><p class="pCellBody">
+user interaction was required, and the &quot;-q&quot; switch was set  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050419"> </a><p class="pCellBody">
+<b class="cBold">255</b>
+</p>
+</td>
+    <td><a name="wp1050421"> </a><p class="pCellBody">
+other errors
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:52:54" />
+  <title>2.5  International Character Handling</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con2.htm">Chapter 2: Distributed Processing: Preparing Your Application</a> &gt; </p>
+<a name="wp1029190"> </a><h2 class="pHeading1">
+2.5  International Character Handling
+</h2>
+<a name="wp1029192"> </a><p class="pBody">
+Often in client/server environments, a client machine may use different character encoding than the server machine, particularly if the client machine is set up for foreign language characters that utilize values above ASCII 127 and the server is not, or if the client is using a PC character set and the server is using a UNIX character set.  This presents a problem when programs or data are passed between the environments, because the characters do not translate directly.
+</p>
+<a name="wp1029195"> </a><p class="pBody">
+If you anticipate passing any items with special characters (e.g., vowels with a grave accent, acute accent, circumflex, tilde, etc.) during a remote CALL, then you should create a map file to reconcile the character encoding for you.
+</p>
+<a name="wp1029197"> </a><p class="pBody">
+The map file should specify which client characters are to be converted to which values before passing the CALL's arguments to the server process or returning information from the server process.  The translation on returning data will affect items that were passed to the server process as &quot;BY REFERENCE&quot; (the default).
+</p>
+<a name="wp1029199"> </a><p class="pBody">
+The map file should re-map only those values that vary between the two character sets.  It should contain two values per line:  the first indicating the decimal or hexadecimal value of the special character on the client machine and the second indicating the decimal or hexadecimal value of the corresponding character on the server machine. You can check the values of specific characters using the Windows Character Map accessory in the PC environment, or by referring to your UNIX man pages in the UNIX environment.
+</p>
+<a name="wp1029200"> </a><p class="pBody">
+In your character map, hexadecimal values should use the standard &quot;0x&quot; notation.  For instance:
+</p>
+<a name="wp1029201"> </a><p class="pBody">
+0x90 0xC9
+</p>
+<a name="wp1029202"> </a><p class="pBody">
+maps &quot;E&quot; (acute) in the IBM PC character set to &quot;E&quot; (acute) in the ISO8859-1 character set using hexadecimal notation.
+</p>
+<a name="wp1029203"> </a><p class="pBody">
+144 201
+</p>
+<a name="wp1029204"> </a><p class="pBody">
+gives the same mapping using decimal notation.
+</p>
+<a name="wp1029205"> </a><p class="pBody">
+You can use the pound sign (#) to indicate a comment if desired.
+</p>
+<a name="wp1029206"> </a><p class="pBody">
+Note that the map will be used to translate only alphanumeric fields; but it will translate <em class="cEmphasis">all</em> alphanumeric fields, including group items and items subject to a REDEFINES clause.  If this is not a desired behavior, you may need to restructure your program to avoid these clauses by passing the elementary items instead of the group item, or passing an item from the REDEFINES clause instead of the first reference.  
+</p>
+<a name="wp1029207"> </a><p class="pBody">
+For example, if you pass the group-name in the following COBOL program:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01 group-name<a name="wp1029208"> </a>
+   03 field-1   pic99 comp-5.<a name="wp1029209"> </a>
+   03 field-2   pic99 comp-5.<a name="wp1035791"> </a>
+call &quot;sun3:/usr/obj/prog2&quot; using group-name.<a name="wp1035792"> </a>
+</pre></div>
+<a name="wp1035793"> </a><p class="pBody">
+then translation will occur on the elementary numeric items.  If these numeric items contain binary data that matches the value of mapped characters, the data will be corrupted.  To correct this situation, you could change the CALL statement to:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+call &quot;*sun3:/usr/obj/prog2&quot; using field-1, field-2.<a name="wp1029213"> </a>
+</pre></div>
+<a name="wp1029214"> </a><p class="pBody">
+Or you could change the definition of the numeric items to a type that will not conflict with potentially mapped characters, as in:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01 group-name<a name="wp1029215"> </a>
+   03 field-1   pic99.<a name="wp1029216"> </a>
+   03 field-2   pic99.<a name="wp1029217"> </a>
+</pre></div>
+<a name="wp1029218"> </a><p class="pBody">
+Defined this way, the numbers are stored as the ASCII representation of each digit, which should not conflict with any character mapping.
+</p>
+<a name="wp1029219"> </a><p class="pBody">
+Once the map file is created, you place it on the client, or if the client is AcuServer enabled, you can place it on the client or server.  Either way, you specify the location of the map file using the DEFAULT_MAP_FILE or <em class="cEmphasis">server</em>_MAP_FILE variables in the client configuration file (e.g., &quot;client.cfg&quot;).  Refer to Chapter 4 for more information on using these variables.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

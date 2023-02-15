@@ -1,0 +1,143 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID.    PRJ-DESC.
+       AUTHOR.        HIGOR.
+
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+           DECIMAL-POINT IS COMMA.
+
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+
+           
+
+       DATA DIVISION.
+       FILE SECTION.
+
+       
+
+       WORKING-STORAGE SECTION.
+       77  SMALL-FONT                     HANDLE.
+          
+
+       01  CAMPOS-CONTROLE-TELA-GRAFICA.
+           03  EVENT-STATUS IS SPECIAL-NAMES EVENT STATUS.
+               05 EVENT-TYPE              PIC X(4) COMP-X.
+                  88 CA-CMD-CLOSE         VALUE 1.
+                  88 CA-CMD-TABCHANGED    VALUE 7.
+               05 EVENT-WINDOW-HANDLE     HANDLE OF WINDOW.
+               05 EVENT-CONTROL-HANDLE    HANDLE.
+               05 EVENT-CONTROL-ID        PIC XX COMP-X.
+               05 EVENT-DATA-1            SIGNED-SHORT.
+               05 EVENT-DATA-2            SIGNED-LONG.
+               05 EVENT-ACTION            PIC X COMP-X.
+
+           03  TECLA-ESCAPE IS SPECIAL-NAMES CRT STATUS
+                                          PIC 9(4) VALUE 0.
+               88 TECLOU-ESC              VALUE 27.
+
+       01  JANELA-PROGRAMA                PIC X(10).
+
+           COPY "MAINRTN.MSG".
+           COPY "ACUGUI.DEF".
+
+       LINKAGE SECTION.
+
+
+       SCREEN SECTION.
+       01  TELA-PRINCIPAL.
+          
+
+           03 LABEL       LINE 02 COL 07
+                          TITLE "EMISSÃO DE BIHETES"
+                          ID 1
+                          TRANSPARENT.
+           03 LABEL       LINE 04 COL 07
+                          TITLE
+       " - O Sistema consiste na emissão de bilhetes para empresas do 
+      - "ramo de transportes."
+                          ID 2
+                          TRANSPARENT.
+
+
+           03 LABEL       LINE 05 COL 07
+                          TITLE
+       " - Realiza o controle das cidades atendidas pela empresa, e as f 
+      - "rotas das quais elas fazem parte."
+                          ID 3
+                          TRANSPARENT.
+           
+	   03 LABEL       LINE 06 COL 07
+                          TITLE " - Geração de preço para as passagens a
+      -"través da distância entre as cidades." 
+                          ID 4
+                          TRANSPARENT.
+
+			   
+	   03 LABEL       LINE 07 COL 07
+                          TITLE " - Cadastro de clientes que adiquiriram
+      -" a passagem, bem como o possível oferecimento de descontos, atra
+      -"vés de parâmetros informados no cadastro"
+                          ID 5
+                          TRANSPARENT.
+      
+    
+
+           03 PUSH-BUTTON TITLE "&Sair"
+                          LINE 10
+                          COL 35
+                          SIZE 12
+                          SELF-ACT
+                          ID 14
+                          EXCEPTION-VALUE 27.
+
+
+           
+
+       PROCEDURE DIVISION 
+       INICIO.
+
+         
+
+	   
+
+           ACCEPT SMALL-FONT FROM STANDARD OBJECT "SMALL-FONT".
+           
+           DISPLAY FLOATING GRAPHICAL WINDOW
+                            SIZE 110 LINES 12
+                            CONTROL FONT SMALL-FONT
+                            COLOR 257
+                            TITLE "Sobre"
+                            NO SCROLL
+                            SYSTEM MENU
+                            AUTO-RESIZE
+                            BACKGROUND-LOW
+                            HANDLE JANELA-PROGRAMA.
+
+           DISPLAY TELA-PRINCIPAL.
+
+	  
+
+           PERFORM TEST AFTER UNTIL TECLOU-ESC
+              ACCEPT TELA-PRINCIPAL
+                     ON EXCEPTION PERFORM TRATA-EXCEPTION-TELA-PRINCIPAL
+              END-ACCEPT
+           END-PERFORM.
+
+       FIM.
+
+           CLOSE WINDOW JANELA-PROGRAMA.
+
+
+           EXIT PROGRAM
+           STOP RUN.
+
+
+       TRATA-EXCEPTION-TELA-PRINCIPAL.
+           IF EVENT-TYPE = CMD-CLOSE
+              SET TECLOU-ESC TO TRUE
+              EXIT PARAGRAPH.
+
+       
+    

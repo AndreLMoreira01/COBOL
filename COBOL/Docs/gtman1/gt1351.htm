@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:09" />
+  <title>3.3.14  Converting Micro Focus Files</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt13.htm"><br />Chapter 3:  Debugger and Utilities</a> &gt; <a href="gt1335.htm">3.3  Vision File Utility - vutil</a> &gt; </p>
+<a name="wp1033561"> </a><h2 class="pHeading2">
+3.3.14  Converting Micro Focus Files
+</h2>
+<a name="wp1033566"> </a><p class="pBody">
+<b class="cBold">vutil</b> can convert a Micro Focus file into a Vision file.  This is useful when you are moving Micro Focus data to an ACUCOBOL-GT application.  The command is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+vutil  -convert  [ -ac ]  [ +c ]  [ -f # ]  [ -2345 ]  <a name="wp1033567"> </a>
+                 [ -d <em class="cEmphasis">dir </em>]  [ -q ]  [<em class="cEmphasis">mf-files</em>]<a name="wp1053431"> </a>
+</pre></div>
+<a name="wp1033568"> </a><p class="pBody">
+You need not specify that the file is a Micro Focus file; <b class="cBold">vutil</b> makes that determination on its own.  
+</p>
+<a name="wp1033569"> </a><p class="pBody">
+The &quot;convert&quot; option starts with the same letter as the &quot;check&quot; option described earlier.  You must use at least two letters of the word &quot;convert&quot; in order to specify this option.  If you just use &quot;-c&quot;, <b class="cBold">vutil</b> will assume that you are specifying the &quot;check&quot; option.
+</p>
+<a name="wp1033570"> </a><p class="pBody">
+The &quot;convert&quot; function takes each named <em class="cEmphasis">mf-file</em> and converts it from a Micro Focus indexed file to a corresponding Vision file.  If no <em class="cEmphasis">mf-files</em> are specified, then the standard input is read for a list of files to convert.
+</p>
+<a name="wp1033571"> </a><p class="pBody">
+Each Micro Focus file actually occupies two files: an index file with the extension &quot;.idx&quot; and a data file.  The resulting Vision file has the same name as the data file, with the extension &quot;.vis&quot;.  Specify only the <em class="cEmphasis">base name</em> in the list of files (do not include any extension).
+</p>
+<a name="wp1033572"> </a><p class="pBody">
+Normally <b class="cBold">vutil</b> warns you about the impending conversion and asks if you want to continue.  The &quot;<b class="cBold">-a</b>&quot; (for &quot;automatic&quot;) option suppresses this warning.  This can be useful when you are calling <b class="cBold">vutil</b> from another program.
+</p>
+<a name="wp1033573"> </a><p class="pBody">
+Specifying the &quot;<b class="cBold">-c</b>&quot; option causes the resulting file to have uncompressed records regardless of the original file; using &quot;<b class="cBold">+c</b>&quot; causes the resulting records to be compressed.
+</p>
+<a name="wp1033575"> </a><p class="pBody">
+The &quot;<b class="cBold">-f</b>&quot; option sets the compression factor used when the file is converted.  This option does not force the use of compression, it merely sets the compression factor if compression is used.  The compression factor, a numeric literal, specifies how much of the space saved by compression is actually to be removed from the record. 
+</p>
+<a name="wp1033576"> </a><p class="pBody">
+The &quot;<b class="cBold">-5</b>&quot; option specifies that you want the resulting file to be in Vision Version 5. The &quot;<b class="cBold">-4</b>&quot; option specifies a Vision Version 4 file.  A &quot;-3&quot; means you want a Version 3 file, and &quot;-2&quot; means you want a Version 2 file.  
+</p>
+<a name="wp1033577"> </a><p class="pBody">
+The &quot;<b class="cBold">-d</b>&quot; option specifies that you want the converted files to be placed in a new directory.  <em class="cEmphasis">Dir</em> should be the name of a directory on the machine other than the directory containing the files to be converted.   The &quot;-d&quot; option implies the &quot;-a&quot; option.
+</p>
+<a name="wp1033578"> </a><p class="pBody">
+The &quot;<b class="cBold">-q</b>&quot; option causes <b class="cBold">vutil</b> to exit (with status 99) if user interaction is required.
+</p>
+<a name="wp1033579"> </a><p class="pBody">
+<b class="cBold">vutil</b> makes a copy of the file while it is converting it.  You must have adequate disk space for <b class="cBold">vutil</b> to complete the conversion.  Also, Micro Focus files and Vision files differ in the amount of disk space that they use.  This difference is fairly unpredictable and can vary quite widely.  Sometimes the Vision files are smaller, and sometimes the Micro Focus files are smaller.  You should have some spare disk space when you start converting files to accommodate the potential difference.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

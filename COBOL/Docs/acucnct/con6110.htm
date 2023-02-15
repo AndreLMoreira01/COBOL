@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:53:04" />
+  <title>6.7.5.2  Other installers  </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con6.htm">Chapter 6: Thin Client: Preparing the Server </a> &gt; <a href="con6103.htm">6.7  Thin Client Automatic Update </a> &gt; <a href="con6108.htm">6.7.5  Accepting the Automatic Update</a> &gt; </p>
+<a name="wp1070914"> </a><h2 class="pHeading3">
+6.7.5.2  Other installers  
+</h2>
+<a name="wp1070915"> </a><p class="pBody">
+If your installer file does not have a &quot;.msi&quot; extension, it needs to choose or allow the user to choose the installation directory.  After the new directory is chosen, your installer needs to update the &quot;.atc&quot; file type association in the registry so that the thin client can locate the newly installed executable after your installer finishes.  If you want to install the thin client in a directory relative to the location of the existing thin client, you can determine the location by querying the registry entries for the &quot;.atc&quot; (or &quot;.acutc&quot;) file type association.  
+</p>
+<a name="wp1070917"> </a><p class="pBody">
+The thin client examines the &quot;.atc&quot; file type association in the registry by first reading the value of HKEY_CLASSES_ROOT\.atc to identify the version-specific name of the current thin client.  It then reads the value of HKEY_CLASSES_ROOT\&lt;current_version&gt;\shell\open\command to get the absolute directory path to the &quot;acuthin.exe&quot; executable.  
+</p>
+<a name="wp1070918"> </a><p class="pBody">
+For example, after a Version 7.2 thin client installation, HKEY_CLASSES_ROOT\.atc has the value 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Acucorp.ThinClient.72 <a name="wp1070919"> </a>
+</pre></div>
+<a name="wp1070920"> </a><p class="pBody">
+HKEY_CLASSES_ROOT\Acucorp.ThinClient.72\shell\open\command may have the value 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&quot;C:\Program Files\AcuThin\acuthin.exe&quot; &quot;%1&quot;<a name="wp1070921"> </a>
+</pre></div>
+<a name="wp1070922"> </a><p class="pBody">
+This value starts with the absolute directory path for the thin client. Your installer should change this value if you install the new thin client in a different directory.  
+</p>
+<a name="wp1070923"> </a><p class="pBody">
+If the value of TC_INSTALLER_CLIENT_FILE is an executable (&quot;.exe&quot; file), the thin client uses the value of the TC_INSTALLER_ARGS configuration variable as the command line options passed to that executable. For example, if you want &quot;msiexec.exe&quot; to log all of its operations to a file named &quot;msi.log&quot;, then you could set TC_INSTALLER_ARGS to &quot;/log msi.log&quot;.  (See the Microsoft Windows Installer documentation for more details.)  TC_INSTALLER_ARGS has no default value.  
+</p>
+<a name="wp1070924"> </a><p class="pBody">
+Note that if the TC_INSTALLER_ARGS configuration variable is set, the TC_INSTALLER_UI_LEVEL configuration variable (see <a  href="con6113.htm#wp1070973">section 6.7.5.5</a>) is ignored.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

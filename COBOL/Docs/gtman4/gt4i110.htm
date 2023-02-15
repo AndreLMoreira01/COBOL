@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>REG_QUERY_VALUE_EX, DISPLAY_REG_QUERY_VALUE_EX Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1037974"> </a><h2 class="pHeading2">
+REG_QUERY_VALUE_EX, DISPLAY_REG_QUERY_VALUE_EX Routine
+</h2>
+<a name="wp1207283"> </a><p class="pBody">
+Retrieves the type and data for a specified value name associated with an open registry key.  
+</p>
+<a name="wp1207284"> </a><p class="pBody">
+Use DISPLAY_REG_QUERY_VALUE_EX to perform the action on the display host's registry (the local host when the application is run with a standard runtime; the <em class="cEmphasis">thin client</em> when the application is run with the thin client).  Use REG_QUERY_VALUE_EX to perform the action on the server host's registry (the local host when the application is run with a standard runtime, and the application host when the application is run with the thin client).
+</p>
+<a name="wp1207286"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;REG_QUERY_VALUE_EX&quot;<a name="wp1037983"> </a>
+    USING OPEN-KEY-HANDLE, VALUE-NAME, DATA-TYPE, VALUE-DATA,<a name="wp1037984"> </a>
+        DATA-SIZE,<a name="wp1037988"> </a>
+    GIVING STATUS-CODE<a name="wp1037989"> </a>
+</pre></div>
+<a name="wp1037991"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1037992"> </a><p class="pBody">
+<b class="cBold">OPEN-KEY-HANDLE</b>  Usage unsigned-long
+</p>
+<a name="wp1037993"> </a><p class="pBody">
+Handle of a currently open key or one of the following predefined handles of keys that are always open (defined in &quot;acugui.def&quot;):
+</p>
+<a name="wp1037994"> </a><p class="pBody">
+HKEY_CLASSES_ROOT
+</p>
+<a name="wp1037995"> </a><p class="pBody">
+HKEY_CURRENT_USER
+</p>
+<a name="wp1037996"> </a><p class="pBody">
+HKEY_LOCAL_MACHINE
+</p>
+<a name="wp1037997"> </a><p class="pBody">
+HKEY_USERS
+</p>
+<a name="wp1037998"> </a><p class="pBody">
+<b class="cBold">VALUE-NAME  </b>PIC  X(n)
+</p>
+<a name="wp1037999"> </a><p class="pBody">
+Name of the value to be queried.
+</p>
+<a name="wp1038000"> </a><p class="pBody">
+<b class="cBold">DATA-TYPE</b>  Usage unsigned-long
+</p>
+<a name="wp1038001"> </a><p class="pBody">
+Points to a variable that receives the type code for the value entry.  The type code can be one of the following values (defined in &quot;acugui.def&quot;):
+</p>
+<a name="wp1058534"> </a><p class="pBody">
+ </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1058041"> </a>
+Value
+
+</th>
+    <th><a name="wp1058043"> </a>
+Meaning
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058045"> </a><p class="pCellBody">
+REG_BINARY
+</p>
+</td>
+    <td><a name="wp1058047"> </a><p class="pCellBody">
+Binary data in any form.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058049"> </a><p class="pCellBody">
+REG_DWORD
+</p>
+</td>
+    <td><a name="wp1058051"> </a><p class="pCellBody">
+A 32-bit number.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058053"> </a><p class="pCellBody">
+REG_DWORD_LITTLE_ENDIAN
+</p>
+</td>
+    <td><a name="wp1058055"> </a><p class="pCellBody">
+A 32-bit number in little-endian format (same as REG_DWORD).  In little-endian format, the most significant byte of a word is the high-order word.  This is the most common format for computers running Windows and Windows NT.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058057"> </a><p class="pCellBody">
+REG_DWORD_BIG_ENDIAN
+</p>
+</td>
+    <td><a name="wp1058059"> </a><p class="pCellBody">
+A 32-bit number in big-endian format.  In big-endian format, the most significant byte of a word is the low-order word.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058061"> </a><p class="pCellBody">
+REG_EXPAND_SZ
+</p>
+</td>
+    <td><a name="wp1058063"> </a><p class="pCellBody">
+A null-terminated string that contains unexpanded references to environment variables (for example, &quot;%PATH%&quot;).   It will be a Unicode or ANSI string depending on whether you use the Unicode or ANSI functions.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058065"> </a><p class="pCellBody">
+REG_LINK
+</p>
+</td>
+    <td><a name="wp1058067"> </a><p class="pCellBody">
+A Unicode symbolic link.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058069"> </a><p class="pCellBody">
+REG_MULTI_SZ
+</p>
+</td>
+    <td><a name="wp1058071"> </a><p class="pCellBody">
+An array of null-terminated strings, terminated by two null characters.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058073"> </a><p class="pCellBody">
+REG_NONE
+</p>
+</td>
+    <td><a name="wp1058075"> </a><p class="pCellBody">
+No defined value type.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058077"> </a><p class="pCellBody">
+REG_RESOURCE_LIST
+</p>
+</td>
+    <td><a name="wp1058079"> </a><p class="pCellBody">
+A device-driver resource list.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058081"> </a><p class="pCellBody">
+REG_SZ
+</p>
+</td>
+    <td><a name="wp1058083"> </a><p class="pCellBody">
+A null-terminated string.  It will be a Unicode or ANSI string, depending on whether you use the Unicode or ANSI functions.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1038048"> </a><p class="pBody">
+<b class="cBold">VALUE-DATA</b>   Variable parameter
+</p>
+<a name="wp1038049"> </a><p class="pBody">
+Buffer to receive the data for the value entry. If you know what type of data is being returned, you may specify this parameter accordingly.  If the type of data returned is unknown, you may specify a group item structured as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 VALUE-DATA<a name="wp1038050"> </a>
+   02 VALUE-DATA-ORIG                                PIC X (n).<a name="wp1038051"> </a>
+   02 VALUE-BINARY redefines VALUE-DATA-ORIG         PIC X (n).<a name="wp1038052"> </a>
+   02 VALUE-DWORD redefines VALUE-DATA-ORIG          Usage signed-long.<a name="wp1038053"> </a>
+   02 VALUE-LIT-ENDIAN redefines VALUE-DATA-ORIG     Usage signed-long.<a name="wp1038054"> </a>
+   02 VALUE-BIG-ENDIAN redefines VALUE-DATA-ORIG     S9 (9) COMP-4.<a name="wp1038055"> </a>
+   02 VALUE-EXPAND-SZ redefines VALUE-DATA-ORIG      PIC X (n).<a name="wp1038056"> </a>
+   02 VALUE-LINK redefines VALUE-DATA-ORIG           PIC X (n).<a name="wp1038057"> </a>
+   02 VALUE-MULTI-SZ redefines VALUE-DATA-ORIG       PIC X (n).<a name="wp1038058"> </a>
+   02 VALUE-NONE redefines VALUE-DATA-ORIG           PIC X (n).<a name="wp1038059"> </a>
+   02 VALUE-RESOURCE-LIST redefines VALUE-DATA-ORIG  PIC X (n).<a name="wp1164893"> </a>
+   02 VALUE-SZ redefines VALUE-DATA-ORIG             PIC X (n).<a name="wp1164894"> </a>
+</pre></div>
+<a name="wp1164895"> </a><p class="pBody">
+<b class="cBold">DATA-SIZE</b>  Usage unsigned-long
+</p>
+<a name="wp1038063"> </a><p class="pBody">
+Prior to the call, must specify the size, in bytes, of the VALUE-DATA buffer.  When the function returns, DATA-SIZE contains the number of bytes copied to VALUE-DATA.  
+</p>
+<a name="wp1038064"> </a><p class="pBody">
+<b class="cBold">STATUS-CODE</b>    Numeric data item
+</p>
+<a name="wp1038065"> </a><p class="pBody">
+Receives the return status of call to Microsoft's &quot;RegQueryValueEx&quot; function.  A return status of zero indicates success; non-zero indicates that an error occurred.  A return status of `234' indicates that the size of the data to be returned in VALUE-DATA exceeds the buffer size specified by the DATA-SIZE parameter.
+</p>
+<a name="wp1038066"> </a><h3 class="pHeadingRef">
+Comments
+</h3>
+<a name="wp1038067"> </a><p class="pBody">
+The key identified by OPEN-KEY-HANDLE must have been opened with KEY_QUERY_VALUE access.
+</p>
+<a name="wp1038068"> </a><p class="pBody">
+This function does not expand the environment-variable names in the value data when the value type is REG_EXPAND_SZ. 
+</p>
+<a name="wp1038069"> </a><p class="pBody">
+When calling the REG_QUERY_VALUE_EX function with OPEN-KEY-HANDLE set to the HKEY_PERFORMANCE_DATA handle and a value string of a specified object, the returned data structure sometimes has unrequested objects.  Don't be surprised; this is normal behavior.  When calling the REG_QUERY_VALUE_EX function, you should always expect to `walk' the returned data structure to look for the requested object. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

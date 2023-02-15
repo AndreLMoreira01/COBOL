@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:41:58" />
+  <title>4.3.1  ALPHA</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl4.htm">Chapter 4:  Using Directives</a> &gt; <a href="4gl44.htm">4.3  Directives Supported by the Acu4GL Interfaces</a> &gt; </p>
+<a name="wp1034450"> </a><h2 class="pHeading2">
+4.3.1  ALPHA
+</h2>
+<a name="wp1034453"> </a><p class="pBody">
+The ALPHA directive allows you to treat a data item as alphanumeric text in the database, when it is declared as numeric in the COBOL program.  
+</p>
+<a name="wp1034454"> </a><h3 class="pHeadingRef">
+Syntax
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+$XFD ALPHA<a name="wp1034455"> </a>
+</pre></div>
+<a name="wp1034456"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( XFD ALPHA ))<a name="wp1034457"> </a>
+</pre></div>
+<a name="wp1034458"> </a><p class="pBody">
+This is especially useful when you have numeric keys in which you occasionally store non-numeric data, such as LOW-VALUES or special codes.  In this situation, treating the field as alphanumeric allows you to move any kind of data to it.  
+</p>
+<a name="wp1034459"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1034460"> </a><p class="pBody">
+Suppose you have specified KEY IS code-key.  Then assume the following record definition:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  code-record.<a name="wp1034461"> </a>
+    03  code-key.<a name="wp1034462"> </a>
+        05  code-num      pic 9(5).<a name="wp1034463"> </a>
+</pre></div>
+<a name="wp1034464"> </a><p class="pBody">
+In the database, group items are disregarded, so CODE-NUM is the actual key field.  Suppose you needed to move a non-numeric value to the key: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+MOVE &quot;C0531&quot; TO CODE-KEY.<a name="wp1034465"> </a>
+WRITE CODE-RECORD.<a name="wp1034466"> </a>
+</pre></div>
+<a name="wp1034467"> </a><p class="pBody">
+In this case the results are not well-defined because a non-numeric value has been moved into a numeric field.  The database might very well reject the record.  
+</p>
+<a name="wp1034468"> </a><p class="pBody">
+One way to solve this problem is to use the ALPHA directive.  This causes the corresponding database field to accept alphanumeric data:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ 01  code-record.<a name="wp1034469"> </a>
+     03  code-key.<a name="wp1034470"> </a>
+$XFD ALPHA<a name="wp1034471"> </a>
+         05  code-num      pic 9(5).<a name="wp1034472"> </a>
+</pre></div>
+<a name="wp1034475"> </a><p class="pBody">
+As an alternative, you could specify the <a  href="4gl413.htm#wp1034754">USE GROUP</a> directive on the line before <em class="cEmphasis">code-key</em>.  The USE GROUP directive implies that the field is alphanumeric.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

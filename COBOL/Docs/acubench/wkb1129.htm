@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:14:29" />
+  <title>11.6.3.4  Understanding the generated code (unpaged controls)</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuBench User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="wkb11.htm">Chapter 11: Working with Screens</a> &gt; <a href="wkb1122.htm">11.6  Designing a Screen</a> &gt; <a href="wkb1125.htm">11.6.3  Autoload Controls</a> &gt; </p>
+<a name="wp1053815"> </a><h2 class="pHeading3">
+11.6.3.4  Understanding the generated code (unpaged controls)
+</h2>
+<a name="wp1053828"> </a><p class="pBody">
+Although the code generated for each control type is different, based on the unique characteristics of the control, the code generated for each of the unpaged controls is very similar.  The first example shows the code generated into the Procedure Division (&quot;.prd&quot;) COPY file for a grid control that takes its data from a data file called &quot;clients&quot;.  The second example shows the code skeleton from which the first sample was generated.
+</p>
+<a name="wp1050367"> </a><h3 class="pHeadingRef">
+Generated code sample:  Grid
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+MOVE LOW-VALUE TO cl-client-id.<a name="wp1050068"> </a>
+START clients, KEY &gt;= cl-client-id<a name="wp1049347"> </a>
+   INVALID KEY<a name="wp1049518"> </a>
+      PERFORM Invalid-Key-Paragraph<a name="wp1049348"> </a>
+END-START.<a name="wp1049349"> </a>
+PERFORM UNTIL NOT valid-clients<a name="wp1049350"> </a>
+   READ clients NEXT RECORD<a name="wp1049351"> </a>
+      AT END<a name="wp1049352"> </a>
+         PERFORM At-End-Paragraph<a name="wp1049353"> </a>
+      NOT AT END<a name="wp1049354"> </a>
+         IF 2&gt;1<a name="wp1049357"> </a>
+            PERFORM Not-At-End-Paragraph<a name="wp1049358"> </a>
+         END-IF<a name="wp1049359"> </a>
+   END-READ<a name="wp1049360"> </a>
+END-PERFORM.<a name="wp1050105"> </a>
+MODIFY clients-gd, MASS-UPDATE = 0.<a name="wp1050136"> </a>
+</pre></div>
+<a name="wp1050106"> </a><h3 class="pHeadingRef">
+Generated code skeleton:  Grid
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+MOVE [Start Value / Variable] TO [Start Key].<a name="wp1050108"> </a>
+START [Filename], KEY [Start Direction] [Start Key]<a name="wp1050019"> </a>
+   INVALID KEY<a name="wp1050020"> </a>
+      PERFORM [Invalid Key Perform]<a name="wp1050021"> </a>
+END-START.<a name="wp1050022"> </a>
+PERFORM UNTIL [Perform Until Condition] [End Value / Variable]<a name="wp1050023"> </a>
+   READ [Filename] [Read Direction]<a name="wp1050024"> </a>
+      AT END<a name="wp1050025"> </a>
+         PERFORM [At End Perform]<a name="wp1050026"> </a>
+      NOT AT END<a name="wp1050027"> </a>
+         IF [At Item Condition]<a name="wp1050028"> </a>
+            PERFORM [Not At End Perform]<a name="wp1050029"> </a>
+         END-IF<a name="wp1050030"> </a>
+   END-READ<a name="wp1050031"> </a>
+END-PERFORM.<a name="wp1050032"> </a>
+MODIFY [Control-Name], MASS-UPDATE = 0.<a name="wp1049988"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuBench-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

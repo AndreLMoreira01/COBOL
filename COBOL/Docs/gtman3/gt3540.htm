@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.7.1.6  IS EXTERNAL-FORM clause</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3533.htm">5.7  Record Description Entry</a> &gt; <a href="gt3534.htm">5.7.1  Data Description Entry</a> &gt; </p>
+<a name="wp1035311"> </a><h2 class="pHeading3">
+5.7.1.6  IS EXTERNAL-FORM clause
+</h2>
+<a name="wp1035317"> </a><p class="pBody">
+The IS EXTERNAL-FORM clause associates a group item with HyperText Markup Language (HTML) data using the Common Gateway Interface (CGI) specification.  It allows you to define input and output records for HTML forms and is useful when your COBOL code is part of an Internet-based application.
+</p>
+<a name="wp1035318"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+[ IS <u class="cUnderline">EXTERNAL-FORM</u> [ <u class="cUnderline">IDENTIFIED</u> BY template-file-name ] ]<a name="wp1035319"> </a>
+[ IS <u class="cUnderline">IDENTIFIED</u> BY external-name ]<a name="wp1035320"> </a>
+</pre></div>
+<a name="wp1035321"> </a><h3 class="pHeadingRef">
+Syntax Rule
+</h3>
+<a name="wp1035322"> </a><p class="pBody">
+<em class="cEmphasis">Template-file-name</em> and <em class="cEmphasis">external-name</em> are alphanumeric literals or unqualified data names.  If a data name is used, it must refer to an unambiguous data item.
+</p>
+<a name="wp1035323"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035324"> </a><div class="pSmartList1"><li>The EXTERNAL-FORM clause associates a group item with HTML data using the Common Gateway Interface (CGI) specification.  It allows you to define input and output records for HTML forms.  The EXTERNAL-FORM clause affects the way ACCEPT and DISPLAY process the data item.  It does not put any restrictions on the way that the data item may be used in your program.  </li></div>
+<a name="wp1035325"> </a><div class="pSmartList1"><li>An EXTERNAL-FORM data item is called an &quot;output form&quot; if the IDENTIFIED BY clause is used in the description of the group item.  This clause associates the data item with an HTML template file.  If the IDENTIFIED BY clause is omitted from the group item, the EXTERNAL-FORM data item is called an &quot;input form&quot;.</li></div>
+<a name="wp1035326"> </a><div class="pSmartList1"><li>For &quot;input forms,&quot; the IDENTIFIED BY clause establishes an association between an elementary data item and a CGI variable.  The value of <em class="cEmphasis">external-name</em> is the name of the CGI variable.  If the IDENTIFIED BY phrase is omitted, then data item's own name (<em class="cEmphasis">data-name</em>) is used as the name of the CGI variable.  If both the IDENTIFIED BY phrase and <em class="cEmphasis">data-name</em> are omitted, then the data item has no corresponding CGI variable.  </li></div>
+<a name="wp1035327"> </a><div class="pSmartList1"><li>CGI variables are case-sensitive.  The runtime matches CGI names according to their case.  However, if a CGI variable is not found using a case-sensitive match, then the runtime tries a case-insensitive match.  Note that <em class="cEmphasis">data-name</em> is always treated as if it were upper case regardless of the case used in the COBOL source.  The case of the value specified by the IDENTIFIED BY phrase is preserved.  </li></div>
+<a name="wp1035328"> </a><div class="pSmartList1"><li>The ACCEPT verb treats input forms and output forms in the same manner.  ACCEPT sets the value of each elementary item, in order, to the value of its associated CGI variable.  The CGI data is retrieved from the program's standard input.  ACCEPT automatically decodes and translates the CGI input data before moving it to the elementary data item.  The value of each CGI variable is converted to the appropriate COBOL data type when it is moved.  If the CGI variable is empty or does not exist, ACCEPT sets the value of numeric data items to zero, and nonnumeric data items to spaces.  </li></div>
+<a name="wp1035329"> </a><div class="pSmartList1"><li>To receive a CGI variable that is repeated (this occurs when multiple items have been selected in a &quot;choose many&quot; list), you should use an elementary data item that is part of a table.  Each occurrence of the data item receives one of the repeated values.  The first occurrence receives the first repeated CGI item; the second occurrence receives the second repeated item; and so forth.  Occurrences that do not correspond to repeated CGI items are set to zero if the data item is numeric, or spaces otherwise.  </li></div>
+<a name="wp1035330"> </a><div class="pSmartList1"><li>Data items are matched to CGI variables immediately before the particular CGI data item is retrieved.  Thus it is possible for a form to have CGI variable names supplied by the CGI input itself.  Consider:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  MY-FORM IS EXTERNAL-FORM<a name="wp1035331"> </a>
+    03  CGI-VAR1 PIC X(20) IDENTIFIED BY &quot;Name&quot;.<a name="wp1035332"> </a>
+    03  CGI-VAR2 PIC X(50) IDENTIFIED BY CGI-VAR1.<a name="wp1035333"> </a>
+</pre></div>
+<a name="wp1035334"> </a><p class="pIndented1">
+In this example, an ACCEPT MY-FORM statement would first locate the CGI variable called &quot;Name&quot; and move its value to CGI-VAR1.  It would then locate a CGI variable identified by that value and move the corresponding value to CGI-VAR2.  Note that, for this to work, you must specify CGI-VAR1 before CGI-VAR2 in MY-FORM, because ACCEPT updates the elementary data items in order.  
+</p>
+<a name="wp1035335"> </a><div class="pSmartList1"><li>The DISPLAY verb treats input and output forms differently.  For output forms, DISPLAY merges the data contained in the elementary items into the associated HTML template file and sends the result to the standard output stream in conformance with the CGI specification.  To do this, DISPLAY scans the HTML template file for data names delineated by two percentage signs on either side (i.e.  %%data-name%%).  It then replaces those data names with the contents of the associated elementary items from the output form, stripping trailing spaces.  The maximum length of a single line in the template file is 256 bytes.  There is virtually no limit to the length of a single HTML output line.  No conversion is performed on the output form items before they are merged with the HTML template file.</li></div>
+<a name="wp1035336"> </a><div class="pSmartList1"><li>When an input form is specified in a DISPLAY statement, the names and values of each elementary item are sent to the standard output stream in HTML format.  One line is generated for each elementary item.  The line consists of the name of the item followed by &quot; = &quot;, followed by the first 100 bytes of the item's value.  This can be useful when you are testing and debugging your CGI program.  </li></div>
+<a name="wp1035337"> </a><div class="pSmartList1"><li><em class="cEmphasis">Template-file-name</em> specifies the name of the HTML template file.  You can specify a series of directories for locating HTML template files.  To do this, use the HTML_TEMPLATE_PREFIX configuration variable.  This variable is similar to FILE_PREFIX and CODE_PREFIX.  It specifies a series of one or more directories to be searched for the desired HTML template file.  The directories are specified as a sequence of space-delimited prefixes to be applied to the file name.  All directories in the sequence must be valid names.  The current directory can be indicated by a period (regardless of the host operating system).</li></div>
+<a name="wp1035340"> </a><div class="pSmartList1"><li>You can omit the suffix if it is either &quot;.html&quot; or &quot;.htm&quot;.  If the suffix is omitted or is something other than &quot;.html&quot; or &quot;.htm&quot;, DISPLAY first appends &quot;.html&quot; to the specified file name and tries to open it.  If that fails, DISPLAY appends &quot;.htm&quot; to the file name and tries to open it.  If that fails, DISPLAY tries to open the file exactly as specified.  If these attempts fail, the following error message is sent to the standard output stream in HTML format:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Can&#39;t open HTML template &quot;<em class="cEmphasis">template-file-name</em>&quot;<a name="wp1035341"> </a>
+</pre></div>
+<a name="wp1035342"> </a><div class="pSmartList1"><li>When the Web Server executes your CGI program, the current working directory depends on the configuration of the specific Web Server that is running.  In many cases it is the same as the Web Server's &quot;root&quot; directory.  As part of the CGI specification, when the Web Server executes your CGI program, it sets an environment variable called PATH_TRANSLATED to the directory containing your CGI program.  You may want to use this information to locate your HTML template files.  </li></div>
+<a name="wp1035343"> </a><div class="pSmartList1"><li>For example, if your template files are in the same directory as your CGI programs, then set the HTML_TEMPLATE_PREFIX configuration variable to the value of PATH_TRANSLATED as follows:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  CGI-DIRECTORY     PIC X(100).<a name="wp1035344"> </a>
+<a name="wp1035345"> </a>
+ACCEPT CGI-DIRECTORY FROM ENVIRONMENT &quot;PATH_TRANSLATED&quot;<a name="wp1035346"> </a>
+SET CONFIGURATION &quot;HTML_TEMPLATE_PREFIX&quot; TO<a name="wp1035347"> </a>
+   CGI-DIRECTORY.<a name="wp1072082"> </a>
+</pre></div>
+<a name="wp1035348"> </a><div class="pSmartList1"><li>The output from a CGI program must begin with a &quot;response header&quot;.  DISPLAY automatically generates a &quot;Content-Type&quot; response header when <em class="cEmphasis">template-file-name</em> specifies a local file (<em class="cEmphasis">i.e</em>., not a URL - see rule #16 below).</li></div>
+<a name="wp1035349"> </a><div class="pSmartList1"><li>You may specify the EXTERNAL-FORM clause for an item that has no subordinate items.  This is useful for displaying static Web pages.  To do this, specify the name of the static Web page in <em class="cEmphasis">template-file-name</em>.  For example, if you have a Web page called &quot;webpage1.html&quot;, add the following lines to your COBOL program:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  WEB-PAGE-1 IS EXTERNAL-FORM,<a name="wp1035350"> </a>
+          IDENTIFIED BY &quot;webpage1&quot;.<a name="wp1072083"> </a>
+<a name="wp1035351"> </a>
+DISPLAY WEB-PAGE-1.<a name="wp1035352"> </a>
+</pre></div>
+<a name="wp1035353"> </a><div class="pSmartList1"><li>You may also specify a complete URL in <em class="cEmphasis">template-file-name</em>.  In this case, DISPLAY generates a &quot;Location&quot; response header that contains the URL.  This header specifies that the data you're returning is a pointer to another location.  To determine whether <em class="cEmphasis">template-file-name</em> is a URL, DISPLAY scans it for the string &quot;://&quot;.  DISPLAY does not apply HTML_TEMPLATE_PREFIX when <em class="cEmphasis">template-file-name</em> is a URL.  For example, if your program determines that the information the user has requested is on another Web server, and its URL is &quot;http://www.theinfo.com&quot;, add the following lines to your COBOL program:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  THE-INFO-URL IS EXTERNAL-FORM<a name="wp1035354"> </a>
+         IDENTIFIED BY &quot;http://www.theinfo.com&quot;<a name="wp1035355"> </a>
+<a name="wp1035356"> </a>
+DISPLAY THE-INFO-URL.<a name="wp1035357"> </a>
+</pre></div>
+<a name="wp1035358"> </a><p class="pIndented1">
+The length of the URL must not exceed 256 bytes.  Only one response header is sent to the standard output stream.  Your CGI program should exit immediately after sending a location header (<em class="cEmphasis">i.e.</em>, after displaying an external form identified by a URL).  
+</p>
+<a name="wp1035359"> </a><div class="pSmartList1"><li>You may use as many HTML template files as you like in a single program.  A common way to use multiple HTML template files is to have three output forms: a header, body, and footer.  Each of these has a corresponding HTML template file.  You first display the header form, then move each row of data to the body form and display it, and finally display the footer form.</li></div>
+<a name="wp1035360"> </a><div class="pSmartList1"><li>Data items that do not have EXTERNAL-FORM specified are treated as regular data items by ACCEPT and DISPLAY, even if they are subordinate to an external form.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  MY-FORM IS EXTERNAL-FORM.<a name="wp1035361"> </a>
+    03  CGI-VAR1  PIC X(10)<a name="wp1035362"> </a>
+    03  CGI-VAR2  PIC 9(5).<a name="wp1035363"> </a>
+</pre></div>
+<a name="wp1035364"> </a><p class="pIndented1">
+Using this data structure, an ACCEPT of MY-FORM would fill in CGI-VAR1 and CGI-VAR2 with CGI data.  An ACCEPT of CGI-VAR1 would simply get data from the user just as it does for any regular data item.  
+</p>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

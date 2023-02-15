@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:34" />
+  <title>8.3  System Security - The AcuAccess File</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb8.htm">Chapter 8: The AcuODBC Server Environment</a> &gt; </p>
+<a name="wp1028327"> </a><h2 class="pHeading1">
+8.3  System Security - The AcuAccess File
+</h2>
+<a name="wp1028332"> </a><p class="pBody">
+The foundation of AcuODBC Server system security is the server access file.  The server access file is an encrypted Vision file, named &quot;AcuAccess&quot; by default, and located in the &quot;/etc&quot; directory on UNIX servers and the &quot;\etc&quot; directory on Windows&#160;NT or Windows 2000 servers.  You may rename the file if you like.  If you rename the file, be sure to indicate the new name in the <a  href="odb819.htm#wp1045566">ACCESS_FILE</a> configuration variable, as described in <a  href="odb818.htm#wp1058709">section 8.4.1</a>.
+</p>
+<a name="wp1057006"> </a><p class="pCaution">
+<hr />
+<b>Caution:  </b>If you have upgraded from an earlier version of AcuODBC Server, the server will detect and convert existing AcuAccess files the first time that they are opened.  Updated AcuAccess files are not compatible with earlier versions of AcuODBC Server.  If you are operating in a mixed environment that includes both AcuODBC Server Version 6.0 and earlier versions of AcuODBC Server, you must use duplicate AcuAccess files.  Running multiple versions of AcuODBC Server is not recommended.
+<hr />
+</p>
+<a name="wp1028333"> </a><p class="pBody">
+The server access file contains one or more access records.  These records define which users of which clients are permitted access to AcuODBC Server.  The server access file is designed to support a wide range of access security, from very open to very restrictive.  You choose the level of security best suited to your needs.
+</p>
+<a name="wp1028337"> </a><p class="pBody">
+The AcuODBC Server checks the AcuAccess file to determine whether the connecting client is authorized to connect to the server.  If the user is not allowed to connect, the following message is returned:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01004 01004 [AcuCorp, Inc.][AcuODBC Driver][ISAM]Not authorized to connect<a name="wp1028338"> </a>
+</pre></div>
+<a name="wp1040062"> </a><p class="pBody">
+Creation and modification of the server access file requires <em class="cEmphasis">root</em> privileges on UNIX, and <em class="cEmphasis">Administrator</em> or <em class="cEmphasis">Administrators</em> group privileges on Windows&#160;NT or Windows&#160;2000.
+</p>
+<a name="wp1040063"> </a><p class="pBody">
+On UNIX servers the access file must be owned by <em class="cEmphasis">root</em>, and only <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">root</span> should have write permissions to the file.  If the access file does not exist, is not owned by <em class="cEmphasis">root</em>, or can be written to by users other than <em class="cEmphasis">root</em>, AcuODBC Server will not start.
+</p>
+<a name="wp1040050"> </a><p class="pBody">
+On Windows NT and Windows 2000 servers, you should protect the access file by allowing write permissions only to users with <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Administrator</span> privileges.  If the access file does not exist, is not owned by <em class="cEmphasis">Administrator</em> or the <em class="cEmphasis">Administrators</em> group, or can be written to by users other than <em class="cEmphasis">Administrator</em> or the <em class="cEmphasis">Administrators</em> group, AcuODBC Server will not start.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

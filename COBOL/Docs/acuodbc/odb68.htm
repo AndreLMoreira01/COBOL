@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:19" />
+  <title>6.2.5  Naming the XFD File</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb6.htm">Chapter 6: Mapping COBOL Data Items and Database Fields</a> &gt; <a href="odb63.htm">6.2  XFD Files</a> &gt; </p>
+<a name="wp1028425"> </a><h2 class="pHeading2">
+6.2.5  Naming the XFD File
+</h2>
+<a name="wp1028429"> </a><p class="pBody">
+The compiler must give a name to each XFD file (data dictionary) that is built.  The compiler attempts to build the name from your COBOL code, but in some instances the name in the code is nonspecific, and you must provide a name.
+</p>
+<a name="wp1028430"> </a><p class="pBody">
+Each &quot;.xfd&quot; name is built from a <em class="cEmphasis">starting name</em> that is derived (if possible) from the SELECT statement in your COBOL code.  The following paragraphs explain how that occurs.
+</p>
+<a name="wp1028431"> </a><h3 class="pHeadingRef">
+ASSIGN name is a variable
+</h3>
+<a name="wp1028436"> </a><p class="pBody">
+If the SELECT for the file has a variable ASSIGN name (ASSIGN TO <em class="cEmphasis">filename</em>), you must specify a starting name for the &quot;.xfd&quot; file via a FILE directive in your code.  (See <a  href="odb333.htm#wp1029736">section 3.7, &quot;File Aliases,&quot;</a> and <a  href="odb614.htm#wp1028852">section 6.3.5, &quot;FILE Directive,&quot;</a> for sample code and additional information.)
+</p>
+<a name="wp1028438"> </a><h3 class="pHeadingRef">
+ASSIGN name is a constant
+</h3>
+<a name="wp1028439"> </a><p class="pBody">
+If the SELECT for the file has a constant ASSIGN name (such as ASSIGN TO &quot;COMPFILE&quot;), that name is used as the starting name for the &quot;.xfd&quot; file.  
+</p>
+<a name="wp1028440"> </a><h3 class="pHeadingRef">
+ASSIGN name is generic
+</h3>
+<a name="wp1028441"> </a><p class="pBody">
+If the ASSIGN phrase refers to a generic device (such as ASSIGN TO &quot;DISK&quot;), the compiler uses the SELECT name as the starting name.  
+</p>
+<a name="wp1028442"> </a><h3 class="pHeadingRef">
+Forming the final XFD name
+</h3>
+<a name="wp1028443"> </a><p class="pBody">
+The final name is formed from the starting name as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1028444"> </a><div class="pSmartList1"><li>The compiler removes any extensions from the starting name.  </li></div>
+<a name="wp1028445"> </a><div class="pSmartList1"><li>It constructs a &quot;universal&quot; base name by stripping out directory information that fits any of the formats used by the operating systems that run ACUCOBOL-GT.</li></div>
+<a name="wp1028446"> </a><div class="pSmartList1"><li>It converts the base name to lower case.</li></div>
+<a name="wp1028447"> </a><div class="pSmartList1"><li>It appends the extension &quot;.xfd&quot; to the base name.</li></div>
+</ol></div>
+<a name="wp1028448"> </a><h3 class="pHeadingRef">
+Examples of XFD names
+</h3>
+<a name="wp1028449"> </a><p class="pBody">
+  </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1035278"> </a>
+COBOL code
+
+</th>
+    <th><a name="wp1035280"> </a>
+File name
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028456"> </a><p class="pCellBody">
+ASSIGN TO &quot;usr/ar/customer.dat&quot;
+</p>
+</td>
+    <td><a name="wp1028458"> </a><p class="pCellBody">
+customer.xfd
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028460"> </a><p class="pCellBody">
+SELECT TESTFILE, ASSIGN TO DISK
+</p>
+</td>
+    <td><a name="wp1028462"> </a><p class="pCellBody">
+testfile.xfd
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028464"> </a><p class="pCellBody">
+ASSIGN TO &quot;-D SYS$LIB:HELP&quot;
+</p>
+</td>
+    <td><a name="wp1028466"> </a><p class="pCellBody">
+help.xfd
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

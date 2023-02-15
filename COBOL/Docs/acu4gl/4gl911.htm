@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:43" />
+  <title>9.2.2  Compiler Warnings  </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl9.htm">Chapter 9:  Performance and Troubleshooting</a> &gt; <a href="4gl99.htm">9.2  Troubleshooting</a> &gt; </p>
+<a name="wp1036859"> </a><h2 class="pHeading2">
+9.2.2  Compiler Warnings  
+</h2>
+<div class="pPreformatted"><pre class="pPreformatted">
+<em class="cEmphasis">xxx</em> not unique in first 30 characters  <a name="wp1036860"> </a>
+</pre></div>
+<a name="wp1036861"> </a><p class="pBody">
+This message occurs if a field name is not unique within the first 30 characters.  The <em class="cEmphasis">xxx</em> is the name found.  You can either change the field name or apply the <a  href="4gl410.htm#wp1035551">NAME</a> directive.
+</p>
+<a name="wp1038893"> </a><p class="pBody">
+The warning listed below can occur when you compile with the &quot;-Zx&quot; or &quot;-Fx&quot; option.  The data dictionary will be built, and Acu4GL will operate correctly.  The warning informs you of a special database situation that This message occurs if a field name is not unique within the first 30 characters.  The <em class="cEmphasis">xxx</em> is the name found.  You can either change the field name or apply the NAME directive.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Field xxx causes duplicate database data<a name="wp1036866"> </a>
+</pre></div>
+<a name="wp1038945"> </a><p class="pBody">
+This warning means that your record definition should be restructured.  Your current definition is set up in such a way that:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1038946"> </a><div class="pSmartList1"><li>you have overlapping key fields, and</li></div>
+<a name="wp1038947"> </a><div class="pSmartList1"><li>both keys must be represented in the database as <em class="cEmphasis">separate items.</em></li></div>
+</ul></div>
+<a name="wp1038948"> </a><p class="pBody">
+Acu4GL will handle this situation correctly.  It will keep the overlapping keys updated simultaneously, so that they always have the same value.  However, the warning alerts you that <em class="cEmphasis">you have the same data represented twice in the database</em>.  This is dangerous, because someone at the site might access the database via SQL and accidentally change only one of the keys.
+</p>
+<a name="wp1038949"> </a><p class="pBody">
+Here's an example of the problem, and a description of how to correct it (the example assumes that both <em class="cEmphasis">key-1</em> and <em class="cEmphasis">key-2</em> have been declared as keys):
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  order-record.<a name="wp1038950"> </a>
+    03  key-1.<a name="wp1038951"> </a>
+        05  field-a                  pic x(5).<a name="wp1038952"> </a>
+        05  field-b                  pic 9(5).<a name="wp1038953"> </a>
+        05  key-2<a name="wp1038954"> </a>
+            redefines field-b        pic x(3).<a name="wp1038955"> </a>
+</pre></div>
+<a name="wp1038956"> </a><p class="pBody">
+This example will generate the warning message.  
+</p>
+<a name="wp1038957"> </a><p class="pBody">
+Because <em class="cEmphasis">key-2</em> is a key, it must also be represented in the database.  It doesn't correspond exactly to any other data field, so it must be entered as a separate column in the database.  
+</p>
+<a name="wp1038958"> </a><p class="pBody">
+In the COBOL view of the file, <em class="cEmphasis">key-1</em> and <em class="cEmphasis">key-2</em> overlap.  But the requirements of database storage force the same data (known to COBOL as <em class="cEmphasis">field-b</em>) to be physically represented twice in the database.  Any updates to the data from any ACUCOBOL-GT® program will correctly update both columns.  Updates from <em class="cEmphasis">outside</em> of ACUCOBOL-GT carry no such guarantee.  
+</p>
+<a name="wp1038959"> </a><p class="pBody">
+In this example, you can correct the situation by breaking <em class="cEmphasis">field-b</em> into two columns, so that <em class="cEmphasis">key-2</em> corresponds exactly to another data field:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  order-record.<a name="wp1038960"> </a>
+    03  key-1.<a name="wp1038961"> </a>
+        05  field-a                        pic x(5).<a name="wp1038962"> </a>
+        05  field-b.<a name="wp1038963"> </a>
+            07  field-b1                   pic x(3).<a name="wp1038964"> </a>
+            07  field-b2                   pic 9(2).<a name="wp1038965"> </a>
+        05  key-2<a name="wp1038966"> </a>
+            redefines field-b              pic x(3).<a name="wp1038967"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

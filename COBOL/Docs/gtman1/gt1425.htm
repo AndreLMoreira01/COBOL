@@ -1,0 +1,737 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:48" />
+  <title>4.4.2  The SCREEN Option </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt14.htm"><br />Chapter 4:  Terminal Manager</a> &gt; <a href="gt1423.htm">4.4  The Display Interface</a> &gt; </p>
+<a name="wp1033991"> </a><h2 class="pHeading2">
+4.4.2  The SCREEN Option 
+</h2>
+<a name="wp1033994"> </a><p class="pBody">
+There is a runtime configuration variable called &quot;SCREEN&quot; that controls many features of the video sub-system.  This option works in the same manner as the &quot;KEYBOARD&quot; variable.  You can specify one or more SCREEN variables.  Attributes that you can set are identified by one or more sets of <em class="cEmphasis">keywords</em> and associated <em class="cEmphasis">values</em>, separated from each other by spaces or tabs; the syntax is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN keyword=value [keyword=value]...<a name="wp1033995"> </a>
+</pre></div>
+<a name="wp1033996"> </a><p class="pBody">
+The following <em class="cEmphasis">keywords</em> are supported:
+</p>
+<a name="wp1033998"> </a><h5 class="pHeading4">
+ALPHA-UPDATES=value
+</h5>
+<a name="wp1033999"> </a><p class="pBody">
+This option affects how alphanumeric fields with a default value are displayed prior to entry.  It works just like the EDITED-UPDATES option (described below) except that it applies to alphanumeric fields instead of numeric edited fields.  The only acceptable value is Unchanged.
+</p>
+<a name="wp1034000"> </a><p class="pBody">
+Placing &quot;Auto-Prompt&quot; immediately after this option, using a comma as a separator, allows the user to decide whether to change or replace the default value.  When Auto-Prompt is specified, the default value will be displayed, and then the program will wait for the user to enter a character.  If the character entered is a data character, ACUCOBOL-GT will fill the field with prompt characters (erasing what was there) and then accept data as if this were a new field.  If the character entered is an editing character (such as an arrow key), then ACUCOBOL-GT allows the user to edit the data normally.  Sample syntax is shown here:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN  ALPHA-UPDATES=Unchanged, Auto-Prompt<a name="wp1034001"> </a>
+</pre></div>
+<a name="wp1034002"> </a><p class="pBody">
+This option can also be specified as SCRN_ALPHA_UPDATES.  The Auto-prompt value can be specified with SCRN_ALPHA_AUTO_PROMPT.  For example, to set the above syntax using these variables, you would enter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCRN<span style="font-family: Arial, Verdana, Helvetica, sans-serif">_</span>ALPHA<span style="font-family: Arial, Verdana, Helvetica, sans-serif">_</span>UPDATES Unchanged<a name="wp1034003"> </a>
+SCRN<span style="font-family: Arial, Verdana, Helvetica, sans-serif">_</span>ALPHA<span style="font-family: Arial, Verdana, Helvetica, sans-serif">_</span>AUTO<span style="font-family: Arial, Verdana, Helvetica, sans-serif">_</span>PROMPT on<a name="wp1040042"> </a>
+</pre></div>
+<a name="wp1034005"> </a><h5 class="pHeading4">
+CONVERT-OUTPUT=value
+</h5>
+<a name="wp1034007"> </a><p class="pBody">
+This option affects only Screen Section DISPLAY statements.  If this keyword is set to &quot;Yes&quot;, then all output fields will act as if the WITH CONVERSION phrase were specified for them.  This has two effects.  The first is that numeric fields will be converted from the internal storage format to a readable form (including suppression of leading zeros).  The second is that the action of the JUSTIFY keyword (see below) takes effect.  This option is normally set to &quot;No&quot;, but is provided as an alternate method of displaying numeric data in the Screen Section.  The configuration variable SCRN_CONVERT_OUTPUT is synonymous with this option.
+</p>
+<a name="wp1034010"> </a><h5 class="pHeading4">
+EDITED-UPDATES=value
+</h5>
+<a name="wp1048129"> </a><p class="pBody">
+This option affects how numeric edited fields with a default value are displayed prior to the user making an entry.  The four possible values are: Converted, Unchanged, Left-Adjust, and Formatted.
+</p>
+<a name="wp1048737"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1048870"> </a><p class="pCellBody">
+<b class="cBold">Converted</b>&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1048872"> </a><p class="pCellBody">
+is the default setting.  When this setting is used, the default value is displayed in a standardized format.  This format has an optional leading minus sign, followed by the number, with no leading zeros and no internal formatting characters.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1048874"> </a><p class="pCellBody">
+<b class="cBold">Unchanged</b>
+</p>
+</td>
+    <td><a name="wp1048876"> </a><p class="pCellBody">
+is an alternate setting.  When this setting is used, the default value is displayed without any changes.  All of the editing characters appear, and leading spaces are shown.  Note that the LEFT, RIGHT, or CENTER phrase will affect the display.  After the value has been displayed, the user can edit it normally.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1048878"> </a><p class="pCellBody">
+<b class="cBold">Left-Adjust</b>
+</p>
+</td>
+    <td><a name="wp1048880"> </a><p class="pCellBody">
+ is identical to Unchanged, except that any leading spaces are removed before the value is displayed.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1048882"> </a><p class="pCellBody">
+<b class="cBold">Formatted</b> 
+</p>
+</td>
+    <td><a name="wp1048884"> </a><p class="pCellBody">
+is fundamentally different from the other options in that it affects the way the number is entered, not just the format of the default value.  When &quot;Formatted&quot; entry is selected, the number is continuously reformatted by the ACCEPT statement to match the editing specification of the item being entered.  This means that the value will always appear to the user in its &quot;final&quot; form.  This is similar to the way numbers are entered on most calculators.  Selecting this option has many minor affects on the actions of various editing keys.  These are not detailed here, but the actions of the editing keys are analogous to their actions on non-formatted fields.  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1048742"> </a><p class="pBody">
+There is one exception to the rule that the number will always be formatted just as described by the PICTURE clause.  This is when &quot;Z&quot; or &quot;*&quot; characters are placed <em class="cEmphasis">after </em>the decimal point in the PICTURE.  In this case, the entered characters will be treated like &quot;9&quot; characters instead.  This is necessary in order to allow the user to enter values between zero and 1 when the default value is zero.  If this rule did not exist, then when the user tried to enter the decimal point, the reformatter would keep removing it.  The same applies to any zero digits between the decimal point and the first non-zero digit.  
+</p>
+<a name="wp1034018"> </a><p class="pBody">
+When the &quot;Formatted&quot; option is used with left justification, the entry action is also left justified.  When it is used with the centering option, the entry occurs as if the field were right justified, and the final result is centered when the user leaves the field.  
+</p>
+<a name="wp1034019"> </a><p class="pBody">
+Place &quot;Auto-Prompt&quot; immediately after this option, using a comma as a separator, to allow the user to decide whether to change or replace the default value.  When Auto-Prompt is specified, the default value will be displayed, and then the program will wait for the user to enter a character.  If the character entered is a data character, ACUCOBOL-GT will fill the field with prompt characters (erasing what was there) and then accept data as if this were a new field.  If the character entered is an editing character (such as an arrow key), then the program allows the user to edit the data normally.  Sample syntax is shown here:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN EDITED-UPDATES=Converted, Auto-Prompt<a name="wp1034020"> </a>
+</pre></div>
+<a name="wp1034021"> </a><p class="pBody">
+This option can also be specified as SCRN_EDITED_UPDATES.  The Auto-prompt value can be specified with SCRN_EDITED_AUTO_PROMPT.
+</p>
+<a name="wp1034023"> </a><h5 class="pHeading4">
+ERROR-BELL=value
+</h5>
+<a name="wp1034024"> </a><p class="pBody">
+This option determines when the error bell will be sounded.  Possible values are:
+</p>
+<a name="wp1049071"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1049077"> </a><p class="pCellBody">
+<b class="cBold">Yes</b>:&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1049079"> </a><p class="pCellBody">
+ring the bell on an entry error, but not on field-full.  This is the default setting.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049081"> </a><p class="pCellBody">
+<b class="cBold">No</b>: 
+</p>
+</td>
+    <td><a name="wp1049083"> </a><p class="pCellBody">
+do not ring the bell on entry error or field-full.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049085"> </a><p class="pCellBody">
+<b class="cBold">All</b>: 
+</p>
+</td>
+    <td><a name="wp1049087"> </a><p class="pCellBody">
+ring the bell whenever the user makes an entry error or attempts to enter data into a full field.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1034028"> </a><p class="pBody">
+For example, to use the &quot;All&quot; setting, add the following line to your runtime configuration file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN  ERROR-BELL=All<a name="wp1034029"> </a>
+</pre></div>
+<a name="wp1034030"> </a><p class="pBody">
+	You may also use the configuration variable SCRN_ERROR_BELL to set these values.  The variable SCRN_WARN is synonymous with SCREEN  ERROR-BELL=All.
+</p>
+<a name="wp1034032"> </a><h5 class="pHeading4">
+ERROR-BOX=value
+</h5>
+<a name="wp1034033"> </a><p class="pBody">
+This option affects whether an error box appears when an entry error has occurred.  Examples of entry errors are entering a letter in a numeric field or entering a number in the wrong format.  When value is set to &quot;yes&quot; (the default), the error message is displayed in a box.  If value is set to &quot;no&quot;, the error is reported based on the entry in the SCREEN ERROR-LINE variable (below).  The configuration variable SCRN_ERROR_BOX may also be specified.
+</p>
+<a name="wp1034035"> </a><h5 class="pHeading4">
+ERROR-COLOR=value
+</h5>
+<a name="wp1034036"> </a><p class="pBody">
+This keyword is given a numeric value that represents the colors used in error messages generated by the runtime system.  Value is the arithmetic sum of the numbers representing the colors and other attributes used in error messages generated by the runtime system.  The following color values are accepted: 
+</p>
+<a name="wp1034037"> </a><p class="pBodyRelative">
+   </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1039407"> </a>
+Color
+
+</th>
+    <th><a name="wp1039409"> </a>
+Foreground
+
+</th>
+    <th><a name="wp1039411"> </a>
+Background
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039413"> </a><p class="pCellBody">
+Black
+</p>
+</td>
+    <td><a name="wp1039415"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1039417"> </a><p class="pCellBody">
+32
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039419"> </a><p class="pCellBody">
+Blue
+</p>
+</td>
+    <td><a name="wp1039421"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1039423"> </a><p class="pCellBody">
+64
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039425"> </a><p class="pCellBody">
+Green
+</p>
+</td>
+    <td><a name="wp1039427"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1039429"> </a><p class="pCellBody">
+96
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039431"> </a><p class="pCellBody">
+Cyan
+</p>
+</td>
+    <td><a name="wp1039433"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1039435"> </a><p class="pCellBody">
+128
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039437"> </a><p class="pCellBody">
+Red
+</p>
+</td>
+    <td><a name="wp1039439"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1039441"> </a><p class="pCellBody">
+160
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039443"> </a><p class="pCellBody">
+Magenta
+</p>
+</td>
+    <td><a name="wp1039445"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1039447"> </a><p class="pCellBody">
+192
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039449"> </a><p class="pCellBody">
+Brown
+</p>
+</td>
+    <td><a name="wp1039451"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1039453"> </a><p class="pCellBody">
+224
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039455"> </a><p class="pCellBody">
+White
+</p>
+</td>
+    <td><a name="wp1039457"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1039459"> </a><p class="pCellBody">
+256
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1034094"> </a><p class="pBody">
+You may specify other video attributes by adding the following values: 
+</p>
+<a name="wp1034121"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1034098"> </a><p class="pCellBody">
+Reverse video
+</p>
+</td>
+    <td><a name="wp1034100"> </a><p class="pCellBody">
+1024
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034102"> </a><p class="pCellBody">
+Low intensity
+</p>
+</td>
+    <td><a name="wp1034104"> </a><p class="pCellBody">
+2048
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034106"> </a><p class="pCellBody">
+High intensity
+</p>
+</td>
+    <td><a name="wp1034108"> </a><p class="pCellBody">
+4096
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034110"> </a><p class="pCellBody">
+Underline
+</p>
+</td>
+    <td><a name="wp1034112"> </a><p class="pCellBody">
+8192
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034114"> </a><p class="pCellBody">
+Blink
+</p>
+</td>
+    <td><a name="wp1034116"> </a><p class="pCellBody">
+16384
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034118"> </a><p class="pCellBody">
+Protected
+</p>
+</td>
+    <td><a name="wp1034120"> </a><p class="pCellBody">
+32768
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1034122"> </a><p class="pBody">
+Only one foreground color and one background color may be specified.  If either is missing, the corresponding default for the current terminal window is used.  High intensity and low intensity may not both be specified.  If neither is specified, the default intensity is used.  
+</p>
+<a name="wp1034123"> </a><p class="pBody">
+For example, to get a blinking white foreground on a blue background, you would specify: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN   ERROR-COLOR=16456<a name="wp1034124"> </a>
+</pre></div>
+<a name="wp1034125"> </a><p class="pBody">
+(16456 = 8+64+16384) 
+</p>
+<a name="wp1034126"> </a><p class="pIndented1">
+The default value is &quot;4096&quot;, which causes the error messages to use the current colors with a high-intensity foreground.  The configuration variable SCRN_ERROR_COLOR is also supported.
+</p>
+<a name="wp1034128"> </a><h5 class="pHeading4">
+ERROR-LINE=value
+</h5>
+<a name="wp1034129"> </a><p class="pBody">
+<em class="cEmphasis">Value</em> is the line number you wish error messages to appear on.  The runtime system pops up a one-line window on this line to display the message, and then removes it after the user responds.  If this is set to a negative value, then the line used will be that many lines up from the bottom of the screen.  For example, &quot;Error-Line=-2&quot; implies that the next-to-last line should be used.  The default value is &quot;-1&quot;.  You may also specify the configuration variable SCRN_ERROR_LINE to set this value.
+</p>
+<a name="wp1034131"> </a><h5 class="pHeading4">
+FORM-FEED=value  
+</h5>
+<a name="wp1034132"> </a><p class="pBody">
+This option lets you use &quot;Control-L&quot; for a form feed.  Setting this variable to &quot;yes&quot; and putting &quot;Ctl-L&quot; in a DISPLAY statement allows a form feed to occur.  In effect, this clears the screen and puts the cursor at screen position (0,0).  Setting this variable to &quot;no&quot; disallows a form feed.  The default value is &quot;no&quot;.  This can also be specified as SCRN_FORM_FEED instead of SCREEN FORM-FEED.
+</p>
+<a name="wp1034134"> </a><h5 class="pHeading4">
+INPUT-DISPLAY=value
+</h5>
+<a name="wp1034135"> </a><p class="pBody">
+This option determines what happens when the DISPLAY verb operates on an input field described in a Screen Section entry.  There are four choices: &quot;None&quot;, &quot;Value&quot;, &quot;Spaces&quot;, and &quot;Prompt&quot;.
+</p>
+<a name="wp1049265"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1049271"> </a><p class="pCellBody">
+<b class="cBold">None</b>:&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1049273"> </a><p class="pCellBody">
+The field is not displayed.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049275"> </a><p class="pCellBody">
+<b class="cBold">Prompt</b>: 
+</p>
+</td>
+    <td><a name="wp1049277"> </a><p class="pCellBody">
+The field is displayed with the field's prompt character (usually underscore). 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049279"> </a><p class="pCellBody">
+<b class="cBold">Spaces</b>:  
+</p>
+</td>
+    <td><a name="wp1049281"> </a><p class="pCellBody">
+The field is displayed as spaces.  This is the default value.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049283"> </a><p class="pCellBody">
+<b class="cBold">Value</b>:  
+</p>
+</td>
+    <td><a name="wp1049285"> </a><p class="pCellBody">
+The current value of the field is displayed.  This will be zero for numeric and numeric-edited fields, and spaces for other fields.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1034140"> </a><p class="pIndented1">
+The configuration variable SCRN_INPUT_DISPLAY is also supported.
+</p>
+<a name="wp1034142"> </a><h5 class="pHeading4">
+INPUT-MODE=value
+</h5>
+<a name="wp1034144"> </a><p class="pBody">
+This option affects pre-display of data in a Screen Section ACCEPT.  The options are &quot;Predisplay&quot;, &quot;Update&quot;, and &quot;Normal&quot;.  
+</p>
+<a name="wp1049444"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1049450"> </a><p class="pCellBody">
+<b class="cBold">Predisplay</b>:&#160;
+</p>
+</td>
+    <td><a name="wp1049452"> </a><p class="pCellBody">
+A Screen Section ACCEPT statement will cause the current value of each input and update field to be displayed.  (Whatever is present in the Screen Section is displayed; this is not necessarily the same as the contents of Working-Storage).  Each field is then entered as an update field (i.e., the value can be edited).  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049454"> </a><p class="pCellBody">
+<b class="cBold">Update</b>:  
+</p>
+</td>
+    <td><a name="wp1049456"> </a><p class="pCellBody">
+Each input field is treated as an update field.  This causes the field's current value to echo on the screen when the field is visited.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049458"> </a><p class="pCellBody">
+<b class="cBold">Normal</b>:  
+</p>
+</td>
+    <td><a name="wp1049460"> </a><p class="pCellBody">
+Causes no echoing of input-only fields. 
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1034148"> </a><p class="pIndented1">
+You may also specify the configuration variable SCRN_INPUT_MODE.
+</p>
+<a name="wp1034150"> </a><h5 class="pHeading4">
+JUSTIFY=value
+</h5>
+<a name="wp1034151"> </a><p class="pBody">
+The JUSTIFY setting determines the default justification of converted numeric and numeric-edited fields.  If &quot;Left&quot; is chosen, then leading spaces are removed from these fields when they are displayed.  If &quot;Right&quot; is chosen, then the leading spaces are retained.  Finally, if &quot;Auto&quot; is chosen (the default), then left justification is used if the program was compiled in RM/COBOL compatibility mode, otherwise right justification is used.  Note that justification affects only fields that have the CONVERT phrase specified or implied for them.  The configuration variable SCRN_JUSTIFY is also supported.
+</p>
+<a name="wp1034153"> </a><h5 class="pHeading4">
+NUMERIC-UPDATES=value
+</h5>
+<a name="wp1034154"> </a><p class="pBody">
+This option affects how numeric fields with a default value are displayed prior to entry.  This option works just like the &quot;EDITED-UPDATES&quot; option described above except that it applies to numeric fields instead of numeric edited fields.  The possible values are Converted and Unchanged.
+</p>
+<a name="wp1034155"> </a><p class="pBody">
+Place the phrase Auto-Prompt immediately after this option, using a comma as a separator, to allow the user to decide whether to change or replace the default value.  When Auto-Prompt is specified, the default value will be displayed, and then the program will wait for the user to enter a character.  If the character entered is a data character, ACUCOBOL-GT will fill the field with prompt characters (erasing what was there) and then accept data as if this were a new field.  If the first character entered is an editing character (such as an arrow key), then ACUCOBOL-GT allows the user to edit the data normally.  Sample syntax is shown here:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN NUMERIC-UPDATES=Converted, Auto-Prompt<a name="wp1034156"> </a>
+</pre></div>
+<a name="wp1034157"> </a><p class="pBody">
+This option can also be specified as SCRN_NUMERIC_UPDATES.  The Auto-prompt value can be specified with SCRN_NUMERIC_AUTO_PROMPT.
+</p>
+<a name="wp1034159"> </a><h5 class="pHeading4">
+PROMPT=value
+</h5>
+<a name="wp1034160"> </a><p class="pBody">
+The value of the PROMPT setting determines the default prompt character.  The default value is underscore.  To specify an alternate prompt, place the character immediately after the equals sign.  To specify a space as the prompt character, leave the value empty (e.g., &quot;Prompt= &quot;).  You may also specify the configuration variable SCRN_PROMPT to set this value.  The variable SCRN_PROMPT_DEFAULT is equivalent to setting SCREEN PROMPT to the default value. 
+</p>
+<a name="wp1034162"> </a><h5 class="pHeading4">
+PROMPT-ALL=value
+</h5>
+<a name="wp1034163"> </a><p class="pBody">
+By default, a prompt character is shown only in the field containing the cursor.  If <em class="cEmphasis">value</em> is &quot;Yes&quot;, then the prompt character is shown in every field managed by the ACCEPT statement.  The prompt characters are removed when the ACCEPT is terminated.  Prompts never appear in SECURE fields.  Default is &quot;No&quot;.  The configuration variable SCRN_PROMPT_ALL is synonymous with this option.
+</p>
+<a name="wp1034164"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>Setting the SCREEN keyword PROMPT-ALL to the value &quot;Protected&quot; will have the same effect as setting PROMPT-ALL to &quot;Yes&quot;, except that prompt characters will <em class="cEmphasis">not</em> be displayed in protected fields.
+<hr />
+</p>
+<a name="wp1034166"> </a><h5 class="pHeading4">
+PROMPT-ATTR=value
+</h5>
+<a name="wp1034167"> </a><p class="pBody">
+You may specify a prompt attribute.  This attribute is used whenever the PROMPT is specified or implied for a Screen Section ACCEPT statement.  The PROMPT-ATTR keyword is followed by a single attribute:  High, Low, or Reverse.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN PROMPT-ATTR=HIGH<a name="wp1034168"> </a>
+</pre></div>
+<a name="wp1034169"> </a><p class="pBody">
+The configuration variable SCRN_PROMPT_ATTR is also supported.  The usage is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN<span style="font-family: Arial, Verdana, Helvetica, sans-serif">_</span>PROMPT<span style="font-family: Arial, Verdana, Helvetica, sans-serif">_</span>ATTR HIGH<a name="wp1034170"> </a>
+</pre></div>
+<a name="wp1034172"> </a><h5 class="pHeading4">
+REFRESH-LINES=value
+</h5>
+<a name="wp1034173"> </a><p class="pBody">
+<em class="cEmphasis">Value </em>specifies the number of screen lines to redisplay after the user has finished entering data into a field.  This option is useful when the terminal or terminal emulator can accept Asian phonetic characters and translate them into ideograms.  The entered characters will often overflow the displayed input field, but after translation, the resultant ideogram(s) will not.  This option will &quot;clean up&quot; the screen by redisplaying the affected lines with the ideograms in place. For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN   REFRESH-LINES=3<a name="wp1034174"> </a>
+</pre></div>
+<a name="wp1034175"> </a><p class="pBody">
+After accepting input data, the Terminal Manager will redisplay the contents of the input field, the remainder of the line, and the two lines below it.
+</p>
+<a name="wp1034176"> </a><p class="pBody">
+If the CODE_SYSTEM runtime configuration variable (see <a  href="gt1428.htm#wp1034353">section 4.4.4</a>) is non-zero, specifying an Asian double-byte character system, the default value of REFRESH-LINES is &quot;1&quot;.  If the CODE_SYSTEM runtime configuration variable is set to &quot;0&quot;, indicating a single-byte ASCII or EBCDIC character system, the default value of REFRESH-LINES is &quot;0&quot;.  You may also use the configuration variable SCRN_REFRESH_LINES to set these values.  
+</p>
+<a name="wp1034184"> </a><h5 class="pHeading4">
+REFRESH-MODE=value
+</h5>
+<a name="wp1034185"> </a><p class="pBody">
+	This option, like REFRESH-LINES, supports double-byte character sets.  <em class="cEmphasis">Value</em> specifies when lines should be refreshed after an ACCEPT.  Setting this variable to a value of &quot;0&quot; means that the lines are never refreshed, &quot;2&quot; indicates that lines are always refreshed. The default value of &quot;1&quot; specifies that lines are refreshed only if double-byte characters are entered. For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN REFRESH-MODE=1<a name="wp1039029"> </a>
+</pre></div>
+<a name="wp1034186"> </a><p class="pBody">
+The configuration variable SCRN_REFRESH_MODE is synonymous with this option.
+</p>
+<a name="wp1034188"> </a><h5 class="pHeading4">
+SHADOW-STYLE=value
+</h5>
+<a name="wp1034189"> </a><p class="pBody">
+This option determines the way window shadows are displayed.  It may have one of the following four values:
+</p>
+<a name="wp1049719"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1049725"> </a><p class="pCellBody">
+<b class="cBold">None</b>:&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1049727"> </a><p class="pCellBody">
+When this setting is used, shadows are not displayed.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049729"> </a><p class="pCellBody">
+<b class="cBold">Dim</b>:  
+</p>
+</td>
+    <td><a name="wp1049731"> </a><p class="pCellBody">
+This setting displays a one-character border around the right and bottom edges of the window.  This border displays the underlying data in low-intensity with a white foreground and a black background; in effect, the border is translucent.  This border looks best when the shadowed window and the window it overlays do not both have black backgrounds.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049733"> </a><p class="pCellBody">
+<b class="cBold">Black</b>: 
+</p>
+</td>
+    <td><a name="wp1049735"> </a><p class="pCellBody">
+This setting displays a black border on the right and bottom edges of the window.  On the right edge, this border is one character wide.  On the bottom edge, the border is one-half character high.  This gives a fairly uniform appearance to the border.  The border depends on the existence of an &quot;upper-half&quot; block character on the display device.  For machines that use a terminal database file, this character should be specified as the 12th character in the GM code in the terminal database file (GM defines the various graphics characters).  Also, we recommend that you specify a &quot;lower-half&quot; character as the 13th GM character.  If such characters do not exist, then the bottom border is a full character high.  The Black setting is the default shadow style.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049737"> </a><p class="pCellBody">
+<b class="cBold">Lines</b>: 
+</p>
+</td>
+    <td><a name="wp1049739"> </a><p class="pCellBody">
+ This setting causes the right and bottom edges to be shown with a border made from the line drawing set.  This setting is not as appealing as the Dim or Black settings when color or reverse-video backgrounds are being used.  When the background is black, however, this setting is preferable to the other two.  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1034194"> </a><p class="pIndented1">
+The configuration variable SCRN_SHADOW_STYLE is also supported.
+</p>
+<a name="wp1034196"> </a><h5 class="pHeading4">
+SIZE=value 
+</h5>
+<a name="wp1034197"> </a><p class="pBody">
+This keyword has meaning only on graphical systems such as Windows.  It is used to change the default virtual screen size.  <em class="cEmphasis">Value</em> is the desired number of rows and columns, separated by a comma. 
+</p>
+<a name="wp1034198"> </a><p class="pIndented1">
+For example, to set the initial virtual screen size to 30 rows by 80 columns, you would make the following entry:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN    SIZE=30,80<a name="wp1034199"> </a>
+</pre></div>
+<a name="wp1034200"> </a><p class="pIndented1">
+The comma is required.
+</p>
+<a name="wp1034202"> </a><p class="pIndented1">
+The size of your virtual screen is independent of the size of the application window or the underlying hardware.  In other words, the virtual screen can be larger than the physical screen.  You may set any screen size up to a maximum of 100 rows and 200 columns.  If you do not  specify a size, the default is 25 rows and 80 columns.  You may also use the configuration variables SCRN_SIZE_COLS and SCRN_SIZE_ROWS to set this option.
+</p>
+<a name="wp1034203"> </a><p class="pIndented1">
+The SIZE option sets only the initial screen size.  After the application begins, the screen size can be changed with the DISPLAY SCREEN SIZE verb.
+</p>
+<a name="wp1034206"> </a><p class="pIndented1">
+If the virtual screen is too large to be fully displayed on the physical screen, the user will have to scroll to view all of the rows and columns.
+</p>
+<a name="wp1034208"> </a><h5 class="pHeading4">
+WINDOW=value  
+</h5>
+<a name="wp1034209"> </a><p class="pBody">
+This keyword has meaning only on graphical systems such as Windows.  Normally, the initial size of an application's window is determined by the host.  You can change this initial size with the WINDOW keyword.  <em class="cEmphasis">Value</em> is the desired number of rows and columns, separated by a comma.  
+</p>
+<a name="wp1034210"> </a><p class="pIndented1">
+For example, if you wanted your initial window to contain 10 rows and 70 columns, you would enter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN   WINDOW=10,70<a name="wp1034211"> </a>
+</pre></div>
+<a name="wp1034213"> </a><p class="pIndented1">
+The WINDOW configuration option has several special values that it recognizes.  If <em class="cEmphasis">either</em> the row or column is set to a negative number, then the initial window is minimized (turned into an icon).  If either value is set to &quot;999&quot; or larger, then the initial window is maximized instead.  Finally, if either value is zero, then the initial window size is determined by the host system (this is the default).  
+</p>
+<a name="wp1034214"> </a><p class="pIndented1">
+The application window size may never be bigger than the virtual screen size, nor may the window size be larger than what can be physically displayed on the user's screen.  This physical limit will change depending on the resolution of the user's screen and the size of the font you are using.  The ACUCOBOL-GT runtime will automatically reduce the requested window size to meet these limits.  
+</p>
+<a name="wp1034215"> </a><p class="pIndented1">
+You may enter the SIZE and WINDOW options on the same line.  For example, if you wanted your application to be able to use 30 lines by 80 columns, and you wanted to start with the window maximized (thus showing the entire virtual screen), you would enter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN   SIZE=30,80   WINDOW=999,999<a name="wp1034216"> </a>
+</pre></div>
+<a name="wp1034217"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>The SIZE and WINDOW options set only the initial screen and window size.  After the application begins, the user is free to change the window size with various system controls, and the application is free to change the screen size with the DISPLAY SCREEN SIZE verb.  
+<hr />
+</p>
+<a name="wp1057721"> </a><p class="pIndented1">
+The configuration variables SCRN_WINDOW_X and SCRN_WINDOW_Y are also supported for this option.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

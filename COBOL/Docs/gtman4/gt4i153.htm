@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-SET-CURSOR</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1201758"> </a><h2 class="pHeading3">
+WINPRINT-SET-CURSOR
+</h2>
+<a name="wp1040292"> </a><p class="pBody">
+This operation code allows you to change the position of the printer's write cursor.  This is useful when doing multiple write statements that include a variety of fonts, font sizes and font attributes.
+</p>
+<a name="wp1040296"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040297"> </a>
+    USING WINPRINT-SET-CURSOR, WINPRINT-DATA<a name="wp1040298"> </a>
+    GIVING RESULT<a name="wp1040299"> </a>
+</pre></div>
+<a name="wp1040300"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040301"> </a><p class="pBody">
+<b class="cBold">WINPRINT-DATA</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 WINPRINT-DATA.<a name="wp1040302"> </a>
+   03 WPRTDATA-SET-STD-FONT.<a name="wp1040303"> </a>
+   03 WPRTDATA-DRAW REDEFINES<a name="wp1040304"> </a>
+   WPRTDATA-SET-STD-FONT.<a name="wp1040305"> </a>
+      05  WPRTDATA-DRAW-START-X       PIC 9(7)V99 COMP-5.<a name="wp1040306"> </a>
+      05  WPRTDATA-DRAW-START-Y       PIC 9(7)V99 COMP-5.<a name="wp1040307"> </a>
+      05  WPRTDATA-DRAW-STOP-X        PIC 9(7)V99 COMP-5.<a name="wp1040308"> </a>
+      05  WPRTDATA-DRAW-STOP-Y        PIC 9(7)V99 COMP-5.<a name="wp1040309"> </a>
+      05  WPRTDATA-DRAW-UNITS         UNSIGNED-SHORT.<a name="wp1040310"> </a>
+      05  WPRTDATA-DRAW-SHAPE         UNSIGNED-SHORT.<a name="wp1040311"> </a>
+</pre></div>
+<a name="wp1040312"> </a><h3 class="pHeadingRef">
+Return Values
+</h3>
+<a name="wp1040313"> </a><p class="pBody">
+This option returns the horizontal and vertical coordinates of the write cursor.  If an error is returned, the current cursor position is not affected.
+</p>
+<a name="wp1040314"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040315"> </a><p class="pBody">
+When printing in Windows, the position of text on the printed page is determined by the location of the write cursor. This is usually handled automatically by the runtime, but you may use this operation to position the cursor yourself. 
+</p>
+<a name="wp1040316"> </a><p class="pBody">
+The printer must be open to perform this operation.  WPRTDATA-DRAW should be initialized prior to use.  The current cursor position on the printer is modified by this call only if WPRTDATA-DRAW-SHAPE is set to a value of &quot;0&quot; and the operation is successful.  When the cursor is moved in this manner, subsequent WRITE statements will be affected.  One exception is that the vertical position of subsequent calls to WINPRINT-COLUMNS will be altered, but not the horizontal position.  
+</p>
+<a name="wp1225524"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>When you call WINPRINT-SET-CURSOR, the operation will automatically test to see if a form feed is pending. If this is the case, the form feed will be performed before the call to this operation is executed. 
+<hr />
+</p>
+<a name="wp1195136"> </a><p class="pBody">
+If you use this operation with WPRDATA-DRAW-SHAPE set to a non-zero value, the cursor is not repositioned. This can be used to inquire the position of the write cursor without changing it.  There is no limit to the number of times this operation may be called.  
+</p>
+<a name="wp1040318"> </a><p class="pBody">
+WINPRINT-SET-CURSOR has the following values:
+</p>
+<a name="wp1040319"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-DRAW-START-X</b> -- Specifies the X coordinate of the cursor location.  The unit of measure is set with WPRTDATA-DRAW-UNITS. The minimum value of this coordinate is &quot;0&quot;.
+</p>
+<a name="wp1040320"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-DRAW-START-Y</b> -- Specifies the Y coordinate of the cursor location.  The unit of measure is set with WPRTDATA-DRAW-UNITS. The minimum value of this coordinate is &quot;0&quot;.
+</p>
+<a name="wp1040321"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-DRAW-STOP-X</b> -- Returns the lower-right horizontal coordinate of the cursor location.  This parameter has no input value, the previous X coordinate is returned.  The unit of measure is determined by the setting of WPRTDATA-DRAW-UNITS. 
+</p>
+<a name="wp1040322"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-DRAW-STOP-Y</b> -- Returns the lower-right vertical coordinate of the cursor location.  This parameter has no input value, the previous Y coordinate is returned. The unit of measure is determined by the setting of WPRTDATA-DRAW-UNITS. 
+</p>
+<a name="wp1040323"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-DRAW-UNITS -- </b>Specifies the unit of measure used for the values passed. If an illegal value is used, the default will be used (WPRTUNITS-PIXELS). The unit of measure may be set to one of the following values:
+</p>
+<a name="wp1088276"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1088282"> </a><p class="pCellBody">
+WPRTUNITS-CELLS
+</p>
+</td>
+    <td><a name="wp1088284"> </a><p class="pCellBody">
+Values are measured using the &quot;cell size&quot; of the currently selected font.  The cell-size is determined by the height and width of the &quot;0&quot; character of a font.  This is roughly equivalent to measuring in &quot;characters&quot;.  
+</p>
+<a name="wp1482179"> </a><p class="pCellBody">
+Positioning is relative to the individual printer's physical margin.  Please note that the margin set in WINPRINT-SET-MARGINS is not used to determine the cursor position.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1088286"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1482176"> </a><p class="pCellBody">
+If you use a proportional font, it is common for uppercase characters to be wider than this measurement.  Non-integer values are allowed in the measurements. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1151260"> </a><p class="pCellBody">
+WPRTUNITS-CELLS-ABS
+</p>
+</td>
+    <td><a name="wp1151262"> </a><p class="pCellBody">
+Values are measured using the &quot;cell size&quot; of the currently selected font.  Positioning is based on the left edge of the paper, regardless of the physical left margin determined by the printer (even if the absolute position is smaller).  If the dimensions of the area to be printed are less than the printer's left or top physical margin, or greater than the printer's right or bottom physical margin, WIN$PRINTER will return an error. (Note that due to inherent differences in the hardware of printer manufacturers, this value may not provide truly device-independent results.)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1088290"> </a><p class="pCellBody">
+WPRTUNITS-INCHES
+</p>
+</td>
+    <td><a name="wp1088292"> </a><p class="pCellBody">
+Values are measured in inches.  Positioning is relative to the individual printer's physical margin.  Please note that the margin set in WINPRINT-SET-MARGINS is not used to determine the cursor position.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1151391"> </a><p class="pCellBody">
+WPRTUNITS-INCHES-ABS
+</p>
+</td>
+    <td><a name="wp1151393"> </a><p class="pCellBody">
+Values are measured in inches. Positioning is based on the left edge of the paper, regardless of the physical left margin determined by the printer (even if the absolute position is smaller).  If the dimensions of the area to be printed are less than the printer's left or top physical margin, or greater than the printer's right or bottom physical margin, WIN$PRINTER will return an error.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1088294"> </a><p class="pCellBody">
+WPRTUNITS-CENTIMETERS
+</p>
+</td>
+    <td><a name="wp1088296"> </a><p class="pCellBody">
+Values are measured in centimeters.  Positioning is relative to the individual printer's physical margin.  Please note that the margin set in WINPRINT-SET-MARGINS is not used to determine the cursor position.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1151599"> </a><p class="pCellBody">
+WPRTUNITS-CENTIMETERS-ABS
+</p>
+</td>
+    <td><a name="wp1151601"> </a><p class="pCellBody">
+Values are measured in centimeters. Positioning is based on the left edge of the paper, regardless of the physical left margin determined by the printer (even if the absolute position is smaller).  If the dimensions of the area to be printed are less than the printer's left or top physical margin, or greater than the printer's right or bottom physical margin, WIN$PRINTER will return an error.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1088298"> </a><p class="pCellBody">
+WPRTUNITS-PIXELS (default)
+</p>
+</td>
+    <td><a name="wp1088300"> </a><p class="pCellBody">
+Values are measured using the dots-per-inch (DPI) resolution of the output device.  Only integer values are allowed in the measurements.  Positioning is relative to the individual printer's physical margin.  Please note that the margin set in WINPRINT-SET-MARGINS is not used to determine the cursor position.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1088302"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1088304"> </a><p class="pCellBody">
+The actual size of this measurement varies depending on the target printer's resolution.  This means that a coordinate of &quot;5&quot; will appear in a different location on a 300dpi printer than it will on a 600dpi printer.  Consider the unit of measure relative to the resolution of the targeting printer before printing.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1040330"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-DRAW-SHAPE</b> -- Determines if subsequent WRITE statements will be affected.  A value of &quot;0&quot; sets the position of the write cursor.  A non zero value will simply return the coordinates of the current position of  the write cursor.  Return values are determined by the setting of WPRTDATA-DRAW-UNITS.
+</p>
+<a name="wp1195413"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If you are using WPRDATA-DRAW-SHAPE to inquire the position of the write cursor, and WPRTDATA-DRAW-UNITS is set to a value other than &quot;WPRTUNITS-PIXELS&quot;, there is a possibility that the cursor position returned may not be 100% accurate, due to rounding errors. 
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

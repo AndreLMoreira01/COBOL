@@ -1,0 +1,418 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:15" />
+  <title>8.11  W$MENU Library Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt28.htm">Chapter 8:  Menu Bars and Pop-up Menus</a> &gt; </p>
+<a name="wp1026449"> </a><h2 class="pHeading1">
+8.11  W$MENU Library Routine
+</h2>
+<a name="wp1026460"> </a><p class="pBody">
+You construct and control menus with the W$MENU library routine.  You use the CALL statement to access this routine.  The routine takes one or more parameters, which are always passed by REFERENCE (the default in COBOL).  The first parameter is always an operation code.  This code defines what the routine will do.  The remaining parameters depend on the operation selected.  
+</p>
+<a name="wp1026462"> </a><p class="pBody">
+The operation codes are defined in the COPY file &quot;acugui.def&quot;.  The available codes are described here:    
+</p>
+<a name="wp1026464"> </a><h5 class="pHeading4">
+WMENU-NEW
+</h5>
+<a name="wp1030248"> </a><p class="pBody">
+This operation constructs a new empty menu.  W$MENU returns a <em class="cEmphasis">handle</em> for this menu in the special register RETURN-CODE.  This handle should be stored in a variable declared as PIC S9(9) COMP-4.  All future references to this menu are made by using this handle.  This operation can fail if the system runs out of memory.  In this case, RETURN-CODE will be set to zero.
+</p>
+<a name="wp1035541"> </a><h5 class="pHeading4">
+WMENU-NEW-POPUP
+</h5>
+<a name="wp1036072"> </a><p class="pBody">
+This operation constructs a new empty pop-up menu.  W$MENU returns a <em class="cEmphasis">handle</em> for this menu in the special register WMENU-RESULT.  This handle should be stored in a variable declared as PIC S9(9) COMP-4.  All future references to this pop-up menu are made with this handle.  This operation can fail if the system runs out of memory.  In this case, WMENU-RESULT will be set to zero.  This option is available for Windows systems only.  
+</p>
+<a name="wp1036074"> </a><h5 class="pHeading4">
+WMENU-POPUP 
+</h5>
+<a name="wp1036075"> </a><p class="pBody">
+This operation displays a pop-up menu and gets the user's response.  After the user makes a selection, the pop-up menu is removed.  (This is not the typical way to display a pop-up window.  It is easier to assign the pop-up menu to a window or control and let the runtime handle activation.)  
+</p>
+<a name="wp1033139"> </a><p class="pBody">
+The second parameter passed in conjunction with this operation code is the handle of the pop-up menu to show.  The next two parameters are optional.  If they are omitted, the menu appears where the mouse is currently located.  If specified, they are the row and column (respectively) of the location where the menu should appear.  This is expressed in screen base units (pixels under Windows), with &quot;1,1&quot; being the upper left corner of the physical screen.  The user's response is sent to the current window and is treated as if it were a regular entry from the widow's menu bar.  This option is available for Windows systems only.  
+</p>
+<a name="wp1035565"> </a><h5 class="pHeading4">
+WMENU-DESTROY
+</h5>
+<a name="wp1030255"> </a><p class="pBody">
+You must pass the handle of a valid menu as the second parameter.  That menu is destroyed and all memory it occupies is released.  Any submenus that it contains are also destroyed.  If the menu is currently being displayed, it is removed from the screen first.  After destroying a menu, you must not use it any more.  You should not destroy a submenu directly; use the WMENU-DELETE operation instead.   
+</p>
+<a name="wp1026488"> </a><h5 class="pHeading4">
+WMENU-ADD
+</h5>
+<a name="wp1030274"> </a><p class="pBody">
+Adds a menu item to a menu.  This operation takes several parameters.  Note that all of the parameters are passed as integers (either USAGE DISPLAY or COMP-4) except for the &quot;text&quot; parameter, which is alphanumeric.  You must use WMENU-SHOW to display an altered main menu bar.   Additions to submenus are displayed the next time the submenu is selected.  
+</p>
+<a name="wp1026492"> </a><p class="pBody">
+The parameters are, in order:     
+</p>
+<a name="wp1034900"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1034954"> </a><p class="pCellBody">
+<b class="cBold">handle</b>
+</p>
+</td>
+    <td><a name="wp1034956"> </a><p class="pCellBody">
+the handle of the menu to which you are adding the item.  You can store the menu handle in a dedicated data type: USAGE HANDLE OF MENU.    
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034958"> </a><p class="pCellBody">
+<b class="cBold">position</b>
+</p>
+</td>
+    <td><a name="wp1034960"> </a><p class="pCellBody">
+the location at which you want to place the new item.  If this value is zero, then the item is appended to the menu.  Otherwise, this value is the ID of the item in front of which you want to insert the new item.   
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034962"> </a><p class="pCellBody">
+<b class="cBold">flags</b>
+</p>
+</td>
+    <td><a name="wp1034964"> </a><p class="pCellBody">
+this is a combination of one or more of the following:
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1034970"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1034972"> </a><p class="pCellBody">
+<b class="cBold">W-CHECKED</b> indicates that a check mark or its equivalent should be placed beside the item.  Check marks appear only on submenus.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1034974"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1034976"> </a><p class="pCellBody">
+<b class="cBold">W-DISABLED</b> indicates that the item may not be selected.  It will appear gray on the menu or be distinguished in some way from other menu items.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1034978"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1034980"> </a><p class="pCellBody">
+<b class="cBold">W-SEPARATOR</b> indicates that this item consists of a bar that separates items on the menu.  This item may not be selected by the user.  The &quot;text&quot; field is ignored for this item.  Separator bars may appear only on submenus.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1034982"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1034984"> </a><p class="pCellBody">
+You may combine flags by adding their values together.  Values are defined in the file &quot;acugui.def&quot;.  The default value is zero, which indicates an enabled, un-checked menu item.   
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034986"> </a><p class="pCellBody">
+<b class="cBold">text</b>
+</p>
+</td>
+    <td><a name="wp1034988"> </a><p class="pCellBody">
+the text of the menu item that will appear on the menu bar.  This text will appear exactly as you specify it, so be sure to use the desired case.  (Graphical environments typically have conventions that you may want to follow, for consistency with other applications.  For example, under Windows it is conventional to capitalize the first letter of each major word in a menu item.) 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1034990"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1034992"> </a><p class="pCellBody">
+You may place an &quot;&amp;&quot; symbol in front of the letter you want to use as the <em class="cEmphasis">key letter</em> for this menu item.  The user can select this menu item by typing its key letter.  The key letter typically appears underlined on the menu (you can change this appearance; see <a  href="gt2824.htm#wp1026610">section 8.12, &quot;Menu Configuration With the Generic Menu Handler.&quot;</a> 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1034994"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1034996"> </a><p class="pCellBody">
+If you omit the &quot;&amp;&quot; symbol, then no underline will appear, and the first letter of the item will be used as the item's key letter.  If the same key letter represents more than one item, and a user types that letter, the system will highlight the next menu item with that key letter and will wait for the user to confirm the selection by pressing &lt;Return&gt;.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1034998"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1035000"> </a><p class="pCellBody">
+Displaying a shortcut key in the menu: A shortcut key is a keyboard key that you have designated in your program to perform the same action as a menu item.  You must create a programmatic association between the menu item and the key.  One easy way to do this is to make the menu item's ID value the same as the exception value of the keystroke.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1035002"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1035004"> </a><p class="pCellBody">
+You may display the shortcut key's text next to the menu item in your menu if you want.  To specify the shortcut key's text, place it immediately after the characters &quot;\t&quot; in the menu item's text.  For example, if you want to create a menu item that has the text &quot;Exit&quot; and you want to display the shortcut key text &quot;Ctl-X&quot; next to it, you would specify &quot;Exit\tCtl-X&quot; as the item's text.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1039439"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1039441"> </a><p class="pCellBody">
+You might think of &quot;\t&quot; as specifying a &quot;tab&quot; character that separates the two columns when they are displayed in the menu.  If you need to include &quot;\t&quot; in your menu item's text, specify &quot;\\t&quot; to prevent it from being interpreted as a shortcut key indicator.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1037871"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1037879"> </a><p class="pCellBody">
+If you need to include two or more consecutive backslashes in the menu item text, specify one more backslash within the quotes than you require.  For example if the menu item is &quot;\\menuitem&quot;, specify &quot;\\\menuitem&quot; in your code. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1035006"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1035008"> </a><p class="pCellBody">
+If &quot;flags&quot; contains the W-SEPARATOR option, you should either omit the text parameter or pass NULL, because a separator bar has no text.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035010"> </a><p class="pCellBody">
+<b class="cBold">id</b>
+</p>
+</td>
+    <td><a name="wp1035012"> </a><p class="pCellBody">
+this is an unsigned integer less than or equal to 4095 that you will use to identify this menu item.  Use this ID anytime you need to refer to this menu item.  This is the ID that's returned to your program when the item is selected by the user.  Assign a unique ID to each item in a particular menu hierarchy.  Normal (text) menu items must be given an ID.  Submenu names and separator bars may optionally be given an ID of zero.  These become anonymous menu items that you may never refer to again.  If this parameter is omitted, an ID of zero is used.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1035014"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1035016"> </a><p class="pCellBody">
+A shortcut key is a keyboard key that you have designated in your program to perform the same action as a menu item.  You must create a programmatic association between the menu item and the key.  One easy way to do this is to make the menu item's ID value the same as the exception value of the keystroke.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035018"> </a><p class="pCellBody">
+<b class="cBold">submenu</b>
+</p>
+</td>
+    <td><a name="wp1035020"> </a><p class="pCellBody">
+This parameter is omitted or set to zero for normal menu items and separator bars.  You can create a submenu by setting this value to the handle of another menu.  When the user selects this item, that other menu will pop up.  Pop-up menus are placed down and to the right, unless they fit better in another position.  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1026511"> </a><h5 class="pHeading4">
+WMENU-CHANGE
+</h5>
+<a name="wp1030483"> </a><p class="pBody">
+This operation takes the same parameters as WMENU-ADD (handle, position, flags, text, id, submenu).  The &quot;position&quot; parameter must not be zero.  It indicates the ID of the menu entry you want to change.  That entry is deleted and the entry described by the current parameters is inserted in the same location.  If the item that you are replacing is a submenu, that submenu's entries are  also destroyed.  If you change the main menu bar, you must use WMENU-SHOW to display the changed menu.   Changes to submenus are displayed the next time the submenu is selected.
+</p>
+<a name="wp1026520"> </a><h5 class="pHeading4">
+WMENU-DELETE
+</h5>
+<a name="wp1030484"> </a><p class="pBody">
+Pass the handle of a menu as the second parameter, and the ID of an entry in that menu as the third parameter.  The indicated entry is removed by this operation.  If the deleted item is a submenu name, the submenu is also destroyed.  If you change the main menu bar, you must use WMENU-SHOW to display the changed menu.  Changes to submenus are displayed the next time the submenu is selected.
+</p>
+<a name="wp1026525"> </a><h5 class="pHeading4">
+WMENU-CHECK
+</h5>
+<a name="wp1030485"> </a><p class="pBody">
+This operation places a check mark or its equivalent in front of a menu item.  You pass two additional parameters: the handle of the menu and the ID of the item you want to change.  Only items that appear in submenus can have check marks.
+</p>
+<a name="wp1035609"> </a><h5 class="pHeading4">
+WMENU-UNCHECK
+</h5>
+<a name="wp1030486"> </a><p class="pBody">
+Use this operation to remove a check mark from a menu item.  The second and third parameters are the handle of the menu and the ID of the item you want to change.
+</p>
+<a name="wp1035617"> </a><h5 class="pHeading4">
+WMENU-DISABLE
+</h5>
+<a name="wp1030491"> </a><p class="pBody">
+Use this operation to disable individual menu items.  Disabled menu items are displayed with gray text or are distinguished in some way from other menu items.  The second and third parameters are the menu's handle and the ID of the item you want to disable.  You may disable items that appear on the top level of the menu.  If you disable a submenu, then access to the submenu's items is denied.  If you change the main menu bar, you must use WMENU-SHOW to display the changed menu.        
+</p>
+<a name="wp1026540"> </a><h5 class="pHeading4">
+WMENU-ENABLE
+</h5>
+<a name="wp1030492"> </a><p class="pBody">
+Use this operation to enable a menu item.  The second and third parameters are the menu's handle and the menu item's ID.  If you change the main menu bar, you must use WMENU-SHOW to display the changed menu.        
+</p>
+<a name="wp1026545"> </a><h5 class="pHeading4">
+WMENU-SHOW
+</h5>
+<a name="wp1030493"> </a><p class="pBody">
+Use this operation to display your menu on the screen.  The second parameter is the handle of the menu you want to show.  Use this operation both to display the menu initially and to display any changes made to the top level of the menu.       
+</p>
+<a name="wp1026549"> </a><p class="pBody">
+For example, if you disable one of the top-level menu items, then you must use WMENU-SHOW to make that change visible.  If the application already has another menu showing when you call WMENU-SHOW, then that menu is removed.  It is not destroyed; you may re-use that menu again later.  If you pass a menu handle of zero, then any existing menu is removed and no new menu is shown, so passing a menu handle of zero is a way to clear all menus off the screen.  
+</p>
+<a name="wp1035641"> </a><h5 class="pHeading4">
+WMENU-REFRESH
+</h5>
+<a name="wp1030494"> </a><p class="pBody">
+Use this operation to redraw an existing menu.  This is typically used to restore a menu that has been overwritten by an external piece of software.  
+</p>
+<a name="wp1039466"> </a><p class="pBody">
+For example, if you called the SYSTEM library routine to display the current directory, the directory listing might overwrite the menu.  Use WMENU-REFRESH to redraw the menu when you are ready to see it again. 
+</p>
+<a name="wp1026556"> </a><p class="pBody">
+The following code fragment lists the files in the current directory on a UNIX machine and then restores the menu after the user presses &lt;enter&gt;:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+* Prevent the user from activating the menu<a name="wp1026557"> </a>
+CALL &quot;W$MENU&quot; USING WMENU-BLOCK.<a name="wp1032908"> </a>
+<a name="wp1032910"> </a>
+* List the current files and wait for the user<a name="wp1032912"> </a>
+CALL &quot;SYSTEM&quot; USING &quot;ls&quot;.<a name="wp1032914"> </a>
+DISPLAY &quot;Listing complete. Press enter:&quot;, NO ADVANCING.<a name="wp1032916"> </a>
+ACCEPT OMITTED.<a name="wp1032918"> </a>
+<a name="wp1032920"> </a>
+*Redisplay the menu and turn it back on<a name="wp1032922"> </a>
+CALL &quot;W$MENU&quot; USING WMENU-REFRESH.<a name="wp1032924"> </a>
+CALL &quot;W$MENU&quot; USING WMENU-UNBLOCK.<a name="wp1032926"> </a>
+</pre></div>
+<a name="wp1035646"> </a><h5 class="pHeading4">
+WMENU-GET-MENU
+</h5>
+<a name="wp1030503"> </a><p class="pBody">
+Sets RETURN-CODE to the handle of the currently displayed menu.  This returns zero if no menu is currently displayed.  Use this in routines that need to save the current menu before replacing it with their own menu.  
+</p>
+<a name="wp1026566"> </a><h5 class="pHeading4">
+WMENU-RELEASE
+</h5>
+<a name="wp1030504"> </a><p class="pBody">
+This operation logically removes the menu from the screen, but doesn't update the screen.  The menu is still visible, but not operational.  This makes the entire screen available to your program, but doesn't scroll the current screen contents.  This is occasionally useful when you need to remove a menu and clear the entire screen.  If you instead use WMENU-SHOW to remove the menu, you'll have additional screen activity as it removes the menu bar and (if that bar was static) scrolls the screen.  The screen update isn't needed if you are going to clear the whole screen anyway.  
+</p>
+<a name="wp1026570"> </a><p class="pBody">
+Under Windows, this function blocks the menu, but leaves it in place.  The runtime uses this function just prior to shutting down.  
+</p>
+<a name="wp1026571"> </a><p class="pBody">
+This operation takes no parameters.  
+</p>
+<a name="wp1026573"> </a><h5 class="pHeading4">
+WMENU-GET-CONFIGURATION
+</h5>
+<a name="wp1027799"> </a><p class="pBody">
+Returns the generic menu handler's current configuration.  You must pass it one parameter that is laid out as described in <a  href="gt2824.htm#wp1026610">section 8.12, &quot;Menu Configuration With the Generic Menu Handler.&quot;</a>  This gets filled in with the current configuration.  This operation sets RETURN-CODE to &quot;1&quot; if the configuration was retrieved.  It sets RETURN-CODE to &quot;0&quot; if the host machine does not use the generic menu handler.  In this case, the configuration information is not used and is meaningless.
+</p>
+<a name="wp1026578"> </a><h5 class="pHeading4">
+WMENU-SET-CONFIGURATION
+</h5>
+<a name="wp1027814"> </a><p class="pBody">
+You must pass one parameter to this operation that has the layout described in <a  href="gt2824.htm#wp1026610">section 8.12</a>.  It causes this parameter to become the current configuration for the generic menu handler.  It sets RETURN-CODE to &quot;1&quot; if the generic menu handler is being used, or &quot;0&quot; if it is not.  In the latter case, the configuration will not be used.
+</p>
+<a name="wp1026582"> </a><p class="pBody">
+If you have a menu displayed when you change the configuration, you should immediately use WMENU-SHOW to update that menu.  Alternately, you may use WMENU-SHOW to remove that menu and display a new menu with the new configuration.  If you have a menu displayed and change the configuration, you can get undefined results if you fail to use WMENU-SHOW.
+</p>
+<a name="wp1035679"> </a><h5 class="pHeading4">
+WMENU-BLOCK
+</h5>
+<a name="wp1030675"> </a><p class="pBody">
+This inhibits the menu.  It works by maintaining a <em class="cEmphasis">blocking-count</em>.  Initially, the blocking-count is set to zero.  This call adds one to the blocking-count.  Anytime the blocking-count is greater than zero, the user will not be allowed to use the menu.  This is typically used by <em class="cEmphasis">modal</em> routines that need to ensure that the user completes some action before continuing.  For example, if you are prompting for a file name, you might want to disable the menu until the user has entered a name.  
+</p>
+<a name="wp1026589"> </a><p class="pBody">
+See also: WMENU-UNBLOCK, WMENU-GET-BLOCK, and WMENU-SET-BLOCK.  
+</p>
+<a name="wp1026591"> </a><h5 class="pHeading4">
+WMENU-UNBLOCK
+</h5>
+<a name="wp1030723"> </a><p class="pBody">
+If the blocking-count is currently greater than zero, this subtracts one from the blocking-count.  If this results in the blocking-count reaching zero, then the user will once again be able to use the menu.   See also: WMENU-BLOCK, WMENU-GET-BLOCK, and WMENU-SET-BLOCK. 
+</p>
+<a name="wp1026596"> </a><h5 class="pHeading4">
+WMENU-GET-BLOCK
+</h5>
+<a name="wp1030732"> </a><p class="pBody">
+Sets RETURN-CODE to the current blocking-count.  This is typically used by routines that need to save the current menu state before replacing the menu with their own menu.  They can save the blocking-count, set it to zero (with WMENU-SET-BLOCK), and then reset to the saved state when they exit.  For example, the ACUCOBOL-GT debugger uses this call when replacing the application menu with its own menu.   See also: WMENU-BLOCK, WMENU-UNBLOCK, and WMENU-SET-BLOCK.
+</p>
+<a name="wp1026601"> </a><h5 class="pHeading4">
+WMENU-SET-BLOCK
+</h5>
+<a name="wp1030737"> </a><p class="pBody">
+Sets the blocking-count to the value of the second parameter.  Use this in conjunction with WMENU-GET-BLOCK to save and restore the current blocking-count.   See also: WMENU-BLOCK, WMENU-UNBLOCK, WMENU-GET-BLOCK. 
+</p>
+<a name="wp1026603"> </a><p class="pBody">
+The W$MENU routine always sets RETURN-CODE.  Except as described above, this is either &quot;1&quot; to indicate success or &quot;0&quot; to indicate that the operation failed.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

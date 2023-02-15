@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:14:50" />
+  <title>14.2.11  Using Grid TABBODY Paragraph Code with the Report Grid Control</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuBench User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="wkb14a.htm">Chapter 14: Working with Reports</a> &gt; <a href="wkb149.htm">14.2  Graphical Sample Reports</a> &gt; </p>
+<a name="wp1042450"> </a><h2 class="pHeading2">
+14.2.11  Using Grid TABBODY Paragraph Code with the Report Grid Control
+</h2>
+<a name="wp1042451"> </a><p class="pBody">
+This report demonstrates an alternative placement of the report&#39;s PERFORM loop code.  The generated code is modified so that the START/READ NEXT loop is entered inside the area of the code that handles the report grid control.  As lines are added to the report, the automatically generated code resizes the grid and prints the column headings at the top of each report page.  
+</p>
+<a name="wp1042484"> </a><p class="pBody">
+As mentioned in reference to the report table control, a single report control that can have only one Before-Print and one After-Print paragraph.  This situation is also true for the report grid.  MOVE statements required for the numeric variables in the grid must be inserted directly after their related READ statements.
+</p>
+<a name="wp1046446"> </a><p class="pBody">
+Set up your project and work environment as described in <a  href="wkb149.htm#wp1036373">section 14.2</a>, and use the following instructions to finish creating this report.  
+</p>
+<a name="wp1041877"> </a><h3 class="pHeadingRef">
+Create and refine the data set that corresponds to your data layout:
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041878"> </a><div class="pSmartList1"><li>Create a new blank program called Report1h from the File/New/Program interface.  </li></div>
+<a name="wp1041879"> </a><div class="pSmartList1"><li>Set up the <b class="cBold">SalesdataDS</b><span style="font-family: Arial, Verdana, Helvetica, sans-serif"> data set for this program, as you have with previous sample reports.  </span></li></div>
+</ol></div>
+<a name="wp1041880"> </a><h3 class="pHeadingRef">
+Design your report in the Report Composer interface:
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041920"> </a><div class="pSmartList1"><li>Create a report grid.</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1041923"> </a><div class="pSmartList2"><li>In the Drag and Drop interface, select &quot;Rpt.Grid&quot; from the right-hand drop-down box.  Select the following variables and drag them to the detail section in the Report Composer window: Sales-State, Sales-Branch-No, Sales-LastName, Sales-FirstName, Sales-Gender, Heavy-Equipment-Sales, Supplies-Sales, and Sales-Quota.</li></div>
+<a name="wp1042013"> </a><div class="pSmartList2"><li>Click the value cell of the Columns' Setting property and click the ellipsis push button to open the Columns' Setting dialog.  For the Sales-State variable, change the Head column entry to &quot;State&quot; and the width to 0.50.  Change Sales-Branch-No so that the heading is &quot;Branch&quot; and the width is 0.50.  Change Sales-LastName to have a heading of &quot;Last Name&quot; and a width of 1.00.  Change Sales-FirstName to have a heading of &quot;First Name&quot; and a width of 1.00.  Set the heading for Sales-Gender to &quot;Gender&quot; and its width to 0.50.  For Heavy-Equipment-Sales, change the Name column to &quot;PR-Heavy-Sales&quot;, its PIC to $ZZZ,ZZ9.99, its heading to &quot;Heavy Sales&quot;, and its width to 1.00.  For Supplies-Sales, change the Name column to &quot;PR-Supplies-Sales&quot;, its PIC to $ZZZ,ZZ9.99, its heading to &quot;Supplies Sales&quot;, and its width to 1.00.  Finally, the Quota variable should have a PIC of $ZZZ,ZZ9.99, a heading of &quot;Quota&quot;, and a width of 1.00.  </li></div>
+<a name="wp1042134"> </a><div class="pSmartList2"><li>Set the Column Headings property to &quot;TRUE&quot; so that the contents of the Head column in the Columns' Setting dialog appear at the top of each report page.  </li></div>
+</ul></div>
+<a name="wp1041914"> </a><div class="pSmartList1"><li>Generate the program.  A report (&quot;.rpt&quot;) file and a Report Composer Section in the source (&quot;.cbl&quot;) file are created.   </li></div>
+</ol></div>
+<a name="wp1041893"> </a><h3 class="pHeadingRef">
+Make one-time modifications to the generated code:  
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041894"> </a><div class="pSmartList1"><li>For this report, <em class="cEmphasis">do not</em> modify the PERFORM . . . DO-PRINT-RTN statement that is automatically generated by AcuBench, as instructed for previous sample reports.  </li></div>
+<a name="wp1042148"> </a><div class="pSmartList1"><li>For this type of grid, the MOVE statements required for the numeric variables in the grid must be inserted directly after their related READ statements.  Be sure to add this code outside the AcuBench program tags so it is not overwritten in subsequent code generations.  Modify the Acu-<em class="cEmphasis">reportname</em>-TABBODY paragraph in &quot;Report1i.cbl&quot; as shown below:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+*{Bench}Report1i-RwGd-1-doprintrtn<a name="wp1042261"> </a>
+  Acu-Report1i-RwGd-1-TABBODY.<a name="wp1042262"> </a>
+    PERFORM Acu-Initialize-Report1i-RwGd-1<a name="wp1042263"> </a>
+*{Bench}end<a name="wp1042264"> </a>
+      *<a name="wp1042265"> </a>
+    PERFORM Before-Master-Print-Loop.<a name="wp1042266"> </a>
+    MOVE Heavy-Equipment-Sales to PR-Heavy-Sales.<a name="wp1042267"> </a>
+    MOVE Supplies-Sales to PR-Supplies-Sales.<a name="wp1042268"> </a>
+    MOVE Sales-Quota to PR-Quota.<a name="wp1042269"> </a>
+<a name="wp1042270"> </a>
+    PERFORM UNTIL NOT Valid-Salesdata<a name="wp1042329"> </a>
+*{Bench}Report1i-RwGd-1-tabbodyprintloop<a name="wp1042330"> </a>
+    PERFORM Acu-Report1i-RwGd-1-TabbodyPrintLoop<a name="wp1042331"> </a>
+*{Bench}end<a name="wp1042274"> </a>
+      PERFORM End-Master-Print-Loop<a name="wp1042275"> </a>
+      MOVE Heavy-Equipment-Sales to PR-Heavy-Sales<a name="wp1042276"> </a>
+      MOVE Supplies-Sales to PR-Supplies-Sales<a name="wp1042277"> </a>
+      MOVE Sales-Quota to PR-Quota<a name="wp1042360"> </a>
+      END-PERFORM.<a name="wp1042361"> </a>
+      *<a name="wp1042281"> </a>
+*{Bench}Report1i-RwGd-1-closegrid<a name="wp1042282"> </a>
+      PERFORM Acu-CLOSE-Report1i-RwGd-1.<a name="wp1042283"> </a>
+*{Bench}end.<a name="wp1042285"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1041904"> </a><h3 class="pHeadingRef">
+Compile and execute the program.   
+</h3>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuBench-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

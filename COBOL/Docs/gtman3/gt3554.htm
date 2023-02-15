@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.9.3  OCCURS Clause</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3551.htm">5.9  Screen Description Entry</a> &gt; </p>
+<a name="wp1036927"> </a><h2 class="pHeading2">
+5.9.3  OCCURS Clause
+</h2>
+<a name="wp1036932"> </a><p class="pBody">
+The Screen Section OCCURS clause simplifies the handling of repeated data items.
+</p>
+<a name="wp1036933"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">OCCURS</u> table-size TIMES<a name="wp1036934"> </a>
+</pre></div>
+<a name="wp1036935"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036936"> </a><div class="pSmartList1"><li><em class="cEmphasis">Table-size</em> is an integer that specifies the number of occurrences of the screen entry.</li></div>
+<a name="wp1036937"> </a><div class="pSmartList1"><li>An OCCURS clause may not be specified for a screen entry that has a level-number of 01.  </li></div>
+<a name="wp1036938"> </a><div class="pSmartList1"><li>An OCCURS clause may be subordinate to a group item with an OCCURS clause to create a two-dimensional table.  An OCCURS clause may not be nested more than two deep (three dimensional or greater tables are not allowed).</li></div>
+<a name="wp1036939"> </a><div class="pSmartList1"><li>If an OCCURS clause applies to a screen output or update field, then one OCCURS clause specifying the same number of occurrences, or no OCCURS clause at all, must apply to the source item.  This OCCURS clause must not include the DEPENDING phrase.</li></div>
+<a name="wp1036940"> </a><div class="pSmartList1"><li>If an OCCURS clause applies to a screen input or update field, then one OCCURS clause specifying the same number of occurrences must apply to the receiving item.  This OCCURS clause must not include the DEPENDING phrase. </li></div>
+<a name="wp1036941"> </a><div class="pSmartList1"><li>If a COLOR clause is specified for a screen description entry that contains or is subordinate to an OCCURS clause, that COLOR clause may reference a table of numeric data items. The number of occurrences in the color table must match the number of occurrences in the screen entry. </li></div>
+</ol></div>
+<a name="wp1036942"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036943"> </a><div class="pSmartList1"><li>The general rules that apply to an OCCURS clause specified for a data item in the File, Working-Storage, or Linkage sections also apply to an <a  href="gt3554.htm#wp1036927">OCCURS Clause</a> specified in the Screen Section.  </li></div>
+<a name="wp1036944"> </a><div class="pSmartList1"><li>Each screen entry affected by an OCCURS clause is repeated <em class="cEmphasis">table-size</em> times.  </li></div>
+<a name="wp1036945"> </a><div class="pSmartList1"><li>If line or column numbers are given to screen items in a table, at least one of these numbers should specify relative positioning.  If absolute positioning is used, then every occurrence of the screen item will appear in the same place.</li></div>
+<a name="wp1036946"> </a><div class="pSmartList1"><li>If the screen item is an output or an update field, and no OCCURS clauses apply to the sending item, then a DISPLAY verb causes the sending item to be moved to every occurrence of the screen item.</li></div>
+<a name="wp1036947"> </a><div class="pSmartList1"><li>If the screen item is an output or an update field with an OCCURS clause applying to the sending item, then a DISPLAY verb causes each occurrence of the sending item to be moved to the corresponding occurrence of the screen item.  </li></div>
+<a name="wp1036948"> </a><div class="pSmartList1"><li>If the screen item is an input or an update field, then an ACCEPT verb causes each occurrence of the screen item to be moved to the corresponding occurrence of the receiving item. </li></div>
+<a name="wp1043268"> </a><div class="pSmartList1"><li>If a COLOR clause that references a table is specified, each occurrence of the table specifies the color for the corresponding occurrence of the screen item. For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DATA DIVISION.<a name="wp1043270"> </a>
+WORKING-STORAGE SECTION.<a name="wp1036952"> </a>
+<a name="wp1036953"> </a>
+01  DATA-TABLE.<a name="wp1036954"> </a>
+    03  DATA-ELEMENT OCCURS 5 TIMES PIC X(5).<a name="wp1036955"> </a>
+<a name="wp1036956"> </a>
+01  COLOR-TABLE.<a name="wp1036957"> </a>
+    03  COLOR-ELEMENT OCCURS 5 TIMES PIC 9(5).<a name="wp1036958"> </a>
+<a name="wp1036959"> </a>
+SCREEN SECTION.<a name="wp1036960"> </a>
+<a name="wp1036961"> </a>
+01  SCREEN-1.<a name="wp1036962"> </a>
+    03  OCCURS 5 TIMES, USING DATA-ELEMENT <a name="wp1036963"> </a>
+        COLOR COLOR-ELEMENT.<a name="wp1036964"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1043311"> </a><h3 class="pHeadingRef">
+Examples
+</h3>
+<a name="wp1036965"> </a><h3 class="pHeadingRef">
+Table on One Line
+</h3>
+<a name="wp1036966"> </a><p class="pBody">
+This program accepts a simple table on one line:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+IDENTIFICATION DIVISION.<a name="wp1036967"> </a>
+PROGRAM-ID. OCCURS-SAMPLE-1.<a name="wp1036968"> </a>
+DATA DIVISION.<a name="wp1036969"> </a>
+WORKING-STORAGE SECTION.<a name="wp1036970"> </a>
+<a name="wp1036971"> </a>
+01  TABLE-1.<a name="wp1036972"> </a>
+    03  TABLE-ITEM OCCURS 5 TIMES     PIC X(5).<a name="wp1036973"> </a>
+<a name="wp1036974"> </a>
+SCREEN SECTION.<a name="wp1036975"> </a>
+<a name="wp1036976"> </a>
+01  SCREEN-1.<a name="wp1036977"> </a>
+    03  &quot;TABLE ITEMS:&quot;.<a name="wp1036978"> </a>
+    03  OCCURS 5 TIMES USING TABLE-ITEM, COLUMN + 2.<a name="wp1036979"> </a>
+<a name="wp1036980"> </a>
+PROCEDURE DIVISION.<a name="wp1036981"> </a>
+<a name="wp1036982"> </a>
+MAIN-LOGIC.<a name="wp1036983"> </a>
+<a name="wp1036984"> </a>
+   DISPLAY WINDOW ERASE.<a name="wp1036985"> </a>
+   DISPLAY SCREEN-1.<a name="wp1036986"> </a>
+   ACCEPT SCREEN-1.<a name="wp1036987"> </a>
+   STOP RUN.<a name="wp1036988"> </a>
+</pre></div>
+<a name="wp1036989"> </a><h3 class="pHeadingRef">
+Two-Element Table
+</h3>
+<a name="wp1036990"> </a><p class="pBody">
+This program accepts a two-element table, each pair on its own line:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+IDENTIFICATION DIVISION.<a name="wp1036991"> </a>
+PROGRAM-ID. OCCURS-SAMPLE-2.<a name="wp1036992"> </a>
+<a name="wp1036993"> </a>
+DATA DIVISION.<a name="wp1036994"> </a>
+WORKING-STORAGE SECTION.<a name="wp1036995"> </a>
+<a name="wp1036996"> </a>
+01  TABLE-1.<a name="wp1036997"> </a>
+    03  TABLE-GROUP OCCURS 5 TIMES.<a name="wp1036998"> </a>
+        05  ITEM-1    PIC X(5).<a name="wp1036999"> </a>
+        05  ITEM-2    PIC 9(5).<a name="wp1037000"> </a>
+<a name="wp1037001"> </a>
+SCREEN SECTION.<a name="wp1037002"> </a>
+<a name="wp1037003"> </a>
+01  SCREEN-1.<a name="wp1037004"> </a>
+    03  &quot;TEXT  NUMBER&quot;.<a name="wp1037005"> </a>
+    03  OCCURS 5 TIMES.<a name="wp1037006"> </a>
+        05  USING ITEM-1, LINE + 1.<a name="wp1037007"> </a>
+        05  USING ITEM-2, COLUMN + 2.<a name="wp1037008"> </a>
+<a name="wp1037009"> </a>
+PROCEDURE DIVISION.<a name="wp1037010"> </a>
+MAIN-LOGIC.<a name="wp1037011"> </a>
+   DISPLAY WINDOW ERASE.<a name="wp1037012"> </a>
+   DISPLAY SCREEN-1.<a name="wp1037013"> </a>
+   ACCEPT SCREEN-1.<a name="wp1037014"> </a>
+   STOP RUN.<a name="wp1037015"> </a>
+</pre></div>
+<a name="wp1037016"> </a><h3 class="pHeadingRef">
+Example with Output
+</h3>
+<a name="wp1037017"> </a><p class="pBody">
+You don't have to use a table data-item when you're doing output:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SCREEN SECTION.<a name="wp1037018"> </a>
+01  LINES-SCREEN.<a name="wp1037019"> </a>
+    03  &quot;-&quot; OCCURS 10 TIMES.<a name="wp1037020"> </a>
+</pre></div>
+<a name="wp1037021"> </a><p class="pBody">
+This would cause &quot;----------&quot; to be displayed.  This is an example of rule 4, where no OCCURS clause applies to the source item.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

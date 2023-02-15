@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:51" />
+  <title>3.2.2  Calling the Runtime DLL</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr3.htm">Chapter 3: Working with Windows Technologies</a> &gt; <a href="itr33.htm">3.2  Calling COBOL From Other Windows Programs</a> &gt; </p>
+<a name="wp1040558"> </a><h2 class="pHeading2">
+3.2.2  Calling the Runtime DLL
+</h2>
+<a name="wp1040561"> </a><p class="pBody">
+For 32-bit Windows users, the ACUCOBOL-GT runtime is available in a DLL file.  
+</p>
+<a name="wp1048788"> </a><p class="pBody">
+To call the runtime DLL from another programming language, you must add certain declarations to the source program.  This example shows what you would use in Visual Basic: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Declare Function AcuInitialize Lib &quot;wrun32.dll&quot; _<a name="wp1040562"> </a>
+   (Optional ByVal cmdLine As String) As Integer<a name="wp1040563"> </a>
+<a name="wp1040564"> </a>
+Declare Sub AcuShutdown Lib &quot;wrun32.dll&quot; ()<a name="wp1040565"> </a>
+<a name="wp1040566"> </a>
+Declare Function AcuCall Lib &quot;wrun32.dll&quot; _<a name="wp1040567"> </a>
+   (ByVal name As String, _<a name="wp1040568"> </a>
+     Optional param1, _<a name="wp1040569"> </a>
+     Optional param2, _<a name="wp1040570"> </a>
+     Optional param3, _<a name="wp1040571"> </a>
+     Optional param4, _<a name="wp1040572"> </a>
+     Optional param5, _<a name="wp1040573"> </a>
+     Optional param6, _<a name="wp1040574"> </a>
+     Optional param7, _<a name="wp1040575"> </a>
+     Optional param8, _<a name="wp1040576"> </a>
+     Optional param9, _<a name="wp1040577"> </a>
+     Optional param10, _<a name="wp1040578"> </a>
+     Optional param11, _<a name="wp1040579"> </a>
+     Optional param12, _<a name="wp1040580"> </a>
+     Optional param13, _<a name="wp1040581"> </a>
+     Optional param14) As Integer<a name="wp1040582"> </a>
+<a name="wp1040583"> </a>
+Declare Function AcuCall50 Lib &quot;wrun32.dll&quot; _<a name="wp1040584"> </a>
+   (ByVal name As String, _<a name="wp1040585"> </a>
+     Optional param1, _<a name="wp1040586"> </a>
+...<a name="wp1040587"> </a>
+     Optional param50) As Integer<a name="wp1040588"> </a>
+</pre></div>
+<a name="wp1040589"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Two declarations are shown.  &quot;AcuCall&quot; supports 14 optional parameters, and &quot;AcuCall50&quot; supports 50 optional parameters.  &quot;AcuCall50&quot; has the same format as &quot;AcuCall&quot;, except that you must include the full list of 50 parameters in your declaration.  The code example for &quot;AcuCall50&quot; was abbreviated.
+<hr />
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Declare Function AcuGetCallError Lib&quot;wrun32.dll&quot; () As Integer<a name="wp1040590"> </a>
+<a name="wp1040591"> </a>
+Declare Sub AcuCancel Lib &quot;wrun32.dll&quot; (ByVal name As String)<a name="wp1040592"> </a>
+</pre></div>
+<a name="wp1040593"> </a><p class="pBody">
+After you add the declarations, you initialize the runtime, call the COBOL program(s) passing the program name and parameters, and shut down when you are finished.  For example, in Visual Basic you would perform the following steps:   
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1040594"> </a><div class="pSmartList1"><li>Call &quot;AcuInitialize&quot; to pass the runtime's command-line options.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+returnValue = AcuInitialize(&quot;-c myconfig -le myerrors&quot;)<a name="wp1040595"> </a>
+</pre></div>
+<a name="wp1040596"> </a><p class="pIndented1">
+&quot;AcuInitialize&quot; returns a value of  &quot;0&quot; on success and &quot;-1&quot; on failure.  You can safely call &quot;AcuInitialize&quot; multiple times.  The command line from the first call is used and is ignored on subsequent calls.
+</p>
+<a name="wp1040597"> </a><p class="pIndented1">
+You may use the runtime &quot;-d&quot; option to debug your ACUCOBOL-GT program.  Specify &quot;-d&quot; in the command line to &quot;AcuInitialize&quot;, and the debugger window appears when you actually call a COBOL program.
+</p>
+<a name="wp1040598"> </a><div class="pSmartList1"><li>Then call &quot;AcuCall&quot;<b class="cBold"> </b>or<b class="cBold"> &quot;</b>AcuCall50&quot;, passing the program name and parameters.  For example, to call the program &quot;vb-test&quot; with &quot;AcuCall&quot;, enter:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+returnValue = AcuCall(&quot;vbtest.acu&quot;, testNum,<a name="wp1040599"> </a>
+   testStr, testLongNum, testFloat)<a name="wp1040600"> </a>
+</pre></div>
+<a name="wp1040601"> </a><p class="pIndented1">
+&quot;AcuCall&quot; returns &quot;0&quot; on success and &quot;-1&quot; on failure.  If &quot;AcuInitialize&quot; hasn't been called yet, &quot;AcuCall&quot; calls it, passing an empty command line.  If &quot;AcuCall&quot; returns &quot;-1&quot;, you may call &quot;AcuGetCallError&quot; to get the error code.  The error codes are as follows:
+</p>
+<a name="wp1040655"> </a><p class="pBodyRelative">
+<div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1040604"> </a><p class="pCellBody">
+-4
+</p>
+</td>
+    <td><a name="wp1040606"> </a><p class="pCellBody">
+&quot;AcuCall&quot; (or &quot;AcuCall50&quot;) has been called in multiple threads.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040608"> </a><p class="pCellBody">
+-3
+</p>
+</td>
+    <td><a name="wp1040610"> </a><p class="pCellBody">
+&quot;AcuInitialize&quot; failed.  (&quot;AcuInitialize&quot; cannot be called after &quot;AcuShutdown&quot; in a single process.)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040612"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1040614"> </a><p class="pCellBody">
+Program missing or inaccessible
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040616"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1040618"> </a><p class="pCellBody">
+Not a COBOL program
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040620"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1040622"> </a><p class="pCellBody">
+Corrupted program
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040624"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1040626"> </a><p class="pCellBody">
+Inadequate memory available
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040628"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1040630"> </a><p class="pCellBody">
+Unsupported version of object code
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040632"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1040634"> </a><p class="pCellBody">
+Program already in use
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040636"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1040638"> </a><p class="pCellBody">
+Too many external segments
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040640"> </a><p class="pCellBody">
+25
+</p>
+</td>
+    <td><a name="wp1040642"> </a><p class="pCellBody">
+Connection refused; perhaps AcuConnect is not running
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040644"> </a><p class="pCellBody">
+27
+</p>
+</td>
+    <td><a name="wp1040646"> </a><p class="pCellBody">
+Program contains object code for a different processor.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040648"> </a><p class="pCellBody">
+28
+</p>
+</td>
+    <td><a name="wp1040650"> </a><p class="pCellBody">
+Incorrect serial number
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040652"> </a><p class="pCellBody">
+30
+</p>
+</td>
+    <td><a name="wp1040654"> </a><p class="pCellBody">
+License error
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1040656"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>Two calls are available to you. &quot;AcuCall&quot; supports 14 optional parameters, and &quot;AcuCall50&quot; supports for up to 50 optional parameters.  &quot;AcuCall50&quot; calls the runtime in the same way as &quot;AcuCall&quot;, just use the appropriate name in the Visual Basic syntax.  The return values are exactly the same.  The declaration is similar, but you must declare all 50 parameters.   
+<hr />
+</p>
+<a name="wp1040657"> </a><div class="pSmartList1"><li>Call &quot;AcuShutdown&quot; after you are completely finished using COBOL in your Visual Basic application.  It is absolutely essential to call &quot;AcuShutdown&quot; from the VB program after the final call to COBOL.  Failure to call &quot;AcuShutdown&quot; before the VB program ends will likely cause the Visual Basic integrated environment to crash, resulting in the loss of any unsaved VB program changes.</li></div>
+<a name="wp1040658"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>If a COBOL program issues a STOP RUN, &quot;AcuCall&quot; returns, the runtime environment is initialized, and the calling process continues running.  This sequence occurs so that STOP RUN does not shut down the calling application or development environment you are using. 
+<hr />
+</p>
+<a name="wp1040659"> </a><div class="pSmartList1"><li>To cancel a COBOL program, call &quot;AcuCancel&quot; passing the name of the program. For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+AcuCancel(&quot;vbtest.acu&quot;)<a name="wp1036676"> </a>
+</pre></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

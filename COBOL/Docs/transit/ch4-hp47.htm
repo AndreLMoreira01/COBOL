@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.3.5.3  EXAMINE statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp30.htm">4.3  The &quot;-Cp&quot; HP COBOL Compatibility Switch </a> &gt; <a href="ch4-hp44.htm">4.3.5  Procedure Division Statements</a> &gt; </p>
+<a name="wp1041748"> </a><h2 class="pHeading3">
+4.3.5.3  EXAMINE statement
+</h2>
+<a name="wp1041750"> </a><p class="pBody">
+The EXAMINE statement is used to count the number of occurrences of a given character in a data item.  ACUCOBOL-GT accepts the EXAMINE statement in the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic; font-weight: bold">HP COBOL</span> compatibility mode.  HP COBOL's EXAMINE statement duplicates some of the functionality of the ACUCOBOL-GT Format 1 INSPECT statement, but with slightly different syntax.  (See the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT Reference Manual,</span> section 6.6, &quot;Procedure Division Statements,&quot; for a detailed discussion of the INSPECT statement.)  
+</p>
+<a name="wp1041751"> </a><h3 class="pHeadingRef">
+Format 1 
+</h3>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<u class="cUnderline">EXAMINE</u> identifier-1 <u class="cUnderline">TALLYING</u> {<u class="cUnderline">ALL</u>        } literal-1 [<u class="cUnderline">REPLACING</u> <u class="cUnderline">BY</u> literal-2]<a name="wp1041752"> </a>
+                              {<u class="cUnderline">LEADING</u>    }<a name="wp1049762"> </a>
+                              {<u class="cUnderline">UNTIL</u> <u class="cUnderline">FIRST</u>}<a name="wp1049763"> </a>
+</pre></div>
+<a name="wp1041753"> </a><h3 class="pHeadingRef">
+Format 2
+</h3>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<u class="cUnderline">EXAMINE</u> identifier-1 <u class="cUnderline">REPLACING</u> {<u class="cUnderline">ALL</u>        } literal-1 BY literal-2<a name="wp1041754"> </a>
+                               {<u class="cUnderline">FIRST</u>      }<a name="wp1049764"> </a>
+                               {<u class="cUnderline">LEADING</u>    }<a name="wp1049765"> </a>
+                               {<u class="cUnderline">UNTIL</u> <u class="cUnderline">FIRST</u>}<a name="wp1049766"> </a>
+</pre></div>
+<a name="wp1041755"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041756"> </a><div class="pSmartList1"><li><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">identifier-1</span> is the name of a data item containing characters to be counted or replaced.  Its USAGE must be DISPLAY (implicitly or explicitly).  </li></div>
+<a name="wp1041757"> </a><div class="pSmartList1"><li>Each <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">literal</span> is a single-character literal or one of the following figurative literals:</li></div>
+<a name="wp1041758"> </a><p class="pIndented1">
+ZERO<br />ZEROS<br />ZEROES<br />SPACE<br />SPACES<br />QUOTE<br />QUOTES<br />LOW-VALUE<br />LOW-VALUES<br />HIGH-VALUE<br />HIGH-VALUES
+</p>
+<a name="wp1041759"> </a><div class="pSmartList1"><li>ACUCOBOL-GT does not enforce the one-character limitation.  If a string literal has two or more characters, it uses only the first character.</li></div>
+</ol></div>
+<a name="wp1041760"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041761"> </a><div class="pSmartList1"><li>The number of characters in Format 1 that obey certain conditions are counted by a special register named TALLY.  Its PICTURE is 9(5) and USAGE is COMP-N.  Its default value is zero.</li></div>
+<a name="wp1041762"> </a><div class="pSmartList1"><li>The characters to be counted and replaced are determined by the key words following TALLYING or REPLACING.  Counting is done only in Format 1, and replacement is done only in Format 2 and when specified in Format 1.</li></div>
+</ol></div>
+<a name="wp1080563"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1080839"> </a>
+Key Words
+
+</th>
+    <th><a name="wp1080841"> </a>
+Characters To Be Counted And Replaced
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1080843"> </a><p class="pCellBody">
+ALL
+</p>
+</td>
+    <td><a name="wp1080845"> </a><p class="pCellBody">
+Count and/or replace all instances of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">literal-1</span> with <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">literal-2</span>.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1080847"> </a><p class="pCellBody">
+FIRST
+</p>
+</td>
+    <td><a name="wp1080849"> </a><p class="pCellBody">
+Replace the first (left-most) instance of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">literal-1</span> with <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">literal-2</span>.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1080851"> </a><p class="pCellBody">
+LEADING
+</p>
+</td>
+    <td><a name="wp1080853"> </a><p class="pCellBody">
+Count and/or replace all instances of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">literal-1</span> that appear before (to the left of) any other character in the data item.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1080855"> </a><p class="pCellBody">
+UNTIL FIRST
+</p>
+</td>
+    <td><a name="wp1080857"> </a><p class="pCellBody">
+Count and/or replace all characters to the left of the first (left-most) instance of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">literal-1</span> with <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">literal-2</span>.  If <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">literal-1</span> does not appear in the data item, count and replace all characters in the data item.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041785"> </a><div class="pSmartList1"><li><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Literal-1</span> is the character to be counted.  <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Literal-2 </span>is the character that will replace <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">literal-1</span>.   Note that the substitution of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">literal-2</span> for characters other than <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">literal-1</span> occurs only when UNTIL FIRST is specified.</li></div>
+<a name="wp1041786"> </a><div class="pSmartList1"><li>The contents of the TALLY register are unchanged in Format 2.  In Format 1, its contents are replaced by the appropriate character count, regardless of the previous contents.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

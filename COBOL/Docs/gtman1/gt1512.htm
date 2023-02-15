@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:06" />
+  <title>5.1.6  Multiple Log Files</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt15.htm"><br />Chapter 5:  File Processing</a> &gt; <a href="gt152.htm">5.1 Transaction Management</a> &gt; </p>
+<a name="wp1032310"> </a><h2 class="pHeading2">
+5.1.6  Multiple Log Files
+</h2>
+<a name="wp1032314"> </a><p class="pBody">
+The transaction management facility allows the program to use multiple log files.  Different types of transactions can be logged in separate log files, giving you quicker access to a particular type of transaction.  Each log file records the information that is necessary to recover a particular file or set of files. 
+</p>
+<a name="wp1032315"> </a><p class="pBody">
+The application administrator or programmer can specify an individual log file to use with any given set of data files.  The specified log file is updated whenever a transaction is committed in its associated data files.  Log file names are specified with configuration variables of the format:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+filename-LOG logfilename<a name="wp1032316"> </a>
+</pre></div>
+<a name="wp1032317"> </a><p class="pBody">
+where <em class="cEmphasis">filename</em> is the base name of the data file, and <em class="cEmphasis">logfilename</em> is the name of the log file.  <em class="cEmphasis">filename</em> should not include any directory names, nor should it include a file extension.  <em class="cEmphasis">logfilename</em> can include the absolute or relative directory path ending with the name of the log file.   If the log file is not found, a new file is created there with the specified name.  Note that <em class="cEmphasis">logfilename</em> can have remote name notation.  A configuration file entry for multiple log files might look like:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#transaction temporary file directory<a name="wp1032319"> </a>
+LOG-DIR /usr/transaction-tmp/<a name="wp1032320"> </a>
+#log file definitions<a name="wp1032321"> </a>
+file1-LOG file1.log<a name="wp1032322"> </a>
+file2-LOG file2.log<a name="wp1032323"> </a>
+file3-LOG file3.log<a name="wp1032324"> </a>
+#default log file definition<a name="wp1032325"> </a>
+LOG-FILE  default.log<a name="wp1032326"> </a>
+</pre></div>
+<a name="wp1032327"> </a><p class="pBody">
+In the example above, during a commit, all of file1's updates are written to &quot;file1.log&quot;, all of file2's updates are written to &quot;file2.log&quot;, and so forth.  If other data files are updated during a transaction, their updates are written to &quot;default.log&quot;. Operations performed with the &quot;RENAME&quot; or &quot;C$COPY&quot; library routines are also written to &quot;default.log&quot;. 
+</p>
+<a name="wp1032328"> </a><p class="pBody">
+A default log file must be specified in the LOG-FILE variable.  The runtime creates that log file, or opens the existing one, as part of the first START TRANSACTION statement.  Log files specified with <em class="cEmphasis">filename</em>-LOG variables are created or opened when the file whose base name is <em class="cEmphasis">filename</em> is opened OUTPUT or I/O for the first time in the program. Note that this means that any error that can be returned from a START TRANSACTION can also be returned as a secondary code of an error 9E on an OPEN statement.  See <a  href="gt1514.htm#wp1032357">section 5.1.8, &quot;Transaction Error Handling.&quot;</a>
+</p>
+<a name="wp1032329"> </a><p class="pBody">
+Multiple log files can be used only with Vision indexed files and relative files. Transaction management for other file systems is dependent on the specific file system's transaction management facility.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

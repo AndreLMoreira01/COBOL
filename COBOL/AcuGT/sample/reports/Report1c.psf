@@ -1,0 +1,463 @@
+; CASEMaker AcuBench Program Structure File, Version 7.2
+; WARNING: DO NOT MODIFY THIS FILE!
+
+[PROGRAM_CONTENT]
+QUIT_CONFIRM=0
+
+{{@DESCRIPTION:
+A report with two breakpoints, Sales-State and Sales-Branch-No
+Report also demonstrates a usage of the Report Occurs control.
+* Section Controller was used to create Group Headers
+* Report Label/Entry-field combinations associated with the 
+Group Header fields have been added to the respective Group 
+Headers.
+* A Report Occurs control has been painted in the Detail Section,
+and associated with the elementary items of the Notes occurs item
+in the FD.  The Headings have been changed in the Columns
+Settings interface of the Report Occurs Property Sheet.
+* A Date-Time control has been added to the Page Footer.
+@}}
+
+[WORKING_STORAGE]
+m_nType=1
+m_strName=Working Storage
+m_bBlockRecords=1
+m_bRecordFixed=1
+m_bStandard=1
+{{@FD_m_strDescriptionWK
+
+@}}
+[FDITEM0_WK]
+m_nType=11
+m_strName=salesdata-status
+m_strRawPic=X(2)
+m_strPic=X(2)
+m_nItemLevel=77
+m_nSync=-1
+m_bFixed=1
+{{@DataItem_m_strDescriptionFDITEM0_WK
+
+@}}
+[FDITEM1_WK]
+m_nType=11
+m_strName=Valid-Salesdata
+m_nItemLevel=88
+m_nSync=-1
+m_bFixed=1
+m_strTrue="00" THRU "09"
+{{@DataItem_m_strDescriptionFDITEM1_WK
+
+@}}
+
+
+[LINKAGE_SECTION]
+m_nType=1
+m_strName=Linkage Section
+m_bBlockRecords=1
+m_bRecordFixed=1
+m_bStandard=1
+{{@FD_m_strDescriptionLK
+
+@}}
+
+
+[DATASET_CONTENT:DS1]
+DATASET_NAME=SalesdataDS
+DATA_LAYOUT=Salesdata
+KEY=Sales-Key
+
+[SEL_LAYOUT_FILE_CONTENT:DATALAYOUT1]
+DATA_LAYOUT=Salesdata
+MODE=0
+DECLARATIVES=
+BEFORE_OPEN=
+AFTER_OPEN=
+BEFORE_COMMIT=
+AFTER_COMMIT=
+BEFORE_ROLLBACK=
+AFTER_ROLLBACK=
+BEFORE_DELETEFILE=
+AFTER_DELETEFILE=
+
+[SEL_LAYOUT_FILE_CONTENT:DATALAYOUT1-IO_FUNCTION_CONTENT]
+GENERATE_IO_FUNCTION1=Declaratives
+GENERATE_IO_FUNCTION2=Read File Key Is
+GENERATE_IO_FUNCTION3=Read File Next
+GENERATE_IO_FUNCTION4=Read File Previous
+GENERATE_IO_FUNCTION5=Delete File
+GENERATE_IO_FUNCTION6=Close File
+
+{{@SCREEN:
+*   Screen Painter Data
+*   Schema 6.0
+*
+BEGIN-SPDATA
+
+END-SPDATA
+
+@}}
+
+{{@REPORT:
+*   Report Writer Data
+*   Schema 6.0
+*
+BEGIN-RWDATA-6.0A
+
+GRAPHICAL-REPORT
+REPORT-FACTOR-10000
+
+Begin Report Report1c
+   PREFIX            = Report1c
+   LOCK-CONTROL      = TRUE
+   (Name)            = Report1c
+   Num Columns (N-Top) = 1
+   Output File Name  = Report1c.html
+   Paper Size        = ( Paper = Letter, Width = 85000, Height = 110000, RealW = 0, RealH = 0 )
+   Paper Size        = ( Header = &w&bPage &p of &P, Footer = &u&b&d, Left = 7500, Right = 7500, Top = 7500, Bottom = 7500 )
+   Report Style      = Standard
+   Target Browser    = Specify Internet Explorer
+   Watermark Style   = None
+   Begin Section Page-Header
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 1771
+      SECTION-LINES     = 3125
+      SECTION-SIZE      = 85000
+      SECTION-GROUPTYPE = 0
+      SECTION-INDEX     = -1
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1c-PH-1
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 3125
+      Size              = 85000
+      Visible           = 1:TRUE
+      Begin Rpt.Label Report1c-RwLa-3
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1c-RwLa-3
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 1042
+         Font              = Default Font
+         Justification     = Unaligned
+         Line              = 3021
+         Lines             = 1875
+         Size              = 9687
+         Title             = "Last Name"
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Label Report1c-RwLa-4
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1c-RwLa-4
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 34375
+         Font              = Default Font
+         Justification     = Unaligned
+         Line              = 3125
+         Lines             = 1875
+         Size              = 9688
+         Title             = "First Name"
+         Visible           = 1:TRUE
+      End
+   End
+   Begin Section Group-Header
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 6667
+      SECTION-LINES     = 3125
+      SECTION-SIZE      = 85000
+      SECTION-GROUPTYPE = 1
+      SECTION-GROUPBY   = Sales-State OF Salesdata
+      SECTION-INDEX     = 0
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1c-GH-1
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 3125
+      Size              = 85000
+      Skip Page after Print = FALSE
+      Skip Page before Print = FALSE
+      Visible           = 1:TRUE
+      Begin Rpt.Label Report1c-RwLa-1
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1c-RwLa-1
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 1042
+         Font              = Default Font
+         Justification     = Unaligned
+         Line              = 1042
+         Lines             = 1875
+         Size              = 4166
+         Title             = "State:"
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Entry-Field Report1c-RwEf-1
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1c-RwEf-1
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 9375
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Unaligned
+         Line              = 1042
+         Lines             = 1875
+         Print if Repeat   = TRUE
+         Size              = 2708
+         Value Picture     = XX
+         Value Variable    = Sales-State
+         Visible           = 1:TRUE
+      End
+   End
+   Begin Section Group-Header
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 11563
+      SECTION-LINES     = 3125
+      SECTION-SIZE      = 85000
+      SECTION-GROUPTYPE = 1
+      SECTION-GROUPBY   = Sales-Branch-No OF Salesdata
+      SECTION-INDEX     = 1
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1c-GH-2
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 3125
+      Size              = 85000
+      Skip Page after Print = FALSE
+      Skip Page before Print = FALSE
+      Visible           = 1:TRUE
+      Begin Rpt.Label Report1c-RwLa-2
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1c-RwLa-2
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 1042
+         Font              = Default Font
+         Justification     = Unaligned
+         Line              = 729
+         Lines             = 1875
+         Size              = 5208
+         Title             = "Branch:"
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Entry-Field Report1c-RwEf-2
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1c-RwEf-2
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 9375
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Unaligned
+         Line              = 625
+         Lines             = 1875
+         Print if Repeat   = TRUE
+         Size              = 3958
+         Value Picture     = X(3)
+         Value Variable    = Sales-Branch-No
+         Visible           = 1:TRUE
+      End
+   End
+   Begin Section Detail
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 16458
+      SECTION-LINES     = 20000
+      SECTION-SIZE      = 85000
+      SECTION-GROUPTYPE = 0
+      SECTION-INDEX     = -1
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1c-Dtl-1
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 20000
+      Size              = 85000
+      Skip Page after Print = FALSE
+      Visible           = 1:TRUE
+      Zebra             = 0
+      Begin Rpt.Entry-Field Report1c-RwEf-3
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1c-RwEf-3
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 1042
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Unaligned
+         Line              = 1042
+         Lines             = 1875
+         Print if Repeat   = TRUE
+         Size              = 31458
+         Value Picture     = X(25)
+         Value Variable    = Sales-LastName
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Entry-Field Report1c-RwEf-4
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1c-RwEf-4
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 34375
+         Display Type      = 2
+         Font              = Default Font
+         Horizontal Spacing = 0
+         Justification     = Unaligned
+         Line              = 1042
+         Lines             = 1875
+         Print if Repeat   = TRUE
+         Size              = 31458
+         Value Picture     = X(25)
+         Value Variable    = Sales-FirstName
+         Visible           = 1:TRUE
+      End
+      Begin Rpt.Occurs Report1c-RwOcc-1
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1c-RwOcc-1
+         Auto Resize       = TRUE
+         Border Color      = 0
+         Border Style      = Boxed
+         Border Width      = 1
+         Color             = 513
+         Column            = 1250
+         Column Headings   = TRUE
+         Columns' Setting  = ( OccName = Notes, OccTimes = 8, OccTimesVar =  )
+         Columns' Setting  = ( X = 1, Name = Note-Date )
+         Columns' Setting  = ( Head = Date )
+         Columns' Setting  = ( PIC = X(10), Width = 12812, Alig = 3)
+         Columns' Setting  = ( Font = Default Font )
+         Columns' Setting  = ( X = 2, Name = Note-Initials )
+         Columns' Setting  = ( Head = Initials )
+         Columns' Setting  = ( PIC = X(3), Width = 7395, Alig = 3)
+         Columns' Setting  = ( Font = Default Font )
+         Columns' Setting  = ( X = 3, Name = Note-Text )
+         Columns' Setting  = ( Head = Text )
+         Columns' Setting  = ( PIC = X(60), Width = 37812, Alig = 3)
+         Columns' Setting  = ( Font = Default Font )
+         Font              = Default Font
+         Heading Color     = 256
+         Line              = 4063
+         Lines             = 14166
+         Show Grid Line    = FALSE
+         Size              = 58227
+         Visible           = 1:TRUE
+      End
+   End
+   Begin Section Page-Footer
+      COUNT-HEIGHT      = TRUE
+      SECTION-COL       = 0
+      SECTION-LINE      = 38229
+      SECTION-LINES     = 5000
+      SECTION-SIZE      = 85000
+      SECTION-GROUPTYPE = 0
+      SECTION-INDEX     = -1
+      LOCK-CONTROL      = FALSE
+      (Name)            = Report1c-PF-1
+      Color             = 131329
+      Font              = Default Font
+      Lines             = 5000
+      Size              = 85000
+      Visible           = 1:TRUE
+      Begin Rpt.Date-Time Report1c-RwDtTm-1
+         LOCK-CONTROL      = FALSE
+         (Name)            = Report1c-RwDtTm-1
+         Border Color      = 0
+         Border Style      = No Box
+         Border Width      = 1
+         Color             = 0
+         Column            = 32604
+         Date Format       = dd/mm/yyyy
+         Date Picture Format = YYYYMMDD
+         Font              = Default Font
+         Justification     = Center
+         Line              = 1042
+         Lines             = 3125
+         Print if Repeat   = TRUE
+         Size              = 19792
+         Time Format       = None
+         Time Picture Format = None
+         Visible           = 1:TRUE
+      End
+   End
+End
+
+END-RWDATA
+
+@}}
+
+{{@PARAGRAPH:
+
+@}}
+
+[KEY_STATUS_FIELD_FORMAT]
+PIC=9(4)
+USAGE=[None]
+
+[KEYSTATUS_CONTENT:KS1]
+CONDITION=Exit-Pushed
+VALUE=27
+
+[KEYSTATUS_CONTENT:KS2]
+CONDITION=Message-Received
+VALUE=95
+
+[KEYSTATUS_CONTENT:KS3]
+CONDITION=Event-Occurred
+VALUE=96
+
+[KEYSTATUS_CONTENT:KS4]
+CONDITION=Screen-No-Input-Field
+VALUE=97
+
+[KEYSTATUS_CONTENT:KS5]
+CONDITION=Screen-Time-Out
+VALUE=99
+
+[CODE_GENERATION_OPTIONS]
+FOLLOW_PROJECT_OPTIONS=1
+GENERATE_PROGRAM_FILE=1
+GENERATE_WORKING_STORAGE=1
+GENERATE_EVENT_PARAGRAPH=1
+GENERATE_SCREEN_SECTION=1
+GENERATE_REPORT_SECTION=1
+GENERATE_PROCEDURE_DIVISION=1
+GENERATE_MENU_PARAGRAPH=1
+GENERATE_LINKAGE_SECTION=1
+REPLACE_REMARK_PART=1
+EXCLUDE_PROGRAM_VARIABLE=1
+EXCLUDE_PROGRAM_PARAGRAPH=1
+PROGRAM_EXTENSION=.cbl
+WORKINGSTORAGE_EXTENSION=.wrk
+EVENT_EXTENSION=.evt
+SCREEN_EXTENSION=.scr
+REPORT_EXTENSION=.rpt
+PROCEDURE_EXTENSION=.prd
+MENU_EXTENSION=.mnu
+LINKAGE_EXTENSION=.lks
+PROGRAM_FILE_READ_ONLY=0
+LINK_CLOSE_TO_OPEN=0
+COPYBOOK_READ_ONLY=1
+GENERATE_COPY_FILES=1
+ACCEPT_CONTROL=1
+ANSI_DOCUMENT_FORMAT=1

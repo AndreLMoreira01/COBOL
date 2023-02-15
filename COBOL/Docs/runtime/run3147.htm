@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:21:17" />
+  <title>HOT_KEY* </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run3.htm"><br />Chapter 3: Runtime Configuration File</a> &gt; <a href="run33.htm">3.2  Configuration File Entries</a> &gt; </p>
+<a name="wp1069107"> </a><h2 class="pHeading2">
+HOT_KEY* 
+</h2>
+<a name="wp1069111"> </a><p class="pBody">
+ACUCOBOL-GT offers two methods for assigning hot keys--the HOT_KEY variable, described here, and the KEYSTROKE hot-key format described in the <em class="cEmphasis">User's Guide,</em> section 4.3.2.2. 
+</p>
+<a name="wp1069112"> </a><p class="pBody">
+Using the HOT_KEY variable described below, you can easily assign a whole range of keys to a single hot-key program and determine which key activated the program.  This lets you write a single program that handles an entire menu.  Each menu item can act as a &quot;hot key&quot; to call this program.    
+</p>
+<a name="wp1069113"> </a><p class="pBody">
+This HOT_KEY format differs from the KEYSTROKE hot-key described in the <em class="cEmphasis">User's Guide</em> in three ways:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1069114"> </a><div class="pSmartList1"><li>You assign a hot key by referencing its <em class="cEmphasis">exception value</em> instead of referencing its <em class="cEmphasis">key code</em>.  Thus, if you assign the same exception value to several individual keys, you can associate these keys with the same hot-key program by making one COBOL configuration file entry.</li></div>
+<a name="wp1069115"> </a><p class="pIndented1">
+Similarly, menu items and individual keys can be assigned the same exception value, and then associated with the same hot-key program in a single configuration file entry.
+</p>
+<a name="wp1069116"> </a><div class="pSmartList1"><li>You may assign a range of exception values to activate the same program.  You could use this to write a menu handler by assigning all of your menu items to a unique range and then assigning that range to a single hot-key program.  </li></div>
+<a name="wp1069117"> </a><div class="pSmartList1"><li>A hot-key program activated using the HOT_KEY format is passed an additional parameter.  This third parameter contains the value of the exception key that activated the program.  This is passed as a COMP-1 data item.</li></div>
+</ul></div>
+<a name="wp1069118"> </a><p class="pBody">
+Use this variable to associate an exception value, or range of values, with a program.  HOT_KEY has the following format:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+HOT_KEY  <em class="cEmphasis">program</em> = <em class="cEmphasis">value1</em> [, <em class="cEmphasis">value2</em>]<a name="wp1069119"> </a>
+</pre></div>
+<a name="wp1069120"> </a><p class="pBody">
+where program is the name of the program to run, value1 is the lower (or only) exception value that activates  the program, and value2 is the upper value of the activation range.  Value2 may be omitted; if it's used it must include the separating comma.  You must place program in single or double quotes if you require a lower-case program name.  
+</p>
+<a name="wp1069121"> </a><p class="pBody">
+For example, to assign a program called &quot;mymenu&quot; to exception values 100 through 200, use the following entry:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+HOT_KEY  &quot;mymenu&quot; = 100, 200<a name="wp1069122"> </a>
+</pre></div>
+<a name="wp1069123"> </a><p class="pBody">
+A special exception value named TIMEOUT may be specified as the first exception value. When this value is used as the first exception value for a HOT_KEY program, the runtime will execute the named program whenever an ACCEPT BEFORE TIME times out.  When that occurs, the second exception value is ignored.
+</p>
+<a name="wp1069125"> </a><p class="pBody">
+Remote name notation is allowed for the HOT_KEY variable if your runtime is client-enabled.  See <em class="cEmphasis">User's Guide</em> sections 5.2.1 and 5.2.2 for more information about client-enabled runtimes and remote name notation.
+</p>
+<a name="wp1069126"> </a><p class="pBody">
+Multiple HOT_KEY entries may reference the same program.  This allows you to specify noncontiguous activation ranges.  (Be aware that no more than 16 hot-key entries can be included in the COBOL configuration file.  Using a contiguous range of exception values assigns many keys while counting as only one entry towards the limit.)  
+</p>
+<a name="wp1069127"> </a><p class="pBody">
+If you specify a <em class="cEmphasis">value1</em> value of &quot;0&quot;, then all hot-key references to <em class="cEmphasis">program</em> are removed.  Within a given run unit, this is the only way to remove the assignment of an exception value to a hot-key program after it has been assigned.  You will probably use SET ENVIRONMENT in your source code to do this.
+</p>
+<a name="wp1069128"> </a><p class="pBody">
+If you assign multiple hot-key programs to the same exception value, the results are undefined.
+</p>
+<a name="wp1069129"> </a><p class="pBody">
+You may assign different hot keys using both the HOT_KEY variable, described here, and the KEYSTROKE hot-key format described in <a  href="run210.htm#wp1042413">section 2.3, &quot;The Keyboard Interface.&quot;</a>  The results are undefined if you assign the same key using both formats.  The total number of hot-key entries defined by both methods cannot exceed 16.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

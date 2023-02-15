@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:52:56" />
+  <title>3.4.9  SECURITY_METHOD</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con3.htm">Chapter 3:  Distributed Processing: Preparing the Server</a> &gt; <a href="con322.htm">3.4  Creating a Server Configuration File</a> &gt; </p>
+<a name="wp1074562"> </a><h2 class="pHeading2">
+3.4.9  SECURITY_METHOD
+</h2>
+<a name="wp1074587"> </a><p class="pBody">
+This variable lets you determine the security method AcuConnect employs for user logon.  AcuConnect can use the operating system's native logon facility or the security provided by the AcuAccess file.  Users can use their regular passwords when they connect to servers, instead of having a different password in the AcuAccess file or remembering to keep the password in the AcuAccess file coordinated with the native password.  
+</p>
+<a name="wp1074654"> </a><p class="pBody">
+This feature works for Windows servers and for UNIX servers.  For UNIX servers, passwords can be stored in /etc/passwd or in /etc/shadow (i.e., the machine uses shadow passwords).  It does not use the newer pluggable authentication module (PAM) libraries.  
+</p>
+<a name="wp1075391"> </a><p class="pBody">
+The default value of SECURITY_METHOD is &quot;NONE&quot;, which means that AcuConnect's AcuAccess file security is used.  For information about using the AcuAccess file, refer to <a  href="con38.htm#wp1028935">section 3.3, &quot;Establishing System Security.&quot;</a>
+</p>
+<a name="wp1074925"> </a><p class="pBody">
+When this variable is set to &quot;LOGON&quot;, the operating system's native logon capability is used.  In Windows, AcuConnect attempts to log the user on to the domain specified in the WINNT_LOGON_DOMAIN configuration variable.  (Refer to <a  href="con336.htm#wp1068688">section 3.4.14, &quot;WINNT_LOGON_DOMAIN,&quot;</a> for details.)  AcuConnect first uses the password in the AcuAccess file to log the user onto the server.  If the AcuAccess password matches the user's Windows domain password, the login completes and the user is never prompted for a password.  If the password doesn't match, or the password field in the AcuAccess file is empty, the user is prompted to supply a password.  The password provided must match the user&#39;s network domain password on the Windows server.  The number of attempts the user has to supply the correct password is limited by the value of the configuration variable PASSWORD_ATTEMPTS.  A successful logon grants the user all the access rights they would have were they directly logged onto the server.  AcuConnect allows Windows servers to manage all issues pertaining to access permissions.   
+</p>
+<a name="wp1075588"> </a><p class="pBody">
+In UNIX, the AcuAccess password is checked against the password in the system files.  If the password matches, the login is completed.  If it does not match, the user is asked for a password that is then checked against the system password.  If you want your UNIX machine to be able to restrict access to the machine based on various parameters, set the USE_SYSTEM_RESTRICTIONS configuration variable.  Refer to <a  href="con334.htm#wp1075178">section 3.4.12, &quot;USE_SYSTEM_RESTRICTIONS,&quot;</a> for details.  
+</p>
+<a name="wp1075468"> </a><p class="pBody">
+SECURITY_METHOD is set on both the client and the server, and the values must match.  If the values don&#39;t match, the security method reverts to &quot;NONE&quot;, which uses only the AcuAccess password.   
+</p>
+<a name="wp1075842"> </a><p class="pBody">
+A value of &quot;NAMED-PIPE&quot; is for AcuServer use only and is not recommended. 
+</p>
+<a name="wp1075045"> </a><p class="pBody">
+The SECURITY_METHOD configuration variable replaces the NT_SECURITY variable (which has been removed).  Note that if you are upgrading a Windows server, you must change your configuration file, replacing the NT_SECURITY variable with the new SECURITY_METHOD variable.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

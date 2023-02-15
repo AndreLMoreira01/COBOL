@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:09" />
+  <title>C.20  Changes Affecting Version 1.4</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4c.htm">Appendix C:  Changes Affecting Previous Versions</a> &gt; </p>
+<a name="wp1034930"> </a><h2 class="pHeading1">
+C.20  Changes Affecting Version 1.4
+</h2>
+<a name="wp1034932"> </a><p class="pBody">
+The following sections describe changes that can affect programs compiled with the Version 1.4 ACUCOBOL-85 compiler.  These are the same changes that occur when you move from Version 1.4 to Version 1.5.
+</p>
+<a name="wp1034933"> </a><h3 class="pHeadingRef">
+Compiler changes
+</h3>
+<a name="wp1034934"> </a><p class="pBody">
+The following changes can affect programs when they are re-compiled.  <b class="cBold">Note that all of these changes can be suppressed by the &quot;-C4&quot; compile-time option,</b> which causes the compiler to use Version 1.4 semantics.  Also note, that the &quot;-Z4&quot; compile-time option (which produces 1.4 compatible object files) will also inhibit these changes.  Note that there are several important changes, especially if you are using VAX COBOL compatibility mode.  You should use &quot;-C4&quot; until you can evaluate the extent to which these changes affect your programs.  
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034936"> </a><div class="pSmartList1"><li><b class="cBold">Important:</b> Under Version 1.4, USAGE BINARY data items are treated as identical to USAGE COMP-1 data items.  Since Version 2.1, USAGE BINARY items are treated as defined by the ANSI standard.  This results in data items that are different except for data items described as PIC S9, S9(2), S9(3) or S9(4).  If you have any USAGE BINARY data items in files, you will need to specify &quot;-C4&quot; to maintain compatibility with your existing files until you can change your programs.</li></div>
+<a name="wp1034937"> </a><div class="pSmartList1"><li><b class="cBold">Important:</b> The internal format of COMPUTATIONAL data items is different under the following circumstances:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1034938"> </a><div class="pSmartList2"><li>You are using VAX COBOL compatibility mode; or</li></div>
+<a name="wp1034939"> </a><div class="pSmartList2"><li>You use the &quot;-Zb&quot; or &quot;-Db&quot; compile-time options.</li></div>
+</ol></div>
+<a name="wp1034940"> </a><p class="pIndented1">
+Under previous versions, a data item that fit one of these conditions is stored as a COMP-1 data item if it is small enough (PIC S9(4) or smaller), otherwise, it is stored as a COMP-2 data item.  Since Version 2.1, these items are stored as BINARY.  This is the same as COMP-1 for the small data items, but is different for the larger ones.  If either of these cases applies to your programs, and you store COMPUTATIONAL data items in files, then you should use &quot;-C4&quot; to maintain compatibility with your files until you can modify your programs.  
+</p>
+<a name="wp1034941"> </a><div class="pSmartList1"><li>In previous versions of ACUCOBOL-85, COMP-3 data items are always treated as signed.  They are also rounded up to an odd number of digits.  Beginning with Version 2.0, they act as described by their picture clauses.  </li></div>
+<a name="wp1034942"> </a><div class="pSmartList1"><li>In Version 1.4, COMP-6 data items always have an even number of digits.  Since Version 2.1, they have the number of digits specified in their picture clauses.  </li></div>
+<a name="wp1034943"> </a><div class="pSmartList1"><li>Since the release of Version 2.1, specifying CONVERT on a DISPLAY of a numeric edited data item causes that item to have its leading spaces stripped and causes the item to be justified according to the rules applied to numeric data items.  Under Version 1.4, output conversion of numeric edited items has no effect.</li></div>
+<a name="wp1034944"> </a><div class="pSmartList1"><li>In Version 1.4, specifying the CONTROL KEY phrase or the ON EXCEPTION Key-Name phrase for an ACCEPT statement implies automatic termination of a field when that field is filled.  Since the release of Version 2.1, this behavior is specified by the AUTO phrase.  Because of the nature of the ACCEPT rules, this change does not affect programs using RM/COBOL compatibility mode.  </li></div>
+<a name="wp1034945"> </a><div class="pSmartList1"><li>Versions of ACUCOBOL-85 prior to 2.1 do not support file errors 14 or 24 for relative files when the relative key data item is too small to hold the relative record number.  Version 2.1 and all later versions return the appropriate error in this case.  </li></div>
+<a name="wp1034946"> </a><div class="pSmartList1"><li>Since Version 2.1, assigning a file to the device name PRINTER without explicitly assigning an external file name causes the file to be assigned to &quot;PRINTER&quot; when you are using VAX COBOL compatibility mode.  Under previous versions, the file is assigned to the same name as its internal file name.  </li></div>
+<a name="wp1034947"> </a><div class="pSmartList1"><li>In Version 1.4, the SYNCHRONIZED clause has no effect.  Since Version 2.1, data item synchronization occurs.</li></div>
+<a name="wp1034948"> </a><div class="pSmartList1"><li>The rules for the meaning of the ON EXCEPTION phrase of the ACCEPT statement have changed.  For versions prior to Version 2.0, this phrase catches numeric conversion errors.  If the Key-Name option is used, it also catches exception keys.  Since Version 2.0, it always catches exception keys and does not catch numeric conversion errors (these errors are handled automatically by the terminal manager).  Specifying &quot;-C4&quot; or &quot;-Ve2&quot; retains the original meaning of this phrase.  Programs using RM/COBOL compatibility mode are unlikely to be affected by this change.  </li></div>
+<a name="wp1034949"> </a><div class="pSmartList1"><li>Since Version 2.0, closing a window moves the cursor to the position it occupied when that window was created.  Before Version 2.0, the cursor moved to the home position of the restored window.  </li></div>
+<a name="wp1034950"> </a><div class="pSmartList1"><li>Many new reserved words have been added since Version 2.0.  Most of these can be treated as user-defined words through use of the new &quot;-Rs&quot; and &quot;-Ri&quot; compile-time options.  A few new words not covered by these options have also been added.  If they conflict with your current programs, you can individually treat them as user-defined words with the &quot;-Rw&quot; option.</li></div>
+<a name="wp1034951"> </a><div class="pSmartList1"><li>Several compile-time options were renamed in Version 2.0.  The original names are still supported, however, so this change does not affect existing programs or compile scripts, except for the &quot;-Ca&quot; option described earlier.  </li></div>
+</ul></div>
+<a name="wp1034952"> </a><h3 class="pHeadingRef">
+Runtime changes
+</h3>
+<a name="wp1034953"> </a><p class="pBody">
+The following changes occur when the latest runtime is installed.  
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034954"> </a><div class="pSmartList1"><li>The default meaning of the Tab key has changed.  Under Version 1.4, the Tab key is an exception key that has a key value of &quot;9&quot;.  Beginning with Version 2.0, the Tab key is a termination key with a key value of &quot;9&quot;.  The only difference is that under the previous version, the Tab key is allowed only when exception keys are allowed and it causes the ON EXCEPTION phrase to execute.  If you depend on this behavior, you can add the following line to your configuration file:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+KEYSTROKE Exception=9 ^I<a name="wp1034955"> </a>
+</pre></div>
+<a name="wp1034956"> </a><p class="pIndented1">
+This change was made so that the Tab key could function as a &quot;next field&quot; key when you are using the Screen Section.
+</p>
+<a name="wp1034957"> </a><div class="pSmartList1"><li>Several other keys were redefined in Version 2.0 for use with the Screen Section.  These changes do not affect existing programs, however, because the new defaults have the same effects as the old ones when used with field-level ACCEPT statements.  </li></div>
+<a name="wp1034958"> </a><div class="pSmartList1"><li>The maximum number of files that can be opened by the runtime was reduced from 64 to 32 in Version 2.0.  This was done to save memory.  If you need more than 32 files, you can set the maximum to any value you want (up to 255) with the <a  href="gt4h195.htm#wp1036998">MAX_LOCKS</a> configuration option.  See Appendix H for details.  </li></div>
+<a name="wp1034959"> </a><div class="pSmartList1"><li>A subtle change has been made in the processing of the user's environment.  In previous versions, an entry in the user's environment always takes precedence over an entry in the runtime's local environment.  Beginning with Version 2.0, an entry in the user's environment takes precedence at the time the local environment is initially created.  This change allows the SET ENVIRONMENT verb to have an affect on an entry initially defined in the user's environment.  </li></div>
+<a name="wp1034960"> </a><div class="pSmartList1"><li>Since Version 2.1 the cursor does not leave the field when the field is filled.  Instead, it stays in the last character position and inhibits further data entry.  This difference is cosmetic, but if you prefer the method used by previous versions, you can add the following line to your configuration file:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+KEYBOARD  Cursor-Past-End=Yes<a name="wp1034961"> </a>
+</pre></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

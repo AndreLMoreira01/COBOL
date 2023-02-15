@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:28:27" />
+  <title>Transaction Support Options</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb3.htm">Chapter 3: Creating Data Sources</a> &gt; <a href="odb328.htm">3.4  Vision Options</a> &gt; </p>
+<a name="wp1029573"> </a><h2 class="pHeading2">
+Transaction Support Options
+</h2>
+<a name="wp1029574"> </a><h3 class="pHeadingRef">
+Enable Transaction Processing Support
+</h3>
+<a name="wp1029580"> </a><p class="pBody">
+Select this check box to enable transaction processing support in AcuODBC.  If you are in a transaction processing environment, enable this feature to begin transaction management, locking, and other key functions.  Selecting this check box also activates the Enable Logging check box and the Temp File Directory field.
+</p>
+<a name="wp1029581"> </a><h3 class="pHeadingRef">
+Enable Logging
+</h3>
+<a name="wp1029584"> </a><p class="pBody">
+Select this check box to enable transaction management logging and to activate the controls on this tab relating to logging.  When this box is selected, file updates are logged to the transaction log file specified in the &quot;Log File&quot; field.  By default, logging is off.  This field is equivalent to the LOGGING configuration variable.
+</p>
+<a name="wp1029585"> </a><h3 class="pHeadingRef">
+Encrypt Log File
+</h3>
+<a name="wp1029590"> </a><p class="pBody">
+Select this check box to encrypt records before writing them to the log file.  By default, log encryption is off.  This field is the equivalent to the LOG_ENCRYPTION configuration variable.
+</p>
+<a name="wp1029591"> </a><h3 class="pHeadingRef">
+Log to Device
+</h3>
+<a name="wp1029594"> </a><p class="pBody">
+Selecting this box causes the transaction management system to assume that the log file is actually a device, rather than a file.  This means that a special device locking method is on the log file.  It also guarantees that the log file is opened &quot;append&quot; and that no seeks are performed on it.  This allows for the use of a tape device for the log file on many systems.  By default, this option is turned off.  This field is equivalent to the LOG_DEVICE configuration variable.
+</p>
+<a name="wp1029595"> </a><h3 class="pHeadingRef">
+Log File
+</h3>
+<a name="wp1029602"> </a><p class="pBody">
+Enter the name of the log file to be used for transaction management logging.  (Activate transaction management logging by selecting the &quot;Enable Logging&quot; check box.)  If the file does not exist, one is created.  This field is equivalent to the LOG_FILE configuration variable.
+</p>
+<a name="wp1029603"> </a><p class="pBody">
+You may store your transaction log file on a remote machine if your system utilizes AcuServer.  To specify a remote filename for Log File, use remote name notation in this field.  Note that AcuServer must be running on the remote machine.  
+</p>
+<a name="wp1029604"> </a><p class="pBody">
+Remote name notation has the following format:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+@server-name:path-name/file-name<a name="wp1029605"> </a>
+</pre></div>
+<a name="wp1029606"> </a><p class="pBody">
+Log files prepended with @<em class="cEmphasis">server-name:path-name</em> are routed to AcuServer on the host specified by <em class="cEmphasis">server-name</em>, and stored in the directory specified by <em class="cEmphasis">path-name</em>.
+</p>
+<a name="wp1029607"> </a><h3 class="pHeadingRef">
+Temp File Directory
+</h3>
+<a name="wp1029612"> </a><p class="pBody">
+This variable allows you to specify a directory to be used for holding the temporary files generated by the transaction management system.  This field is equivalent to the TEMP_DIR configuration variable.  If no directory is specified, temporary files are placed in the current directory.
+</p>
+<a name="wp1029613"> </a><h3 class="pHeadingRef">
+Log Buffer Size
+</h3>
+<a name="wp1029619"> </a><p class="pBody">
+This sets the maximum buffer size, in bytes, for the transaction log file.  It is equivalent to the LOG_BUFFER_SIZE configuration variable.  Acceptable values are from &quot;0&quot; to &quot;32767&quot;.  Log Buffer Size is examined before each write to the log file.  Its default value is &quot;512&quot;.  If Log Buffer Size is set to &quot;0&quot;, writes to the log file are synchronous (unbuffered).  That is, if the log buffer size is &quot;0&quot;, there is an operating system call after every write to the log buffer.  If the number is large, there is a call only when the buffer is full.  Acucorp recommends that you experiment to determine which size works best in your environment.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

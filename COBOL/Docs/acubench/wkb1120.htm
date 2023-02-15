@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:14:29" />
+  <title>11.4.4  Graphical Screen Importing Notes and Restrictions</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuBench User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="wkb11.htm">Chapter 11: Working with Screens</a> &gt; <a href="wkb1116.htm">11.4  Importing a Graphical Screen</a> &gt; </p>
+<a name="wp1034767"> </a><h2 class="pHeading2">
+11.4.4  Graphical Screen Importing Notes and Restrictions
+</h2>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034769"> </a><div class="pSmartList1"><li>The grid, tree view, Web browser, status bar, and ActiveX controls, as well as pop-up menus, are only partially imported.  For these controls, common properties and styles are imported.  However, control-specific properties and styles are ignored and must be added manually.  </li></div>
+<a name="wp1034771"> </a><div class="pSmartList1"><li>Only controls are imported.  Screen elements described by textual fields (e.g., DISPLAY &quot;CUST NO&quot;) are not imported.</li></div>
+<a name="wp1034772"> </a><div class="pSmartList1"><li>The imported screen does not retain any of the structural information in the original source&#39;s Screen section.  For example, if a Screen section item contains subsidiary group items, that information is lost.  The Screen Designer cannot represent these items, so they are not imported.  The resulting screen has the same look as the original, but a different internal structure.  </li></div>
+<a name="wp1034773"> </a><div class="pSmartList1"><li>Importing a screen and then generating code may result in an illegal COBOL program.  This can happen when the original source code contains structures that have no representation in the Screen Designer.  For example, if the original program contains two fields that have the same name, but are distinct using qualification by intermediate group items, the resulting program may be illegal as the intermediate group items are lost.  In another example, if the USING phrase for a control names a qualified data item (e.g., MY-DATA OF MY-GROUP), then the resulting program contains an illegal data declaration (e.g., &quot;01  MY-DATA OF MY-GROUP  PIC X(10)&quot;).  You can adjust for these anomalies in the Screen Designer after importing the screen.   </li></div>
+<a name="wp1034774"> </a><div class="pSmartList1"><li>If both FROM and TO are specified, the TO item becomes the control&#39;s VALUE and the FROM item is ignored.  Otherwise any specified FROM/TO/USING item becomes the control&#39;s VALUE.  The control&#39;s actual VALUE is suppressed, but the VALUE data item name and picture are imported.</li></div>
+<a name="wp1034775"> </a><div class="pSmartList1"><li>CLINE, CCOL, CSIZE, and CLINES are not currently imported.</li></div>
+<a name="wp1034776"> </a><div class="pSmartList1"><li>MULTIPLE VALUE items have the word &quot;Table&quot; in front of their data item name.  However, the number of occurrences in the table is not imported.  </li></div>
+<a name="wp1034777"> </a><div class="pSmartList1"><li>For entry fields, list boxes, and combo boxes, if neither BOXED nor NO-BOX is specified, the import utility sets BOXED to &quot;true&quot; (although FIELDS-UNBOXED can affect this).  While this is an accurate reflection of the control&#39;s appearance under Windows, this could change the look under character systems.  You might want to leave both BOXED and UNBOXED &quot;false&quot; and have the Screen Designer assume the BOXED appearance.  Also note that FIELDS-UNBOXED implies the NO-BOX style (for entry fields) at the time the control is created.  This is reflected in the imported code even though NO-BOX is not specified in the original source.  </li></div>
+<a name="wp1034778"> </a><div class="pSmartList1"><li>Labels always have a LABEL-OFFSET of &quot;0&quot;.  The label offset value is reflected in the coordinates for the label.</li></div>
+<a name="wp1034779"> </a><div class="pSmartList1"><li>Single-line entry fields report their MAX-LINES as &quot;0&quot;, because MAX-LINES is only meaningful for multi-line entry fields.</li></div>
+<a name="wp1034780"> </a><div class="pSmartList1"><li>CURSOR and ACTION properties are not imported for entry fields.  These fields are not normally used in a Screen section.</li></div>
+<a name="wp1034781"> </a><div class="pSmartList1"><li>For list boxes, the following properties are not imported: MASS-UPDATE, ITEM-TO-ADD, RESET-LIST, ITEM-TO-DELETE, INSERTION-INDEX, SEARCH-TEXT, SELECTION-INDEX, QUERY-INDEX, and ITEM-VALUE.  All of these are dynamic properties that are not part of the static appearance of the list box.  You may want to reconsider ITEM-TO-ADD and possibly others.  </li></div>
+<a name="wp1034782"> </a><div class="pSmartList1"><li>For combo boxes, the following properties are not imported: MASS-UPDATE, ITEM-TO-ADD, RESET-LIST, ITEM-TO-DELETE, and INSERTION-INDEX.</li></div>
+<a name="wp1034783"> </a><div class="pSmartList1"><li>For frames, FILL-PERCENT is not imported.</li></div>
+<a name="wp1034784"> </a><div class="pSmartList1"><li>For tab controls, RESET-TABS and TAB-TO-DELETE are not imported.  </li></div>
+<a name="wp1034785"> </a><div class="pSmartList1"><li>For bars, one dimension has a size of zero.  Use the value of the WIDTH property to determine the actual width of the line.</li></div>
+<a name="wp1034786"> </a><div class="pSmartList1"><li>For bitmaps, either SIZE or LINES may be zero.  In this case, the full size of the actual bitmap should be used for the corresponding dimension.</li></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuBench-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

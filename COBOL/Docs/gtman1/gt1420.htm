@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:48" />
+  <title>4.3.2.5  Special keys</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt14.htm"><br />Chapter 4:  Terminal Manager</a> &gt; <a href="gt1410.htm">4.3  The Keyboard Interface</a> &gt; <a href="gt1415.htm">4.3.2  Redefining the Keyboard</a> &gt; </p>
+<a name="wp1059856"> </a><h2 class="pHeading3">
+4.3.2.5  Special keys
+</h2>
+<a name="wp1033598"> </a><p class="pBody">
+The following keys deserve special attention.
+</p>
+<a name="wp1033599"> </a><h3 class="pHeadingRef">
+Arrow keys
+</h3>
+<a name="wp1033601"> </a><p class="pBody">
+The left and right arrow keys can be configured to meet a variety of needs.  
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033602"> </a><div class="pSmartList1"><li>As <b class="cBold">exception keys</b> only.  In this case, typing an arrow key will cause an ACCEPT to terminate immediately with the arrow-key exception value.  The program can then take the appropriate action (such as moving a highlight in the requested direction).  To configure an arrow in this manner, define an EXCEPTION value for it with the KEYSTROKE runtime configuration variable.  </li></div>
+<a name="wp1033603"> </a><div class="pSmartList1"><li>As <b class="cBold">edit keys</b> only.  In this case, the arrows will move the cursor within the ACCEPT field, but will not move outside the boundaries of the field.  In this mode, the arrow key will never terminate the ACCEPT.  To configure an arrow in this manner, define the appropriate EDIT value for it with the KEYSTROKE runtime configuration variable.  </li></div>
+<a name="wp1033604"> </a><div class="pSmartList1"><li>As both <b class="cBold">exception keys</b> and <b class="cBold">edit keys</b>.  In this mode, the arrows will act as edit keys within the ACCEPT field, but will act as exception keys when the user tries to move outside the field.  This can be useful if you are writing a &quot;fill-in-the-form&quot; style of application.  To configure an arrow in this manner, define both an EXCEPTION and an EDIT value for it.  </li></div>
+</ol></div>
+<a name="wp1033605"> </a><p class="pBody">
+By default, the left and right arrows act as edit keys, and the up and down arrows act as both edit and exception keys.  You can change the behavior of the arrows at runtime to switch between different modes if you need to.  You do this via the SET ENVIRONMENT verb and the appropriate KEYSTROKE settings.  For example, to configure the left arrow to act as an editing key from within a program, use:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SET ENVIRONMENT &quot;KEYSTROKE&quot; TO &quot;EDIT=Left kl&quot;<a name="wp1033606"> </a>
+</pre></div>
+<a name="wp1033607"> </a><h3 class="pHeadingRef">
+Backspace vs. Left Arrow 
+</h3>
+<a name="wp1033609"> </a><p class="pBody">
+On some terminals, the Backspace  and Left Arrow keys send the same hardware signal.  If so, ACUCOBOL-GT's key naming rules will treat both as a (destructive) Backspace, because the host name takes precedence.  You can deal with this situation in one of several ways; some possibilities are:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033610"> </a><div class="pSmartList1"><li>If you do not use the Left Arrow key as anything other than an edit key, you can probably just use the defaults.  You will not have the Left Arrow capability, but most users prefer to have destructive Backspace instead.  Alternatively, if you prefer to have Left Arrow instead of destructive Backspace you can, with a KEYSTROKE variable, define the Backspace key to have the &quot;Left&quot; edit action.</li></div>
+<a name="wp1033611"> </a><div class="pSmartList1"><li>If you use the Left Arrow as an exception key, then you can leave the destructive backspace action on the Backspace key and also give it an exception code value.  This will cause the Backspace key to act as a destructive backspace while the cursor is in an ACCEPT field.  The Left Arrow exception value will be returned when the user backspaces off the left edge of the field.</li></div>
+<a name="wp1033612"> </a><div class="pSmartList1"><li>Finally, you can use operating system commands to assign the host's Backspace key to another key.  This will then cause the Backspace key to be recognized as a Left Arrow key while the other key will take on the characteristics of the Backspace key.  If you wish to do this, a common key to use as the alternate Backspace key is the Rub Out (or DEL) key.  </li></div>
+</ol></div>
+<a name="wp1033613"> </a><p class="pBody">
+Other combinations exist, but this should give you a general idea of ways to address this issue.
+</p>
+<a name="wp1033614"> </a><h3 class="pHeadingRef">
+Interrupt key  
+</h3>
+<a name="wp1033616"> </a><p class="pBody">
+ACUCOBOL-GT has no way of defining a key to be the asynchronous interrupt key.  ACUCOBOL-GT makes use of the host's definition for this key.  This has two effects:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033617"> </a><div class="pSmartList1"><li>If you want to define a special asynchronous interrupt key, you must do so at the operating system level.</li></div>
+<a name="wp1033618"> </a><div class="pSmartList1"><li>Whichever key is used as the Interrupt key will be unavailable to you as a normal key.  This is because the host operating system acts on this key prior to ACUCOBOL-GT's ever receiving it.  ACUCOBOL-GT &quot;sees&quot; an interrupt when this key is typed; it never receives a character for it.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

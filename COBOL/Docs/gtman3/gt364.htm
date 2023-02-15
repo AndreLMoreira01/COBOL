@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>6.1.1.1  Scope of statements</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt362.htm">6.1  Organization</a> &gt; <a href="gt363.htm">6.1.1  Statements and Sentences</a> &gt; </p>
+<a name="wp1034374"> </a><h2 class="pHeading3">
+6.1.1.1  Scope of statements
+</h2>
+<a name="wp1034377"> </a><p class="pBody">
+The scope of a statement designates when a statement ends.  A period terminates all currently active statements.  In a delimited-scope statement, the scope delimiter ends the statement.  An imperative statement ends at the beginning of the next statement.  
+</p>
+<a name="wp1034378"> </a><p class="pBody">
+Conditional and delimited-scope statements can contain other statements.  These statements can be terminated implicitly by elements of the containing statement.   In the following example, the ELSE clause terminates the ADD and DISPLAY statements.  The period terminates the MOVE and IF statements.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    IF VAR-1 = VAR-2<a name="wp1034379"> </a>
+        ADD VAR-X TO VAR-Y<a name="wp1034380"> </a>
+            ON SIZE ERROR DISPLAY &quot;OVERFLOW&quot;<a name="wp1034381"> </a>
+    ELSE<a name="wp1034382"> </a>
+        MOVE VAR-2 TO VAR-1.<a name="wp1034383"> </a>
+</pre></div>
+<a name="wp1034384"> </a><p class="pBody">
+Clauses or scope-delimiters that terminate a statement always terminate the statement that begins with the closest preceding unpaired verb of the appropriate type.  In the following example, the first ELSE terminates the DISPLAY statement, the second ELSE terminates the MOVE statement and the second IF statement, and the period terminates the ADD statement and the first IF statement. 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    IF VAR-1 = VAR-2<a name="wp1034386"> </a>
+        IF VAR-3 = VAR-4<a name="wp1034387"> </a>
+            DISPLAY &quot;CONDITION 1&quot;<a name="wp1034388"> </a>
+        ELSE<a name="wp1034389"> </a>
+            MOVE &quot;CONDITION 2&quot; TO VAR-5<a name="wp1034390"> </a>
+    ELSE<a name="wp1034391"> </a>
+        ADD 1 TO VAR-3.<a name="wp1034392"> </a>
+</pre></div>
+<a name="wp1034393"> </a><p class="pBody">
+A delimited-scope statement is one that contains a scope-delimiter.  A scope-delimiter is always a reserved word that begins with &quot;END-&quot; and finishes with a verb name.  For example, END-ADD and END-START are scope delimiters for the ADD and START statements.  The presence of a scope-delimiter converts a conditional statement into a delimited-scope statement.  A delimited-scope statement may be used anywhere an imperative statement can appear. 
+</p>
+<a name="wp1060814"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Only imperative statements may be nested within another statement, unless the other statement is an IF statement. 
+<hr />
+</p>
+<a name="wp1060815"> </a><p class="pBody">
+ The following is <em class="cEmphasis">illegal</em>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ADD VAR-1 TO VAR-2 ON SIZE ERROR<a name="wp1060808"> </a>
+       IF VAR-1 &lt; ZERO<a name="wp1034396"> </a>
+          DISPLAY &quot;VAR-1 IS NEGATIVE&quot;<a name="wp1034397"> </a>
+       ELSE<a name="wp1034398"> </a>
+          DISPLAY &quot;VAR-1 TOO LARGE&quot;.<a name="wp1034399"> </a>
+</pre></div>
+<a name="wp1034400"> </a><p class="pBody">
+Since the IF statement is conditional, it may not be nested within the ADD statement.  The correct version of this construct is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    ADD VAR-1 TO VAR-2 ON SIZE ERROR<a name="wp1034401"> </a>
+       IF VAR-1 &lt; ZERO<a name="wp1034402"> </a>
+          DISPLAY &quot;VAR-1 IS NEGATIVE&quot;<a name="wp1034403"> </a>
+       ELSE<a name="wp1034404"> </a>
+          DISPLAY &quot;VAR-1 TOO LARGE&quot;<a name="wp1034405"> </a>
+       END-IF.<a name="wp1034406"> </a>
+</pre></div>
+<a name="wp1034407"> </a><p class="pBody">
+The presence of the END-IF converts the conditional IF statement into a delimited-scope statement which may be used in place of an imperative statement.  Thus it may appear nested within the ADD statement.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

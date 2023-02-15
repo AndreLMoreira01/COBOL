@@ -1,0 +1,662 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$PARSEXFD Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1306648"> </a><h2 class="pHeading2">
+C$PARSEXFD Routine
+</h2>
+<a name="wp1306659"> </a><p class="pBody">
+This routine is used to parse XFD files and retrieve information about them, giving you a way to map field description information to file record areas.  Similar functionality allows the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">alfred</span> utility to display data in a logical way (rather than displaying full records).
+</p>
+<a name="wp1315754"> </a><p class="pBody">
+A detailed description of the use and structure of XFD files can be found in Book 1, Chapter 5, <a  href="javascript:WWHClickedPopup('ACUCOBOL_GT_User_s_Guide_Version_7_2', 'gt1521.htm#wp1032471');" onMouseOver="WWHShowPopup('ACUCOBOL_GT_User_s_Guide_Version_7_2', 'gt1521.htm#wp1032471', (document.all||document.getElementById||document.layers)?event:null);" onMouseOut="WWHHidePopup();">section 5.3</a> of the <em style="font-style: italic" class="cEmphasis">ACUCOBOL-GT User's Guide</em><em style="font-style: normal" class="cEmphasis">.</em>
+</p>
+<a name="wp1309306"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The utility <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">alfred</span> is distributed with a file called &quot;parsexfd.ws&quot;, which describes how to use the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">alfred</span> object library to parse XFD files.  Although the C$PARSEXFD routine supersedes the abilities of that program, you may continue to use it.  The &quot;ParseXFD&quot; COBOL program has been rewritten to use C$PARSEXFD, but the program interface has not changed.
+<hr />
+</p>
+<a name="wp1304506"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$PARSEXFD&quot;<a name="wp1304507"> </a>
+    USING OP-CODE, parameters<a name="wp1304508"> </a>
+    GIVING return-value.<a name="wp1304509"> </a>
+</pre></div>
+<a name="wp1304510"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1304511"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">OP-CODE </span>  Numeric value
+</p>
+<a name="wp1304512"> </a><p class="pBody">
+The op-codes, which are defined in &quot;parsexfd.def&quot;, select which C$PARSEXFD function to perform.  This table shows which operation corresponds to each operation code.  </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1315835"> </a>
+Code
+
+</th>
+    <th><a name="wp1315837"> </a>
+Operation
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1315839"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1315841"> </a><p class="pCellBody">
+parse XFD file
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1315843"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1315845"> </a><p class="pCellBody">
+retrieve key information
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1315847"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1315849"> </a><p class="pCellBody">
+retrieve condition information
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1315851"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1315853"> </a><p class="pCellBody">
+retrieve field information
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1315855"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1315857"> </a><p class="pCellBody">
+test record conditions
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1316717"> </a><p class="pCellBody">
+9
+</p>
+</td>
+    <td><a name="wp1316719"> </a><p class="pCellBody">
+release XFD file from memory
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1315832"> </a><p class="pBody">
+Detailed information about the operations is given in the description below.  
+</p>
+<a name="wp1304515"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">parameters</span> 
+</p>
+<a name="wp1304520"> </a><p class="pBody">
+Op-code parameters vary depending on the operation code chosen.  They provide information and hold results for the operations specified.  The parameters that apply to C$PARSEXFD op-codes are all defined in &quot;parsexfd.def&quot;.
+</p>
+<a name="wp1331005"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">return-value</span>  Numeric data item
+</p>
+<a name="wp1331003"> </a><p class="pBody">
+This item returns information relevant to the operation.  The type of return value varies by op-code.
+</p>
+<a name="wp1315817"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1315818"> </a><p class="pBody">
+C$PARSEXFD performs a variety of operations depending on the specified op-code.  These operations are as follows:
+</p>
+<a name="wp1304524"> </a><h3 class="pHeadingRef">
+PARSEXFD-PARSE (op-code 0)
+</h3>
+<a name="wp1315815"> </a><p class="pBody">
+This operation parses a specified XFD file.  The syntax is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$PARSEXFD&quot; <a name="wp1309331"> </a>
+    USING PARSEXFD-PARSE, xfd-name, filename, flags,<a name="wp1309336"> </a>
+         xfd-description.<a name="wp1309366"> </a>
+</pre></div>
+<a name="wp1309325"> </a><p class="pBody">
+PARSEXFD-PARSE takes the following parameters:
+</p>
+<a name="wp1304525"> </a><p class="pBody">
+<span class="cBoldItalic">xfd-name</span>   PIC X(n)
+</p>
+<a name="wp1304526"> </a><p class="pBody">
+Specifies the name of the XFD file to parse, with or without path information.  If there is no path information, then the configuration variables XFD_DIRECTORY or XFD_PREFIX are used to find the XFD file.  You may omit the &quot;.xfd&quot; extension.
+</p>
+<a name="wp1304527"> </a><p class="pBody">
+<span class="cBoldItalic">filename</span>  PIC X(n) or NULL 
+</p>
+<a name="wp1304528"> </a><p class="pBody">
+Specifies an indexed data file to be compared against the parsed XFD file.  If the characteristics of the specified data file do not match the XFD, the parsed XFD is freed and the return-value is set to NULL.  If this parameter is NULL or empty, the XFD file is not compared to any file.
+</p>
+<a name="wp1304529"> </a><p class="pBody">
+<span class="cBoldItalic">flags </span> Numeric parameter
+</p>
+<a name="wp1304530"> </a><p class="pBody">
+Flags modify the type of information returned from other op-codes.  This parameter can be &quot;0&quot; (if no flags are set), or the sum of any of the following values:
+</p>
+<a name="wp1304531"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FLAG-INCLUDE-COMMENTS</b> (value 1):  This option causes comments to be included in the parsed XFD.  The routine cannot, however, currently retrieve those comments.
+</p>
+<a name="wp1306619"> </a><p class="pIndented1">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">PARSEXFD-FLAG-INCLUDE-999</span> (value 2):  This option includes fields with a condition code of 999, which indicates group items and other fields not normally included with XFD files.
+</p>
+<a name="wp1304534"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FLAG-EXCLUDE-ARRAYS</b> (value 4):  All table elements are normally appended with a value indicating their index.  For example, for a field that occurs five times, the returned XFD includes five fields with _1, _2, _3, _4, and _5 appended to the field names.  When this flag is set, such fields are returned with no suffix indicating their array index value.  The information is still included, however, with the field group item (see below).
+</p>
+<a name="wp1304535"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FLAG-DEEP-FIRST</b> (value 8):  This flag modifies the order in which fields that are sub-elements of a table are returned.  For example:
+</p>
+   07  my-array occurs 5 times.<a name="wp1304536"> </a>
+      09  elem-1     pic x.<a name="wp1304537"> </a>
+      09  elem-2     pic x.<a name="wp1304538"> </a>
+      09  elem-3     pic x.<a name="wp1304539"> </a>
+<a name="wp1304540"> </a><p class="pBody">
+Normally this is returned as elem-1(1), elem-1(2), elem-1(3), elem-1(4), elem-1(5), elem-2(1), elem-2(2), elem-2(3), elem-2(4), elem-2(5), elem-3(1), elem-3(2), elem-3(3), elem-3(4), elem-3(5).
+</p>
+<a name="wp1304541"> </a><p class="pBody">
+If PARSEXFD-FLAG-DEEP-FIRST is specified, the items are instead returned as elem-1(1), elem-2(1), elem-3(1), elem-1(2), elem-2(2), and so on.  The same data is returned, but in a different order.
+</p>
+<a name="wp1304542"> </a><p class="pBody">
+<span class="cBoldItalic">xfd-description</span>   Group item
+</p>
+<a name="wp1304543"> </a><p class="pBody">
+This parameter is structured as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  PARSEXFD-DESCRIPTION.<a name="wp1304544"> </a>
+    03  PARSEXFD-HEADER-LINE.<a name="wp1316737"> </a>
+        05  PARSEXFD-VERSION           PIC X COMP-N.<a name="wp1316738"> </a>
+        05  PARSEXFD-SELECT-NAME       PIC X(30).<a name="wp1316739"> </a>
+        05  PARSEXFD-FILENAME          PIC X(30).<a name="wp1316740"> </a>
+        05  PARSEXFD-FILETYPE          PIC X COMP-N.<a name="wp1316741"> </a>
+    03  PARSEXFD-RECORD-LINE.<a name="wp1316742"> </a>
+        05  PARSEXFD-MAX-REC-SIZE      PIC X(4) COMP-N.<a name="wp1317129"> </a>
+        05  PARSEXFD-MIN-REC-SIZE      PIC X(4) COMP-N.<a name="wp1317130"> </a>
+        05  PARSEXFD-NUM-KEYS          PIC X COMP-N.<a name="wp1317131"> </a>
+    03  PARSEXFD-CONDITION-LINE.<a name="wp1317140"> </a>
+        05  PARSEXFD-NUMBER-CONDITIONS PIC XX COMP-N.<a name="wp1317141"> </a>
+    03  PARSEXFD-FIELDS-LINE.<a name="wp1317146"> </a>
+        05  PARSEXFD-NUMBER-FIELDS     PIC X(4) COMP-N.<a name="wp1317149"> </a>
+</pre></div>
+<a name="wp1304558"> </a><p class="pBody">
+The values of the &quot;xfd-description&quot; parameter are defined as follows:
+</p>
+<a name="wp1304559"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-VERSION</b> is the version number of this XFD file.
+</p>
+<a name="wp1304560"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-SELECT-NAME</b> is the SELECT name of the file.
+</p>
+<a name="wp1304561"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FILENAME</b> is the name of the data file described in the XFD.
+</p>
+<a name="wp1304562"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FILETYPE</b> is the data file type.  Valid values are 4 (sequential file), 8 (relative file), and 12 (indexed file).
+</p>
+<a name="wp1304563"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-MAX-REC-SIZE</b> and <b class="cBold">MIN-REC-SIZE</b> are the maximum and minimum size values for a record in this file.
+</p>
+<a name="wp1304564"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-NUM-KEYS</b> gives the number of keys described in the XFD.
+</p>
+<a name="wp1304565"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-NUMBER-CONDITIONS</b> gives the number of conditions described in the XFD file.
+</p>
+<a name="wp1304566"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-NUMBER-FIELDS</b> is the number of fields available in the XFD.
+</p>
+<a name="wp1304567"> </a><p class="pBody">
+<span class="cBoldItalic">return-value </span>
+</p>
+<a name="wp1304568"> </a><p class="pBody">
+For this op-code, the return value is the handle to the XFD.  This handle must be used in future calls to C$PARSEXFD to get more information about the XFD, and to free the XFD when you are finished.
+</p>
+<a name="wp1304569"> </a><p class="pBody">
+If the return-value is &quot;0&quot;, an error occurred.  You can get  information about errors by examining f-errno and f-int-errno, which are defined in the &quot;filesys.def&quot; COPY file.
+</p>
+<a name="wp1304570"> </a><h3 class="pHeadingRef">
+PARSEXFD-GET-KEY-INFO (op-code 1)
+</h3>
+<a name="wp1317153"> </a><p class="pBody">
+This operation retrieves information about the specified (single) key.  It uses the following syntax:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$PARSEXFD&quot; <a name="wp1309351"> </a>
+    USING PARSEXFD-GET-KEY-INFO, xfd-handle, keynum,<a name="wp1309356"> </a>
+          key-description<a name="wp1309359"> </a>
+</pre></div>
+<a name="wp1309341"> </a><p class="pBody">
+The operation takes the following parameters:  
+</p>
+<a name="wp1304571"> </a><p class="pBody">
+<span class="cBoldItalic">xfd-handle</span> 
+</p>
+<a name="wp1304572"> </a><p class="pBody">
+A valid handle returned by C$PARSEXFD PARSEXFD-PARSE.
+</p>
+<a name="wp1304573"> </a><p class="pBody">
+<span class="cBoldItalic">keynum</span>  Numeric parameter between 0 and PARSEXFD-NUM-KEYS
+</p>
+<a name="wp1317158"> </a><p class="pBody">
+Used to specify which key to parse.  Takes a value between 0 and PARSEXFD-NUM-KEYS.  Both 0 and &quot;PARSEXFD-NUM-KEYS - 1&quot; are valid key numbers, but &quot;PARSEXFD-NUM-KEYS&quot; is not valid.  In other words, key numbers are a zero-based array.
+</p>
+<a name="wp1304575"> </a><p class="pBody">
+<span class="cBoldItalic">key-description</span>   Group item 
+</p>
+<a name="wp1304576"> </a><p class="pBody">
+This parameter is structured as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 PARSEXFD-KEY-DESCRIPTION.<a name="wp1304577"> </a>
+   03 PARSEXFD-NUMBER-SEGMENTS        PIC X COMP-N.<a name="wp1304578"> </a>
+   03 PARSEXFD-DUP-FLAG               PIC X COMP-N.<a name="wp1304579"> </a>
+      88 PARSEXFD-ALLOW-DUPLICATES    VALUE 1 FALSE 0.<a name="wp1304580"> </a>
+   03 PARSEXFD-SEGMENT-DESCRIPTION<a name="wp1304581"> </a>
+        OCCURS MAX-SEGS TIMES<a name="wp1304582"> </a>
+        INDEXED BY PARSEXFD-SEG-IDX.<a name="wp1304583"> </a>
+      05 PARSEXFD-SEGMENT-LENGTH      PIC X COMP-N.<a name="wp1304584"> </a>
+      05 PARSEXFD-SEGMENT-OFFESET     PIC X(4) COMP-N.<a name="wp1317209"> </a>
+      05 PARSEXFD-SEGMENT-OFFSET      PIC X(4) COMP-N.<a name="wp1304585"> </a>
+   03 PARSEXFD-NUMBER-KEY-FIELDS      PIC X COMP-N.<a name="wp1304586"> </a>
+   03 PARSEXFD-KEY-FIELDS<a name="wp1304587"> </a>
+        OCCURS MAXNUMKEYFIELDS TIMES<a name="wp1304588"> </a>
+        INDEXED BY PARSEXFD-KEY-FIELD-IDX.<a name="wp1304589"> </a>
+      05 PARSEXFD-KEY-FIELD-NUM       PIC XX COMP-N.<a name="wp1304590"> </a>
+</pre></div>
+<a name="wp1304591"> </a><p class="pBody">
+The values of the &quot;key-description&quot; parameter are defined as follows:
+</p>
+<a name="wp1304592"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-NUMBER-SEGMENTS</b> specifies the number of segments in this key.
+</p>
+<a name="wp1304593"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-DUP-FLAG</b> shows whether duplicates are allowed in this key.  A value of &quot;1&quot; indicates that duplicates are allowed; a value of &quot;0&quot; indicates no duplicates.
+</p>
+<a name="wp1304594"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-SEGMENT-LENGTH</b> and <b class="cBold">SEGMENT-OFFSET</b> are the length and offset of each segment.  The offset value is zero-based, so offset 0 is the beginning of the record.  There is one SEGMENT-LENGTH and SEGMENT-OFFSET value for each segment.
+</p>
+<a name="wp1304595"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-NUMBER-KEY-FIELDS</b> gives the number of fields that make up this key.  This is always at least as large as the number of segments, but may be larger (if a segment holds multiple fields).
+</p>
+<a name="wp1304596"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-KEY-FIELDS</b> is a table of key fields.  This table has PARSEXFD-NUMBER-KEY-FIELDS valid elements.
+</p>
+<a name="wp1304597"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-KEY-FIELD-NUM</b> is the field number of this key field.  Get information about the key field by looking at this field number.
+</p>
+<a name="wp1304598"> </a><p class="pBody">
+<span class="cBoldItalic">return-value</span>  0 or 1
+</p>
+<a name="wp1304599"> </a><p class="pBody">
+A return value of &quot;1&quot; indicates that the operation was successful; a &quot;0&quot; indicates failure.  For this operation, a return code of &quot;0&quot; means that you have entered an invalid key number (for instance, specifying a key number of 3 for a file that only has two keys).  Note, however, that if an invalid handle is specified, the results are undefined and may result in a memory violation.
+</p>
+<a name="wp1304600"> </a><h3 class="pHeadingRef">
+PARSEXFD-GET-COND-INFO (op-code 2)
+</h3>
+<a name="wp1317163"> </a><p class="pBody">
+This operation retrieves information about conditions that use the WHEN directive within the XFD file.  It uses the following syntax:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$PARSEXFD&quot;<a name="wp1309370"> </a>
+    USING PARSEXFD-GET-COND-INFO, xfd-handle, cond-index,<a name="wp1309420"> </a>
+          cond-description.<a name="wp1309423"> </a>
+</pre></div>
+<a name="wp1309367"> </a><p class="pBody">
+PARSEXFD-GET-COND-INFO takes the following parameters:
+</p>
+<a name="wp1304601"> </a><p class="pBody">
+<span class="cBoldItalic">xfd-handle</span> 
+</p>
+<a name="wp1304602"> </a><p class="pBody">
+A valid handle returned by C$PARSEXFD PARSEXFD-PARSE.
+</p>
+<a name="wp1304603"> </a><p class="pBody">
+<span class="cBoldItalic">cond-index</span>  Numeric parameter 
+</p>
+<a name="wp1304604"> </a><p class="pBody">
+The condition index determines which condition to evaluate.  It takes a value between 0 and PARSEXFD-NUMBER-CONDITIONS.  Because conditions are a zero-based array, &quot;0&quot; and &quot;PARSEXFD-NUMBER-CONDITIONS - 1&quot; are valid values, but PARSEXFD-NUMBER-CONDITIONS is not.
+</p>
+<a name="wp1304605"> </a><p class="pBody">
+<span class="cBoldItalic">cond-description</span>  Group item 
+</p>
+<a name="wp1317208"> </a><p class="pBody">
+The condition description holds information about what condition has been set (EQUAL TO, AND, OR), whether the condition has been met (is true or false), and how the condition is structured.
+</p>
+<a name="wp1304606"> </a><p class="pBody">
+This parameter is structured as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  PARSEXFD-CONDITION-DESCRIPTION.<a name="wp1304607"> </a>
+    03  PARSEXFD-CONDITION-TYPE         PIC X COMP-N.<a name="wp1304608"> </a>
+        88  PARSEXFD-EQUAL-CONDITION    VALUE 1.<a name="wp1304609"> </a>
+        88  PARSEXFD-AND-CONDITION      VALUE 2.<a name="wp1304610"> </a>
+        88  PARSEXFD-OTHER-CONDITION    VALUE 3.<a name="wp1304611"> </a>
+        88  PARSEXFD-GT-CONDITION       VALUE 4.<a name="wp1304612"> </a>
+        88  PARSEXFD-GE-CONDITION       VALUE 5.<a name="wp1304613"> </a>
+        88  PARSEXFD-LT-CONDITION       VALUE 6.<a name="wp1304614"> </a>
+        88  PARSEXFD-LE-CONDITION       VALUE 7.<a name="wp1304615"> </a>
+        88  PARSEXFD-NE-CONDITION       VALUE 8.<a name="wp1304616"> </a>
+        88  PARSEXFD-OR-CONDITION       VALUE 9.<a name="wp1304617"> </a>
+        88  PARSEXFD-COMPARISON-COND    VALUES 1, 4 THROUGH 8.<a name="wp1304618"> </a>
+    03  PARSEXFD-CONDITION-FLAG         PIC X.<a name="wp1304619"> </a>
+        88  PARSEXFD-TRUE-CONDITION     VALUE &#39;Y&#39; FALSE &#39;N&#39;.<a name="wp1304620"> </a>
+    03  PARSEXFD-COMPARISON-CONDITIONS.<a name="wp1304621"> </a>
+        05  PARSEXFD-COMP-FIELDNUM      PIC XX COMP-N.<a name="wp1304622"> </a>
+        05  PARSEXFD-COMP-FIELDNAME     PIC X(30).<a name="wp1304623"> </a>
+        05  PARSEXFD-COMP-FIELD-VAL     PIC X(50).<a name="wp1304624"> </a>
+    03  PARSEXFD-OTHER-CONDITIONS<a name="wp1304625"> </a>
+         REDEFINES PARSEXFD-COMPARISON-CONDITIONS.<a name="wp1304626"> </a>
+        05  PARSEXFD-OTHER-FIELDNUM     PIC XX COMP-N.<a name="wp1304627"> </a>
+        05  PARSEXFD-OTHER-FIELDNAME    PIC X(30).<a name="wp1304628"> </a>
+    03  PARSEXFD-AND-OR-CONDITIONS<a name="wp1304629"> </a>
+         REDEFINES PARSEXFD-COMPARISON-CONDITIONS.<a name="wp1304630"> </a>
+        05  PARSEXFD-CONDITION-1        PIC XX COMP-N.<a name="wp1304631"> </a>
+        05  PARSEXFD-CONDITION-2        PIC XX COMP-N.<a name="wp1304632"> </a>
+    03  PARSEXFD-CONDITION-TABLENAME    PIC X(30).<a name="wp1304633"> </a>
+</pre></div>
+<a name="wp1326620"> </a><p class="pBody">
+The values of the &quot;cond-description&quot; parameter are defined as follows:
+</p>
+<a name="wp1304634"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-CONDITION-TYPE</b> tells whether this is an EQUAL condition, AND condition, etc.
+</p>
+<a name="wp1304635"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-CONDITION-FLAG</b> tells whether this condition is TRUE.  This is only valid after PARSEXFD-TEST-CONDITONS (see below) has been called.
+</p>
+<a name="wp1393109"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-CONDITION-TABLENAME</b> is the table name specified in the TABLENAME directive of the WHEN directive.
+</p>
+<a name="wp1393110"> </a><p class="pIndented1">
+For EQUAL, GT (greater than), GE (greater than or equal to), LT (less than), LE (less than or equal to), and NE (not equal to) conditions, the following fields are valid:
+</p>
+<a name="wp1393111"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-COMP-FIELDNUM</b> is the field number of the field whose value will be tested against the value of the condition.
+</p>
+<a name="wp1393112"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-COMP-FIELDNAME</b> is the name of that field.
+</p>
+<a name="wp1393113"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-COMP-FIELD-VAL</b> is the value to be tested.  This is the value specified in the WHEN directive of the FD used to create this XFD.
+</p>
+<a name="wp1304641"> </a><p class="pBody">
+For OTHER conditions, the following fields are valid:
+</p>
+<a name="wp1304642"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-OTHER-FIELDNUM</b> is the field number of the field whose value will be different than all the other conditions which use this field.
+</p>
+<a name="wp1304643"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-OTHER-FIELDNAME</b> is the name of that field.
+</p>
+<a name="wp1304644"> </a><p class="pBody">
+For AND and OR conditions, the following fields are valid:
+</p>
+<a name="wp1304645"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-CONDITION-1</b> and <b class="cBold">PARSEXFD-CONDITION-2 </b>are the conditions tested to determine whether this condition is true.  For AND, both conditions must be true.  For OR, one or both conditions must be true.
+</p>
+<a name="wp1304646"> </a><h3 class="pHeadingRef">
+PARSEXFD-GET-FIELD-INFO (op-code 3)
+</h3>
+<a name="wp1327767"> </a><p class="pBody">
+This operation retrieves information about the field.  It uses the following syntax:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$PARSEXFD&quot;<a name="wp1309594"> </a>
+    USING PARSEXFD-GET-FIELD-INFO, xfd-handle, fieldnum,<a name="wp1309599"> </a>
+          field-description.<a name="wp1309602"> </a>
+</pre></div>
+<a name="wp1309426"> </a><p class="pBody">
+The operation takes the following parameters:
+</p>
+<a name="wp1304647"> </a><p class="pBody">
+<span class="cBoldItalic">xfd-handle</span> 
+</p>
+<a name="wp1304648"> </a><p class="pBody">
+A valid handle returned by C$PARSEXFD PARSEXFD-PARSE.
+</p>
+<a name="wp1304649"> </a><p class="pBody">
+<span class="cBoldItalic">fieldnum</span>  Numeric parameter 
+</p>
+<a name="wp1304650"> </a><p class="pBody">
+Takes a value between 0 and PARSEXFD-NUMBER-FIELDS.  Because fields are a zero-based array, &quot;0&quot; and &quot;PARSEXFD-NUMBER-FIELDS - 1&quot; are valid values, but PARSEXFD-NUMBER-FIELDS is not valid.
+</p>
+<a name="wp1304651"> </a><p class="pBody">
+<span class="cBoldItalic">field-description</span>  Group item 
+</p>
+<a name="wp1304652"> </a><p class="pBody">
+This parameter is structured as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  PARSEXFD-FIELD-DESCRIPTION.<a name="wp1304653"> </a>
+    03  PARSEXFD-FIELD-OFFSET            PIC X(4) COMP-N.<a name="wp1304654"> </a>
+    03  PARSEXFD-FIELD-LENGTH            PIC X(4) COMP-N.<a name="wp1304655"> </a>
+    03  PARSEXFD-FIELD-TYPE              PIC X COMP-N.<a name="wp1304656"> </a>
+        88  PARSEXFD-SIGNED-FIELD   VALUES NumSignSep<a name="wp1304657"> </a>
+                                           NumSigned<a name="wp1304658"> </a>
+                                           NumSepLead<a name="wp1304659"> </a>
+                                           NumLeading<a name="wp1304660"> </a>
+                                           CompSigned<a name="wp1304661"> </a>
+                                           PackedSigned<a name="wp1304662"> </a>
+                                           BinarySigned<a name="wp1304663"> </a>
+                                           NativeSigned.<a name="wp1304664"> </a>
+        88  PARSEXFD-NUM-FIELD      VALUES NumEdited THRU<a name="wp1304665"> </a>
+                                           NativeUnsigned.<a name="wp1309265"> </a>
+        88  PARSEXFD-FLOAT-FIELD    VALUE  Flt.<a name="wp1304667"> </a>
+        88  PARSEXFD-ASCII-FIELD    VALUES Alphanum THRU Group.<a name="wp1304668"> </a>
+        88  PARSEXFD-NAT-FIELD      VALUES Nat-type THRU NatEdited.<a name="wp1304669"> </a>
+        88  PARSEXFD-WIDE-FIELD     VALUES Wide-type THRU<a name="wp1304670"> </a>
+                                           WideEdited.<a name="wp1304671"> </a>
+    03  PARSEXFD-FIELD-DIGITS            PIC X COMP-N.<a name="wp1304672"> </a>
+    03  PARSEXFD-FIELD-SCALE             SIGNED-SHORT.<a name="wp1304673"> </a>
+    03  PARSEXFD-FIELD-USER-TYPE         PIC XX COMP-N.<a name="wp1304674"> </a>
+    03  PARSEXFD-FIELD-CONDITION         PIC XX COMP-N.<a name="wp1304675"> </a>
+    03  PARSEXFD-FIELD-LEVEL             PIC X COMP-N.<a name="wp1304676"> </a>
+    03  PARSEXFD-FIELD-NAME              PIC X(30).<a name="wp1304677"> </a>
+    03  PARSEXFD-FIELD-FORMAT            PIC X(30).<a name="wp1304678"> </a>
+    03  PARSEXFD-FIELD-OCCURS-DEPTH      PIC X COMP-N.<a name="wp1304679"> </a>
+    03  PARSEXFD-FIELD-OCCURS-TABLE<a name="wp1304680"> </a>
+            OCCURS MaxNumKeyFields TIMES<a name="wp1304681"> </a>
+            INDEXED BY PARSEXFD-FIELD-OCCURS-LEVEL.<a name="wp1304682"> </a>
+        05  PARSEXFD-FIELD-OCC-MAX-IDX   PIC XX COMP-N.<a name="wp1304683"> </a>
+        05  PARSEXFD-FIELD-OCC-THIS-IDX  PIC XX COMP-N.<a name="wp1304684"> </a>
+    03  PARSEXFD-FIELD-IN-KEY-FLAG       PIC X.<a name="wp1304685"> </a>
+        88  PARSEXFD-FIELD-IS-IN-KEY     VALUE &#39;Y&#39; FALSE &#39;N&#39;.<a name="wp1304686"> </a>
+    03  PARSEXFD-FIELD-SECONDARY-FLAG    PIC X.<a name="wp1304687"> </a>
+        88  PARSEXFD-FIELD-IS-SECONDARY  VALUE &#39;Y&#39; FALSE &#39;N&#39;.<a name="wp1304688"> </a>
+    03  PARSEXFD-FIELD-HIDDEN-FLAG       PIC X.<a name="wp1393196"> </a>
+        88  PARSEXFD-FIELD-IS-HIDDEN     VALUE &#39;Y&#39; FALSE &#39;N&#39;.<a name="wp1304690"> </a>
+    03  PARSEXFD-FIELD-READ-ONLY-FLAG    PIC X.<a name="wp1304691"> </a>
+        88  PARSEXFD-FIELD-IS-READ-ONLY  VALUE &#39;Y&#39; FALSE &#39;N&#39;.<a name="wp1304692"> </a>
+</pre></div>
+<a name="wp1326626"> </a><p class="pBody">
+The values of the &quot;field-description&quot; parameter are defined as follows:
+</p>
+<a name="wp1304693"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-OFFSET</b> is the offset of the beginning of this field (zero-based).
+</p>
+<a name="wp1304694"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-LENGTH</b> is the number of bytes this field requires.
+</p>
+<a name="wp1304695"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-TYPE</b> describes the type of field.  The types are defined as they appear in lib/sub.h, and are also listed in &quot;parsexfd.def&quot;.
+</p>
+<a name="wp1304696"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-DIGITS</b> is either the number of digits in this numeric field, or the length if the field is non-numeric.
+</p>
+<a name="wp1304697"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-SCALE</b> is either the scale of the numeric field or &quot;0&quot; if the field is non-numeric.  The scale is defined as the power of ten by which the numeric value must be multiplied in order to get the actual value.  For example, if the scale is -2, then there are two digits to the right of the decimal point.
+</p>
+<a name="wp1304698"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-USER-TYPE</b> describes some of the XFD directives, as listed in &quot;parsexfd.def&quot;.  The UserDate, UserBinary and UserVarLength values are mutually exclusive (only one of them is set).  SecondaryTable may be added to the value to signify that the SECONDARY-TABLE directive was also used.
+</p>
+<a name="wp1304699"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-CONDITION</b> is the condition that the field depends on.  A condition of &quot;0&quot; means that the field is always included; &quot;999&quot; means that the field is a group item.  In the latter case, the value may not be completely meaningful (if there are binary items in the group item).
+</p>
+<a name="wp1304700"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-LEVEL</b> is the level number of the field in the FD used to create this XFD.
+</p>
+<a name="wp1304701"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-NAME</b> is the name of the field.  If EXCLUDE-ARRAYS was NOT used when parsing the XFD, and the field is part of a table, then the field name may include array indices.
+</p>
+<a name="wp1304702"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-FORMAT</b> is the date format specified in the XFD DATE directive.
+</p>
+<a name="wp1304703"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-OCCURS-DEPTH</b> is the number of valid elements in the OCCURS-TABLE.
+</p>
+<a name="wp1304704"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-OCCURS-TABLE</b> gives information about this element of a table.  The OCC-MAX-IDX is the maximum index allowed.  The OCC-THIS-IDX is the index of this element.
+</p>
+<a name="wp1304705"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-IN-KEY-FLAG</b> indicates whether this field is part of a key.  The value is &quot;Y&quot; if this field is a part of one or more keys, or &quot;N&quot; if not.
+</p>
+<a name="wp1304706"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-SECONDARY-FLAG</b> indicates whether the  SECONDARY-TABLE directive was used.  The value is &quot;Y&quot; if so or &quot;N&quot; if not.
+</p>
+<a name="wp1304707"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-HIDDEN-FLAG</b> indicates whether the HIDDEN directive was used on this field.  The value is &quot;Y&quot; if so or &quot;N&quot; if not.
+</p>
+<a name="wp1304708"> </a><p class="pIndented1">
+<b class="cBold">PARSEXFD-FIELD-READ-ONLY-FLAG</b> indicates whether the  READ-ONLY directive was used on this field.  The value is &quot;Y&quot; if so or &quot;N&quot; if not.
+</p>
+<a name="wp1317322"> </a><p class="pBody">
+<span class="cBoldItalic">return-value</span>  0 or 1
+</p>
+<a name="wp1304709"> </a><p class="pBody">
+A return-value of &quot;1&quot; indicates that the operation was successful; a &quot;0&quot; indicates failure.  For this operation, you will only see a return code of &quot;0&quot; if you specify an invalid field number (for example, if you try to retrieve information about field number 17 in a record that only has 15 fields).
+</p>
+<a name="wp1317333"> </a><h3 class="pHeadingRef">
+PARSEXFD-TEST-CONDITIONS (op-code 4)
+</h3>
+<a name="wp1317223"> </a><p class="pBody">
+This operation tests the conditions of a particular record.  It uses the following syntax:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$PARSEXFD&quot; <a name="wp1309633"> </a>
+    USING PARSEXFD-TEST-CONDITIONS, xfd-handle, <a name="wp1309672"> </a>
+          record-pointer.<a name="wp1317222"> </a>
+</pre></div>
+<a name="wp1309605"> </a><p class="pBody">
+The operation takes the following parameters:
+</p>
+<a name="wp1304710"> </a><p class="pBody">
+<span class="cBoldItalic">xfd-handle</span> 
+</p>
+<a name="wp1304711"> </a><p class="pBody">
+A valid handle returned by C$PARSEXFD PARSEXFD-PARSE.
+</p>
+<a name="wp1304712"> </a><p class="pBody">
+<span class="cBoldItalic">record-pointer</span> 
+</p>
+<a name="wp1304713"> </a><p class="pBody">
+This is a pointer to the record area on which to test conditions.  (Because conditions are true or false depending on the value of particular fields, the values of those fields must be known.  The only way to do this is to have a record from a file, specified with the PARSEXFD-PARSE op-code, to test against.)
+</p>
+<a name="wp1304714"> </a><p class="pBody">
+After calling with this op-code, you can get each condition and tell whether fields that depend on that condition should be included in this record.
+</p>
+<a name="wp1304715"> </a><h3 class="pHeadingRef">
+PARSEXFD-RELEASE (op-code 9)
+</h3>
+<a name="wp1317224"> </a><p class="pBody">
+This operation frees all memory associated with the XFD.  It has the following syntax:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$PARSEXFD&quot; USING PARSEXFD-RELEASE, xfd-handle<a name="wp1309728"> </a>
+</pre></div>
+<a name="wp1309719"> </a><p class="pBody">
+This operation takes a single parameter:
+</p>
+<a name="wp1304716"> </a><p class="pBody">
+<span class="cBoldItalic">xfd-handle</span>
+</p>
+<a name="wp1304717"> </a><p class="pBody">
+A valid handle returned by C$PARSEXFD PARSEXFD-PARSE.
+</p>
+<a name="wp1304718"> </a><p class="pBody">
+After calling this op-code, do not reference the XFD handle.  Doing so will result in undefined behavior, and may cause a memory access violation.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

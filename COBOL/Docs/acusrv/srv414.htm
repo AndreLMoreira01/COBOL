@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:45:06" />
+  <title>ACUSERVER_MASTER_SERVER</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv4.htm">Chapter 4: Configuration</a> &gt; <a href="srv43.htm">4.2  Configuration Variables</a> &gt; <a href="srv412.htm">4.2.2  Server Configuration Variables</a> &gt; </p>
+<a name="wp1052889"> </a><h2 class="pHeading3">
+ACUSERVER_MASTER_SERVER
+</h2>
+<a name="wp1052893"> </a><p class="pBody">
+This variable is used for load-balancing in environments with multiple instances of the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> daemon/service.  One instance of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> is designated the master, or primary, server.  This primary server is responsible for distributing client requests among the available <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> daemons.  Note that you must start the daemon designated as the primary server before you start any secondary servers.
+</p>
+<a name="wp1054175"> </a><p class="pBody">
+After a primary server is specified, you can start other <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> instances as secondary, or slave, servers.  Instances of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> that are configured as secondary servers register with the primary server to indicate that they are ready to allow connections.  When a secondary server shuts down, it notifies the primary that it is no longer available for client requests.
+</p>
+<a name="wp1053493"> </a><p class="pBody">
+In the following example, the primary server resides on a server called &quot;jupiter&quot; and listens at port 4331.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ACUSERVER_MASTER_SERVER jupiter.mycompany.com:4331<a name="wp1053027"> </a>
+</pre></div>
+<a name="wp1053115"> </a><p class="pBody">
+Note that you must specify a fully qualified domain name for your server.
+</p>
+<a name="wp1057348"> </a><p class="pBody">
+If this value appears in the configuration files for all instances of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> in the environment, the primary server both manages communication with secondary servers and serves files itself.
+</p>
+<a name="wp1053987"> </a><p class="pBody">
+To create a primary server that only performs load-balancing services, do not specify a value for ACUSERVER_MASTER_SERVER in the configuration file for the primary server.  Configuration files for the secondary servers must still contain the machine name and port of the primary.
+</p>
+<a name="wp1053860"> </a><p class="pBody">
+To configure the client machines to take advantage of the server load balancing, set the FILE_PREFIX and ACUSERVER_PORT runtime configuration variables to point to the instance of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> designated as the primary server.  On the server side, set FILE_PREFIX to local file locations in the configuration file(s) used by the secondary servers.
+</p>
+<a name="wp1053476"> </a><p class="pBody">
+When a client connects to the server, it first communicates with the primary server, which determines which secondary is least busy.  Then the primary server passes the client connection to a secondary server, and all further communication occurs between the client and the secondary server, without further involvement of the primary server.
+</p>
+<a name="wp1053496"> </a><p class="pBody">
+To determine which secondary server is least busy, it considers the following criteria:  first, percentage of idle time in the last 15 minutes; second, number of active users; third, number of open files; and finally, if all other factors are equal, registration order.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:45:06" />
+  <title>SECURITY_METHOD</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv4.htm">Chapter 4: Configuration</a> &gt; <a href="srv43.htm">4.2  Configuration Variables</a> &gt; <a href="srv412.htm">4.2.2  Server Configuration Variables</a> &gt; </p>
+<a name="wp1061470"> </a><h2 class="pHeading3">
+SECURITY_METHOD
+</h2>
+<a name="wp1061471"> </a><p class="pBody">
+This variable lets you specify the security method to use when accessing files via AcuServer.  If desired, you can use your server's native security mechanism in place of AcuServer's so that users can use their usual passwords when accessing files rather than remembering or coordinating an AcuAccess password as well as a network password.
+</p>
+<a name="wp1061472"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This feature works for Windows servers and UNIX servers that use shadow passwords.  It does not use PAM (pluggable authentication module) libraries.
+<hr />
+</p>
+<a name="wp1061473"> </a><p class="pBody">
+When native security is enabled, AcuServer impersonates the user who is logged onto the client machine.  This allows AcuServer to spend less time managing security issues, and allows the full range of operating system security to be used on files and directories on the server.  To use this feature, you must have the necessary user accounts set up and configured on the server.  (Ask your system administrator whether security has been set up for each potential user.)  Once a user is connected, it is as if that user is actually logged onto the server.  Files that are available to the user when he or she is directly logged on to the server are available to the user who is connected via AcuServer.
+</p>
+<a name="wp1061474"> </a><p class="pBody">
+SECURITY_METHOD can take any of three values.  The valid values are:
+</p>
+<a name="wp1061475"> </a><h5 class="pHeading4">
+NONE (false, no)
+</h5>
+<a name="wp1061476"> </a><p class="pBody">
+Do not use the native operating system security.  Use AcuServer security instead.  &quot;NONE&quot; is the default value. 
+</p>
+<a name="wp1061482"> </a><h5 class="pHeading4">
+LOGON
+</h5>
+<a name="wp1061483"> </a><p class="pBody">
+Use the system's native security to manage user logons.
+</p>
+<a name="wp1062555"> </a><p class="pBody">
+On Windows, attempt to log the user onto the Windows NT domain specified in the WINNT-LOGON-DOMAIN configuration variable. If the access file allows the connection, then check the access record for the domain password.  If it is present, then establish a connection.  If the password is not present in the access record or does not match the domain password, then prompt the user for the domain password of the local username account. The number of attempts the user has to supply the correct password is limited be the value of the configuration variable PASSWORD_ATTEMPTS (3, by default).  A successful logon grants the user all of the same access rights they would have were they directly logged onto the server.  AcuServer allows the Windows NT/Windows 2000 server to manage all issues pertaining to access permissions.
+</p>
+<a name="wp1062286"> </a><p class="pBody">
+On UNIX, if the access file allows the connection, then check the access record for the native password.  If it is present, then establish a connection.  If the password is not present in the access record or does not match the native password, then prompt the user for the native password of the local username account. 
+</p>
+<a name="wp1065370"> </a><p class="pBody">
+Some UNIX machines have a the ability to restrict access to the machine based on various parameters.  If you want to include those restrictions in AcuServer, set the configuration variable USE-SYSTEM-RESTRICTIONS to &quot;TRUE&quot;. See your UNIX administration manuals for information on this restriction feature. 
+</p>
+<a name="wp1062514"> </a><h5 class="pHeading4">
+NAMED-PIPE (on, true, yes) 
+</h5>
+<a name="wp1062515"> </a><p class="pBody">
+&quot;NAMED PIPE&quot; can only be specified when a Windows client is connecting to a Windows server.  It is not valid for UNIX clients and is treated as &quot;NONE&quot; if specified for UNIX. 
+</p>
+<a name="wp1062516"> </a><p class="pBody">
+A value of &quot;NAMED PIPE&quot; tells AcuServer to use Windows security based on the connection made from the client to the server via a named pipe.  When a named pipe is used, the password field in the AcuAccess file is ignored.  The AcuAccess file is used only as a first check to see if the user connecting to the server is allowed to connect. 
+</p>
+<a name="wp1062508"> </a><p class="pBody">
+In order to use this option successfully, your client machine must have permission to connect to the named pipe that AcuServer creates.  If your machine does not have permission, it may look to you as though your client runtime has hung and it may look to other users as though the server is down.  Without the proper permission, the only way to resolve this situation is to kill the server using the Windows task manager.  See your Windows system administrator for help in establishing named pipe permissions and resolving connection problems.
+</p>
+<a name="wp1061485"> </a><p class="pBody">
+The SECURITY_METHOD configuration variable must be set in both the client runtime configuration file <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">and</span> the AcuServer configuration file.  The values must match or the security method reverts to &quot;NONE&quot;, and only the AcuAccess password is used. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

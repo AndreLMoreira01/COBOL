@@ -1,0 +1,62 @@
+      * Report1f.prd
+      * Report1f.prd is generated from C:\Acucorp\Acucbl720\AcuGT\sample\reports\Report1f.Psf
+      * This is a generated file. DO NOT modify this file directly.      
+
+       Acu-Initial-Routine.
+      *    Before-Init
+      * get system information
+           ACCEPT System-Information FROM System-Info
+      * get terminal information
+           ACCEPT Terminal-Abilities FROM Terminal-Info
+      * open file
+           PERFORM Acu-Open-Files
+      *    After-Init
+           .
+
+       Acu-Exit-Rtn.
+           PERFORM Acu-Close-Files
+      *    After-Program
+           EXIT PROGRAM
+           STOP RUN
+           .
+
+       Acu-Open-Files.
+      *    Before-Open
+           PERFORM Acu-Open-Salesdata
+      *    After-Open
+           .
+
+       Acu-Open-Salesdata.
+      *    Before-Open
+           OPEN INPUT Salesdata 
+           IF NOT salesdata-status(1:1) = "0"
+              PERFORM Acu-Extended-File-Status
+              GO TO Acu-Exit-Rtn
+           END-IF
+      *    After-Open
+           .
+
+       Acu-Close-Files.
+      *    Before-Close
+           CLOSE Salesdata
+      *    After-Close
+           .
+
+      * SalesdataDS
+
+       Acu-SalesdataDS-Read.
+           READ Salesdata WITH NO LOCK KEY Sales-Key OF Salesdata
+           .
+
+       Acu-SalesdataDS-Read-Next.
+           READ Salesdata NEXT WITH NO LOCK
+           .
+
+       Acu-SalesdataDS-Read-Prev.
+           READ Salesdata PREVIOUS WITH NO LOCK
+           .
+
+       Acu-SalesdataDS-Delete.
+           DELETE FILE Salesdata
+           . 
+

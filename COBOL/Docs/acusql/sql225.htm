@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:35:43" />
+  <title>2.7  Checking Syntax</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql2.htm">Chapter 2: Program Preparation</a> &gt; </p>
+<a name="wp1034654"> </a><h2 class="pHeading1">
+2.7  Checking Syntax
+</h2>
+<a name="wp1034659"> </a><p class="pBody">
+The pre-compiler supports both relaxed and strict syntax checking.  You indicate relaxed checking with the &quot;-Pr&quot; command line option, strict checking by not including this option.  See <a  href="sql35.htm#wp1033849">section 3.2.2, &quot;Invoking the Pre-compiler From the ACUCOBOL-GT Command Line,&quot;</a> for information on the &quot;-Pr&quot; option.  These choices operate on the entire source code file.
+</p>
+<a name="wp1034660"> </a><p class="pBody">
+However, you may prefer to exercise strict checking in some parts of your program and relaxed checking in others.  You can indicate the mode of syntax checking by indicating &quot;Relaxed&quot; or &quot;Strict&quot; with your EXEC ESQL command.
+</p>
+<a name="wp1034661"> </a><p class="pBody">
+For example, 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+EXEC SQL RELAXED<a name="wp1039150"> </a>
+    DECLARE COBCUR1 FOR<a name="wp1039151"> </a>
+    SELECT<a name="wp1040886"> </a>
+        C_NUMBER, C_NAME, TO_CHAR(C_BIRTHDAY, &#39;DD-MM-YY&#39;), C_INFO<a name="wp1034665"> </a>
+        FROM CUSTOMER<a name="wp1034666"> </a>
+        WHERE C_NUMBER &gt;= :C_NUMBER<a name="wp1034667"> </a>
+END-EXEC.<a name="wp1034668"> </a>
+</pre></div>
+<a name="wp1034669"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+EXEC SQL STRICT<a name="wp1034670"> </a>
+    DECLARE COBCUR1 FOR<a name="wp1034671"> </a>
+        SELECT<a name="wp1034672"> </a>
+            C_NUMBER, C_NAME, TO_CHAR(C_BIRTHDAY, &#39;DD-MM-YY&#39;), C_INFO<a name="wp1034673"> </a>
+        FROM CUSTOMER<a name="wp1034674"> </a>
+        WHERE C_NUMBER &gt;= :C_NUMBER<a name="wp1034675"> </a>
+END-EXEC.<a name="wp1034676"> </a>
+</pre></div>
+<a name="wp1034677"> </a><p class="pBody">
+(For a description of this code, see <a  href="sql518.htm#wp1034443">section 5.6, &quot;Working With More Than One Row - select3.sqb.&quot;</a>)
+</p>
+<a name="wp1034678"> </a><p class="pBody">
+Note that you cannot indicate &quot;Relaxed&quot; or &quot;Strict&quot; in the following instances:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034679"> </a><div class="pSmartList1"><li>EXEC SQL BEGIN DECLARE SECTION</li></div>
+<a name="wp1034680"> </a><div class="pSmartList1"><li>EXEC SQL END DECLARE SECTION</li></div>
+<a name="wp1034681"> </a><div class="pSmartList1"><li>EXEC SQL INCLUDE</li></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

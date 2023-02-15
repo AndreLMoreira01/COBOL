@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:34" />
+  <title>5.11  Grid</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt25.htm">Chapter 5:  Control Types Reference</a> &gt; </p>
+<a name="wp1161921"> </a><h2 class="pHeading1">
+5.11  Grid
+</h2>
+<a name="wp1161925"> </a><p class="pBodyRelative">
+</p><div><img src="ch5_grid.gif" height="279" width="341" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1161928"> </a><p class="pBody">
+The GRID control is a two-dimensional table of data fields.  Each element of this table, called a &quot;cell,&quot; can hold either text or a bitmap, or both.  Grids are relatively complex controls with many properties that you can use to customize their appearance and behavior.  
+</p>
+<a name="wp1161929"> </a><p class="pBody">
+Currently the grid control is supported only in Windows environments.  Attempting to create a grid control on other systems will fail, causing the handle to be returned with the NULL value.
+</p>
+<a name="wp1161930"> </a><p class="pBody">
+Grids are organized into rows, columns, and records.  In a grid, a &quot;row&quot; is a grouping of cells that appear on one line in the control.  A &quot;record&quot; is one or more rows that are treated as a logical unit.  A &quot;column&quot; identifies a particular cell in a record.  
+</p>
+<a name="wp1161931"> </a><p class="pBody">
+By default, a record occupies one row in a grid, but you can arrange for a record to &quot;wrap around&quot; to the next row when it passes the right edge of the grid.  When this occurs, a record will occupy more than one row in the grid.  You might want to construct a grid like this when you want to see many fields in a data record at once.  Alternatively, you can have the grid use scroll bars to access cells past the right edge of the control.  Column, row and record numbers all start at &quot;1&quot;.  
+</p>
+<a name="wp1161932"> </a><p class="pBody">
+Grids come in two different formats: with horizontal scrolling and without.  When you opt for horizontal scrolling, each record may occupy only one row in the grid.  Grids with horizontal scrolling appear much like a spreadsheet.  Without horizontal scrolling, a record may occupy more than one row.  In either case, vertical scroll bars appear automatically when needed (providing you allow them with the VSCROLL style).  
+</p>
+<a name="wp1161933"> </a><p class="pBody">
+A grid's capacity is limited by available memory.  The grid uses a sparse storage technique in which records with no data have no memory allocated for them.  A grid may not have more than 100 columns.  There are no other practical limits (2 <em class="cEmphasis">giga </em>records (2,147,483,647 records) and 2 GB text per record).  A single cell may contain no more than 32766 bytes of text.  
+</p>
+<a name="wp1161935"> </a><p class="pBody">
+The grid operates in two different modes: <em class="cEmphasis">navigate mode</em> and <em class="cEmphasis">entry mode</em>.  While it is in navigate mode, the arrow keys move the cursor around the grid.  This is the default mode.  The grid shifts to entry mode when the user starts to modify data.  In this mode, the arrow keys are used to edit the current cell's data.  When the user finishes a cell, the grid returns to navigate mode.  
+</p>
+<a name="wp1161937"> </a><p class="pBody">
+The exact set of keys understood by the grid depends on the host system.  Under Windows, the following keys are used in navigate mode:
+</p>
+<a name="wp1161987"> </a><p class="pBody">
+ </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1161940"> </a><p class="pCellBody">
+Up/Down Arrow
+</p>
+</td>
+    <td><a name="wp1161942"> </a><p class="pCellBody">
+moves cursor to the same column in the previous/next record
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161944"> </a><p class="pCellBody">
+Left/Right Arrow
+</p>
+</td>
+    <td><a name="wp1161946"> </a><p class="pCellBody">
+moves cursor to the previous/next column in the record 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161948"> </a><p class="pCellBody">
+Tab (with USE-TAB)
+</p>
+</td>
+    <td><a name="wp1161950"> </a><p class="pCellBody">
+moves cursor right, wrapping to next record when at last cell in record 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161952"> </a><p class="pCellBody">
+Backtab (with USE-TAB)
+</p>
+</td>
+    <td><a name="wp1161954"> </a><p class="pCellBody">
+moves cursor left, wrapping to the previous record when at the first cell in record 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161956"> </a><p class="pCellBody">
+Home
+</p>
+</td>
+    <td><a name="wp1161958"> </a><p class="pCellBody">
+moves to first column in record 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161960"> </a><p class="pCellBody">
+Ctl-Home
+</p>
+</td>
+    <td><a name="wp1161962"> </a><p class="pCellBody">
+moves to first column of first record 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161964"> </a><p class="pCellBody">
+End
+</p>
+</td>
+    <td><a name="wp1161966"> </a><p class="pCellBody">
+moves to last column in record 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161968"> </a><p class="pCellBody">
+Ctl-End
+</p>
+</td>
+    <td><a name="wp1161970"> </a><p class="pCellBody">
+moves to first column in last record  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161972"> </a><p class="pCellBody">
+Page Up/Down
+</p>
+</td>
+    <td><a name="wp1161974"> </a><p class="pCellBody">
+moves cursor up/down one page 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161976"> </a><p class="pCellBody">
+Enter
+</p>
+</td>
+    <td><a name="wp1161978"> </a><p class="pCellBody">
+shifts to entry mode for the current cell; highlights contents for editing 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161980"> </a><p class="pCellBody">
+Shift-Enter
+</p>
+</td>
+    <td><a name="wp1161982"> </a><p class="pCellBody">
+moves cursor to the first column of the next record
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1161984"> </a><p class="pCellBody">
+Any printable character<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1161986"> </a><p class="pCellBody">
+shifts to entry mode for the current cell; overwrites contents with character 
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1161989"> </a><p class="pBody">
+When in entry mode, the user types into an entry field control.  All of the editing keys usable by an entry field are usable here.  The user leaves entry mode by typing Enter or Tab/Backtab, or by clicking on another cell with the mouse.  The special property FINISH-REASON can be used to ascertain why the user left entry mode.
+</p>
+<a name="wp1161991"> </a><p class="pBody">
+Clicking a mouse on a cell moves the cursor to that cell.  Double-clicking on a cell shifts to entry mode.  
+</p>
+<a name="wp1161992"> </a><p class="pBody">
+Grids can have row and column headers.   Use the ROW-HEADINGS style to establish row headers and the COLUMN-HEADINGS style to make column headers.  Headers are normal cells with certain special traits as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1161993"> </a><div class="pSmartList1"><li>Headers are always visible regardless of how the user scrolls the grid.</li></div>
+<a name="wp1161994"> </a><div class="pSmartList1"><li>The cursor does not move into a header cell.</li></div>
+<a name="wp1161995"> </a><div class="pSmartList1"><li>The special properties HEADING-COLOR, HEADING-FONT and HEADING-DIVIDER-COLOR apply only to header cells.  The style TILED-HEADINGS applies only to header cells.  </li></div>
+<a name="wp1161996"> </a><div class="pSmartList1"><li>The events MSG-HEADING-CLICKED, MSG-HEADING-DBLCLICK, and MSG-HEADING-DRAGGED apply only to header cells.  </li></div>
+</ol></div>
+<a name="wp1161997"> </a><p class="pBody">
+Otherwise, headers are normal cells.  When you use column headers, record &quot;1&quot; becomes the column headers.  When you use row headers, column &quot;1&quot; of each record supplies the row headers.  
+</p>
+<a name="wp1162000"> </a><p class="pBody">
+The grid control can have different colors and fonts assigned to each cell.  For convenience, there are several ways this can be done.  For example, you can set the color for the grid as a whole, for a particular row or column, or for a particular cell (in addition to other techniques).  For a particular cell, there could be several colors or fonts specified for it.  The grid picks the color or font to use by applying a priority list.  The first item in the list that provides the color or font is the one that is used.  For colors, this is determined independently for foreground and background colors.  
+</p>
+<a name="wp1162001"> </a><p class="pBody">
+For colors, the list of priorities is as follows (highest applying first):
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1162002"> </a><div class="pSmartList1"><li>CURSOR-COLOR</li></div>
+<a name="wp1166828"> </a><div class="pSmartList1"><li>DRAG-COLOR</li></div>
+<a name="wp1162003"> </a><div class="pSmartList1"><li>REGION-COLOR</li></div>
+<a name="wp1162004"> </a><div class="pSmartList1"><li>CELL-COLOR</li></div>
+<a name="wp1162005"> </a><div class="pSmartList1"><li>HEADING-COLOR</li></div>
+<a name="wp1162006"> </a><div class="pSmartList1"><li>ROW-COLOR</li></div>
+<a name="wp1162007"> </a><div class="pSmartList1"><li>COLUMN-COLOR</li></div>
+<a name="wp1162008"> </a><div class="pSmartList1"><li>ROW-COLOR-PATTERN</li></div>
+<a name="wp1162009"> </a><div class="pSmartList1"><li>Grid's overall color</li></div>
+</ul></div>
+<a name="wp1162010"> </a><p class="pBody">
+For fonts, the following priority list is used:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1162011"> </a><div class="pSmartList1"><li>CELL-FONT</li></div>
+<a name="wp1162012"> </a><div class="pSmartList1"><li>HEADING-FONT</li></div>
+<a name="wp1162013"> </a><div class="pSmartList1"><li>ROW-FONT</li></div>
+<a name="wp1162014"> </a><div class="pSmartList1"><li>COLUMN-FONT</li></div>
+<a name="wp1162015"> </a><div class="pSmartList1"><li>Grid's overall font</li></div>
+</ul></div>
+<a name="wp1162016"> </a><p class="pBody">
+Currently, the grid control is available only under Windows.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

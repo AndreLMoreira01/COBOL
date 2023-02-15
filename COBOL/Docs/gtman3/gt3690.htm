@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>DELETE Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1037222"> </a><h2 class="pHeading2">
+DELETE Statement
+</h2>
+<a name="wp1037224"> </a><p class="pBody">
+The DELETE statement logically removes a record from a file or a file from the host system.  
+</p>
+<a name="wp1037226"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<a name="wp1037227"> </a><h3 class="pHeadingRef">
+Format 1
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">DELETE</u> file-name RECORD<a name="wp1037228"> </a>
+<a name="wp1037229"> </a>
+   [ <u class="cUnderline">INVALID</u> KEY statement-1 ]<a name="wp1037230"> </a>
+<a name="wp1037231"> </a>
+   [ <u class="cUnderline">NOT</u> <u class="cUnderline">INVALID</u> KEY statement-2 ]<a name="wp1037232"> </a>
+<a name="wp1037233"> </a>
+   [ <u class="cUnderline">END-DELETE</u> ]<a name="wp1037234"> </a>
+</pre></div>
+<a name="wp1037235"> </a><h3 class="pHeadingRef">
+Format 2
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">DELETE</u> <u class="cUnderline">FILE</u> file-name<a name="wp1037236"> </a>
+</pre></div>
+<a name="wp1037238"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037239"> </a><div class="pSmartList1"><li><em class="cEmphasis">File-name</em> must refer to a file described in the Data Division.  It may not be a sort file.  In Format 1, it cannot be the name of a sequential file.</li></div>
+<a name="wp1037240"> </a><div class="pSmartList1"><li><em class="cEmphasis">Statement-1</em> and <em class="cEmphasis">statement-2</em> are imperative statements.</li></div>
+<a name="wp1037241"> </a><div class="pSmartList1"><li>The INVALID KEY and NOT INVALID KEY clauses must not be specified for a DELETE statement that references a file that is in the sequential access mode.  </li></div>
+</ol></div>
+<a name="wp1037243"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<a name="wp1037244"> </a><h3 class="pHeadingRef">
+Format 1 - DELETE RECORD
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037246"> </a><div class="pSmartList1"><li>The file must reside on a mass-storage device and be open in the I/O mode when the DELETE statement executes.  </li></div>
+<a name="wp1037247"> </a><div class="pSmartList1"><li>For files in the sequential access mode, the last I/O statement executed for the file prior to the execution of the DELETE statement must have been a successful READ statement.  The DELETE statement deletes that record from the file.</li></div>
+<a name="wp1037248"> </a><div class="pSmartList1"><li>For a relative file in the random or dynamic access mode, the DELETE statement removes the record identified by the file's RELATIVE KEY data item.  If that record does not exist, an invalid key condition exists.</li></div>
+<a name="wp1037249"> </a><div class="pSmartList1"><li>For an indexed file in the random or dynamic access mode, the DELETE statement removes the record identified by that file's RECORD KEY data item.  If that record does not exist, an invalid key condition exists.</li></div>
+<a name="wp1037250"> </a><div class="pSmartList1"><li>After a successful DELETE, the deleted record has been logically removed from the file and may no longer be accessed.  </li></div>
+<a name="wp1037251"> </a><div class="pSmartList1"><li>The execution of the DELETE statement does not affect the file's record area.  </li></div>
+<a name="wp1037252"> </a><div class="pSmartList1"><li>The current file position is not changed by the DELETE statement.</li></div>
+<a name="wp1037253"> </a><div class="pSmartList1"><li>The FILE STATUS variable of the file is updated.</li></div>
+<a name="wp1037254"> </a><div class="pSmartList1"><li>If there is an applicable USE AFTER EXCEPTION procedure, it executes whenever a non-zero I/O status applies to the DELETE.  However, it does not execute if an invalid key condition exists and the INVALID KEY phrase is used.  If a USE AFTER EXCEPTION procedure would normally execute, but none has been specified, then the program prints an error message and halts.  </li></div>
+<a name="wp1037255"> </a><div class="pSmartList1"><li><em class="cEmphasis">Statement-1</em> is executed if it is specified and the invalid key condition exists.</li></div>
+<a name="wp1037256"> </a><div class="pSmartList1"><li><em class="cEmphasis">Statement-2</em> is executed if it is specified and the DELETE statement is successful.  </li></div>
+</ol></div>
+<a name="wp1037258"> </a><h3 class="pHeadingRef">
+Format 2 - DELETE FILE
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037259"> </a><div class="pSmartList1"><li>The DELETE FILE statement removes a file from the host computer system.  The file named by <em class="cEmphasis">file-name</em> must be closed and reside on a mass-storage device.  </li></div>
+<a name="wp1037260"> </a><div class="pSmartList1"><li>With one exception, the organization and record layout of <em class="cEmphasis">file-name</em> need not match the file being deleted, although it is highly recommended that they do.  For Vision Version 5 and 4 files, the organization and record layout of <em class="cEmphasis">file-name</em> must match the file being deleted.</li></div>
+<a name="wp1078992"> </a><div class="pSmartList1"><li>If<b class="cBold"> </b>you match the type of the file referenced (sequential, relative, or indexed) with the type of the file being removed, your programs will consistently work with versions of ACUCOBOL-GT based on different file systems.  For example,  C-ISAM and Vision Versions 5 and 4 implement indexed files using two physical disk files for each COBOL indexed file.  An ACUCOBOL-GT runtime using Vision Version 5, 4, or C-ISAM needs to know if an index file is being removed so that it will look for both physical files when an indexed file is removed.  </li></div>
+<a name="wp1037262"> </a><p class="pIndented1">
+When the DELETE statement executes, <em class="cEmphasis">file-name</em> is translated as for the OPEN statement, and the corresponding file is removed from the system.
+</p>
+<a name="wp1037263"> </a><div class="pSmartList1"><li>The FILE STATUS data item is updated by the DELETE FILE statement.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

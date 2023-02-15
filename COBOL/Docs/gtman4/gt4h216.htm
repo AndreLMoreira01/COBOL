@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:24" />
+  <title>QUIT_MODE </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4h.htm">Appendix H: Configuration File Entries</a> &gt; <a href="gt4h3.htm">H.2  Configuration File Entries</a> &gt; </p>
+<a name="wp1037248"> </a><h2 class="pHeading2">
+QUIT_MODE 
+</h2>
+<a name="wp1037251"> </a><p class="pBody">
+This variable has meaning only on graphical systems such as Windows.  It gives you control over the Close action that appears on the System menu in a graphical environment.  You may use the QUIT_MODE variable with only the main application window.  All other windows return the CMD-CLOSE event when they are closed.  QUIT_MODE has no affect on windows created with the NO-CLOSE phrase (see formats 11 and 12 of the DISPLAY statement, in Book 3, section 6.6).
+</p>
+<a name="wp1037252"> </a><p class="pBody">
+Many COBOL programs should not be shut down in an uncontrolled manner.  This is especially true of any application that updates several files in a row.  If the program is halted after updating the first file, but before updating the last, the files are left in an inconsistent state.  For this reason, ACUCOBOL-GT allows you to control the Close action.
+</p>
+<a name="wp1037253"> </a><p class="pBody">
+To do this, you set QUIT_MODE to a non-zero value.  The value that you specify affects the Close action as follows:
+</p>
+<a name="wp1037271"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1037256"> </a><p class="pCellBody">
+-2
+</p>
+</td>
+    <td><a name="wp1037258"> </a><p class="pCellBody">
+Disable Close: disables the Close action entirely.  The Close menu item will appear gray on the System menu, and the user will not be able to select it.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037260"> </a><p class="pCellBody">
+-1
+</p>
+</td>
+    <td><a name="wp1037262"> </a><p class="pCellBody">
+Close only on input: the runtime disables the Close action except when it is waiting for user input.  This prevents the user from stopping the runtime in the middle of a series of file operations, but still allows the user to quit the application any time that the application is waiting for input.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037264"> </a><p class="pCellBody">
+ 0
+</p>
+</td>
+    <td><a name="wp1037266"> </a><p class="pCellBody">
+Always Close: the runtime halts the program whenever Close is selected from the system menu.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037268"> </a><p class="pCellBody">
+&gt;0
+</p>
+</td>
+    <td><a name="wp1037270"> </a><p class="pCellBody">
+Program controlled Close: when a positive value is used, the Close item becomes a standard menu item with an ID equal to the value of QUIT_MODE.  You may then handle the Close item just like any other menu item.  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1037272"> </a><p class="pBody">
+For example, if you set QUIT_MODE to &quot;100&quot;, then your program will receive exception value 100 when the user selects the Close item.  If you wanted to call a special shutdown program when the user selected Close, you could assign the Close action to a hot-key program:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MENU_ITEM  Hot_Key =&quot;shutdown&quot;  100<a name="wp1037273"> </a>
+</pre></div>
+<a name="wp1037274"> </a><p class="pBody">
+In this example, the &quot;shutdown&quot; program might pop up a small window to confirm that the user wanted to exit and, if so, do a STOP RUN. 
+</p>
+<a name="wp1037275"> </a><p class="pBody">
+If you start your program in &quot;safe&quot; mode with the &quot;-s&quot; runtime option, then QUIT_MODE will be initialized to &quot;-2&quot; instead of &quot;0&quot;.  This prevents the user from using the Close menu item.  A QUIT_MODE entry in the configuration file takes precedence over the default handling of &quot;-s&quot;.  
+</p>
+<a name="wp1037276"> </a><p class="pBody">
+If a user attempts to end the Windows session when it is not allowed, a pop-up message box asks the user to terminate the application first.  You can customize the message that appears in the box by setting the TEXT configuration variable, message number 18.
+</p>
+<a name="wp1037277"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The QUIT_MODE setting affects only the main application window.  All other windows always return the event CMD-CLOSE when the window is closed.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

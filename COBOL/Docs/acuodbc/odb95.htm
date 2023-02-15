@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:40" />
+  <title>Configuring a remote data source in Windows </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb9.htm">Chapter 9: Remote Data Sources</a> &gt; <a href="odb94.htm">9.3  Configuring the Remote DSN on a Windows Server</a> &gt; </p>
+<a name="wp1043270"> </a><h2 class="pHeading2">
+Configuring a remote data source in Windows 
+</h2>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1028330"> </a><div class="pSmartList1"><li>Select <b class="cBold">AcuODBC Server Control Panel</b> from the Start/Programs/Acucorp&#160;7xx/AcuODBC/AcuODBC&#160;Server menu and click on the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">Data Sources</span> tab.</li></div>
+<a name="wp1035289"> </a><div class="pSmartList1"><li>Click <b class="cBold">New</b> to configure a new data source.  This opens the AcuODBC Server Configuration property sheet.</li></div>
+<a name="wp1035296"> </a><div class="pSmartList1"><li>Select the General tab and complete the Data Source Name, XFD Directory, Data Directory, and Data File Extension fields as described in <a  href="odb34.htm#wp1050998">section 3.2, &quot;Defining the Data Source.&quot;</a>  </li></div>
+<a name="wp1035340"> </a><p class="pIndented1">
+To ensure accuracy, Acucorp recommends that you use the browse buttons to specify directories and files.  If you are not using the browse buttons, make sure that you accurately enter the names of any requested files and directories.  The AcuODBC Server Configuration utility does not check to see if they exist.  If you enter an incorrect name, you will not be able to bring the external data into your application.  
+</p>
+<a name="wp1028339"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>If AcuODBC server is running on a UNIX server and the XFD files reside on that server as well, the entire name of the XFD file must be lowercase, such as &quot;accounts.xfd&quot;.  See <a  href="odb34.htm#wp1050998">section 3.2, &quot;Defining the Data Source,&quot;</a> for additional information.
+<hr />
+</p>
+<a name="wp1028345"> </a><div class="pSmartList1"><li>Select one of the following from the drop-down box for the Security Method setting.  The value of this setting determines the type of security used when allowing clients to connect to AcuODBC Server.  The setting in this field <em class="cEmphasis">must</em> match the setting of the Security Method field on the AcuODBC Server tab of the client configuration.  See <a  href="odb93.htm#wp1028245">section 9.2, &quot;Configuring the Remote DSN on a Windows Client,&quot;</a> for additional details.</li></div>
+<a name="wp1028368"> </a><p class="pBodyRelative">
+<div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1032415"> </a>
+If ...
+
+</th>
+    <th><a name="wp1032417"> </a>
+Then ...
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028353"> </a><p class="pCellBody">
+You want to use AcuODBC Server's security features
+</p>
+</td>
+    <td><a name="wp1028355"> </a><p class="pCellBody">
+Select <b class="cBold">None</b>.  AcuODBC Server uses the AcuAccess file to authorize the connection and manage file access.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028359"> </a><p class="pCellBody">
+You want to use Windows NT's security system by connecting to the server via a named pipe.  This method does not require the use of a password.
+</p>
+</td>
+    <td><a name="wp1028361"> </a><p class="pCellBody">
+Select <b class="cBold">Named Pipe</b>.  The password field in the AcuAccess file is ignored.  The AcuODBC client connects to the AcuODBC server using a named pipe.  This gives the client all the features of Windows NT file permissions.  The client machine <em class="cEmphasis">must</em> have permission to create the named pipe.  If the client does not have permission, both the client and server systems will hang.  See your Windows NT documentation for information about permissions and named pipes.  Note that Acucorp does not encourage the use of named pipes.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028365"> </a><p class="pCellBody">
+You want to use Windows NT or UNIX security by logging the user onto the domain via a password.  The password may be stored in the AcuAccess file or can be entered by the user directly.
+</p>
+</td>
+    <td><a name="wp1028367"> </a><p class="pCellBody">
+Select <b class="cBold">Logon</b>.  When &quot;Logon&quot; is selected, AcuODBC Server attempts to log the user onto the domain using the password in the AcuAccess file.  If there is no password or the password is not valid, the user is prompted to enter a password.  &quot;Logon&quot; is frequently a simpler, more reliable connection method than a named pipe.
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1028369"> </a><p class="pIndented1">
+See <a  href="odb84.htm#wp1028327">section 8.3, &quot;System Security - The AcuAccess File,&quot;</a> for information on AcuODBC Server security.
+</p>
+<a name="wp1028370"> </a><div class="pSmartList1"><li>Complete the remaining tabs on the AcuODBC Server Configuration property sheet.  </li></div>
+<a name="wp1035371"> </a><div class="pSmartList1"><li>Click <b class="cBold">OK</b> when you have finished configuring the data source.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

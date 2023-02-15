@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.12.1.1  Calling a preprocessor </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt1261.htm">2.12  General Preprocessor Interface</a> &gt; <a href="gt1262.htm">2.12.1  Use of Preprocessors</a> &gt; </p>
+<a name="wp1034004"> </a><h2 class="pHeading3">
+2.12.1.1  Calling a preprocessor 
+</h2>
+<a name="wp1034007"> </a><p class="pBody">
+The compiler option &quot;-Pg&quot; is used to call a preprocessor written in any language that produces a directly executable object file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+-Pg &quot;preproc-1 [options]&quot;<a name="wp1034008"> </a>
+</pre></div>
+<a name="wp1034009"> </a><p class="pBody">
+Here, <em class="cEmphasis">preproc-1</em> is the name of the preprocessor's executable file.  The compiler looks for this file first in the directory in which the compiler executable is located.  We recommend that you place preprocessors in that directory.  If you place them elsewhere, you need to provide a complete path specification.  Under Windows, the compiler appends the extension .EXE automatically (if it is not already there).
+</p>
+<a name="wp1060130"> </a><p class="pBody">
+The name of the preprocessor, and of any directories in its path, cannot contain spaces.  Note that Windows creates a space-free alias for any name with embedded spaces. Every file and directory under Windows has an &quot;MS-DOS&quot; name and extension (maximum eight character name with a three character extension; the name can be viewed in the Properties dialog by right-clicking on the file in the File Explorer).  For example, the MS-DOS name and extension for acuodbcconfig.dll is ACUODB~1.DLL.  The MS-DOS name does <em class="cEmphasis">not</em> contain spaces, even if the original name does.  The MS-DOS name and extension can be used by any Windows command or application in lieu of the original name and extension.
+</p>
+<a name="wp1034012"> </a><p class="pBody">
+If the preprocessor requires or permits special options that are not specified by the ACUCOBOL-GT interface, they must follow the preprocessor executable file name and must be separated from it, and from each other, by spaces or tabs.
+</p>
+<a name="wp1034013"> </a><p class="pBody">
+If a preprocessor option contains embedded spaces, it must be enclosed in delimiters so that it will be recognized as a single option.  Standard double quotation marks (&quot;.&#160;.&#160;. &quot;) cannot be used for this purpose because they are used to enclose the preprocessor executable filename and its associated options.  Therefore, two apostrophes (''.&#160;.&#160;.'') are used instead.  
+</p>
+<a name="wp1034014"> </a><p class="pBody">
+For example, the following option might be used to call a preprocessor:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+-Pg &quot;preproc -d ''x=:the quick brown fox'' &quot;<a name="wp1034015"> </a>
+</pre></div>
+<a name="wp1034016"> </a><h3 class="pHeadingRef">
+Preprocessor written in ACUCOBOL-GT
+</h3>
+<a name="wp1034018"> </a><p class="pBody">
+Preprocessors written in ACUCOBOL-GT use extension &quot;.ACU&quot; by default and are not directly executable.  In this case, options of a slightly different form are required:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+-Pg &quot;runtime preproc-2.ACU [options]&quot;<a name="wp1034019"> </a>
+</pre></div>
+<a name="wp1034020"> </a><p class="pBody">
+<em class="cEmphasis">runtime</em> is the name of the ACUCOBOL-GT runtime executable file.  By default, under Windows it is &quot;wrun32&quot;, and under UNIX it is &quot;runcbl&quot;.  A path is usually not required because this file is normally installed in the same directory as the compiler's executable file.
+</p>
+<a name="wp1034021"> </a><p class="pBody">
+<em class="cEmphasis">preproc-2.ACU</em> is the name and extension of the preprocessor, i.e., your ACUCOBOL-GT object file.  The extension &quot;.ACU&quot; is required; it will not be added automatically.  The runtime will look for this file in the current directory.  If the file is elsewhere, it is necessary to include a complete path specification.
+</p>
+<a name="wp1034022"> </a><p class="pBody">
+Rules regarding the use of options with this type of preprocessor are the same as for other preprocessors.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

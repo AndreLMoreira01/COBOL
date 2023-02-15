@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.7.1.10  OCCURS clause</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3533.htm">5.7  Record Description Entry</a> &gt; <a href="gt3534.htm">5.7.1  Data Description Entry</a> &gt; </p>
+<a name="wp1036240"> </a><h2 class="pHeading3">
+5.7.1.10  OCCURS clause
+</h2>
+<a name="wp1036243"> </a><p class="pBody">
+The OCCURS clause allows for the creation of tables or arrays.
+</p>
+<a name="wp1036245"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<a name="wp1036246"> </a><h3 class="pHeadingRef">
+Format 1
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">OCCURS</u> table-size TIMES<a name="wp1036247"> </a>
+<a name="wp1036248"> </a>
+   [ {<u class="cUnderline">ASCENDING</u> } KEY IS {key-name} ... ] ...<a name="wp1036249"> </a>
+     {<u class="cUnderline">DESCENDING</u>}<a name="wp1036250"> </a>
+<a name="wp1036251"> </a>
+   [ <u class="cUnderline">INDEXED</u> BY {index-name} ... ]<a name="wp1036252"> </a>
+</pre></div>
+<a name="wp1036253"> </a><h3 class="pHeadingRef">
+Format 2
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">OCCURS</u> [ min-size <u class="cUnderline">TO</u> ] max-size TIMES <u class="cUnderline">DEPENDING</u> ON dep-item<a name="wp1036254"> </a>
+<a name="wp1036255"> </a>
+   [ {<u class="cUnderline">ASCENDING</u> } KEY IS {key-name} ... ] ...<a name="wp1036256"> </a>
+     {<u class="cUnderline">DESCENDING</u>}<a name="wp1036257"> </a>
+<a name="wp1036258"> </a>
+   [ <u class="cUnderline">INDEXED</u> BY {index-name} ... ]<a name="wp1036259"> </a>
+</pre></div>
+<a name="wp1036261"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036262"> </a><div class="pSmartList1"><li><em class="cEmphasis">Table-size</em> is a positive integer that specifies the exact number of occurrences.  </li></div>
+<a name="wp1036263"> </a><div class="pSmartList1"><li><em class="cEmphasis">Min-size</em> is an integer that specifies the minimum number of occurrences.  Its value must be greater than or equal to zero.  If omitted, it has a default value of one.</li></div>
+<a name="wp1036264"> </a><div class="pSmartList1"><li><em class="cEmphasis">Max-size</em> is an integer that specifies the maximum number of occurrences.  Its value cannot be less than <em class="cEmphasis">min-size</em>; it cannot be larger than 2147483647. </li></div>
+<a name="wp1036265"> </a><div class="pSmartList1"><li><em class="cEmphasis">Dep-item</em> is the name of an elementary unsigned integer data item.  Its value specifies the current number of occurrences.  </li></div>
+<a name="wp1036266"> </a><div class="pSmartList1"><li><em class="cEmphasis">Index-name</em> is an index-name.  It associates an index with the table.  <em class="cEmphasis">Index-name</em> is implicitly defined by the INDEXED phrase.  It may not be defined elsewhere in the program.  Each <em class="cEmphasis">index-name</em> must be a unique word in the program, because it cannot be qualified.  </li></div>
+<a name="wp1036267"> </a><div class="pSmartList1"><li><em class="cEmphasis">Key-name</em> is the data-name of the entry that contains the OCCURS clause, or an entry subordinate to it.  <em class="cEmphasis">Key-name</em> may be qualified.  Each <em class="cEmphasis">key-name</em> after the first must name a subordinate item to the entry containing the OCCURS clause.  A <em class="cEmphasis">key-name</em> may not contain an OCCURS clause unless that <em class="cEmphasis">key-name</em> is the name of the subject of the current OCCURS clause.</li></div>
+<a name="wp1036268"> </a><div class="pSmartList1"><li>If a Format 2 OCCURS clause appears in a record description for a file, <em class="cEmphasis">dep-item</em> must appear in the same record.  </li></div>
+<a name="wp1036269"> </a><div class="pSmartList1"><li>An item described by a Format 2 OCCURS clause can be followed, in the same record description, only by items subordinate to it.  </li></div>
+<a name="wp1036270"> </a><div class="pSmartList1"><li>An OCCURS clause may not appear in a data description entry that has a level-number of 66, 78, or 88.  A variable occurrence data item (one that has a Format 2 OCCURS clause) may not be subordinate to another data item that has an OCCURS clause.  </li></div>
+<a name="wp1036271"> </a><div class="pSmartList1"><li>The <em class="cEmphasis">dep-item</em> may not occupy any character positions subordinate to the data item described by that OCCURS clause.  </li></div>
+</ol></div>
+<a name="wp1036273"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036274"> </a><div class="pSmartList1"><li>The OCCURS clause defines tables.  All items subordinate to an OCCURS clause must be referenced with subscripting or indexing. </li></div>
+<a name="wp1036276"> </a><div class="pSmartList1"><li>Except for the OCCURS clause itself, all data description clauses associated with that data item apply to each occurrence of the item.  </li></div>
+<a name="wp1036277"> </a><div class="pSmartList1"><li>A Format 1 OCCURS clause defines a fixed-size table.</li></div>
+<a name="wp1036278"> </a><div class="pSmartList1"><li>A Format 2 OCCURS clause defines a table that contains a variable number of occurrences.  The current number of occurrences depends on <em class="cEmphasis">dep-item</em>.  Only the number of occurrences is variable; the table's size is fixed (<em class="cEmphasis">max-size</em>).  <em class="cEmphasis">Dep-item</em> must fall in the range from <em class="cEmphasis">min-size</em> to <em class="cEmphasis">max-size</em>.  Values contained in the table that are beyond the current number of occurrences (<em class="cEmphasis">dep-item</em>) are unpredictable.</li></div>
+<a name="wp1036279"> </a><div class="pSmartList1"><li>The size occupied by a table is the size of one of its occurrences multiplied by the maximum number of occurrences in the table (<em class="cEmphasis">max-size</em> in Format 2).  </li></div>
+<a name="wp1036280"> </a><div class="pSmartList1"><li>If a group item containing a subordinate data item with a Format 2 OCCURS clause is involved in an operation, the operation uses only that part of the table specified by <em class="cEmphasis">dep-item</em>.  </li></div>
+<a name="wp1036281"> </a><div class="pSmartList1"><li>Index names are treated in all respects as USAGE INDEX data items by the compiler.  </li></div>
+<a name="wp1036282"> </a><div class="pSmartList1"><li>The KEY IS phrase indicates that the data is arranged in ascending or descending order according to the values in the data items named by <em class="cEmphasis">key-name</em>.  The position of each <em class="cEmphasis">key-name</em> in the list determines its significance.  The first <em class="cEmphasis">key-name</em> is the most significant, the last is the least significant.  The KEY IS phrase is used by the SEARCH ALL verb.  </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

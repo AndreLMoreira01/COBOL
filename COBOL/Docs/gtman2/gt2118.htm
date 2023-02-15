@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:10" />
+  <title>1.5.3.1  Establishing the initial window</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt21.htm">Chapter 1:  Introduction</a> &gt; <a href="gt2110.htm">1.5  Creating Portable User Interfaces</a> &gt; <a href="gt2117.htm">1.5.3  Tips for Solving Cross Platform Interface Problems</a> &gt; </p>
+<a name="wp1026582"> </a><h2 class="pHeading3">
+1.5.3.1  Establishing the initial window
+</h2>
+<a name="wp1026585"> </a><p class="pBody">
+One of the most important things that you can do when implementing a user interface that includes graphical controls is establish the program's main application window correctly.  By default, ACUCOBOL-GT will construct a main application window for you.  However, this window is designed to run traditional, text-based COBOL programs and not programs with graphical controls.  The runtime does this so that it can run older ACUCOBOL programs unchanged.  If you plan to use graphical controls, it is very important that you do not use the default window.  Instead you should explicitly create your window.  There are two reasons why this is so important:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1026588"> </a><div class="pSmartList1"><li>It gives you an opportunity to account for the height difference between character-based entry fields and graphical entry fields.  How to do this is described below.  </li></div>
+<a name="wp1026589"> </a><div class="pSmartList1"><li>It ensures that your program will look right when run under various Windows machines using different resolutions.  If you use the default, you risk having your program look wrong when run under some Windows configurations.  The reason for this is that the standard fonts used at higher resolutions are often not the ones supplied by Microsoft.  Instead, they come from the video card manufacturer.  Sometimes, the relative proportions of the standard fonts are changed from those seen in the Microsoft fonts.  </li></div>
+<a name="wp1026590"> </a><div class="pSmartList1"><li>Since the runtime's default window uses the FIXED-FONT to measure lines and columns, but your controls usually use some other font (such as the DEFAULT-FONT) to determine their size, a change in proportion between these two fonts causes the screen to change.  This can result in overlapping controls and other problems.  This is not a bug, but an effect of the changing environment.  By establishing your initial window correctly, you can use the same font to position controls as you use to size the controls.  Then, regardless of the size of this font, your whole application will scale itself proportionally and look fine. </li></div>
+</ol></div>
+<a name="wp1026591"> </a><p class="pBody">
+Format 12 of the DISPLAY verb is used to create the main application window.  See section 6.6 in Book 3, <em class="cEmphasis">Reference Manual</em>, for the rules that govern its use.  See <a  href="gt249.htm#wp1026198">section 4.6</a> of this book for a more detailed discussion of coordinate space issues.  Here are a few suggestions for handling the most common situations for graphical programs:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1026592"> </a><div class="pSmartList1"><li>Use &quot;DISPLAY STANDARD GRAPHICAL WINDOW&quot;.  The GRAPHICAL phrase ensures that the default font used for controls is also used to determine lines and columns in the window. </li></div>
+<a name="wp1026593"> </a><div class="pSmartList1"><li>If boxed entry fields are going to be a major element of the window, then use the following statement:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DISPLAY STANDARD GRAPHICAL WINDOW, <a name="wp1026594"> </a>
+    CELL SIZE = ENTRY-FIELD FONT, SEPARATE<a name="wp1041278"> </a>
+</pre></div>
+<a name="wp1041279"> </a><div class="pSmartList1"><li>You can substitute OVERLAPPED for SEPARATE if you prefer. This statement also works well if vertically stacked push buttons are a major component of the screen (push buttons require about 1.5 lines each, just like boxed entry fields).  </li></div>
+<a name="wp1026596"> </a><div class="pSmartList1"><li>If you plan to use a font other than DEFAULT-FONT as your primary font, name it as the CONTROL FONT.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77  LARGE-FONT  USAGE HANDLE OF FONT.<a name="wp1026597"> </a>
+<a name="wp1041272"> </a>
+ACCEPT LARGE-FONT FROM <a name="wp1032342"> </a>
+    STANDARD OBJECT &quot;LARGE-FONT&quot;<a name="wp1032343"> </a>
+DISPLAY STANDARD GRAPHICAL WINDOW<a name="wp1032344"> </a>
+    CONTROL FONT IS LARGE-FONT<a name="wp1032338"> </a>
+    CELL SIZE = ENTRY-FIELD FONT, SEPARATE<a name="wp1032339"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1026599"> </a><p class="pBody">
+There are many other options you can add to the DISPLAY STANDARD WINDOW statement, including the ability to set the window's size.  The preceding suggestions just cover the basics of establishing the measuring font.  
+</p>
+<a name="wp1026600"> </a><p class="pBody">
+If you follow suggestion number two above, then you should find that you can place labels and entry fields on whole line numbers and have them show up nicely spaced under both character and graphical systems.  Because the line height is determined by the height of a boxed entry field, each line is exactly big enough to hold one entire entry field.  This solves the problem where entry fields are 50% taller on graphical systems than they are on character systems. 
+</p>
+<a name="wp1026601"> </a><p class="pBody">
+An alternative solution is to avoid using boxes with entry fields on graphical systems.  You can do this very easily by using the FIELDS-UNBOXED configuration option.  However, while this solution is very easy, it has two problems.  One is that the results look a little out of place under Windows, where boxed fields are the norm.  The other problem is that unboxed entry fields are used so infrequently under Windows that the underlying Windows code is not well exercised.  Occasionally you will see slightly odd behavior with unboxed entry fields under Windows (for example, leaving a stray pixel turned on when it should be erased during editing). 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

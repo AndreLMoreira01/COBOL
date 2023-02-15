@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:09" />
+  <title>3.8.2.4  INCLUDE/OMIT instructions</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt13.htm"><br />Chapter 3:  Debugger and Utilities</a> &gt; <a href="gt1389.htm">3.8  External Sort Utility - AcuSort</a> &gt; <a href="gt1391.htm">3.8.2  AcuSort Instructions</a> &gt; </p>
+<a name="wp1110780"> </a><h2 class="pHeading3">
+3.8.2.4  INCLUDE/OMIT instructions
+</h2>
+<a name="wp1110781"> </a><p class="pBody">
+The INCLUDE and OMIT instructions specify conditions under which individual records may be included in or excluded from, respectively, a sort or merge process.  As with SORT and MERGE, these instructions are mutually exclusive.  Each SORT or MERGE instruction may have a single optional INCLUDE or OMIT conditional (COND) phrase.  Syntax for these instructions is as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+omit cond (<em class="cEmphasis">start, length, type, comparison expression</em>)<a name="wp1110782"> </a>
+<a name="wp1110783"> </a>
+include cond (<em class="cEmphasis">start, length, type, comparison 
+expression</em>)<a name="wp1110784"> </a>
+</pre></div>
+<a name="wp1110785"> </a><p class="pBody">
+where <em class="cEmphasis">start</em>, <em class="cEmphasis">length</em>, and <em class="cEmphasis">type</em> are as defined for the SORT/MERGE instructions, and <em class="cEmphasis">comparison expression</em> sets the conditions for a specified comparison. 
+</p>
+<a name="wp1113122"> </a><p class="pBody">
+Conditional constants ALL and NONE match all or none of the records, respectively.  As an example, each of the following statements would result in the inclusion of all records:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+include cond = all<a name="wp1113123"> </a>
+</pre></div>
+<a name="wp1113127"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+omit cond = none<a name="wp1113128"> </a>
+</pre></div>
+<a name="wp1113129"> </a><p class="pBody">
+To omit all records, you would use one of the following statements:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+omit cond = all<a name="wp1113137"> </a>
+</pre></div>
+<a name="wp1113141"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+include cond = none<a name="wp1113142"> </a>
+</pre></div>
+<a name="wp1110786"> </a><p class="pBody">
+A default record field type may be specified for an INCLUDE/OMIT instruction by setting FORMAT to the desired type.  (Refer to the table of data field types in <a  href="gt1393.htm#wp1110647">section 3.8.2.2, &quot;SORT/MERGE instructions.&quot;</a>)  This assignment can appear either before or after the COND phrase.  Record field specifications without the type inherit the default type specified by FORMAT.  A warning is issued if the default format is specified but never used.  
+</p>
+<a name="wp1110787"> </a><p class="pBody">
+The INCLUDE or OMIT instruction comparison expression may compare a record field against another record field or against a constant.  The size of an expression is not limited.  Comparison operators are: 
+</p>
+<a name="wp1110813"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1110790"> </a><p class="pCellBody">
+EQ
+</p>
+</td>
+    <td><a name="wp1110792"> </a><p class="pCellBody">
+Equal to
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1110794"> </a><p class="pCellBody">
+GE
+</p>
+</td>
+    <td><a name="wp1110796"> </a><p class="pCellBody">
+Greater than or equal to
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1110798"> </a><p class="pCellBody">
+GT
+</p>
+</td>
+    <td><a name="wp1110800"> </a><p class="pCellBody">
+Greater than
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1110802"> </a><p class="pCellBody">
+LE
+</p>
+</td>
+    <td><a name="wp1110804"> </a><p class="pCellBody">
+Less than or equal to
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1110806"> </a><p class="pCellBody">
+LT
+</p>
+</td>
+    <td><a name="wp1110808"> </a><p class="pCellBody">
+Less than
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1110810"> </a><p class="pCellBody">
+NE
+</p>
+</td>
+    <td><a name="wp1110812"> </a><p class="pCellBody">
+Not equal to
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1110814"> </a><h3 class="pHeadingRef">
+INCLUDE/OMIT samples
+</h3>
+<a name="wp1113608"> </a><p class="pBody">
+If you want to include records in which the first four bytes are greater than 1000 when interpreted as USAGE DISPLAY data, you could use one of the following code statements:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+include cond = 1 4 nu gt 1000<a name="wp1113164"> </a>
+</pre></div>
+<a name="wp1113165"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+omit cond (1 4 nu le 1000)<a name="wp1113159"> </a>
+</pre></div>
+<a name="wp1113149"> </a><p class="pBody">
+To include records in which the first four bytes are the same as the second four bytes when interpreted as characters, you could use one of the following statements:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+include cond = 1 4 ch eq 5 4 ch<a name="wp1113175"> </a>
+</pre></div>
+<a name="wp1113176"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+omit cond 1 4 ch ne 5 4 ch<a name="wp1113170"> </a>
+</pre></div>
+<a name="wp1113169"> </a><p class="pBody">
+As another example, if you want to omit any record in which the first four bytes (COMP-6) are greater than the second four bytes (COMP-4), you could use one of the following statements (note the use of the FORMAT phrase in this example):	
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+omit format=c6 cond = (1 4 gt 5 4 bi)<a name="wp1113206"> </a>
+</pre></div>
+<a name="wp1113207"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+include cond 1 4 c6 le 5 4 format bi<a name="wp1113201"> </a>
+</pre></div>
+<a name="wp1113225"> </a><p class="pBody">
+In addition to the data types already available with SORT/MERGE, the INCLUDE/OMIT instructions may have a substring search (SS) type, which indicates that a search should be performed for the specified character constant.  Only the equal to (EQ) or not equal to (NE) operators may be used in conjunction with the SS type.  The designated string is either found or not found with this comparison.  As an example, each of the following code statements would result in the omission of records in which the first 10 characters contain the substring &quot;data&quot;:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+omit cond 1 10 ss eq c&#39;data&#39;<a name="wp1113219"> </a>
+</pre></div>
+<a name="wp1113220"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+include cond = (1 10 ss ne c&#39;data&#39;)<a name="wp1113214"> </a>
+</pre></div>
+<a name="wp1110815"> </a><p class="pBody">
+Constant types can be decimal, hexadecimal, or character.  Decimal constants match the pattern 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+[+-]?[0-9]+  <a name="wp1110816"> </a>
+</pre></div>
+<a name="wp1110817"> </a><p class="pBody">
+that is, an optional sign character followed by a number of digits.  Decimal constants may be up to 76 digits long.
+</p>
+<a name="wp1110818"> </a><p class="pBody">
+Hexadecimal constants match the pattern 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+x&#39;([0-9A-F]{2})+&#39; <a name="wp1110819"> </a>
+</pre></div>
+<a name="wp1110820"> </a><p class="pBody">
+that is, a leading &quot;x&quot; indicating a hex constant and then groups of two hexadecimal digits in single quotation marks.  Hexadecimal constants are unsigned and may be up to 64 hexadecimal digits long (32 bytes).  For example, either of the following statements  results in the inclusion of records in which the first 10 characters (USAGE DISPLAY) equal 0xFFFF:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+include cond = (1 10 nu eq x&#39;FFFF&#39;)<a name="wp1113241"> </a>
+</pre></div>
+<a name="wp1113242"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+omit cond 1 10 nu ne x&#39;FFFF&#39;<a name="wp1113236"> </a>
+</pre></div>
+<a name="wp1110821"> </a><p class="pBody">
+Character constants match the pattern 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+c&#39;.+&#39; <a name="wp1110822"> </a>
+</pre></div>
+<a name="wp1110823"> </a><p class="pBody">
+that is, a leading &quot;c&quot; indicating a character constant and then a number of characters in single quotation marks.  Single quotation marks may be represented within the character constant by specifying two single quotation marks in a row.  
+</p>
+<a name="wp1110824"> </a><p class="pBody">
+In general, numeric types may be compared against each other or against a constant.  Floating point data may only be compared against other floating point data.  Strings may be compared against each other, a string, or a hexadecimal constant.  Strings may also be used in substring searches.
+</p>
+<a name="wp1110825"> </a><p class="pBody">
+Specifically, data types BI, C5, C6, CX, LI, LS, NU, PD, S5, SB, TI, and TS may be compared against each other, or against a hexadecimal or decimal constant.  BI and CH may be compared against each other or a string constant.  CH may be compared against a hexadecimal constant.   
+</p>
+<a name="wp1110826"> </a><p class="pBody">
+The AND and OR operators may be used to join comparison expressions.  The AND operator takes precedence over OR.  Note that the characters &quot;&amp;&quot; and &quot;|&quot; may be used to represent AND and OR, respectively.  As an example, either of the following statements results in the omission of any record in which the first character does not equal the second or the third character:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+omit cond = (1 1 ne 2 1) &amp; (1 1 ne 3 1) format ch<a name="wp1113251"> </a>
+</pre></div>
+<a name="wp1113252"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+include format=ch cond ((1 1 eq 2 1) or (1 1 eq 3 1))<a name="wp1113246"> </a>
+</pre></div>
+<a name="wp1110827"> </a><p class="pBody">
+Parentheses may be used to determine the evaluation order of an expression.  An expression is evaluated only as far as necessary to determine the inclusion or exclusion of the record.  For example, if a conditional is a list of expressions joined by AND operators, and the first expression evaluates as false, the remainder of the expressions is not evaluated for this record.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

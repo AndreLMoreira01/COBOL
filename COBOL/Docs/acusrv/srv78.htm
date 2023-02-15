@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:46:00" />
+  <title>7.3  Server Name Management</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv7.htm">Chapter 7: Programming for AcuServer</a> &gt; </p>
+<a name="wp1035359"> </a><h2 class="pHeading1">
+7.3  Server Name Management
+</h2>
+<a name="wp1035361"> </a><p class="pBody">
+At large installations, with many clients and servers, changes in file location and network configuration can mean frequent tedious maintenance of client runtime configuration files.  Every time a new server comes on-line, or a network reorganization moves data files from one server to another, the FILE_PREFIX and CODE_PREFIX definitions and name aliases must be updated.
+</p>
+<a name="wp1035362"> </a><p class="pBody">
+One way to simplify the network maintenance would be to create a file which contains the name of the file server.  Each application would then be written so that it reads this file and uses the name it finds there when referencing the server.  If you need to move your files to a new server, you have to change only this single file.
+</p>
+<a name="wp1035363"> </a><p class="pBody">
+Here's an example of this approach:
+</p>
+<a name="wp1035364"> </a><p class="pBody">
+First determine a permanent location for the server name file, and create it there.  The following program creates a server name file on machine &quot;faithful,&quot; on our hypothetical network:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+identification division.<a name="wp1035365"> </a>
+program-id. svnamcrt.<a name="wp1039130"> </a>
+environment division.<a name="wp1039131"> </a>
+input-output section.<a name="wp1039132"> </a>
+file-control.<a name="wp1039133"> </a>
+    select namefile<a name="wp1039134"> </a>
+    assign to <a name="wp1039135"> </a>
+    disk &quot;@faithful:/usr/acucobol/srvrnam.dat&quot;.<a name="wp1039136"> </a>
+<a name="wp1039137"> </a>
+data division.<a name="wp1039138"> </a>
+file section.<a name="wp1039139"> </a>
+fd  namefile.<a name="wp1039140"> </a>
+01  namerec    pic x(60).<a name="wp1039141"> </a>
+<a name="wp1039142"> </a>
+screen section.<a name="wp1039143"> </a>
+01  enter-screen.<a name="wp1039144"> </a>
+    03  &quot;REMOTE DIRECTORY: &quot; line 5.<a name="wp1039157"> </a>
+    03  using namerec.<a name="wp1039158"> </a>
+<a name="wp1039159"> </a>
+procedure division.<a name="wp1039160"> </a>
+main-logic.<a name="wp1039161"> </a>
+<a name="wp1039162"> </a>
+    open output namefile.<a name="wp1039163"> </a>
+    display window erase.<a name="wp1039164"> </a>
+    display enter-screen.<a name="wp1039165"> </a>
+    accept enter-screen.<a name="wp1039166"> </a>
+    write namerec.<a name="wp1039167"> </a>
+    close namefile.<a name="wp1039168"> </a>
+<a name="wp1039169"> </a>
+    stop run.<a name="wp1039170"> </a>
+</pre></div>
+<a name="wp1035366"> </a><p class="pBody">
+For the purposes of this example, we enter &quot;@helios:/usr2/sales/records&quot; at the ACCEPT.  This string designates the machine (helios) and the directory on that machine (&quot;/usr2/sales/records&quot;) where our data files can be found.
+</p>
+<a name="wp1035367"> </a><p class="pBody">
+The next step is to create a front-end program that your application will use to read the server name file.  It is possible for this program to be written in such a way that you can avoid any re-compilation of existing programs within your application.  The following is an example of such a front-end program:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+identification division.<a name="wp1035368"> </a>
+program-id. srvrnam.<a name="wp1039186"> </a>
+environment division.<a name="wp1039199"> </a>
+input-output section.<a name="wp1039212"> </a>
+file-control.<a name="wp1039225"> </a>
+    select namefile<a name="wp1039238"> </a>
+    assign to<a name="wp1039251"> </a>
+    disk &quot;@faithful:/usr/acucobol/srvrnam.dat&quot;.<a name="wp1039264"> </a>
+<a name="wp1039277"> </a>
+data division.<a name="wp1039290"> </a>
+file section.<a name="wp1039303"> </a>
+fd  namefile.<a name="wp1039316"> </a>
+01  namerec    pic x(60).<a name="wp1039329"> </a>
+<a name="wp1039342"> </a>
+working-storage section.<a name="wp1039355"> </a>
+<a name="wp1039368"> </a>
+01  ws-prefix  pic x(80).<a name="wp1039381"> </a>
+<a name="wp1039394"> </a>
+procedure division.<a name="wp1039400"> </a>
+main-logic.<a name="wp1039408"> </a>
+    open input namefile.<a name="wp1039409"> </a>
+    read namefile.<a name="wp1039410"> </a>
+    close namefile.<a name="wp1039411"> </a>
+<a name="wp1039412"> </a>
+    string namerec<a name="wp1039413"> </a>
+        delimited by spaces into ws-prefix.<a name="wp1039428"> </a>
+    set environment &quot;FILE_PREFIX&quot; to ws-prefix.<a name="wp1039429"> </a>
+<a name="wp1039432"> </a>
+    call &quot;your_app&quot;.<a name="wp1039433"> </a>
+<a name="wp1039434"> </a>
+    stop run.<a name="wp1039435"> </a>
+</pre></div>
+<a name="wp1035369"> </a><p class="pBody">
+In the above example, the program reads the server name file (found on &quot;faithful&quot;), creates the environment variable &quot;FILE_PREFIX&quot;, set to the value found in the server name file (&quot;@helios:/usr2/sales/records&quot;), and then calls the existing application.  Because the variable is defined in the same run unit in which the application runs, the variable is available to the application.  File operations are now routed to the machine &quot;helios&quot;.
+</p>
+<a name="wp1035370"> </a><p class="pBody">
+A file trace for this program might look like:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Configuration file = &#39;/etc/cblconfig&#39;<a name="wp1035371"> </a>
+Try loading &#39;srvrnam&#39;...<a name="wp1039451"> </a>
+srvrnam loaded<a name="wp1039464"> </a>
+@faithful:/usr/acucobol/srvrnam.dat: open input<a name="wp1039477"> </a>
+@faithful:/usr/acucobol/srvrnam.dat: next<a name="wp1039483"> </a>
+@faithful:/usr/acucobol/srvrnam.dat: close<a name="wp1039484"> </a>
+Set parameter &#39;FILE_PREFIX&#39; to &#39;@helios:/usr2/sales/records&#39;<a name="wp1039485"> </a>
+Try loading your_app...<a name="wp1039486"> </a>
+your_app loaded<a name="wp1039494"> </a>
+Set keystroke to &#39;Edit=Next Terminate=13 ^M&#39;<a name="wp1039507"> </a>
+thelp.dat: open i-o<a name="wp1039513"> </a>
+tword.dat: open i-o<a name="wp1039521"> </a>
+users.dat: open i-o<a name="wp1039534"> </a>
+</pre></div>
+<a name="wp1035372"> </a><p class="pBody">
+Note that FILE_PREFIX is set to the directory on &quot;helios&quot; where the data files are found.  The application behaves normally, and the FILE_PREFIX variable works just as if it had been changed in the runtime configuration file, but without the effort.
+</p>
+<a name="wp1035373"> </a><p class="pBody">
+There are other approaches that the front-end program might take to define FILE_PREFIX.  In the following program FILE_PREFIX includes the value held in the server name file, as well as any values that exist in the configuration file:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+identification division.<a name="wp1035374"> </a>
+program-id. srvrnam.<a name="wp1039555"> </a>
+environment division.<a name="wp1039568"> </a>
+input-output section.<a name="wp1039581"> </a>
+file-control.<a name="wp1039594"> </a>
+    select namefile<a name="wp1039607"> </a>
+    assign to<a name="wp1039620"> </a>
+    disk &quot;@faithful:/usr/acucobol/srvrnam.dat&quot;.<a name="wp1039633"> </a>
+<a name="wp1039646"> </a>
+data division.<a name="wp1039659"> </a>
+file section.<a name="wp1039672"> </a>
+fd  namefile.<a name="wp1039685"> </a>
+01  namerec     pic x(60).<a name="wp1039698"> </a>
+<a name="wp1039711"> </a>
+working-storage section.<a name="wp1039724"> </a>
+<a name="wp1039737"> </a>
+01  ws-prefix   pic x(80).<a name="wp1039750"> </a>
+01  full-path   pic x(120).<a name="wp1039763"> </a>
+<a name="wp1039768"> </a>
+procedure division.<a name="wp1039801"> </a>
+main-logic.<a name="wp1039842"> </a>
+<a name="wp1039855"> </a>
+    open input namefile.<a name="wp1039868"> </a>
+    read namefile.<a name="wp1039881"> </a>
+    close namefile.<a name="wp1039914"> </a>
+<a name="wp1039923"> </a>
+    accept ws-prefix from environment &quot;FILE_PREFIX&quot;.<a name="wp1039936"> </a>
+<a name="wp1039949"> </a>
+    move spaces to full-path.<a name="wp1039962"> </a>
+    string namerec, &quot; &quot;, ws-prefix<a name="wp1039975"> </a>
+        delimited by &quot;  &quot; into full-path.<a name="wp1039980"> </a>
+    set environment &quot;FILE_PREFIX&quot; to full-path.<a name="wp1039981"> </a>
+<a name="wp1039990"> </a>
+    call &quot;your_app&quot;.<a name="wp1040003"> </a>
+<a name="wp1040016"> </a>
+    stop run.<a name="wp1040029"> </a>
+</pre></div>
+<a name="wp1035375"> </a><p class="pBody">
+This program accesses the server name file and calls the application, just as in the first example.  However, the construction of the FILE_PREFIX variable includes both the value found in the server name file and the existing definition of FILE_PREFIX, as defined in the configuration file.
+</p>
+<a name="wp1035376"> </a><p class="pBody">
+In the next example, the front-end program creates a full pathname for each file in the application, using a different variable to hold the location of each file:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+identification division.<a name="wp1035377"> </a>
+program-id. srvrnam.<a name="wp1040050"> </a>
+environment division.<a name="wp1040051"> </a>
+input-output section.<a name="wp1040052"> </a>
+file-control.<a name="wp1040053"> </a>
+     select namefile<a name="wp1040054"> </a>
+     assign to disk &quot;@faithful:/usr/acucobol/srvrnam.dat&quot;.<a name="wp1040055"> </a>
+<a name="wp1040056"> </a>
+data division.<a name="wp1040057"> </a>
+file section.<a name="wp1040058"> </a>
+fd  namefile.<a name="wp1040059"> </a>
+01  namerec      pic x(60).<a name="wp1040060"> </a>
+<a name="wp1040061"> </a>
+working-storage section.<a name="wp1040583"> </a>
+01  first-file   pic x(20) value &quot;THELP_FILE&quot;.<a name="wp1040584"> </a>
+01  second-file  pic x(20) value &quot;KEYWORDS_FILE&quot;.<a name="wp1040585"> </a>
+01  third-file   pic x(20) value &quot;USER_FILE&quot;.<a name="wp1040588"> </a>
+01  file-1       pic x(20) value &quot;thelp&quot;.<a name="wp1040589"> </a>
+01  file-2       pic x(20) value &quot;tword&quot;.<a name="wp1040590"> </a>
+01  file-3       pic x(20) value &quot;users&quot;.<a name="wp1040068"> </a>
+01  ws-suffix    pic x(10).<a name="wp1040069"> </a>
+01  full-path    pic x(90).<a name="wp1040070"> </a>
+<a name="wp1040071"> </a>
+procedure division.<a name="wp1040072"> </a>
+main-logic.<a name="wp1040073"> </a>
+<a name="wp1040074"> </a>
+    open input namefile.<a name="wp1040075"> </a>
+    read namefile.<a name="wp1040076"> </a>
+    close namefile.<a name="wp1040077"> </a>
+    accept ws-suffix from environment &quot;FILE_SUFFIX&quot;.<a name="wp1040078"> </a>
+<a name="wp1040079"> </a>
+    move spaces to full-path.<a name="wp1040080"> </a>
+    string namerec, &quot;/&quot;, file-1, &quot;.&quot; <a name="wp1040085"> </a>
+        ws-suffix<a name="wp1040086"> </a>
+        delimited by spaces into full-path.<a name="wp1040087"> </a>
+    set environment first-file to full-path.<a name="wp1040088"> </a>
+<a name="wp1040089"> </a>
+    move spaces to full-path.<a name="wp1040081"> </a>
+    string namerec, &quot;/&quot;, file-2, &quot;.&quot; <a name="wp1040090"> </a>
+        ws-suffix<a name="wp1040091"> </a>
+        delimited by spaces into full-path.<a name="wp1040092"> </a>
+    set environment second-file to full-path.<a name="wp1040093"> </a>
+<a name="wp1040095"> </a>
+    move spaces to full-path.<a name="wp1040578"> </a>
+    string namerec, &quot;/&quot;, file-3, &quot;.&quot; <a name="wp1040579"> </a>
+        ws-suffix<a name="wp1040580"> </a>
+        delimited by spaces into full-path.<a name="wp1040101"> </a>
+    set environment third-file to full-path.<a name="wp1040102"> </a>
+<a name="wp1040103"> </a>
+    call &quot;your_app&quot;.<a name="wp1040083"> </a>
+<a name="wp1040104"> </a>
+    stop run.<a name="wp1040084"> </a>
+</pre></div>
+<a name="wp1035378"> </a><p class="pBody">
+Notice that the program constructs the full path name of each file.  If there is a file suffix, and it is known, it could be hard-coded into this program.  If there is a file suffix, but it is variable, this program could extract that information from the environment and append this variable suffix to the full path name.  However, be aware that this approach <em class="cEmphasis">may</em> require recompilation of the existing programs within the application.  In the case of the above example, the ASSIGN clause in each of the affected SELECT statements includes a hard-coded file suffix.  The period character (&quot;.&quot;) in that name cannot be used in the name of the environment variable, so the program must be recompiled after the code change:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+input-output section.<a name="wp1035379"> </a>
+file-control.<a name="wp1040108"> </a>
+<a name="wp1040109"> </a>
+    select optional thelp-file<a name="wp1040110"> </a>
+*       assign to &quot;thelp.dat&quot;<a name="wp1040111"> </a>
+        assign to disk ...<a name="wp1040112"> </a>
+<a name="wp1040113"> </a>
+    select optional keywords-file<a name="wp1040114"> </a>
+*       assign to &quot;tword.dat&quot;<a name="wp1040115"> </a>
+        assign to disk ...<a name="wp1040116"> </a>
+<a name="wp1040117"> </a>
+    select optional user-file<a name="wp1040118"> </a>
+*       assign to &quot;users.dat&quot;<a name="wp1040119"> </a>
+        assign to disk ...<a name="wp1040120"> </a>
+</pre></div>
+<a name="wp1035380"> </a><p class="pBody">
+A file trace for this example might look like:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Configuration file = &#39;/etc/cblconfig&#39;<a name="wp1037559"> </a>
+Try loading &#39;srvrnam&#39;...<a name="wp1040124"> </a>
+srvrnam loaded<a name="wp1040125"> </a>
+@faithful:/usr/acucobol/srvrnam.dat: open input<a name="wp1040126"> </a>
+@faithful:/usr/acucobol/srvrnam.dat: next<a name="wp1040127"> </a>
+@faithful:/usr/acucobol/srvrnam.dat: close<a name="wp1040128"> </a>
+Assign &#39;THELP_FILE&#39; to &#39;@helios:/usr2/sales/records/thelp.dat&#39;<a name="wp1040129"> </a>
+Assign &#39;KEYWORDS_FILE&#39; to &#39;@helios:/usr2/sales/records/tword.dat&#39;<a name="wp1040130"> </a>
+Assign &#39;USER_FILE&#39; to &#39;@helios:/usr2/sales/records/users.dat&#39;<a name="wp1040131"> </a>
+Try loading &#39;your_app&#39;...<a name="wp1040133"> </a>
+your_app loaded<a name="wp1040132"> </a>
+THELP-FILE: open i-o<a name="wp1040137"> </a>
+&gt;&gt;&gt;translated name =   @helios:/usr2/sales/records/thelp.dat<a name="wp1040138"> </a>
+KEYWORDS-FILE: open i-o<a name="wp1040139"> </a>
+&gt;&gt;&gt;translated name =   @helios:/usr2/sales/records/tword.dat<a name="wp1040140"> </a>
+USER-FILE: open i-o<a name="wp1040141"> </a>
+&gt;&gt;&gt;translated name =   @helios:/usr2/sales/records/users.dat<a name="wp1040142"> </a>
+</pre></div>
+<a name="wp1035382"> </a><p class="pBody">
+Note that in the above example, <em class="cEmphasis">only</em> those files specifically named in an environment variable will be looked for or created on the file server.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

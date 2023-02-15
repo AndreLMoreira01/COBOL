@@ -1,0 +1,591 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:10" />
+  <title>6.3  Control Events</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt26.htm">Chapter 6:  Events Reference</a> &gt; </p>
+<a name="wp1026110"> </a><h2 class="pHeading1">
+6.3  Control Events
+</h2>
+<a name="wp1034712"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>For any ACUCOBOL-GT, ActiveX, or .NET graphical control in your program, you can specify a list of event types to either send to or withhold from the program.  This mechanism can be helpful in improving application performance by eliminating the processing of events that are not required.  For details, see the entry for EVENT-LIST in section 6.4.9, &quot;Common Screen Options,&quot; of Book 3.
+<hr />
+</p>
+<a name="wp1034649"> </a><p class="pBody">
+The following events are associated with controls:
+</p>
+<a name="wp1026117"> </a><h5 class="pHeading4">
+CMD-CLICKED (value 4)  
+</h5>
+<a name="wp1028080"> </a><p class="pBody">
+This event occurs for push button, check box, and radio button controls, even if NOTIFY is not specified.  Specifying NOTIFY makes this a terminating event for check boxes and radio buttons.  CMD-CLICKED is always a terminating event for push buttons.  The EVENT-DATA-1 and EVENT-DATA-2 values are not used.  
+</p>
+<a name="wp1026120"> </a><h5 class="pHeading4">
+CMD-DBLCLICK (value 5)  
+</h5>
+<a name="wp1028083"> </a><p class="pBody">
+Indicates that the user has double-clicked on an item in a list-box or combo-box (returning this event), and that the box does not have a TERMINATION-VALUE or EXCEPTION-VALUE associated with it.  This will only occur if the application requests it via the NOTIFY-DBLCLICK list-box and combo-box styles.  EVENT-DATA-1 is the index of the selected item in the list (starting at &quot;1&quot;).  EVENT-DATA-2 is not used. 
+</p>
+<a name="wp1026125"> </a><h5 class="pHeading4">
+CMD-GOTO (value 3)  
+</h5>
+<a name="wp1034311"> </a><p class="pBody">
+Indicates that the user wants to activate the control that generated the event.  This happens when the user clicks on an inactive control with the mouse or types the control's key letter.  The application should perform a normal ACCEPT of that control in response.  (Failing to ACCEPT a control in response to a CMD-GOTO event for that control is generally not good programming practice, because it prevents the control from behaving normally.)  The EVENT-DATA-1 and EVENT-DATA-2 values are not used.  Note that the event is not generated if you are ACCEPTing a Screen Section item and the user selects different controls in that screen.  The Screen Section handler automatically performs the necessary activation.  
+</p>
+<a name="wp1026127"> </a><p class="pBody">
+The CMD-GOTO event is handled specially in the Screen Section with regard to embedded procedures.  This event causes a control's AFTER procedure to execute, instead of its EXCEPTION procedure.  We assume that moving between fields with the mouse is a normal event and that field validation and clean-up (normally located in AFTER procedures) should be executed.  
+</p>
+<a name="wp1026130"> </a><h5 class="pHeading4">
+CMD-HELP (value 8)  
+</h5>
+<a name="wp1028100"> </a><p class="pBody">
+This event occurs when help is requested for the control described in EVENT-CONTROL-HANDLE.  The control's help ID is in EVENT-DATA-2 (this value is zero if the control does not have a help ID).  Because this event is handled by the runtime, it is not a terminating event in your program.  However, you can detect this event in the control's event procedure.  You can also handle this event in the event procedure itself and prevent the runtime's automatic handling by setting the EVENT-ACTION-CONTINUE element of the EVENT-STATUS data item.  For a detailed description of EVENT-ACTION-CONTINUE and other elements of the EVENT-STATUS data item, see section 4.2.3, Book&#160;3, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Reference Manual</span>.  
+</p>
+<a name="wp1026134"> </a><h5 class="pHeading4">
+CMD-TABCHANGED (value 7)  
+</h5>
+<a name="wp1028110"> </a><p class="pBody">
+This event occurs when the user selects a new tab from a TAB control.  The value of the selected tab is in EVENT-DATA-1.  Unlike most events, this one performs any validation specified in the ACCEPT, and the current field's AFTER procedure is executed rather than its EXCEPTION procedure.  This event ensures that the user cannot use the TAB control to leave a form when it contains invalid data.  EVENT-DATA-2 is not used.
+</p>
+<a name="wp1026138"> </a><h5 class="pHeading4">
+MSG-AX-EVENT (value 16436)  
+</h5>
+<a name="wp1034777"> </a><p class="pBody">
+This event occurs when an ActiveX control or COM object has &quot;fired&quot; an event. EVENT-DATA-2 contains the ActiveX control's or COM object's event ID.  This is a numeric identifier that matches an EVENT phrase in the description of the class that generates the event. The ID may be positive or negative. 
+</p>
+<a name="wp1034785"> </a><p class="pBody">
+For ActiveX, two pairs of library routines, C$GETEVENTDATA/C$SETEVENTDATA and C$GETEVENTPARAM/C$SETEVENTPARAM are used to get and set event parameters for the current event.  For COM, you must use the C$GETEVENTDATA/C$SETEVENTDATA routines to get and set event parameters.  These library routines are described in Appendix I, Book 4, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Appendices</span>. 
+</p>
+<a name="wp1026141"> </a><h5 class="pHeading4">
+MSG-BEGIN-DRAG (value 16406)  
+</h5>
+<a name="wp1028118"> </a><p class="pBody">
+This is generated when the user begins dragging the mouse in a grid control while holding down the left-button.  This is generated only for non-header cells.  This is generated immediately before the first corresponding MSG-GOTO-CELL-DRAG event.  EVENT-DATA-1 contains the column number of the cell where the user began dragging the mouse, and EVENT-DATA-2 contains the row number of that cell.  The properties X and Y are set to match these values for the duration of this event.  The properties START-X and START-Y are also set to match these values (note that unlike &quot;X&quot; and &quot;Y,&quot; these settings are retained after this event finishes). 
+</p>
+<a name="wp1026145"> </a><h5 class="pHeading4">
+MSG-BEGIN-ENTRY (value 16392)  
+</h5>
+<a name="wp1028122"> </a><p class="pBody">
+This event occurs when the user starts modifying a cell in a grid control.  EVENT-DATA-1 contains the column number of the cell, and EVENT-DATA-2 contains its record number.  For convenience, the properties X and Y are set to the cursor's cell for the duration of this event (<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">i.e.</span>, they are set to the cursor's location at entry to the event procedure and restored to their prior values at exit).  This allows you to get a &quot;before&quot; image of the cell easily by simply doing an INQUIRE on CELL-DATA. 
+</p>
+<a name="wp1026146"> </a><p class="pBody">
+You can prevent the entry from occurring by setting EVENT-ACTION to EVENT-ACTION-FAIL.  
+</p>
+<a name="wp1026148"> </a><h5 class="pHeading4">
+MSG-BITMAP-CLICKED (value 16400)  
+</h5>
+<a name="wp1028129"> </a><p class="pBody">
+This event occurs when the user left-clicks on a bitmap contained in a grid control. EVENT-DATA-1 contains the column number of the cell clicked, and EVENT-DATA-2 contains the record number of that cell.  For convenience, the properties X and Y are set to match these values for the duration of the event. 
+</p>
+<a name="wp1026150"> </a><p class="pBody">
+If you set EVENT-ACTION to EVENT-ACTION-FAIL, the normal action of left-clicking in a cell is prevented (<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">i.e.</span>, the cursor is not moved to that cell).  
+</p>
+<a name="wp1026152"> </a><h5 class="pHeading4">
+MSG-BITMAP-DBLCLICK (value 16401)  
+</h5>
+<a name="wp1032753"> </a><p class="pBody">
+This event occurs when the user double clicks on a bitmap contained in a grid control.  EVENT-DATA-1 contains the column number of the cell double-clicked, and EVENT-DATA-2 contains the record number of that cell.  For convenience, the properties X and Y are set to match these values for the duration of the event. 
+</p>
+<a name="wp1026154"> </a><p class="pBody">
+If you set EVENT-ACTION to EVENT-ACTION-FAIL, the normal action of double-clicking in a cell is prevented (<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">i.e.</span>, the grid does not shift to entry mode for the cell).  
+</p>
+<a name="wp1026156"> </a><h5 class="pHeading4">
+MSG-BEGIN-HEADING-DRAG (value 16408)  
+</h5>
+<a name="wp1032754"> </a><p class="pBody">
+This is generated when the user begins dragging the mouse in a grid control while holding down the left-button.  This is generated only for header cells.  This is generated immediately before the first corresponding MSG-HEADING-DRAGGED event.  EVENT-DATA-1 contains the column number of the cell where the user began dragging the mouse, and EVENT-DATA-2 contains the row number of that cell.  The properties X and Y are set to match these values for the duration of this event.  The properties START-X and START-Y are also set to match these values (note that unlike &quot;X&quot; and &quot;Y&quot;, these settings are retained after this event finishes). 
+</p>
+<a name="wp1026159"> </a><h5 class="pHeading4">
+MSG-CANCEL-ENTRY (value 16394)  
+</h5>
+<a name="wp1028159"> </a><p class="pBody">
+This event occurs when the user leaves entry mode in a grid control by typing the &quot;cancel&quot; key (under Windows, this is the Escape key).  The contents of the cell are restored to the cell's contents prior to the start of the entry.  EVENT-DATA-1 contains the column number of the cell, and EVENT-DATA-2 contains its record number.  For convenience, the properties X and Y are set to the cursor's cell for the duration of this event.  This event also occurs in the special case where the user enters spaces (or nothing) into a cell that is in a record past the end of the last record added to the grid.  This is to prevent variable-length grids (<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">i.e.&#160;</span>NUM-ROWS of &quot;-1&quot;) from expanding when the user enters empty&#160;data. 
+</p>
+<a name="wp1026162"> </a><h5 class="pHeading4">
+MSG-COL-WIDTH-CHANGED (value 16410)  
+</h5>
+<a name="wp1028163"> </a><p class="pBody">
+This occurs when the user changes the width of a column in a grid control.  For this to occur, the grid must have the ADJUSTABLE-COLUMNS style and must have only one row per record.  EVENT-DATA-1 contains the column number being changed.  EVENT-DATA-2 contains the new width (in characters). 
+</p>
+<a name="wp1026165"> </a><h5 class="pHeading4">
+MSG-END-DRAG (value 16407)  
+</h5>
+<a name="wp1028167"> </a><p class="pBody">
+This event indicates that the user has released the mouse button after dragging the mouse during a normal (non-header) drag operation in a grid control.  EVENT-DATA-1 contains the column number of the cell where the user finished dragging the mouse.  EVENT-DATA-2 contains that cell's row number.  The properties X and Y are set to match these values for the duration of this event. 
+</p>
+<a name="wp1026168"> </a><h5 class="pHeading4">
+MSG-END-HEADING-DRAG (value 16409)  
+</h5>
+<a name="wp1028171"> </a><p class="pBody">
+This event indicates that the user has released the mouse button after dragging the mouse during a header drag operation in a grid control. EVENT-DATA-1 contains the column number of the cell where the user finished dragging the mouse.  EVENT-DATA-2 contains that cell's row number.  The properties X and Y are set to match these values for the duration of this event.  
+</p>
+<a name="wp1026171"> </a><h5 class="pHeading4">
+MSG-FINISH-ENTRY (value 16393)  
+</h5>
+<a name="wp1028175"> </a><p class="pBody">
+This event occurs when the user finishes editing a cell in a grid control.  You can use this opportunity to validate the cell's contents and do any reformatting of the data.  EVENT-DATA-1 contains the column number of the cell, and EVENT-DATA-2 contains its record number.  For convenience, the properties X and Y are set to the cursor's cell for the duration of this event.  This allows you to retrieve the entered data by simply performing an INQUIRE on CELL-DATA.  To reformat the entered data, INQUIRE on CELL-DATA, perform the desired formatting, and MODIFY CELL-DATA with the reformatted data.  Note that if you INQUIRE directly into a numeric or numeric-edited data item, you get automatic conversion similar to MOVE WITH CONVERSION (with simple truncation on overflow).  For more sophisticated testing and reformatting, INQUIRE into an alphanumeric item and examine the data directly.  
+</p>
+<a name="wp1026173"> </a><p class="pBody">
+You can force the user to stay in entry mode on the current cell by setting EVENT-ACTION to EVENT-ACTION-FAIL.  This is what you should usually do if the user enters invalid data.  
+</p>
+<a name="wp1026174"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>Like all controls that can be activated, grids generate the MSG-VALIDATE event.  However, this occurs only when the user attempts to leave the grid entirely.  This is not usually very useful, so it is best to do validation in response to MSG-FINISH-ENTRY.  
+<hr />
+</p>
+<a name="wp1026177"> </a><h5 class="pHeading4">
+MSG-GOTO-CELL (value 16395)  
+</h5>
+<a name="wp1028185"> </a><p class="pBody">
+This is generated any time the user moves the cursor to a new grid control cell using the keyboard.  EVENT-DATA-1 contains the column number of the cell being moved to, and EVENT-DATA-2 contains the record number of that cell.  For convenience, the properties X and Y are set to match these values for the duration of the event.  You can determine which cell the user is moving from by inquiring CURSOR-X and CURSOR-Y. 
+</p>
+<a name="wp1026178"> </a><p class="pBody">
+You can prevent the user from entering the cell by setting EVENT-ACTION to EVENT-ACTION-FAIL.  If you do this, the cursor remains in its previous cell.  You can direct the cursor to a different cell by setting EVENT-ACTION to EVENT-ACTION-FAIL and then modifying CURSOR-X and CURSOR-Y directly. 
+</p>
+<a name="wp1026180"> </a><h5 class="pHeading4">
+ MSG-GOTO-CELL-DRAG (value 16404)  
+</h5>
+<a name="wp1028197"> </a><p class="pBody">
+This is generated when the user moves the mouse into a new grid control cell while holding the left-button down.  This event occurs only if the user clicks in a non-header cell first.  Clicking outside of the grid and then dragging the mouse over the grid has no effect.  Clicking in a header cell and then dragging the mouse over the grid generates MSG-HEADING-DRAGGED events instead.  (Note that this action has poor performance in applications that run with the ACUCOBOL-GT Thin Client.)
+</p>
+<a name="wp1026182"> </a><p class="pBody">
+Like most grid events, EVENT-DATA-1 contains the column number of the cell being moved to, and EVENT-DATA-2 contains the record number of that cell.  For convenience, the properties X and Y are set to match these values for the duration of the event.
+</p>
+<a name="wp1026183"> </a><p class="pBody">
+The default action taken for this event is to scroll the grid (if needed) and then place the cursor in the dragged-to cell.  You can prevent the cursor from being moved by setting EVENT-ACTION to EVENT-ACTION-FAIL (the grid is scrolled regardless). 
+</p>
+<a name="wp1026186"> </a><h5 class="pHeading4">
+MSG-GOTO-CELL-MOUSE (value 16396)  
+</h5>
+<a name="wp1028212"> </a><p class="pBody">
+This is generated any time the user moves the cursor to a grid control cell using the mouse.  This event is similar to MSG-GOTO-CELL, which generates a message when the cursor is moved via the keyboard.  One reason you may want to know whether the user is moving to the cell via the mouse or the keyboard is if you are preventing the user from visiting a particular cell.  You may want to leave the cursor in its original location if the user clicks on the cell with the mouse.  But if the user types a key, you may want to skip over the field (you can tell which direction to skip by looking at the cell the user is starting from). This event differs from MSG-GOTO-CELL because a message is generated by MSG-GOTO-CELL-MOUSE even when the user clicks in the grid control cell that contains the cursor.
+</p>
+<a name="wp1033753"> </a><p class="pBody">
+For details about the handling of this event, see MSG-GOTO-CELL. 
+</p>
+<a name="wp1026187"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>The behavior of this event changed with Version 5.2.  For more&#160;information, see &quot;Changes Affecting Version 5.1&quot; in Book 4, Appendix C.
+<hr />
+</p>
+<a name="wp1026190"> </a><h5 class="pHeading4">
+MSG-GRID-RBUTTON-DOWN (value 16426)  
+</h5>
+<a name="wp1028224"> </a><p class="pBody">
+This event occurs in the grid control when the user depresses the right mouse button.  EVENT-DATA-1 is set to the column number of the cell being clicked, EVENT-DATA-2 is set to the row number.  If the grid is right-clicked outside of any cells, these values are set to zero.  The grid properties X and Y are set to these same values for the duration of this event.  If you respond to this event by setting EVENT-ACTION to EVENT-ACTION-COMPLETE, no further processing of this event occurs.  Otherwise, the grid acts as if the user pressed the left mouse&#160;button.
+</p>
+<a name="wp1026193"> </a><h5 class="pHeading4">
+MSG-GRID-RBUTTON-UP (value 16427)  
+</h5>
+<a name="wp1028228"> </a><p class="pBody">
+This event occurs when the user releases the right mouse button.  The event behaves in the same manner as the MSG-GRID-RBUTTON-DOWN event described above.  Once this event finishes processing, any pop-up menu associated with the grid is displayed normally.
+</p>
+<a name="wp1026194"> </a><p class="pBody">
+One way you can use this event is to select an appropriate pop-up menu depending on the cell clicked.  For example, you may want different pop-up menus for the headings and the body of the grid.  You can examine the cell clicked in this event and set the appropriate pop-up menu for the control.  The selected menu appears after the event has finished.
+</p>
+<a name="wp1026196"> </a><h5 class="pHeading4">
+MSG-HEADING-CLICKED (value 16402)  
+</h5>
+<a name="wp1028232"> </a><p class="pBody">
+This event occurs when the user left-clicks on a row or column header in a grid control.  EVENT-DATA-1 contains the column number of the cell clicked, and EVENT-DATA-2 contains the record number of that cell (one of these will be &quot;1&quot;).  For convenience, the properties X and Y are set to match these values for the duration of the event. 
+</p>
+<a name="wp1026199"> </a><h5 class="pHeading4">
+MSG-HEADING-DBLCLICK (value 16403)  
+</h5>
+<a name="wp1028242"> </a><p class="pBody">
+This event occurs when the user double-clicks on a row or column header in a grid control.  EVENT-DATA-1 contains the column number of the cell double-clicked, and EVENT-DATA-2 contains the record number of that cell (one of these will be &quot;1&quot;).  For convenience, the properties X and Y are set to match these values for the duration of the&#160;event. 
+</p>
+<a name="wp1026202"> </a><h5 class="pHeading4">
+MSG-HEADING-DRAGGED (value 16405)  
+</h5>
+<a name="wp1028252"> </a><p class="pBody">
+This event occurs when the user moves the mouse into a grid control header cell while holding the left-button down.  This event is generated only when the user first clicks in a header cell.  If the user clicks in a header, and then drags the mouse over a non-header cell, MSG-HEADING-DRAGGED is generated and the closest header cell is used.  These rules allow the user to be a bit &quot;sloppy&quot; when dragging the mouse. 
+</p>
+<a name="wp1026204"> </a><p class="pBody">
+EVENT-DATA-1 contains the column number of the cell dragged-to, and EVENT-DATA-2 contains the row number (one of these will be &quot;1&quot;).  For convenience, the properties X and Y are set to match these values for the duration of the event.  
+</p>
+<a name="wp1034624"> </a><h5 class="pHeading4">
+MSG-NET-EVENT (value 16437) 
+</h5>
+<a name="wp1034625"> </a><p class="pBody">
+This event occurs when a .NET control has <em class="cEmphasis">fired</em> an event.  EVENT-DATA-2 contains the .NET control's event type.  A library routine, C$GETNETEVENTDATA, is used to get the event parameters for the current event. This routine is described in Book 4, Appendix I.
+</p>
+<a name="wp1026207"> </a><h5 class="pHeading4">
+MSG-PAGED-FIRST (value 16423)  
+</h5>
+<a name="wp1035250"> </a><p class="pBody">
+This event occurs for grids with the PAGED style.  It indicates that the user has clicked on the &quot;First Page&quot; button (the same button as the &quot;Previous Record&quot; button with the Shift key held down).  The runtime responds to this event by positioning the record pointer at the beginning of the data source.  Assuming that the data source is an indexed file, a START statement sets the record pointer so that a READ NEXT would retrieve the first record in the file.  If you set EVENT-ACTION to EVENT-ACTION-NORMAL (this is the default), the following occurs after this event has finished:
+</p>
+<div class="pSmartList1"><ol type="a" class="pSmartList1">
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1035251"> </a><div class="pSmartList2"><li>the control is emptied of data, except for any column headers;  and</li></div>
+<a name="wp1026209"> </a><div class="pSmartList2"><li>the control generates a page worth of MSG-PAGED-NEXT events to fill up the first page of data.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp1026210"> </a><p class="pBody">
+If you opted to fill up the first page itself in response to this event, set EVENT-ACTION to EVENT-ACTION-COMPLETE to inform the grid that it should not generate the MSG-PAGED-NEXT events to fill the first page.  If you cannot start at the beginning of the file (because the file is empty), set EVENT-ACTION to EVENT-ACTION-FAIL.
+</p>
+<a name="wp1026213"> </a><h5 class="pHeading4">
+MSG-PAGED-LAST (value 16424)  
+</h5>
+<a name="wp1028272"> </a><p class="pBody">
+This event occurs for grids with the PAGED style.  It indicates that the user has clicked on the &quot;Last Page&quot; button (the &quot;Next Record&quot; button with the Shift key held down).  This works in the same manner as the MSG-PAGED-FIRST event described above.  You position the data source so that a MSG-PAGED-PREV event would retrieve the last record, and the grid handles the rest.  See MSG-PAGED-FIRST and MSG-PAGED-PREV.
+</p>
+<a name="wp1026216"> </a><h5 class="pHeading4">
+MSG-PAGED-NEXT (value 16419)  
+</h5>
+<a name="wp1028292"> </a><p class="pBody">
+This event occurs for grids with the PAGED style.  It indicates that the user has clicked on the &quot;Next Record&quot; button.  The expected response from the runtime is to supply the next record after the end of the grid's current data.  To do this, add a new record at the end of the grid (using RECORD-TO-ADD).  If the data is from an indexed file, the value of EVENT-DATA-2 is the number of READ NEXTs you need to perform to get to the appropriate record. This value is controlled by the property FILE-POS.  See the discussion on the FILE-POS property under the grid control for details on how this works.  If you cannot supply the next record (because you have reached the end of the file), respond by setting EVENT-ACTION to EVENT-ACTION-FAIL.  When you do this, you receive no more MSG-PAGED-NEXT events.  
+</p>
+<a name="wp1026219"> </a><h5 class="pHeading4">
+MSG-PAGED-NEXTPAGE (value 16421)  
+</h5>
+<a name="wp1028320"> </a><p class="pBody">
+This event occurs for grids with the PAGED style.  It indicates that the user has clicked on the &quot;Next Page&quot; button.  If you do not define a specific action when this event occurs, the grid implements the logic itself by generating a page worth of MSG-PAGED-NEXT events.  This is done with the MASS-UPDATE internally set to a non-zero value.
+</p>
+<a name="wp1026220"> </a><p class="pBody">
+If you want to supply the logic by adding code to handle this event, set EVENT-ACTION to EVENT-ACTION-COMPLETE.  This action-status informs the grid that it should not generate the MSG-PAGED-NEXT events because the &quot;Next Page&quot; has already been handled.
+</p>
+<a name="wp1026223"> </a><h5 class="pHeading4">
+MSG-PAGED-PREV (value 16420)  
+</h5>
+<a name="wp1028354"> </a><p class="pBody">
+This event occurs for grids with the PAGED style.  It indicates that the user has clicked the &quot;Previous Record&quot; button.  The expected response from the runtime is to supply the record before the first record of the grid's current data.  To do this, add a new record at the start of the grid (using RECORD-TO-ADD to add the record and INSERTION-INDEX to position the record before the first row of data, and making sure that the record is not inserted before any column headings in the grid).  If the data is from an indexed file, the value in EVENT-DATA-2 is the number of READ PREVIOUS statements you need to perform to get to the appropriate record.  This value is controlled by the property FILE-POS.  See the discussion about the FILE-POS property under grid control.  If you cannot supply the record (because you have reached the beginning of the file), respond by setting EVENT-ACTION to EVENT-ACTION-FAIL.  When you do this, you will receive no more MSG-PAGED-PREV events. 
+</p>
+<a name="wp1026226"> </a><h5 class="pHeading4">
+MSG-PAGED-PREVPAGE (value 16422)  
+</h5>
+<a name="wp1028366"> </a><p class="pBody">
+This event occurs for grids with the PAGED style.  It indicates that the user has clicked the &quot;Previous Page&quot; button.  This works in the same manner as the MSG-PAGED-NEXTPAGE event described above.  Although this event may be ignored, you may want to supply a specific action in response to this event. See MSG-PAGED-NEXTPAGE for details.  
+</p>
+<a name="wp1026228"> </a><h5 class="pHeading4">
+MSG-SB-NEXT (value 16385)  
+</h5>
+<a name="wp1028386"> </a><p class="pBody">
+This event occurs when the user clicks on the down/right button in a scroll bar.  When this message is sent to the scroll bar's event procedure, the program should respond by setting the control's new position.  EVENT-DATA-1 and EVENT-DATA-2 are not used. 
+</p>
+<a name="wp1026231"> </a><h5 class="pHeading4">
+MSG-SB-NEXTPAGE (value 16387)  
+</h5>
+<a name="wp1028398"> </a><p class="pBody">
+This event occurs when the user clicks on the down/right page region in a scroll bar.  When this message is sent to the scroll bar's event procedure, the program responds by setting the control's new position.  EVENT-DATA-1 and EVENT-DATA-2 are not used. 
+</p>
+<a name="wp1026234"> </a><h5 class="pHeading4">
+MSG-SB-PREV (value 16386)  
+</h5>
+<a name="wp1028402"> </a><p class="pBody">
+This event occurs when the user clicks on the up/left button in a scroll bar.  When this message is sent to the scroll bar's event procedure, the program responds by setting the control's new position.  EVENT-DATA-1 and EVENT-DATA-2 are not used. 
+</p>
+<a name="wp1026237"> </a><h5 class="pHeading4">
+MSG-SB-PREVPAGE (value 16388)  
+</h5>
+<a name="wp1028422"> </a><p class="pBody">
+This event occurs when the user clicks on the up/left page region in a scroll bar.  When this message is sent to the scroll bar's event procedure, the program responds by setting the control's new position.  EVENT-DATA-1 and EVENT-DATA-2 are not used. 
+</p>
+<a name="wp1026240"> </a><h5 class="pHeading4">
+MSG-SB-THUMB (value 16389)  
+</h5>
+<a name="wp1028434"> </a><p class="pBody">
+This event occurs when the user repositions the scroll bar's slider, or &quot;thumb.&quot;  When this message is sent to the scroll bar's event procedure, the program responds by setting the control's new position to the value in EVENT-DATA-2.  EVENT-DATA-1 is not used. 
+</p>
+<a name="wp1026243"> </a><h5 class="pHeading4">
+MSG-SB-THUMBTRACK (value 16390)  
+</h5>
+<a name="wp1028438"> </a><p class="pBody">
+This event occurs when the user moves a scroll bar's slider that has the TRACK-THUMB style.  When this message is sent to the scroll bar's event procedure, the program does <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">not</span> reset the control's position in response.  EVENT-DATA-2 contains the new position.  EVENT-DATA-1 is not used. This scroll bar message is the only one that should not change the slider's position. 
+</p>
+<a name="wp1026247"> </a><h5 class="pHeading4">
+MSG-SPIN-DOWN (value 16417)  T
+</h5>
+<a name="wp1028442"> </a><p class="pBody">
+his event occurs when the user clicks the down arrow of an entry field with the SPINNER style.  The program responds to MSG-SPIN-DOWN by decrementing the entry field by a specific value, not necessarily 1.  Similar to the MSG-SPIN-UP event described above, if the entry field has the AUTO-SPIN style, you can set the EVENT-ACTION to EVENT-ACTION-FAIL to prevent the control from decrementing the value itself.
+</p>
+<a name="wp1026250"> </a><h5 class="pHeading4">
+MSG-SPIN-UP (value 16416)  
+</h5>
+<a name="wp1028446"> </a><p class="pBody">
+This event occurs when the user clicks the up arrow of an entry field with the SPINNER style.  The program responds to this event by incrementing the value of the entry field. You are not limited to incrementing by one.  You may increment the value of the field any way you want by inquiring the field's current value and then modifying it to have the desired value.
+</p>
+<a name="wp1026251"> </a><p class="pIndented1">
+If the entry field has the AUTO-SPIN style, you can set EVENT-ACTION to EVENT-ACTION-FAIL in response to MSG-SPIN-UP to prevent the control from incrementing the value itself.
+</p>
+<a name="wp1026254"> </a><h5 class="pHeading4">
+MSG-TV-DBLCLICK (value 16428)  
+</h5>
+<a name="wp1028459"> </a><p class="pBody">
+This event occurs when the user double-clicks an item in Tree-View control that has no children.  Items that have children expand or collapse when double-clicked.  The ID of the item clicked is in EVENT-DATA-2.
+</p>
+<a name="wp1026255"> </a><p class="pIndented1">
+You may set EVENT-ACTION to EVENT-ACTION-IGNORE to inhibit the control's internal handling of a double-click event.  You should do this if you wish to transfer control to a new window in response to the double-click.  If your code creates a new window here but does not <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ignore</span> the event, then the control's internal handling can deactivate your new window.
+</p>
+<a name="wp1026258"> </a><h5 class="pHeading4">
+MSG-TV-EXPANDED (value 16414)  
+</h5>
+<a name="wp1028475"> </a><p class="pBody">
+This event occurs when an item in a Tree View control has expanded or collapsed.  The ID of the parent item is in EVENT-DATA-2.  One of the following two flags is in EVENT-DATA-1:
+</p>
+<a name="wp1026268"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1026261"> </a><p class="pCellBody">
+<b style="font-style: normal; font-weight: bold; text-decoration: none; vertical-align: baseline" class="cBold">TVFLAG EXPAND</b>
+</p>
+</td>
+    <td><a name="wp1026263"> </a><p class="pCellBody">
+Item expanded to show children
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1026265"> </a><p class="pCellBody">
+<b class="cBold">TVFLAG COLLAPSE</b>
+</p>
+</td>
+    <td><a name="wp1026267"> </a><p class="pCellBody">
+Item collapsed to hide children
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1026271"> </a><h5 class="pHeading4">
+MSG-TV-EXPANDING (value 16413)  
+</h5>
+<a name="wp1028495"> </a><p class="pBody">
+This event occurs when an item in a Tree View control is about to expand or collapse.  EVENT-DATA-1 and EVENT-DATA-2 are set in the same manner as for the event MSG-TV-EXPANDED.  You can prevent the control from expanding or collapsing the item by setting EVENT-ACTION to EVENT-ACTION-FAIL.  Note that the runtime will send both of these events in response to the user pressing the + or * keys.  The difference is that these messages are sent regardless of whether the particular item is expanded already or not, whereas a mouse event will only cause the EXPAND messages to be sent if the item is not already expanded.  This fact can cause problems in COBOL programs, so programmers should be aware of it.
+</p>
+<a name="wp1026272"> </a><p class="pIndented1">
+The + and * keys will generate an EXPANDED message with EVENT-DATA-1 set to TVFLAG-EXPAND, while the - key will generate an EXPANDED message with EVENT-DATA-1 set to TVFLAG-COLLAPSE.
+</p>
+<a name="wp1026275"> </a><h5 class="pHeading4">
+MSG-TV-SELCHANGE (value 16412)  
+</h5>
+<a name="wp1028498"> </a><p class="pBody">
+This event occurs when the selection has changed in a Tree View control.  The ID of the new item is contained in EVENT-DATA-2.  EVENT-DATA-1 contains the cause of the change.  It is one of the following values (found in &quot;acugui.def&quot;):
+</p>
+<a name="wp1026289"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1026278"> </a><p class="pCellBody">
+<b class="cBold">TVFLAG MOUSE</b>
+</p>
+</td>
+    <td><a name="wp1026280"> </a><p class="pCellBody">
+New item selected with mouse
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1026282"> </a><p class="pCellBody">
+<b class="cBold">TVFLAG KEYBOARD</b>
+</p>
+</td>
+    <td><a name="wp1026284"> </a><p class="pCellBody">
+New item selected with keyboard
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1026286"> </a><p class="pCellBody">
+<b class="cBold">TVFLAG PROGRAM</b>
+</p>
+</td>
+    <td><a name="wp1026288"> </a><p class="pCellBody">
+Program changed selected item
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1034029"> </a><h5 class="pHeading4">
+MSG-TV-SELCHANGING (value 16411)  
+</h5>
+<a name="wp1028511"> </a><p class="pBody">
+This event occurs when the selection in a Tree View control is about to change.  EVENT-DATA-1 contains the reason for the change (see MSG-TV-SELCHANGE), and EVENT-DATA-2 contains the ID of the item that is about to be selected.  You can prevent the selection from occurring by setting EVENT-ACTION to EVENT-ACTION-FAIL.
+</p>
+<a name="wp1034080"> </a><p class="pIndented1">
+This event is generated much more often and in many more circumstances than may be anticipated.  For example, the event is generated when the control goes active, even if the selection does not change.  If the program is deployed with the thin client, the volume of these events can cause performance problems.  The configuration variable TC_TV_SELCHANGING provides some control over the generation of these events in a thin client deployment.  See the entry for TC_TV_SELCHANGING in Appendix H of Book 4.
+</p>
+<a name="wp1026294"> </a><h5 class="pHeading4">
+MSG-VALIDATE (value 16391)  
+</h5>
+<a name="wp1028523"> </a><p class="pBody">
+This event occurs immediately after the runtime performs intrinsic validation of a field at data entry (for example, the REQUIRED phrase).  Specifically, an MSG-VALIDATE event is generated whenever an activatable control terminates and the termination is not the result of: 
+</p>
+<div class="pSmartList1"><ol type="a" class="pSmartList1">
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1026296"> </a><div class="pSmartList2"><li>an event, except for CMD-GOTO, or CMD-TABCHANGED</li></div>
+<a name="wp1026297"> </a><div class="pSmartList2"><li>a message, except &quot;status 95&quot;</li></div>
+<a name="wp1026298"> </a><div class="pSmartList2"><li>an exception, except for those that also cause movement between fields in a Screen Section</li></div>
+</ol></div>
+</ol></div>
+<a name="wp1026299"> </a><p class="pBody">
+When the above conditions are met, it is a good point in the program to perform other validation of a control's data. 
+</p>
+<a name="wp1026300"> </a><p class="pBody">
+If the EVENT-ACTION element is set to EVENT-ACTION-CONTINUE (value 2), the control remains active so the user can correct any errors.  Note that MSG-VALIDATE is not generated for controls with the SELF-ACT style, nor is it sent when the runtime does not normally perform validation (for example, in response to a function key).  This message is generated for any control that is activated, even if it does not have a value.  Due to the dynamic nature of graphical screens, a user can exit a screen without all the fields being validated, therefore, validation should also be performed <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">after</span> completion of data entry.  
+</p>
+<a name="wp1026301"> </a><h5 class="pHeading4">
+MSG-WB-BEFORE-NAVIGATE (value 16429)  
+</h5>
+<a name="wp1028527"> </a><p class="pBody">
+Occurs when the WEB-BROWSER control is about to navigate to a new URL.  The NAVIGATE-URL property is set to the new URL.   If you set EVENT-ACTION to EVENT-ACTION-FAIL, navigate will be cancelled.  
+</p>
+<a name="wp1026302"> </a><h5 class="pHeading4">
+MSG-WB-DOWNLOAD-BEGIN (value 16431)  
+</h5>
+<a name="wp1028531"> </a><p class="pBody">
+Occurs when a navigation operation is beginning, shortly after the BeforeNavigate event.
+</p>
+<a name="wp1026303"> </a><h5 class="pHeading4">
+MSG-WB-DOWNLOAD-COMPLETE (value 16432)  
+</h5>
+<a name="wp1028535"> </a><p class="pBody">
+Occurs when a navigation operation is finished.
+</p>
+<a name="wp1026304"> </a><h5 class="pHeading4">
+MSG-WB-NAVIGATE-COMPLETE (value 16430)  
+</h5>
+<a name="wp1028539"> </a><p class="pBody">
+Occurs after the browser has navigated to a new URL.  The final URL is stored in the VALUE property.
+</p>
+<a name="wp1026305"> </a><h5 class="pHeading4">
+MSG-WB-PROGRESS-CHANGE (value 16433)  
+</h5>
+<a name="wp1028548"> </a><p class="pBody">
+Occurs when the progress of a download is updated.  The PROGRESS property is set to the current progress value.  The MAX-PROGRESS property is set to maximum progress value
+</p>
+<a name="wp1026306"> </a><h5 class="pHeading4">
+MSG-WB-STATUS-TEXT-CHANGE (value 16434)  
+</h5>
+<a name="wp1028552"> </a><p class="pBody">
+Occurs when the status bar text has changed.  The STATUS-TEXT property is set to the new status text.
+</p>
+<a name="wp1026307"> </a><h5 class="pHeading4">
+MSG-WB-TITLE-CHANGE (value 16435)   
+</h5>
+<a name="wp1028556"> </a><p class="pBody">
+Occurs when the title of a document in the WEB-BROWSER control becomes available or changes.  The TITLE property is set to the new&#160;title
+</p>
+<a name="wp1026324"> </a><h5 class="pHeading4">
+NTF-CHANGED (value 4100)  
+</h5>
+<a name="wp1028567"> </a><p class="pBody">
+Indicates that the value of an entry field may have been changed by the user.  This occurs only for entry fields that have the NOTIFY-CHANGE style.  EVENT-DATA-1 is the current position of the cursor in the entry field (starting at &quot;1&quot;).  EVENT-DATA-2 is not&#160;used. 
+</p>
+<a name="wp1026326"> </a><h5 class="pHeading4">
+NTF-PL-FIRST (value 4105)  
+</h5>
+<a name="wp1028576"> </a><p class="pBody">
+This event is generated only by list boxes with the PAGED style.  It indicates that the user wants to scroll to the top of the list.  The normal response is to add the first &quot;n&quot; records to the list where &quot;n&quot; is the number of lines the list box can show.  EVENT-DATA-1 and EVENT-DATA-2 are not used. 
+</p>
+<a name="wp1026329"> </a><h5 class="pHeading4">
+NTF-PL-LAST (value 4106)  
+</h5>
+<a name="wp1028584"> </a><p class="pBody">
+This event is generated only by list boxes with the PAGED style.  It indicates that the user wants to scroll to the bottom of the list.  The normal response is to add the last &quot;n&quot; records to the list where &quot;n&quot; is the number of lines the list box can show.  EVENT-DATA-1 and EVENT-DATA-2 are not used. 
+</p>
+<a name="wp1026332"> </a><h5 class="pHeading4">
+NTF-PL-NEXT (value 4101)  
+</h5>
+<a name="wp1028600"> </a><p class="pBody">
+This event is generated only by list boxes with the PAGED style.  It indicates that the user wants to scroll the list box one record in the downward direction.  The normal response to this message is to add the next record in the list to the list box.  EVENT-DATA-1 and EVENT-DATA-2 are not used. 
+</p>
+<a name="wp1026335"> </a><h5 class="pHeading4">
+NTF-PL-NEXTPAGE (value 4103)  
+</h5>
+<a name="wp1028619"> </a><p class="pBody">
+This event is generated only by list boxes with the PAGED style.  It indicates that the user wants to scroll the list box one <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">page</span> in the downward direction.  The normal response is to add the next &quot;n&quot; records to the list box where &quot;n&quot; is the number of lines the list box can show.  EVENT-DATA-1 and EVENT-DATA-2 are not used. 
+</p>
+<a name="wp1026338"> </a><h5 class="pHeading4">
+NTF-PL-PREV (value 4102)  
+</h5>
+<a name="wp1028631"> </a><p class="pBody">
+This event is generated only by list boxes with the PAGED style.  It indicates that the user wants to scroll the list box one record in the upward direction.  The normal response to this message is to add the previous record in the list to the top of the list box.  EVENT-DATA-1 and EVENT-DATA-2 are not used. 
+</p>
+<a name="wp1026341"> </a><h5 class="pHeading4">
+NTF-PL-PREVPAGE (value 4104)  
+</h5>
+<a name="wp1028643"> </a><p class="pBody">
+This event is generated only by list boxes with the PAGED style.  It indicates that the user wants to scroll the list box one <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">page</span> in the upward direction.  The normal response is to add the previous &quot;n&quot; records to the top of the list box, where &quot;n&quot; is the number of lines the&#160;list box can show.   EVENT-DATA-1 and EVENT-DATA-2 are not&#160;used. 
+</p>
+<a name="wp1026344"> </a><h5 class="pHeading4">
+NTF-PL-SEARCH (value 4107)  
+</h5>
+<a name="wp1028655"> </a><p class="pBody">
+This event is generated only by list boxes with the PAGED style.  It indicates that the user wants to scroll to the page that contains the text he or she has entered.  The normal response is to locate the closest matching record and then to add a page of records to the list box, starting with the record found.  EVENT-DATA-1 contains the length of the search text.  EVENT-DATA-2 is not used.  To determine the search text entered, use the INQUIRE verb on the SEARCH-TEXT property of the list box. 
+</p>
+<a name="wp1026347"> </a><h5 class="pHeading4">
+NTF-SELCHANGE (value 4099)  
+</h5>
+<a name="wp1028670"> </a><p class="pBody">
+Indicates that the user has selected a new item in a list box or in the list-box of a combo-box.  This will only occur if the application requests it via the NOTIFY-SELCHANGE list-box and combo-box styles.  EVENT-DATA-1 is the index of the selected item in the list (starting at &quot;1&quot;).  EVENT-DATA-2 is not used. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:06" />
+  <title>5.4  International Character Handling</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt15.htm"><br />Chapter 5:  File Processing</a> &gt; </p>
+<a name="wp1044134"> </a><h2 class="pHeading1">
+5.4  International Character Handling
+</h2>
+<a name="wp1033152"> </a><p class="pBody">
+This section explains how to exchange data between different types of hardware that use different character code sets.  Not all machines use the same codes for the characters that are outside of the standard ASCII character set (those whose underlying decimal values are 128 or larger).  But you can overcome these differences by setting up a simple character map file and then pointing to your map file with a runtime configuration variable.  Character mapping is triggered by the presence (on the client machine) of a configuration variable that points to the map file.  Only single-byte alphanumeric characters are mapped.
+</p>
+<a name="wp1033153"> </a><p class="pBody">
+Mapping might be essential for sites using the AcuServer product to retrieve and store data on a remote server.  Sites that use AcuConnect to launch programs on a remote server might need character mapping to ensure that parameter values returned for their CALL statements are correctly translated.  Sites using AcuODBC to access Vision data files on a remote machine may need to provide a map file for the client.
+</p>
+<a name="wp1033154"> </a><p class="pBody">
+The map file is a simple text file that you create with any text editor.  You can choose any name for it that you like.  It should contain two values on each line.  The first value on the line indicates the decimal or hexadecimal value of the character on the client machine.  The second value on the line indicates the decimal or hexadecimal value of the corresponding character on the server machine.  Hexadecimal values use the standard &quot;0x&quot; notation.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+0x90  0xC9<a name="wp1033155"> </a>
+</pre></div>
+<a name="wp1033156"> </a><p class="pBody">
+maps &quot;E&quot; (acute) in the IBM PC character set to &quot;E&quot; (acute) in the ISO8859-1 character set.
+</p>
+<a name="wp1033157"> </a><p class="pBody">
+Only those character codes that differ between the two machines need to be included in the map file.  This might include characters with a grave accent, acute accent, circumflex, tilde, umlaut, and so forth.
+</p>
+<a name="wp1033158"> </a><p class="pBody">
+You can check the values of specific characters by using the Windows Character Map accessory in the PC environment, or by referring to your UNIX man pages in the UNIX environment.
+</p>
+<a name="wp1033159"> </a><p class="pBody">
+As data moves from the client machine to the server, each alphanumeric character that appears in the first position of a map file entry is mapped to the corresponding second character in that entry.  A character coming from the server to the client is mapped in reverse: from the second value listed to the first value listed.  Each line in the map file thus sets up a one-to-one mapping.
+</p>
+<a name="wp1033160"> </a><p class="pBody">
+The map is used to translate only single-byte alphanumeric fields.  All group items are treated as alphanumeric, so you may want to restructure them to eliminate numeric fields within the group.  Data items that are subject to a REDEFINES clause need to be examined with care.  For example, if the data looks like this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+03  customer-info          pic x(150).<a name="wp1033161"> </a>
+03  customer-detail redefines customer-info.<a name="wp1033162"> </a>
+      05 customer-name     pic x(30).<a name="wp1033163"> </a>
+      05 customer-code     pic 9(20).<a name="wp1033164"> </a>
+      05 customer-address1 pic x(25).<a name="wp1033165"> </a>
+      05 customer-address2 pic x(25).<a name="wp1033166"> </a>
+      05 customer-address3 pic x(25).<a name="wp1033167"> </a>
+      05 customer-address4 pic x(25).<a name="wp1033168"> </a>
+</pre></div>
+<a name="wp1033169"> </a><p class="pBody">
+then you might need to reorganize or restructure the data definition to ensure that numeric fields are not translated.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:34" />
+  <title>5.9.1  Entry Field: Common Properties</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt25.htm">Chapter 5:  Control Types Reference</a> &gt; <a href="gt2536.htm">5.9  Entry Field</a> &gt; </p>
+<a name="wp1159910"> </a><h2 class="pHeading2">
+5.9.1  Entry Field: Common Properties
+</h2>
+<a name="wp1159911"> </a><h3 class="pHeadingRef">
+TITLE
+</h3>
+<a name="wp1159914"> </a><p class="pBody">
+Entry fields do not use titles.  
+</p>
+<a name="wp1159915"> </a><h3 class="pHeadingRef">
+VALUE
+</h3>
+<a name="wp1159918"> </a><p class="pBody">
+Entry fields take a numeric or alphanumeric value. 
+</p>
+<a name="wp1159919"> </a><p class="pBody">
+Conversion between the alphanumeric and numeric forms occurs automatically if you specify a numeric value.  This allows you to use numeric data items with entry fields.  When you use a numeric data item as an entry field's value, the runtime prevents the user from entering non-numeric data.  
+</p>
+<a name="wp1159920"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Under Windows, you may encounter a peculiar behavior that looks like a bug but is actually a limitation of the Windows systems.  If your entry field is formatted for numeric value and you paste non-numeric data into it from the clipboard, the runtime has no way of checking and verifying that the data is of a correct format, and as a result the entry field will be allowed to contain invalid data. 
+<hr />
+</p>
+<a name="wp1159921"> </a><h3 class="pHeadingRef">
+MULTIPLE
+</h3>
+<a name="wp1159925"> </a><p class="pBody">
+You may use the &quot;VALUE IS MULTIPLE <em class="cEmphasis">value&quot; </em>option with multi-line entry fields.  The <em class="cEmphasis">value</em> data item should be a one-dimensional table with no subscript specified.  The effect of the MULTIPLE phrase is to match each line of the entry field to occurrences in the table.  The first line is matched to the first occurrence in the table, the second line with the second occurrence, and so on.  Occurrences that are larger than the number of lines in the entry field are set to spaces when the entry field is accepted.  The MULTIPLE option makes it easy to process a large multi-line entry field in COBOL.  
+</p>
+<a name="wp1159927"> </a><p class="pBody">
+There is one important issue to consider when you use the MULTIPLE <em class="cEmphasis">value </em>option.  The runtime does not provide a way to limit the amount of text the user can enter on a single line.  Thus, the user could enter more text than a single occurrence of the <em class="cEmphasis">value </em>data item can hold.  Normally, to prevent the user from entering extra data, you might set the width of the entry field to be the same as the size of the <em class="cEmphasis">value </em>data item.  However, this does not always work, because entry fields typically use a proportionally spaced font.  Some characters are smaller than others, and the user can thus enter more of those characters than the width of the entry field might suggest.  
+</p>
+<a name="wp1159928"> </a><p class="pBody">
+There are two possible ways of addressing this issue.  One option is to use a fixed-width font with the entry field.  Then the width of the field matches the number of characters that the user can enter.  The other option is to use a <em class="cEmphasis">value </em>data item that is larger than the width of the entry field.  You will need to experiment to find appropriate sizes.  You might try a <em class="cEmphasis">value </em>data item that is 20% larger than the entry field.  
+</p>
+<a name="wp1159929"> </a><p class="pBody">
+This issue is not normally a problem for single-line entry fields: the MAX-TEXT property (see below) prevents the user from entering too much data.
+</p>
+<a name="wp1159930"> </a><p class="pBody">
+Finally, note that you can have a multiple-line entry field without using the MULTIPLE <em class="cEmphasis">value </em>phrase.  In this case, the entire contents of the entry field are returned as a single string.  Any carriage returns that the user enters directly are kept as part of the string.  Carriage returns implied by word-wrapping are discarded.  
+</p>
+<a name="wp1159931"> </a><h3 class="pHeadingRef">
+SIZE
+</h3>
+<a name="wp1159935"> </a><p class="pBody">
+Entry fields determine their height by multiplying the LINES value by the height of the entry field's font.  If the entry field is also boxed (the default), then the space required for the box is added to the height.  
+</p>
+<a name="wp1159936"> </a><p class="pBody">
+Entry fields determine their width by multiplying the SIZE value by the <em class="cEmphasis">standard</em> or <em class="cEmphasis">wide</em> font measure as described below.  If the entry field is also boxed, the space required for the box is added to the width.  Entry fields have a minimum width of at least one character.
+</p>
+<a name="wp1159937"> </a><p class="pBody">
+When the program executes on a non-graphical system, the values specified in the CLINES and CSIZE phrases, if present, replace the values specified by the LINES and SIZE phrases.
+</p>
+<a name="wp1159938"> </a><p class="pBody">
+The default LINES value is &quot;1&quot;.  The default SIZE value depends on whether or not a VALUE is specified when the field is created.  If a VALUE is specified, the default SIZE equals the size of the VALUE literal or data item.  Otherwise, the default SIZE is &quot;8&quot;.  
+</p>
+<a name="wp1159939"> </a><h3 class="pHeadingRef">
+Setting the entry field's width
+</h3>
+<a name="wp1159941"> </a><p class="pBody">
+Most controls, including entry fields, base their width on the width of the &quot;0&quot; (zero) character in the control's font.  This usually works well because in most fonts, the &quot;0&quot; character is slightly wider than the average character.  This means that the field is optimally sized for numeric data, and nearly optimally sized for alphanumeric data (actually it is slightly oversized, which is preferable because the user can enter data that is wider than average).  In cases where the user enters very wide data, the entry field will scroll horizontally to fit all the data.
+</p>
+<a name="wp1159942"> </a><p class="pBody">
+However, there are a few cases where this rule does not produce the best results.  To handle these cases, several special sizing rules apply to entry fields.  
+</p>
+<a name="wp1159943"> </a><p class="pBody">
+The most pronounced problem arises when the input includes a lot of upper-case data.  Upper-case characters are quite a lot wider than the average character (&quot;0&quot;), so when there are many upper-case characters they often do not fit in the space allotted by the normal rule.  Therefore, additional rules handle two cases: (a) upper-case-only fields, and (b) small fields.  Small fields require special handling because they tend to be <em class="cEmphasis">coded</em> fields (which are usually shown in upper-case).  Also, scrolling in small fields feels odd to most users while scrolling in large fields is familiar.
+</p>
+<a name="wp1159944"> </a><p class="pBody">
+To do a better job with these cases, the runtime employs a second font measurement.  The second measure averages the width of the &quot;0&quot; (zero) character with the width of the maximum-width character in the font.  This value is approximately the size of the average upper-case character in most fonts.  We call this measurement the <em class="cEmphasis">wide</em> font measure.  The size of the &quot;0&quot; character is known as the <em class="cEmphasis">standard</em> font measure.  
+</p>
+<a name="wp1159946"> </a><p class="pBody">
+When the runtime constructs an entry field, the first applicable rule from the list below is used to determine the entry field's physical size.  Overhead for the entry field's box, if present, is added to this width.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1159947"> </a><div class="pSmartList1"><li>An entry field is never allowed to be smaller than the size of the maximum width character.  This ensures that at least one character of data is visible in the field.</li></div>
+<a name="wp1159948"> </a><div class="pSmartList1"><li>If the field has the NUMERIC style, then its SIZE is multiplied by the standard font measure (i.e., numeric fields are normal).</li></div>
+<a name="wp1159949"> </a><div class="pSmartList1"><li>If the field has the UPPER style, and the configuration variable EF-UPPER-WIDE is non-zero, then its SIZE is multiplied by the wide font measure (i.e., upper-case fields are wide).</li></div>
+<a name="wp1159953"> </a><div class="pSmartList1"><li>If the field's SIZE is less than or equal to the value of the configuration variable EF-WIDE-SIZE, then its SIZE is multiplied by the wide font measure (i.e., small fields are wide).</li></div>
+<a name="wp1159956"> </a><div class="pSmartList1"><li>Otherwise, its SIZE is multiplied by the standard font measure (i.e., everything else is normal).</li></div>
+</ol></div>
+<a name="wp1159957"> </a><p class="pBody">
+The default setting of EF-UPPER-WIDE is &quot;1&quot; (&quot;on&quot;).  The default setting of EF-WIDE-SIZE is &quot;5&quot;.
+</p>
+<a name="wp1159958"> </a><h3 class="pHeadingRef">
+Tips
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1159959"> </a><div class="pSmartList1"><li>If your users will primarily enter upper-case characters in your application, you can set EF-WIDE-SIZE to a large value (for example &quot;1000&quot;) to ensure that all of your non-numeric fields allow enough space for upper-case entry.</li></div>
+<a name="wp1159960"> </a><div class="pSmartList1"><li>If you want to ensure that the standard measure is always applied, set both EF-WIDE-SIZE and EF-UPPER-WIDE to zero. </li></div>
+<a name="wp1166810"> </a><div class="pSmartList1"><li>If your upper-case fields are still too narrow (because, for example, you tend to use upper-case  &quot;W&quot; frequently), you can increase the entry field's size further with the FONT-WIDE-SIZE-ADJUST configuration variable.</li></div>
+</ol></div>
+<a name="wp1166813"> </a><p class="pBody">
+For a detailed description of the FONT-SIZE-ADJUST and FONT-WIDE-SIZE-ADJUST configuration variables, see Book 4, <em class="cEmphasis">Appendices</em>, Appendix H.
+</p>
+<a name="wp1159965"> </a><h3 class="pHeadingRef">
+COLOR
+</h3>
+<a name="wp1199021"> </a><p class="pBody">
+Entry fields will use any specified foreground or background color.  If either color is omitted, then that color uses a system-dependent default value.  On most systems, the default foreground is black and the default background is white.  Under Microsoft Windows, the default values are determined by the settings defined by the user in the Control Panel (usually black on bright-white).  These system-dependent default colors are not transformed or mapped by the runtime's color-handling configuration options.  
+</p>
+<a name="wp1213814"> </a><h3 class="pHeadingRef">
+EVENT-LIST, EXCLUDE-EVENT-LIST
+</h3>
+<a name="wp1213815"> </a><p class="pBody">
+EVENT-LIST is an exclusive list of events that are either sent to or withheld (blocked) from the program depending on the value of EXCLUDE-EVENT-LIST.  See section 6.4.9, &quot;Common Screen Options,&quot; in Book 3.
+</p>
+<a name="wp1199023"> </a><h3 class="pHeadingRef">
+STYLES 
+</h3>
+<a name="wp1199024"> </a><h5 class="pHeading4">
+NUMERIC
+</h5>
+<a name="wp1159974"> </a><p class="pBody">
+ This style causes the entry field to accept only numeric data.  The NUMERIC style is applied automatically to any entry field that has a numeric or numeric-edited VALUE specified for it before it is created.  As a result, you do not normally need to specify this style explicitly.  Use this style when creating an entry field that does not have an initial value but which needs to be restricted to accepting only numeric data.
+</p>
+<a name="wp1159977"> </a><h5 class="pHeading4">
+NO-BOX   
+</h5>
+<a name="wp1159978"> </a><p class="pBody">
+On most host graphical systems, entry fields are boxed (on character-based systems, they are not).  The NO-BOX style prevents the box from being shown.  Generally speaking, boxed entry fields are preferred stylistically, but you may need to omit the box in order to conserve screen space.  
+</p>
+<a name="wp1159981"> </a><h5 class="pHeading4">
+BOXED   
+</h5>
+<a name="wp1159982"> </a><p class="pBody">
+On graphical systems, this style causes a box to be drawn around the entry field (the default).  You can use the BOXED style to override the FIELDS-UNBOXED configuration variable for individual entry fields.
+</p>
+<a name="wp1159986"> </a><h5 class="pHeading4">
+3-D 
+</h5>
+<a name="wp1159987"> </a><p class="pBody">
+This style causes the entry field to appear inscribed into the surface of the screen.  This looks similar to the LOWERED frame style (see &quot;Frames&quot; in <a  href="gt2542.htm#wp1161138">section 5.10</a>, below).  The runtime uses the background color of the floating window to determine how to draw the frame.  The background color is set when the window is created, and each time the window is erased.  This color must be one of the low-intensity standard colors, except for black (color numbers 2-7).  Any other background color will prevent the 3-D effect from displaying.  Only boxed entry fields will display 3-D effects.  
+</p>
+<a name="wp1159994"> </a><h5 class="pHeading4">
+LEFT   
+</h5>
+<a name="wp1174946"> </a><p class="pBody">
+This style causes the value to be shown left-justified in the entry field (the default).  Changing this style after the control has been created has no effect.
+</p>
+<a name="wp1174939"> </a><h5 class="pHeading4">
+RIGHT   
+</h5>
+<a name="wp1159999"> </a><p class="pBody">
+This style causes the value to be shown right-justified in the entry field.   This style implies that the entry field is MULTILINE.  Changing this style after the control has been created has no effect.
+</p>
+<a name="wp1160002"> </a><h5 class="pHeading4">
+CENTER, CENTERED   
+</h5>
+<a name="wp1160003"> </a><p class="pBody">
+This style is supported only in Windows.  It centers the text in the entry field.  This style is allowed on other systems, but it has no effect.  Changing this style after the control has been created has no effect.
+</p>
+<a name="wp1160006"> </a><h5 class="pHeading4">
+MULTILINE   
+</h5>
+<a name="wp1160007"> </a><p class="pBody">
+This style indicates that the field can display and accept more than one line of text.  An entry field created with a LINES setting of two (2) or more automatically has this style applied to it, unless the CELLS phrase is also used or implied.  For this reason, you usually will not need to specify this style explicitly.
+</p>
+<a name="wp1160008"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>An entry field created with the CELLS phrase following the &quot;LINES <em class="cEmphasis">value</em>&quot; phrase has the single-line style applied to it by default.
+<hr />
+</p>
+<a name="wp1160011"> </a><h5 class="pHeading4">
+VSCROLL   
+</h5>
+<a name="wp1160012"> </a><p class="pBody">
+This style allows the user to scroll the contents of the entry field vertically.  Without this style, the user may not enter more lines of text than the entry field can hold.  With this style, the field will scroll as needed to allow the user to enter multiple lines of text.  This style automatically implies the MULTILINE style.  
+</p>
+<a name="wp1160016"> </a><h5 class="pHeading4">
+VSCROLL-BAR   
+</h5>
+<a name="wp1160017"> </a><p class="pBody">
+This style is identical to the VSCROLL style, with the addition that a vertical scroll bar is placed to the side of the entry field.  The size of the entry field is extended to include the space needed by the scroll bar.  
+</p>
+<a name="wp1160020"> </a><h5 class="pHeading4">
+USE-RETURN   
+</h5>
+<a name="wp1160021"> </a><p class="pBody">
+The Enter (or &quot;Return&quot;)  key typically terminates entry.  If you specify the USE-RETURN style, the Enter key is instead used to start a new line within the entry field, when the field is active.  Without this style, pressing Enter (normally) terminates input.  
+</p>
+<a name="wp1160024"> </a><h5 class="pHeading4">
+USE-TAB   
+</h5>
+<a name="wp1160025"> </a><p class="pBody">
+The Tab key is typically used to move between fields.  If you specify the USE-TAB style, the user can enter a tab within the entry field, when the field is active.  This prevents the user from using the Tab key to leave the field.  
+</p>
+<a name="wp1175008"> </a><h5 class="pHeading4">
+LOWER   
+</h5>
+<a name="wp1175009"> </a><p class="pBody">
+This style converts all keyboard entry to lower-case for this field.  This style can be changed to UPPER with the MODIFY statement after the control has been created.
+</p>
+<a name="wp1160032"> </a><h5 class="pHeading4">
+UPPER   
+</h5>
+<a name="wp1160033"> </a><p class="pBody">
+This style converts all keyboard entry to upper-case for this field.  This style can be changed to LOWER with the MODIFY statement after the control has been created.
+</p>
+<a name="wp1160036"> </a><h5 class="pHeading4">
+NO-AUTOSEL   
+</h5>
+<a name="wp1160037"> </a><p class="pBody">
+Normally, when an entry field is activated, all of its current contents are selected and highlighted (exception: if the field is activated by the mouse, this does not occur).  This allows users to replace the entire contents of the field by simply typing in a new value (they can edit the current contents by using editing keys, or keep the current value by terminating the field).  The NO-AUTOSEL style prevents the automatic selection from occurring.  This is most commonly used on large multi-line entry fields.  
+</p>
+<a name="wp1160040"> </a><h5 class="pHeading4">
+READ-ONLY   
+</h5>
+<a name="wp1160041"> </a><p class="pBody">
+This style prevents the user from typing or editing data in the entry field.  In all other respects, the entry field behaves normally.
+</p>
+<a name="wp1160044"> </a><h5 class="pHeading4">
+SECURE   
+</h5>
+<a name="wp1160045"> </a><p class="pBody">
+This style prevents the characters that are entered into the field from being displayed on the screen.  In place of each character, an &quot;*&quot; is displayed.  This style is normally used with fields that take a password.  This style is not available with MULTILINE entry fields.
+</p>
+<a name="wp1160048"> </a><h5 class="pHeading4">
+SPINNER  (Available only for Windows-based systems.)   
+</h5>
+<a name="wp1160049"> </a><p class="pBody">
+This style attaches up and down arrow buttons to the right side of the entry field.  When the user clicks on the up arrow, your program receives a MSG-SPIN-UP event.  Clicking on the down arrow generates a MSG-SPIN-DOWN event.  Your program would normally respond to these events by incrementing or decrementing the entry field's value.  Refer to the AUTO-SPIN style for simplified handling. 
+</p>
+<a name="wp1160050"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>The SPINNER style may be used only with a single-line entry field.  It is ignored if you specify MULTILINE, or if you have an entry field that has more than two lines.  In addition, a technical limitation of Windows prevents spinners from being used by entry fields with RIGHT or CENTER justification.  This limitation stems from the fact that Windows requires a multiline entry field to use these styles (even if the entry field shows only one line).  Windows interprets the up and down arrows as vertical scrolling messages to this &quot;multiline&quot; field.  <em class="cEmphasis">(create)</em>
+<hr />
+</p>
+<a name="wp1160051"> </a><p class="pBody">
+Using the SPINNER with a 3-D entry field produces a look significantly different when you use the WIN32-3D configuration option.  
+</p>
+<a name="wp1160056"> </a><h5 class="pHeading4">
+AUTO-SPIN 
+</h5>
+<a name="wp1189925"> </a><p class="pBody">
+Similar to the SPINNER style, AUTO-SPIN provides a more simplified way of handling spinners by automatically updating the value of the entry field.  When the user clicks the up arrow, the control's value is incremented by one.  The down arrow decrements the value by one.  The entry field uses the properties MIN-VAL and MAX-VAL to set the allowed range of values.  When the user modifies the entry field's value, the AUTO-SPIN style interprets the current value as an integer and sets the resulting value as an integer.  This could have non-obvious results if the field contains something other than an integer when the arrows are clicked. The AUTO-SPIN is only available to entry fields that are left justified.
+</p>
+<a name="wp1189926"> </a><p class="pBody">
+Entry fields with the AUTO-SPIN style still generate MSG-SPIN-UP and MSG-SPIN-DOWN events.  This occurs before the value is changed.  If your program sets EVENT-ACTION to EVENT-ACTION-FAIL in response to these events, AUTO-SPIN does not change the value of the entry field.  This allows you to do additional range checking; you can also substitute a different value by setting the entry field's value directly in response to the event.  
+</p>
+<a name="wp1160059"> </a><p class="pNoteListHead">
+<hr />
+<b>Note:  </b>The behavior of an entry field control with the SPINNER, MIN-VAL, and MAX-VAL properties is determined by its event procedure, which processes messages from the spinner arrows.  If your COBOL program does not use an event procedure, the behavior is as follows:
+</p>
+<a name="wp1160060"> </a><p class="pNoteListEnd">
+When the user enters a value that is outside the permitted range and then uses the spinner arrows to increase or decrease it, the value of the field is incremented or decremented as required.  Then if the value is below MIN-VAL, it is set equal to MIN-VAL, and if the value is above MAX-VAL, it is set equal to MAX-VAL <em class="cEmphasis">(create)</em>. 
+<hr />
+</p>
+<a name="wp1160063"> </a><h5 class="pHeading4">
+AUTO   
+</h5>
+<a name="wp1160064"> </a><p class="pBody">
+This style causes the entry field to terminate as soon as it is filled by the user.  A field is considered filled when the number of characters it contains equals its MAX-TEXT setting (see below).  You may also use the words &quot;AUTOTERMINATE&quot; and &quot;AUTO-SKIP&quot; as synonyms for AUTO.  This provides compatibility with text-mode COBOL.  
+</p>
+<a name="wp1160067"> </a><h5 class="pHeading4">
+NOTIFY-CHANGE   
+</h5>
+<a name="wp1160068"> </a><p class="pBody">
+This style causes the entry field to generate NTF-CHANGED events.  An NTF-CHANGED event is generated whenever the user changes the value of the entry field.  Use this style when you need to track character-by-character changes to an entry field.  Note that if you use this style with AUTO, the auto-termination status will take precedence over the NTF-CHANGED event (i.e., when the user fills the field, the field will auto-terminate instead of generating an NTF-CHANGED event).  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.7  Runtime Configuration</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; </p>
+<a name="wp1033431"> </a><h2 class="pHeading1">
+2.7  Runtime Configuration
+</h2>
+<a name="wp1033436"> </a><p class="pBody">
+Many aspects of the runtime system can be controlled through <em class="cEmphasis">configuration variables</em>.  Configuration variables can be modified by each <b class="cBold">runcbl</b> site as well as directly by an ACUCOBOL-GT program.  This allows a great deal of flexibility in adapting <b class="cBold">runcbl</b> to a particular system.  
+</p>
+<a name="wp1033437"> </a><p class="pBody">
+Configuration variables are maintained in a <em class="cEmphasis">configuration file</em>.  This is a standard text file that can be modified by the host system's text editor.  <b class="cBold">runcbl</b> uses the following rules to decide what the configuration file is called: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033439"> </a><div class="pSmartList1"><li>If the &quot;-c&quot; runtime option is used, then the configuration file is the one named by that option; otherwise,</li></div>
+<a name="wp1033440"> </a><div class="pSmartList1"><li>If the operating system environment variable &quot;A_CONFIG&quot; is defined, then its value is the name of the configuration file; otherwise,</li></div>
+<a name="wp1033441"> </a><div class="pSmartList1"><li>The configuration file is named according to the host operating system.  This depends on the operating system used by the machine, as outlined in the following table. </li></div>
+<a name="wp1037618"> </a><p class="pBodyRelative">
+<div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1037522"> </a>
+System
+
+</th>
+    <th><a name="wp1037524"> </a>
+Configuration File
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037530"> </a><p class="pCellBody">
+Windows
+</p>
+</td>
+    <td><a name="wp1037532"> </a><p class="pCellBody">
+\etc\cblconfi
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037538"> </a><p class="pCellBody">
+UNIX/Linux
+</p>
+</td>
+    <td><a name="wp1037540"> </a><p class="pCellBody">
+/etc/cblconfig
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037542"> </a><p class="pCellBody">
+MPE/iX
+</p>
+</td>
+    <td><a name="wp1037544"> </a><p class="pCellBody">
+/etc/cblconfig
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037546"> </a><p class="pCellBody">
+VMS
+</p>
+</td>
+    <td><a name="wp1037548"> </a><p class="pCellBody">
+SYS$LIBRARY:A_CONFIG.DAT
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+</ol></div>
+<a name="wp1033473"> </a><p class="pBody">
+The configuration file is optional, as are all of its contents.  For this reason, no errors in the configuration file are ever reported.  The &quot;-l&quot; <b class="cBold">runcbl</b> option can help debug configuration file problems.  
+</p>
+<a name="wp1033475"> </a><p class="pBody">
+Each entry in the configuration file consists of a single line.  All entries start with a keyword, followed by one or more spaces, tabs, or an equals sign, and then a value.  The value consists of the rest of the line less any trailing spaces.  The limit for each configuration value entry is 4095 characters.
+</p>
+<a name="wp1033476"> </a><p class="pBody">
+For the following configuration variables, a colon may be used instead of an equals sign in the value portion of the entry:
+</p>
+<a name="wp1033516"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1033481"> </a><p class="pCellBody">
+COLOR-TABLE
+</p>
+</td>
+    <td><a name="wp1033485"> </a><p class="pCellBody">
+COLOR-MAP
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1033489"> </a><p class="pCellBody">
+FILE-CONDITION
+</p>
+</td>
+    <td><a name="wp1033493"> </a><p class="pCellBody">
+KEYBOARD
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1033497"> </a><p class="pCellBody">
+KEYSTROKE
+</p>
+</td>
+    <td><a name="wp1033501"> </a><p class="pCellBody">
+SCREEN
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1033505"> </a><p class="pCellBody">
+MENU-ITEM
+</p>
+</td>
+    <td><a name="wp1033509"> </a><p class="pCellBody">
+MOUSE
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1033513"> </a><p class="pCellBody">
+HOT-KEY
+</p>
+</td>
+    <td><a name="wp1033515"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1033517"> </a><p class="pBody">
+In the above cases, allowing a colon instead of an equals sign in the value portion of the entry makes it possible to specify these values in environment variables.  This accommodates systems that do not allow an equals sign in the environment variable.
+</p>
+<a name="wp1033519"> </a><p class="pBody">
+In all configuration file entries:  0, OFF, NO, FALSE are interchangeable; 1, ON, YES, TRUE are interchangeable. You can insert comments by placing a &quot;#&quot; in column one.  The following sections contain examples of configuration file entries.  
+</p>
+<a name="wp1033520"> </a><p class="pBody">
+In the keyword, all lower-case characters are treated as upper-case and all hyphens are treated as underscores.  Keywords longer than 60 characters are truncated to 60 characters.  
+</p>
+<a name="wp1033521"> </a><p class="pBody">
+All of the configuration variables may also be given initial assignments in the host computer's environment.  When a particular variable appears in both the host's environment and the configuration file, then the value in the host's environment is used.  Note that when placed in the host's environment, a configuration variable <em class="cEmphasis">must</em> be upper-case and must use underscores instead of hyphens.
+</p>
+<a name="wp1033522"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>All configuration variables that have a default value are used by and affect the runtime in the same way that they would if they were in the configuration file.  That is to say, a configuration variable that has a default value is treated as if it appears in the configuration file set to the default value.  
+<hr />
+</p>
+<a name="wp1033523"> </a><p class="pBody">
+The following sections describe some of the most frequently used configuration variables.  A complete list of configuration variables along with a description of their use can be found in Appendix H in Book 4, <em class="cEmphasis">Appendices</em>.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

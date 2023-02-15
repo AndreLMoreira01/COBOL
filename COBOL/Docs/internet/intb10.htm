@@ -1,0 +1,282 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/01/05 10:11:33" />
+  <title>B.1.8  Sample Web Browser Program</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Programmer's Guide to the Internet <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="intb.htm">Appendix B: Adding Internet Features to Your Program</a> &gt; <a href="intb2.htm">B.1 WEB-BROWSER Control</a> &gt; </p>
+<a name="wp1028311"> </a><h2 class="pHeading2">
+B.1.8  Sample Web Browser Program
+</h2>
+<a name="wp1028312"> </a><p class="pBody">
+The following sample program, &quot;browser.cbl&quot;, demonstrates usage of the ACUCOBOL-GT WEB-BROWSER control.  Additional samples have been provided in the sample directory on your ACUCOBOL-GT distribution media.  See &quot;webbrows.cbl&quot; for another useful example.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+identification division.<a name="wp1028313"> </a>
+program-id.  Browser.<a name="wp1028314"> </a>
+      <a name="wp1028315"> </a>
+* Copyright (c) 1988 - 2003 by Acucorp, Inc.  Users of ACUCOBOL<a name="wp1028316"> </a>
+* may freely modify and redistribute this program.<a name="wp1028317"> </a>
+       <a name="wp1031788"> </a>
+remarks.<a name="wp1031789"> </a>
+This program illustrates the WEB BROWSER control type. <a name="wp1031790"> </a>
+<a name="wp1031791"> </a>
+***************************************************************<a name="wp1028322"> </a>
+data division.<a name="wp1028323"> </a>
+working-storage section.<a name="wp1028324"> </a>
+copy &quot;acucobol.def&quot;.<a name="wp1028325"> </a>
+copy &quot;acugui.def&quot;.<a name="wp1028326"> </a>
+<a name="wp1028327"> </a>
+77  key-status <a name="wp1028328"> </a>
+         is special-names  crt status    pic 9(4) value 0.<a name="wp1028329"> </a>
+         88  exit-button-pushed          value 27.<a name="wp1028330"> </a>
+<a name="wp1028331"> </a>
+01  event-status<a name="wp1028332"> </a>
+         is special-names event status.<a name="wp1028333"> </a>
+    03  event-type                       pic x(4) comp-x.<a name="wp1028334"> </a>
+    03  event-window-handle              usage handle.<a name="wp1028335"> </a>
+    03  event-control-handle             usage handle.       <a name="wp1028336"> </a>
+    03  event-control-id                 pic x(2) comp-x.<a name="wp1028337"> </a>
+    03  event-data-1                     usage signed-short.<a name="wp1028338"> </a>
+    03  event-data-2                     usage signed-long.<a name="wp1028339"> </a>
+    03  event-action                     pic x comp-x.<a name="wp1028340"> </a>
+<a name="wp1028341"> </a>
+78  event-occurred                       value 96.<a name="wp1028342"> </a>
+78  go-btn-pressed                       value 707.<a name="wp1028343"> </a>
+78  back-btn-pressed                     value 708.<a name="wp1028344"> </a>
+78  forward-btn-pressed                  value 709.<a name="wp1028345"> </a>
+78  home-btn-pressed                     value 710.<a name="wp1028346"> </a>
+78  refresh-btn-pressed                  value 711.<a name="wp1028347"> </a>
+78  search-btn-pressed                   value 712.<a name="wp1028348"> </a>
+78  stop-btn-pressed                     value 713.<a name="wp1028349"> </a>
+77  ef-url                               pic x(1000).<a name="wp1028350"> </a>
+77  wb-1-url                             pic x(1000).<a name="wp1028351"> </a>
+77  wb-1-title                           pic x(100).<a name="wp1028352"> </a>
+77  wb-1-status                          pic x(100).<a name="wp1028353"> </a>
+77  wb-1-progress                        pic 9(7).<a name="wp1028354"> </a>
+77  wb-1-max-progress                    pic 9(7).<a name="wp1028355"> </a>
+77  progress-percent                     pic 9(9).<a name="wp1028356"> </a>
+<a name="wp1028357"> </a>
+77  gt-bitmap                            pic s9(9) comp-4.<a name="wp1028358"> </a>
+<a name="wp1028359"> </a>
+01  configuration-data.<a name="wp1028360"> </a>
+  05 current-lines                       pic s99999V99 value 25.<a name="wp1028361"> </a>
+  05 current-size                        pic s99999v99 value 73.<a name="wp1028362"> </a>
+<a name="wp1028363"> </a>
+      
+*****************************************************************<a name="wp1028364"> </a>
+screen section.<a name="wp1028365"> </a>
+01  screen-1.<a name="wp1028366"> </a>
+<a name="wp1028367"> </a>
+    03  entry-field, column 5, line 4, size 55 max-text = 0 <a name="wp1028368"> </a>
+        value ef-url.<a name="wp1028369"> </a>
+<a name="wp1028370"> </a>
+    03  push-button, &quot;&amp;Back&quot;,<a name="wp1028371"> </a>
+        column 5, line 2, size 9<a name="wp1028372"> </a>
+        self-act<a name="wp1028373"> </a>
+        termination-value = back-btn-pressed.<a name="wp1028374"> </a>
+<a name="wp1028375"> </a>
+    03  push-button, &quot;&amp;Forward&quot;,<a name="wp1028376"> </a>
+        column + 2, size 9<a name="wp1028377"> </a>
+        self-act<a name="wp1028378"> </a>
+        termination-value = forward-btn-pressed.<a name="wp1028379"> </a>
+<a name="wp1028380"> </a>
+    03  push-button, &quot;&amp;Home&quot;,<a name="wp1028381"> </a>
+        column + 2, size 9<a name="wp1028382"> </a>
+        self-act<a name="wp1028383"> </a>
+        termination-value = home-btn-pressed.<a name="wp1028384"> </a>
+<a name="wp1028385"> </a>
+    03  push-button, &quot;&amp;Refresh&quot;,<a name="wp1028386"> </a>
+        column + 2, size 9<a name="wp1028387"> </a>
+        self-act<a name="wp1028388"> </a>
+        termination-value = refresh-btn-pressed.<a name="wp1028389"> </a>
+<a name="wp1028390"> </a>
+    03  push-button, &quot;&amp;Find&quot;,<a name="wp1028391"> </a>
+        column + 2, size 9<a name="wp1028392"> </a>
+        self-act<a name="wp1028393"> </a>
+        termination-value = search-btn-pressed.<a name="wp1028394"> </a>
+<a name="wp1028395"> </a>
+    03  push-button, &quot;&amp;Stop&quot;,<a name="wp1028396"> </a>
+        column + 2, size 9<a name="wp1028397"> </a>
+        self-act<a name="wp1028398"> </a>
+        termination-value = stop-btn-pressed.<a name="wp1028399"> </a>
+<a name="wp1028400"> </a>
+    03  push-button, &quot;&amp;Go&quot;, default-button<a name="wp1028401"> </a>
+        column 55.2, line 4,<a name="wp1028402"> </a>
+        termination-value = go-btn-pressed.<a name="wp1028403"> </a>
+<a name="wp1028405"> </a>
+    03  status-frame-1 frame, line 22, column 5, <a name="wp1031872"> </a>
+        lines 2 size 65 cells lowered.<a name="wp1028406"> </a>
+<a name="wp1028407"> </a>
+    03  status-text-1 label, line 22.5, column 5.5,<a name="wp1028408"> </a>
+        size 64 cells<a name="wp1028409"> </a>
+        value wb-1-status.<a name="wp1028410"> </a>
+<a name="wp1028411"> </a>
+    03  progress-meter-1 frame line 24 column 5 <a name="wp1028412"> </a>
+        lines 1.5 size 24<a name="wp1028413"> </a>
+        fill-color = red, fill-color2 = white,<a name="wp1028414"> </a>
+        fill-percent = 0, lowered.<a name="wp1028415"> </a>
+<a name="wp1028416"> </a>
+    03  exit-1 push-button, &quot;E&amp;xit&quot;,<a name="wp1028417"> </a>
+        cancel-button, line 24, column 32, size 11.<a name="wp1028418"> </a>
+<a name="wp1028419"> </a>
+    03  busy-bitmap bitmap bitmap-handle = gt-bitmap,<a name="wp1028420"> </a>
+        size 39, bitmap-start = 1, bitmap-end = 15,<a name="wp1028421"> </a>
+        bitmap-timer = 0,<a name="wp1028422"> </a>
+        line 2, column 65. <a name="wp1028423"> </a>
+<a name="wp1028425"> </a>
+    03  wb-1 web-browser<a name="wp1031875"> </a>
+        column 5, line 6, <a name="wp1028426"> </a>
+        lines 16 cells, size 65 cells<a name="wp1028427"> </a>
+        event procedure is browser-event-handler.<a name="wp1028428"> </a>
+<a name="wp1028430"> </a>
+***************************************************************<a name="wp1031878"> </a>
+procedure division.<a name="wp1028431"> </a>
+main-logic.<a name="wp1028432"> </a>
+    display standard window, <a name="wp1028433"> </a>
+         title &quot;Web Browser Sample - browser.cbl&quot;<a name="wp1028434"> </a>
+         lines current-lines, size current-size,<a name="wp1028435"> </a>
+         resizable<a name="wp1028436"> </a>
+         background-low.<a name="wp1028437"> </a>
+ <a name="wp1028438"> </a>
+    call &quot;w$bitmap&quot; using wbitmap-load, &quot;gtanima.bmp&quot;, <a name="wp1028439"> </a>
+         giving gt-bitmap.<a name="wp1028440"> </a>
+<a name="wp1028441"> </a>
+    display screen-1.<a name="wp1028442"> </a>
+<a name="wp1028443"> </a>
+    perform, with test after, until exit-button-pushed<a name="wp1028444"> </a>
+         accept screen-1<a name="wp1028445"> </a>
+         evaluate key-status<a name="wp1028446"> </a>
+           when go-btn-pressed<a name="wp1028447"> </a>
+             move ef-url to wb-1-url<a name="wp1028448"> </a>
+             modify wb-1 value=wb-1-url<a name="wp1028449"> </a>
+           when back-btn-pressed<a name="wp1028450"> </a>
+             modify wb-1 go-back=1<a name="wp1028451"> </a>
+           when forward-btn-pressed<a name="wp1028452"> </a>
+             modify wb-1 go-forward=1<a name="wp1028453"> </a>
+           when home-btn-pressed<a name="wp1028454"> </a>
+             modify wb-1 go-home=1<a name="wp1028455"> </a>
+           when search-btn-pressed<a name="wp1028456"> </a>
+             modify wb-1 go-search=1<a name="wp1028457"> </a>
+           when refresh-btn-pressed<a name="wp1028458"> </a>
+             modify wb-1 refresh=1<a name="wp1028459"> </a>
+           when stop-btn-pressed<a name="wp1028460"> </a>
+             modify wb-1 stop-browser=1<a name="wp1028461"> </a>
+           when event-occurred<a name="wp1028462"> </a>
+             if event-type = ntf-resized<a name="wp1028463"> </a>
+               divide event-data-1 by 100 giving current-lines<a name="wp1028464"> </a>
+               divide event-data-2 by 100 giving current-size<a name="wp1028465"> </a>
+               modify wb-1 <a name="wp1028466"> </a>
+                 lines current-lines - 9<a name="wp1028467"> </a>
+                 size current-size - 8<a name="wp1028468"> </a>
+               modify status-frame-1<a name="wp1028469"> </a>
+                 line current-lines - 3<a name="wp1028470"> </a>
+                 size current-size - 8 <a name="wp1028471"> </a>
+               modify status-text-1<a name="wp1028472"> </a>
+                 line current-lines - 2.5<a name="wp1028473"> </a>
+                 size current-size - 9 <a name="wp1028474"> </a>
+               modify progress-meter-1<a name="wp1028475"> </a>
+                 line current-lines - 1<a name="wp1028476"> </a>
+               modify exit-1<a name="wp1028477"> </a>
+                 line current-lines - 1<a name="wp1028478"> </a>
+             end-if<a name="wp1028479"> </a>
+         end-evaluate<a name="wp1028480"> </a>
+    end-perform.<a name="wp1028481"> </a>
+    stop run.<a name="wp1028482"> </a>
+<a name="wp1028483"> </a>
+browser-event-handler.<a name="wp1028484"> </a>
+    evaluate event-type<a name="wp1028485"> </a>
+        when msg-wb-navigate-complete<a name="wp1028486"> </a>
+            inquire wb-1 value in wb-1-url<a name="wp1028487"> </a>
+            if wb-1-url is not = ef-url then<a name="wp1028488"> </a>
+                move wb-1-url to ef-url<a name="wp1028489"> </a>
+                display screen-1<a name="wp1028490"> </a>
+            end-if<a name="wp1028491"> </a>
+        when msg-wb-progress-change<a name="wp1028492"> </a>
+            inquire wb-1 progress in wb-1-progress<a name="wp1028493"> </a>
+            inquire wb-1 max-progress in wb-1-max-progress<a name="wp1028494"> </a>
+            move wb-1-progress to progress-percent<a name="wp1028495"> </a>
+            multiply 100 by progress-percent<a name="wp1028496"> </a>
+            divide wb-1-max-progress into progress-percent<a name="wp1028497"> </a>
+            if progress-percent = 100<a name="wp1028498"> </a>
+                move 0 to progress-percent<a name="wp1028499"> </a>
+            end-if<a name="wp1028500"> </a>
+            modify progress-meter-1, <a name="wp1028501"> </a>
+                fill-percent = progress-percent<a name="wp1028502"> </a>
+            if progress-percent = 0<a name="wp1028503"> </a>
+                modify busy-bitmap bitmap-timer = 0 <a name="wp1028504"> </a>
+                    bitmap-number = 1<a name="wp1028505"> </a>
+            else<a name="wp1028506"> </a>
+                modify busy-bitmap bitmap-timer = 10 <a name="wp1028507"> </a>
+            end-if<a name="wp1028508"> </a>
+        when msg-wb-status-text-change<a name="wp1028509"> </a>
+            inquire wb-1 status-text in wb-1-status<a name="wp1028510"> </a>
+            display status-text-1<a name="wp1028511"> </a>
+        when msg-wb-title-change<a name="wp1028512"> </a>
+            inquire wb-1 title in wb-1-title<a name="wp1028513"> </a>
+            display wb-1-title upon global window title<a name="wp1028514"> </a>
+    end-evaluate.<a name="wp1028515"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

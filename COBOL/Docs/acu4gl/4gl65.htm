@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:17" />
+  <title>6.1.3  Using Additional Directives</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl6.htm">Chapter 6:  Working with COBOL</a> &gt; <a href="4gl62.htm">6.1 Preparing and Compiling Your COBOL Program</a> &gt; </p>
+<a name="wp1035542"> </a><h2 class="pHeading2">
+6.1.3  Using Additional Directives
+</h2>
+<a name="wp1035543"> </a><p class="pBody">
+In this final approach, you decide to streamline the code a bit.  Three changes are introduced:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1035544"> </a><div class="pSmartList1"><li>The <a  href="4gl413.htm#wp1034754">USE GROUP</a> directive is applied to the notes, because you don't need to access each note line individually from the database side.  Grouping them improves execution speed and clarity.</li></div>
+<a name="wp1035545"> </a><div class="pSmartList1"><li>The notes field is renamed for convenience.</li></div>
+<a name="wp1035546"> </a><div class="pSmartList1"><li>The USE GROUP and <a  href="4gl48.htm#wp1034508">DATE</a> directives are applied to the date, to give it all the properties of a date on the database side.</li></div>
+</ul></div>
+<div class="pPreformatted"><pre class="pPreformatted">
+ fd p-o-file.<a name="wp1035547"> </a>
+<b class="cBold">*(( xfd when p-o-record-type = &quot;h&quot; ))</b><a name="wp1035548"> </a>
+ 01  p-o-record.<a name="wp1035549"> </a>
+     03  <u class="cUnderline">p-o-division-number</u>                      pic 9(3).<a name="wp1035550"> </a>
+     03  <u class="cUnderline">p-o-record-type</u>                          pic x.<a name="wp1035551"> </a>
+         88  header-record                        value &quot;h&quot;.<a name="wp1035552"> </a>
+         88  detail-record                        value &quot;d&quot;.<a name="wp1035553"> </a>
+     03  <u class="cUnderline">p-o-number</u>                               pic 9(10).<a name="wp1035554"> </a>
+     03  p-o-number-detail redefines p-o-number.<a name="wp1035555"> </a>
+         05  picking-ticket-number                pic 9(6).<a name="wp1035556"> </a>
+         05  shipping-region                      pic 9(2).<a name="wp1035557"> </a>
+         05  p-o-customer-type                    pic 9(2).
+         05  p-o-customer-breakdown redefines 
+               p-o-customer-type.<a name="wp1035558"> </a>
+             07  customer-category                pic x.<a name="wp1035559"> </a>
+                 88  p-o-customer-retail          value &quot;r&quot;.<a name="wp1035560"> </a>
+                 88  p-o-customer-whlsale         value &quot;w&quot;.<a name="wp1035561"> </a>
+             07  customer-pay-format              pic x.<a name="wp1035562"> </a>
+                 88  is-net-30                    value &quot;3&quot;.<a name="wp1035563"> </a>
+                 88  is-net-10                    value &quot;1&quot;.<a name="wp1035564"> </a>
+*(( xfd use group, date ))<a name="wp1035565"> </a>
+     03  p-o-date.<a name="wp1035566"> </a>
+         05  p-o-yy                               pic 9(2).<a name="wp1036198"> </a>
+         05  p-o-mm                               pic 9(2).<a name="wp1035567"> </a>
+         05  p-o-dd                               pic 9(2).<a name="wp1035568"> </a>
+*(( xfd when p-o-record-type = &quot;d&quot; ))<a name="wp1035569"> </a>
+ 01  p-o-detail-record.<a name="wp1035570"> </a>
+     03  <u class="cUnderline">p-o-dept-number</u>                          pic 9(3).<a name="wp1036199"> </a>
+     03  p-o-record-type                          pic x.<a name="wp1035571"> </a>
+     03  detail-p-o-number                        pic 9(10).<a name="wp1035572"> </a>
+     03  p-o-shipping-info.<a name="wp1035573"> </a>
+         05  <u class="cUnderline">p-o-quantity-to-ship</u>                 pic s9(4) comp.<a name="wp1035574"> </a>
+         05  <u class="cUnderline">p-o-total-quantity</u>                   pic s9(4) comp.<a name="wp1035575"> </a>
+*(( xfd use group, name = notes ))<a name="wp1035576"> </a>
+     03  p-o-notes.<a name="wp1035577"> </a>
+         05  notes-line occurs 3 times            pic x(40).<a name="wp1035578"> </a>
+</pre></div>
+<a name="wp1035579"> </a><p class="pNote">
+<hr />
+<b>Note:  </b><b class="cBold">p-o-record-type</b> is entered only <em class="cEmphasis">once</em> into the table.  The <b class="cBold">detail-p-o-number</b> field is not part of the table, because the key overlays this area.  
+<hr />
+</p>
+<a name="wp1035580"> </a><p class="pBody">
+This table is built in the database:
+</p>
+<a name="wp1035618"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1038865"> </a>
+Column Name
+
+</th>
+    <th><a name="wp1038867"> </a>
+Type
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035587"> </a><p class="pCellBody">
+p_o_division_number
+</p>
+</td>
+    <td><a name="wp1035589"> </a><p class="pCellBody">
+number(3) 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035591"> </a><p class="pCellBody">
+p_o_record_type
+</p>
+</td>
+    <td><a name="wp1035593"> </a><p class="pCellBody">
+char(1)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035595"> </a><p class="pCellBody">
+p_o_number
+</p>
+</td>
+    <td><a name="wp1035597"> </a><p class="pCellBody">
+number(10) 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035599"> </a><p class="pCellBody">
+p_o_date
+</p>
+</td>
+    <td><a name="wp1035601"> </a><p class="pCellBody">
+date
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035603"> </a><p class="pCellBody">
+p_o_dept_number
+</p>
+</td>
+    <td><a name="wp1035605"> </a><p class="pCellBody">
+number(3) 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035607"> </a><p class="pCellBody">
+p_o_quantity_to_sh
+</p>
+</td>
+    <td><a name="wp1035609"> </a><p class="pCellBody">
+number(4) 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035611"> </a><p class="pCellBody">
+p_o_total_quantity
+</p>
+</td>
+    <td><a name="wp1035613"> </a><p class="pCellBody">
+number(4) 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035615"> </a><p class="pCellBody">
+notes
+</p>
+</td>
+    <td><a name="wp1035617"> </a><p class="pCellBody">
+char(120)
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

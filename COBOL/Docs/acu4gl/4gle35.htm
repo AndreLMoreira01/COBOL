@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:40" />
+  <title>A_SYB_NATIVE_LOCK_TIMEOUT</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gle.htm">Appendix E:  Acu4GL for Sybase Information </a> &gt; <a href="4gle17.htm">E.4  Acu4GL for Sybase Configuration File Variables</a> &gt; </p>
+<a name="wp1049622"> </a><h2 class="pHeading2">
+A_SYB_NATIVE_LOCK_TIMEOUT
+</h2>
+<a name="wp1049625"> </a><p class="pBody">
+This is one of two locking methods available with Acu4GL for Sybase.  The methods are accessed via two configuration variables: A_SYB_VISION_LOCKS_FILE and A_SYB_NATIVE_LOCK_TIMEOUT.  The lock method used is determined as follows:  If A_SYB_VISION_LOCKS_FILE is set to the name of a Vision file that can be opened I/O and has the correct structure, the Vision file is used to hold lock information.  If A_SYB_NATIVE_LOCK_TIMEOUT is set to a positive value, native locking is used.  Otherwise, the AcuLocks table is used to hold locks.
+</p>
+<a name="wp1049626"> </a><p class="pBody">
+This locking method enables you to use Sybase native locks if you explicitly code transactions in your COBOL program.  You can access this method by setting the configuration variable A_SYB_NATIVE_LOCK_TIMEOUT to a positive value.  This value will be the number of seconds that a connection will wait for a timeout to occur.  When such a timeout occurs (for any reason), the Acu4GL product assumes that the timeout was due to a locked record, and will return error 99 (record locked).  If you set this variable but do not explicitly code transactions in your COBOL program, record locking does not occur.  Note that the Acu4GL product will wait the number of seconds specified, and your application may seem to hang if the timeout is too long.  On the other hand, if the timeout is too short, you may get record locked errors when the network is slow.
+</p>
+<a name="wp1049627"> </a><p class="pBody">
+Sybase uses a page locking mechanism, and so this method of locking records may cause your application to return spurious record locked errors due to a record being locked on the same page as the record you are trying to access.  If a future version of Sybase implements row-level locking, this locking method may be the preferred method.
+</p>
+<a name="wp1049628"> </a><h3 class="pHeadingRef">
+See also
+</h3>
+<a name="wp1053785"> </a><p class="pBody">
+<a  href="4gle50.htm#wp1049736">A_SYB_VISION_LOCKS_FILE</a> configuration variable
+</p>
+<a name="wp1053786"> </a><p class="pBody">
+<a  href="4gle51.htm#wp1049746"><span style="font-family: Arial, Verdana, Helvetica, sans-serif">Section E.5, &quot;Record and Table Locking&quot;</span></a>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

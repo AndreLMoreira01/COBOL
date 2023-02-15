@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:21:17" />
+  <title>FILE_IO_PROCESSES_MESSAGES </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run3.htm"><br />Chapter 3: Runtime Configuration File</a> &gt; <a href="run33.htm">3.2  Configuration File Entries</a> &gt; </p>
+<a name="wp1068590"> </a><h2 class="pHeading2">
+FILE_IO_PROCESSES_MESSAGES 
+</h2>
+<a name="wp1068594"> </a><p class="pBody">
+This configuration variable can be used to control whether the runtime processes system messages while performing file I/O operations.  When it is set to &quot;1&quot; (on, true, yes), the runtime will process system messages while doing file I/O operations.  This was the default behavior <em class="cEmphasis">prior</em> to Version 3.2.  Note that the processing of system messages during file I/O should only be enabled under special conditions, as described below.
+</p>
+<a name="wp1068595"> </a><p class="pBody">
+To understand when it is appropriate to set this configuration variable, it is important to be familiar with <em class="cEmphasis">system messages </em>and how the ACUCOBOL-GT runtime and your program respond to them.  For the purposes of this discussion, system messages are the mechanism used by graphical systems, such as Windows, to communicate with your program.  They are what the operating system uses to facilitate the communication of user and system activity to the program.  They are similar to ACUCOBOL-GT's <em class="cEmphasis">events</em>.  Prior to Version 3.2, the runtime automatically processed system events during file operations.  This allows the user to manipulate an application window (for example, minimizing it) while file I/O operations are performed.  If the application suspends the processing of system messages, the system appears to the user to be frozen.  
+</p>
+<a name="wp1068596"> </a><p class="pBody">
+Starting with Version 3.2, this feature is turned off by default.  This is because the processing of messages outside of an ACCEPT statement can cause flaws in a program that uses multithreading or modeless windows.  It also creates a state where event procedures can be called at unexpected times.  In addition, the controls of the application are not actually functional, though they appear to be working to the user.
+</p>
+<a name="wp1068597"> </a><p class="pBody">
+Generally speaking, setting this variable is useful only when the application does not use multithreading, modeless windows, or event procedures.
+</p>
+<a name="wp1068598"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The proper way to process system messages while performing other operations is to start a second thread that performs an ACCEPT statement while the main thread continues with the work.  This allows the system to process messages under control of an ACCEPT, which provides a well-defined point in your program from which event procedures can be called.  
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

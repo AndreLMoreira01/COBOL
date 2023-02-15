@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>UPON Phrase  </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3621.htm">6.4  Common Statement Rules</a> &gt; <a href="gt3630.htm">6.4.9  Common Screen Options</a> &gt; </p>
+<a name="wp1035593"> </a><h2 class="pHeading3">
+UPON Phrase  
+</h2>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">UPON</u> new-window<a name="wp1035594"> </a>
+</pre></div>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035596"> </a><div class="pSmartList1"><li>The UPON phrase is used to update a floating window that is not the <em class="cEmphasis">current</em> floating window.  In this phrase <em class="cEmphasis">new-window</em> is a USAGE HANDLE or PIC X(10) data item that contains a valid floating window handle.  The floating window specified by <em class="cEmphasis">new-window</em> becomes the <em class="cEmphasis">current</em> window for the duration of the DISPLAY statement.</li></div>
+<a name="wp1035598"> </a><div class="pSmartList1"><li>If you create a new floating window while in the scope of the UPON phrase, the new window becomes the current window after the DISPLAY statement terminates.  Otherwise, the window that was current before the DISPLAY UPON statement executed is restored to the current window.  For example, if the main application window is current and you execute:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DISPLAY FLOATING WINDOW UPON MAIN-WINDOW, ...<a name="wp1035599"> </a>
+</pre></div>
+<a name="wp1035600"> </a><p class="pIndented1">
+when the DISPLAY statement terminates, the new floating window becomes the current window, instead of the main application window.
+</p>
+<a name="wp1035601"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b><em class="cEmphasis">new-window</em> is always the current window for the entire remaining DISPLAY statement, even if you mix DISPLAY formats.  For example:
+<hr />
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DISPLAY SUBWINDOW UPON WINDOW-1, <a name="wp1035602"> </a>
+   AT 0504, LINES 5, SIZE 30, BOXED<a name="wp1035603"> </a>
+   &quot;Line 1&quot;, LINE 1,<a name="wp1035604"> </a>
+   &quot;Line 2&quot;, LINE 2.<a name="wp1035605"> </a>
+</pre></div>
+<a name="wp1035606"> </a><p class="pIndented1">
+The above code creates a new subwindow in WINDOW-1 and then displays two lines in the new subwindow.  The UPON WINDOW-1 phrase applies to both the DISPLAY SUBWINDOW operation and the display of the subsequent text items because they are all specified in one DISPLAY statement. 
+</p>
+<a name="wp1035607"> </a><div class="pSmartList1"><li>When you mix several DISPLAY formats, the logic to determine the current window is applied sequentially through the statement.  Here is a complex example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DISPLAY FLOATING WINDOW UPON WINDOW-1<a name="wp1035608"> </a>
+   LINES 10, SIZE 40, BOXED, <a name="wp1035609"> </a>
+   HANDLE IN WINDOW-99;<a name="wp1035610"> </a>
+   &quot;Line 1&quot;, LINE 1,<a name="wp1035611"> </a>
+   &quot;Line 2&quot;, UPON WINDOW-2, LINE 2<a name="wp1035612"> </a>
+   &quot;Line 3&quot;, LINE 3.<a name="wp1035613"> </a>
+</pre></div>
+<a name="wp1035614"> </a><p class="pIndented1">
+In this example, the new floating window (WINDOW-99) is created with WINDOW-1 as its parent (because of the first UPON phrase).  Normally, this UPON phrase would cause &quot;Line 1&quot; to display in WINDOW-1 too, but the DISPLAY FLOATING WINDOW operation causes the new window to become the current window.  So, &quot;Line 1&quot; is shown in WINDOW-99 instead.  This would apply to &quot;Line 2&quot; also, but it specifies its own UPON phrase, so it displays in WINDOW-2.  &quot;Line 3&quot; also displays in WINDOW-2 because that was the last window specified.  At the end of the DISPLAY statement, the new floating window, WINDOW-99, is made the current window.  
+</p>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

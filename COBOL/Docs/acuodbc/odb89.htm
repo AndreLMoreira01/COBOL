@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:34" />
+  <title>Access record composition</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb8.htm">Chapter 8: The AcuODBC Server Environment</a> &gt; <a href="odb84.htm">8.3  System Security - The AcuAccess File</a> &gt; <a href="odb88.htm">8.3.2  Managing AcuAccess Records</a> &gt; </p>
+<a name="wp1028418"> </a><h2 class="pHeading3">
+Access record composition
+</h2>
+<a name="wp1028421"> </a><p class="pBody">
+The server access file contains one or more access records.  Each access record is composed of five fields:</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1029349"> </a>
+Field
+
+</th>
+    <th><a name="wp1029351"> </a>
+Function
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028429"> </a><p class="pCellBody">
+Client Machine Name
+</p>
+</td>
+    <td><a name="wp1028431"> </a><p class="pCellBody">
+The name of the client system.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028433"> </a><p class="pCellBody">
+Client Username
+</p>
+</td>
+    <td><a name="wp1028435"> </a><p class="pCellBody">
+The user's login name on the client system.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028437"> </a><p class="pCellBody">
+Local Username
+</p>
+</td>
+    <td><a name="wp1028439"> </a><p class="pCellBody">
+The local user name that AcuODBC Server will use when fulfilling requests for the client user.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028441"> </a><p class="pCellBody">
+Password
+</p>
+</td>
+    <td><a name="wp1028443"> </a><p class="pCellBody">
+Optional password protection.  When used, the requester must supply a password that matches this field.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028445"> </a><p class="pCellBody">
+Umask
+</p>
+</td>
+    <td><a name="wp1028447"> </a><p class="pCellBody">
+A three-digit file creation mask.  This field is not used by AcuODBC Server.  However, since the AcuAccess file is used by several Acucorp products, this field is present.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1028450"> </a><p class="pBody">
+A typical server access record might look like:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<u class="cUnderline">Client Machine Name</u>    <u class="cUnderline">Client Username </u>   <u class="cUnderline">Local Username </u>   <u class="cUnderline">Password</u>    <u class="cUnderline">Umask</u><a name="wp1028451"> </a>
+starling               bernie             bsmith            &lt;none&gt;      002<a name="wp1029468"> </a>
+</pre></div>
+<a name="wp1028452"> </a><p class="pBody">
+or:</p><div><img src="images/odbcserv.gif" height="52" width="427" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1034474"> </a><p class="pBody">
+This record will allow user <em class="cEmphasis">bernie</em> to connect from machine <em class="cEmphasis">starling</em>.  AcuODBC Server will use the local user name <em class="cEmphasis">bsmith</em> (Bernie's account on the file server) when executing requests for <em class="cEmphasis">bernie</em>.  No password is required.
+</p>
+<a name="wp1049806"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The Access tab of the ODCP does not include a password column.  To see if a user requires a password, or to change or delete a password, select the relevant record and click <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">Modify</span> to open the Access User dialog box.
+<hr />
+</p>
+<a name="wp1028453"> </a><p class="pBody">
+Three fields, Client Machine Name, Client Username, and Local Username, can have a wildcard value to indicate a general behavior.  These wildcards are:</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1028457"> </a>
+Field name
+
+</td>
+    <td><a name="wp1028459"> </a>
+Wildcard
+
+</td>
+    <td><a name="wp1028461"> </a>
+Meaning
+
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028463"> </a><p class="pCellBody">
+Client Machine Name
+</p>
+</td>
+    <td><a name="wp1028465"> </a><p class="pCellBody">
+*
+</p>
+</td>
+    <td><a name="wp1028467"> </a><p class="pCellBody">
+Match all clients machines
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028469"> </a><p class="pCellBody">
+Client Username
+</p>
+</td>
+    <td><a name="wp1028471"> </a><p class="pCellBody">
+(empty field)
+</p>
+</td>
+    <td><a name="wp1028473"> </a><p class="pCellBody">
+Match all client users
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028475"> </a><p class="pCellBody">
+Local Username
+</p>
+</td>
+    <td><a name="wp1028477"> </a><p class="pCellBody">
+same as client
+</p>
+</td>
+    <td><a name="wp1028479"> </a><p class="pCellBody">
+Use the Client Username
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1028482"> </a><p class="pBody">
+On Windows clients, Client Username is set to the name given by the user at logon.  If the operating system does not provide a logon, or the user bypasses the logon, the value of the environment variable USER is applied.  If USER is not defined, the value of the environment variable USERNAME is applied.  Note that the values assigned to these variables are case-sensitive.  Be sure that the case used in the AcuAccess file matches the case of the value set in the variable.  If neither USER nor USERNAME is defined, the literal string &quot;USER&quot; is used.
+</p>
+<a name="wp1028483"> </a><p class="pBody">
+For illustrative purposes, here is a set of common access records:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<u class="cUnderline">Client Machine Name</u>    <u class="cUnderline">Client Username</u>    <u class="cUnderline">Local Username </u>   <u class="cUnderline">Password</u>    <u class="cUnderline">Umask</u><a name="wp1028484"> </a>
+support-pc                                techie            &lt;none&gt;      002<a name="wp1028485"> </a>
+warehouse-pc                                                &lt;none&gt;      002<a name="wp1029477"> </a>
+president-pc           diamond            &lt;same as client&gt;  &lt;none&gt;      002<a name="wp1029486"> </a>
+robin                                     &lt;same as client&gt;  &lt;none&gt;      002<a name="wp1029495"> </a>
+starling               felice             &lt;same as client&gt;  &lt;none&gt;      002<a name="wp1029503"> </a>
+starling               baxter                               ......      002<a name="wp1029504"> </a>
+swallow                hartley            hartley           &lt;none&gt;      002<a name="wp1029506"> </a>
+swallow                                   acct              &lt;none&gt;      002<a name="wp1028486"> </a>
+</pre></div>
+<a name="wp1028487"> </a><p class="pBody">
+or:</p><div><img src="images/access_r.gif" height="149" width="410" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1034517"> </a><p class="pBody">
+These entries are interpreted as follows:
+</p>
+<a name="wp1028488"> </a><p class="pBody">
+The entry for <em class="cEmphasis">support-pc</em> allows any user of support-pc to use AcuODBC Server.  AcuODBC Server will use the local user name <em class="cEmphasis">techie</em> when executing requests for <em class="cEmphasis">support-pc</em>.
+</p>
+<a name="wp1028489"> </a><p class="pBody">
+The entry for <em class="cEmphasis">warehouse-pc</em> allows any user of warehouse-pc to use AcuODBC Server.  
+</p>
+<a name="wp1028490"> </a><p class="pBody">
+The entry for <em class="cEmphasis">president-pc</em> allows user <em class="cEmphasis">diamond</em> to access AcuODBC Server.  For this record to match, the environment variable USERNAME or USER must be defined with the value &quot;diamond&quot;.  AcuODBC Server will also attempt to use <em class="cEmphasis">diamond</em> as the Local Username.  
+</p>
+<a name="wp1028491"> </a><p class="pBody">
+The entry for <em class="cEmphasis">robin</em> allows all users of robin to access AcuODBC Server.  If the requester has an account on the server by the same name, AcuODBC Server will use that name.
+</p>
+<a name="wp1028492"> </a><p class="pBody">
+One entry for <em class="cEmphasis">starling</em> allows user <em class="cEmphasis">felice</em> to access AcuODBC Server.  AcuODBC Server will follow the same rules as the previous entry to assign a local user name.
+</p>
+<a name="wp1028493"> </a><p class="pBody">
+The other entry for <em class="cEmphasis">starling</em> allows user <em class="cEmphasis">baxter</em> to access AcuODBC Server.  <em class="cEmphasis">baxter</em> will need to provide a password before a connection will be established.
+</p>
+<a name="wp1028494"> </a><p class="pBody">
+One entry for <em class="cEmphasis">swallow</em> allows user <em class="cEmphasis">hartley</em> to access AcuODBC Server.  AcuODBC Server will use the local user name <em class="cEmphasis">hartley</em> when executing requests for <em class="cEmphasis">hartley</em>.
+</p>
+<a name="wp1028495"> </a><p class="pBody">
+The other entry for <em class="cEmphasis">swallow</em> allows all users of swallow to access AcuODBC Server.  AcuODBC Server will use the local user name <em class="cEmphasis">acct</em> for all users of swallow, except <em class="cEmphasis">hartley</em> (or other records for swallow that explicitly name a client user).
+</p>
+<a name="wp1028496"> </a><p class="pBody">
+The most permissive access record that can be created is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<u class="cUnderline">Client Machine Name</u>    <u class="cUnderline">Client Username </u>   <u class="cUnderline">Local Username </u>   <u class="cUnderline">Password</u>    <u class="cUnderline">Umask</u><a name="wp1028497"> </a>
+*                                         &lt;same as client&gt;  &lt;none&gt;      002<a name="wp1028498"> </a>
+</pre></div>
+<a name="wp1028499"> </a><p class="pBody">
+This record allows any user of any client to use AcuODBC Server, so long as they have an account on the server by the same name.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

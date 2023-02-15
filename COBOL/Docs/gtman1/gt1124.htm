@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:38" />
+  <title>1.5  Environment Variables </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt11.htm"><br />Chapter 1:  Introduction</a> &gt; </p>
+<a name="wp1032403"> </a><h2 class="pHeading1">
+1.5  Environment Variables 
+</h2>
+<a name="wp1032405"> </a><p class="pBody">
+This manual often refers to the host machine's <em class="cEmphasis">environment variables</em>.  These are values maintained by the host operating system that can be changed by the user.  Exactly how an environment variable is set differs among various operating systems:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1048275"> </a><div class="pSmartList1"><li>With Windows NT/2000/2003/XP, environment variables are set using the &quot;System&quot; applet in the Control Panel.  Windows must be restarted for the new values to take effect.</li></div>
+<a name="wp1048277"> </a><div class="pSmartList1"><li>With Windows 98/ME, environment variables can be defined in the &quot;autoexec.bat&quot; file (with the same syntax that's used with MS-DOS).  Any changes made to the &quot;autoexec.bat&quot; file require restarting Windows to take effect.  Environment variables can be defined temporarily by booting to MS-DOS mode, defining variables with the SET command and then starting Windows.  Variables defined in this way persist until the system is rebooted.</li></div>
+<a name="wp1041315"> </a><div class="pSmartList1"><li>On Windows systems where the console runtime (<b class="cBold">crun32</b>) is used, environment variables are inherited from the Windows environment.  Temporary environment variables can be defined in the console window (DOS-box) with the SET command.  For example, to set the environment variable &quot;SORT_DIR&quot; to &quot;C:\TEMP\&quot;, you would use the following line:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SET  SORT_DIR=C:\TEMP\<a name="wp1041452"> </a>
+</pre></div>
+<a name="wp1041453"> </a><p class="pIndented1">
+Variables defined in this way persist until the DOS-box is closed.  Forward slashes (/) may be used in place of backslashes (\).  Upper-case and lower-case letters are interchangeable.
+</p>
+<a name="wp1032413"> </a><div class="pSmartList1"><li>On UNIX and Linux systems, the environment is controlled in one of two fashions, depending on which command shell you are using.  If you are using the Bourne shell (&quot;sh&quot;) or the Korn shell (&quot;ksh&quot;), then you set a shell variable to the desired value and then export that variable.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SORT_DIR=/tmp/;  export SORT_DIR<a name="wp1032414"> </a>
+</pre></div>
+<a name="wp1032415"> </a><p class="pIndented1">
+If you are using the C-shell instead, then you use the <b class="cBold">setenv</b> command.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+setenv  SORT_DIR  /tmp/<a name="wp1032416"> </a>
+</pre></div>
+<a name="wp1032417"> </a><p class="pIndented1">
+Upper-case and lower-case environment variables are distinct.  
+</p>
+<a name="wp1032418"> </a><p class="pIndented1">
+If you are using a different shell, see the documentation for that shell, or ask your system administrator.
+</p>
+<a name="wp1032419"> </a><div class="pSmartList1"><li>On VAX/VMS systems, you set a <em class="cEmphasis">symbol</em> to the desired value.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SORT_DIR == &quot;$DISK1:[TEMP]&quot;<a name="wp1032420"> </a>
+</pre></div>
+<a name="wp1032421"> </a><p class="pIndented1">
+Unlike UNIX, upper-case and lower-case variable names are treated the same on VMS.
+</p>
+</ol></div>
+<a name="wp1041567"> </a><h3 class="pHeadingRef">
+Environment variables for handling temporary files
+</h3>
+<a name="wp1041615"> </a><p class="pBody">
+Temporary files that are not placed in a specific directory via a configuration variable, such as SORT_DIR, can be directed to a specific directory by defining the A_TMPDIR or TMPDIR environment variables.  The runtime gives preference to A_TMPDIR.  This allows users to specify an alternative temporary directory exclusively for ACUCOBOL-GT temporary files.  On UNIX systems, TMPDIR is the traditional variable for specifying a location for temporary files.  On Windows, the runtime system also checks the TEMP and TMP environment variables.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

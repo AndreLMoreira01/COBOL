@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:27" />
+  <title>11.1 Regarding Windows</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt211.htm">Chapter 11:  Tips and Hints</a> &gt; </p>
+<a name="wp1026850"> </a><h2 class="pHeading1">
+11.1 Regarding Windows
+</h2>
+<a name="wp1026852"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1029661"> </a><p class="pBody">
+When I click the mouse outside the area of my floating window, the runtime doesn't return any event to my program.  Why? 
+</p>
+<a name="wp1026070"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1029696"> </a><p class="pBody">
+	This is normal behavior under Windows.  Windows delivers the mouse message to the top-most window where the mouse is located.  If the mouse isn't clicked within the floating window, it never receives any indication that a mouse event occurred.  The only way to receive such events is to capture the mouse, but that prevents the mouse from being used by any other application.  Ordinarily, the mouse should be captured only when the user is marking or dragging some object on the screen.
+</p>
+<a name="wp1026071"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1029860"> </a><p class="pBody">
+How can I trap the CMD-CLOSE event when the user closes the application by selecting the &quot;Close&quot; option of the System Menu?  I need to be able to close files and perform an orderly shutdown. 
+</p>
+<a name="wp1026076"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1029924"> </a><p class="pBody">
+	Look at the QUIT-MODE runtime configuration variable.  QUIT-MODE allows you to handle this event in a program-defined way, or in a variety of pre-defined ways.  See Appendix H of Book 4, <em class="cEmphasis">Appendices</em>. 
+</p>
+<a name="wp1030056"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1030095"> </a><p class="pBody">
+ I don't see any references to Dialog Boxes.  How do I build one? I 
+</p>
+<a name="wp1030086"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1030117"> </a><p class="pBody">
+	Under ACUCOBOL-GT, a Dialog Box is simply a floating window.  You can specify many options when creating the window, but the basic Dialog Box is declared with:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DISPLAY FLOATING WINDOW,<a name="wp1030088"> </a>
+   LINES <em class="cEmphasis">height</em>, SIZE <em class="cEmphasis">width</em>,<a name="wp1033328"> </a>
+   BOXED, HANDLE IN <em class="cEmphasis">handle-data-item</em><a name="wp1033346"> </a>
+</pre></div>
+<a name="wp1026082"> </a><p class="pBody">
+	Common additions include a TITLE and SYSTEM MENU.  You can then populate the Dialog Box with &quot;DISPLAY <em class="cEmphasis">control-type&quot;</em> statements.  Or a better alternative is to define a Screen Section group item that describes all the Dialog Box contents and then just DISPLAY that group item.  
+</p>
+<a name="wp1030249"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1030309"> </a><p class="pBody">
+Which of the Windows Common Dialog Boxes can I create directly from ACUCOBOL-GT?    
+</p>
+<a name="wp1026086"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1030374"> </a><p class="pBody">
+	Five are available via ACUCOBOL-GT library routines.  The ChooseColor dialog box can be found in W$PALETTE.  The PrintDialog setup box is available in WIN$PRINTER.  The file <em class="cEmphasis">Open</em> and <em class="cEmphasis">Save-as</em> dialogs are available in C$OPENSAVEBOX.  W$FONT has the ChooseFont dialog box.  Other Windows Common Dialogs are not directly available, though they can be accessed indirectly through C.
+</p>
+<a name="wp1032160"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1026089"> </a><p class="pBody">
+	How do I handle a dialog box that doesn't have any entry fields, for example a dialog box with only push<b class="cBold"> buttons?</b>
+</p>
+<a name="wp1032172"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1026090"> </a><p class="pBody">
+	All controls are handled in the same general fashion.  This means that you can ACCEPT a push button just as you do an entry field.  Push buttons are a little strange in that they don't have values, but they do provide a termination value, just as regular fields.  The following is sample code for a simple dialog box that prompts for verification before terminating the application.  The line and column numbers may need to be adjusted to improve appearance.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+*Screen section<a name="wp1026091"> </a>
+01 shutdown-screen.<a name="wp1026092"> </a>
+   03 label  &quot;This will end your application&quot;,<a name="wp1026093"> </a>
+      line 2, column 3.<a name="wp1026094"> </a>
+   03 push-button, ok-button, line 4, column 10.<a name="wp1026095"> </a>
+   03 push-button, cancel-button, column 20.<a name="wp1026096"> </a>
+<a name="wp1026097"> </a>
+*Procedure Division<a name="wp1026098"> </a>
+display floating window,<a name="wp1026099"> </a>
+   size 30, lines 5, <a name="wp1026100"> </a>
+   title &quot;Application Shutdown&quot;,<a name="wp1026101"> </a>
+   handle in shutdown-window.<a name="wp1026102"> </a>
+<a name="wp1026103"> </a>
+display shutdown-screen.<a name="wp1026104"> </a>
+perform, with test after,<a name="wp1026105"> </a>
+      until key-status = 13 or 27<a name="wp1026106"> </a>
+   accept shutdown-screen<a name="wp1026107"> </a>
+     on exception key-status continue end-accept<a name="wp1026108"> </a>
+end perform.<a name="wp1026109"> </a>
+<a name="wp1026110"> </a>
+destroy shutdown-window.<a name="wp1026111"> </a>
+<a name="wp1026112"> </a>
+if key-status = 13<a name="wp1026113"> </a>
+   perform shutdown-windows.<a name="wp1026114"> </a>
+</pre></div>
+<a name="wp1032178"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1026115"> </a><p class="pBody">
+I'd like to minimize my COBOL application when I switch tasks, but a child window is open, and I can't access the minimize button of the main application window.  Why?
+</p>
+<a name="wp1032196"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1026118"> </a><p class="pBody">
+	The child window is a <em class="cEmphasis">modal</em> window.  As long as a <em class="cEmphasis">modal</em> window is open, you cannot get to any other application window.  To minimize the application, you must first close all child windows.  
+</p>
+<a name="wp1026119"> </a><p class="pBody">
+If the current window were a <em class="cEmphasis">modeless</em> window, you could switch to a different window without closing the first one.  ACUCOBOL-GT Version 3.2 and later supports the creation of modeless windows.  
+</p>
+<a name="wp1032214"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1026120"> </a><p class="pBody">
+I want to create a toolbar large enough to host bitmap buttons that are 36 pixels square.  How do I do that?
+</p>
+<a name="wp1032244"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1034230"> </a><p class="pBody">
+	All you need to do to is to create a toolbar window that is tall enough to handle 36 pixels (or any height you want).  When you create the bitmap buttons, be sure to specify the exact size of your buttons.  For example, to handle 36 pixel square bitmap buttons, try creating a toolbar four lines high.  Remember, you can use fractional line values to create a toolbar that is exactly the height you want.  For more about toolbars and bitmap buttons see the &quot;DISPLAY TOOLBAR&quot; statement in section 6.6 of Book 3, <em class="cEmphasis">Reference Manual, </em>and section 3.7, &quot;Bitmap Buttons&quot; in Book 2, <em class="cEmphasis">User Interface Programming</em>.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

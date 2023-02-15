@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$SOCKET Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1118431"> </a><h2 class="pHeading2">
+C$SOCKET Routine
+</h2>
+<a name="wp1118466"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">This routine </span>can be used to communicate with other processes on remote or local hosts. This provides an interface to inter-process communication via sockets. 
+</p>
+<a name="wp1118467"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$SOCKET&quot; <a name="wp1118468"> </a>
+    USING OP-CODE, parameters<a name="wp1474790"> </a>
+</pre></div>
+<a name="wp1118469"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1118470"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">OP-CODE  </span> Numeric parameter
+</p>
+<a name="wp1125840"> </a><p class="pBody">
+Specifies the operation to perform.  These are defined in the description below.
+</p>
+<a name="wp1118471"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">Parameters</span>   Various types defined in &quot;socket.def&quot;. 
+</p>
+<a name="wp1125847"> </a><p class="pBody">
+The remaining parameters vary depending on the operation selected. They provide information and hold results for the operations specified. 
+</p>
+<a name="wp1118472"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1118473"> </a><p class="pBody">
+All parameters passed to C$SOCKET are passed BY REFERENCE.  The C$SOCKET routine provides any necessary conversions. Numeric arguments passed to this routine must be declared as COMP 5.
+</p>
+<a name="wp1118474"> </a><p class="pNote">
+<hr />
+<b>Note:  </b> If a COBOL thread calls one of these operations, all threads are blocked until the operation is finished and control is returned to the COBOL program.  
+<hr />
+</p>
+<a name="wp1262903"> </a><h3 class="pHeadingRef">
+AGS-CREATE-SERVER (op-code 1) 
+</h3>
+<a name="wp1271144"> </a><p class="pBody">
+This operation creates a server-side socket.  It must be called once at the beginning of any service you create.  If the call is successful, the value in RETURN-CODE should be moved to a data item that is USAGE HANDLE.  This data item is then passed as the socket handle to AGS-ACCEPT or AGS-NEXT-READ.  This socket handle is not available for read or write operations.  You can use the GIVING phrase instead of MOVE to store the value in a data item. If the call fails, RETURN-CODE is NULL. This operation has a single parameter: 
+</p>
+<a name="wp1262904"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">port-number</em>	a numeric value specifying the port on which the socket is created.  All clients must use the same port number to connect to this server.
+</p>
+<a name="wp1262905"> </a><h3 class="pHeadingRef">
+AGS-ACCEPT (op-code 2) 
+</h3>
+<a name="wp1271159"> </a><p class="pBody">
+This operation waits for a connection from a client.  It blocks other calls while waiting, and returns only after a client has attempted to connect.  If a client successfully connects, the value in RETURN-CODE is a socket handle that may be used to communicate with the client using AGS-WRITE and AGS-READ. This operation is called once if the server is a single-client server. In that case, once the client has connected it is safe to close the original server socket (created in AGS-CREATE-SERVER) using AGS-CLOSE, and use only the socket handle returned by this operation. This operation has a single parameter:
+</p>
+<a name="wp1262906"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">socket-handle</em>	this is returned by a call from AGS-CREATE-SERVER.
+</p>
+<a name="wp1262907"> </a><h3 class="pHeadingRef">
+AGS-CREATE-CLIENT (op-code 3) 
+</h3>
+<a name="wp1271301"> </a><p class="pBody">
+This operation attempts to connect to a server.  It waits only a short time before giving up, so the server should be running before the client makes this call. (The length of time is dependent on the underlying socket layer.) If it is successful, the value in RETURN-CODE is a socket handle that can be used to communicate with the server using AGS-WRITE and AGS-READ.  The socket handle should be moved to a data item of USAGE HANDLE. This operation takes two parameters:
+</p>
+<a name="wp1262908"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">port-number</em>	a numeric value specifying the port on which the socket is created.  
+</p>
+<a name="wp1262909"> </a><p style="text-align: left" class="pListOptions">
+<em style="font-style: italic" class="cEmphasis">server-name</em><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">	</span>a PIC X(n) data item that holds the machine name of the server.
+</p>
+<a name="wp1262910"> </a><h3 class="pHeadingRef">
+AGS-CLOSE (op-code 4) 
+</h3>
+<a name="wp1271313"> </a><p class="pBody">
+This operation closes a socket handle.  After closing a socket handle, it should no longer be referenced.  This operation takes a single parameter:
+</p>
+<a name="wp1262911"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">socket-handle</em>	this indicates which socket to close.
+</p>
+<a name="wp1262912"> </a><h3 class="pHeadingRef">
+AGS-WRITE (op-code 5) 
+</h3>
+<a name="wp1271320"> </a><p class="pBody">
+This operation writes data to a socket, either from the client to the server, or from the server to the client.  With this operation, data is actually written: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1272049"> </a><div class="pSmartList1"><li>when AGS-READ is attempted on that socket,</li></div>
+<a name="wp1272050"> </a><div class="pSmartList1"><li>when you are querying for any available sockets to read using AGS-READ or AGS-NEXT-READ, or </li></div>
+<a name="wp1272051"> </a><div class="pSmartList1"><li>when you call AGS-FLUSH. </li></div>
+</ul></div>
+<a name="wp1272057"> </a><p class="pBody">
+The value in RETURN-CODE is the number of bytes written.  If this is different than the length parameter, an error has occurred.  
+</p>
+<a name="wp1262913"> </a><p class="pNote">
+<hr />
+<b>Note:  </b> It is up to you to make sure that the server is writing when the client is reading, and vice versa.  If both attempt to read at the same time, a deadlock will result.  
+<hr />
+</p>
+<a name="wp1262914"> </a><p class="pBody">
+This operation takes three parameters:
+</p>
+<a name="wp1262915"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">socket-handle </em>	a valid socket handle returned from AGS-ACCEPT, AGS-CREATE-CLIENT, or AGS-NEXT-READ. 
+</p>
+<a name="wp1262916"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">buffer </em>	indicates a buffer to write.  It can be of any format, including a group item.  
+</p>
+<a name="wp1262917"> </a><p style="font-family: Arial, Verdana, Helvetica, sans-serif">
+<hr />
+<b>Note:  </b>Be careful when sending numeric data across the network because some machines use different byte ordering than others and native numeric data can appear swapped on different machines.  COMP-4 data is in the order that most network servers expect for binary data.  If you are communicating with a non-COBOL client or server, you should use COMP-4 data of the correct size for the machine in question. If your client and server are both COBOL, you can use standard COBOL types.
+<hr />
+</p>
+<a name="wp1262918"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">length </em>	the number of bytes to write.  If the buffer passed is smaller than the value of this parameter, an error will result.
+</p>
+<a name="wp1272070"> </a><h3 class="pHeadingRef">
+AGS-READ (op-code 6) 
+</h3>
+<a name="wp1272083"> </a><p class="pBody">
+This operation reads data from a socket.  It blocks other calls until all the data requested is actually read, or an error occurs.  The value returned in RETURN-CODE is the number of bytes actually read.  If this is different than the length parameter, an error occurred. This operation takes four parameters:
+</p>
+<a name="wp1262920"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">socket-handle</em> 	a valid socket handle returned from AGS-ACCEPT, AGS-CREATE-CLIENT, or AGS-NEXT-READ. 
+</p>
+<a name="wp1262921"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">buffer</em>	indicates a buffer to read.  It can be of any format, including a group item.  (The same cautions about byte order described in AGS-WRITE apply here.)
+</p>
+<a name="wp1262922"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">length</em> 	the number of bytes to read.  If the buffer passed is smaller than the value of this parameter, an error will result. If length = 0, then the return value is the number of bytes available to be read on the socket.  In other words, after calling AGS-READ with a length of &quot;0&quot;, you can call AGS-READ again with a length equal to the previous return value and be guaranteed not to block.  If length is negative, the data is moved to the buffer, but it is also left in the socket so that a future call to AGS-READ can read it again.  In this case, the number of bytes transferred to the buffer is the absolute value of length.
+</p>
+<a name="wp1262923"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">timeval</em>	a number, measured in milliseconds, that determines how long to execute this operation. If the specified time-out period passes, <em class="cEmphasis">buffer</em> will contain as much data as is available, and the return value will be the number of bytes read. This will probably be less than the number of bytes desired. This allows COBOL programs to wait for data that may not come.
+</p>
+<a name="wp1262924"> </a><h3 class="pHeadingRef">
+AGS-FLUSH (op-code 7) 
+</h3>
+<a name="wp1272125"> </a><p class="pBody">
+This operation flushes any data in the socket, sending any data that has been written, and checking for data to be read.  The data to be read is stored in an internal buffer, awaiting a call to AGS-READ. This operation returns no value. This operation takes a single parameter:
+</p>
+<a name="wp1262925"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">socket-handle</em> 	this indicates which socket handle to flush.
+</p>
+<a name="wp1262926"> </a><h3 class="pHeadingRef">
+AGS-EMPTY (op-code 8) 
+</h3>
+<a name="wp1272271"> </a><p class="pBody">
+This operation is similar to AGS-READ, except that the number of bytes is thrown away, rather than being stored. This operation takes two parameters:
+</p>
+<a name="wp1262927"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">socket-handle</em> 	a valid socket handle returned from AGS-ACCEPT, AGS-CREATE-CLIENT, or AGS-NEXT-READ. 
+</p>
+<a name="wp1262928"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">length</em> 	the number of bytes to throw away.  Setting this parameter means that AGS-EMPTY will not complete until that many bytes are available on the socket to throw away.
+</p>
+<a name="wp1262929"> </a><h3 class="pHeadingRef">
+AGS-GETHOSTNAME (op-code 9) 
+</h3>
+<a name="wp1272287"> </a><p class="pBody">
+This operation allows the COBOL program to get the name of the host machine on which the COBOL program is executing. The return value is &quot;0&quot; on success, and &quot;-1&quot; on error. This operation takes a single parameter:
+</p>
+<a name="wp1272301"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">hostname</em> 	this parameter should be a PIC X(n) parameter.  The name of the host machine is stored in this data item.
+</p>
+<a name="wp1272302"> </a><h3 class="pHeadingRef">
+AGS-LAST-ERROR (op-code 10) 
+</h3>
+<a name="wp1272308"> </a><p class="pBody">
+This operation allows the COBOL program to determine the last error on a socket.  This information is only meaningful when an error has occurred.  It is useful if one of the operations that returns a socket handle returns an error instead.  The value stored in RETURN-CODE is the error number.  The error numbers are listed by name in &quot;socket.def&quot;.  (To interpret these error codes, refer to third-party documentation about sockets.) This operation takes a single parameter:
+</p>
+<a name="wp1262932"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">socket-handle</em> 	a valid socket handle returned from AGS-ACCEPT, AGS-CREATE-CLIENT, or AGS-NEXT-READ, or a NULL socket handle.  
+</p>
+<a name="wp1262933"> </a><h3 class="pHeadingRef">
+AGS-NEXT-READ (op-code 11) 
+</h3>
+<a name="wp1296162"> </a><p class="pBody">
+This operation allows you to create multi-client servers.  It waits until data is ready to be read from one of the sockets your server has created. Note that this operation only returns information about sockets created as children of the server socket passed (meaning that it only waits for sockets that were ACCEPTed from that socket) and ignores all other sockets.  It automatically accepts new client connections from AGS-CREATE-CLIENT, and returns the corresponding socket handle as one that can be read. The value in RETURN-CODE is a socket handle returned from AGS-ACCEPT, AGS-CREATE-CLIENT, or AGS-NEXT-READ, &quot;0&quot; to signify that the timeval has elapsed, or &quot;-1&quot; to signify an error.  (The socket handle returned from this operation may be from a new client which has connected and sent data.  If your program has not yet recognized this as a valid socket, the value may be unfamiliar to you.)  This operation takes two parameters:
+</p>
+<a name="wp1296163"> </a><p style="text-align: left" class="pListOptions">
+<em style="font-style: italic" class="cEmphasis">server-socket-handle</em><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">	   </span>the socket handle returned by AGS-CREATE-SERVER.
+</p>
+<a name="wp1262935"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">timeval</em>	a number, measured in microseconds, that determines how long to execute this operation. The first time you call AGS-NEXT-READ, <em class="cEmphasis">timeval</em> determines the length of time the operation executes. All subsequent invocations of this operation are handled in one of two ways:
+</p>
+<a name="wp1262936"> </a><p style="text-align: left" class="pListOptions">
+	1)  If there is a socket handle that has already been determined to have data available, that socket handle is returned immediately regardless of the value of <em class="cEmphasis">timeval</em>.  
+</p>
+<a name="wp1262937"> </a><p style="text-align: left" class="pListOptions">
+	2)  If all sockets have been processed, then the setting of timeval determines how long the routine will execute, just as in the initial call.  Any sockets that receive data during that time will store the data until AGS-READ or AGS-EMPTY is called with that socket as an argument.  Any future calls to AGS-NEXT-READ will return those socket handles.
+</p>
+<a name="wp1262938"> </a><p style="text-align: left" class="pListOptions">
+	If <em class="cEmphasis">timeval</em> is set to &quot;0&quot;,  all the sockets are checked and the operation returns immediately.  If no sockets have data, the routine  returns &quot;0&quot;. Otherwise the return value will be a socket that has data. If <em class="cEmphasis">timeval</em> is set to the default of &quot;-1&quot;, the operation waits until a socket which can be read is available (potentially forever).  If all your server does is service clients, then you should always pass the value of &quot;-1&quot; as the <em class="cEmphasis">timeval</em>.  The only reason to pass a <em class="cEmphasis">timeval</em> that is not &quot;-1&quot; is if your server wants to perform other work while it is not busy servicing clients.  
+</p>
+<a name="wp1262939"> </a><h3 class="pHeadingRef">
+AGS-REMOTE-NAME (op-code 12) 
+</h3>
+<a name="wp1272352"> </a><p class="pBody">
+This operation returns the name of a remote machine. It takes two parameters:
+</p>
+<a name="wp1262940"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">socket-handle</em> 	a valid socket handle returned from AGS-ACCEPT, AGS-CREATE-CLIENT, or AGS-NEXT-READ.  
+</p>
+<a name="wp1262941"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">remote-name</em> 	a PIC X(n) data item that is filled with the name of the remote machine.
+</p>
+<a name="wp1262942"> </a><h3 class="pHeadingRef">
+AGS-REMOTE-ADDR (op-code 13) 
+</h3>
+<a name="wp1272370"> </a><p class="pBody">
+This operation returns the IP address of a remote machine. It takes two parameters:
+</p>
+<a name="wp1262943"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">socket-handle</em> 	a valid socket handle returned from AGS-ACCEPT, AGS-CREATE-CLIENT, or AGS-NEXT-READ.  
+</p>
+<a name="wp1262944"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">remote-addr</em> 	a PIC X(n) data item that is filled with the IP address of the remote machine.
+</p>
+<a name="wp1262945"> </a><h3 class="pHeadingRef">
+AGS-READ-LINE (op-code 14) 
+</h3>
+<a name="wp1272385"> </a><p class="pBody">
+This operation reads a line of data from a socket.  A line is defined as a block of text terminated by either a NewLine or Carriage-Return / NewLine (NL or CRNL).  The NL or CRNL is stripped from the data before it is returned, and the return value is the number of bytes read, not counting the NL or CRNL.  This operation blocks other calls until all the data requested is actually read, or an error occurs. This operation takes four parameters:
+</p>
+<a name="wp1262946"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">socket-handle</em> 	a valid socket handle returned from AGS-ACCEPT, AGS-CREATE-CLIENT, or AGS-NEXT-READ. 
+</p>
+<a name="wp1262947"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">buffer</em>	indicates a buffer to read.  It can be of any format, including a group item.  (The same cautions about byte order described in AGS-WRITE apply here.)
+</p>
+<a name="wp1262948"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">length</em> 	the number of bytes to read.  If the buffer passed is smaller than the value of this parameter, an error results.  If length = 0, then the return value is the number of bytes available to be read on the socket.  In other words, after calling AGS-READ-LINE with a length of 0, you can call AGS-READ-LINE again with a length equal to the previous return value and be guaranteed not to block.  If length is negative, the data is moved to the buffer, but it is also left in the socket so that a future call to AGS-READ-LINE can read it again.  In this case, the number of bytes transferred to the buffer is the absolute value of length.
+</p>
+<a name="wp1262949"> </a><p style="text-align: left" class="pListOptions">
+<em class="cEmphasis">timeval</em>	a number, measured in milliseconds, that determines how long to execute this operation. If the specified time-out period passes, <em class="cEmphasis">buffer</em> will contain as much data as is available, and the return value will be the number of bytes read. This will probably be less than the number of bytes desired. This allows COBOL programs to wait for data that may not come.
+</p>
+<a name="wp1262950"> </a><h3 class="pHeadingRef">
+Examples
+</h3>
+<a name="wp1262952"> </a><p class="pBody">
+Three sample programs are provided to illustrate the use of the C$SOCKET routine. 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1262953"> </a><div class="pSmartList1"><li>&quot;sockcli.cbl&quot; is a client that connects to a server and sends it data.  The server returns the data modified. </li></div>
+<a name="wp1262954"> </a><div class="pSmartList1"><li>&quot;socksrv1.cbl&quot; is a single-client server.  This means that it can accommodate a single client.  When that client shuts down, the server also halts.  If another client subsequently tries to connect to the server, it is ignored.</li></div>
+<a name="wp1262955"> </a><div class="pSmartList1"><li>&quot;socksrvm.cbl&quot; is a multi-client server.  Any number of clients can attach to this server.  When one client disconnects, the rest continue to be serviced.  </li></div>
+</ul></div>
+<a name="wp1118524"> </a><p class="pBody">
+Because of limitations in the &quot;socksrvm.cbl&quot; sample program, the only way to halt the server is to kill it at the operating system level.  This is not a general requirement of  multi-client servers.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

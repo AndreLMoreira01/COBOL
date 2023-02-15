@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:01:17" />
+  <title>11.2.4.1  AcuXML output structures</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr11.htm">Chapter 11: Working with Non-Vision Data</a> &gt; <a href="itr113.htm">11.2  Working with XML Data</a> &gt; <a href="itr1114.htm">11.2.4  Using AcuXML</a> &gt; </p>
+<a name="wp1036816"> </a><h2 class="pHeading3">
+11.2.4.1  AcuXML output structures
+</h2>
+<a name="wp1036818"> </a><p class="pBody">
+When AcuXML generates XML data, the hierarchical structure of the XML file matches the record structure of the COBOL file.  For example, <b class="cBold">iobench</b> has a sequential file SEQ1, whose record structure is defined as:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  SEQ-1-RECORD.<a name="wp1036819"> </a>
+   03  SEQ-1-KEY                       PIC 9(10).<a name="wp1036820"> </a>
+   03  SEQ-1-ALT-KEY.<a name="wp1036821"> </a>
+       05  SEQ-1-ALT-KEY-A             PIC X(30).<a name="wp1036822"> </a>
+       05  SEQ-1-ALT-KEY-B             PIC 9(10).<a name="wp1036823"> </a>
+   03  SEQ-1-BODY                      PIC X(50).<a name="wp1036824"> </a>
+</pre></div>
+<a name="wp1036825"> </a><p class="pBody">
+If this file were written as an XML file, a typical record would look like this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ &lt;SEQ-1-RECORD&gt;<a name="wp1036826"> </a>
+   &lt;SEQ-1-KEY&gt;20&lt;/SEQ-1-KEY&gt;<a name="wp1036827"> </a>
+   &lt;SEQ-1-ALT-KEY&gt;<a name="wp1036828"> </a>
+     &lt;SEQ-1-ALT-KEY-A&gt;032472140976086473026412339002<a name="wp1036829"> </a>
+     &lt;/SEQ-1-ALT-KEY-A&gt;<a name="wp1036830"> </a>
+     &lt;SEQ-1-ALT-KEY-B&gt;20&lt;/SEQ-1-ALT-KEY-B&gt;<a name="wp1036831"> </a>
+   &lt;/SEQ-1-ALT-KEY&gt;<a name="wp1036832"> </a>
+ &lt;SEQ-1-BODY&gt;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrst<a name="wp1036833"> </a>
+ &lt;/SEQ-1-BODY&gt;<a name="wp1036834"> </a>
+ &lt;/SEQ-1-RECORD&gt;<a name="wp1036835"> </a>
+</pre></div>
+<a name="wp1036836"> </a><p class="pBody">
+Note that in XML, it is possible for two data elements to have the same name.  For instance:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&lt;Lender phone=&quot;607.555.2222&quot;&gt;<a name="wp1036837"> </a>
+    &lt;name&gt;Doug Glass&lt;/name&gt;<a name="wp1036838"> </a>
+    &lt;street&gt;416 Disk Drive&lt;/street&gt;<a name="wp1036839"> </a>
+    &lt;city&gt;Medfield&lt;/city&gt;<a name="wp1036840"> </a>
+    &lt;state&gt;MA&lt;/state&gt;<a name="wp1036841"> </a>
+&lt;/Lender&gt;<a name="wp1036842"> </a>
+&lt;Borrower phone=&quot;310.555.1111&quot;&gt;<a name="wp1036843"> </a>
+    &lt;name&gt;Britta Regensburg&lt;/name&gt;<a name="wp1036844"> </a>
+    &lt;street&gt;219 Union Drive&lt;/street&gt;<a name="wp1036845"> </a>
+    &lt;city&gt;Medfield&lt;/city&gt;<a name="wp1036846"> </a>
+    &lt;state&gt;CA&lt;/state&gt;<a name="wp1036847"> </a>
+&lt;/Borrower&gt;<a name="wp1036848"> </a>
+</pre></div>
+<a name="wp1036849"> </a><p class="pBody">
+However, XFDs are designed to mirror the structure of databases which do not allow duplicate element names.  For this reason, compiling a COBOL program with this record structure will result in an XFD compiler warning.  If you are working with XML data files, you may disregard this warning.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

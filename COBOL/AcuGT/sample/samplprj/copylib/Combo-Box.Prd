@@ -1,0 +1,170 @@
+      * Combo-Box.prd
+      * Combo-Box.prd is generated from C:\Acucorp\Acucbl720\AcuGT\sample\samplprj\Combo-Box.Psf
+      * This is a generated file. DO NOT modify this file directly.      
+
+       Acu-Initial-Routine.
+      *    Before-Init
+      * get system information
+           ACCEPT System-Information FROM System-Info
+      * get terminal information
+           ACCEPT Terminal-Abilities FROM Terminal-Info
+      *    After-Init
+           .
+
+       Acu-Exit-Rtn.
+      *    After-Program
+           EXIT PROGRAM
+           STOP RUN
+           .
+
+       Acu-Screen-1-Routine.
+      *    Before-Routine
+           PERFORM Acu-Screen-1-Scrn
+           PERFORM Acu-Screen-1-Proc
+      *    After-Routine
+           .
+
+       Acu-Screen-1-Scrn.
+           PERFORM Acu-Screen-1-Create-Win
+           PERFORM Acu-Screen-1-Init-Data
+           .
+
+       Acu-Screen-1-Create-Win.
+      *    Before-Create
+      * display screen
+              DISPLAY Standard GRAPHICAL WINDOW
+                 LINES 39.00, SIZE 48.00, CELL HEIGHT 10, 
+                 CELL WIDTH 10, AUTO-MINIMIZE, COLOR IS 65793, 
+                 CONTROL FONT Default-Font, ERASE, LABEL-OFFSET 0, 
+                 MODELESS, WITH SYSTEM MENU, 
+                 TITLE "Combo Box Sample - combobox.cbl", TITLE-BAR, 
+                 USER-GRAY, USER-WHITE, 
+                 HANDLE IS Form1-Handle
+      * toolbar
+           DISPLAY Screen-1 UPON Form1-Handle
+      *    After-Create
+           .
+
+       Acu-Screen-1-Init-Data.
+      *    Before-Initdata
+           PERFORM Acu-Default-Combo-Content
+           PERFORM Acu-UnSorted-Combo-Content
+           PERFORM Acu-StaticList-Combo-Content
+           PERFORM Acu-DropDown-Combo-Content
+           PERFORM Acu-DropList-Combo-Content
+           PERFORM Acu-3D-Combo-Content
+      *    After-Initdata
+           .
+      * Screen-1
+       Acu-Screen-1-Proc.
+           PERFORM UNTIL Exit-Pushed
+              ACCEPT Screen-1  
+                 ON EXCEPTION PERFORM Acu-Screen-1-Evaluate-Func
+              END-ACCEPT
+           END-PERFORM
+           DESTROY Form1-Handle
+           INITIALIZE Key-Status
+           .
+
+      * Default-Combo
+       Acu-Default-Combo-Content.
+           MODIFY Default-Combo, MASS-UPDATE = 1, RESET-LIST = 1
+           MODIFY Default-Combo, ITEM-TO-ADD = TABLE combo-box-choices
+           MODIFY Default-Combo, MASS-UPDATE = 0
+           MODIFY Default-Combo, VALUE Combo-Data-1
+           .
+
+      * UnSorted-Combo
+       Acu-UnSorted-Combo-Content.
+           MODIFY UnSorted-Combo, MASS-UPDATE = 1, RESET-LIST = 1
+           MODIFY UnSorted-Combo, ITEM-TO-ADD = TABLE combo-box-choices
+           MODIFY UnSorted-Combo, MASS-UPDATE = 0
+           MODIFY UnSorted-Combo, VALUE Combo-Data-2
+           .
+
+      * StaticList-Combo
+       Acu-StaticList-Combo-Content.
+           MODIFY StaticList-Combo, MASS-UPDATE = 1, RESET-LIST = 1
+           MODIFY StaticList-Combo, ITEM-TO-ADD = TABLE 
+              combo-box-choices
+           MODIFY StaticList-Combo, MASS-UPDATE = 0
+           MODIFY StaticList-Combo, VALUE Combo-Data-3
+           .
+
+      * DropDown-Combo
+       Acu-DropDown-Combo-Content.
+           MODIFY DropDown-Combo, MASS-UPDATE = 1, RESET-LIST = 1
+           MODIFY DropDown-Combo, ITEM-TO-ADD = TABLE combo-box-choices
+           MODIFY DropDown-Combo, MASS-UPDATE = 0
+           MODIFY DropDown-Combo, VALUE Combo-Data-4
+           .
+
+      * DropList-Combo
+       Acu-DropList-Combo-Content.
+           MODIFY DropList-Combo, MASS-UPDATE = 1, RESET-LIST = 1
+           MODIFY DropList-Combo, ITEM-TO-ADD = TABLE combo-box-choices
+           MODIFY DropList-Combo, MASS-UPDATE = 0
+           MODIFY DropList-Combo, VALUE Combo-Data-5
+           .
+
+      * 3D-Combo
+       Acu-3D-Combo-Content.
+           MODIFY 3D-Combo, MASS-UPDATE = 1, RESET-LIST = 1
+           MODIFY 3D-Combo, ITEM-TO-ADD = TABLE combo-box-choices
+           MODIFY 3D-Combo, MASS-UPDATE = 0
+           MODIFY 3D-Combo, VALUE Combo-Data-6
+           .
+
+      * Screen-1
+       Acu-Screen-1-Evaluate-Func.
+           EVALUATE TRUE
+              WHEN Exit-Pushed
+                 PERFORM Acu-Screen-1-Exit
+              WHEN Event-Occurred
+                 IF Event-Type = Cmd-Close
+                    PERFORM Acu-Screen-1-Exit
+                 END-IF
+      * DefaultDisabled-PB Link To
+              WHEN Key-Status = 101
+                 PERFORM Toggle-Default-Enable
+      * DefaultInvisible-PB Link To
+              WHEN Key-Status = 102
+                 PERFORM Toggle-Default-Visible
+      * UnSortedDisabled-PB Link To
+              WHEN Key-Status = 301
+                 PERFORM Toggle-Unsorted-Enable
+      * UnSortedInvisible-PB Link To
+              WHEN Key-Status = 302
+                 PERFORM Toggle-Unsorted-Visible
+      * StaticListDisabled-PB Link To
+              WHEN Key-Status = 501
+                 PERFORM Toggle-Staticlist-Enable
+      * StaticListInvisible-PB Link To
+              WHEN Key-Status = 502
+                 PERFORM Toggle-Staticlist-Visible
+      * DropDownDisabled-PB Link To
+              WHEN Key-Status = 201
+                 PERFORM Toggle-Dropdown-Enable
+      * DropDownInvisible-PB Link To
+              WHEN Key-Status = 202
+                 PERFORM Toggle-Dropdown-Visible
+      * DropListDisabled-PB Link To
+              WHEN Key-Status = 401
+                 PERFORM Toggle-Droplist-Enable
+      * DropListInvisible-PB Link To
+              WHEN Key-Status = 402
+                 PERFORM Toggle-Droplist-Visible
+      * 3DDisabled-PB Link To
+              WHEN Key-Status = 601
+                 PERFORM Toggle-3d-Enable
+      * 3DInvisible-PB Link To
+              WHEN Key-Status = 602
+                 PERFORM Toggle-3d-Visible
+           END-EVALUATE
+           MOVE 1 TO Accept-Control
+           . 
+
+       Acu-Screen-1-Exit.
+           SET Exit-Pushed TO TRUE
+           .
+

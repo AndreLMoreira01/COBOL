@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.8  Multiple Execution Threads </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; </p>
+<a name="wp1033096"> </a><h2 class="pHeading1">
+6.8  Multiple Execution Threads 
+</h2>
+<a name="wp1033099"> </a><p class="pBody">
+ACUCOBOL-GT includes support for the specification and control of multiple execution paths in the program (multithreading).  This means that you can define separately executing program <em class="cEmphasis">threads</em> and control their execution.  
+</p>
+<a name="wp1039115"> </a><p class="pBody">
+A <em class="cEmphasis">thread</em> is an execution path through a program.  All programs have at least one thread, the thread (execution path) that starts when the program starts and ends when the program ends.  In a program that has multiple threads, more than one thread may be <em class="cEmphasis">active</em> at a time.  
+</p>
+<a name="wp1039116"> </a><p class="pBody">
+When more than one thread is active, the runtime monitors and switches among threads, dividing processing time in accordance to program activity and thread priority (thread priorities are described below).  In this way, threads can be thought of as running in parallel.  Although conceptually they run in parallel, keep in mind that your program is still executing one statement at a time.  The runtime controls the movement among active threads in response to a variety of conditions, such as computational activity, file I/O, user input, and programmatic controls, such as <em class="cEmphasis">messages</em> and <em class="cEmphasis">locks</em> (described below).
+</p>
+<a name="wp1033103"> </a><p class="pBody">
+While most programs do not need multiple execution paths, there are some cases where threads can be helpful.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033106"> </a><div class="pSmartList1"><li>Threads can be used to simplify modeless window handling.  By tying threads to modeless windows you simplify the task of managing multiple windows.  If each modeless window has its own thread, the runtime can automatically activate or suspend each window (via its associated thread).  The code within each thread can then focus solely on managing its own window.  This approach is much easier than the alternative, in which the program must be made to handle requests from any window at any time.  </li></div>
+<a name="wp1033108"> </a><div class="pSmartList1"><li>Threads can improve system throughput.  There are times when you can improve system throughput by performing tasks in one thread while waiting for user input in another thread.  For example, you could do your program initialization while the user enters his or her password. Or, you could allow the user to edit the first item found by a complex search while your program continues searching for additional items.  </li></div>
+<a name="wp1033109"> </a><div class="pSmartList1"><li>Threads can be used to control program actions.  For example a program can present and accept a &quot;cancel&quot; dialog box in one thread while running a report in another.  If the user clicks on the cancel button, that thread stops the report by terminating the report's thread.  </li></div>
+<a name="wp1033110"> </a><div class="pSmartList1"><li>Threads can be used to perform periodic updates.  Any periodic effect, such as updating an on-screen clock or performing animation, can easily be accomplished in a thread by placing that thread in a loop that sleeps for some period of time, wakes and performs the update, and then loops back to the sleep cycle.  This allows the rest of your program to be written without concern about performing the periodic update.  </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

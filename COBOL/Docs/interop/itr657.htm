@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>6.6.3  Passing Data with Named Pipes</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr654.htm">6.6  Other Interface Paths for COBOL and C</a> &gt; </p>
+<a name="wp1122552"> </a><h2 class="pHeading2">
+6.6.3  Passing Data with Named Pipes
+</h2>
+<a name="wp1122554"> </a><p class="pBody">
+Another way to pass data between COBOL and C programs is through named pipes.  Named pipes are a method for exchanging information between two unrelated processes.  
+</p>
+<a name="wp1122555"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>To communicate via named pipes, the COBOL and C programs must be on the same host machine.
+<hr />
+</p>
+<a name="wp1122556"> </a><p class="pBody">
+Technically, named pipes are files with known pathnames.  Because a named pipe is associated with a pathname, unrelated processes can open the file to begin communications with one another.  Because a C program can open a named pipe just as it would a normal file, no special code is required.  By opening the file for reading, a process has access to the reading end of the pipe, and by opening the file for writing, a process has access to the writing end of the pipe.  In effect, named pipes allow independent processes to &quot;rendezvous&quot; their I/O streams.
+</p>
+<a name="wp1122557"> </a><p class="pBody">
+Named pipes can be created in two ways: via the command line or from within a program. 
+</p>
+<a name="wp1122558"> </a><p class="pBody">
+In UNIX, to create a named pipe with the file named &quot;npipe&quot; you can use the following command on the command line: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+% mkfifo npipe<a name="wp1122559"> </a>
+</pre></div>
+<a name="wp1122560"> </a><p class="pBody">
+Alternatively, you could create the named pipe from within your program using:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+int mkfifo(const char *path, mode_t mode)<a name="wp1122561"> </a>
+</pre></div>
+<a name="wp1122562"> </a><p class="pBody">
+where path is the path of the file and mode_t is the mode (permissions) with which the file should be created.
+</p>
+<a name="wp1122563"> </a><p class="pBody">
+A named pipe can be opened using the <b class="cBold">open( )</b> system call or the <b class="cBold">fopen( )</b> standard C library function. 
+</p>
+<a name="wp1122564"> </a><p class="pBody">
+As with normal files, if the call succeeds, you get either a file descriptor or a &quot;FILE&quot; structure pointer, depending on how you opened the file.  You can then use this information for reading or writing, depending on the parameters you passed to <b class="cBold">open( )</b> or <b class="cBold">fopen( )</b>. 
+</p>
+<a name="wp1122565"> </a><p class="pBody">
+Reading from and writing to a named pipe are very similar to reading from and writing to a normal file. You can use the standard C library function calls <b class="cBold">read( )</b> and <b class="cBold">write( )</b>. 
+</p>
+<a name="wp1122566"> </a><p class="pBody">
+Named pipes can also be used on Windows systems.  You create Windows pipes with the <b class="cBold">CreateNamedPipe( )</b> API.  You can then use the <b class="cBold">CreateFile( ) </b>API to access the other end of the newly created named pipe. 
+</p>
+<a name="wp1122567"> </a><p class="pBody">
+Although named pipes can be very effective for communicating between COBOL and C applications, bear in mind the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1122568"> </a><div class="pSmartList1"><li>Named pipes work only for processes on the same host machine. </li></div>
+<a name="wp1122569"> </a><div class="pSmartList1"><li>Named pipes can be created only in the local file system of the host. </li></div>
+<a name="wp1122570"> </a><div class="pSmartList1"><li>Named pipe data is a byte stream, and no record identification exists. </li></div>
+<a name="wp1122571"> </a><div class="pSmartList1"><li>Named pipes provide only a half-duplex flow of data.  They are also known as &quot;fifos&quot; for their method of &quot;first in, first out&quot; communication.  To establish full-duplex communication, you must create and manage two pipes, which can be complicated and result in file deadlocks if you are not careful.</li></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

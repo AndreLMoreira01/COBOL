@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/01/05 10:10:06" />
+  <title>4.5.4  Sample CGI Programs</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Programmer's Guide to the Internet <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="int4.htm">Chapter 4: Launching Applications on a Web Server With CGI</a> &gt; <a href="int418.htm">4.5  Writing a CGI Program</a> &gt; </p>
+<a name="wp1028487"> </a><h2 class="pHeading2">
+4.5.4  Sample CGI Programs
+</h2>
+<a name="wp1028489"> </a><p class="pBody">
+The following CGI programs were written in ACUCOBOL-GT.  
+</p>
+<a name="wp1028491"> </a><h3 class="pHeadingRef">
+Oscars sample
+</h3>
+<a name="wp1028492"> </a><p class="pBody">
+The first program, <b class="cBold">oscars</b>, is designed to return the names of actors and actresses who won Oscar awards in a specified year.  Notice the definition of external form items in the Working-Storage section of this program.  Notice also that the ACCEPT statement in the main logic section ACCEPTs these external form items, and that the DISPLAY statement defines the HTML templates to be used: &quot;HTML-header-form,&quot; &quot;HTML-footer-form,&quot; and &quot;body-para.&quot;  The contents of these templates follows.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+identification division.<a name="wp1028493"> </a>
+program-id. oscars.<a name="wp1028494"> </a>
+remarks.<a name="wp1028495"> </a>
+working-storage section.<a name="wp1028496"> </a>
+01  cgi-form       is external-form.<a name="wp1028497"> </a>
+    05 y2004       pic x(5) is identified by &quot;y2004&quot;.<a name="wp1047853"> </a>
+    05 y2003       pic x(5) is identified by &quot;y2003&quot;.<a name="wp1028498"> </a>
+    05 y2002       pic x(5) is identified by &quot;y2002&quot;.<a name="wp1028499"> </a>
+01  cgi-form-table redefines cgi-form.<a name="wp1028503"> </a>
+    05  cgi-year   pic x(5) occurs 5 times.<a name="wp1028504"> </a>
+01  html-header-form is external-form identified by &quot;header&quot;.<a name="wp1028505"> </a>
+    05  opening-message				pic x(40).<a name="wp1028506"> </a>
+01  html-body-form is external-form identified by &quot;body&quot;.<a name="wp1028507"> </a>
+    05  ryear      pic x(5).<a name="wp1028508"> </a>
+    05  html-oscar-info.<a name="wp1028509"> </a>
+        10  rmovie       pic x(25).<a name="wp1028510"> </a>
+        10  ractor       pic x(42).<a name="wp1028511"> </a>
+        10  ractress     pic x(42).<a name="wp1028512"> </a>
+01  html-footer-form is external-form identified by &quot;footer&quot;.<a name="wp1028513"> </a>
+    05  closing-message  pic x(40).<a name="wp1028514"> </a>
+01  movie-values.<a name="wp1028515"> </a>
+     05  2004-oscar.<a name="wp1047864"> </a>
+        10 movie     pic x(25) value &quot;THE LORD OF THE RINGS&quot;.<a name="wp1047865"> </a>
+        10 actor     pic x(42) value &quot;Sean Penn MYSTIC RIVER&quot;.<a name="wp1047866"> </a>
+        10 actress   pic x(42) value &quot;Charlize Theron MONSTER&quot;.<a name="wp1028516"> </a>
+     05  2003-oscar.<a name="wp1047862"> </a>
+        10 movie     pic x(25) value &quot;CHICAGO&quot;.<a name="wp1028517"> </a>
+        10 actor     pic x(42) value &quot;Adrien Brody THE PIANIST&quot;.<a name="wp1030617"> </a>
+        10 actress   pic x(42) value &quot;Nicole Kidman THE HOURS&quot;.<a name="wp1030618"> </a>
+     05  2002-oscar.<a name="wp1028520"> </a>
+        10 movie     pic x(25) value &quot;A BEAUTIFUL MIND&quot;.<a name="wp1028521"> </a>
+        10 actor     pic x(42) value &quot;Halle Berry MONSTER'S BALL&quot;.<a name="wp1028522"> </a>
+        10 actress  pic x(42) value &quot;Denzel Washington TRAINING DAY&quot;.<a name="wp1028523"> </a>
+01  movie-table redefines movie-values occurs 5 times.<a name="wp1028536"> </a>
+     05  oscar-winners.<a name="wp1028537"> </a>
+         10  best-movie   pic x(25).<a name="wp1028538"> </a>
+         10  best-actor   pic x(42).<a name="wp1028539"> </a>
+         10  best-actress pic x(42).<a name="wp1028540"> </a>
+01  various-counters.<a name="wp1028541"> </a>
+     05 idx-1              pic 99 value 1.<a name="wp1028542"> </a>
+procedure division.<a name="wp1028543"> </a>
+main-logic.<a name="wp1028544"> </a>
+accept cgi-form.<a name="wp1028545"> </a>
+     if cgi-form = space<a name="wp1028546"> </a>
+          move &quot;You did not select any years!&quot; to opening-message<a name="wp1028547"> </a>
+          display html-header-form<a name="wp1028548"> </a>
+          move &quot;Back up and try again.&quot; to closing-message<a name="wp1028549"> </a>
+     else<a name="wp1028550"> </a>
+          move &quot;Acucorp CGI in action.&quot; to opening-message<a name="wp1028551"> </a>
+          display html-header-form<a name="wp1028552"> </a>
+          perform display-body-para<a name="wp1028553"> </a>
+          move &quot;THE END.&quot; to closing-message<a name="wp1028554"> </a>
+     end-if.<a name="wp1028555"> </a>
+     display html-footer-form.<a name="wp1028556"> </a>
+     stop run.<a name="wp1028557"> </a>
+display-body-para.<a name="wp1028558"> </a>
+     perform varying idx-1 from 1 by 1 until idx-1 &gt; 12<a name="wp1028559"> </a>
+          if cgi-year(idx-1) = space<a name="wp1028560"> </a>
+               continue<a name="wp1028561"> </a>
+          else<a name="wp1028562"> </a>
+               move cgi-year(idx-1) to ryear<a name="wp1028563"> </a>
+               move movie-table(idx-1) to html-oscar-info<a name="wp1056988"> </a>
+               display html-body-form<a name="wp1057000"> </a>
+          end-if<a name="wp1057001"> </a>
+     end-perform.<a name="wp1057002"> </a>
+</pre></div>
+<a name="wp1028568"> </a><h3 class="pHeadingRef">
+Header.htm
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;ACUCOBOL-GT CGI Header&lt;/TITLE&gt;&lt;/HEAD&gt;<a name="wp1028569"> </a>
+&lt;BODY&gt;<a name="wp1028570"> </a>
+&lt;H2&gt;%%opening-message%%&lt;/H2&gt;<a name="wp1028571"> </a>
+&lt;CENTER&gt;&lt;H1&gt;Oscar Winners&lt;/H1&gt;<a name="wp1028572"> </a>
+&lt;HR&gt;<a name="wp1028573"> </a>
+&lt;TABLE border cellspacing=0 cellpadding=5&gt;<a name="wp1028574"> </a>
+&lt;TR&gt;<a name="wp1028575"> </a>
+&lt;TH colspan=4 align=center&gt;Your Selections&lt;/TH&gt;<a name="wp1028576"> </a>
+&lt;/TR&gt;<a name="wp1028577"> </a>
+&lt;TR align=center&gt;<a name="wp1028578"> </a>
+&lt;TH&gt;Year&lt;/TH&gt;<a name="wp1028579"> </a>
+&lt;TH&gt;Best Movie&lt;/TH&gt;<a name="wp1028580"> </a>
+&lt;TH&gt;Best Actor&lt;/TH&gt;<a name="wp1028581"> </a>
+&lt;TH&gt;Best Actress&lt;/TH&gt;<a name="wp1028582"> </a>
+&lt;/TR&gt;<a name="wp1028583"> </a>
+</pre></div>
+<a name="wp1028584"> </a><h3 class="pHeadingRef">
+Footer.htm
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+&lt;/TABLE&gt;<a name="wp1028585"> </a>
+&lt;/CENTER&gt;<a name="wp1028586"> </a>
+&lt;H2&gt;%%closing-message%%&lt;/H2&gt;<a name="wp1028587"> </a>
+&lt;HR&gt;<a name="wp1028588"> </a>
+&lt;P&gt;The information you requested was processed by the ACUCOBOL-GT CGI 
+program.<a name="wp1028589"> </a>
+&lt;BR&gt;Following the CGI standard, ACUCOBOL-GT was able to send <a name="wp1028590"> </a>
+&lt;BR&gt;the requested data items to the appropriate templates and<a name="wp1056847"> </a>
+&lt;BR&gt;return the completed HTML document back to you.&lt;/P&gt;<a name="wp1056848"> </a>
+&lt;/BODY&gt;&lt;/HTML&gt;<a name="wp1028591"> </a>
+</pre></div>
+<a name="wp1028592"> </a><h3 class="pHeadingRef">
+Body.htm
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+&lt;TR align=center&gt;<a name="wp1028593"> </a>
+&lt;TD&gt;%%ryear%%&lt;/TD&gt;<a name="wp1028594"> </a>
+&lt;TD&gt;%%rmovie%%&lt;/TD&gt;<a name="wp1028595"> </a>
+&lt;TD&gt;%%ractor%%&lt;/TD&gt;<a name="wp1028596"> </a>
+&lt;TD&gt;%%ractress%%&lt;/TD&gt;<a name="wp1028597"> </a>
+&lt;/TR&gt;<a name="wp1028598"> </a>
+</pre></div>
+<a name="wp1028599"> </a><h3 class="pHeadingRef">
+Oscar.htm
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+&lt;HTML&gt;<a name="wp1028600"> </a>
+&lt;HEAD&gt;<a name="wp1028601"> </a>
+&lt;META HTTP-EQUIV=&quot;Content-Type&quot; CONTENT=&quot;text/html; 
+charset=windows-1252&quot;&gt;<a name="wp1028602"> </a>
+&lt;META NAME=&quot;Generator&quot; CONTENT=&quot;Microsoft Word 97&quot;&gt;<a name="wp1028603"> </a>
+&lt;TITLE&gt;ACUCOBOL-GT CGI Example&lt;/TITLE&gt;<a name="wp1028604"> </a>
+&lt;META NAME=&quot;Template&quot; CONTENT=&quot;C:\PROGRAM FILES\MICROSOFT 
+OFFICE\OFFICE\html.dot&quot;&gt;<a name="wp1028605"> </a>
+&lt;/HEAD&gt;<a name="wp1028606"> </a>
+&lt;BODY LINK=&quot;#0000ff&quot; VLINK=&quot;#800080&quot;&gt;<a name="wp1028607"> </a>
+&lt;H2&gt;ACUCOBOL-GT CGI Example using ACUCOBOL-GT.&lt;/H2&gt;<a name="wp1028608"> </a>
+&lt;H3&gt;This example shows how easily you can use ACUCOBOL-GT to act as a 
+CGI program. <a name="wp1028609"> </a>
+&lt;BR&gt;User input is transferred from the following HTML page to a 
+ACUCOBOL-GT program running &lt;BR&gt;<a name="wp1028610"> </a>
+on the web server. The appropriate output is returned.&lt;/H3&gt;<a name="wp1028611"> </a>
+&lt;P&gt;&lt;HR&gt;&lt;/P&gt;<a name="wp1028612"> </a>
+&lt;H1 ALIGN=&quot;CENTER&quot;&gt;Oscar Trivia&lt;/H1&gt;<a name="wp1028613"> </a>
+&lt;P&gt;Select a year(s)and press the Submit Query button. &lt;BR&gt;<a name="wp1028614"> </a>
+The Best Picture, Best Actor and Best Actress for each year selected 
+will be returned. &lt;/P&gt;<a name="wp1028615"> </a>
+&lt;FORM ACTION=&quot;http://your_server_name/Scripts/oscars.acu&quot; 
+METHOD=&quot;post&quot;&gt;<a name="wp1028616"> </a>
+&lt;P&gt;Year: &lt;/P&gt;<a name="wp1028617"> </a>
+&lt;P&gt;<a name="wp1028618"> </a>
+&lt;INPUT TYPE=&quot;checkbox&quot; NAME=&quot;y2004&quot; VALUE=&quot;2004&quot;&gt;<a name="wp1047882"> </a>
+2004 <a name="wp1047880"> </a>
+&lt;INPUT TYPE=&quot;checkbox&quot; NAME=&quot;y2003&quot; VALUE=&quot;2003&quot;&gt;<a name="wp1028619"> </a>
+2003 <a name="wp1028620"> </a>
+&lt;INPUT TYPE=&quot;checkbox&quot; NAME=&quot;y2002&quot; VALUE=&quot;2002&quot;&gt;<a name="wp1028621"> </a>
+2002 <a name="wp1028622"> </a>
+&lt;P&gt;<a name="wp1028629"> </a>
+&lt;INPUT TYPE=&quot;submit&quot;  VALUE=&quot;Submit Query&quot; &gt;<a name="wp1028630"> </a>
+&lt;/P&gt;&lt;/FORM&gt;&lt;/BODY&gt;<a name="wp1028631"> </a>
+&lt;/HTML&gt;<a name="wp1028632"> </a>
+</pre></div>
+<a name="wp1028633"> </a><h3 class="pHeadingRef">
+Hello User sample
+</h3>
+<a name="wp1028634"> </a><p class="pBody">
+The following CGI program assumes that the user has been asked to enter his or her name, and that the entered name is stored in the CGI variable &quot;username&quot;.  This can be accomplished using the following HTML form:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&lt;body&gt;<a name="wp1056874"> </a>
+&lt;form action=&quot;/cgi-bin/simple.acu&quot; method=&quot;get&quot;&gt;<a name="wp1056875"> </a>
+Please enter your name or leave blank for &quot;anonymous&quot;: <a name="wp1056876"> </a>
+&lt;input type=&quot;text&quot; name=&quot;username&quot; size=60&gt;<a name="wp1028638"> </a>
+&lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&gt;<a name="wp1028639"> </a>
+&lt;/form&gt;<a name="wp1028640"> </a>
+&lt;/body&gt;<a name="wp1028641"> </a>
+</pre></div>
+<a name="wp1028643"> </a><p class="pBody">
+This program also uses an HTML template, &quot;greeting.html&quot;.  Here is an example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&lt;body&gt;<a name="wp1028644"> </a>
+Hello %%username%% <a name="wp1028645"> </a>
+This Web page is still under construction. <a name="wp1028646"> </a>
+Please try again in a few days.<a name="wp1028647"> </a>
+&lt;/body&gt;<a name="wp1028648"> </a>
+</pre></div>
+<a name="wp1028649"> </a><p class="pBody">
+The CGI program then, is as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+identification division.<a name="wp1028650"> </a>
+program-id. simple.<a name="wp1028651"> </a>
+remarks. <a name="wp1028652"> </a>
+data division.<a name="wp1028653"> </a>
+working-storage section.<a name="wp1028654"> </a>
+01  input-output-form is external-form is identified by &quot;greeting&quot;.<a name="wp1028655"> </a>
+    03  user-name  pic x(60) identified by &quot;username&quot;.<a name="wp1028656"> </a>
+procedure division.<a name="wp1028657"> </a>
+main-logic.<a name="wp1028658"> </a>
+    accept input-output-form.<a name="wp1028659"> </a>
+    display input-output-form.<a name="wp1028660"> </a>
+</pre></div>
+<a name="wp1028661"> </a><h3 class="pHeadingRef">
+Substituting a URL sample
+</h3>
+<a name="wp1028662"> </a><p class="pBody">
+This program demonstrates using an external form to substitute a URL for the output.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+identification division.<a name="wp1028663"> </a>
+program-id. acusrch.<a name="wp1028664"> </a>
+remarks.<a name="wp1028665"> </a>
+data division.<a name="wp1028666"> </a>
+working-storage section.<a name="wp1028667"> </a>
+01  acucorp-search-url   pic x(40) is external-form <a name="wp1028668"> </a>
+          identified by &quot;http://www.acucorp.com/cgi-bin/acusearch&quot;.<a name="wp1028669"> </a>
+procedure division.<a name="wp1028670"> </a>
+main-logic.<a name="wp1028671"> </a>
+     display acucorp-search-url.<a name="wp1028672"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

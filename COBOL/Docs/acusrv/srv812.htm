@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:46:11" />
+  <title>8.4.3  File Access Denied</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv8.htm">Chapter 8: System Management</a> &gt; <a href="srv89.htm">8.4  Troubleshooting</a> &gt; </p>
+<a name="wp1035383"> </a><h2 class="pHeading2">
+8.4.3  File Access Denied
+</h2>
+<a name="wp1035386"> </a><p class="pBody">
+Problem: Attempts to access a file on the server fail with an &quot;access denied&quot; error.  A typical &quot;access denied&quot; error looks like:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+File error 37,07 on @condor:/usr2/bsmith/fio_seq<a name="wp1035387"> </a>
+</pre></div>
+<a name="wp1035388"> </a><p class="pBody">
+The 37, 07 error code (ANSI 85 standard error code) indicates that the user does not have sufficient permissions to access the file.  If your application uses one of the alternate sets of file status codes, your error code will differ.  Refer to your <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT</span> <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Runtime Manual</span>.
+</p>
+<a name="wp1035389"> </a><p class="pBody">
+&quot;Access denied&quot; errors occur because a file's permissions, or the permissions of a directory in which the file resides, prohibit access.  Finding and correcting &quot;access denied&quot; errors requires familiarity with AcuServer access security and Windows NT/2000 or UNIX file security.  You may need access to <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Administrator </span>or <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">root</span> privileges.  We recommended that you work with your site's AcuServer system administrator to resolve the problem.
+</p>
+<a name="wp1035390"> </a><p class="pBody">
+AcuServer adds complexity to finding &quot;access denied&quot; errors, because AcuServer handles requests with a <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">user ID</span> (user name) designated in the server access file (AcuAccess).  The user name designated may not be the user name that you expect (see <a  href="srv813.htm#wp1035503">section 8.4.4, &quot;Unexpected User Name&quot;</a>).  Therefore, finding and resolving &quot;access denied&quot; errors can involve inspecting two components of the system: file protections and the AcuServer server access file.  AcuServer also adds complexity when implementing native system security, because the server impersonates the connecting client.
+</p>
+<a name="wp1035391"> </a><p class="pBody">
+File permissions diagnostics are used to verify that the ownerships and permissions on the file and directories do, in fact, allow access to the user ID that AcuServer is using (or the user name that you <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">assume</span> that AcuServer is using).  
+</p>
+<a name="wp1035392"> </a><p class="pBody">
+The AcuServer user name diagnostics are used to determine the actual user name that AcuServer is using when the access denied error occurs.  Step-by-step diagnostic procedures follow.
+</p>
+<a name="wp1035393"> </a><p class="pBody">
+Whether you first verify the user ID, or first check the file permissions, is up to you.  If you're familiar with file security, you may find it faster to check the file permissions first, under the assumption that AcuServer is using the user ID that you expect.  Then, if necessary, you can verify the user ID, followed by repeating the file permissions inspection if the actual user name differs from the assumed name.
+</p>
+<a name="wp1035394"> </a><p class="pBody">
+The steps below break the diagnostic process into three activities: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035395"> </a><div class="pSmartList1"><li>getting the full path of the file generating the error</li></div>
+<a name="wp1035396"> </a><div class="pSmartList1"><li>checking the file permissions</li></div>
+<a name="wp1035397"> </a><div class="pSmartList1"><li>determining the user ID used by AcuServer</li></div>
+</ol></div>
+<a name="wp1035398"> </a><p class="pBody">
+To review the structure and function of the server access file see <a  href="srv63.htm#wp1035043">section 6.2, &quot;The Server Access File.&quot;</a>  To review the procedure used by AcuServer to get the requester's user ID see <a  href="srv618.htm#wp1035648">section 6.5, &quot;AcuServer Connection Logic.&quot;</a>  For a brief description of file permissions see <a  href="srv26.htm#wp1039679">section 2.4.1</a>.
+</p>
+<a name="wp1035399"> </a><h3 class="pHeadingRef">
+Diagnostics: 1. Getting the file name
+</h3>
+<a name="wp1035400"> </a><p class="pBody">
+Get the name and path of the file that produces the access denied error.
+</p>
+<a name="wp1035401"> </a><p class="pBody">
+Most applications will report the full path and name of the file in the standard error output.  If your application doesn't, run your application again with the &quot;-x&quot; runtime option:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+runcbl -x your-usual-options program-name<a name="wp1035402"> </a>
+</pre></div>
+<a name="wp1035403"> </a><p class="pBody">
+If the &quot;-x&quot; option doesn't produce the full name and path, run the application in the debugger with FILE TRACE enabled and examine the log file for the first occurrence of an access error.  The file name that precedes the error is the file generating the error.
+</p>
+<a name="wp1035404"> </a><p class="pBody">
+To run the debugger enter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+runcbl -dle error-file your-usual-options program-name <a name="wp1035405"> </a>
+</pre></div>
+<a name="wp1035406"> </a><p class="pBody">
+&quot;-d&quot; turns on the debugger.  &quot;-l&quot; causes the contents of the runtime configuration file to be included in the error output.  &quot;-e&quot; causes file trace and error output to be placed in error-file.
+</p>
+<a name="wp1035407"> </a><p class="pBody">
+After starting your program, you will be at the debugger screen.  Turn on file tracing by entering
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+tf<a name="wp1035408"> </a>
+</pre></div>
+<a name="wp1035409"> </a><p class="pBody">
+&quot;FILE TRACE&quot; will be echoed to the screen.  To start program execution, enter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+g<a name="wp1035410"> </a>
+</pre></div>
+<a name="wp1035411"> </a><p class="pBody">
+Allow the program to run until you encounter the error condition, and then exit.  Your log file will contain: the error information, all COBOL configuration file variables that have been set, and a record of every OPEN, READ, and WRITE.
+</p>
+<a name="wp1035412"> </a><p class="pBody">
+Examine the log file and find the error output for the access denied error.  The file name that precedes the error is the file generating the error.  Note the full path of the file and retain the log file for future reference.
+</p>
+<a name="wp1035413"> </a><h3 class="pHeadingRef">
+2a. Checking UNIX permissions
+</h3>
+<a name="wp1035415"> </a><p class="pBody">
+If you are using a UNIX server, verify that the file and directory permissions grant access to the user name.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035416"> </a><div class="pSmartList1"><li>Log on to the server with the user name used (assumed to be used) by AcuServer.  If that's not possible (you don't know the password or the login attempt fails), skip to step 3.</li></div>
+<a name="wp1035417"> </a><div class="pSmartList1"><li>After logging onto the server, perform an &quot;ls -l&quot; on the file using the full path (beginning with &quot;/&quot;).  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ls -l /usr2/bsmith/fio_seq<a name="wp1035418"> </a>
+</pre></div>
+<a name="wp1035419"> </a><p class="pIndented1">
+If the &quot;ls -l&quot; fails with a &quot;cannot access directory&quot; (or similar) error, the permissions on one or more of the directories are too restrictive.  In order to access a directory, the directory must allow you EXECUTE permissions.  Adjust the permissions or move the file to a directory that will allow access.
+</p>
+<a name="wp1035420"> </a><p class="pIndented1">
+If you are not the owner of the directories, you will need to ask the owner, or someone with root privileges, for assistance.
+</p>
+<a name="wp1035421"> </a><p class="pIndented1">
+After adjusting the permissions, verify directory access to the file by performing an &quot;ls -l&quot; on the full path to the file.
+</p>
+<a name="wp1035422"> </a><p class="pIndented1">
+If the &quot;ls -l&quot; succeeds, the permissions set on the file are displayed.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+-rw-r--r--  1 prod  general  4870  Aug 18 1993  <a name="wp1035423"> </a>
+   /usr2/bsmith/fio_seq<a name="wp1040425"> </a>
+</pre></div>
+<a name="wp1035424"> </a><p class="pIndented1">
+Evaluate the file's ownerships and permissions, including the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">group</span> permissions, to determine if they allow the type of access required by the requesting application.  Except as noted below, all files opened by AcuServer must allow READ<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic"> and </span>WRITE access.  Under Sun OS with ACUCOBOL-GT version 2.1.2 or later, files having READ only permissions may be opened &quot;INPUT&quot;.
+</p>
+<a name="wp1035425"> </a><p class="pIndented1">
+If the file's permissions need changing and the file is not owned by you, you will need to enlist the assistance of the owner of the file or someone with <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">root</span> privileges.
+</p>
+<a name="wp1035426"> </a><p class="pIndented1">
+Once the file and directories permit access, run the application again.  If the program fails when attempting to access the same file <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">and</span> you have not yet confirmed the user name that AcuServer is using, perform the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Confirming the user name</span> diagnostics (below).
+</p>
+<a name="wp1035427"> </a><div class="pSmartList1"><li>If you can't log onto the server under the user name used by AcuServer, ask your UNIX system administrator to evaluate whether the file in question is accessible to the user name.  If the file or directories do not allow access, ask the owner of the file, or the system administrator, to adjust the permissions to allow access.</li></div>
+<a name="wp1035428"> </a><p class="pIndented1">
+After the permissions have been adjusted, run the application again.  If the program fails attempting to access the same file <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">and</span> you have not yet confirmed the user name that AcuServer is using, proceed to the next section.  Otherwise contact Acucorp Technical Support.
+</p>
+</ol></div>
+<a name="wp1035429"> </a><h3 class="pHeadingRef">
+2b. Checking Windows NT/Windows 2000/Windows 2003 permissions
+</h3>
+<a name="wp1035431"> </a><p class="pBody">
+If you are using a Windows NT , Windows 2000, or Windows 2003 server, verify that the file and directory permissions grant access to the user name.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035432"> </a><div class="pSmartList1"><li>Log on to the server with the user name used (assumed to be used) by AcuServer.  If that's not possible (you don't know the password or the login attempt fails), skip to step 3.</li></div>
+<a name="wp1035433"> </a><div class="pSmartList1"><li>After logging onto the server, select the file or directory.  Then select:</li></div>
+<a name="wp1035434"> </a><p class="pIndented1">
+File/Properties/Security/Permissions
+</p>
+<a name="wp1035435"> </a><p class="pIndented1">
+from the menus.  If the permissions are too restrictive, adjust the permissions or move the file to a directory that will allow access.
+</p>
+<a name="wp1035436"> </a><p class="pIndented1">
+When AcuServer is running as a Windows NT/2000 service, it belongs to an implicit group called &quot;SYSTEM.&quot;  Otherwise it should belong to the &quot;Adminstrators&quot; group.  If you are using AcuServer system security, make sure that the &quot;SYSTEM&quot; and &quot;Adminstrators&quot; groups are added to your file permissions with &quot;Full Control.&quot;  This step is not necessary if you are implementing Windows NT security.
+</p>
+<a name="wp1035437"> </a><p class="pIndented1">
+Under AcuServer system security, files created by AcuServer are owned by the Administrators group and allow &quot;Full Control&quot; for &quot;SYSTEM&quot; and &quot;Administrator.&quot;  &quot;Everyone&quot; is given the permissions specified by the third digit in the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">umask </span>in the AcuAccess file. 
+</p>
+<a name="wp1035438"> </a><p class="pIndented1">
+If you are not the owner of the directory or file, you will need to ask the owner, or someone with <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Administrator</span> privileges, for assistance.
+</p>
+<a name="wp1035439"> </a><p class="pIndented1">
+Once the file and directories permit access, run the application again.  If the program fails when attempting to access the same file <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">and</span> you have not yet confirmed the user name that AcuServer is using, perform the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Confirming the user name</span> diagnostics (below).
+</p>
+<a name="wp1035440"> </a><div class="pSmartList1"><li>If you can't log onto the server under the user name used by AcuServer, ask your system administrator to evaluate whether the file in question is accessible to the user name.  If the file or directories do not allow access, ask the owner of the file, or the system administrator, to adjust the permissions to allow access.</li></div>
+<a name="wp1035441"> </a><p class="pIndented1">
+After the permissions have been adjusted, run the application again.  If the program fails attempting to access the same file <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">and</span> you have not yet confirmed the user name that AcuServer is using, proceed to the next section.  Otherwise contact Acucorp Technical Support.
+</p>
+</ol></div>
+<a name="wp1035442"> </a><h3 class="pHeadingRef">
+3. Confirming the user name
+</h3>
+<a name="wp1035443"> </a><p class="pBody">
+Confirm the user name that AcuServer is using when the access denied error occurs (see also, <a  href="srv813.htm#wp1035503">section 8.4.4, &quot;Unexpected User Name&quot;</a>).
+</p>
+<a name="wp1035444"> </a><p class="pBody">
+Note that some of the procedures in this section require <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">root</span> or <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Administrator</span> privileges.  If you don't have these privileges, enlist the assistance of your AcuServer or system administrator.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035445"> </a><div class="pSmartList1"><li>If there is any doubt about your <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">client user name</span>, confirm your client user name.</li></div>
+<a name="wp1035446"> </a><p class="pIndented1">
+On UNIX systems:
+</p>
+<a name="wp1035447"> </a><p class="pIndented1">
+Enter &quot;who  am  i&quot; at the UNIX prompt.
+</p>
+<a name="wp1035448"> </a><p class="pIndented1">
+On Windows systems:
+</p>
+<a name="wp1035449"> </a><p class="pIndented1">
+If a user is logged into a Windows NT/2000 workgroup or domain, AcuServer will use the user's log-in name.  Otherwise, it uses the user name value that is set by the environment variable USERNAME.  If USERNAME is not set, then the runtime uses the value that is set by the environment variable USER.  (The values of these variables are case-sensitive.)  If neither of these environment variables is set, then the runtime uses the literal string &quot;USER&quot;.
+</p>
+<a name="wp1035450"> </a><p class="pIndented1">
+To confirm the presence (or absence) of the &quot;USERNAME&quot; environment variable, enter &quot;SET&quot; at the command prompt.  SET will display the value of all environment variables.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COMSPEC=C:\COMMAND.COM<a name="wp1035451"> </a>
+PATH=C:\;C:\WINDOWS;C:\MOUSE;<a name="wp1040503"> </a>
+PROMPT=$P$G<a name="wp1040482"> </a>
+USERNAME=BERNIE<a name="wp1040560"> </a>
+</pre></div>
+<a name="wp1035452"> </a><p class="pIndented1">
+If USERNAME is defined, the value of USERNAME is the name passed to AcuServer.  Otherwise the variable USER is checked.  If USER is not set, then the literal string &quot;USER&quot; is passed.
+</p>
+<a name="wp1035453"> </a><div class="pSmartList1"><li>If <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> is running with level 2, 3, 6, or 7 tracing enabled (see the &quot;-t&quot; option to &quot;acuserve -start&quot;, <a  href="srv59.htm#wp1038886">section 5.4, &quot;Starting and Stopping acuserve&quot;</a>), all connections and disconnections are reported in the AcuServer log file.  Inspect the log file and look for the last connection entry for your client machine name/client user name combination.  The trace messages associated with that connection request will include the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Local Username </span>that AcuServer has assigned to that connection.  Find the line that reports the &quot;mapping&quot; of the client user name to the local user name.</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acuserve: 06/13/94 12:43:44 - <a name="wp1035454"> </a>
+   Server version: 010000<a name="wp1040641"> </a>
+   Client version: 010000<a name="wp1040714"> </a>
+acuserve: 06/13/94 12:43:44 - <a name="wp1040787"> </a>
+   AUTHORIZATION request from user:bernie<a name="wp1040808"> </a>
+&gt;&gt; client:starling, <a name="wp1040809"> </a>
+   PASSWORD-ATTEMPTS allowed:3<a name="wp1040862"> </a>
+&gt;&gt; Mapping user:bernie to local user:bsmith<a name="wp1040883"> </a>
+&gt;&gt; Socket:5, uid:205, gid:101<a name="wp1040884"> </a>
+&gt;&gt; Password is not required<a name="wp1040885"> </a>
+acuserve: adding   <a name="wp1040938"> </a>
+   client:starling, user:bernie, <a name="wp1041011"> </a>
+   pid:18397, fid:57a28<a name="wp1041084"> </a>
+</pre></div>
+<a name="wp1035455"> </a><p class="pIndented1">
+If the local user name is not the one you expect, consult with your AcuServer system administrator to verify that it is the correct user name.  Your system administrator can make any necessary changes to the server access file.
+</p>
+<a name="wp1035456"> </a><div class="pSmartList1"><li>If <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> is <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">not</span> running with tracing enabled, you can turn it on using the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> &quot;-config&quot; option.  At the command line, type &quot;acuserve -config&quot;, then type &quot;set FILE_TRACE 2&quot; (or 3, 6, or 7) at the prompt, then type &quot;exit&quot;.  After tracing is turned on, run your application again and follow the procedure outlined in step 2, above.</li></div>
+<a name="wp1035457"> </a><p class="pIndented1">
+When you no longer want tracing enabled, type &quot;acuserve -config&quot; again, then type &quot;set FILE_TRACE 0&quot; at the prompt.
+</p>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

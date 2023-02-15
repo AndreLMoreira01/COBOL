@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/12/05 11:54:24" />
+  <title>8.2.2  Starting and Stopping acushare</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Getting Started <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gsb8.htm"><br />Chapter 8: License Management</a> &gt; <a href="gsb83.htm">8.2  License File Management Under UNIX/Linux</a> &gt; </p>
+<a name="wp1034833"> </a><h2 class="pHeading2">
+8.2.2  Starting and Stopping acushare
+</h2>
+<a name="wp1034835"> </a><p class="pBody">
+<b class="cBold">Acushare</b> manages both the license file and any shared code segments used by the ACUCOBOL-GT runtime system.  On UNIX and Linux systems, <b class="cBold">acushare</b> runs as a background server process that responds to requests from various client products (a &quot;daemon&quot; in UNIX terminology).  
+</p>
+<a name="wp1034836"> </a><p class="pBody">
+<b class="cBold">Acushare</b> has several command line formats.  They include: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+acushare -start [ -p portnumber ] [ -e errorfile [ -g ] ]<a name="wp1034837"> </a>
+acushare -kill<a name="wp1034838"> </a>
+acushare -clean<a name="wp1037059"> </a>
+acushare -version<a name="wp1034839"> </a>
+acushare<a name="wp1034840"> </a>
+</pre></div>
+<a name="wp1034841"> </a><p class="pBody">
+All of <b class="cBold">acushare</b>'s command line formats are fully described in section 2.11 of Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>.  General information on starting and stopping <b class="cBold">acushare</b> is given below. 
+</p>
+<a name="wp1037064"> </a><h3 class="pHeadingRef">
+-start
+</h3>
+<a name="wp1037095"> </a><p class="pBody">
+To start <b class="cBold">acushare</b>, you simply enter the following on the command line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acushare -start<a name="wp1037140"> </a>
+</pre></div>
+<a name="wp1037143"> </a><p class="pBody">
+A successful start creates a background process that handles license management and shared code.  
+</p>
+<a name="wp1037096"> </a><p class="pBody">
+If you want <b class="cBold">acushare</b> to start automatically each time your system boots, you can add a small amount of code to the system boot file.  The name of the boot file varies from system to system.  Typical names are &quot;/etc/rc.local&quot;, &quot;/etc/brc&quot; or &quot;/etc/rc&quot;.  Identify the proper startup file and add lines similar to the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+if [ -f /usr/etc/acushare ]; then<a name="wp1036395"> </a>
+   echo Starting ACUCOBOL-GT shared-code and license daemon &gt; \<a name="wp1036396"> </a>
+        /dev/console<a name="wp1036397"> </a>
+   /usr/etc/acushare -start &gt; /dev/console<a name="wp1036398"> </a>
+fi<a name="wp1036399"> </a>
+</pre></div>
+<a name="wp1034851"> </a><p class="pBody">
+The above example assumes that you've placed <b class="cBold">acushare</b> in &quot;/usr/etc&quot;.  You may need to adjust the sample code to match the conventions used in your environment.  
+</p>
+<a name="wp1037170"> </a><p class="pBody">
+For more information about starting <b class="cBold">acushare</b>, see section 2.11 in Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>.
+</p>
+<a name="wp1034855"> </a><h3 class="pHeadingRef">
+-kill
+</h3>
+<a name="wp1035871"> </a><p class="pBody">
+To stop acushare, you simply enter the following on the command line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acushare -kill<a name="wp1037576"> </a>
+</pre></div>
+<a name="wp1037610"> </a><p class="pBody">
+For complete information on all of <b class="cBold">acushare</b>'s options, and information on licensing and memory sharing error messages, see section 2.11 in Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>.
+</p>
+<a name="wp1034898"> </a><p class="pBody">
+
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:19" />
+  <title>6.3.5  FILE Directive</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb6.htm">Chapter 6: Mapping COBOL Data Items and Database Fields</a> &gt; <a href="odb69.htm">6.3  Using Directives</a> &gt; </p>
+<a name="wp1028852"> </a><h2 class="pHeading2">
+6.3.5  FILE Directive
+</h2>
+<a name="wp1028856"> </a><p class="pBody">
+The FILE directive supplies a <em class="cEmphasis">starting name</em> from which the data dictionary file name is formed.  This directive is required only when the file name in the COBOL code is nonspecific.  For example, you would use this directive when the SELECT for the file has a variable ASSIGN name (ASSIGN TO <em class="cEmphasis">variable_name</em>).  In this situation, the interface cannot form a file name automatically, and you must provide a name.  
+</p>
+<a name="wp1028858"> </a><p class="pBody">
+You can encounter this situation when you are using AcuODBC's file alias feature.  For example, the description section of your COBOL file may reference multiple data files with the same format.  Each of these data files represents a distinct table in the database, but one XFD file describes them all.  See <a  href="odb333.htm#wp1029736">section 3.7, &quot;File Aliases,&quot;</a> for more information.
+</p>
+<a name="wp1028859"> </a><p class="pBody">
+A starting name is a short file name that serves as the basis for the dictionary name.  See <a  href="odb68.htm#wp1028425">section 6.2.5, &quot;Naming the XFD File,&quot;</a> for additional information.
+</p>
+<a name="wp1028860"> </a><h3 class="pHeadingRef">
+Syntax 
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+$XFD FILE=name<a name="wp1028861"> </a>
+</pre></div>
+<a name="wp1028862"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( XFD FILE=name ))<a name="wp1028863"> </a>
+</pre></div>
+<a name="wp1028865"> </a><p class="pBody">
+This directive must appear on the line immediately preceding the file's FD.
+</p>
+<a name="wp1028866"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1028867"> </a><p class="pBody">
+The sample file &quot;file_dir.cbl&quot; contains code that demonstrates the FILE directive.  Suppose your SELECT statement has a variable ASSIGN name such as the one shown here:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT work-file<a name="wp1028868"> </a>
+     ASSIGN to pet-file.<a name="wp1028869"> </a>
+</pre></div>
+<a name="wp1028870"> </a><p class="pBody">
+You must add the FILE directive as shown here:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+       FILE-CONTROL.<a name="wp1028871"> </a>
+           SELECT work-file<a name="wp1028872"> </a>
+              ASSIGN TO pet-file<a name="wp1028873"> </a>
+              ORGANIZATION IS INDEXED<a name="wp1028874"> </a>
+              ACCESS IS DYNAMIC<a name="wp1028875"> </a>
+              RECORD KEY IS type-id<a name="wp1028876"> </a>
+              FILE STATUS IS qa-file-status.<a name="wp1028877"> </a>
+<a name="wp1028878"> </a>
+       DATA DIVISION.<a name="wp1028879"> </a>
+       FILE SECTION.<a name="wp1028880"> </a>
+      $XFD FILE=patients<a name="wp1028881"> </a>
+       FD  work-file.<a name="wp1028882"> </a>
+       01  pet-record.<a name="wp1028883"> </a>
+           05  type-id.<a name="wp1028884"> </a>
+               10  atype            pic x.<a name="wp1028885"> </a>
+               10  ano              pic 99.<a name="wp1028886"> </a>
+           05  owner                pic x(30).<a name="wp1028887"> </a>
+           05  breed                pic x(25).<a name="wp1028888"> </a>
+           05  gender               pic x.<a name="wp1028889"> </a>
+       WORKING-STORAGE SECTION.<a name="wp1028890"> </a>
+       01  pet-file                 pic x(8). <a name="wp1028891"> </a>
+       01  qa-file-status           pic xx.<a name="wp1028892"> </a>
+</pre></div>
+<a name="wp1028893"> </a><p class="pBody">
+Note that after compilation, the data directory now contains the files &quot;file_dir.acu&quot; and &quot;patients.xfd&quot;.  Because the FILE directive assigns the name of the XFD file, this is different than in previous examples where both the &quot;.acu&quot; file and the &quot;.xfd&quot; file took the same base name as the &quot;.cbl&quot; file.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:25" />
+  <title>2.2.2.5  Example of Java calling COBOL</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr2.htm">Chapter 2: Working with Java Technology</a> &gt; <a href="itr23.htm">2.2  Calling COBOL from Java</a> &gt; <a href="itr25.htm">2.2.2  Using the Java API, &quot;CVM.jar&quot; </a> &gt; </p>
+<a name="wp1075025"> </a><h2 class="pHeading3">
+2.2.2.5  Example of Java calling COBOL
+</h2>
+<a name="wp1075026"> </a><h3 class="pHeadingRef">
+Java program
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+import com.acucorp.acucobolgt.*;<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1094461"> </a>
+<a name="wp1094783"> </a>
+public static void main(String[] args) throws IOException {<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1094462"> </a>
+  try{ <a name="wp1094463"> </a>
+     CVM cvm = CVM.GET_INSTANCE(); <a name="wp1094464"> </a>
+     cvm.setErrorsOut(&quot;/tmp/errfile&quot;); <a name="wp1094465"> </a>
+     cvm.setConfigFile(&quot;c:/myproject/config&quot;); <a name="wp1094466"> </a>
+     cvm.initialize(); <a name="wp1094467"> </a>
+<a name="wp1094468"> </a>
+     CALL_OPTIONS co = new CALL_OPTIONS(); <a name="wp1094790"> </a>
+     co.setOption(&quot;debug_method&quot;, &quot;1&quot;); <a name="wp1094469"> </a>
+<a name="wp1094470"> </a>
+     int intParam = 1; <a name="wp1094794"> </a>
+     Integer objInt = new Integer(intParam); <a name="wp1094471"> </a>
+<a name="wp1094472"> </a>
+     byte byteParam = &#39;a&#39;; <a name="wp1094795"> </a>
+     Byte objByte = new Byte(byteParam); <a name="wp1094473"> </a>
+<a name="wp1094474"> </a>
+     char charParam = &#39;b&#39;; <a name="wp1094796"> </a>
+       Character objChar = new Character(charParam); <a name="wp1094475"> </a>
+<a name="wp1094476"> </a>
+     Object params[] = { <a name="wp1094863"> </a>
+       objInt, <a name="wp1094477"> </a>
+       objByte, <a name="wp1094478"> </a>
+       objChar <a name="wp1094479"> </a>
+     }; <a name="wp1094480"> </a>
+     cvm.callProgram(&quot;TestJavaToCobol&quot;, params, co);<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1094481"> </a>
+     cvm.cancelProgram(&quot;TestJavaToCobol&quot;);<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1100633"> </a>
+<a name="wp1103102"> </a>
+     objInt = (Integer)params[0]; <a name="wp1103118"> </a>
+     objByte = (Byte)params[1];<a name="wp1103119"> </a>
+     objChar = (Character)params[2]; <a name="wp1103120"> </a>
+  <a name="wp1103121"> </a>
+     System.out.println(&quot;COBOL changed value to &quot; +     
+        objInt.intValue());<a name="wp1103122"> </a>
+     System.out.println(&quot;COBOL changed value to &quot; + 
+        objByte.byteValue(); <a name="wp1103123"> </a>
+     System.out.println(&quot;COBOL changed value to &quot; + 
+        objChar.charValue()); <a name="wp1103124"> </a>
+<a name="wp1103107"> </a>
+     cvm.shutdown(); <a name="wp1100634"> </a>
+   } catch (Exception e){ <a name="wp1100635"> </a>
+    e.printStackTrace(); <a name="wp1094485"> </a>
+   } <a name="wp1094486"> </a>
+}<a name="wp1094316"> </a>
+</pre></div>
+<a name="wp1094366"> </a><h3 class="pHeadingRef">
+COBOL program
+</h3>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+identification division.
+program-id. TestJavaToCobol.<a name="wp1094218"> </a>
+data division.
+working-storage section.
+COPY &quot;java.def&quot;.
+01 status-val pic 9(02) value zero. <a name="wp1095035"> </a>
+<a name="wp1094219"> </a>
+linkage section.
+01 integer-parameter usage is signed-int.
+01 byte-parameter pic x.
+01 char-parameter pic x. <a name="wp1094220"> </a>
+<a name="wp1094221"> </a>
+procedure division 
+   using integer-parameter, byte-parameter,  
+   char-parameter.<a name="wp1094222"> </a>
+main-logic.
+   move 3 to integer-parameter.
+   move &quot;d&quot; to byte-parameter.
+   move &quot;e&quot; to char-parameter.
+   exit program. <a name="wp1094223"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:09" />
+  <title>C.19  Changes Affecting Version 1.5</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4c.htm">Appendix C:  Changes Affecting Previous Versions</a> &gt; </p>
+<a name="wp1034905"> </a><h2 class="pHeading1">
+C.19  Changes Affecting Version 1.5
+</h2>
+<a name="wp1034907"> </a><p class="pBody">
+The following sections detail changes that can affect programs compiled with the Version 1.5 ACUCOBOL-85 compiler.  
+</p>
+<a name="wp1034908"> </a><h3 class="pHeadingRef">
+Compiler changes
+</h3>
+<a name="wp1034909"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>All of the changes described in this section can be inhibited with the &quot;-C5&quot; compile-time option, which causes the compiler to use ACUCOBOL-85 Version 1.5 semantics.  The &quot;-Z5&quot; option (which produces object files compatible with Version 1.5) will also inhibit these changes.
+<hr />
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034910"> </a><div class="pSmartList1"><li>Since the release of Version 2.0, indexed, relative, and binary sequential files can have variable-length records.  You might have syntax in your existing programs that implies variable-length records, even though your files on disk are fixed-length.  If this is the case, you will receive error &quot;39&quot; when you try to open your existing files after recompiling your programs.  This type of error will occur most frequently with files that have multiple records declared for them (more than one &quot;01&quot; entry in the file's FD).  In order to prevent the error, compile with either the &quot;-C5&quot; or &quot;-Cf&quot; compile-time option.  The &quot;-Cf&quot; option causes the compiler to assume fixed-length records for these kinds of files.</li></div>
+<a name="wp1034911"> </a><div class="pSmartList1"><li>The function of the RETURN-CODE special register was expanded in Version 2.0.  This register is used to return a status value to the operating system or calling program.  The return status of the SYSTEM library routine is also stored here.  This can cause an existing program to behave differently if you set RETURN-CODE to a particular value and then call the SYSTEM routine.  This can also cause programs that return zero to the operating system (the default value of RETURN-CODE) to return a non-zero value if they call SYSTEM.  Note that this change affects programs only after they have been recompiled with Version 2.0 or later.  You can inhibit the change with the &quot;-C5&quot; compile-time option.</li></div>
+<a name="wp1034912"> </a><div class="pSmartList1"><li>The CALL PROGRAM verb behaves differently since Version 2.1.  If you used CALL PROGRAM under Version 1.5, use the &quot;-C5&quot; option to maintain compatibility when you compile with Version 3.0.  Also note, that since Version 2.1 the &quot;-Ci&quot; option implies the recursive PERFORM switch &quot;-Zr&quot;.</li></div>
+<a name="wp1034913"> </a><div class="pSmartList1"><li>Under Version 1.5, the &quot;-Vc&quot; compile-time option caused ACCEPT statements that entered <em class="cEmphasis">numeric</em> fields to be treated as if the CONVERT phrase were specified for them.  Since Version 2.1, this option also implies the CONVERT phrase for <em class="cEmphasis">numeric edited</em> fields. </li></div>
+<a name="wp1034914"> </a><div class="pSmartList1"><li>Under Version 1.5, the WRITE and REWRITE verbs did not check the length of the record for legality.  Since Version 2.1, an illegally sized record returns error &quot;44&quot;.</li></div>
+<a name="wp1034915"> </a><div class="pSmartList1"><li>The option &quot;-Zz&quot; causes spaces in a USAGE DISPLAY numeric item to be treated as the value zero.  Because this action was formerly handled by the SPACES-ZERO runtime option, if you have a mix of object files from Version 3.0 or later and from any versions prior to Version 2.0, then you should use &quot;-Zz&quot; to create the new objects and should also add the SPACES-ZERO option to your runtime configuration file to handle prior versions.</li></div>
+</ul></div>
+<a name="wp1034918"> </a><h3 class="pHeadingRef">
+Runtime changes
+</h3>
+<a name="wp1034919"> </a><p class="pBody">
+The changes described in this section take effect when you install the latest runtime system.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034920"> </a><div class="pSmartList1"><li><b class="cBold">Important: </b>Beginning with Version 2.0 and continuing through Version 3.1, the ACUCOBOL-GT runtime was delivered with Version 3 of the Vision file system.  Version 3.2 and later versions are delivered with Vision Version&#160;4.  The Vision file system is used on all ACUCOBOL-GT implementations except VAX systems running VMS and Alpha Micro systems running AMOS.  Vision Version 3 introduced a new file format that is portable across all machines, and is (generally) smaller. Vision Version 4 introduced a dual file format, in which the indexes are kept in a separate file from the data.  When you are installing the latest version of the runtime system, you have three choices:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1034921"> </a><div class="pSmartList2"><li>You can leave your existing data files in place.  ACUCOBOL-GT will continue to use them.  However, any new data files created by Version 3.2 or later will have the new Vision Version 4 format.  This is the default behavior.</li></div>
+<a name="wp1034922"> </a><div class="pSmartList2"><li>You can convert all of your files to the new format with the &quot;rebuild&quot; option of &quot;vutil&quot;.  In particular, running &quot;vutil -rebuild -3&quot; on your data files will convert them to the Vision Version 3 format, and running &quot;vutil -rebuild -4&quot; on your data files will convert them to the Vision Version 4 format.</li></div>
+<a name="wp1034923"> </a><div class="pSmartList2"><li>You can continue to use the old format for all of your data files, including any newly created ones.  To do this, add the line:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+V-VERSION 2<a name="wp1034924"> </a>
+</pre></div>
+<a name="wp1034925"> </a><p class="pIndented2">
+to your &quot;cblconfig&quot; file.  This will ensure that any newly created files use the old format.
+</p>
+</ol></div>
+<a name="wp1034926"> </a><div class="pSmartList1"><li>The default method of editing numeric and numeric edited fields on the screen changed slightly when Version 2.0 was released.  In Version 1.5, when a user was editing an existing value, the user could type over the value.  This left any trailing digits in place, and sometimes caused confusion.  Beginning with Version 2.0, if the user starts typing over an existing field, the current contents are erased first.  If the user instead starts by editing the field (by using an arrow key or an editing key), then the default value remains on the screen and the user can modify it.  </li></div>
+<a name="wp1034927"> </a><p class="pIndented1">
+This behavior is controlled by the &quot;NUMERIC-UPDATES&quot; and &quot;EDITED-UPDATES&quot; configuration options.  If you already have the following entries in your configuration file, then the default change will not affect you.  If you do not have these entries and want to maintain exact compatibility with Version 1.5, then you should add the following to your configuration file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN  Numeric-Updates=Converted<a name="wp1034928"> </a>
+Edited-Updates=Converted<a name="wp1035431"> </a>
+</pre></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

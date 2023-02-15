@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-GET-PRINTER-INFO-EX</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1040684"> </a><h2 class="pHeading3">
+WINPRINT-GET-PRINTER-INFO-EX
+</h2>
+<a name="wp1040686"> </a><p class="pBody">
+This operation code returns additional information about a particular printer, extending the functionality of WINPRINT-GET-PRINTER-INFO.  It does not alter any of the current printer settings.
+</p>
+<a name="wp1040690"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040691"> </a>
+    USING WINPRINT-GET-PRINTER-INFO-EX, WINPRINT-SELECTION<a name="wp1040692"> </a>
+    GIVING RESULT<a name="wp1040693"> </a>
+</pre></div>
+<a name="wp1040694"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040695"> </a><p class="pBody">
+<b class="cBold">WINPRINT-SELECTION</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  WINPRINT-SELECTION.<a name="wp1040696"> </a>
+   03 WINPRINT-NAME                    PIC X(80).<a name="wp1040697"> </a>
+   03 WINPRINT-PORT                    PIC X(80).<a name="wp1040698"> </a>
+   03 WINPRINT-DRIVER                  PIC X(80).<a name="wp1040699"> </a>
+   03 WINPRINT-DRV-VERSION             SIGNED-INT.<a name="wp1040700"> </a>
+   03 WINPRINT-NO-OF-PRINTERS          SIGNED-SHORT.<a name="wp1040701"> </a>
+   03 WINPRINT-IS-DEFAULT              SIGNED-SHORT.<a name="wp1040702"> </a>
+   03 WINPRINT-COPIES                  SIGNED-SHORT.<a name="wp1040703"> </a>
+   03 WINPRINT-ORIENTATION             SIGNED-SHORT.<a name="wp1040704"> </a>
+   03 WINPRINT-QUALITY                 SIGNED-SHORT.<a name="wp1040705"> </a>
+   03 WINPRINT-CURR-ORIENTATION        SIGNED-SHORT.<a name="wp1040706"> </a>
+   03 WINPRINT-CURR-COPIES             SIGNED-SHORT.<a name="wp1040707"> </a>
+   03 WINPRINT-DUPLEX                  SIGNED-SHORT.<a name="wp1040708"> </a>
+   03 WINPRINT-COLLATE                 SIGNED-SHORT.<a name="wp1040709"> </a>
+   03 WINPRINT-COLOR                   SIGNED-SHORT.<a name="wp1040710"> </a>
+   03 WINPRINT-CURR-DUPLEX             SIGNED-SHORT.<a name="wp1040711"> </a>
+   03 WINPRINT-CURR-COLLATE            SIGNED-SHORT.<a name="wp1040712"> </a>
+   03 WINPRINT-CURR-PAPERSIZE          SIGNED-SHORT.<a name="wp1040713"> </a>
+   03 WINPRINT-CURR-TRAY               SIGNED-SHORT.<a name="wp1040714"> </a>
+   03 WINPRINT-CURR-COLOR              SIGNED-SHORT.<a name="wp1283729"> </a>
+   03 WINPRINT-JOB-TITLE               PIC X(80).<a name="wp1283730"> </a>
+</pre></div>
+<a name="wp1283731"> </a><p class="pBody">
+This group item has numerous conditional variables.  See &quot;winprint.def&quot; for the complete list.
+</p>
+<a name="wp1040718"> </a><h3 class="pHeadingRef">
+Return Values
+</h3>
+<a name="wp1040719"> </a><p class="pBody">
+This operation returns information about the currently selected printer using the values described in WINPRINT-GET-PRINTER and the values described below.  
+</p>
+<a name="wp1040720"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040721"> </a><p class="pBody">
+The printer may be open or closed to perform these functions.  There is no need to reset any of these functions.  WINPRINT-SELECTION should be initialized prior to use.  WINPRINT-GET-PRINTER-INFO-EX has all the same values as WINPRINT-GET-PRINTER-INFO plus the following additional values:
+</p>
+<a name="wp1040722"> </a><p class="pBody">
+<b class="cBold">WINPRINT-DUPLEX</b> -- Determines if the currently selected printer supports duplex printing. If yes, the returned value is WPRT-HAS-DUPLEX.
+</p>
+<a name="wp1040723"> </a><p class="pBody">
+<b class="cBold">WINPRINT-COLLATE</b> -- Determines if the currently selected printer supports collating. If yes, the returned value is WPRT-HAS-COLLATE.
+</p>
+<a name="wp1040724"> </a><p class="pBody">
+<b class="cBold">WINPRINT-COLOR</b> -- Determines if the currently selected printer can print in color.  If color printing is supported, the returned value is WPRT-HAS-COLOR.
+</p>
+<a name="wp1040725"> </a><p class="pBody">
+<b class="cBold">WINPRINT-CURR-DUPLEX</b> -- Returns the current duplex setting of the printer. Possible values are: WPRT-SIMPLEX, WPRT-DUPLEX-VERTICAL, and WPRT-DUPLEX-HORIZONTAL.
+</p>
+<a name="wp1040726"> </a><p class="pBody">
+<b class="cBold">WINPRINT-CURR-COLLATE</b> -- Determines if the collating feature of the currently selected printer is turned on or off.
+</p>
+<a name="wp1040727"> </a><p class="pBody">
+<b class="cBold">WINPRINT-CURR-PAPERSIZE</b> -- Returns the current paper size selected in the printer driver.  Values less than 42 should correspond to the PAPER-SIZES table in &quot;winprint.def&quot;.  Values greater than 41 and less than 69 are defined by version 4.x of Windows NT.  Values greater than 68 and less than 119 are defined in Windows 2000.  Values greater than 118 and less than 256 are considered undefined.  Values greater than 255 are considered user defined.
+</p>
+<a name="wp1040728"> </a><p class="pBody">
+<b class="cBold">WINPRINT-CURR-TRAY</b> -- Returns the currently selected paper tray as defined in the printer driver. Values less than 16 should correspond to the PAPER-TRAYS table in &quot;winprint.def&quot;.  Values greater than 15 and less than 256 are considered undefined.  Values greater than 255 are considered device specific.
+</p>
+<a name="wp1040729"> </a><p class="pBody">
+Values 12 and 13 are not defined in the PAPER-SIZES table in &quot;winprint.def&quot;.  This matches a similar gap in the Windows API.  Refer to &quot;prndemox.cbl&quot; for an example of how to compensate for these undefined values. 
+</p>
+<a name="wp1040730"> </a><p class="pBody">
+<b class="cBold">WINPRINT-CURR-COLOR</b> -- Determines if the printer is in the proper mode to print in color.  If yes, WPRT-COLOR is returned.  Monochromatic printers or color printers with color support disabled return WPRT-MONOCHROME.
+</p>
+<a name="wp1204825"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>When using one of these extended operations, it is best to pair it with a corresponding extended operation. For example, use <span style="font-family: Arial, Verdana, Helvetica, sans-serif">WINPRINT-GET-PRINTER-INFO-EX </span>with <span style="font-family: Arial, Verdana, Helvetica, sans-serif">WINPRINT-SET-PRINTER-EX</span>, instead of with <span style="font-family: Arial, Verdana, Helvetica, sans-serif">WINPRINT-SET-PRINTER</span>.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:25" />
+  <title>2.2.4  Using C$SOCKET</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr2.htm">Chapter 2: Working with Java Technology</a> &gt; <a href="itr23.htm">2.2  Calling COBOL from Java</a> &gt; </p>
+<a name="wp1037208"> </a><h2 class="pHeading2">
+2.2.4  Using C$SOCKET
+</h2>
+<a name="wp1037734"> </a><p class="pBody">
+If desired, you can facilitate communication between Java and COBOL programs on a socket level.  ACUCOBOL-GT includes a library routine, known as C$SOCKET, to perform interprocess communication.   
+</p>
+<a name="wp1048970"> </a><p class="pBody">
+When calling COBOL from Java:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1049348"> </a><div class="pSmartList1"><li>The COBOL programmer uses the C$SOCKET routine to create a server socket (op-code 1) and wait for and accept a connection from the Java client (op-code 2). </li></div>
+<a name="wp1049251"> </a><div class="pSmartList1"><li>The Java programmer creates a socket, connects via TCP/IP to the port of the COBOL program, and writes data to it.  </li></div>
+<a name="wp1049257"> </a><div class="pSmartList1"><li>Via C$SOCKET, the COBOL program reads the data (op-code 6), processes it, and returns data to the socket (op-code 5).  </li></div>
+</ol></div>
+<a name="wp1049336"> </a><p class="pBody">
+Of course, because the data format is totally open and undefined, the COBOL and Java programmers must agree on a common format.
+</p>
+<a name="wp1049059"> </a><p class="pBody">
+Following is sample code to demonstrate this capability: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*The following code creates a server socket. <a name="wp1097369"> </a>
+CALL &quot;C$SOCKET&quot; USING AGS-CREATE-SERVER, 8765
+GIVING SOCKET-HANDLE-1. <a name="wp1097370"> </a>
+
+*The following code waits for a connection. <a name="wp1097371"> </a>
+CALL &quot;C$SOCKET&quot; USING AGS-NEXT-READ, SOCKET-HANDLE-1,
+TIMEOUT.<a name="wp1097372"> </a>
+<a name="wp1097586"> </a>
+*If have a connection request. Accept the connection. <a name="wp1097373"> </a>
+CALL &quot;C$SOCKET&quot; USING AGS-ACCEPT, SOCKET-HANDLE-1.<a name="wp1097374"> </a>
+<a name="wp1097375"> </a>
+*Read data from the connecting socket. <a name="wp1097587"> </a>
+CALL &quot;C$SOCKET&quot; USING AGS_READ, SOCKET-HANDLE-2,
+SOCKET-IN, IN-DATA-LENGTH
+GIVING READ-AMOUNT.<a name="wp1097376"> </a>
+<a name="wp1097377"> </a>
+*Write outgoing data back to the client socket: <a name="wp1097588"> </a>
+CALL &quot;C$SOCKET&quot; USING AGS-WRITE, SOCKET-HANDLE-2,
+SOCKET-OUT, OUT-DATA-LENGTH.<a name="wp1097367"> </a>
+</pre></div>
+<a name="wp1037723"> </a><p class="pBody">
+Refer to Appendix I in <em class="cEmphasis">ACUCOBOL-GT Appendices</em> for information on the C$SOCKET library routine.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

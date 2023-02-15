@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-SET-PRINTER</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1040768"> </a><h2 class="pHeading3">
+WINPRINT-SET-PRINTER
+</h2>
+<a name="wp1040770"> </a><p class="pBody">
+This operation code allows you to select a specific printer and set properties.  
+</p>
+<a name="wp1040776"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040777"> </a>
+    USING WINPRINT-SET-PRINTER, WINPRINT-SELECTION<a name="wp1040778"> </a>
+    GIVING RESULT<a name="wp1040779"> </a>
+</pre></div>
+<a name="wp1040780"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040781"> </a><p class="pBody">
+<b class="cBold">WINPRINT-SELECTION</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 WINPRINT-SELECTION.<a name="wp1040782"> </a>
+   03 WINPRINT-NAME                    PIC X(80).<a name="wp1040783"> </a>
+   03 WINPRINT-PORT                    PIC X(80).<a name="wp1040784"> </a>
+   03 WINPRINT-DRIVER                  PIC X(80).<a name="wp1040785"> </a>
+   03 WINPRINT-DRV-VERSION             SIGNED-INT.<a name="wp1040786"> </a>
+   03 WINPRINT-NO-OF-PRINTERS          SIGNED-SHORT.<a name="wp1040787"> </a>
+      88 WPRTERR-NO-PRINTERS           VALUE -1.<a name="wp1040788"> </a>
+   03 WINPRINT-IS-DEFAULT              SIGNED-SHORT.<a name="wp1040789"> </a>
+      88 WPRT-IS-NOT-DEFAULT           VALUE 0.<a name="wp1040790"> </a>
+      88 WPRT-IS-DEFAULT               VALUE 1.<a name="wp1040791"> </a>
+   03 WINPRINT-COPIES                  SIGNED-SHORT.<a name="wp1040792"> </a>
+      88 WPRT-HAS-NO-COPY              VALUE 1.<a name="wp1040793"> </a>
+   03 WINPRINT-ORIENTATION             SIGNED-SHORT.<a name="wp1040794"> </a>
+      88 WPRT-HAS-NO-LANDSCAPE         VALUE 0.<a name="wp1040795"> </a>
+      88 WPRT-HAS-LANDSCAPE            VALUE 1.<a name="wp1040796"> </a>
+   03 WINPRINT-QUALITY                 SIGNED-SHORT.<a name="wp1040797"> </a>
+   03 WINPRINT-CURR-ORIENTATION        SIGNED-SHORT.<a name="wp1040798"> </a>
+   03 WINPRINT-CURR-COPIES             SIGNED-SHORT.<a name="wp1040799"> </a>
+</pre></div>
+<a name="wp1040800"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040801"> </a><p class="pBody">
+WINPRINT-NAME must hold the name of the printer as received by WINPRINT-GET-PRINTER-INFO.  If WINPRINT-COPIES is set to a positive value greater than one, you may use WINPRINT-CURR-COPIES to set the number of copies to print.  If WINPRINT-CURR-COPIES is set to zero, the printer driver default is used.  If WINPRINT-ORIENTATION is set to a positive value, then WINPRINT-CURR-ORIENTATION may be set to any of the following values:
+</p>
+<a name="wp1040802"> </a><p class="pBody">
+<b class="cBold">WPRTSEL-ORIENT-DEFAULT</b> -- For printer default.  
+</p>
+<a name="wp1040803"> </a><p class="pBody">
+<b class="cBold">WPRTSEL-ORIENT-PORTRAIT</b> -- For portrait orientation.  
+</p>
+<a name="wp1040804"> </a><p class="pBody">
+<b class="cBold">WPRTSEL-ORIENT-LANDSCAPE</b> -- For landscape orientation.  
+</p>
+<a name="wp1040805"> </a><p class="pBody">
+WINPRINT-QUALITY may be used to select varying grades of print quality.  One may use the predefined constants for this purpose: 
+</p>
+<a name="wp1040806"> </a><p class="pBody">
+<b class="cBold">WPRTSEL-QUALITY-DEFAULT</b> -- For printer default.  
+</p>
+<a name="wp1040807"> </a><p class="pBody">
+<b class="cBold">WPRTSEL-QUALITY-HIGH</b> -- For high quality.  
+</p>
+<a name="wp1040808"> </a><p class="pBody">
+<b class="cBold">WPRTSEL-QUALITY-MEDIUM</b> -- For medium quality.  
+</p>
+<a name="wp1040809"> </a><p class="pBody">
+<b class="cBold">WPRTSEL-QUALITY-LOW</b> --  For low quality.  
+</p>
+<a name="wp1040810"> </a><p class="pBody">
+<b class="cBold">WPRTSEL-QUALITY-DRAFT</b> -- For draft quality.    
+</p>
+<a name="wp1040811"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>WINPRINT-QUALITY only applies to dot-matrix-type printers.  Most inkjet and laser printers do not support this method of determining different levels of print quality.  
+<hr />
+</p>
+<a name="wp1040812"> </a><h3 class="pHeadingRef">
+Specifying a printer
+</h3>
+<a name="wp1040816"> </a><p class="pBody">
+The steps for actually specifying a printer differ depending on whether or not you know the name of the printer. 
+</p>
+<a name="wp1040817"> </a><p class="pBody">
+If you know the name of the printer, set WINPRINT-NO-OF-PRINTERS to 0, and set WINPRINT-NAME to the name of the printer as given in the Printers folder under Settings. Specify any settings you desire and call &quot;WIN$PRINTER&quot; using WINPRINT-SET-PRINTER.
+</p>
+<a name="wp1040818"> </a><p class="pBody">
+If you don't know the name of the printer, start by calling &quot;WIN$PRINTER using WINPRINT-GET-NO-PRINTERS and storing the result in an appropriate variable. Next, enumerate the printers by iterating through the available printers starting with 1, ending with the value obtained from WINPRINT-NO-OF-PRINTERS.  Stop when you have found the printer you want.  Specify the settings you desire and call &quot;WIN$PRINTER&quot; again, this time using WINPRINT-SET-PRINTER.  An example of this scenario can be found in the sample program &quot;prndemo.cbl&quot;.
+</p>
+<a name="wp1040819"> </a><p class="pBody">
+The WINPRINT-SET-PRINTER operation also allows you to change some printer settings while the printer is open, or spooling.  For example, if you are printing a portrait-oriented report that contains a single-page table in landscape format, you would need to change the page orientation during printing.   When you are using this feature, the only properties you can alter for this op-code are those controlling the number of copies, the page orientation and the print quality.  All other properties for this op-code use the existing settings.  
+</p>
+<a name="wp1040820"> </a><h3 class="pHeadingRef">
+Comments
+</h3>
+<a name="wp1040821"> </a><p class="pBody">
+If you call WINPRINT-SET-PRINTER on an open print job, there is  an implicit form feed.  WINPRINT-SET-PRINTER must be called before you begin to print the page with the different setting, and after all printing is done on the page immediately preceding the page with the different setting.  When the current page is finished, the print cursor is positioned at the top leftmost point on the new page.  The new page accepts the current values specified for number of copies, page orientation and print quality, provided they are within legal parameters for the particular setting.  
+</p>
+<a name="wp1040822"> </a><p class="pBody">
+Because this feature of  WINPRINT-SET PRINTER occurs during a print job, it alters the document being printed, particularly by setting any current page margins to the printer default values.  This means that if you have customized margins and you call WINPRINT-SET-PRINTER on an open printer, you will have to reset the margins after the call to reestablish your custom margin settings. 
+</p>
+<a name="wp1040823"> </a><p class="pBody">
+Margin limitations may vary from portrait to landscape on the same printer and you may not be able to specify the same values for both orientations.
+</p>
+<a name="wp1040824"> </a><p class="pBody">
+Changing the output device with this operation will reset any columns you have set using WINPRINT-COLUMN op-codes.
+</p>
+<a name="wp1040825"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1040826"> </a><p class="pBody">
+Here is an example of how to specify a printer named &quot;Gutenberg&quot;:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+INITIALIZE WINPRINT-NO-OF-PRINTERS.<a name="wp1040827"> </a>
+MOVE &quot;Gutenberg&quot; TO WINPRINT-NAME.<a name="wp1040828"> </a>
+CALL &quot;WIN$PRINTER&quot; <a name="wp1040829"> </a>
+    USING WINPRINT-GET-PRINTER-INFO WINPRINT-SELECTION.<a name="wp1040830"> </a>
+<a name="wp1040831"> </a>
+*we want to set landscape orientation <a name="wp1040832"> </a>
+<a name="wp1040833"> </a>
+MOVE WPRTSEL-ORIENT-LANDSCAPE TO WINPRINT-CURR-ORIENTATION.<a name="wp1040834"> </a>
+<a name="wp1040835"> </a>
+*with this call, subsequent print jobs will print in landscape <a name="wp1040836"> </a>
+*orientation from Gutenberg<a name="wp1040837"> </a>
+<a name="wp1040838"> </a>
+CALL &quot;WIN$PRINTER&quot; <a name="wp1040839"> </a>
+    USING WINPRINT-SET-PRINTER WINPRINT-SELECTION.<a name="wp1040840"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

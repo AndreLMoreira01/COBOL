@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>W$FLUSH Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1038412"> </a><h2 class="pHeading2">
+W$FLUSH Routine
+</h2>
+<a name="wp1038419"> </a><p class="pBody">
+The W$FLUSH routine causes the screen and/or cursor to be refreshed.  It can be used to ensure that the user sees the most current display (see the explanation under Description, below).
+</p>
+<a name="wp1038420"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;W$FLUSH&quot; <a name="wp1038421"> </a>
+    USING PARAM-NUM<a name="wp1481701"> </a>
+</pre></div>
+<a name="wp1038422"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1038423"> </a><p class="pBody">
+<b class="cBold">PARAM-NUM</b>   numeric data item (optional)
+</p>
+<a name="wp1038424"> </a><p class="pBody">
+Specifies what part of the display (screen or cursor) is refreshed.  
+</p>
+<a name="wp1145388"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1038446"> </a><p class="pBody">
+Calling this routine refreshes the display so that the user sees everything that is current, even if an ACCEPT has not been performed.  Normally, the runtime ensures that the information the user sees is correct only when input is required from the user.  This means that if you DISPLAY some text or control, and then perform extensive processing without also performing an ACCEPT, the text or control may not be immediately visible to the user.  Possible values are:
+</p>
+<a name="wp1144913"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1144896"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1144898"> </a><p class="pCellBody">
+(default) the screen is made current, but the cursor may appear in an arbitrary location. (This is due to output optimization.)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1144900"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1144902"> </a><p class="pCellBody">
+the screen and cursor are made current
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1144904"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1144906"> </a><p class="pCellBody">
+on UNIX machines using the BUFFERED-SCREEN configuration option, the screen is made current at the next clock tick
+</p>
+<a name="wp1144907"> </a><p class="pCellBody">
+on all other machines this has the same behavior as setting the value to &quot;1&quot;.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1144909"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1144911"> </a><p class="pCellBody">
+on UNIX machines using the BUFFERED-SCREEN configuration option, the screen and cursor are made current at the next clock tick
+</p>
+<a name="wp1144912"> </a><p class="pCellBody">
+on all other machines this has the same behavior as setting the value to &quot;1&quot;.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1145401"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Prior to the introduction of W$FLUSH, some programs worked around this problem using the statement &quot;ACCEPT OMITTED BEFORE TIME 0&quot;.
+<hr />
+</p>
+<a name="wp1140858"> </a><p class="pBody">
+If you are experiencing a performance penalty for these runtime calls, especially during file processing where the screen is updated after each record, you can choose to inhibit calls to W$FLUSH.  This can be useful if you want to simulate &quot;mass update&quot; functionality for ActiveX controls that do not have this capability built in.  Use one of the following parameters: 
+</p>
+<a name="wp1145413"> </a><p class="pBody">
+ </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1145406"> </a><p class="pCellBody">
+256
+</p>
+</td>
+    <td><a name="wp1145408"> </a><p class="pCellBody">
+inhibits any future calls to W$FLUSH, including those made internally by the runtime system.  Only a call with parameter &quot;257&quot; will be honored.  This parameter must be turned off to restore user interaction.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1145410"> </a><p class="pCellBody">
+257
+</p>
+</td>
+    <td><a name="wp1145412"> </a><p class="pCellBody">
+cancels the inhibited state caused by parameter &quot;256&quot;.  This parameter does not cause a flush itself; it just allows future calls to W$FLUSH to function.  You must call this parameter before interacting with the user.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1140861"> </a><p class="pBody">
+For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+   78  INHIBIT-FLUSH   VALUE 256.<a name="wp1140862"> </a>
+   78  ALLOW-FLUSH     VALUE 257.<a name="wp1140863"> </a>
+<a name="wp1140864"> </a>
+   CALL &quot;W$FLUSH&quot; USING INHIBIT-FLUSH<a name="wp1140865"> </a>
+   PERFORM LARGE-ACTIVEX-UPDATE<a name="wp1140866"> </a>
+   CALL &quot;W$FLUSH&quot; USING ALLOW-FLUSH<a name="wp1140867"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,501 @@
+      * WINPRINT.DEF - definitions for WIN$PRINTER library routine.
+      * Last modified: 29-Jul-1999 TDC.
+
+      * Copyright (c) 1996-2006 by Acucorp, Inc.  Users of ACUCOBOL
+      * may freely include this file in their COBOL source code.
+
+      * WIN$PRINTER opcodes
+
+       78  WINPRINT-SUPPORTED                  VALUE 1.
+       78  WINPRINT-SETUP                      VALUE 2.
+       78  WINPRINT-SET-STD-FONT               VALUE 3.
+       78  WINPRINT-GET-PAGE-LAYOUT            VALUE 4.
+       78  WINPRINT-GET-SETTINGS-SIZE          VALUE 5.
+       78  WINPRINT-GET-SETTINGS               VALUE 6.
+       78  WINPRINT-SET-SETTINGS               VALUE 7.
+       78  WINPRINT-SET-FONT                   VALUE 8.
+       78  WINPRINT-SET-LINES-PER-PAGE         VALUE 9.
+       78  WINPRINT-GET-CAPABILITIES           VALUE 10.
+       78  WINPRINT-PRINT-BITMAP               VALUE 11.
+       78  WINPRINT-SET-MARGINS                VALUE 12.
+       78  WINPRINT-GET-NO-PRINTERS            VALUE 13.
+       78  WINPRINT-GET-PRINTER-INFO           VALUE 14.
+       78  WINPRINT-SET-PRINTER                VALUE 15.
+       78  WINPRINT-GET-CURRENT-INFO           VALUE 16.
+       78  WINPRINT-SETUP-OLD                  VALUE 17.
+       78  WINPRINT-SET-DATA-COLUMNS           VALUE 18.
+       78  WINPRINT-CLEAR-DATA-COLUMNS         VALUE 19.
+       78  WINPRINT-SET-PAGE-COLUMN            VALUE 20.
+       78  WINPRINT-CLEAR-PAGE-COLUMNS         VALUE 21.
+       78  WINPRINT-GET-PAGE-COLUMN            VALUE 22.
+       78  WINPRINT-GRAPH-BRUSH                VALUE 23.
+       78  WINPRINT-GRAPH-PEN                  VALUE 24.
+       78  WINPRINT-GRAPH-DRAW                 VALUE 25.
+       78  WINPRINT-SET-CURSOR                 VALUE 26.
+       78  WINPRINT-GET-SPOOL-ERR              VALUE 27.
+       78  WINPRINT-GET-PRINTER-INFO-EX        VALUE 28.
+       78  WINPRINT-SET-PRINTER-EX             VALUE 29.
+       78  WINPRINT-GET-CURRENT-INFO-EX        VALUE 30.
+       78  WINPRINT-SET-TEXT-COLOR             VALUE 31.
+       78  WINPRINT-GET-PRINTER-STATUS         VALUE 32.
+       78  WINPRINT-GET-PRINTER-MEDIA          VALUE 33.
+       78  WINPRINT-GET-JOB-STATUS             VALUE 34.
+       78  WINPRINT-SET-JOB-STATUS             VALUE 35.
+       78  WINPRINT-SET-JOB                    VALUE 36.
+       78  WINPRINT-GET-MARGINS                VALUE 37.
+       78  WINPRINT-SETUP-USE-MARGINS          VALUE 38.
+
+      * WIN$PRINTER return values
+
+       78  WPRTERR-UNSUPPORTED                 VALUE 0.
+       78  WPRTERR-BAD-ARG                     VALUE -1.
+       78  WPRTERR-CANCELLED                   VALUE -2.
+       78  WPRTERR-BUFFER-TOO-SMALL            VALUE -3.
+       78  WPRTERR-NO-MEMORY                   VALUE -4.
+       78  WPRTERR-SPOOLER-OPEN                VALUE -5.
+       78  WPRTERR-SPOOLER-CLOSED              VALUE -6.
+       78  WPRTERR-DEVICE-INCAPABLE            VALUE -7.
+       78  WPRTERR-ENUM-FAIL                   VALUE -8.
+       78  WPRTERR-DRV-LOADFAIL                VALUE -9.
+       78  WPRTERR-BAD-DRIVER                  VALUE -10.
+       78  WPRTERR-SPOOL-ERR                   VALUE -11.
+
+      * Standard font values
+
+       78  WPRTFONT-DEFAULT                    VALUE 1.
+       78  WPRTFONT-COURIER-12                 VALUE 2.
+       78  WPRTFONT-COURIER-12-COMP            VALUE 3.
+       78  WPRTFONT-COURIER-10                 VALUE 4.
+       78  WPRTFONT-COURIER-10-COMP            VALUE 5.
+
+      * Bitmap flags
+
+       78  WPRTBITMAP-PRINTER-BITMAP           VALUE 1.
+       78  WPRTBITMAP-SCALE-CELLS              VALUE 2.
+       78  WPRTBITMAP-SCALE-INCHES             VALUE 4.
+       78  WPRTBITMAP-SCALE-CENTIMETERS        VALUE 8.
+       78  WPRTBITMAP-SCALE-PIXELS             VALUE 16.
+       78  WPRTBITMAP-UNITS-INCHES             VALUE 32.
+       78  WPRTBITMAP-UNITS-CENTIMETERS        VALUE 64.
+       78  WPRTBITMAP-UNITS-PIXELS             VALUE 128.
+       78  WPRTBITMAP-UNITS-CELLS-ABS          VALUE 256.
+       78  WPRTBITMAP-UNITS-INCHES-ABS         VALUE 512.
+       78  WPRTBITMAP-UNITS-CENTIMETERS-ABS    VALUE 1024.
+
+      * Margins flags
+
+       78  WPRTMARGIN-DEFAULT-MARGINS          VALUE 0.
+       78  WPRTMARGIN-CELLS                    VALUE 1.
+       78  WPRTMARGIN-INCHES                   VALUE 2.
+       78  WPRTMARGIN-CENTIMETERS              VALUE 3.
+       78  WPRTMARGIN-PIXELS                   VALUE 4.
+
+      * Printer selection options
+
+       78  WPRTSEL-ORIENT-DEFAULT              VALUE 0.
+       78  WPRTSEL-ORIENT-PORTRAIT             VALUE 1.
+       78  WPRTSEL-ORIENT-LANDSCAPE            VALUE 2.
+       78  WPRTSEL-QUALITY-DEFAULT             VALUE 0.
+       78  WPRTSEL-QUALITY-HIGH                VALUE -1.
+       78  WPRTSEL-QUALITY-MEDIUM              VALUE -2.
+       78  WPRTSEL-QUALITY-LOW                 VALUE -3.
+       78  WPRTSEL-QUALITY-DRAFT               VALUE -4.
+
+      * Units flags
+
+       78  WPRTUNITS-CELLS                     VALUE 0.
+       78  WPRTUNITS-INCHES                    VALUE 1.
+       78  WPRTUNITS-CENTIMETERS               VALUE 2.
+       78  WPRTUNITS-PIXELS                    VALUE 3.
+      * These apply to WINPRINT-GRAPH-DRAW and WINPRINT-SET-CURSOR only
+       78  WPRTUNITS-CELLS-ABS                 VALUE 4.
+       78  WPRTUNITS-INCHES-ABS                VALUE 5.
+       78  WPRTUNITS-CENTIMETERS-ABS           VALUE 6.
+
+      * Alignment flags
+
+       78  WPRTALIGN-NONE                      VALUE SPACE.
+       78  WPRTALIGN-LEFT                      VALUE "L".
+       78  WPRTALIGN-RIGHT                     VALUE "R".
+       78  WPRTALIGN-CENTER                    VALUE "C".
+       78  WPRTALIGN-DECIMAL                   VALUE "D".
+       78  WPRTALIGN-DECIMAL-SUPPRESS          VALUE "S".
+       78  WPRTALIGN-RIGHT-SIGN                VALUE "-".
+
+      * Printer drawing flags
+       78  WPRT-DRAW-RECTANGLE                 VALUE 1. | straight corners
+       78  WPRT-DRAW-ROUND-RECTANGLE           VALUE 2. | rounded corners
+       78  WPRT-DRAW-LINE                      VALUE 3. | line
+
+      * Printer pen flags
+       78  WPRT-PEN-SOLID                      VALUE 0. | Solid pen
+       78  WPRT-PEN-DASH                       VALUE 1. | ------- pen width must be 1
+       78  WPRT-PEN-DOT                        VALUE 2. | ....... pen width must be 1
+       78  WPRT-PEN-DASHDOT                    VALUE 3. | -.-.-.- pen width must be 1
+       78  WPRT-PEN-DASHDOTDOT                 VALUE 4. | -..-..- pen width must be 1
+       78  WPRT-PEN-NULL                       VALUE 5. | No pen
+       78  WPRT-PEN-INSIDEFRAME                VALUE 6. | Solid pen, inside frame
+
+      * Printer brush flags
+       78  WPRT-BRUSH-SOLID                    VALUE 0. | Solid color (black)
+       78  WPRT-BRUSH-NULL                     VALUE 1. | No fill
+       78  WPRT-BRUSH-BDIAGONAL                VALUE 2. | ///////
+       78  WPRT-BRUSH-CROSS                    VALUE 3. | +++++++
+       78  WPRT-BRUSH-DIAGCROSS                VALUE 4. | xxxxxxx
+       78  WPRT-BRUSH-FDIAGONAL                VALUE 5. | \\\\\\\
+       78  WPRT-BRUSH-HORIZONTAL               VALUE 6. | -------
+       78  WPRT-BRUSH-VERTICAL                 VALUE 7. | |||||||
+       78  WPRT-BRUSH-DKGRAY                   VALUE 8. | Solid dark gray
+       78  WPRT-BRUSH-GRAY                     VALUE 9. | Solid gray
+       78  WPRT-BRUSH-LTGRAY                   VALUE 10. | Solid light gray
+
+      * WIN$PRINTER parameters
+
+       01  WINPRINT-DATA.
+           03  WPRTDATA-SET-STD-FONT.
+               05  WPRTDATA-STD-FONT           PIC X COMP-X.
+               05  FILLER                      PIC X(21).
+
+           03  WPRTDATA-PAGE-LAYOUT REDEFINES
+               WPRTDATA-SET-STD-FONT.
+               05  WPRTDATA-LINES-PER-PAGE     UNSIGNED-SHORT.
+               05  WPRTDATA-COLUMNS-PER-PAGE   UNSIGNED-SHORT.
+
+           03  WPRTDATA-SET-FONT REDEFINES
+               WPRTDATA-SET-STD-FONT.
+               05  WPRTDATA-FONT               HANDLE OF FONT.
+
+           03  WPRTDATA-CAPABILITIES REDEFINES
+               WPRTDATA-SET-STD-FONT.
+               05  WPRTDATA-BITMAPS-OK-FLAG    PIC 9.
+                   88  WPRTDATA-BITMAPS-OK     VALUE 1, FALSE ZERO.
+
+           03  WPRTDATA-PRINT-BITMAP REDEFINES
+               WPRTDATA-SET-STD-FONT.
+               05  WPRTDATA-BITMAP             PIC X(4) COMP-N.
+               05  WPRTDATA-BITMAP-ROW         PIC 9(7)V99 COMP-5.
+               05  WPRTDATA-BITMAP-COL         PIC 9(7)V99 COMP-5.
+               05  WPRTDATA-BITMAP-HEIGHT      PIC 9(7)V99 COMP-5.
+               05  WPRTDATA-BITMAP-WIDTH       PIC 9(7)V99 COMP-5.
+               05  WPRTDATA-BITMAP-FLAGS       UNSIGNED-SHORT.
+
+           03  WPRTDATA-MARGINS REDEFINES
+               WPRTDATA-SET-STD-FONT.
+               05  WPRTDATA-TOP-MARGIN         PIC 9(7)V99 COMP-5.
+               05  WPRTDATA-BOTTOM-MARGIN      PIC 9(7)V99 COMP-5.
+               05  WPRTDATA-LEFT-MARGIN        PIC 9(7)V99 COMP-5.
+               05  WPRTDATA-RIGHT-MARGIN       PIC 9(7)V99 COMP-5.
+               05  WPRTDATA-MARGIN-UNITS       UNSIGNED-SHORT.
+
+           03  WPRTDATA-DRAW REDEFINES
+               WPRTDATA-SET-STD-FONT.
+               05  WPRTDATA-DRAW-START-X       PIC 9(7)V99 COMP-5.
+               05  WPRTDATA-DRAW-START-Y       PIC 9(7)V99 COMP-5.
+               05  WPRTDATA-DRAW-STOP-X        PIC 9(7)V99 COMP-5.
+               05  WPRTDATA-DRAW-STOP-Y        PIC 9(7)V99 COMP-5.
+               05  WPRTDATA-DRAW-UNITS         UNSIGNED-SHORT.
+               05  WPRTDATA-DRAW-SHAPE         UNSIGNED-SHORT.
+
+           03  WPRTDATA-PEN REDEFINES
+               WPRTDATA-SET-STD-FONT.
+               05  WPRTDATA-PEN-STYLE          UNSIGNED-SHORT.
+               05  WPRTDATA-PEN-WIDTH          UNSIGNED-SHORT.
+               05  WPRTDATA-PEN-COLOR          PIC 9(9) COMP-5 SYNC.
+
+           03  WPRTDATA-BRUSH REDEFINES
+               WPRTDATA-SET-STD-FONT.
+               05  WPRTDATA-BRUSH-STYLE        UNSIGNED-SHORT.
+               05  WPRTDATA-BRUSH-COLOR        PIC 9(9) COMP-5 SYNC.
+
+	   03 WPRTDATA-TEXT-COLOR REDEFINES
+	       WPRTDATA-SET-STD-FONT           PIC 9(9) COMP-5 SYNC.
+
+      *Max constants to printer driver tables.
+       78  MAX-PAPER-SIZES                     VALUE 41.
+       78  MAX-PAPER-TRAYS                     VALUE 13.
+       78  MAX-PRINTER-STATUS                  VALUE 26.
+       78  MAX-JOB-STATUS                      VALUE 12.
+
+       01  WINPRINT-SELECTION.
+           03  WINPRINT-NAME                   PIC X(80).
+           03  WINPRINT-PORT                   PIC X(80).
+           03  WINPRINT-DRIVER                 PIC X(80).
+           03  WINPRINT-DRV-VERSION            SIGNED-INT.
+           03  WINPRINT-NO-OF-PRINTERS         SIGNED-SHORT.
+               88 WPRTERR-NO-PRINTERS          VALUE -1.
+           03  WINPRINT-IS-DEFAULT             SIGNED-SHORT.
+               88 WPRT-IS-NOT-DEFAULT          VALUE 0.
+               88 WPRT-IS-DEFAULT              VALUE 1.
+           03  WINPRINT-COPIES                 SIGNED-SHORT.
+               88 WPRT-HAS-NO-COPY             VALUE 1.
+           03  WINPRINT-ORIENTATION            SIGNED-SHORT.
+               88 WPRT-HAS-NO-LANDSCAPE        VALUE 0.
+               88 WPRT-HAS-LANDSCAPE           VALUE 1.
+           03  WINPRINT-QUALITY                SIGNED-SHORT.
+           03  WINPRINT-CURR-ORIENTATION       SIGNED-SHORT.
+           03  WINPRINT-CURR-COPIES            SIGNED-SHORT.
+      *The following are Extended attributes introduced in version 5.2
+      *Requires -EX versions of functions to be used.
+           03  WINPRINT-DUPLEX                 SIGNED-SHORT.
+               88 WPRT-HAS-NO-DUPLEX           VALUE 0.
+               88 WPRT-HAS-DUPLEX              VALUE 1.
+           03  WINPRINT-COLLATE                SIGNED-SHORT.
+               88 WPRT-HAS-NO-COLLATE          VALUE 0.
+               88 WPRT-HAS-COLLATE             VALUE 1.
+           03  WINPRINT-COLOR                  SIGNED-SHORT.
+               88 WPRT-HAS-NO-COLOR            VALUE 0.
+               88 WPRT-HAS-COLOR               VALUE 1.
+           03  WINPRINT-CURR-DUPLEX            SIGNED-SHORT.
+               88 WPRT-SIMPLEX                 VALUE 1.
+               88 WPRT-DUPLEX-VERTICAL         VALUE 2.
+               88 WPRT-DUPLEX-HORIZONTAL       VALUE 3.
+           03  WINPRINT-CURR-COLLATE           SIGNED-SHORT.
+               88 WPRT-COLLATE-OFF             VALUE 0.
+               88 WPRT-COLLATE-ON              VALUE 1.
+      *Standard Windows paper sizes, note that with Windows 2000
+      *Windows standard actually has up to 118 different paper sizes
+      *defined. The original Windows definition stopped at 41, due to
+      *simplicity we have limited ourselves to the initial 41 as
+      *provided with the Windows API, all Windows versions know these.
+           03  WINPRINT-CURR-PAPERSIZE         SIGNED-SHORT.
+               88 WPRT-LETTER                  VALUE  1. | Letter 8 1/2 x 11 in
+               88 WPRT-LETTERSMALL             VALUE  2. | Letter Small 8 1/2 x 11 in
+               88 WPRT-TABLOID                 VALUE  3. | Tabloid 11 x 17 in
+               88 WPRT-LEDGER                  VALUE  4. | Ledger 17 x 11 in
+               88 WPRT-LEGAL                   VALUE  5. | Legal 8 1/2 x 14 in
+               88 WPRT-STATEMENT               VALUE  6. | Statement 5 1/2 x 8 1/2 in
+               88 WPRT-EXECUTIVE               VALUE  7. | Executive 7 1/4 x 10 1/2 in
+               88 WPRT-A3                      VALUE  8. | A3 297 x 420 mm
+               88 WPRT-A4                      VALUE  9. | A4 210 x 297 mm
+               88 WPRT-A4SMALL                 VALUE 10. | A4 Small 210 x 297 mm
+               88 WPRT-A5                      VALUE 11. | A5 148 x 210 mm
+               88 WPRT-B4                      VALUE 12. | B4 (JIS) 250 x 354
+               88 WPRT-B5                      VALUE 13. | B5 (JIS) 182 x 257 mm
+               88 WPRT-FOLIO                   VALUE 14. | Folio 8 1/2 x 13 in
+               88 WPRT-QUARTO                  VALUE 15. | Quarto 215 x 275 mm
+               88 WPRT-10X14                   VALUE 16. | 10x14 in
+               88 WPRT-11X17                   VALUE 17. | 11x17 in
+               88 WPRT-NOTE                    VALUE 18. | Note 8 1/2 x 11 in
+               88 WPRT-ENV_9                   VALUE 19. | Envelope #9 3 7/8 x 8 7/8
+               88 WPRT-ENV_10                  VALUE 20. | Envelope #10 4 1/8 x 9 1/2
+               88 WPRT-ENV_11                  VALUE 21. | Envelope #11 4 1/2 x 10 3/8
+               88 WPRT-ENV_12                  VALUE 22. | Envelope #12 4 \276 x 11
+               88 WPRT-ENV_14                  VALUE 23. | Envelope #14 5 x 11 1/2
+               88 WPRT-CSHEET                  VALUE 24. | C size sheet
+               88 WPRT-DSHEET                  VALUE 25. | D size sheet
+               88 WPRT-ESHEET                  VALUE 26. | E size sheet
+               88 WPRT-ENV_DL                  VALUE 27. | Envelope DL 110 x 220mm
+               88 WPRT-ENV_C5                  VALUE 28. | Envelope C5 162 x 229 mm
+               88 WPRT-ENV_C3                  VALUE 29. | Envelope C3  324 x 458 mm
+               88 WPRT-ENV_C4                  VALUE 30. | Envelope C4  229 x 324 mm
+               88 WPRT-ENV_C6                  VALUE 31. | Envelope C6  114 x 162 mm
+               88 WPRT-ENV_C65                 VALUE 32. | Envelope C65 114 x 229 mm
+               88 WPRT-ENV_B4                  VALUE 33. | Envelope B4  250 x 353 mm
+               88 WPRT-ENV_B5                  VALUE 34. | Envelope B5  176 x 250 mm
+               88 WPRT-ENV_B6                  VALUE 35. | Envelope B6  176 x 125 mm
+               88 WPRT-ENV_ITALY               VALUE 36. | Envelope 110 x 230 mm
+               88 WPRT-ENV_MONARCH             VALUE 37. | Envelope Monarch 3.875 x 7.5 in
+               88 WPRT-ENV_PERSONAL            VALUE 38. | 6 3/4 Envelope 3 5/8 x 6 1/2 in
+               88 WPRT-FANFOLD_US              VALUE 39. | US Std Fanfold 14 7/8 x 11 in
+               88 WPRT-FANFOLD_STD_GERMAN      VALUE 40. | German Std Fanfold 8 1/2 x 12 in
+               88 WPRT-FANFOLD_LGL_GERMAN      VALUE 41. | German Legal Fanfold 8 1/2 x 13 in
+      *Note the 'hole' in the list, that numbers 12 and 13 are missing, this is
+      *inherited from the Windows API. We have chosen not to 'short cut' this, in order
+      *to provide the Cobol developer with complete control.
+           03  WINPRINT-CURR-TRAY              SIGNED-SHORT.
+               88 WPRT-UPPER-TRAY              VALUE 1.
+               88 WPRT-LOWER-TRAY              VALUE 2.
+               88 WPRT-MIDDLE-TRAY             VALUE 3.
+               88 WPRT-MANUAL-TRAY             VALUE 4.
+               88 WPRT-ENVELOPE-TRAY           VALUE 5.
+               88 WPRT-ENVMANUAL-TRAY          VALUE 6.
+               88 WPRT-AUTO-TRAY               VALUE 7.
+               88 WPRT-TRACTOR-TRAY            VALUE 8.
+               88 WPRT-SMALLFMT-TRAY           VALUE 9.
+               88 WPRT-LARGEFMT-TRAY           VALUE 10.
+               88 WPRT-LARGECAPACITY-TRAY      VALUE 11.
+               88 WPRT-CASSETTE-TRAY           VALUE 14.
+               88 WPRT-FORMSOURCE-TRAY         VALUE 15.
+           03  WINPRINT-CURR-COLOR             SIGNED-SHORT.
+               88 WPRT-MONOCHROME              VALUE 0.
+               88 WPRT-COLOR                   VALUE 1.
+           03  WINPRINT-JOB-TITLE              PIC X(80).
+
+      *WINPRINT-GET-MEDIA parameter
+       01  WINPRINT-MEDIA.
+           03  WINPRINT-MEDIA-PRINTER          PIC X(80).
+           03  WINPRINT-MEDIA-PORT             PIC X(80).
+           03  WINPRINT-MEDIA-PAPERCOUNT       SIGNED-SHORT.
+           03  WINPRINT-MEDIA-TRAYCOUNT        SIGNED-SHORT.
+           03  WINPRINT-MEDIA-PAPER            SIGNED-SHORT
+                                               OCCURS MAX-PAPER-SIZES.
+           03  WINPRINT-MEDIA-TRAYS            SIGNED-SHORT
+                                               OCCURS MAX-PAPER-TRAYS.
+
+      *WINPRINT-SET-JOB-STATUS, WINPRINT-GET-JOB-STATUS parameter
+       01  WINPRINT-JOB-STATUS.
+           03  WINPRINT-JOB-PRINTER            PIC X(80).
+           03  WINPRINT-JOB-ID                 SIGNED-INT.
+           03  WINPRINT-JOB-STATUS-NO          PIC 9(9) COMP-5.
+               88 WPRT-JOB-PAUSE               VALUE 1.
+               88 WPRT-JOB-RESUME              VALUE 2.
+               88 WPRT-JOB-CANCEL              VALUE 3.
+               88 WPRT-JOB-RESTART             VALUE 4.
+           03  WINPRINT-JOB-POSITION           SIGNED-INT.
+           03  WINPRINT-JOB-PAGE-TOTAL         SIGNED-INT.
+           03  WINPRINT-JOB-PAGE-PRINTED       SIGNED-INT.
+           03  WINPRINT-JOB-STATUS-TEXT        PIC X(80).
+
+       01  WINPRINT-COLUMN, SYNC.
+           03  WINPRINT-COL-START              PIC 9(7)V99 COMP-5.
+           03  WINPRINT-COL-INDENT             PIC 9(7)V99 COMP-5.
+           03  WINPRINT-COL-SEPARATION         PIC 9(7)V99 COMP-5.
+           03  WINPRINT-COL-FONT               HANDLE OF FONT.
+           03  WINPRINT-COL-UNITS              PIC 99 COMP-X.
+           03  WINPRINT-COL-ALIGNMENT          PIC X.
+           03  WINPRINT-TRANSPARENCY           PIC 99 COMP-X.
+               88  WINPRINT-TRANSPARENT        VALUE 1, FALSE 0.
+
+      *Standard Windows paper sizes, note that with Windows 2000
+      *Windows standard actually has up to 118 different paper sizes
+      *defined. The original Windows definition stopped at 41, due to
+      *simplicity we have limited ourselves to the initial 41 as
+      *provided with the Windows API, all Windows versions know these.
+       01  MISC-WINPRINT-TABLES.
+           03  PAPER-SIZES.
+               05 FILLER PIC X(34) VALUE "Letter 8 1/2 x 11 in".
+               05 FILLER PIC X(34) VALUE "Letter Small 8 1/2 x 11 in".
+               05 FILLER PIC X(34) VALUE "Tabloid 11 x 17 in".
+               05 FILLER PIC X(34) VALUE "Ledger 17 x 11 in".
+               05 FILLER PIC X(34) VALUE "Legal 8 1/2 x 14 in".
+               05 FILLER PIC X(34) VALUE "Statement 5 1/2 x 8 1/2 in".
+               05 FILLER PIC X(34) VALUE "Executive 7 1/4 x 10 1/2 in".
+               05 FILLER PIC X(34) VALUE "A3 297 x 420 mm".
+               05 FILLER PIC X(34) VALUE "A4 210 x 297 mm".
+               05 FILLER PIC X(34) VALUE "A4 Small 210 x 297 mm".
+               05 FILLER PIC X(34) VALUE "A5 148 x 210 mm".
+               05 FILLER PIC X(34) VALUE "B4 (JIS) 250 x 354 mm".
+               05 FILLER PIC X(34) VALUE "B5 (JIS) 182 x 257 mm".
+               05 FILLER PIC X(34) VALUE "Folio 8 1/2 x 13 in".
+               05 FILLER PIC X(34) VALUE "Quarto 215 x 275 mm".
+               05 FILLER PIC X(34) VALUE "10x14 in".
+               05 FILLER PIC X(34) VALUE "11x17 in".
+               05 FILLER PIC X(34) VALUE "Note 8 1/2 x 11 in".
+               05 FILLER PIC X(34) VALUE "Envelope #9 3 7/8 x 8 7/8 in".
+               05 FILLER PIC X(34) VALUE
+                  "Envelope #10 4 1/8 x 9 1/2 in".
+               05 FILLER PIC X(34) VALUE
+                  "Envelope #11 4 1/2 x 10 3/8 in".
+               05 FILLER PIC X(34) VALUE "Envelope #12 4 \276 x 11 in".
+               05 FILLER PIC X(34) VALUE "Envelope #14 5 x 11 1/2 in".
+               05 FILLER PIC X(34) VALUE "C size sheet".
+               05 FILLER PIC X(34) VALUE "D size sheet".
+               05 FILLER PIC X(34) VALUE "E size sheet".
+               05 FILLER PIC X(34) VALUE "Envelope DL 110 x 220 mm".
+               05 FILLER PIC X(34) VALUE "Envelope C5 162 x 229 mm".
+               05 FILLER PIC X(34) VALUE "Envelope C3  324 x 458 mm".
+               05 FILLER PIC X(34) VALUE "Envelope C4  229 x 324 mm".
+               05 FILLER PIC X(34) VALUE "Envelope C6  114 x 162 mm".
+               05 FILLER PIC X(34) VALUE "Envelope C65 114 x 229 mm".
+               05 FILLER PIC X(34) VALUE "Envelope B4  250 x 353 mm".
+               05 FILLER PIC X(34) VALUE "Envelope B5  176 x 250 mm".
+               05 FILLER PIC X(34) VALUE "Envelope B6  176 x 125 mm".
+               05 FILLER PIC X(34) VALUE "Envelope 110 x 230 mm".
+               05 FILLER PIC X(34) VALUE
+                  "Envelope Monarch 3.875 x 7.5 in".
+               05 FILLER PIC X(34) VALUE
+                  "6 3/4 Envelope 3 5/8 x 6 1/2 in".
+               05 FILLER PIC X(34) VALUE
+                  "US Std Fanfold 14 7/8 x 11 in".
+               05 FILLER PIC X(34) VALUE
+                  "German Std Fanfold 8 1/2 x 12 in".
+               05 FILLER PIC X(34) VALUE
+                  "German Legal Fanfold 8 1/2 x 13 in".
+           03  PAPER-SIZE-TABLE REDEFINES PAPER-SIZES PIC X(34)
+               OCCURS MAX-PAPER-SIZES.
+
+           03  PAPER-TRAYS.
+               05 FILLER PIC X(34) VALUE "Upper tray".
+               05 FILLER PIC X(34) VALUE "Lower tray".
+               05 FILLER PIC X(34) VALUE "Middle tray".
+               05 FILLER PIC X(34) VALUE "Manual".
+               05 FILLER PIC X(34) VALUE "Envelope tray".
+               05 FILLER PIC X(34) VALUE "Manual envelope".
+               05 FILLER PIC X(34) VALUE "Auto".
+               05 FILLER PIC X(34) VALUE "Tractor feeder".
+               05 FILLER PIC X(34) VALUE "Small format tray".
+               05 FILLER PIC X(34) VALUE "Large format tray".
+               05 FILLER PIC X(34) VALUE "Large capacity tray".
+               05 FILLER PIC X(34) VALUE "Cassette tray".
+               05 FILLER PIC X(34) VALUE "Form source tray".
+           03  PAPER-TRAY-TABLE REDEFINES PAPER-TRAYS PIC X(34)
+               OCCURS MAX-PAPER-TRAYS.
+
+      *WINPRINT-GET-PRINTER-STATUS parameter
+       01  WINPRINT-PRINTER-STATUS	          SIGNED-INT.
+
+      *Possible printer conditions as listed in the Windows API
+       01  PRINTER-CONDITIONS-R.
+           03  PRINTER-STATUS-IDLE            PIC 9(9) COMP-5 VALUE 0.
+           03  PRINTER-STATUS-PAUSED          PIC 9(9) COMP-5 VALUE 1.
+           03  PRINTER-STATUS-ERROR           PIC 9(9) COMP-5 VALUE 2.
+           03  PRINTER-STATUS-PENDING-DELETION    PIC 9(9) COMP-5
+                                                  VALUE 4.
+           03  PRINTER-STATUS-PAPER-JAM       PIC 9(9) COMP-5 VALUE 8.
+           03  PRINTER-STATUS-PAPER-OUT       PIC 9(9) COMP-5 VALUE 16.
+           03  PRINTER-STATUS-MANUAL-FEED     PIC 9(9) COMP-5 VALUE 32.
+           03  PRINTER-STATUS-PAPER-PROBLEM   PIC 9(9) COMP-5 VALUE 64.
+           03  PRINTER-STATUS-OFFLINE         PIC 9(9) COMP-5 VALUE 128.
+           03  PRINTER-STATUS-IO-ACTIVE       PIC 9(9) COMP-5 VALUE 256.
+           03  PRINTER-STATUS-BUSY            PIC 9(9) COMP-5 VALUE 512.
+           03  PRINTER-STATUS-PRINTING        PIC 9(9) COMP-5
+                                              VALUE 1024.
+           03  PRINTER-STATUS-OUTPUT-BIN-FULL PIC 9(9) COMP-5
+                                              VALUE 2048.
+           03  PRINTER-STATUS-NOT-AVAILABLE   PIC 9(9) COMP-5
+                                              VALUE 4096.
+           03  PRINTER-STATUS-WAITING         PIC 9(9) COMP-5
+                                              VALUE 8192.
+           03  PRINTER-STATUS-PROCESSING      PIC 9(9) COMP-5
+                                              VALUE 16384.
+           03  PRINTER-STATUS-INITIALIZING    PIC 9(9) COMP-5
+                                              VALUE 32768.
+           03  PRINTER-STATUS-WARMING-UP      PIC 9(9) COMP-5
+                                              VALUE 65536.
+           03  PRINTER-STATUS-TONER-LOW       PIC 9(9) COMP-5
+                                              VALUE 131072.
+           03  PRINTER-STATUS-NO-TONER        PIC 9(9) COMP-5
+                                              VALUE 262144.
+           03  PRINTER-STATUS-PAGE-PUNT       PIC 9(9) COMP-5
+                                              VALUE 524288.
+           03  PRINTER-STATUS-USER-INTERVENTION   PIC 9(9) COMP-5
+                                                  VALUE 1048576.
+           03  PRINTER-STATUS-OUT-OF-MEMORY   PIC 9(9) COMP-5
+                                              VALUE 2097152.
+           03  PRINTER-STATUS-DOOR-OPEN       PIC 9(9) COMP-5
+                                              VALUE 4194304.
+           03  PRINTER-STATUS-SERVER-UNKNOWN  PIC 9(9) COMP-5
+                                              VALUE 8388608.
+           03  PRINTER-STATUS-POWER-SAVE      PIC 9(9) COMP-5
+                                              VALUE 16777216.
+       01  PRINTER-CONDITIONS REDEFINES PRINTER-CONDITIONS-R
+                              PIC 9(9) COMP-5 OCCURS MAX-PRINTER-STATUS.
+
+      *Possible job conditions as listed in the Windows API
+       01  JOB-CONDITIONS-R.
+           03  JOB-STATUS-PAUSED             PIC 9(9) COMP-5 VALUE 1.
+           03  JOB-STATUS-ERROR              PIC 9(9) COMP-5 VALUE 2.
+           03  JOB-STATUS-DELETING           PIC 9(9) COMP-5 VALUE 4.
+           03  JOB-STATUS-SPOOLING           PIC 9(9) COMP-5 VALUE 8.
+           03  JOB-STATUS-PRINTING           PIC 9(9) COMP-5 VALUE 16.
+           03  JOB-STATUS-OFFLINE            PIC 9(9) COMP-5 VALUE 32.
+           03  JOB-STATUS-PAPEROUT           PIC 9(9) COMP-5 VALUE 64.
+           03  JOB-STATUS-PRINTED            PIC 9(9) COMP-5 VALUE 128.
+           03  JOB-STATUS-DELETED            PIC 9(9) COMP-5 VALUE 256.
+           03  JOB-STATUS-STAT-BLOCKED-DEVQ  PIC 9(9) COMP-5 VALUE 512.
+           03  JOB-STATUS-USER-INTERVENTION  PIC 9(9) COMP-5 VALUE 1024.
+           03  JOB-STATUS-RESTART            PIC 9(9) COMP-5 VALUE 2048.
+       01  JOB-CONDITIONS REDEFINES JOB-CONDITIONS-R PIC 9(9) COMP-5
+                          OCCURS MAX-JOB-STATUS.
+
+      * End of WINPRINT.DEF.

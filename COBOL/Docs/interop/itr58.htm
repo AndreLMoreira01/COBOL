@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:58:17" />
+  <title>5.4.1.2  --netdll</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr5.htm">Chapter 5: Working With .NET Assemblies</a> &gt; <a href="itr55.htm">5.4  Calling COBOL from .NET</a> &gt; <a href="itr56.htm">5.4.1  Using the .NET MSIL Compiler Options</a> &gt; </p>
+<a name="wp1037575"> </a><h2 class="pHeading3">
+5.4.1.2  --netdll
+</h2>
+<a name="wp1037577"> </a><p class="pBody">
+The &quot;--netdll&quot; compiler option generates a .NET dynamic link library (DLL) that gives .NET assemblies-both executables and DLLs-a programmatic interface to your COBOL program.  All COBOL entry points are exposed as .NET methods along with ACUCOBOL-GT runtime properties and methods.  This allows .NET programmers to set ACUCOBOL-GT command options and call runtime interfaces from their .NET assembly.  
+</p>
+<a name="wp1037578"> </a><p class="pBody">
+By referring to an ACUCOBOL-GT .NET DLL in a project solution, .NET programmers can view ACUCOBOL-GT runtime properties, runtime initialization and control methods, COBOL entry points, the main COBOL entry point, and Linkage Section parameters in the Visual Studio .NET object browser.  
+</p>
+<a name="wp1037579"> </a><p class="pBody">
+Three files are created when you compile a COBOL program using the &quot;--netdll&quot; option.  All three begin with the program file name.  For example, the compiler command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl32 --netdll MyProgram.cbl<a name="wp1037580"> </a>
+</pre></div>
+<a name="wp1037581"> </a><p class="pBody">
+results in &quot;MyProgram.dll,&quot; &quot;MyProgram.netmodule,&quot; and &quot;MyProgram_CVM.dll.&quot;  .NET programmers would reference &quot;MyProgram.dll&quot; and &quot;MyProgram_CVM.dll&quot; in their project.  
+</p>
+<a name="wp1037582"> </a><p class="pBody">
+&quot;MyProgram_CVM.dll&quot; contains all the COBOL program entry points and ACUCOBOL-GT runtime interfaces exposed as .NET methods.  ACUCOBOL-GT runtime options are exposed as properties.  
+</p>
+<a name="wp1037583"> </a><p class="pBody">
+The class in &quot;MyProgram.dll&quot; derives from class CVM which resides in &quot;MyProgram_CVM.dll&quot; allowing the instantiation of namespace class &quot;MyProgram.MyProgram myPgm = new MyProgram.MyProgram()&quot;.  All methods and properties in &quot;MyProgram_CVM.dll&quot; class CVM are exposed to object &quot;myPgm&quot;. 
+</p>
+<a name="wp1037584"> </a><p class="pBody">
+&quot;MyProgram.netmodule&quot; contains ACUCOBOL-GT setup routines that are automatically executed during object instantiation.  &quot;MyProgram.dll&quot; works in conjuction with &quot;MyProgram.netmodule&quot; to perform this task.  The namespace and class are always generated using the COBOL file name without the extension.  In this case the namespace and class are &quot;MyProgram.MyProgram&quot;.
+</p>
+<a name="wp1037585"> </a><p class="pBody">
+As mentioned previously, COBOL entry names and the main COBOL program entry point generate .NET methods.  Method parameters are generated when entry statements contain USING parameters or a Procedure Division statement contains USING parameters.  There are two additional parameters added to each generated .NET method.  They follow all the COBOL USING parameters for the entry name or Procedure Division statement.  The first parameter, string, is for program execution command parameters.  They are &quot;-d&quot; (debug) and &quot;-cache&quot;.  All other runtime command options must be set via properties before calling AcuInitialize or in the string parameter of AcuInitialize.  
+</p>
+<a name="wp1037586"> </a><p class="pBody">
+The second parameter is for a return code.  This is the return code from the COBOL program.  The method return code is from the COBOL Virtual Machine interface and is documented in <a  href="itr512.htm#wp1037801">section 5.4.2.1</a>.  You can also view the values using the Visual Studio .NET object browser under ErrorTypes in class CVM.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

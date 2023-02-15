@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.5.5  Using Screen Section Embedded Procedures</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt1633.htm">6.5  Screen Section </a> &gt; </p>
+<a name="wp1032934"> </a><h2 class="pHeading2">
+6.5.5  Using Screen Section Embedded Procedures
+</h2>
+<a name="wp1032937"> </a><p class="pBody">
+The following example shows how to use embedded procedures to provide an automatic look-up function plus field validation on a key field.  In this example, an ellipsis in braces indicates omitted code.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+IDENTIFICATION DIVISION.<a name="wp1032938"> </a>
+PROGRAM-ID. SCREEN-EXAMPLE.<a name="wp1032939"> </a>
+REMARKS.<a name="wp1032940"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+This program shows how to use embedded procedures <a name="wp1032942"> </a>
+in the Screen Section to: <a name="wp1051214"> </a>
+(a) show a field-specific legend when the user<a name="wp1051334"> </a>
+    arrives at that field, <a name="wp1051337"> </a>
+(b) perform validation of a key field and, <a name="wp1051330"> </a>
+(c) perform a look-up procedure when a special<a name="wp1051333"> </a>
+    function key is pressed.  <a name="wp1051340"> </a>
+In this example, a customer-number field is included<a name="wp1051341"> </a>
+in an order-entry screen.  When the user enters a<a name="wp1051352"> </a>
+customer number, the program validates that it's an<a name="wp1051355"> </a>
+existing customer and, if so, displays the customer's<a name="wp1051358"> </a>
+name.  If it's not valid, the user must re-enter the<a name="wp1051361"> </a>
+field.  If the user presses the F1 key, a look-up<a name="wp1051364"> </a>
+procedure locates the desired customer. <a name="wp1051367"> </a>
+</pre></div>
+<a name="wp1032952"> </a>
+ENVIRONMENT DIVISION.<a name="wp1039057"> </a>
+CONFIGURATION SECTION.<a name="wp1032953"> </a>
+SPECIAL-NAMES.<a name="wp1032954"> </a>
+   CRT STATUS IS CRT-STATUS<a name="wp1032955"> </a>
+   SCREEN CONTROL IS SCREEN-CONTROL.<a name="wp1032956"> </a>
+<a name="wp1032957"> </a>
+INPUT-OUTPUT SECTION.<a name="wp1032958"> </a>
+FILE-CONTROL.<a name="wp1032959"> </a>
+   { . . . }<a name="wp1032960"> </a>
+<a name="wp1032961"> </a>
+<a name="wp1032962"> </a>
+DATA DIVISION.<a name="wp1032963"> </a>
+FILE SECTION.<a name="wp1032964"> </a>
+   { . . . }<a name="wp1032965"> </a>
+<a name="wp1032966"> </a>
+<a name="wp1032967"> </a>
+WORKING-STORAGE SECTION.<a name="wp1032968"> </a>
+01  CRT-STATUS            PIC 9(3).<a name="wp1032969"> </a>
+      88  F1-KEY            VALUE 1.<a name="wp1032970"> </a>
+ <a name="wp1032971"> </a>
+<a name="wp1032972"> </a>
+01  SCREEN-CONTROL.<a name="wp1032973"> </a>
+    03  ACCEPT-CONTROL    PIC 9.<a name="wp1032974"> </a>
+      88  GOTO-FIELD      VALUE 1.<a name="wp1032975"> </a>
+    03  CONTROL-VALUE     PIC 999.<a name="wp1032976"> </a>
+    03  CONTROL-HANDLE    HANDLE.<a name="wp1032977"> </a>
+    03  CONTROL-ID        PIC XX COMP-X.<a name="wp1032978"> </a>
+<a name="wp1032979"> </a>
+{ . . . }<a name="wp1032981"> </a>
+<a name="wp1032982"> </a>
+SCREEN SECTION.<a name="wp1032983"> </a>
+01  ORDER-SCREEN.<a name="wp1032984"> </a>
+  { . . . }<a name="wp1032985"> </a>
+  03  &quot;Cust #: &quot;.<a name="wp1032986"> </a>
+  03  USING CUSTOMER-NO <a name="wp1032987"> </a>
+      BEFORE PROCEDURE IS SHOW-CUST-LEGEND <a name="wp1032988"> </a>
+      AFTER PROCEDURE IS TEST-CUSTOMER <a name="wp1032989"> </a>
+      EXCEPTION PROCEDURE IS CHECK-FOR-LOOKUP.<a name="wp1032990"> </a>
+  03  SHOW-CUSTOMER-NAME, PIC X(30) FROM <a name="wp1032991"> </a>
+      CUSTOMER-NAME, COLUMN + 3.<a name="wp1039068"> </a>
+  { . . . }<a name="wp1032993"> </a>
+<a name="wp1032994"> </a>
+PROCEDURE DIVISION.<a name="wp1032995"> </a>
+MAIN-LOGIC.<a name="wp1032996"> </a>
+   { . . . }<a name="wp1032997"> </a>
+   DISPLAY ORDER-SCREEN.<a name="wp1032998"> </a>
+   ACCEPT ORDER-SCREEN <a name="wp1032999"> </a>
+      ON EXCEPTION CONTINUE<a name="wp1033000"> </a>
+      NOT ON EXCEPTION WRITE ORDER-RECORD<a name="wp1033001"> </a>
+   END-ACCEPT.<a name="wp1033002"> </a>
+   { . . . }<a name="wp1033003"> </a>
+   STOP RUN.<a name="wp1033004"> </a>
+<a name="wp1033005"> </a>
+* SHOW-CUST-LEGEND executes whenever the user<a name="wp1033006"> </a>
+* arrives at the customer number field.  It <a name="wp1033007"> </a>
+* displays a legend. This legend is removed by<a name="wp1033008"> </a>
+* both the AFTER and EXCEPTION procedures<a name="wp1033009"> </a>
+* associated with the customer-number field.<a name="wp1033010"> </a>
+<a name="wp1033011"> </a>
+SHOW-CUST-LEGEND.<a name="wp1033012"> </a>
+   DISPLAY &quot;F1 = Customer Lookup&quot;, LINE 24,<a name="wp1033013"> </a>
+   ERASE TO END OF LINE.<a name="wp1033014"> </a>
+<a name="wp1033015"> </a>
+* TEST-CUSTOMER checks for a valid customer number<a name="wp1033016"> </a>
+* entry by reading the customer file. If it finds a<a name="wp1033017"> </a>
+* customer record, it displays the customer's name.  <a name="wp1033018"> </a>
+* If it does not find a record, it forces the user <a name="wp1033019"> </a>
+* to re-enter the field by setting the SCREEN-<a name="wp1033020"> </a>
+* CONTROL condition, GOTO-FIELD, to TRUE.  Since <a name="wp1033021"> </a>
+* the ACCEPT statement initializes CONTROL-VALUE to <a name="wp1033022"> </a>
+* the field number of the customer number field, <a name="wp1033023"> </a>
+* setting GOTO-FIELD to TRUE will cause the ACCEPT <a name="wp1033024"> </a>
+* statement to return to the customer-number field.<a name="wp1033025"> </a>
+<a name="wp1033026"> </a>
+TEST-CUSTOMER.<a name="wp1033027"> </a>
+   DISPLAY SPACES, LINE 24, ERASE TO END OF LINE.<a name="wp1033028"> </a>
+   READ CUSTOMER-FILE RECORD<a name="wp1033029"> </a>
+      INVALID KEY<a name="wp1033030"> </a>
+         DISPLAY &quot;CUSTOMER NOT ON FILE - PRESS RETURN&quot;, <a name="wp1033031"> </a>
+         LINE 24, BOLD<a name="wp1039093"> </a>
+         ACCEPT OMITTED<a name="wp1033033"> </a>
+         SET GOTO-FIELD TO TRUE<a name="wp1033034"> </a>
+<a name="wp1033035"> </a>
+      NOT INVALID KEY<a name="wp1033036"> </a>
+         DISPLAY SHOW-CUSTOMER-NAME.<a name="wp1033037"> </a>
+<a name="wp1033038"> </a>
+* CHECK-FOR-LOOKUP executes when the user types a<a name="wp1033039"> </a>
+* function key when in the customer-number field. <a name="wp1033040"> </a>
+* It erases the legend and then checks to see if <a name="wp1033041"> </a>
+* Function Key 1 was pressed.  If it was, it <a name="wp1033042"> </a>
+* executes a look-up procedure.  If the procedure <a name="wp1033043"> </a>
+* returns with a valid customer selected, it <a name="wp1033044"> </a>
+* displays the customer's name and causes control <a name="wp1033045"> </a>
+* to pass to the next field. Otherwise, it forces <a name="wp1033046"> </a>
+* the user to re-enter the customer-number field. <a name="wp1033047"> </a>
+* It does this by setting GOTO-FIELD to TRUE while <a name="wp1033048"> </a>
+* leaving CONTROL-VALUE unchanged.  <a name="wp1033049"> </a>
+<a name="wp1033050"> </a>
+CHECK-FOR-LOOKUP.<a name="wp1033051"> </a>
+   DISPLAY SPACES, LINE 24, ERASE TO END OF LINE.<a name="wp1033052"> </a>
+   IF F1-KEY<a name="wp1033053"> </a>
+      PERFORM CUSTOMER-LOOKUP-PROCEDURE<a name="wp1033054"> </a>
+      IF HAVE-CUSTOMER-NUMBER<a name="wp1033055"> </a>
+         DISPLAY SHOW-CUSTOMER-NAME<a name="wp1033056"> </a>
+         ADD 1 TO CONTROL-VALUE<a name="wp1033057"> </a>
+   END-IF<a name="wp1033058"> </a>
+   SET GOTO-FIELD TO TRUE.<a name="wp1033059"> </a>
+</pre></div>
+<a name="wp1033060"> </a><p class="pBody">
+A complete description of the rules that govern the execution of embedded procedures can be found in section 5.9.6 of Book 3, <em class="cEmphasis">Reference Manual</em>.  Rules covering the use of event procedures, a variant of embedded procedures, are also found in this discussion of the PROCEDURE clause.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

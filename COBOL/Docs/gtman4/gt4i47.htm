@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$FULLNAME Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1035850"> </a><h2 class="pHeading2">
+C$FULLNAME Routine
+</h2>
+<a name="wp1035854"> </a><p class="pBody">
+C$FULLNAME locates a file by using the runtime's filename translation and search logic.  The routine returns the full name of the corresponding file. 
+</p>
+<a name="wp1035855"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$FULLNAME&quot;<a name="wp1035856"> </a>
+    USING FILE-NAME, FULL-NAME, FILE-INFO<a name="wp1035857"> </a>
+    GIVING STATUS-CODE<a name="wp1035858"> </a>
+</pre></div>
+<a name="wp1035859"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1035860"> </a><p class="pBody">
+<b class="cBold">FILE-NAME</b>   PIC X(n)
+</p>
+<a name="wp1035861"> </a><p class="pBody">
+Specifies the name of the file to be located.  
+</p>
+<a name="wp1035862"> </a><p class="pBody">
+<b class="cBold">FULL-NAME</b>   PIC X(n)
+</p>
+<a name="wp1035863"> </a><p class="pBody">
+Data item to receive the full name of the file.
+</p>
+<a name="wp1035864"> </a><p class="pBody">
+<b class="cBold">FILE-INFO   </b>Group item (optional)
+</p>
+<a name="wp1035865"> </a><p class="pBody">
+Group item to receive information about the file located.  Must have this structure: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  FILE-INFO.<a name="wp1035866"> </a>
+    02  FILE-SIZE    PIC X(8) COMP-X.<a name="wp1035867"> </a>
+    02  FILE-DATE    PIC 9(8) COMP-X.<a name="wp1035868"> </a>
+    02  FILE-TIME    PIC 9(8) COMP-X.<a name="wp1035869"> </a>
+</pre></div>
+<a name="wp1035870"> </a><p class="pBody">
+The FILE-SIZE field is the size of the file in bytes.  The FILE-DATE and FILE-TIME fields indicate the time the file was last modified.  FILE-DATE has the form &quot;YYYYMMDD&quot; (year/month/day, note the 4-digit year) and FILE-TIME has the form &quot;HHMMSShh&quot; (hours/minutes/seconds/hundredths--just like ACCEPT FROM TIME).  On all current implementations, the hundredths field is always set to zero.  
+</p>
+<a name="wp1035871"> </a><p class="pBody">
+<b class="cBold">STATUS-CODE   </b>Any numeric data item.
+</p>
+<a name="wp1035872"> </a><p class="pBody">
+This receives the return status.  It will be zero if successful, or &quot;1&quot; if FILE-NAME could not be found on disk or if FILE-NAME is not the name of a regular disk file.
+</p>
+<a name="wp1035873"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1035874"> </a><p class="pBody">
+C$FULLNAME invokes the runtime's data file search logic on FILE-NAME.  This involves using the configuration variables FILE-PREFIX, FILE-SUFFIX and FILE-CASE.  The disk is searched using the rules described in section 2.8 of the <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>.  The first matching file is returned in FULL-NAME.  Note that the returned name is not automatically a full path name.  Instead, it is the name of the file as the runtime found it.  This may be based on the current directory.  
+</p>
+<a name="wp1035875"> </a><p class="pBody">
+If FILE-INFO is specified, information about the file located is returned in it. 
+</p>
+<a name="wp1035876"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The search techniques do not involve any file system specific techniques.  For example, the Vision file system has a name mapping facility for its additional segments.  This facility is not used when the runtime is searching for the file.  Also note that remote file names are searched for when used in conjunction with AcuServer. 
+<hr />
+</p>
+<a name="wp1061348"> </a><p class="pBody">
+The behavior of this routine is affected by the FILENAME_SPACES configuration variable. The value of  FILENAME_SPACES determines whether spaces are allowed in a file name.  See the entry for <a  href="gt4h132.htm#wp1035905">FILENAME_SPACES</a> in Appendix&#160;H for more information.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

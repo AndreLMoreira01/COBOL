@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.3  Data Division Format</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; </p>
+<a name="wp1034752"> </a><h2 class="pHeading1">
+5.3  Data Division Format
+</h2>
+<a name="wp1034753"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+[ <u class="cUnderline">DATA</u> <u class="cUnderline">DIVISION</u>. ]<a name="wp1034754"> </a>
+<a name="wp1034755"> </a>
+[ <u class="cUnderline">FILE</u> <u class="cUnderline">SECTION</u>.<a name="wp1034756"> </a>
+   [ file-desc { record-description } ... ] ... ]<a name="wp1034757"> </a>
+   [ sort-desc { record-description } ... ]<a name="wp1034758"> </a>
+<a name="wp1034759"> </a>
+[ <u class="cUnderline">WORKING-STORAGE</u> <u class="cUnderline">SECTION</u>.<a name="wp1034760"> </a>
+   [ record-description ] ... ]<a name="wp1034761"> </a>
+<a name="wp1034762"> </a>
+[ <u class="cUnderline">LINKAGE</u> <u class="cUnderline">SECTION</u>.<a name="wp1034763"> </a>
+   [ record-description ] ... ]<a name="wp1034764"> </a>
+<a name="wp1034765"> </a>
+[ <u class="cUnderline">SCREEN</u> <u class="cUnderline">SECTION</u>.<a name="wp1034766"> </a>
+   [ screen-description ] ... ]<a name="wp1034767"> </a>
+</pre></div>
+<a name="wp1034768"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034770"> </a><div class="pSmartList1"><li>The division header is optional for the Data Division. </li></div>
+<a name="wp1089912"> </a><div class="pSmartList1"><li>The FILE SECTION header is optional.</li></div>
+</ol></div>
+<a name="wp1034771"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034772"> </a><div class="pSmartList1"><li>The Data Division entries are described in the following sections.  </li></div>
+<a name="wp1034773"> </a><div class="pSmartList1"><li>The File Section defines the structure of data files.</li></div>
+<a name="wp1034774"> </a><div class="pSmartList1"><li>A <em class="cEmphasis">file-desc</em> entry and its associated <em class="cEmphasis">record-descriptions</em> specify the format, layout, and sizes of a file's logical records.  A <em class="cEmphasis">sort-desc</em> entry specifies the layout and sizes of a sort file's logical records.  </li></div>
+<a name="wp1034775"> </a><div class="pSmartList1"><li>For each file described by a SELECT in the Environment Division, a corresponding <em class="cEmphasis">file-desc</em> or <em class="cEmphasis">sort-desc</em> must be made in the Data Division.</li></div>
+<a name="wp1034776"> </a><div class="pSmartList1"><li>The Working-Storage Section describes the records and independent data items which are not part of data files but are developed and processed by the program internally.  </li></div>
+<a name="wp1034777"> </a><div class="pSmartList1"><li>Each <em class="cEmphasis">record-description</em> in Working Storage describes the format, layout, and size of an internal data item.</li></div>
+<a name="wp1034778"> </a><div class="pSmartList1"><li>Data items in Working Storage can be given initial values (see <a  href="gt3548.htm#wp1036377">VALUE clause</a>).  Items that are not explicitly initialized are set to spaces, or the value specified with the &quot;-Dv&quot; compile option, when the program is in its initial state.  This may or may not be a valid value for the data item.  </li></div>
+<a name="wp1034779"> </a><div class="pSmartList1"><li>The Linkage Section is used only in a called program.  It defines the data available from the calling program.  Both the called and calling program can use this data.</li></div>
+<a name="wp1034780"> </a><div class="pSmartList1"><li>To access data described in the Linkage Section, the called program may specify a USING phrase in its Procedure Division header.  An alternative way to do this is through the SET ADDRESS OF statement.  In the example below, note that the USING phrase has been omitted from the Procedure Division header.</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+LINKAGE SECTION.<a name="wp1034781"> </a>
+01  my-var       pic x(30).<a name="wp1034782"> </a>
+<a name="wp1034783"> </a>
+PROCEDURE DIVISION.<a name="wp1034784"> </a>
+main-logic.<a name="wp1034785"> </a>
+    if switch-1<a name="wp1034786"> </a>
+       set address of my-var to msg-1<a name="wp1034787"> </a>
+    else<a name="wp1034788"> </a>
+       set address of my-var to msg-2<a name="wp1034789"> </a>
+    end-if.<a name="wp1034790"> </a>
+    display my-var.<a name="wp1034791"> </a>
+</pre></div>
+<a name="wp1034792"> </a><p class="pIndented1">
+See <a  href="gt3678.htm#wp1035736">section 6.6</a> for additional information on the <a  href="gt36137.htm#wp1041588">SET Statement</a>.
+</p>
+<a name="wp1034793"> </a><div class="pSmartList1"><li>The Screen Section describes the format, layout, and behavior of console screen items.  These screen items are used with the ACCEPT and DISPLAY verbs to perform single- and multi-field console I/O. </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

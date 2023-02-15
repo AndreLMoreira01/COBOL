@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:41:44" />
+  <title>3.2.6  Naming the XFD</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl3.htm">Chapter 3: Data Dictionaries</a> &gt; <a href="4gl33.htm">3.2  XFD Files</a> &gt; </p>
+<a name="wp1034187"> </a><h2 class="pHeading2">
+3.2.6  Naming the XFD
+</h2>
+<a name="wp1034193"> </a><p class="pBody">
+The compiler needs to give a name to each XFD file (data dictionary) that is built.  It attempts to build the name from your COBOL code, although there are some instances where the name in the code is nonspecific, and you must provide a name.  
+</p>
+<a name="wp1034194"> </a><p class="pBody">
+Each XFD name is built from a <em class="cEmphasis">starting name</em> that is derived (if possible) from the SELECT statement in your COBOL code.  The following paragraphs explain how that occurs.
+</p>
+<a name="wp1034195"> </a><h3 class="pHeadingRef">
+ASSIGN name is a variable
+</h3>
+<a name="wp1034198"> </a><p class="pBody">
+If the SELECT for the file has a variable ASSIGN name (ASSIGN TO <em class="cEmphasis">filename</em>), you must specify a starting name for the XFD file via a <a  href="4gl49.htm#wp1034600">FILE</a> directive in your code.  This process is described in <a  href="4gl4.htm#wp1039333">Chapter 4, &quot;Using Directives.&quot;</a>  
+</p>
+<a name="wp1034199"> </a><h3 class="pHeadingRef">
+ASSIGN name is a constant
+</h3>
+<a name="wp1034200"> </a><p class="pBody">
+If the SELECT for the file has a constant ASSIGN name (such as ASSIGN TO &quot;COMPFILE&quot;), that name is used as the starting name for the XFD name.  
+</p>
+<a name="wp1034201"> </a><h3 class="pHeadingRef">
+ASSIGN name is generic
+</h3>
+<a name="wp1034202"> </a><p class="pBody">
+If the ASSIGN phrase refers to a generic device (such as ASSIGN TO &quot;DISK&quot;), the compiler uses the SELECT name as the starting name.  
+</p>
+<a name="wp1034203"> </a><h3 class="pHeadingRef">
+Forming the final XFD name
+</h3>
+<a name="wp1034207"> </a><p class="pBody">
+From the starting name, the final name is formed as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034208"> </a><div class="pSmartList1"><li>The compiler removes any extensions from the starting name. </li></div>
+<a name="wp1034209"> </a><div class="pSmartList1"><li>It constructs a &quot;universal&quot; base name by stripping out directory information that fits any of the formats used by the operating systems that run the ACUCOBOL-GT compiler.  </li></div>
+<a name="wp1034210"> </a><div class="pSmartList1"><li>It reduces the base name to eight characters and converts it to lower case.</li></div>
+<a name="wp1034211"> </a><div class="pSmartList1"><li>It appends the letters &quot;.xfd&quot; to the base name.</li></div>
+</ul></div>
+<a name="wp1034212"> </a><h3 class="pHeadingRef">
+Examples of XFD names
+</h3>
+<a name="wp1034234"> </a><p class="pBodyRelative">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1037814"> </a>
+COBOL code
+
+</th>
+    <th><a name="wp1037816"> </a>
+File name
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+ASSIGN TO &quot;usr/ar/customer.dat&quot;<a name="wp1034219"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1034221"> </a><p class="pCellBody">
+customer.xfd
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+SELECT TESTFILE, ASSIGN TO DISK<a name="wp1034223"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1034225"> </a><p class="pCellBody">
+testfile.xfd
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+ASSIGN TO &quot;-D SYS$LIB:HELP&quot;<a name="wp1034227"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1034229"> </a><p class="pCellBody">
+help.xfd
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+ASSIGN TO FILENAME<a name="wp1034231"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1034233"> </a><p class="pCellBody">
+(you specify)
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1034235"> </a><h3 class="pHeadingRef">
+Mapping other files to an XFD
+</h3>
+<a name="wp1034238"> </a><p class="pBody">
+At run time, it is possible to use a single XFD for files that have different names.  For example, suppose a site has customer files that have identical structures but different names (CUST0001, CUST0002, CUST0003, etc.).  It's not necessary to have a separate XFD for each file, so long as their record definitions are the same.  
+</p>
+<a name="wp1034241"> </a><p class="pBody">
+The individual files can all be mapped to the same XFD via a runtime configuration variable called <a  href="4gl818.htm#wp1036113">XFD_MAP</a>.  The following paragraphs describe how it works.
+</p>
+<a name="wp1034244"> </a><p class="pBody">
+Suppose your COBOL application has a SELECT with a variable ASSIGN name, such as customer-file.  This variable assumes different values (such as CUST0001 and CUST0002) during program execution.  
+</p>
+<a name="wp1034247"> </a><p class="pBody">
+Before compiling the application, you would use the <a  href="4gl49.htm#wp1034600">FILE</a> directive to provide a base name for the XFD.  Suppose you provide &quot;CUST&quot; as the base.  The compiler would then generate an XFD named &quot;cust.xfd&quot;.  (The compiler always converts XFD names to lower case.)
+</p>
+<a name="wp1034248"> </a><p class="pBody">
+To ensure that all customer files, each having a unique name, will use this same XFD, you make this entry in your runtime configuration file:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+XFD_MAP   CUST* = CUST<a name="wp1034249"> </a>
+</pre></div>
+<a name="wp1034250"> </a><p class="pBody">
+The asterisk (&quot;*&quot;) in the example is a wildcard that matches any number of characters.  <em class="cEmphasis">Note that the extension &quot;.xfd&quot; should not be included in the map.</em>  This statement would cause the XFD &quot;cust.xfd&quot; to be used for all files whose names begin with &quot;CUST&quot;.
+</p>
+<a name="wp1034251"> </a><p class="pBody">
+The XFD_MAP variable has this syntax:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+XFD_MAP   [<em class="cEmphasis">pattern</em> = <em class="cEmphasis">base-xfd-name</em>]  ...<a name="wp1034252"> </a>
+</pre></div>
+<a name="wp1034891"> </a><p class="pBody">
+where pattern consists of any valid filename characters and may include &quot;*&quot; or &quot;?&quot;.  These two characters have special meanings in the pattern:
+</p>
+<a name="wp1034892"> </a><p class="pBody">
+   </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1034895"> </a><p class="pCellBody">
+*
+</p>
+</td>
+    <td><a name="wp1034897"> </a><p class="pCellBody">
+matches any number of characters
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034899"> </a><p class="pCellBody">
+?
+</p>
+</td>
+    <td><a name="wp1034901"> </a><p class="pCellBody">
+matches a single occurrence of any character
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1034265"> </a><p class="pBody">
+For example:
+</p>
+<a name="wp1034266"> </a><p class="pBodyRelative">
+   </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1034269"> </a><p class="pCellBody">
+CUST???? &#160;&#160;
+</p>
+</td>
+    <td><a name="wp1034271"> </a><p class="pCellBody">
+matches CUST0001 and CUSTOMER;<br />does not match CUST001 or CUST00001
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034273"> </a><p class="pCellBody">
+CUST*     
+</p>
+</td>
+    <td><a name="wp1034275"> </a><p class="pCellBody">
+matches all of the above
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034277"> </a><p class="pCellBody">
+CUST*1    
+</p>
+</td>
+    <td><a name="wp1034279"> </a><p class="pCellBody">
+matches CUST001 and CUST0001 and CUST00001;<br />does not match CUSTOMER
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034281"> </a><p class="pCellBody">
+*OMER     
+</p>
+</td>
+    <td><a name="wp1034283"> </a><p class="pCellBody">
+matches CUSTOMER;<br />does not match CUST001 or CUST0001
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1034285"> </a><p class="pBody">
+The XFD_MAP variable is read during the open file stage of any Acu4GL products linked into the runtime.
+</p>
+<a name="wp1034288"> </a><p class="pBody">
+XFD values can be replaced or be added to the end of existing XFD map values by setting the <a  href="4gl819.htm#wp1036151">XFD_MAP_RESETS</a> configuration variable. This configuration variable determines whether setting the XFD_MAP adds to or replaces the existing value.  When this variable is set to &quot;0&quot; (off, false, no), setting the XFD_MAP adds new value patterns to the end of the existing value.  When it is set to &quot;1&quot; (on, true, yes), setting the XFD_MAP replaces the existing value with a new value.  The default value is &quot;1&quot; (on, true, yes).  
+</p>
+<a name="wp1034289"> </a><p class="pBody">
+This variable may be useful if you need to include multiple XFD_MAP lines in a configuration file, and want to avoid setting and resetting the variable.  When multiple lines exist, all patterns are used in the order they are listed.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

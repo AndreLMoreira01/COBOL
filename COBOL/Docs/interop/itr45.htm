@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:57:47" />
+  <title>4.2.2  To Add an ActiveX Control or COM Object to Your ACUCOBOL-GT Program</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr4.htm">Chapter 4: Using ActiveX Controls and COM Objects</a> &gt; <a href="itr43.htm">4.2  Adding ActiveX Controls or COM Objects to Your COBOL Program</a> &gt; </p>
+<a name="wp1037520"> </a><h2 class="pHeading2">
+4.2.2  To Add an ActiveX Control or COM Object to Your ACUCOBOL-GT Program
+</h2>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037522"> </a><div class="pSmartList1"><li>If it is not installed already, install and register the ActiveX control or COM object of interest on your development system.  </li></div>
+<a name="wp1037524"> </a><p class="pIndented1">
+Complex controls may come with their own setup programs, licensing, and registration wizards.  Look for a setup program or &quot;readme&quot; file in the directory containing the control.  Run the setup program if you find one.  This program will likely install and register the control for you.  Read the &quot;readme&quot; file, if one exists, for any installation and registration instructions.  If you cannot find any instructions on the control, you can also visit the control vendor's Web site.  
+</p>
+<a name="wp1037527"> </a><p class="pIndented1">
+For simple controls, you can usually accomplish installation and registration by copying the ActiveX control files (at least a &quot;.ocx&quot; or &quot;.dll&quot; file) to your hard disk and executing the following command: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+regsvr32 &lt;ocx or dll name&gt;<a name="wp1037528"> </a>
+</pre></div>
+<a name="wp1037530"> </a><p class="pIndented1">
+The &quot;regsvr32.exe&quot; file is normally located in your \windows\system directory.  Do not assume that it is in your search path.  Even if the control is already installed on your machine (for instance, if it came with other software that you've purchased) you may still need to register the control with &quot;regsvr32.exe&quot;.
+</p>
+<a name="wp1037531"> </a><div class="pSmartList1"><li>Use Windows Explorer to locate &quot;axdefgen.exe&quot;.  You'll find it in the \AcuGT\bin directory wherever you installed ACUCOBOL-GT on your machine (\acucorp\acucbl700\AcuGT\bin by default).</li></div>
+<a name="wp1037532"> </a><div class="pSmartList1"><li>Double-click the AXDEFGEN icon to start the utility.  A list of all the controls and COM objects currently in the local machine's Windows registry appears.  (If desired, you can launch &quot;AXDEFGEN&quot; from the command line.  Refer to <a  href="itr425.htm#wp1038384">section 4.20</a> of this book for applicable command-line options.)</li></div>
+<a name="wp1037539"> </a><p class="pBodyRelative">
+<br />
+<img src="images/axdefgen.gif" height="406" width="488" border="0" hspace="0" vspace="0"/>
+<br />
+
+</p>
+<a name="wp1037540"> </a><div class="pSmartList1"><li>Select the ActiveX control or COM object that you'd like to include in your COBOL program, then specify an output path and filename for the COPY file.  Click <b class="cBold">OK</b> when done.  The utility automatically generates a COPY file for the chosen control and appends the &quot;.def&quot; filename extension to the file.</li></div>
+<a name="wp1037541"> </a><p class="pIndented1">
+Many ActiveX controls and COM objects have documentation available.  If they do, the ActiveX Help push button on the right side of this box is enabled.  Click the button to read the help file for the selected ActiveX control or COM object.  If the ActiveX Help push button is disabled, then <b class="cBold">AXDEFGEN</b> could not locate a help file for the selected control.
+</p>
+<a name="wp1037542"> </a><div class="pSmartList1"><li>In a code editor, open your ACUCOBOL-GT program and go to its Environment Division/Configuration Section.  </li></div>
+<a name="wp1037543"> </a><div class="pSmartList1"><li>Copy the new COPY file into the COBOL program's Special-Names paragraph.  If you are adding several controls, copy several COPY files into this paragraph.  Add a period at the end of the paragraph.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SPECIAL-NAMES<a name="wp1037544"> </a>
+COPY &quot;calendar.def&quot;.<a name="wp1037545"> </a>
+COPY &quot;chart.def&quot;.<a name="wp1037546"> </a>
+.<a name="wp1037547"> </a>
+</pre></div>
+<a name="wp1037548"> </a><p class="pIndented1">
+ACUCOBOL-GT  includes an &quot;acuclass.def&quot; file, which contains stock class definitions for ActiveX.  We recommend that you also copy it into your program's Special-Names paragraph, as in:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY &quot;acuclass.def&quot;.<a name="wp1037549"> </a>
+</pre></div>
+<a name="wp1037550"> </a><div class="pSmartList1"><li>Add the control to your program.  If you are adding a COM object, you add the object using the CREATE statement in your program's Procedure Division. For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+*Create an instance of the Outlook application <a name="wp1037551"> </a>
+CREATE Application OF Outlook <a name="wp1037552"> </a>
+     HANDLE IN myOutlook <a name="wp1037553"> </a>
+     EVENT PROCEDURE OUTLOOK-EVENTS.<a name="wp1037554"> </a>
+</pre></div>
+<a name="wp1037555"> </a><p class="pIndented1">
+If you are adding an ActiveX control, however, you can do one of two things: 
+</p>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1037556"> </a><div class="pSmartList2"><li>Add the new control to your screen in your program's Screen Section.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SCREEN SECTION<a name="wp1037557"> </a>
+...<a name="wp1037558"> </a>
+03 calendar-item Calendar column 5, <a name="wp1037559"> </a>
+   line 5, size 60, lines 20<a name="wp1037560"> </a>
+...<a name="wp1037561"> </a>
+</pre></div>
+<a name="wp1037562"> </a><p class="pIndented2">
+or
+</p>
+<a name="wp1037563"> </a><div class="pSmartList2"><li>Create the control using the DISPLAY statement in your program's Procedure Division.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+*Declare the calendar control's handle.<a name="wp1037564"> </a>
+   77 CALENDAR-1 USAGE IS HANDLE OF Calendar.<a name="wp1037565"> </a>
+   ...<a name="wp1037566"> </a>
+*Create an instance of the calendar control<a name="wp1037567"> </a>
+   DISPLAY Calendar line 4, column 6, <a name="wp1037568"> </a>
+      lines 10, size 40<a name="wp1037569"> </a>
+      EVENT PROCEDURE IS CALENDAR-EVENT-HANDLER <a name="wp1037570"> </a>
+      HANDLE IN CALENDAR-1.<a name="wp1037571"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1037572"> </a><p class="pIndented1">
+You can determine the name of the control by opening the COPY file (&quot;.def&quot; file) and looking at the section called &quot;***Primary Interface***.&quot;  Look for the name of the control after the word &quot;CLASS&quot; in the primary interface definition. 
+</p>
+<a name="wp1037573"> </a><p class="pIndented1">
+If you set a property of the ActiveX control in the control property panel (thus storing it in the resource file) and that property has a corresponding ACUCOBOL-GT property (e.g., ENABLED), then the COBOL program must explicitly set the corresponding ACUCOBOL-GT property in the Screen Section or Procedure Division.  For example, if the ActiveX ENABLED property is set to &quot;false&quot; in the ActiveX control property panel, then a line must be included in the initialization code of the COBOL program to set the ACUCOBOL-GT ENABLED property to &quot;false&quot;, as in:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MODIFY ActiveXcontrol ENABLED FALSE<a name="wp1037574"> </a>
+</pre></div>
+<a name="wp1037575"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>The runtime ignores events from all controls while it is creating an ActiveX control.  If you are using a control that delivers significant information using events and you don't want to miss those events while you are creating a new control, set the CONTROL_CREATION_EVENTS runtime configuration variable to &quot;1&quot; (on, true, yes).  Alternatively, you could avoid creating an ActiveX control when you are expecting an event.
+<hr />
+</p>
+<a name="wp1037577"> </a><div class="pSmartList1"><li>If desired, you can modify a control's properties or invoke methods using the MODIFY verb as in the following example:   </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MODIFY ActiveXcontrol Method (&quot;parameters&quot;).<a name="wp1037578"> </a>
+<a name="wp1037579"> </a>
+MODIFY ActiveXcontrol Property-name = property-value.<a name="wp1037580"> </a>
+</pre></div>
+<a name="wp1037581"> </a><p class="pIndented1">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MODIFY ActiveXcontrol PROPERTY 37 = (&quot;parameters&quot;).<a name="wp1037582"> </a>
+</pre></div>
+<a name="wp1037583"> </a><p class="pIndented1">
+Note that 37 is the ActiveX or COM &quot;property&quot; number of Property-name or Method.  You can determine the property number by opening the COPY file and searching for the name of the property or method.  The &quot;property&quot; number, also known as the dispatch id or dispid, precedes the name in the COPY file.  The equal sign is optional.
+</p>
+<a name="wp1037586"> </a><p class="pIndented1">
+To disable an ActiveX control, you use the MODIFY statement:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MODIFY ActiveXcontrol ENABLED FALSE.<a name="wp1037587"> </a>
+</pre></div>
+<a name="wp1037588"> </a><p class="pIndented1">
+If the ActiveX control has its own property named ENABLED, the MODIFY statement must explicitly set both the ACUCOBOL-GT ENABLED property and the ActiveX property (@ENABLED; the &quot;@&quot; symbol signifies that the property is a property of the ActiveX control).  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MODIFY ActiveXcontrol ENABLED FALSE @ENABLED FALSE.<a name="wp1037589"> </a>
+</pre></div>
+<a name="wp1037590"> </a><p class="pIndented1">
+To enable the control:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MODIFY ActiveXcontrol ENABLED TRUE @ENABLED TRUE.<a name="wp1037591"> </a>
+</pre></div>
+<a name="wp1037592"> </a><p class="pIndented1">
+To inquire about the value of one of a control's properties, use the INQUIRE verb, as in:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+INQUIRE ActiveXcontrol Property-name IN value-item.<a name="wp1037593"> </a>
+</pre></div>
+<a name="wp1037594"> </a><p class="pIndented1">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+INQUIRE ActiveXcontrol PROPERTY 37 IN value-item.<a name="wp1037595"> </a>
+</pre></div>
+<a name="wp1037596"> </a><div class="pSmartList1"><li>If desired, modify your program to respond to one of the control's events (e.g., a mouse click).  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+calendar-1-event.<a name="wp1037597"> </a>
+   evaluate event-type<a name="wp1037598"> </a>
+      when msg-ax-event<a name="wp1037599"> </a>
+         evaluate event-data-2<a name="wp1037600"> </a>
+            when CalendarClick<a name="wp1037601"> </a>
+               Perform ...<a name="wp1037602"> </a>
+         end-evaluate.<a name="wp1037603"> </a>
+      ...<a name="wp1037604"> </a>
+   end-evaluate.<a name="wp1037605"> </a>
+</pre></div>
+<a name="wp1037606"> </a><p class="pIndented1">
+You can view a list of control events by opening the COPY file created by AXDEFGEN and looking at the section &quot;Event Interface for the <em class="cEmphasis">xxx</em> Control.&quot;
+</p>
+<a name="wp1037607"> </a><div class="pSmartList1"><li>Compile and run your modified program.</li></div>
+</ol></div>
+<a name="wp1037608"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In order for the control to work on your end user's machine, it must be installed and registered.  If you are licensed to do so, you can distribute the control along with your application.  Refer to <a  href="itr415.htm#wp1038056">section 4.10, &quot;Distributing Applications Containing ActiveX Controls,&quot;</a> for information about distributing an application that contains an ActiveX object.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

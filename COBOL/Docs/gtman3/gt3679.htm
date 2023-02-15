@@ -1,0 +1,1686 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>ACCEPT Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1035747"> </a><h2 class="pHeading2">
+ACCEPT Statement
+</h2>
+<a name="wp1035750"> </a><p class="pBody">
+The ACCEPT statement makes low-volume data available to the program. See <a  href="gt3630.htm#wp1034866">Section 6.4.9, &quot;Common Screen Options,&quot;</a> for more information on many of the optional clauses shown below.  
+</p>
+<a name="wp1035751"> </a><p class="pBody">
+The different forms of the ACCEPT statement perform the following functions:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1035752"> </a><div class="pSmartList1"><li>Format 1, ACCEPT (an individual field)</li></div>
+<a name="wp1035753"> </a><div class="pSmartList1"><li>Format 2, ACCEPT (a Screen Section item, one or more fields)</li></div>
+<a name="wp1035754"> </a><div class="pSmartList1"><li>Format 3, ACCEPT FROM (returns selected data from the operating environment)</li></div>
+<a name="wp1035755"> </a><div class="pSmartList1"><li>Format 4, ACCEPT FROM SCREEN (accepts data found on screen)</li></div>
+<a name="wp1035756"> </a><div class="pSmartList1"><li>Format 5, ACCEPT FROM ENVIRONMENT (accepts value of variable from user's environment or from ACUCOBOL-GT'<span style="font-family: Arial, Verdana, Helvetica, sans-serif">s</span> runtime configuration settings)</li></div>
+<a name="wp1035757"> </a><div class="pSmartList1"><li>Format 6, ACCEPT (ANSI style)</li></div>
+<a name="wp1035758"> </a><div class="pSmartList1"><li>Format 7, ACCEPT (activates a specific control)</li></div>
+<a name="wp1035759"> </a><div class="pSmartList1"><li>Format 8, ACCEPT (accepts HTML forms)</li></div>
+<a name="wp1035760"> </a><div class="pSmartList1"><li>Format 9, ACCEPT (accepts an &quot;event&quot;)</li></div>
+<a name="wp1035761"> </a><div class="pSmartList1"><li>Format 10, ACCEPT (HP COBOL)</li></div>
+<a name="wp1035762"> </a><div class="pSmartList1"><li>Format 11, ACCEPT (HP COBOL)</li></div>
+<a name="wp1035764"> </a><div class="pSmartList1"><li>Format 12, ACCEPT (HP COBOL)</li></div>
+<a name="wp1071510"> </a><div class="pSmartList1"><li>Format 13, ACCEPT FROM ENVIRONMENT-VALUE (returns the value of the special register ENVIRONMENT-NAME)</li></div>
+</ul></div>
+<a name="wp1035765"> </a><p class="pBody">
+Depending on the Format and options used, an ACCEPT statement can return the following pre-defined exception values.  The numbers listed here are the actual values that are returned.  Exception values can be found in the file &quot;acugui.def&quot;.  The names given here are the level 78 data items found in that file.  
+</p>
+<a name="wp1035800"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1210480"> </a><p class="pCellBody">
+95 W-MESSAGE
+</p>
+</td>
+    <td><a name="wp1210482"> </a><p class="pCellBody">
+- message received    
+</p>
+<a name="wp1210484"> </a><p class="pCellBody">
+    (ACCEPT ALLOWING MESSAGES) 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1210487"> </a><p class="pCellBody">
+96 W-EVENT
+</p>
+</td>
+    <td><a name="wp1210490"> </a><p class="pCellBody">
+ - ACCEPT terminated by an event  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1210493"> </a><p class="pCellBody">
+97 W-NO-FIELDS
+</p>
+</td>
+    <td><a name="wp1210495"> </a><p class="pCellBody">
+ - no input fields, or all fields protected or hidden  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1210499"> </a><p class="pCellBody">
+98 W-CONVERSION-ERROR
+</p>
+</td>
+    <td><a name="wp1210502"> </a><p class="pCellBody">
+ - numeric conversion error  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1210505"> </a><p class="pCellBody">
+99 W-TIMEOUT
+</p>
+</td>
+    <td><a name="wp1210507"> </a><p class="pCellBody">
+ - ACCEPT timed out    
+</p>
+<a name="wp1210509"> </a><p class="pCellBody">
+    (ACCEPT BEFORE TIME) 
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1035802"> </a><p class="pBody">
+Please note that ACCEPT works differently on Windows and character-based systems.  In Windows, an entry field is automatically in insert mode-that is, typing characters moves other characters instead of overwriting them.  In character-based systems, entry fields start in overwrite mode, so typing new characters overwrites characters that already exist.  
+</p>
+<a name="wp1207776"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<a name="wp1035803"> </a><h3 class="pHeadingRef">
+Format 1
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">ACCEPT</u> {dest-item}<a name="wp1035804"> </a>
+       {<u class="cUnderline">OMITTED</u>  }<a name="wp1035805"> </a>
+</pre></div>
+<a name="wp1035807"> </a><p class="pBody">
+Remaining phrases are optional, can appear in any order.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">AT</u> screen-loc<a name="wp1035808"> </a>
+<a name="wp1035811"> </a>
+{FROM} <u class="cUnderline">LINE</u> NUMBER line-num<a name="wp1061668"> </a>
+{AT  }<a name="wp1061673"> </a>
+<a name="wp1035812"> </a>
+{FROM} {<u class="cUnderline">COLUMN</u>  } NUMBER col-num<a name="wp1035813"> </a>
+{AT  } {<u class="cUnderline">COL</u>     }<a name="wp1035814"> </a>
+       {<u class="cUnderline">POSITION</u>}<a name="wp1035815"> </a>
+       {<u class="cUnderline">POS</u>     }<a name="wp1035816"> </a>
+<a name="wp1035817"> </a>
+WITH PROTECTED <u class="cUnderline">SIZE</u> length<a name="wp1035818"> </a>
+<a name="wp1035819"> </a>
+WITH <u class="cUnderline">NO</u> ADVANCING<a name="wp1035820"> </a>
+<a name="wp1061675"> </a>
+{<u class="cUnderline">ERASE</u>} [TO <u class="cUnderline">END</u> OF] {<u class="cUnderline">LINE</u>  }  <em class="cEmphasis">(VAX, ICOBOL)</em><a name="wp1035821"> </a>
+{<u class="cUnderline">BLANK</u>}             {<u class="cUnderline">SCREEN</u>}<a name="wp1035822"> </a>
+<a name="wp1061674"> </a>
+{<u class="cUnderline">ERASE</u>} [<u class="cUnderline">EOS</u>]                 <em class="cEmphasis">(RM)</em><a name="wp1035823"> </a>
+{<u class="cUnderline">BLANK</u>} [<u class="cUnderline">EOL</u>]<a name="wp1035824"> </a>
+<a name="wp1061676"> </a>
+WITH [<u class="cUnderline">NO</u>] {<u class="cUnderline">BELL</u>}<a name="wp1035825"> </a>
+          {<u class="cUnderline">BEEP</u>}<a name="wp1035826"> </a>
+<a name="wp1035827"> </a>
+{<u class="cUnderline">UNDERLINE</u> }<a name="wp1035828"> </a>
+{<u class="cUnderline">UNDERLINED</u>}<a name="wp1035829"> </a>
+<a name="wp1061677"> </a>
+WITH {<u class="cUnderline">BLINKING</u>}<a name="wp1035830"> </a>
+     {<u class="cUnderline">BLINK</u>   }<a name="wp1035831"> </a>
+<a name="wp1061678"> </a>
+{<u class="cUnderline">HIGHLIGHT</u>}<a name="wp1035832"> </a>
+{<u class="cUnderline">HIGH</u>     }<a name="wp1035833"> </a>
+{<u class="cUnderline">BOLD</u>     }<a name="wp1035834"> </a>
+{<u class="cUnderline">LOWLIGHT</u> }<a name="wp1035835"> </a>
+{<u class="cUnderline">LOW</u>      }<a name="wp1035836"> </a>
+{<u class="cUnderline">STANDARD</u> }<a name="wp1035837"> </a>
+<a name="wp1035838"> </a>
+{<u class="cUnderline">REVERSE-VIDEO</u>}<a name="wp1035839"> </a>
+{<u class="cUnderline">REVERSE</u>      }<a name="wp1035840"> </a>
+{<u class="cUnderline">REVERSED</u>     }<a name="wp1035841"> </a>
+<a name="wp1035842"> </a>
+<u class="cUnderline">SAME</u><a name="wp1035843"> </a>
+<a name="wp1035844"> </a>
+WITH {<u class="cUnderline">COLOR</u> } color-val<a name="wp1035845"> </a>
+     {<u class="cUnderline">COLOUR</u>}<a name="wp1035846"> </a>
+<a name="wp1035847"> </a>
+{<u class="cUnderline">FOREGROUND-COLOR</u> } IS fg-color<a name="wp1035848"> </a>
+{<u class="cUnderline">FOREGROUND-COLOUR</u>}<a name="wp1035849"> </a>
+<a name="wp1035850"> </a>
+{<u class="cUnderline">BACKGROUND-COLOR</u> } IS bg-color<a name="wp1035851"> </a>
+{<u class="cUnderline">BACKGROUND-COLOUR</u>}<a name="wp1035852"> </a>
+<a name="wp1035853"> </a>
+<u class="cUnderline">SCROLL</u> [<u class="cUnderline">UP</u>  ] [ BY scrl-num {LINE } ]<a name="wp1035854"> </a>
+       [<u class="cUnderline">DOWN</u>]               {LINES}<a name="wp1035855"> </a>
+<a name="wp1035856"> </a>
+OUTPUT {JUSTIFIED}  {<u class="cUnderline">LEFT</u>    }<a name="wp1035857"> </a>
+       {JUST     }  {<u class="cUnderline">RIGHT</u>   }<a name="wp1035858"> </a>
+                    {<u class="cUnderline">CENTERED</u>}<a name="wp1035859"> </a>
+WITH {<u class="cUnderline">CONVERSION</u>}<a name="wp1035860"> </a>
+     {<u class="cUnderline">CONVERT</u>   }<a name="wp1035861"> </a>
+<a name="wp1061679"> </a>
+{WITH <u class="cUnderline">NO</u> <u class="cUnderline">ECHO</u>}<a name="wp1035862"> </a>
+{<u class="cUnderline">NO-ECHO</u>     }<a name="wp1035863"> </a>
+{<u class="cUnderline">SECURE</u>      }<a name="wp1035864"> </a>
+{<u class="cUnderline">OFF</u>         }<a name="wp1035865"> </a>
+<a name="wp1035866"> </a>
+<u class="cUnderline">PROMPT</u> [ CHARACTER IS prompt-lit ]<a name="wp1035867"> </a>
+<a name="wp1035868"> </a>
+{<u class="cUnderline">DEFAULT</u> [IS default]}<a name="wp1035869"> </a>
+{<u class="cUnderline">UPDATE</u>              }<a name="wp1035870"> </a>
+<a name="wp1035871"> </a>
+<u class="cUnderline">ECHO</u><a name="wp1035872"> </a>
+<a name="wp1035873"> </a>
+{<u class="cUnderline">AUTO</u>         }<a name="wp1035874"> </a>
+{<u class="cUnderline">AUTO-SKIP</u>    }<a name="wp1035875"> </a>
+{<u class="cUnderline">AUTOTERMINATE</u>}<a name="wp1035876"> </a>
+{<u class="cUnderline">TAB</u>          }<a name="wp1035877"> </a>
+<a name="wp1035878"> </a>
+{<u class="cUnderline">UPPER</u>}<a name="wp1035879"> </a>
+{<u class="cUnderline">LOWER</u>}<a name="wp1035880"> </a>
+<a name="wp1035881"> </a>
+<u class="cUnderline">CURSOR</u> curs-offset<a name="wp1035882"> </a>
+<a name="wp1035883"> </a>
+<u class="cUnderline">CONTROL</u> cntrl-string<a name="wp1035884"> </a>
+<a name="wp1035885"> </a>
+{<u class="cUnderline">REQUIRED</u>   }<a name="wp1035886"> </a>
+{<u class="cUnderline">EMPTY-CHECK</u>}<a name="wp1035887"> </a>
+<a name="wp1035888"> </a>
+{<u class="cUnderline">FULL</u>        }<a name="wp1035889"> </a>
+{<u class="cUnderline">LENGTH-CHECK</u>}<a name="wp1035890"> </a>
+<a name="wp1061680"> </a>
+{<u class="cUnderline">ZERO-FILL</u>   }<a name="wp1035891"> </a>
+{<u class="cUnderline">NUMERIC-FILL</u>}<a name="wp1035892"> </a>
+<a name="wp1035893"> </a>
+CONTROL <u class="cUnderline">KEY</u> IN key-dest<a name="wp1035894"> </a>
+<a name="wp1035895"> </a>
+BEFORE <u class="cUnderline">TIME</u> timeout<a name="wp1035896"> </a>
+<a name="wp1061705"> </a>
+ALLOWING <u class="cUnderline">MESSAGES</u> <u class="cUnderline">FROM</u> { THREAD thread-1 }<a name="wp1061706"> </a>
+                       { <u class="cUnderline">LAST</u> <u class="cUnderline">THREAD</u>     }<a name="wp1035898"> </a>
+                       { <u class="cUnderline">ANY</u> <u class="cUnderline">THREAD</u>      }<a name="wp1035899"> </a>
+<a name="wp1035900"> </a>
+[ { ON <u class="cUnderline">EXCEPTION</u> [key-dest] } {statement-1  } ]<a name="wp1035901"> </a>
+  { ON <u class="cUnderline">ESCAPE</u>    [key-dest] } {<u class="cUnderline">NEXT</u> <u class="cUnderline">SENTENCE</u>}<a name="wp1035902"> </a>
+  { AT <u class="cUnderline">END</u>                  }<a name="wp1035903"> </a>
+<a name="wp1035904"> </a>
+[ <u class="cUnderline">NOT</u>   { ON <u class="cUnderline">EXCEPTION</u> } statement-2 ]<a name="wp1035905"> </a>
+        { ON <u class="cUnderline">ESCAPE</u>    }<a name="wp1035906"> </a>
+        { AT <u class="cUnderline">END</u>       }<a name="wp1035907"> </a>
+<a name="wp1035908"> </a>
+[ <u class="cUnderline">END-ACCEPT</u> ]<a name="wp1035909"> </a>
+</pre></div>
+<a name="wp1035910"> </a><h3 class="pHeadingRef">
+Format 2
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">ACCEPT</u> screen-name<a name="wp1035912"> </a>
+</pre></div>
+<a name="wp1035913"> </a><p class="pBody">
+Remaining phrases are optional, can appear in any order.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">AT</u> screen-loc<a name="wp1035914"> </a>
+<a name="wp1035915"> </a>
+{FROM} <u class="cUnderline">LINE</u> NUMBER line-num<a name="wp1035916"> </a>
+{AT  }<a name="wp1035917"> </a>
+<a name="wp1035918"> </a>
+{FROM} {<u class="cUnderline">COLUMN</u>  } NUMBER col-num<a name="wp1035919"> </a>
+{AT  } {<u class="cUnderline">COL</u>     }<a name="wp1035920"> </a>
+       {<u class="cUnderline">POSITION</u>}<a name="wp1035921"> </a>
+       {<u class="cUnderline">POS</u>     }<a name="wp1035922"> </a>
+<a name="wp1035923"> </a>
+BEFORE <u class="cUnderline">TIME</u> timeout<a name="wp1035924"> </a>
+<a name="wp1035925"> </a>
+ALLOWING <u class="cUnderline">MESSAGES</u> <u class="cUnderline">FROM</u> { THREAD thread-1 }<a name="wp1035926"> </a>
+                       { <u class="cUnderline">LAST</u> <u class="cUnderline">THREAD</u>     }<a name="wp1035927"> </a>
+                       { <u class="cUnderline">ANY</u> <u class="cUnderline">THREAD</u>      }<a name="wp1035928"> </a>
+<a name="wp1061682"> </a>
+[ <u class="cUnderline">UNTIL</u> condition-1 ]<a name="wp1035929"> </a>
+<a name="wp1061683"> </a>
+[ ON {<u class="cUnderline">EXCEPTION</u>} statement-1 ]<a name="wp1035930"> </a>
+     {<u class="cUnderline">ESCAPE</u>   }<a name="wp1035931"> </a>
+<a name="wp1061684"> </a>
+[ <u class="cUnderline">NOT</u> ON {<u class="cUnderline">EXCEPTION</u>} statement-2 ]<a name="wp1035932"> </a>
+         {<u class="cUnderline">ESCAPE</u>   }<a name="wp1035933"> </a>
+<a name="wp1061685"> </a>
+[ <u class="cUnderline">END-ACCEPT</u> ]<a name="wp1035934"> </a>
+</pre></div>
+<a name="wp1035936"> </a><h3 class="pHeadingRef">
+Format 3 
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">ACCEPT</u> dest-item <u class="cUnderline">FROM</u> {<u class="cUnderline">DATE</u>                       }<a name="wp1035937"> </a>
+                      {<u class="cUnderline">DAY</u>                        }<a name="wp1035938"> </a>
+                      {<u class="cUnderline">CENTURY-DATE</u>               }<a name="wp1035939"> </a>
+                      {<u class="cUnderline">DATE</u> <u class="cUnderline">YYYYMMDD</u>              }<a name="wp1035940"> </a>
+                      {<u class="cUnderline">CENTURY-DAY</u>                }<a name="wp1035941"> </a>
+                      {<u class="cUnderline">DAY</u> <u class="cUnderline">YYYYDDD</u>                }<a name="wp1035942"> </a>
+                      {<u class="cUnderline">TIME</u>                       }<a name="wp1035943"> </a>
+                      {<u class="cUnderline">DAY-OF-WEEK</u>                }<a name="wp1035944"> </a>
+                      {<u class="cUnderline">TERMINAL-INFO</u>              }<a name="wp1035945"> </a>
+                      {<u class="cUnderline">SYSTEM-INFO</u>                }<a name="wp1035946"> </a>
+                      {<u class="cUnderline">INPUT</u> <u class="cUnderline">STATUS</u>               }<a name="wp1035947"> </a>
+                      {<u class="cUnderline">ESCAPE</u> KEY                 }<a name="wp1035948"> </a>
+                      {<u class="cUnderline">LINE</u> <u class="cUnderline">NUMBER</u>                }<a name="wp1035949"> </a>
+                      {<u class="cUnderline">COMMAND-LINE</u>               }<a name="wp1035950"> </a>
+                      {STANDARD <u class="cUnderline">OBJECT</u> object-name}<a name="wp1035951"> </a>
+                      {<u class="cUnderline">THREAD</u> HANDLE              }<a name="wp1035952"> </a>
+                      {<u class="cUnderline">WINDOW</u> HANDLE              }<a name="wp1035953"> </a>
+</pre></div>
+<a name="wp1035954"> </a><h3 class="pHeadingRef">
+Format 4
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">ACCEPT</u> dest-item <u class="cUnderline">FROM</u> <u class="cUnderline">SCREEN</u> <a name="wp1035955"> </a>
+</pre></div>
+<a name="wp1035956"> </a><p class="pBody">
+Remaining phrases are optional, can appear in any order.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">AT</u> screen-loc<a name="wp1035957"> </a>
+<a name="wp1061721"> </a>
+{FROM} <u class="cUnderline">LINE</u> NUMBER line-num<a name="wp1035959"> </a>
+{AT  }<a name="wp1035960"> </a>
+<a name="wp1035961"> </a>
+{FROM} {<u class="cUnderline">COLUMN</u>  } NUMBER col-num<a name="wp1035962"> </a>
+{AT  } {<u class="cUnderline">COL</u>     }<a name="wp1035963"> </a>
+       {<u class="cUnderline">POSITION</u>}<a name="wp1035964"> </a>
+<a name="wp1035965"> </a>
+<u class="cUnderline">SIZE</u> length<a name="wp1035966"> </a>
+</pre></div>
+<a name="wp1035967"> </a><h3 class="pHeadingRef">
+Format 5
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">ACCEPT</u> dest-item <u class="cUnderline">FROM</u> {<u class="cUnderline">CONFIGURATION</u>} env-name<a name="wp1035968"> </a>
+                      {<u class="cUnderline">ENVIRONMENT</u>  }<a name="wp1035969"> </a>
+<a name="wp1061727"> </a>
+    [ ON <u class="cUnderline">EXCEPTION</u> statement-1 ]<a name="wp1035970"> </a>
+<a name="wp1035971"> </a>
+    [ <u class="cUnderline">NOT</u> ON <u class="cUnderline">EXCEPTION</u> statement-2 ]<a name="wp1035972"> </a>
+<a name="wp1035973"> </a>
+    [ <u class="cUnderline">END-ACCEPT</u> ]<a name="wp1035974"> </a>
+</pre></div>
+<a name="wp1035975"> </a><h3 class="pHeadingRef">
+Format 6
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">ACCEPT</u> dest-item [ <u class="cUnderline">FROM</u> mnemonic-name ]<a name="wp1035976"> </a>
+</pre></div>
+<a name="wp1035977"> </a><h3 class="pHeadingRef">
+Format 7
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">ACCEPT</u> {control-handle}<a name="wp1035978"> </a>
+       {<u class="cUnderline">CONTROL</u>       }<a name="wp1035979"> </a>
+</pre></div>
+<a name="wp1035980"> </a><p class="pBody">
+Remaining phrases are optional, can appear in any order.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">VALUE</u> IN [ <u class="cUnderline">MULTIPLE</u> ] value<a name="wp1035981"> </a>
+<a name="wp1035982"> </a>
+<u class="cUnderline">AT</u> screen-loc   [<u class="cUnderline">CELL</u>  ]<a name="wp1035983"> </a>
+                [<u class="cUnderline">CELLS</u> ]<a name="wp1035984"> </a>
+                [<u class="cUnderline">PIXEL</u> ]<a name="wp1035985"> </a>
+                [<u class="cUnderline">PIXELS</u>]<a name="wp1035986"> </a>
+<a name="wp1035987"> </a>
+AT <u class="cUnderline">LINE</u> NUMBER line-num   [CELL  ]<a name="wp1035988"> </a>
+                          [CELLS ]<a name="wp1035989"> </a>
+                          [PIXEL ]<a name="wp1035990"> </a>
+                          [PIXELS]<a name="wp1035991"> </a>
+<a name="wp1035992"> </a>
+AT {<u class="cUnderline">COLUMN</u>  } NUMBER col-num   [CELL  ]<a name="wp1035993"> </a>
+   {<u class="cUnderline">COL</u>     }                  [CELLS ]<a name="wp1035994"> </a>
+   {<u class="cUnderline">POSITION</u>}                  [PIXEL ]<a name="wp1035995"> </a>
+   {<u class="cUnderline">POS</u>     }                  [PIXELS]<a name="wp1035996"> </a>
+<a name="wp1035997"> </a>
+AT <u class="cUnderline">CLINE</u> NUMBER cline-num   [CELL ]<a name="wp1035998"> </a>
+                            [CELLS]<a name="wp1035999"> </a>
+<a name="wp1036000"> </a>
+AT <u class="cUnderline">CCOL</u> NUMBER ccol-num   [CELL ]<a name="wp1036001"> </a>
+                          [CELLS]<a name="wp1036002"> </a>
+<a name="wp1036003"> </a>
+WITH {<u class="cUnderline">BELL</u>}<a name="wp1036004"> </a>
+     {<u class="cUnderline">BEEP</u>}<a name="wp1036005"> </a>
+<a name="wp1036006"> </a>
+BEFORE <u class="cUnderline">TIME</u> timeout<a name="wp1036007"> </a>
+<a name="wp1036008"> </a>
+CONTROL <u class="cUnderline">KEY</u> IN key-dest<a name="wp1036009"> </a>
+<a name="wp1036010"> </a>
+ALLOWING <u class="cUnderline">MESSAGES</u> <u class="cUnderline">FROM</u> { THREAD thread-1 }<a name="wp1036011"> </a>
+                       { <u class="cUnderline">LAST</u> <u class="cUnderline">THREAD</u>     }<a name="wp1036012"> </a>
+                       { <u class="cUnderline">ANY</u> <u class="cUnderline">THREAD</u>      }<a name="wp1036013"> </a>
+<a name="wp1036014"> </a>
+ON  {<u class="cUnderline">EXCEPTION</u>} [key-dest] statement-1<a name="wp1036015"> </a>
+    {<u class="cUnderline">ESCAPE</u>   }<a name="wp1036016"> </a>
+<a name="wp1036017"> </a>
+<u class="cUnderline">NOT</u> ON {<u class="cUnderline">EXCEPTION</u>} statement-2<a name="wp1036018"> </a>
+       {<u class="cUnderline">ESCAPE</u>   }<a name="wp1036019"> </a>
+<a name="wp1036020"> </a>
+<u class="cUnderline">END-ACCEPT</u><a name="wp1036021"> </a>
+</pre></div>
+<a name="wp1036022"> </a><h3 class="pHeadingRef">
+Format 8
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">ACCEPT</u> external-form-item <a name="wp1036023"> </a>
+</pre></div>
+<a name="wp1036024"> </a><h3 class="pHeadingRef">
+Format 9
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">ACCEPT</u> <u class="cUnderline">EVENT</u><a name="wp1036025"> </a>
+</pre></div>
+<a name="wp1036026"> </a><p class="pBody">
+Remaining phrases are optional.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+BEFORE <u class="cUnderline">TIME</u> timeout<a name="wp1036027"> </a>
+ALLOWING <u class="cUnderline">MESSAGES</u> <u class="cUnderline">FROM</u> { THREAD thread-1 }<a name="wp1036028"> </a>
+                       { <u class="cUnderline">LAST</u> <u class="cUnderline">THREAD</u>     }<a name="wp1036029"> </a>
+                       { <u class="cUnderline">ANY</u> <u class="cUnderline">THREAD</u>      }<a name="wp1036030"> </a>
+<a name="wp1061728"> </a>
+[ { ON <u class="cUnderline">EXCEPTION</u> [code-dest] } {statement-1  } ]<a name="wp1036031"> </a>
+  { ON <u class="cUnderline">ESCAPE</u>    [code-dest] } {<u class="cUnderline">NEXT SENTENCE</u>}<a name="wp1036032"> </a>
+  { AT <u class="cUnderline">END</u>                  }<a name="wp1036033"> </a>
+<a name="wp1061729"> </a>
+[ <u class="cUnderline">NOT</u> { ON <u class="cUnderline">EXCEPTION</u> } statement-2 ]<a name="wp1036034"> </a>
+      { ON <u class="cUnderline">ESCAPE</u>    }<a name="wp1036035"> </a>
+      { AT <u class="cUnderline">END</u>       }<a name="wp1036036"> </a>
+<a name="wp1036037"> </a>
+[ <u class="cUnderline">END-ACCEPT</u> ]<a name="wp1036038"> </a>
+</pre></div>
+<a name="wp1036040"> </a><h3 class="pHeadingRef">
+Format 10  (HP COBOL)
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">ACCEPT</u> identifier [<u class="cUnderline">FREE</u>]  [<u class="cUnderline">FROM</u> { <u class="cUnderline">SYSIN</u>         }]<a name="wp1076548"> </a>
+                                { <u class="cUnderline">CONSOLE</u>       }<a name="wp1076549"> </a>
+                                { mnemonic-name }<a name="wp1076550"> </a>
+</pre></div>
+<a name="wp1036044"> </a><h3 class="pHeadingRef">
+Format 11  (HP COBOL)
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">ACCEPT</u> identifier <u class="cUnderline">FREE</u>  [<u class="cUnderline">FROM</u> { <u class="cUnderline">SYSIN</u>         }]<a name="wp1036045"> </a>
+                              { <u class="cUnderline">CONSOLE</u>       }<a name="wp1036046"> </a>
+                              { mnemonic-name }<a name="wp1036047"> </a>
+<a name="wp1036048"> </a>
+[ON <u class="cUnderline">INPUT</u> <u class="cUnderline">ERROR</u> imperative-statement-1]<a name="wp1036049"> </a>
+[<u class="cUnderline">NOT</u> ON <u class="cUnderline">INPUT</u> <u class="cUnderline">ERROR</u> imperative-statement-2]<a name="wp1036050"> </a>
+<a name="wp1036051"> </a>
+[<u class="cUnderline">END-ACCEPT</u>]<a name="wp1036052"> </a>
+</pre></div>
+<a name="wp1036053"> </a><h3 class="pHeadingRef">
+Format 12  (HP COBOL)
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">ACCEPT</u> identifier <u class="cUnderline">FROM</u> { <u class="cUnderline">DATE</u>        }<a name="wp1036054"> </a>
+                       { <u class="cUnderline">DAY</u>         }<a name="wp1036055"> </a>
+                       { <u class="cUnderline">DAY-OF-WEEK</u> }<a name="wp1036056"> </a>
+                       { <u class="cUnderline">TIME</u>        }<a name="wp1036057"> </a>
+</pre></div>
+<a name="wp1071531"> </a><h3 class="pHeadingRef">
+Format 13
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">ACCEPT</u> value <u class="cUnderline">FROM</u> <u class="cUnderline">ENVIRONMENT-VALUE</u><a name="wp1071532"> </a>
+<a name="wp1122325"> </a>
+</pre></div>
+<a name="wp1036059"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<a name="wp1197530"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>For Syntax Rules and General Rules specific to Formats 10, 11, and&#160;12, see Chapter 5, &quot;HP COBOL Conversions,&quot; in <em class="cEmphasis">Transitioning to ACUCOBOL-GT</em>.
+<hr />
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1197531"> </a><div class="pSmartList1"><li><em class="cEmphasis">Dest-item</em> is a data item that receives the accepted data.  It must be USAGE DISPLAY unless the WITH CONVERSION phrase is also used. </li></div>
+<a name="wp1036063"> </a><p class="pIndented1">
+If the Format 3 STANDARD OBJECT, THREAD HANDLE, or WINDOW HANDLE phrase is used, <em class="cEmphasis">dest-item</em> must be a USAGE HANDLE data item of the appropriate type.  If the WINDOW HANDLE phrase is used, <em class="cEmphasis">dest-item</em> can also be a PIC X(10) item.  
+</p>
+<a name="wp1036064"> </a><div class="pSmartList1"><li><em class="cEmphasis">Screen-name</em> is the name of a screen entry declared in the program's Screen Section.  See <a  href="gt3550.htm#wp1036481">section 5.8, &quot;Screen Section,&quot;</a> for more information.</li></div>
+<a name="wp1036065"> </a><div class="pSmartList1"><li><em class="cEmphasis">Screen-loc</em> is a numeric literal or data item containing either 4 or 6 digits.  It may also be a group item of 4 or 6 characters.  If a numeric item is used, it must be a non-negative integer.</li></div>
+<a name="wp1036066"> </a><div class="pSmartList1"><li>In Format 7, the AT, LINE, COLUMN, CLINE, and CCOL phrases may be used only if the CONTROL phrase is also used.</li></div>
+<a name="wp1036067"> </a><div class="pSmartList1"><li><em class="cEmphasis">Line-num</em>, <em class="cEmphasis">col-num</em>, <em class="cEmphasis">cline-num</em>, and <em class="cEmphasis">ccol-num</em> are numeric data items or literals.  Note that they may be non-integer, unless the value is in pixels.</li></div>
+<a name="wp1036068"> </a><div class="pSmartList1"><li><em class="cEmphasis">Length, color-val, curs-offset</em>, <em class="cEmphasis">timeout,</em> and <em class="cEmphasis">scrl-num</em> are numeric literals or data items.  They must specify non-negative integers.  You may also specify the value of <em class="cEmphasis">line-num</em>, <em class="cEmphasis">col-num,</em> <em class="cEmphasis">length,</em> and <em class="cEmphasis">color-val </em>with an arithmetic expression. </li></div>
+<a name="wp1036069"> </a><div class="pSmartList1"><li><em class="cEmphasis">Fg-color</em> and <em class="cEmphasis">bg-color</em> are integer literals or numeric data items.  They may be arithmetic expressions.  They may not be subscripted or reference modified.  See <a  href="gt3630.htm#wp1034866">section 6.4.9</a>, &quot;FOREGROUND-COLOR and BACKGROUND-COLOR Phrases,&quot; for a more detailed discussion of color settings and values. </li></div>
+<a name="wp1036070"> </a><div class="pSmartList1"><li><em class="cEmphasis">Prompt-lit</em> is a single-character alphanumeric literal or the figurative constant SPACE, ZERO, or QUOTE.  </li></div>
+<a name="wp1036071"> </a><div class="pSmartList1"><li><em class="cEmphasis">Default</em> is a literal or data item.  It specifies the default entry value.  </li></div>
+<a name="wp1036073"> </a><div class="pSmartList1"><li><em class="cEmphasis">Key-dest</em> is a numeric data item.  It receives the value of the key that terminated input.</li></div>
+<a name="wp1036074"> </a><div class="pSmartList1"><li><em class="cEmphasis">Thread-1</em> is a USAGE HANDLE or HANDLE OF THREAD data item.</li></div>
+<a name="wp1036075"> </a><div class="pSmartList1"><li><em class="cEmphasis">Statement-1</em> and <em class="cEmphasis">statement-2 </em>are any imperative statements.</li></div>
+<a name="wp1036076"> </a><div class="pSmartList1"><li><em class="cEmphasis">Condition-1</em> is any conditional expression.</li></div>
+<a name="wp1036077"> </a><div class="pSmartList1"><li><em class="cEmphasis">Cntrl-string</em> and <em class="cEmphasis">env-name</em> are nonnumeric literals or data items.</li></div>
+<a name="wp1036079"> </a><div class="pSmartList1"><li><em class="cEmphasis">Mnemonic-name</em> must be a user-defined word declared in Special-Names that refers to a display device, or it must be the name of the display device itself. See <a  href="gt346.htm#wp1034415">section 4.2.3, &quot;Special-Names Paragraph,&quot;</a> for a list of valid devices. </li></div>
+<a name="wp1036080"> </a><div class="pSmartList1"><li><em class="cEmphasis">Object-name</em> must be an alphanumeric literal or data item.</li></div>
+<a name="wp1036081"> </a><div class="pSmartList1"><li><em class="cEmphasis">Control-handle</em> must be USAGE HANDLE.  If <em class="cEmphasis">control-handle</em> is a typed handle, it must be associated with a control.  It should hold a handle returned by a DISPLAY Control-Type (Format 14) statement.</li></div>
+<a name="wp1036082"> </a><div class="pSmartList1"><li><em class="cEmphasis">Value</em> can be any data item.  It receives the current value of the control when the ACCEPT statement terminates.  </li></div>
+<a name="wp1036083"> </a><div class="pSmartList1"><li><em class="cEmphasis">Code-dest</em> is a numeric data item.</li></div>
+<a name="wp1036084"> </a><div class="pSmartList1"><li>If the AT phrase is specified, neither the LINE nor the COLUMN phrase may be specified.</li></div>
+<a name="wp1036085"> </a><div class="pSmartList1"><li>If the COLOR phrase is specified, neither the FOREGROUND-COLOR nor the BACKGROUND-COLOR phrase may be specified. </li></div>
+<a name="wp1036086"> </a><div class="pSmartList1"><li>The CURSOR phrase may not be specified if a CURSOR phrase is specified in the program's Configuration Section.  </li></div>
+<a name="wp1036089"> </a><div class="pSmartList1"><li>AUTO, AUTO-SKIP, and AUTOTERMINATE are equivalent.</li></div>
+<a name="wp1036090"> </a><div class="pSmartList1"><li>NO-ECHO, NO ECHO, OFF, and SECURE are equivalent.</li></div>
+<a name="wp1036091"> </a><div class="pSmartList1"><li>BLANK and ERASE are equivalent.</li></div>
+<a name="wp1036092"> </a><div class="pSmartList1"><li>BOLD, HIGH, and HIGHLIGHT are equivalent.</li></div>
+<a name="wp1036093"> </a><div class="pSmartList1"><li>LOWLIGHT and LOW are equivalent.</li></div>
+<a name="wp1036094"> </a><div class="pSmartList1"><li>COLUMN, COL, POSITION, and POS are equivalent.</li></div>
+<a name="wp1036095"> </a><div class="pSmartList1"><li>BELL and BEEP are equivalent.</li></div>
+<a name="wp1036096"> </a><div class="pSmartList1"><li>REVERSE-VIDEO, REVERSE, and REVERSED are equivalent.</li></div>
+<a name="wp1036097"> </a><div class="pSmartList1"><li>BLINK and BLINKING are equivalent.</li></div>
+<a name="wp1036098"> </a><div class="pSmartList1"><li>UNDERLINE and UNDERLINED are equivalent.</li></div>
+<a name="wp1036099"> </a><div class="pSmartList1"><li>CONVERSION and CONVERT are equivalent.</li></div>
+<a name="wp1036101"> </a><div class="pSmartList1"><li>REQUIRED and EMPTY-CHECK are equivalent.</li></div>
+<a name="wp1036102"> </a><div class="pSmartList1"><li>FULL and LENGTH-CHECK are equivalent.</li></div>
+<a name="wp1036103"> </a><div class="pSmartList1"><li>EXCEPTION and ESCAPE are equivalent.</li></div>
+<a name="wp1036104"> </a><div class="pSmartList1"><li>If the OMITTED option is used, then none of the following phrases may be specified: SIZE, JUSTIFIED, CONVERT, NO ECHO, PROMPT, DEFAULT, ECHO, UPPER, LOWER, REQUIRED, FULL, ZERO-FILL, NUMERIC-FILL or any of the attribute setting phrases (such as COLOR or REVERSE).  </li></div>
+<a name="wp1036105"> </a><div class="pSmartList1"><li>The ERASE phrase has two forms.  In VAX COBOL and ICOBOL compatibility modes, the ERASE LINE/SCREEN form must be used.  In RM/COBOL mode, the ERASE EOS/EOL form must be used.  This is indicated in the General Format by the symbols &quot;<em class="cEmphasis">(VAX, ICOBOL)</em>&quot; and &quot;<em class="cEmphasis">(RM)</em>&quot;.  </li></div>
+<a name="wp1036106"> </a><div class="pSmartList1"><li>A NOT AT END phrase may not be paired with an ON EXCEPTION phrase, nor may a NOT ON EXCEPTION phrase be paired with an AT END phrase.  </li></div>
+<a name="wp1036107"> </a><div class="pSmartList1"><li>In a Format 6 ACCEPT statement, if you omit the FROM phrase, you must use the &quot;-Ca&quot; compile-time option.  Otherwise, the compiler treats the statement as a Format 1 ACCEPT instead.  </li></div>
+<a name="wp1036108"> </a><div class="pSmartList1"><li>If the CONTROL KEY phrase is used, the <em class="cEmphasis">key-dest</em> option of the ON EXCEPTION phrase may not be specified.  </li></div>
+<a name="wp1036109"> </a><div class="pSmartList1"><li>You may add FROM CRT to a Format 1 ACCEPT statement to distinguish it from a Format 6 ACCEPT statement.  You need to do this only if you use the &quot;-Ca&quot; compile-time option. </li></div>
+<a name="wp1036110"> </a><div class="pSmartList1"><li><em class="cEmphasis">External-form-item</em> is an input record for an HTML form when used in a Common Gateway Interface (CGI) program.  It is a group data item (declared with the IS EXTERNAL-FORM clause) that has one or more elementary items associated with CGI variables.  The association is made with the IS IDENTIFIED BY clause in the description of the elementary item(s). </li></div>
+<a name="wp1036111"> </a><p class="pIndented1">
+<em class="cEmphasis">External-form-item</em> may also be an output record for an HTML form.  In this case, the group item is declared with both the IS EXTERNAL-FORM and IDENTIFIED BY clauses.
+</p>
+<a name="wp1036112"> </a><p class="pIndented1">
+See the IS EXTERNAL-FORM clause for more information about declaring external forms. 
+</p>
+<a name="wp1072313"> </a><div class="pSmartList1"><li>For Format 13, <em class="cEmphasis">value</em> is a Working-Storage data item of the type needed to receive the value of the environment or configuration value stored in ENVIRONMENT-NAME (see DISPLAY Format 17).</li></div>
+</ol></div>
+<a name="wp1072315"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<a name="wp1036115"> </a><h3 class="pHeadingRef">
+Format 1 (ACCEPT dest-item)
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036116"> </a><div class="pSmartList1"><li>The ACCEPT statement accepts data typed by the user.  The data accepted is placed in <em class="cEmphasis">dest-item</em>.  If the OMITTED option is used instead of <em class="cEmphasis">dest-item</em>, then the user is required to enter a termination key, and no data is transmitted to the program.  This can be used if you want to enter a function key only and do not need any other data from the user. </li></div>
+<a name="wp1036117"> </a><div class="pSmartList1"><li>The precise action of the ACCEPT statement depends both on the various clauses specified and the <em class="cEmphasis">compatibility mode</em> that the compiler is using.  The compiler is run in RM/COBOL, VAX COBOL, or ICOBOL compatibility mode.</li></div>
+<a name="wp1036118"> </a><div class="pSmartList1"><li>Use of the AUTO phrase causes a field to terminate as soon as it is filled with data--this is the default mode in RM COBOL.  Use of the TAB phrase forces the user to finish with a termination key--this is the standard mode except for RM COBOL.</li></div>
+<a name="wp1036119"> </a><p class="pIndented1">
+The effects of the CURSOR, CONTROL KEY, BEFORE TIME, ON EXCEPTION, and AT END clauses are described below.  The effects of the remaining optional clauses are described in <a  href="gt3630.htm#wp1034866">section 6.4.9, &quot;Common Screen Options.&quot;</a>  
+</p>
+</ol></div>
+<a name="wp1036121"> </a><p class="pBody">
+<b class="cBold">CURSOR Phrase</b>
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036122"> </a><div class="pSmartList1"><li>The CURSOR phrase specifies the initial cursor offset from the beginning of the field.  The leftmost position of the ACCEPT field is offset one.  If the CURSOR phrase is omitted or zero, then an offset of one is used.  </li></div>
+<a name="wp1036123"> </a><div class="pSmartList1"><li>The offset specified is reduced as needed to keep the cursor in the bounds of the field.  Also, the offset is reduced to keep the cursor within the data contained in the field.  This means that an offset of one will always be used if the DEFAULT (or UPDATE) phrase is not used.  </li></div>
+<a name="wp1036124"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">curs-offset</em> is a numeric data item, then the ending cursor offset will be assigned to it when the ACCEPT statement terminates.  This can be used to find the current cursor location (field column + <em class="cEmphasis">curs-offset</em> - 1).  </li></div>
+<a name="wp1036125"> </a><div class="pSmartList1"><li>If a CURSOR clause is specified in the program's Configuration Section, then that clause is used to determine the cursor's initial offset.  See <a  href="gt346.htm#wp1034415">section 4.2.3, &quot;Special-Names Paragraph,&quot;</a> for details.  </li></div>
+</ol></div>
+<a name="wp1036127"> </a><p class="pBody">
+<b class="cBold">CONTROL KEY Phrase  </b>
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036128"> </a><div class="pSmartList1"><li>The CONTROL KEY clause allows for the entry of special keys and the recording of which key terminated input.  (For additional information, see <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>, section 4.3, &quot;The Keyboard Interface.&quot;) When the CONTROL KEY clause is specified, all of the special keys named in the following table can be used. </li></div>
+<a name="wp1036130"> </a><div class="pSmartList1"><li><em class="cEmphasis">Key-dest</em> is a numeric item that receives the value of the key that terminated input.  The keys allowed by the CONTROL KEY phrase and their returned values are:</li></div>
+<a name="wp1053147"> </a><p class="pBodyRelative">
+ <div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1052236"> </a>
+Key
+
+</th>
+    <th><a name="wp1052238"> </a>
+Value
+
+</th>
+    <th><a name="wp1052240"> </a>
+Key
+
+</th>
+    <th><a name="wp1052242"> </a>
+Value
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052244"> </a><p class="pCellBody">
+Enter/Return
+</p>
+</td>
+    <td><a name="wp1052246"> </a><p class="pCellBody">
+13
+</p>
+</td>
+    <td><a name="wp1052248"> </a><p class="pCellBody">
+F-13
+</p>
+</td>
+    <td><a name="wp1052250"> </a><p class="pCellBody">
+13*
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052252"> </a><p class="pCellBody">
+Tab
+</p>
+</td>
+    <td><a name="wp1052254"> </a><p class="pCellBody">
+9
+</p>
+</td>
+    <td><a name="wp1052256"> </a><p class="pCellBody">
+F-14
+</p>
+</td>
+    <td><a name="wp1052258"> </a><p class="pCellBody">
+14*
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052260"> </a><p class="pCellBody">
+F-1
+</p>
+</td>
+    <td><a name="wp1052262"> </a><p class="pCellBody">
+1*
+</p>
+</td>
+    <td><a name="wp1052264"> </a><p class="pCellBody">
+F-15
+</p>
+</td>
+    <td><a name="wp1052266"> </a><p class="pCellBody">
+15*
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052268"> </a><p class="pCellBody">
+F-2
+</p>
+</td>
+    <td><a name="wp1052270"> </a><p class="pCellBody">
+2*
+</p>
+</td>
+    <td><a name="wp1052272"> </a><p class="pCellBody">
+F-16
+</p>
+</td>
+    <td><a name="wp1052274"> </a><p class="pCellBody">
+16*
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052276"> </a><p class="pCellBody">
+F-3
+</p>
+</td>
+    <td><a name="wp1052278"> </a><p class="pCellBody">
+3*
+</p>
+</td>
+    <td><a name="wp1052280"> </a><p class="pCellBody">
+F-17
+</p>
+</td>
+    <td><a name="wp1052282"> </a><p class="pCellBody">
+17*
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052284"> </a><p class="pCellBody">
+F-4
+</p>
+</td>
+    <td><a name="wp1052286"> </a><p class="pCellBody">
+4*
+</p>
+</td>
+    <td><a name="wp1052288"> </a><p class="pCellBody">
+F-18
+</p>
+</td>
+    <td><a name="wp1052290"> </a><p class="pCellBody">
+18*
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052292"> </a><p class="pCellBody">
+F-5
+</p>
+</td>
+    <td><a name="wp1052294"> </a><p class="pCellBody">
+5*
+</p>
+</td>
+    <td><a name="wp1052296"> </a><p class="pCellBody">
+F-19
+</p>
+</td>
+    <td><a name="wp1052298"> </a><p class="pCellBody">
+19*
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052300"> </a><p class="pCellBody">
+F-6
+</p>
+</td>
+    <td><a name="wp1052302"> </a><p class="pCellBody">
+6*
+</p>
+</td>
+    <td><a name="wp1052304"> </a><p class="pCellBody">
+F-20
+</p>
+</td>
+    <td><a name="wp1052306"> </a><p class="pCellBody">
+20*
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052308"> </a><p class="pCellBody">
+F-7
+</p>
+</td>
+    <td><a name="wp1052310"> </a><p class="pCellBody">
+7*
+</p>
+</td>
+    <td><a name="wp1052312"> </a><p class="pCellBody">
+Do (Command)
+</p>
+</td>
+    <td><a name="wp1052314"> </a><p class="pCellBody">
+40*
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052316"> </a><p class="pCellBody">
+F-8
+</p>
+</td>
+    <td><a name="wp1052318"> </a><p class="pCellBody">
+8*
+</p>
+</td>
+    <td><a name="wp1052320"> </a><p class="pCellBody">
+Up Arrow
+</p>
+</td>
+    <td><a name="wp1052322"> </a><p class="pCellBody">
+52*
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052324"> </a><p class="pCellBody">
+F-9
+</p>
+</td>
+    <td><a name="wp1052326"> </a><p class="pCellBody">
+9*
+</p>
+</td>
+    <td><a name="wp1052328"> </a><p class="pCellBody">
+Down Arrow
+</p>
+</td>
+    <td><a name="wp1052330"> </a><p class="pCellBody">
+53*
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052332"> </a><p class="pCellBody">
+F-10
+</p>
+</td>
+    <td><a name="wp1052334"> </a><p class="pCellBody">
+10*
+</p>
+</td>
+    <td><a name="wp1052336"> </a><p class="pCellBody">
+Page Up
+</p>
+</td>
+    <td><a name="wp1052338"> </a><p class="pCellBody">
+67*
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052340"> </a><p class="pCellBody">
+F-11
+</p>
+</td>
+    <td><a name="wp1052342"> </a><p class="pCellBody">
+11*
+</p>
+</td>
+    <td><a name="wp1052344"> </a><p class="pCellBody">
+Page Down
+</p>
+</td>
+    <td><a name="wp1052346"> </a><p class="pCellBody">
+68*
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1052348"> </a><p class="pCellBody">
+F-12
+</p>
+</td>
+    <td><a name="wp1052350"> </a><p class="pCellBody">
+12*
+</p>
+</td>
+    <td><a name="wp1052352"> </a><p class="pCellBody">
+Help
+</p>
+</td>
+    <td><a name="wp1052354"> </a><p class="pCellBody">
+90*
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1036253"> </a><p class="pIndented1">
+Control keys may also be used.  They return their underlying ASCII value (for example, Control-B returns the value 2).  If a field is entered in AUTO mode and the ACCEPT terminates because the field was filled with data, then <em class="cEmphasis">key-dest</em> receives the value zero.  If the BEFORE TIME phrase is specified and a time-out occurs, then <em class="cEmphasis">key-dest</em> receives the value &quot;99&quot;.  
+</p>
+<a name="wp1036254"> </a><div class="pSmartList1"><li>The keys marked with &quot;*&quot; are exception keys.  These keys may be used only if a CONTROL KEY or ON EXCEPTION phrase is specified for the ACCEPT statement (alternately, the &quot;-Vx&quot; compile-time option can be used).  If these keys are not allowed, then the runtime system will ignore them when they are typed.  Note that if you use the &quot;-Ve&quot; compile-time option to disable the ON EXCEPTION phrase for exception keys, then using the ON EXCEPTION phrase will not enable exception keys.  (See also rule number 2 under ALLOWING MESSAGES Phrase.)</li></div>
+<a name="wp1036256"> </a><div class="pSmartList1"><li>By using the &quot;-Ve&quot; compile-time option, you can cause ACUCOBOL-GT to return  numeric conversion errors to the program. If you use this option to enable program handling of conversion errors, then <em class="cEmphasis">key-dest</em> will be assigned the value &quot;98&quot; whenever a conversion error occurs.  See <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>, section 4.3.2.1, &quot;The Keyboard Variable,&quot; subsection 3,  &quot;CHECK-NUMBERS.&quot;</li></div>
+<a name="wp1036257"> </a><div class="pSmartList1"><li>For compatibility with programs written under other systems, the values returned by these keys may be changed at runtime.  Also, other keys may be added or removed from this table.  See section 4.3.2, &quot;Redefining the Keyboard,&quot; in Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>, for details on how to do this.  </li></div>
+</ol></div>
+<a name="wp1036259"> </a><p class="pBody">
+<b class="cBold">BEFORE TIME Phrase  </b>
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036260"> </a><div class="pSmartList1"><li>The BEFORE TIME phrase allows you to automatically terminate an ACCEPT statement after a certain amount of time has passed.  The <em class="cEmphasis">timeout</em> value specifies the time to wait in hundredths of a second.  For example, &quot;BEFORE TIME 500&quot; specifies a timer value of 5 seconds. </li></div>
+<a name="wp1036262"> </a><div class="pSmartList1"><li>The user must enter data to the ACCEPT statement before the timer elapses.  As soon as the user starts entering data, the timer is canceled and the user may take as much time as desired to complete the entry.  If the user does not enter any data before the timer elapses, then the ACCEPT statement terminates and returns a value exactly as if the user had typed the &quot;enter&quot; key.  An exception condition is then raised and the exception key value is set to &quot;99&quot;.  </li></div>
+<a name="wp1036263"> </a><div class="pSmartList1"><li>The precise amount of time waited can vary significantly from machine to machine.  Factors involved include the rate of the system clock and the current load on the machine.  For example, some UNIX systems update the system clock only once every second.  The ACUCOBOL-GT runtime system takes the specified value and rounds it up to a whole number of &quot;ticks&quot; of the system clock.  It then calls the system's alarm mechanism to interrupt the ACCEPT after this many &quot;ticks&quot; have elapsed.  Different operating systems will handle this interrupt with varying degrees of accuracy.  You should think of the <em class="cEmphasis">timeout</em> value as only an approximate one.</li></div>
+<a name="wp1036264"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>If you want to program a task that executes at a regular interval, such as updating an on-screen clock, it is best to program the task in a separate thread (as opposed to timing out all of your ACCEPT statements).  The periodic task would be placed inside a loop in a separate thread.  The task would sleep for some period, wake and perform the update, and then loop back to the sleep state.  This approach allows the runtime's thread manager to schedule the update, and ensures that no input, such as a mouse click, is missed when the update takes place.  For more about threads, see Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>, section 6.8. 
+<hr />
+</p>
+</ol></div>
+<a name="wp1036266"> </a><p class="pBody">
+<b class="cBold">ALLOWING MESSAGES Phrase  </b>
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036267"> </a><div class="pSmartList1"><li>The ALLOWING MESSAGES phrase causes the ACCEPT statement to terminate when a message is sent from the appropriate thread, as follows:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1036268"> </a><div class="pSmartList2"><li>The THREAD <em class="cEmphasis">thread-1</em> option allows messages from the thread identified by <em class="cEmphasis">thread-1</em>.</li></div>
+<a name="wp1036269"> </a><div class="pSmartList2"><li>The LAST THREAD option allows for messages from the &quot;last&quot; thread (see section 6.8.1, Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide</em> for a discussion of the last thread).</li></div>
+<a name="wp1036270"> </a><div class="pSmartList2"><li>The ANY THREAD option allows messages from any thread.</li></div>
+</ol></div>
+<a name="wp1036272"> </a><div class="pSmartList1"><li>If an allowed message is available when the ACCEPT begins, or one arrives while the ACCEPT is active, the ACCEPT terminates with an exception value of &quot;95&quot;.  The exception occurs even if exceptions are not otherwise allowed in the ACCEPT. </li></div>
+<a name="wp1036274"> </a><div class="pSmartList1"><li>When an ACCEPT terminates due to a message, the target data item is not updated with the data entered by the user up to that point.  This affects the following cases:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1036275"> </a><div class="pSmartList2"><li>In Format 1, <em class="cEmphasis">dest-item</em> is not updated.</li></div>
+<a name="wp1036276"> </a><div class="pSmartList2"><li>In Format 2, any VALUE, USING, or TO data items in the Screen Section are not updated.</li></div>
+<a name="wp1036277"> </a><div class="pSmartList2"><li>In Format 7, <em class="cEmphasis">value</em> is not updated.</li></div>
+</ol></div>
+<a name="wp1036278"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>Testing of the data item is not performed (such as the REQUIRED phrase).  Essentially, you get the termination status, but no other information.  This allows you to share a data item between two controls.  When the user changes one of them, it can send a message to the other to have that control update its appearance.  If this rule was not in place, the message would terminate any ACCEPT on that control, and that control's current contents would overwrite the correct data in the shared data item.  If you need to determine the current value of a control in response to a message, you can INQUIRE the control's value directly.  
+<hr />
+</p>
+<a name="wp1036279"> </a><div class="pSmartList1"><li>An ACCEPT statement that is suspended (because another thread has an active ACCEPT) terminates when an allowed message arrives. </li></div>
+<a name="wp1036280"> </a><div class="pSmartList1"><li>If the ALLOWING MESSAGES phrase is omitted, messages will not terminate the ACCEPT.  Instead, they are queued as normal.</li></div>
+</ol></div>
+<a name="wp1036283"> </a><p class="pBody">
+<b class="cBold">ON EXCEPTION Phrase  </b>
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036285"> </a><div class="pSmartList1"><li>When this phrase is used, <em class="cEmphasis">statement-1</em> is executed when an exception condition occurs. An exception condition occurs under the following circumstances:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1036286"> </a><div class="pSmartList2"><li>An end-of-file condition occurs on the console.</li></div>
+<a name="wp1036287"> </a><div class="pSmartList2"><li>A BEFORE TIME phrase was specified and the ACCEPT statement timed out.  </li></div>
+<a name="wp1036288"> </a><div class="pSmartList2"><li>An exception key was used to terminate input.  This may be disabled with the &quot;-Ve&quot; compile-time option.</li></div>
+<a name="wp1036289"> </a><div class="pSmartList2"><li>A conversion error occurred when numeric data was entered with the CONVERSION phrase.  You must use the &quot;-Ve&quot; compile-time option to enable program handling of conversion errors for this exception condition to be used.  Normally, the ACUCOBOL-GT runtime system does not allow invalid numeric data to be entered.  </li></div>
+<a name="wp1036290"> </a><div class="pSmartList2"><li>A <em class="cEmphasis">message</em> terminates the ACCEPT.</li></div>
+<a name="wp1036291"> </a><div class="pSmartList2"><li>An <em class="cEmphasis">event</em> terminates the ACCEPT.</li></div>
+<a name="wp1036292"> </a><div class="pSmartList2"><li>the screen contains no input fields, or all input fields are protected or disabled.</li></div>
+</ol></div>
+<a name="wp1036293"> </a><div class="pSmartList1"><li><em class="cEmphasis">Key-dest</em>, if specified, causes this phrase to have all of the effects of the CONTROL KEY phrase in addition to its normal effects.  See the CONTROL KEY phrase above for details.  If you specify <em class="cEmphasis">key-dest</em>, then exception keys will cause <em class="cEmphasis">statement-1</em> to execute even if you have used the &quot;-Ve&quot; compile-time option to turn off handling of exception keys by the ON EXCEPTION phrase.  </li></div>
+<a name="wp1036294"> </a><div class="pSmartList1"><li>If you specify an ON EXCEPTION phrase, then exception keys will be allowed for the ACCEPT statement.  Otherwise exception keys will be disabled unless you use the CONTROL KEY phrase or the &quot;-Vx&quot; compile-time option.  However, if you use the &quot;-Ve&quot; compile-time option to disable exception key handling, then an ON EXCEPTION phrase will <em class="cEmphasis">not </em>enable exception keys unless the <em class="cEmphasis">key-dest</em> option is also used.  </li></div>
+<a name="wp1036295"> </a><div class="pSmartList1"><li>If the NEXT SENTENCE option is used, then control will pass to the next executable sentence when an exception condition exists.  </li></div>
+<a name="wp1036296"> </a><div class="pSmartList1"><li>If the NOT ON EXCEPTION phrase is specified, then <em class="cEmphasis">statement-2</em> executes if no exception condition exists.  </li></div>
+<a name="wp1036297"> </a><div class="pSmartList1"><li>The ON EXCEPTION phrase may not be specified if the AT END phrase is used.  The <em class="cEmphasis">key-dest</em> option may not be used if the CONTROL KEY phrase is specified.  </li></div>
+</ol></div>
+<a name="wp1036299"> </a><p class="pBody">
+<b class="cBold">AT END Phrase  </b>
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036300"> </a><div class="pSmartList1"><li>The AT END phrase causes the following <em class="cEmphasis">statement-1</em> to execute if an end-of-file occurs during the ACCEPT.  </li></div>
+<a name="wp1036301"> </a><div class="pSmartList1"><li>If NEXT SENTENCE is specified instead of <em class="cEmphasis">statement-1</em>, control passes to the next executable sentence if an end-of-file occurs.</li></div>
+<a name="wp1036302"> </a><div class="pSmartList1"><li>If the NOT AT END phrase is used, then <em class="cEmphasis">statement-2</em> executes if an end-of-file does not occur during the ACCEPT.</li></div>
+<a name="wp1036303"> </a><div class="pSmartList1"><li>By default, ACUCOBOL-GT does not have a method of generating end-of-file conditions from a terminal.  The runtime system can be reconfigured, however, to generate an end-of-file for selected keys.  For details, see section 4.3.2, &quot;Redefining the Keyboard,&quot; in Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>.<em class="cEmphasis">  </em></li></div>
+<a name="wp1036304"> </a><div class="pSmartList1"><li>The AT END phrase may not be specified when the ON EXCEPTION phrase is. </li></div>
+</ol></div>
+<a name="wp1036305"> </a><h3 class="pHeadingRef">
+Format 2 (ACCEPT screen-name)
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036306"> </a><div class="pSmartList1"><li>This is a form level ACCEPT.  A Format 2 ACCEPT statement allows the user to enter data into all of the input and update fields (as well as every control that can be activated) contained in <em class="cEmphasis">screen-name</em>.  <em class="cEmphasis">Screen-name</em> must be a screen item declared in the program's Screen Section.  After the user finishes, each input and update field is moved to its corresponding data item.  See <a  href="gt3550.htm#wp1036481">section 5.8, &quot;Screen Section,&quot;</a> for a complete description of a screen item.  </li></div>
+<a name="wp1036308"> </a><div class="pSmartList1"><li>The AT, LINE, and COLUMN phrases describe the starting location of the screen item.  These phrases are described in detail in <a  href="gt3630.htm#wp1034866">section 6.4.9, &quot;Common Screen Options.&quot;</a> If either the line or column number is missing or zero, then line or column number 1 is used.</li></div>
+<a name="wp1036310"> </a><div class="pSmartList1"><li>The BEFORE TIME phrase works in the same manner as described above for a Format 1 ACCEPT.  If multiple input fields are being entered, then the timer is set only for the <em class="cEmphasis">first</em> field.  As soon as the user starts entering data, as much time as desired may be taken to enter the screen.</li></div>
+<a name="wp1036311"> </a><div class="pSmartList1"><li>The ALLOWING MESSAGES phrase works in the same manner as described above for a Format 1 ACCEPT.</li></div>
+<a name="wp1036313"> </a><div class="pSmartList1"><li>If an exception condition occurs, the ON EXCEPTION phrase causes control to be transferred to <em class="cEmphasis">statement-1.  </em>(Exception codes are stored in the variable named in SPECIAL-NAMES with the CRT STATUS phrase.)  See rule number 1 under ON EXCEPTION phrase (above) for a list of the conditions that cause an exception.  Exception keys are listed under the heading &quot;CONTROL KEY Phrase&quot; above.  If an exception does not occur, and the NOT EXCEPTION phrase is specified, then <em class="cEmphasis">statement-2</em> executes.  </li></div>
+<a name="wp1036314"> </a><div class="pSmartList1"><li>Specifying the EXCEPTION phrase allows the user to terminate input with an exception key.  Otherwise, exception keys are disabled unless the program is compiled with the &quot;-Vx&quot; option.   </li></div>
+<a name="wp1036315"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>You can code Screen Section entries that reference embedded procedures or an event procedure for Format 2 ACCEPT statements. See <a  href="gt3557.htm#wp1037068">section 5.9.6, &quot;PROCEDURE Clause,&quot;</a> for more information. 
+<hr />
+</p>
+<a name="wp1036316"> </a><p class="pIndented1">
+You can also code a Special-Names entry that allows an embedded procedure to control an ACCEPT statement.  See <a  href="gt346.htm#wp1034415">section 4.2.3, &quot;Special-Names Paragraph,&quot;</a> for more information. 
+</p>
+<a name="wp1036317"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">condition-1</em> is specified, then the ACCEPT statement executes repeatedly until <em class="cEmphasis">condition-1</em> evaluates &quot;true&quot;.  The effect is exactly the same as coding:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PERFORM, WITH TEST AFTER, UNTIL <em class="cEmphasis">condition-1</em><a name="wp1036318"> </a>
+         ACCEPT <em class="cEmphasis">screen-name</em>, <em class="cEmphasis">accept options</em><a name="wp1036319"> </a>
+END-PERFORM<a name="wp1036320"> </a>
+</pre></div>
+<a name="wp1036321"> </a><p class="pIndented1">
+This can be convenient when you are retrieving data from a graphical screen.  For example, you could use a statement like the following to get data from a dialog box until the user presses the box's &quot;OK&quot; button:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ACCEPT screen-1, UNTIL ok-button-pressed<a name="wp1036322"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1036323"> </a><h3 class="pHeadingRef">
+Format 3 (ACCEPT FROM)
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036324"> </a><div class="pSmartList1"><li>The Format 3 ACCEPT statement causes information to be transferred to <em class="cEmphasis">dest-item</em> according to the rules for the MOVE statement.</li></div>
+<a name="wp1036326"> </a><div class="pSmartList1"><li>The DATE option causes the current date to be moved to <em class="cEmphasis">dest-item</em>.  The date is composed of the year of the century, the month of the year, and the day of the month.  Each element occupies two digits.  For example, December 25, 1998, would be expressed &quot;981225&quot;.  DATE is treated as if it were described by a PICTURE 9(6) clause. </li></div>
+<a name="wp1036328"> </a><div class="pSmartList1"><li>The DAY option causes the current date to be moved to <em class="cEmphasis">dest-item</em>.  The format of the date is the year of the century (2 digits) followed by the day of the year (3 digits).  For example, December 25, 1998, is &quot;98359&quot;.  DAY acts as if it were described by a PICTURE 9(5) clause. </li></div>
+<a name="wp1036331"> </a><div class="pSmartList1"><li>ACCEPT FROM CENTURY-DATE returns the current date in the format &quot;YYYYMMDD&quot; (year/month/day).  ACCEPT FROM DATE YYYYMMDD is equivalent to ACCEPT FROM CENTURY-DATE.  ACCEPT FROM CENTURY-DAY returns the current date in the format &quot;YYYYDDD&quot; (year/day-of-year).  ACCEPT FROM DAY YYYYDDD is equivalent to ACCEPT FROM CENTURY-DAY.  These are the same as ACCEPT FROM DATE and ACCEPT FROM DAY, except that the year field is 4 digits instead of 2 digits.</li></div>
+<a name="wp1036332"> </a><p class="pIndented1">
+The compiler option &quot;-Zy&quot; lets you treat ACCEPT FROM DATE as ACCEPT FROM CENTURY-DATE, and ACCEPT FROM DAY as ACCEPT FROM CENTURY-DAY.  For details, see the <em class="cEmphasis">ACUCOBOL-GT User's Guide</em> section 2.1.13, &quot;Miscellaneous Options.&quot; 
+</p>
+<a name="wp1036334"> </a><div class="pSmartList1"><li>The TIME option causes the current time of day to be moved to <em class="cEmphasis">dest-item</em>.  The format of the time is the hour (24-hour clock), the minutes, the seconds and the hundredths of a second.  Each element occupies two digits.  For example, 2:41 PM would be expressed &quot;14410000&quot;.  TIME acts as if it were described by a PICTURE 9(8) clause. </li></div>
+<a name="wp1036335"> </a><p class="pIndented1">
+Generally speaking, older UNIX machines keep time only to the nearest second.  Thus the hundredths portion of the value returned by ACCEPT FROM TIME is typically zero on UNIX machines.  However, System V Release 4 and some other UNIX versions have an alternate method for determining the time with greater precision.  The runtime system will use this alternate method if it is available, and then the hundredths portion will be filled in.
+</p>
+<a name="wp1036337"> </a><div class="pSmartList1"><li>The DAY-OF-WEEK option causes the current day of the week to be moved to <em class="cEmphasis">dest-item</em>.  The format of this item is a single digit where 1 represents Monday, 2 represents Tuesday, up through 7 for Sunday.  DAY-OF-WEEK acts as if it were described by a PICTURE 9 clause. </li></div>
+<a name="wp1036340"> </a><div class="pSmartList1"><li>The TERMINAL-INFO option causes information about the user's terminal to be moved to <em class="cEmphasis">dest-item</em>.  This information is returned in the following format, as contained in the TERMINAL-ABILITIES group item defined in &quot;acucobol.def&quot;:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  TERMINAL-ABILITIES.<a name="wp1036342"> </a>
+    03  TERMINAL-NAME                PIC X(10).<a name="wp1036343"> </a>
+    03  FILLER                       PIC X.<a name="wp1036344"> </a>
+        88  HAS-REVERSE              VALUE &quot;Y&quot;.<a name="wp1036345"> </a>
+    03  FILLER                       PIC X.<a name="wp1036346"> </a>
+        88  HAS-BLINK                VALUE &quot;Y&quot;.<a name="wp1036347"> </a>
+    03  FILLER                       PIC X.<a name="wp1036348"> </a>
+        88  HAS-UNDERLINE            VALUE &quot;Y&quot;.<a name="wp1036349"> </a>
+    03  FILLER                       PIC X.<a name="wp1036350"> </a>
+        88  HAS-DUAL-INTENSITY       VALUE &quot;Y&quot;.<a name="wp1036351"> </a>
+    03  FILLER                       PIC X.<a name="wp1036352"> </a>
+        88  HAS-132-COLUMN-MODE      VALUE &quot;Y&quot;.<a name="wp1036353"> </a>
+    03  FILLER                       PIC X.<a name="wp1036354"> </a>
+        88  HAS-COLOR                VALUE &quot;Y&quot;.<a name="wp1036355"> </a>
+    03  FILLER                       PIC X.<a name="wp1036356"> </a>
+        88  HAS-LINE-DRAWING         VALUE &quot;Y&quot;.<a name="wp1036357"> </a>
+    03  NUMBER-OF-SCREEN-LINES       PIC 9(3).<a name="wp1036358"> </a>
+    03  NUMBER-OF-SCREEN-COLUMNS     PIC 9(3).<a name="wp1036359"> </a>
+    03  FILLER                       PIC X.<a name="wp1036360"> </a>
+        88  HAS-LOCAL-PRINTER        VALUE &quot;Y&quot;.<a name="wp1036361"> </a>
+    03  FILLER                       PIC X.<a name="wp1036362"> </a>
+        88  HAS-VISIBLE-ATTRIBUTES   VALUE &quot;Y&quot;.<a name="wp1036363"> </a>
+    03  FILLER                       PIC X.<a name="wp1036364"> </a>
+        88  HAS-GRAPHICAL-INTERFACE  VALUE &quot;Y&quot;.<a name="wp1036365"> </a>
+    03  USABLE-SCREEN-HEIGHT         PIC X(2) COMP-X.<a name="wp1036366"> </a>
+    03  USABLE-SCREEN-WIDTH          PIC X(2) COMP-X.<a name="wp1036367"> </a>
+    03  PHYSICAL-SCREEN-HEIGHT       PIC X(2) COMP-X.<a name="wp1036368"> </a>
+    03  PHYSICAL-SCREEN-WIDTH        PIC X(2) COMP-X.<a name="wp1036369"> </a>
+    03  FILLER                       PIC X.<a name="wp1099040"> </a>
+        88  IS-REMOTE                VALUE &quot;Y&quot;.<a name="wp1099704"> </a>
+    03  CLIENT-MACHINE-NAME          PIC X(64).<a name="wp1099705"> </a>
+    03  FILLER                       PIC X.<a name="wp1159097"> </a>
+        88  ACU-NO-TERMINAL          VALUE &quot;Y&quot;.<a name="wp1159098"> </a>
+</pre></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1036371"> </a><div class="pSmartList2"><li>The TERMINAL-NAME field contains a short descriptive name of the terminal type being used (e.g., &quot;vt100&quot;, &quot;tvi925&quot;, &quot;pc-color&quot;).  The number-of-lines and number-of-columns fields contain the number of lines and columns the screen contains in its current configuration.  The remaining fields contain a &quot;Y&quot; if the user's terminal has the named feature and an &quot;N&quot; if it does not.  </li></div>
+<a name="wp1036374"> </a><div class="pSmartList2"><li>The NUMBER-OF-SCREEN-LINES and NUMBER-OF-SCREEN-COLUMNS fields hold the number of whole lines and columns (respectively) in the current floating window.  If no window has been created, these values are set to the size of the default application window.  </li></div>
+<a name="wp1036377"> </a><div class="pSmartList2"><li>The HAS-VISIBLE-ATTRIBUTES field is set to &quot;Y&quot; if setting a video attribute on the terminal causes a character to be taken up on the screen.  Terminals that behave in this fashion have additional restrictions over the terminals that have &quot;hidden&quot; attributes.  For additional information on these restrictions, see <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>, section 4.5, &quot;Restricted Attribute Handling.&quot; </li></div>
+<a name="wp1036379"> </a><div class="pSmartList2"><li>The HAS-GRAPHICAL-INTERFACE item is set to TRUE (value &quot;Y&quot;) if the runtime is using a graphical user interface.  Otherwise, it is FALSE (value &quot;N&quot;).  You can generally assume that graphical systems can support non-integer row/column positions and window/control sizes.  </li></div>
+<a name="wp1036380"> </a><div class="pSmartList2"><li>Non-graphical (i.e., character-based) systems will truncate non-integer row and column positions, along with window and control sizes to the nearest integer that is smaller (e.g., &quot;line 1.5&quot; will be treated as &quot;line 1&quot;).  </li></div>
+<a name="wp1036382"> </a><div class="pSmartList2"><li>The USABLE-SCREEN-HEIGHT field holds the height of the usable portion of the user's display device in &quot;base units.&quot;  This value represents character cells for character-based systems or pixels for graphical systems.  On graphical systems, this value can be larger than the area used by your program (it is the largest area that a program could conceivably use).  Under Windows 98, this value excludes the Taskbar if the user has set the &quot;Always on top&quot; Taskbar option.  On character-based systems, this value is the size of the actual screen, or the current application window if you are running in a character-emulator such as the Windows console-mode (DOS box) or an X-term.  </li></div>
+<a name="wp1036384"> </a><div class="pSmartList2"><li>USABLE-SCREEN-WIDTH is the same as USABLE-SCREEN-HEIGHT except that it returns the width instead of the height.</li></div>
+<a name="wp1036386"> </a><div class="pSmartList2"><li>PHYSICAL-SCREEN-HEIGHT is the same as USABLE-SCREEN-HEIGHT except that it includes the entire screen instead of just the usable portion of the screen.  Under Windows 98, this is the actual screen resolution.  Under character-based systems, this value is normally the same as USABLE-SCREEN-HEIGHT because most character-based systems do not provide a method for measuring the physical screen.</li></div>
+<a name="wp1036388"> </a><div class="pSmartList2"><li>PHYSICAL-SCREEN-WIDTH is the same as PHYSICAL-SCREEN-HEIGHT except that it returns the screen's width instead of the screen's height.</li></div>
+<a name="wp1099709"> </a><div class="pSmartList2"><li>IS-REMOTE is set to TRUE (value &quot;Y&quot;) if the program is running with the thin client.  When IS-REMOTE is true, CLIENT-MACHINE-NAME is set to the name of the client that is running <b class="cBold">acuthin</b>, plus a hyphen (&quot;-&quot;) and the hex value of the client process ID.  For example: </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+   techxp-2ef1<a name="wp1180557"> </a>
+</pre></div>
+<a name="wp1159218"> </a><div class="pSmartList2"><li>ACU-NO-TERMINAL is set to TRUE if the runtime was started with the &quot;-b&quot; option (&quot;-b&quot; inhibits terminal initialization and implies that no terminal is attached to the process).  In this scenario, terminal I/O is undefined and should be avoided.  When ACU-NO-TERMINAL is TRUE, other fields in TERMINAL-ABILITIES return their default value.</li></div>
+</ol></div>
+<a name="wp1036389"> </a><p class="pIndented1">
+On many UNIX systems, the runtime can use ACCEPT FROM TERMINAL-INFO to determine the initial size of its window when it is running under the X Window system, Motif, OpenLook, or Sunview.  It uses this information to set the number of rows and columns available to the program, and to scroll the screen correctly.  The size found overrides the size specified in the &quot;a_termcap&quot; entry for the terminal.  If you need to, you can override these settings with the LINES and COLUMNS environment variables.
+</p>
+<a name="wp1036391"> </a><div class="pSmartList1"><li>The SYSTEM-INFO option causes some general information about the runtime to be moved to <em class="cEmphasis">dest-item</em>.  The information is returned in the following format (SYSTEM-INFORMATION is defined in &quot;acucobol.def&quot;):</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  SYSTEM-INFORMATION.<a name="wp1131594"> </a>
+    03  OPERATING-SYSTEM            PIC X(10).<a name="wp1130762"> </a>
+        88  OS-IS-MSDOS             VALUE &quot;MS-DOS&quot;.<a name="wp1130763"> </a>
+        88  OS-IS-OS2               VALUE &quot;OS/2&quot;.<a name="wp1130764"> </a>
+        88  OS-IS-VMS               VALUES &quot;VMS&quot;,<a name="wp1130765"> </a>
+                                            &quot;VAX/VMS&quot;.<a name="wp1130766"> </a>
+        88  OS-IS-UNIX               VALUES &quot;Unix&quot;,<a name="wp1130767"> </a>
+                                            &quot;Unix-V&quot;,<a name="wp1130768"> </a>
+                                            &quot;Unix-4&quot;,<a name="wp1130769"> </a>
+                                            &quot;UNOS&quot;.<a name="wp1130770"> </a>
+        88  OS-IS-AOS                VALUE &quot;AOS/VS&quot;.<a name="wp1130771"> </a>
+        88  OS-IS-WINDOWS            VALUE &quot;WINDOWS&quot;.<a name="wp1130772"> </a>
+        88  OS-IS-WIN-NT             VALUE &quot;WIN/NT&quot;.<a name="wp1130773"> </a>
+        88  OS-IS-WIN-FAMILY         VALUES &quot;WINDOWS&quot;,<a name="wp1130774"> </a>
+                                            &quot;WIN/NT&quot;.<a name="wp1130775"> </a>
+        88  OS-IS-AMOS               VALUE &quot;AMOS&quot;.<a name="wp1130776"> </a>
+        88  OS-IS-MPE                VALUE &quot;MPE/iX&quot;.<a name="wp1130777"> </a>
+        88  OS-IS-MPEIX              VALUE &quot;MPE/iX&quot;.<a name="wp1130778"> </a>
+    03  USER-ID                      PIC X(12).<a name="wp1130779"> </a>
+    03  STATION-ID                   PIC X(12).<a name="wp1130780"> </a>
+    03  FILLER                       PIC X.<a name="wp1130781"> </a>
+        88  HAS-INDEXED-READ-PREVIOUS   VALUE &quot;Y&quot;.<a name="wp1130782"> </a>
+    03  FILLER                          PIC X.<a name="wp1130783"> </a>
+        88  HAS-RELATIVE-READ-PREVIOUS  VALUE &quot;Y&quot;.<a name="wp1130784"> </a>
+    03  FILLER                          PIC X.<a name="wp1130785"> </a>
+        88  CAN-TEST-INPUT-STATUS       VALUE &quot;Y&quot;.<a name="wp1130786"> </a>
+    03  FILLER                          PIC X.<a name="wp1130787"> </a>
+        88  IS-MULTI-TASKING            VALUE &quot;Y&quot;.<a name="wp1130788"> </a>
+    03  RUNTIME-VERSION.<a name="wp1130789"> </a>
+        88  VERSION-PRIOR-TO-2-2        VALUE SPACES.<a name="wp1130790"> </a>
+        05  RUNTIME-MAJOR-VERSION       PIC 99.<a name="wp1130791"> </a>
+        05  RUNTIME-MINOR-VERSION       PIC 99.<a name="wp1130792"> </a>
+        05  RUNTIME-RELEASE             PIC 99.<a name="wp1130793"> </a>
+    03  FILLER                          PIC X.<a name="wp1130794"> </a>
+        88  IS-PLUGIN                   VALUE &quot;Y&quot;.<a name="wp1130795"> </a>
+    03  SERIAL-NUMBER                   PIC X(20).<a name="wp1130796"> </a>
+    03  FILLER                          PIC X.<a name="wp1130797"> </a>
+        88  HAS-LARGE-FILE-SUPPORT      VALUE &quot;Y&quot;.<a name="wp1209107"> </a>
+</pre></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1209112"> </a><div class="pSmartList2"><li><b style="font-weight: normal" class="cBold">The OPERATING</b>-SYSTEM field returns information about the operating system the runtime is ported to.  It may contain one of the following values:</li></div>
+<a name="wp1054066"> </a><p class="pBodyRelative">
+<div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1053527"> </a>
+Value
+
+</th>
+    <th><a name="wp1053529"> </a>
+Host System
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1053531"> </a><p class="pCellBody">
+Unix
+</p>
+</td>
+    <td><a name="wp1053533"> </a><p class="pCellBody">
+Any version of Unix 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1053535"> </a><p class="pCellBody">
+MPE/iX
+</p>
+</td>
+    <td><a name="wp1053537"> </a><p class="pCellBody">
+Running on HP machines
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1053539"> </a><p class="pCellBody">
+VMS
+</p>
+</td>
+    <td><a name="wp1053541"> </a><p class="pCellBody">
+VMS or OpenVMS
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1053547"> </a><p class="pCellBody">
+WINDOWS
+</p>
+</td>
+    <td><a name="wp1053549"> </a><p class="pCellBody">
+Microsoft Windows 98
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1053551"> </a><p class="pCellBody">
+WIN/NT
+</p>
+</td>
+    <td><a name="wp1053553"> </a><p class="pCellBody">
+Microsoft Windows NT 4.0, or Windows 2000
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1036445"> </a><p class="pIndented2">
+These values are intended to give the program fundamental information about the runtime.
+</p>
+<a name="wp1036446"> </a><p style="font-family: Arial, Verdana, Helvetica, sans-serif">
+<hr />
+<b>Note:  </b>The sample copy library &quot;acucobol.def&quot; includes some useful level 88 descriptions of operating system labels.  For example, &quot;OS-IS-UNIX&quot; covers all UNIX platforms.  For a complete list, see &quot;acucobol.def&quot; in the &quot;samples&quot; directory of your ACUCOBOL-GT installation.
+<hr />
+</p>
+<a name="wp1036448"> </a><div class="pSmartList2"><li><b style="font-weight: normal" class="cBold">The USER-ID</b> field is filled in with the login name of the current user.  If it is not set, the runtime looks for the symbol &quot;USERNAME&quot;.  If it is not set, the literal &quot;USER&quot; is placed in this field.  </li></div>
+<a name="wp1036450"> </a><div class="pSmartList2"><li><b style="font-weight: normal" class="cBold">The STATION-ID</b>  field is filled in with the station name of the video terminal attached to the executing program.  For UNIX systems, the initial &quot;/dev/&quot; is removed from the name first.  </li></div>
+<a name="wp1036451"> </a><p class="pIndented2">
+On Windows machines, the value of the symbol &quot;STATION&quot; will be returned if it is set in the host environment.  If it is not set, then the literal &quot;CON&quot; will be placed in this field.  
+</p>
+<a name="wp1127395"> </a><p class="pIndented2">
+If the program is displaying on a thin client, STATION-ID is filled with &quot;at&lt;<em class="cEmphasis">pid</em>&gt;&quot; where <em class="cEmphasis">pid</em> is the process ID of the runtime running on the server.
+</p>
+<a name="wp1036454"> </a><div class="pSmartList2"><li><b style="font-weight: normal" class="cBold">The HAS-INDEXED-READ-PREVIOUS</b> field is &quot;Y&quot; if the READ PREVIOUS and START LESS THAN verbs are available for indexed files on the host system.  If these verbs are not available, this field is set to &quot;N&quot;.  If more than one indexed file system is being used, then this field is set to &quot;Y&quot; only if <em class="cEmphasis">all</em> of the file systems support READ PREVIOUS. </li></div>
+<a name="wp1036455"> </a><div class="pSmartList2"><li><b style="font-weight: normal" class="cBold">The HAS-RELATIVE-READ-PREVIOUS</b> field is &quot;Y&quot; if the READ PREVIOUS and START LESS THAN verbs are available for relative files on the host system.  If these verbs are not available, this field is set to &quot;N&quot;. </li></div>
+<a name="wp1036456"> </a><div class="pSmartList2"><li><b style="font-weight: normal" class="cBold">The CAN-TEST-INPUT-STATUS</b> field is &quot;Y&quot; if the ACCEPT FROM INPUT STATUS verb is available on the host system.  If not, it is set to &quot;N&quot;.  Most machines can use this verb, but a few cannot.  On these machines, executing this verb will return a constant value that you can pre-select with a configuration file option. </li></div>
+<a name="wp1036458"> </a><div class="pSmartList2"><li><b style="font-weight: normal" class="cBold">The IS-MULTI-TASKING field</b> is &quot;Y&quot; if the host system can run multiple tasks at once and has record locking facilities installed.  This can be used to determine whether or not multiple copies of the runtime system can be run with correct file handling. </li></div>
+<a name="wp1036460"> </a><div class="pSmartList2"><li><b style="font-weight: normal" class="cBold">RUNTIME-VERSION</b> fields are filled in with numbers that identify the major version number, minor version number, and release number.  For example, ACUCOBOL-GT Version 3.2.0 would return 03 as the major version, 02 as the minor version, and 00 as the release number.</li></div>
+<a name="wp1036463"> </a><div class="pSmartList2"><li>The IS-PLUGIN field is &quot;Y&quot; if the runtime is the Web Runtime running within a Web browser.  Otherwise, it is set to &quot;N&quot;.  See the separate Acucorp book titled <em class="cEmphasis">A Programmer's Guide to the Internet</em> for more information about the Web Runtime. </li></div>
+<a name="wp1036464"> </a><div class="pSmartList2"><li><b style="font-weight: normal" class="cBold">The SERIAL-NUMBER </b>field is filled with the serial number of the runtime.</li></div>
+<a name="wp1113192"> </a><div class="pSmartList2"><li>The HAS-LARGE-FILE-SUPPORT field is &quot;Y&quot; if the UNIX port in question has extended support for large sequential and relative files.  Otherwise, it is set to &quot;N&quot;.</li></div>
+</ol></div>
+<a name="wp1036466"> </a><div class="pSmartList1"><li>The INPUT STATUS form of the ACCEPT statement returns a value that indicates whether or not there is data currently available from the standard input.  Normally, when an ACCEPT statement executes, the program pauses until the user types in some data.  The INPUT STATUS option can be used to test to see if the user has entered some data before executing an ACCEPT.  </li></div>
+<a name="wp1036467"> </a><p class="pIndented1">
+This can be useful in a loop that constantly updates information while still allowing for user input.
+</p>
+<a name="wp1036468"> </a><p class="pIndented1">
+The INPUT STATUS option causes this information to be moved to <em class="cEmphasis">dest-item</em>.  It is treated as if the source item were described as PICTURE 9(1).  The value is 1 if input is currently available, 0 if not.  
+</p>
+<a name="wp1036469"> </a><p class="pIndented1">
+If the input is being redirected, by default the value returned is zero.  You can control this with the configuration variables INPUT_STATUS_DEFAULT and SCRIPT_STATUS.
+</p>
+<a name="wp1036474"> </a><p class="pIndented1">
+A small number of hardware platforms do not have the ability to test for pending input.  On these machines, this verb returns a constant value.  By default, this value is zero, but it may be set to another value via the configuration variable INPUT_STATUS_DEFAULT. 
+</p>
+<a name="wp1036475"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>Another method of waiting for input while performing another operation is to use threads.  A separate thread is used to perform the regular ACCEPT (for example), while the original thread performs the ongoing operation.  For more about threads, see section 6.8 of Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide.</em>
+<hr />
+</p>
+<a name="wp1036476"> </a><p class="pIndented1">
+When you use the INPUT STATUS phrase of the ACCEPT verb with controls, and especially with ActiveX controls, the results may be undefined.  A much better way of handling detection of user input in programs using controls is to employ event procedures or a separate thread for that purpose. 
+</p>
+<a name="wp1036478"> </a><div class="pSmartList1"><li>The ESCAPE option of the ACCEPT statement returns the termination key value of the last Format 1 or Format 2 ACCEPT statement.  These values are listed under the heading &quot;CONTROL KEY Phrase&quot; above.  The value is treated as a COMP-1 data item that is moved to <em class="cEmphasis">dest-item</em> using the standard rules for a numeric move (exception: in ICOBOL compatibility mode, the value is treated as a PIC 99 data item).  </li></div>
+<a name="wp1036480"> </a><div class="pSmartList1"><li>The ACCEPT FROM LINE NUMBER option returns a 3-digit number corresponding to the console device that is controlling the executing program.  Because most of the machines that run ACUCOBOL-GT do not use device numbers, but use alphanumeric names instead, ACUCOBOL-GT computes the device number by the following procedure.  First the device name is converted to upper case and hyphens are converted to underscores (on UNIX systems, the initial &quot;/dev/&quot; is removed).  This name is then searched for in the environment (including the configuration file).  If it is found, then the value of the name is returned.  This allows you to assign a customized value for each device.  If the name is not found in the environment, then a number is formed from any digits found in the original device name (for example, &quot;tty15&quot; would return as &quot;15&quot;).  If there are no digits in the device name, the value 0 is used.  </li></div>
+<a name="wp1200468"> </a><p class="pIndented1">
+If the program is displaying on a thin client, ACCEPT FROM LINE NUMBER returns the last three digits of the process ID of the runtime running on the server.
+</p>
+<a name="wp1036482"> </a><div class="pSmartList1"><li>The ACCEPT FROM COMMAND-LINE option causes the contents of the original command line to be moved to <em class="cEmphasis">dest-item</em>. Only those elements of the command line that appear after the program name are returned.  No parsing is done; you must parse the command line into separate arguments yourself.  </li></div>
+<a name="wp1036483"> </a><p class="pIndented1">
+On Windows machines, the command line is limited to 1024 characters.  The command line remains unchanged regardless of the actions of any CHAIN, CALL PROGRAM, or CALL RUN verbs (which all start new run units).  
+</p>
+<a name="wp1036484"> </a><p class="pIndented1">
+For an alternate method in which the runtime system parses the arguments for you, see the <a  href="gt3684.htm#wp1037075">CHAIN Statement</a>.  
+</p>
+<a name="wp1036485"> </a><p class="pIndented1">
+To change the contents of the command line buffer, see the DISPLAY UPON COMMAND-LINE statement (Format 8) in this section.  You can also access the command line buffer from a C program.  The buffer is an external data array named Acmd_line.
+</p>
+<a name="wp1036491"> </a><div class="pSmartList1"><li>The STANDARD OBJECT option returns a handle to one of the system's pre-defined resources.  The resource returned depends on the value of <em class="cEmphasis">object-name</em>, as described in the following table:</li></div>
+<a name="wp1055645"> </a><p class="pBodyRelative">
+<div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1054345"> </a>
+Object-Name
+
+</th>
+    <th><a name="wp1054347"> </a>
+Resource
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054349"> </a><p class="pCellBody">
+FIXED-FONT
+</p>
+</td>
+    <td><a name="wp1054351"> </a><p class="pCellBody">
+The host system's default fixed-size font.  This is the default font used for textual displays.  Under Microsoft Windows, this font is Windows' SYSTEM-FIXED-FONT.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054353"> </a><p class="pCellBody">
+TRADITIONAL-FONT<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1054355"> </a><p class="pCellBody">
+Also a fixed-size font.  This font uses the standard character set associated with the host hardware (as opposed to the host graphical system).  On many systems, this font is the same as FIXED-FONT.  Under Microsoft Windows, this font is Windows' OEM-FIXED-FONT and uses the &quot;OEM&quot; character set instead of the &quot;ANSI&quot; character set.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054357"> </a><p class="pCellBody">
+DEFAULT-FONT
+</p>
+</td>
+    <td><a name="wp1054359"> </a><p class="pCellBody">
+This is the default font used by controls.  On a graphical system, this font is usually a proportional font, and usually the same as MEDIUM-FONT.  On non-graphical systems, this is the same as the FIXED-FONT.  You can specify the default font with the DEFAULT-FONT configuration variable (see DEFAULT-FONT in Appendix H, Book 4, <em class="cEmphasis">Appendices</em>).  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054361"> </a><p class="pCellBody">
+LARGE-FONT
+</p>
+</td>
+    <td><a name="wp1054363"> </a><p class="pCellBody">
+A moderately large font that is appropriate for controls.  On graphical systems, this is a proportionally spaced font.  Under Microsoft Windows, this is Windows' SYSTEM-FONT.  On non-graphical systems, this is the same as FIXED-FONT.  On some systems, this is the same as MEDIUM-FONT.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054365"> </a><p class="pCellBody">
+MEDIUM-FONT
+</p>
+</td>
+    <td><a name="wp1054367"> </a><p class="pCellBody">
+An average size font that is appropriate for controls.  On graphical systems, this is a proportionally spaced font.  Under Microsoft Windows, this font is a boldface version of Windows' ANSI-VAR-FONT.  On non-graphical systems, this is the same as FIXED-FONT.   
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1054369"> </a><p class="pCellBody">
+SMALL-FONT
+</p>
+</td>
+    <td><a name="wp1054371"> </a><p class="pCellBody">
+A small font that is appropriate for controls.  On graphical systems, this is a proportionally spaced font.  Under Microsoft Windows, this font is Windows' ANSI-VAR-FONT.   On non-graphical systems, this is the same as FIXED-FONT.  On some systems, this is the same as MEDIUM-FONT.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1080335"> </a><p class="pCellBody">
+LM-RESIZE
+</p>
+</td>
+    <td><a name="wp1080337"> </a><p class="pCellBody">
+A standard layout manager that assists in moving or resizing controls when a window changes size.  See Book 2, section 4.8, &quot;Layout Managers.&quot;
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1036547"> </a><p class="pIndented1">
+You may use either upper-case or lower-case values in <em class="cEmphasis">object-name</em>.  If <em class="cEmphasis">object-name</em> does not match any of the allowed values, <em class="cEmphasis">dest-item</em> is set to NULL.
+</p>
+<a name="wp1036548"> </a><div class="pSmartList1"><li>The ACCEPT FROM THREAD statement moves the thread ID of the executing thread to dest-item.  </li></div>
+<a name="wp1036551"> </a><div class="pSmartList1"><li>The WINDOW HANDLE option causes dest-item to receive the handle of the initial or current floating window.  Note that this is the only way to get the handle of the default main application window.  You do this by performing an ACCEPT FROM WINDOW HANDLE prior to creating any floating windows in your application.  </li></div>
+</ol></div>
+<a name="wp1036552"> </a><h3 class="pHeadingRef">
+Format 4 (ACCEPT SCREEN) 
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036554"> </a><div class="pSmartList1"><li>The ACCEPT FROM SCREEN verb returns data present on the user's terminal.  This differs from the Format 1 ACCEPT statement in that the user does not enter the data.  Instead, the data is what is already present on the screen.  This can be used to obtain an image of the user's current screen.  Note however that screen attributes such as underlines and reverse colors are not returned.</li></div>
+<a name="wp1036556"> </a><p class="pIndented1">
+On graphical systems, this verb does not return any information contained in controls.  To determine the current value of a control, use the INQUIRE verb.
+</p>
+<a name="wp1036557"> </a><div class="pSmartList1"><li><em class="cEmphasis">Dest-item</em> must specify an alphanumeric data item without the JUSTIFIED phrase.  It is filled with the returned screen contents.  <em class="cEmphasis">Dest-item</em> is space-filled on the right if it is larger than the returned screen contents.</li></div>
+<a name="wp1036558"> </a><div class="pSmartList1"><li>The LINE phrase specifies the screen line to use for the ACCEPT.  Line one refers to the top line of the current window.  If the LINE phrase is missing or <em class="cEmphasis">line-num</em> is zero, the current cursor line is used.</li></div>
+<a name="wp1036559"> </a><div class="pSmartList1"><li>The COLUMN phrase specifies the screen column to use.  Column one refers to the leftmost column of the current window.  If the COLUMN phrase is missing or zero, then the column depends on the following:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1036560"> </a><div class="pSmartList2"><li>If the LINE phrase is used (and is not zero), then column one is used.</li></div>
+<a name="wp1036561"> </a><div class="pSmartList2"><li>Otherwise, the current cursor column is used.</li></div>
+</ol></div>
+<a name="wp1036562"> </a><div class="pSmartList1"><li>The SIZE phrase specifies the number of screen positions to return.  If the SIZE phrase is missing, then the size of <em class="cEmphasis">dest-item</em> is used.  If the SIZE phrase specifies fewer characters than the size of <em class="cEmphasis">dest-item</em>, then <em class="cEmphasis">dest-item</em> is space-filled on the right.  </li></div>
+<a name="wp1036563"> </a><div class="pSmartList1"><li>The ACCEPT FROM SCREEN verb does not change the cursor position or modify the screen in any way.  A single ACCEPT FROM SCREEN can &quot;wrap around&quot; the right edge of the window to return characters from multiple screen lines.  </li></div>
+<a name="wp1036564"> </a><div class="pSmartList1"><li>Except as specified in the following rule, all characters on the terminal screen are returned using the underlying representation of the character in the native character set.  This is usually the ASCII value of the character.  </li></div>
+<a name="wp1036565"> </a><div class="pSmartList1"><li>The ACUCOBOL-GT Terminal Manager returns consistent values for certain special characters, regardless of the hardware being used.  This is done for certain characters used by the Terminal Manager that do not have an ASCII representation.  These special characters are the following:</li></div>
+<a name="wp1055736"> </a><p class="pBodyRelative">
+<div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1055657"> </a>
+Character
+
+</th>
+    <th><a name="wp1055659"> </a>
+Value
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055661"> </a><p class="pCellBody">
+Unknown
+</p>
+</td>
+    <td><a name="wp1055663"> </a><p class="pCellBody">
+1
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055665"> </a><p class="pCellBody">
+Horizontal Line
+</p>
+</td>
+    <td><a name="wp1055667"> </a><p class="pCellBody">
+2
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055669"> </a><p class="pCellBody">
+Vertical Line
+</p>
+</td>
+    <td><a name="wp1055671"> </a><p class="pCellBody">
+3
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055673"> </a><p class="pCellBody">
+Upper Left Corner
+</p>
+</td>
+    <td><a name="wp1055675"> </a><p class="pCellBody">
+4
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055677"> </a><p class="pCellBody">
+Upper Right Corner
+</p>
+</td>
+    <td><a name="wp1055679"> </a><p class="pCellBody">
+5
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055681"> </a><p class="pCellBody">
+Lower Left Corner
+</p>
+</td>
+    <td><a name="wp1055683"> </a><p class="pCellBody">
+6
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055685"> </a><p class="pCellBody">
+Lower Right Corner
+</p>
+</td>
+    <td><a name="wp1055687"> </a><p class="pCellBody">
+7
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055689"> </a><p class="pCellBody">
+&quot;Tee&quot; Up
+</p>
+</td>
+    <td><a name="wp1055691"> </a><p class="pCellBody">
+8
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055693"> </a><p class="pCellBody">
+&quot;Tee&quot; Right
+</p>
+</td>
+    <td><a name="wp1055695"> </a><p class="pCellBody">
+9
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055697"> </a><p class="pCellBody">
+&quot;Tee&quot; Down
+</p>
+</td>
+    <td><a name="wp1055699"> </a><p class="pCellBody">
+10
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055701"> </a><p class="pCellBody">
+&quot;Tee&quot; Left
+</p>
+</td>
+    <td><a name="wp1055703"> </a><p class="pCellBody">
+11
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055705"> </a><p class="pCellBody">
+4-Way Intersection
+</p>
+</td>
+    <td><a name="wp1055707"> </a><p class="pCellBody">
+12
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055709"> </a><p class="pCellBody">
+Bottom Endpoint
+</p>
+</td>
+    <td><a name="wp1055711"> </a><p class="pCellBody">
+13
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055713"> </a><p class="pCellBody">
+Left Endpoint
+</p>
+</td>
+    <td><a name="wp1055715"> </a><p class="pCellBody">
+14
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055717"> </a><p class="pCellBody">
+Top Endpoint
+</p>
+</td>
+    <td><a name="wp1055719"> </a><p class="pCellBody">
+15
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055721"> </a><p class="pCellBody">
+Right Endpoint
+</p>
+</td>
+    <td><a name="wp1055723"> </a><p class="pCellBody">
+16
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055725"> </a><p class="pCellBody">
+Visible Attribute
+</p>
+</td>
+    <td><a name="wp1055727"> </a><p class="pCellBody">
+17
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1036642"> </a><p class="pIndented1">
+The &quot;Unknown&quot; value is returned for any screen position that cannot be determined by ACUCOBOL-GT.  The &quot;Visible Attribute&quot; character is used by certain types of terminals when they are displaying video attributes.  On these types of terminals, video attributes take up screen positions.  They usually appear as spaces on the screen.  The remaining special characters are various line segments used by the DISPLAY WINDOW, DISPLAY LINE, and DISPLAY BOX verbs.  
+</p>
+<a name="wp1036643"> </a><div class="pSmartList1"><li><b class="cBold">Technical Note:</b> <b style="font-weight: normal" class="cBold">I</b>t is often desirable to translate the special case characters into ASCII values.  You can do this easily with the INSPECT CONVERTING verb.  For example, the following statement converts the line-drawing characters into hyphens, vertical bars, and plus signs, and translates the &quot;unknown&quot; and &quot;visible attribute&quot; characters into spaces:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+INSPECT ... CONVERTING<a name="wp1036646"> </a>
+        X&#39;0102030405060708090A0B0C0D0E0F1011&#39;<a name="wp1036647"> </a>
+    TO &quot; -|+++++++++|-|- &quot;<a name="wp1036648"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1036649"> </a><h3 class="pHeadingRef">
+Format 5 (ACCEPT ENVIRONMENT)
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1061928"> </a><div class="pSmartList1"><li>A Format 5 ACCEPT statement returns values from the user's environment or the ACUCOBOL-GT runtime system's configuration settings.  <em class="cEmphasis">Env-name</em> is the name of the environment setting whose value is to be returned.  If you provide the literal name of this item (such as CURSOR-MODE), you must enclose it in quotes.  The value returned from this item is moved to <em class="cEmphasis">dest-item</em>.  </li></div>
+<a name="wp1036653"> </a><div class="pSmartList1"><li>This verb will search for <em class="cEmphasis">env-name</em> in the following places:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1036654"> </a><div class="pSmartList2"><li>First, the runtime system sees if <em class="cEmphasis">env-name</em> matches any of its configuration variables.  If it does, the configuration variable's current setting is moved to <em class="cEmphasis">dest-item</em>.  Not all configuration variables can be returned by the ACCEPT verb, because some of them have multiple settings.  The list of configuration variables that can be returned is detailed in Appendix H, Book 4, <em class="cEmphasis">Appendices.</em>  </li></div>
+<a name="wp1036655"> </a><div class="pSmartList2"><li>Next, <em class="cEmphasis">env-name</em> is searched for in the runtime system's local environment.  This environment consists of all of the entries in the ACUCOBOL-GT configuration file plus any entries made with the SET ENVIRONMENT verb.  This excludes the runtime system's configuration variables that are covered in rule (a) above.  Note that any entry in the ACUCOBOL-GT configuration file that is also in the user's host environment has its <em class="cEmphasis">initial</em> value set the same as the entry in the user's environment.  </li></div>
+<a name="wp1036656"> </a><div class="pSmartList2"><li>Finally, on machines that have a user-maintained environment, that environment is searched for <em class="cEmphasis">env-name</em>.  A description of the user's environment for each machine is given in section 1.4 of the <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>.   </li></div>
+<a name="wp1036657"> </a><p class="pIndented2">
+When the runtime system searches for <em class="cEmphasis">env-name</em>, only the first 30 characters are used.  Also, any lower-case characters in <em class="cEmphasis">env-name</em> are treated as upper-case, and any hyphens are treated as underscores.  If the truncated name is not found, the runtime searches again, this time looking for <em class="cEmphasis">env_name</em> exactly as specified.
+</p>
+</ol></div>
+<a name="wp1036658"> </a><div class="pSmartList1"><li>If an entry is found, then its value is moved to <em class="cEmphasis">dest-item</em>.  For numeric configuration variables, the source item is treated as if it were a COMP-1 data item.  For all other entries, the source item is treated as an alphanumeric data item.  The value is moved to <em class="cEmphasis">dest-item</em> according to the rules for the MOVE statement.  Note that if the source item is numeric, then <em class="cEmphasis">dest-item</em> may be defined either as a numeric field or as an alphanumeric field of five or more characters.  If <em class="cEmphasis">dest-item</em> is alphanumeric and is larger than five characters, the value that is returned will occupy the leftmost five characters of <em class="cEmphasis">dest-item</em>. </li></div>
+<a name="wp1036659"> </a><div class="pSmartList1"><li>If no matching entry is found, or if the <em class="cEmphasis">env-name</em> is the name of a configuration variable whose value cannot be returned, spaces are moved to <em class="cEmphasis">dest-item</em> and <em class="cEmphasis">statement-1</em>, if specified, is executed.  </li></div>
+<a name="wp1036660"> </a><div class="pSmartList1"><li>If a legal matching entry is found, then <em class="cEmphasis">statement-2</em> (if specified) is executed.  </li></div>
+</ol></div>
+<a name="wp1036661"> </a><h3 class="pHeadingRef">
+Format 6 (ANSI ACCEPT)
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036664"> </a><div class="pSmartList1"><li>A Format 6 ACCEPT statement reads a line of input from the standard input device (usually the user's console).  This data is then moved into <em class="cEmphasis">dest-item</em>.  If the data is longer than the size of <em class="cEmphasis">dest-item</em>, it is truncated on the right.  If it is smaller, then it is space-filled on the right.  </li></div>
+<a name="wp1036665"> </a><div class="pSmartList1"><li>Prior to reading the line, the runtime system places the user's terminal into the state it normally occupies when it is used by the operating system.  The runtime then requests the input from the operating system.  The operating system usually provides some form of input editing, such as backspacing.  The exact editing available depends on the host operating system.  </li></div>
+<a name="wp1036667"> </a><div class="pSmartList1"><li><b class="cBold">Technical Note:</b> Because this verb requests input directly from the operating system, ACUCOBOL-GT's Terminal Manager is not aware of the changes that are occurring to the screen.  This can cause problems if you mix ANSI-style and ACUCOBOL-GT-style ACCEPT and DISPLAY verbs in the same program.  On many machines, ACUCOBOL-GT'<span style="font-family: Arial, Verdana, Helvetica, sans-serif">s</span> Terminal Manager maintains an image of the user's screen.  (This improves efficiency by removing redundant screen output and is also used to implement &quot;pop-up&quot; windows.)  Bypassing the Terminal Manager can cause the Terminal Manager's screen image to become incorrect.  This can cause strange effects when it is mixed with an ACUCOBOL-GT-style ACCEPT or DISPLAY verb, including:</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1036668"> </a><div class="pSmartList2"><li>lost data</li></div>
+<a name="wp1036669"> </a><div class="pSmartList2"><li>incorrect functioning of CLOSE WINDOW</li></div>
+<a name="wp1036670"> </a><div class="pSmartList2"><li>incorrect cursor position</li></div>
+<a name="wp1036671"> </a><div class="pSmartList2"><li>incorrect character attributes</li></div>
+<a name="wp1036672"> </a><div class="pSmartList2"><li>incorrect display in debugger </li></div>
+</ul></div>
+<a name="wp1036674"> </a><p class="pIndented1">
+For these reasons, you must be careful when using ANSI ACCEPT.  Here are some useful guidelines:
+</p>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1036675"> </a><div class="pSmartList2"><li>If your statement does not affect the screen image, then it can be used safely.  For example, sending a control sequence to an attached cash register is safe.</li></div>
+<a name="wp1036676"> </a><div class="pSmartList2"><li>If you use only ANSI-style ACCEPT and DISPLAY verbs, then you should not experience any problems except that the debugger will not be able to show the user's screen.  </li></div>
+<a name="wp1036682"> </a><div class="pSmartList2"><li>If you must mix formats, then you can use the library routine &quot;W$FORGET&quot; to correct the behavior of the Terminal Manager.  This routine causes the Terminal Manager to enter its initial state.  It will assume that it does not know the screen image or current attribute settings.  Calling this routine after a series of ANSI-style ACCEPT or DISPLAY verbs will place the Terminal Manager into a state where it can operate correctly.  See Appendix I, Book 4, <em class="cEmphasis">Appendices</em> for additional information.</li></div>
+<a name="wp1036683"> </a><div class="pSmartList2"><li>You can safely use the verb if your ANSI-style ACCEPT or DISPLAY sends data to a device other than the user's console, such as the standard error file.</li></div>
+</ol></div>
+<a name="wp1036684"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>When you are running a 32-bit Windows CGI program with the &quot;-f&quot; option or with the A_CGI environment variable set, the runtime reads only the number of bytes specified by the web server in the CONTENT_LENGTH environment variable.  The runtime does not wait for an end of file condition.  If you are running without the &quot;-f&quot; option and have not set the A_CGI environment variable, then the runtime reads until an end of file condition occurs.  Note that some web servers such as Microsoft Internet Information Server 4.0 do not terminate input to a CGI program with an end of file condition.  Instead, they rely upon the CGI program to read exactly the number of bytes specified in the CONTENT_LENGTH variable.  When running an ANSI ACCEPT style CGI program using these web servers, you must use the &quot;-f&quot; option or set the A_CGI environment variable.
+<hr />
+</p>
+</ol></div>
+<a name="wp1036685"> </a><h3 class="pHeadingRef">
+Format 7 (ACCEPT control-handle)
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036688"> </a><div class="pSmartList1"><li>The ACCEPT Control-Handle statement activates the control identified by <em class="cEmphasis">control-handle</em>.  The user interacts with the control until some terminating event occurs.  The event that caused the termination is then stored in <em class="cEmphasis">key-dest,</em> and the control's current value is stored in <em class="cEmphasis">value</em>.  The ACCEPT statement then terminates.  </li></div>
+<a name="wp1036689"> </a><div class="pSmartList1"><li>If the CONTROL phrase is used, the runtime activates the control located at the screen position specified by the AT, LINE, and COLUMN phrases in the current window (on non-graphical systems, the CLINE and CCOL phrases also apply).  The runtime maintains a list of controls in each window.  When attempting to activate a control at a specific location, the runtime searches this list, using the first control it finds that exactly matches the given location.  The list is maintained in order in which the controls are created.  If the runtime does not find a control at the specified location, it returns an exception value of &quot;96&quot; (the same as doing an ACCEPT of a invalid control handle).  </li></div>
+<a name="wp1036690"> </a><p class="pIndented1">
+The following example creates an anonymous entry field and then ACCEPTs it, using its screen position.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DISPLAY ENTRY-FIELD, LINE 2, COL 5, SIZE 15.<a name="wp1036691"> </a>
+ACCEPT CONTROL, VALUE MY-DATA, LINE 2, COL 5.<a name="wp1036692"> </a>
+</pre></div>
+<a name="wp1036696"> </a><div class="pSmartList1"><li><em class="cEmphasis">Key-dest </em>names a data item that will receive a code indicating the terminating event.  The program's CRT STATUS (if any) also receives the termination code.  </li></div>
+<a name="wp1036699"> </a><div class="pSmartList1"><li>When the ACCEPT statement terminates, the current value of the control is moved to <em class="cEmphasis">value</em> in accordance with the rules for the MOVE statement.  The type of control determines the source format of the value.  </li></div>
+<a name="wp1036701"> </a><div class="pSmartList1"><li>The BEFORE TIME phrase operates in the same manner as it does in a Format 1 ACCEPT statement.  </li></div>
+<a name="wp1036703"> </a><div class="pSmartList1"><li>The WITH BELL phrase causes the station's bell to sound when the control is initially activated.  </li></div>
+<a name="wp1036705"> </a><div class="pSmartList1"><li>The ALLOWING MESSAGES phrase works in the same manner as described above for a Format 1 ACCEPT.</li></div>
+<a name="wp1036707"> </a><div class="pSmartList1"><li>The ACCEPT statement can terminate in several different ways.  These ways are classified as either <em class="cEmphasis">normal</em> terminations or as <em class="cEmphasis">exceptions</em>.  If an exception caused the termination, then <em class="cEmphasis">statement-1</em> is executed.  Otherwise, <em class="cEmphasis">statement-2</em> is executed.  If you do not specify the ON EXCEPTION phrase, then the ACCEPT statement ignores exception keys (function keys).  You can override this behavior with the &quot;-Vx&quot; compile-time option.  </li></div>
+<a name="wp1036709"> </a><p class="pIndented1">
+If you attempt to ACCEPT a disabled or otherwise invalid control, or if the active control is hidden during the ACCEPT either by an event procedure or by code running in a different thread, the ACCEPT will immediately terminate, returning a CRT STATUS value of &quot;97&quot;.  For a Screen Section ACCEPT, this will occur only if all of the referenced controls are disabled.
+</p>
+<a name="wp1036711"> </a><div class="pSmartList1"><li>You may also activate a control with a Format 2 ACCEPT statement (a Screen Section ACCEPT) .  If the referenced Screen Section entry defines any controls, they are activated as appropriate.</li></div>
+</ol></div>
+<a name="wp1036712"> </a><h3 class="pHeadingRef">
+Format 8 (ACCEPT external-form-item)
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036713"> </a><div class="pSmartList1"><li>The &quot;external form&quot; of Format 8 is called an &quot;output form&quot; if the IDENTIFIED BY clause is used to associate it with an HTML template file.  If the IDENTIFIED BY clause is omitted, it is called an &quot;input form&quot;.  </li></div>
+<a name="wp1036714"> </a><p class="pIndented1">
+For example, the following is an input form:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  CGI-FORM IS EXTERNAL-FORM.<a name="wp1036715"> </a>
+    03  CGI-VAR1  PIC X(10).<a name="wp1036716"> </a>
+    03  CGI-VAR2  PIC X(10).<a name="wp1036717"> </a>
+</pre></div>
+<a name="wp1036718"> </a><p class="pIndented1">
+and this is an output form:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  HTML-FORM IS EXTERNAL-FORM IDENTIFIED BY <a name="wp1036719"> </a>
+    &quot;tmplate1&quot;.<a name="wp1036720"> </a>
+    03  HTML-VAR1  PIC X(10).<a name="wp1036721"> </a>
+    03  HTML-VAR2  PIC X(10).<a name="wp1036722"> </a>
+</pre></div>
+<a name="wp1036723"> </a><div class="pSmartList1"><li>The ACCEPT verb treats input and output forms the same.  ACCEPT sets the value of each elementary item, in order, to the value of its associated CGI variable, padding with trailing spaces.  ACCEPT automatically decodes and translates the CGI input data before moving it to the elementary items of <em class="cEmphasis">external-form-item</em>.  The value of each CGI variable is converted to the appropriate COBOL data type when it is moved to the external form.</li></div>
+<a name="wp1036724"> </a><p class="pIndented1">
+CGI variable names are case-sensitive.  However, for convenience, if ACCEPT cannot identify a CGI variable, it will repeat the search for the variable ignoring the case.
+</p>
+<a name="wp1036725"> </a><div class="pSmartList1"><li>If the CGI variable is empty or does not exist, ACCEPT sets the value of numeric data items to zero and nonnumeric data items to spaces.</li></div>
+<a name="wp1036726"> </a><div class="pSmartList1"><li>If the CGI variable is repeated in the CGI input data (as it would be in the case where multiple items have been selected from a &quot;choose-many&quot; list), the external form item that is identified with the CGI variable must be in a table.  Otherwise, only the first CGI value is moved to the external form item.  </li></div>
+<a name="wp1036727"> </a><p class="pIndented1">
+For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  CGI-FORM IS EXTERNAL-FORM.<a name="wp1036728"> </a>
+    03  CGI-TABLE    OCCURS 10 TIMES.<a name="wp1036729"> </a>
+        05  CGI-VAR1   PIC X(10).<a name="wp1036730"> </a>
+        05  CGI-VAR2   PIC X(10).<a name="wp1036731"> </a>
+</pre></div>
+<a name="wp1036732"> </a><p class="pIndented1">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  CGI-FORM     IS EXTERNAL-FORM.<a name="wp1036733"> </a>
+    03  CGI-VAR1  PIC X(10) OCCURS 10 TIMES.<a name="wp1036734"> </a>
+    03  CGI-VAR2  PIC X(10) OCCURS 10 TIMES.<a name="wp1036735"> </a>
+</pre></div>
+<a name="wp1036736"> </a><p class="pIndented1">
+ACCEPT moves the values of the CGI variable to the items in the table.  After all of the CGI values have been moved to items in the COBOL table, the remaining items in the table are set to 0 if they are numeric items, and set to spaces otherwise.
+</p>
+</ol></div>
+<a name="wp1036737"> </a><h3 class="pHeadingRef">
+Format 9 (ACCEPT EVENT)
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036739"> </a><div class="pSmartList1"><li>The ACCEPT EVENT statement waits for a terminating event to occur. The event that caused the termination is stored in <em class="cEmphasis">code-dest</em>. The ACCEPT statement then terminates.</li></div>
+<a name="wp1036740"> </a><div class="pSmartList1"><li><em class="cEmphasis">Code-dest</em> names a data item that will receive a code indicating the terminating event.  The program's CRT STATUS (if any) also receives the termination code.  </li></div>
+<a name="wp1036741"> </a><div class="pSmartList1"><li>The BEFORE TIME phrase operates in the same manner as it does in a Format&#160;1 ACCEPT statement. </li></div>
+<a name="wp1036742"> </a><div class="pSmartList1"><li>The ALLOWING MESSAGES phrase works in the same manner as described above for a Format 1 ACCEPT.</li></div>
+<a name="wp1036743"> </a><div class="pSmartList1"><li>ACCEPT EVENT is similar to ACCEPT OMITTED except that it does not display a default initial window and it does not detect keyboard termination or exception keys.</li></div>
+<a name="wp1036744"> </a><div class="pSmartList1"><li>The ACCEPT EVENT statement is designed for use in programs without a user interface. However, if the program has a user interface and interacting with it causes a terminating event to occur, ACCEPT EVENT will terminate. In the debugger, ACCEPT EVENT will terminate if the user presses the Enter key. </li></div>
+<a name="wp1036745"> </a><div class="pSmartList1"><li>The ACCEPT EVENT statement can terminate in several different ways.  These ways are classified as either normal terminations or as exceptions.  If an exception caused a termination, then statement-1 is executed.  Otherwise, statement-2 is executed.</li></div>
+</ol></div>
+<a name="wp1036746"> </a><h3 class="pHeadingRef">
+Code Example
+</h3>
+<a name="wp1036747"> </a><h3 class="pHeadingRef">
+Format 9:
+</h3>
+<a name="wp1036748"> </a><p class="pBody">
+The following program uses the Microsoft Agent Control (ActiveX) to create a &quot;genie&quot; character and then directs it to speak &quot;Hello World&quot;.  It does not have a visible initial window or a user interface that allows keyboard or mouse input.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+identification division.<a name="wp1036749"> </a>
+program-id.  no-ui.<a name="wp1036750"> </a>
+environment division.<a name="wp1036751"> </a>
+special-names.<a name="wp1036752"> </a>
+copy &quot;msagent.def&quot;.<a name="wp1036753"> </a>
+                  .<a name="wp1036754"> </a>
+data division.<a name="wp1036755"> </a>
+working-storage section.<a name="wp1036756"> </a>
+<a name="wp1036757"> </a>
+77  genie1-handle       usage handle of Agent.<a name="wp1036758"> </a>
+77  request-handle      usage handle of IAgentCtlRequest.<a name="wp1036759"> </a>
+77  request-status      pic 9.<a name="wp1036760"> </a>
+<a name="wp1036761"> </a>
+procedure division.<a name="wp1036762"> </a>
+Main-Logic.<a name="wp1036763"> </a>
+<a name="wp1122435"> </a>
+   display initial window visible = 0.<a name="wp1122436"> </a>
+<a name="wp1122437"> </a>
+   display Agent of AgentObjects handle in genie1-handle.<a name="wp1036767"> </a>
+<a name="wp1036768"> </a>
+   modify genie1-handle <a name="wp1036769"> </a>
+             Characters::Load(&quot;Genie1&quot;, &quot;genie.acs&quot;).<a name="wp1122440"> </a>
+<a name="wp1036770"> </a>
+   use genie1-handle Characters::Item(&quot;Genie1&quot;)<a name="wp1036771"> </a>
+<a name="wp1036772"> </a>
+       modify ^LanguageID 1033<a name="wp1036773"> </a>
+              ^Show()<a name="wp1036774"> </a>
+              ^Speak &quot;Hello World&quot; giving request-handle<a name="wp1036775"> </a>
+<a name="wp1036776"> </a>
+       perform until request-status = 1<a name="wp1036777"> </a>
+           <b class="cBold">ACCEPT EVENT BEFORE TIME 1000</b><a name="wp1036778"> </a>
+           inquire request-handle status in request-status<a name="wp1036779"> </a>
+       end-perform<a name="wp1036780"> </a>
+<a name="wp1036781"> </a>
+       destroy request-handle<a name="wp1036782"> </a>
+<a name="wp1036783"> </a>
+       modify ^Hide()<a name="wp1036784"> </a>
+<a name="wp1036785"> </a>
+   end-use.<a name="wp1036786"> </a>
+<a name="wp1036787"> </a>
+   destroy genie1-handle.<a name="wp1036788"> </a>
+<a name="wp1061975"> </a>
+   stop run.<a name="wp1061976"> </a>
+</pre></div>
+<a name="wp1197149"> </a><h3 class="pHeadingRef">
+Formats 10, 11, 12
+</h3>
+<a name="wp1197501"> </a><p class="pBody">
+See Chapter 4, &quot;HP COBOL Conversions,&quot; of <em class="cEmphasis">Transitioning to ACUCOBOL-GT</em>.
+</p>
+<a name="wp1071552"> </a><h3 class="pHeadingRef">
+Format 13 (ACCEPT FROM ENVIRONMENT-VALUE)
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1072291"> </a><div class="pSmartList1"><li>Use a Format 13 ACCEPT to fetch the value of an environment or configuration variable stored with a Format 17 DISPLAY statement (DISPLAY UPON ENVIRONMENT-NAME).  </li></div>
+<a name="wp1072292"> </a><div class="pSmartList1"><li>The <em class="cEmphasis">value</em> data item should be of a size and type that will accommodate the value of the environment or configuration variable.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

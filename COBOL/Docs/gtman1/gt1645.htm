@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.8.2.1  LOCK THREAD and UNLOCK THREAD</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt1641.htm">6.8  Multiple Execution Threads </a> &gt; <a href="gt1644.htm">6.8.2  Data Sharing Among Threads</a> &gt; </p>
+<a name="wp1033166"> </a><h2 class="pHeading3">
+6.8.2.1  LOCK THREAD and UNLOCK THREAD
+</h2>
+<a name="wp1033169"> </a><p class="pBody">
+There may be times when you want to be sure that a group of operations is performed without switching threads.  For example, if you have a utility paragraph that does a series of math operations on a data item, you will not want to begin that paragraph and then switch to another thread if another thread uses that data item.  In this case, you can use the LOCK THREAD statement to ensure that a series of operations are all accomplished together.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+PARA-1.<a name="wp1033171"> </a>
+   LOCK THREAD<a name="wp1033172"> </a>
+   ADD DATA-1 TO DATA-2<a name="wp1033173"> </a>
+   IF DATA-2 &gt; DATA-2-DIV-LIMIT<a name="wp1033174"> </a>
+      MOVE DATA-2-DIV-LIMIT TO DATA-2<a name="wp1033175"> </a>
+   COMPUTE DATA-2 = DATA-2 / DATA-3<a name="wp1033176"> </a>
+   UNLOCK THREAD.<a name="wp1033177"> </a>
+</pre></div>
+<a name="wp1033178"> </a><p class="pBody">
+The LOCK THREAD statement ensures that no other thread executes.  This condition remains in effect until the thread is unlocked (with UNLOCK THREAD) or the thread terminates.  In the preceding example, if the LOCK THREAD was omitted, another thread referencing DATA-2 could see its value after the ADD but before the COMPUTE.  This could be a value that is not meaningful.  
+</p>
+<a name="wp1033180"> </a><p class="pBody">
+A thread can have more than one lock.  Each time a LOCK THREAD statement executes in the thread, the number of locks held by that thread increases by one.  To allow other threads to run again, an equal number of UNLOCK THREAD statements must also execute.  Each UNLOCK THREAD statement removes the last lock applied to the thread.  This capability allows a thread to lock itself, call a subroutine that also locks itself, and remain locked after that subroutines unlocks itself.
+</p>
+<a name="wp1033182"> </a><p class="pBody">
+The data sharing aspect of threads is very powerful.  However, ensuring that the data are always consistent can be a difficult programming problem.  When writing multithreaded programs, you should strive to share data in a well-defined manner to minimize this problem.  The best way to do this is to share as little data as possible and to be clear when each thread is allowed to use that data.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

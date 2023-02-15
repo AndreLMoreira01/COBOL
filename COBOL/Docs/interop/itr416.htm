@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:57:47" />
+  <title>4.11  Deployment Guidelines</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr4.htm">Chapter 4: Using ActiveX Controls and COM Objects</a> &gt; </p>
+<a name="wp1038095"> </a><h2 class="pHeading1">
+4.11  Deployment Guidelines
+</h2>
+<a name="wp1038096"> </a><p class="pBody">
+Listed below are some guidelines to consider when deploying a COM object or ActiveX control:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1038097"> </a><div class="pSmartList1"><li>Is there an end-user license? </li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1038098"> </a><div class="pSmartList2"><li>Check with the vendor.</li></div>
+<a name="wp1038099"> </a><div class="pSmartList2"><li>Make sure the LICENSE-KEY phrase is filled in with any necessary license information.</li></div>
+<a name="wp1038100"> </a><div class="pSmartList2"><li>If you are using the Microsoft common controls included on the Acucorp CD, you do not need to worry about licensing.  The end-user license is automatically checked out by the ACUCOBOL-GT runtime.</li></div>
+<a name="wp1038104"> </a><div class="pSmartList2"><li> Licensing implications are discussed in <a  href="itr415.htm#wp1038056">section 4.10</a>. </li></div>
+</ul></div>
+<a name="wp1038105"> </a><div class="pSmartList1"><li>Are there any file dependencies?</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1038106"> </a><div class="pSmartList2"><li>What files are required (if any) to execute the control?  The control vendor can tell you this.  Don't ship the entire developer's installation unless you must, because this typically includes unnecessary components.  </li></div>
+<a name="wp1038107"> </a><div class="pSmartList2"><li>If external files are required, what versions should they be? </li></div>
+<a name="wp1038108"> </a><div class="pSmartList2"><li>Does the dependent file have a dependency?  If your control is made with any version of Visual Studio, it may depend on the presence of the Microsoft Visual C runtime library, or the Microsoft foundation classes of a particular version.  Normally you don't have to think about this, because the COBOL Virtual Machine(TM) already depends on these and provides them.  Make a note of it though, because your component may rely on a different version and may behave oddly in the case of a mismatch.</li></div>
+<a name="wp1038109"> </a><div class="pSmartList2"><li>For the Microsoft common controls shipped on the Acucorp CD, Acucorp provides a text file describing the control dependencies.  This file is stored in the same folder as the controls. </li></div>
+</ul></div>
+<a name="wp1038110"> </a><div class="pSmartList1"><li>	When should you install component and additional files?</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1038111"> </a><div class="pSmartList2"><li>ACUCOBOL-GT's Declaratives section covers object exceptions, or cases where an ActiveX control or COM object either did not display or terminated during execution.  You can trap these kinds of events in the Object Exception part of the Declaratives.  You should do this to make sure that you can control the full execution of the control, and if nothing else, make a graceful termination for your application.  See <a  href="itr421.htm#wp1038179">section 4.16</a> for additional details.</li></div>
+<a name="wp1038115"> </a><div class="pSmartList2"><li>With the Object Exception section in place, you can use the standard DISPLAY or CREATE verb to determine if the control you are about to use is already installed.  If you have an Object Exception section and create an object that is not installed, your program is thrown into the Declaratives.  Using the C$EXCEPINFO library function, you can determine the cause of the failure.   </li></div>
+<a name="wp1038116"> </a><div class="pSmartList2"><li>If it is determined that the control is not installed, you should copy the files into your application directory (where you have &quot;wrun32.exe&quot; installed) to avoid interfering with other software and to ensure the possibility of an easy cleanup and uninstall.</li></div>
+<a name="wp1038117"> </a><div class="pSmartList2"><li>If the control is not installed and it has a &quot;.dll&quot; extension, you can install it from within your COBOL application.  You must copy the component files to the /bin directory and then register the files via:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DllRegisterServer<a name="wp1038118"> </a>
+</pre></div>
+<a name="wp1038119"> </a><p class="pIndented2">
+and
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DllUnregisterServer<a name="wp1038120"> </a>
+</pre></div>
+<a name="wp1038121"> </a><p class="pIndented2">
+Alternatively, you can use &quot;regsvr32&quot; like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+regsvr32 activexfilename<a name="wp1038122"> </a>
+</pre></div>
+<a name="wp1038123"> </a><p class="pIndented2">
+If you want to unregister, use this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+regsvr32 activexfilename /U<a name="wp1038124"> </a>
+</pre></div>
+<a name="wp1038125"> </a><p style="font-family: Arial, Verdana, Helvetica, sans-serif">
+<hr />
+<b>Note:  </b>If the control has the extension &quot;.ocx&quot;, you may rename it to &quot;.dll&quot; in order to install it in ACUCOBOL-GT.  The control's behavior is the same.  The runtime does not recognize an &quot;.ocx&quot; as a &quot;.dll&quot;.  Once renamed, a control should not be renamed again.
+<hr />
+</p>
+</ul></div>
+</ol></div>
+<a name="wp1038126"> </a><p class="pBody">
+For instructions on how to deploy an ActiveX control or COM object, see <a  href="itr43.htm#wp1037506">section 4.2</a>.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

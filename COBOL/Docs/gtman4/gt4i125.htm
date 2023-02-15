@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>W$KEYBUF Routine </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1038805"> </a><h2 class="pHeading2">
+W$KEYBUF Routine 
+</h2>
+<a name="wp1038811"> </a><p class="pBody">
+This routine lets you add characters to the runtime's keyboard input buffer.  This allows a program to simulate user input.  
+</p>
+<a name="wp1038812"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;W$KEYBUF&quot; <a name="wp1038813"> </a>
+    USING OP-CODE, parameters<a name="wp1481721"> </a>
+</pre></div>
+<a name="wp1038814"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1038815"> </a><p class="pBody">
+<b class="cBold">OP-CODE</b>   PIC 9(2)
+</p>
+<a name="wp1038816"> </a><p class="pBody">
+<b class="cBold">parameters</b> Vary depending on the op-code chosen
+</p>
+<a name="wp1259829"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1038820"> </a><p class="pBody">
+The first parameter to W$KEYBUF is a number that determines the action of the routine.  The following options are supported:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1038821"> </a><div class="pSmartList1"><li>Use op-code &quot;1&quot; to add keystrokes to the keyboard input buffer.  In this case, the second parameter to W$KEYBUF specifies the key or keys you want to add.  Optionally, you may also specify a third parameter that contains the number of characters you want to add.  If you omit the third parameter, then all of the second parameter is used (including any trailing spaces).  When keystrokes are added to the input buffer, they are placed after any previously added keystrokes, but before any keys typed by the user.  This ensures that the user does not interfere with your programmatic control.  </li></div>
+<a name="wp1038822"> </a><div class="pSmartList1"><li>This is the same as &quot;1&quot; except that the characters are added at the beginning of the input buffer instead of at the end.</li></div>
+<a name="wp1038823"> </a><div class="pSmartList1"><li>Use op-code &quot;3&quot; to empty the input buffer.  This can be useful in some error handling routines.  Note that this routine does <em class="cEmphasis">not</em> empty the operating system's input buffer--any keys queued up by the user are still available.  Only keys added with W$KEYBUF are removed.  </li></div>
+<a name="wp1038824"> </a><div class="pSmartList1"><li>Op-code &quot;4&quot; turns on the keystroke recording mechanism.  You must pass as a second parameter the name of a buffer in which you want to place the recorded keystrokes.  The buffer is a field you have defined in the Data Division.  The size of this buffer limits the number of keystrokes recorded.  You may optionally pass a third parameter that is the size of the buffer.  If you omit the third parameter, then the entire buffer is used.  The keystroke recorder does not initialize the buffer, and it does not modify any part of the buffer that follows the last recorded keystroke.  </li></div>
+<a name="wp1038825"> </a><div class="pSmartList1"><li>Op-code &quot;5&quot; turns off the keystroke recorder.  This action sets RETURN-CODE to the number of characters used in the buffer to hold the recorded keystrokes.</li></div>
+<a name="wp1038826"> </a><div class="pSmartList1"><li>Op-code &quot;6&quot; inquires whether or not the keystroke recorder is active.  This will set RETURN-CODE to &quot;1&quot; if keystroke recording is currently turned on.  If it is turned off, then RETURN-CODE will be set to &quot;0&quot;.</li></div>
+<a name="wp1148807"> </a><div class="pSmartList1"><li>Op-code &quot;7&quot; causes keys typed by the user to be recorded in a file.  You pass the name of the file as the first parameter after the op-code.  If that file exists, it is deleted first.  If the file is successfully created, then RETURN-CODE is set to zero.  If the file cannot be created, then RETURN-CODE is set to &quot;1&quot;.  You use op-code &quot;5&quot; to turn off the recording.  Only one recording mode can be active at once, so this op-code will cancel any other active keystroke recording.  In thin client environments, keys typed by the user are recorded in a temporary local file. That file is automatically uploaded to the server when recording is stopped with op-code &quot;5&quot;.</li></div>
+<a name="wp1148808"> </a><div class="pSmartList1"><li>Op-code &quot;8&quot; is identical to op-code &quot;7&quot;, except that the file is appended to if it already exists. In thin client environments, the file is downloaded from the server to the client, appended to, and then uploaded to the server with op-code &quot;5&quot;.</li></div>
+<a name="wp1038829"> </a><div class="pSmartList1"><li>Op-code &quot;9&quot; causes a previously recorded file to be &quot;played back.&quot;  The keystrokes recorded in that file are treated as input from the user.  The file name is passed as the first parameter after the op-code.  RETURN-CODE is set to zero if the file is opened successfully, otherwise RETURN-CODE is set to &quot;1&quot;.  Keystrokes inserted into the keyboard buffer using op-codes &quot;1&quot; or &quot;2&quot; of W$KEYBUF are processed before the keystrokes recorded in the file.  Once the keystrokes in the file have all been used, control passes back to the user's keyboard.  </li></div>
+<a name="wp1482005"> </a><p class="pIndented1">
+In thin client environments, this op-code first tries to open the file on the client machine using the path specified in the CALL statement.  If the file is not found, the thin client requests that the file be downloaded from the server.  In this case the path specified in the CALL statement refers to the server machine's file system.  The specified path can be an absolute path or a path relative to the current working directory, as specified in the alias file.  If the file is found, it is downloaded to the client machine and stored in the thin client's temporary cache directory (the directory specified by the TEMP environment variable; often &quot;C:\WINDOWS\TEMP&quot;.  If the TEMP environment variable is not set, the files are stored in the client's current working directory.  The file is not downloaded again unless it changes or is deleted from the client.
+</p>
+<a name="wp1482006"> </a><p class="pIndented1">
+There is a runtime command-line option that causes the immediate playback of a keystroke file.  This option, &quot;-k&quot;, causes the next command-line argument to be treated as the name of a file that contains recorded keystrokes.  The runtime internally calls W$KEYBUF using op-code &quot;9&quot; and this file name prior to executing the first COBOL program.  The effect is that the keystrokes recorded in the file are treated as the runtime's first user input.
+</p>
+<a name="wp1038831"> </a><div class="pSmartList1"><li>Op-code &quot;10&quot; allows you to specify how long the system waits after each simulated keystroke is processed.  The delay, expressed in hundredths of a second, is passed as the second parameter.  For example, to add a quarter-second delay to each keystroke, use the following:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+     CALL &quot;W$KEYBUF&quot; USING 10, 25<a name="wp1038832"> </a>
+</pre></div>
+<a name="wp1038833"> </a><p class="pIndented1">
+You can terminate a pause early by pressing any key.
+</p>
+<a name="wp1038834"> </a><div class="pSmartList1"><li>Op-code &quot;11&quot; defines a key that causes the playback to pause for an indefinite time period, allowing you to explain a special feature.  The playback resumes when another key is pressed.  To designate the pause key, use op-code &quot;11&quot; with the ASCII value of the key. Note that you can only define a pause key that is a simple ASCII key, not a complex key like a function key.</li></div>
+<a name="wp1038835"> </a><div class="pSmartList1"><li>Op-code &quot;12&quot; defines a key that stops the playback and returns the program to interactive mode.  Use op-code &quot;12&quot; with the ASCII value of the cancel key.  </li></div>
+</ol></div>
+<a name="wp1038836"> </a><h3 class="pHeadingRef">
+Special keystrokes
+</h3>
+<a name="wp1330306"> </a><p class="pBody">
+You may specify special keystrokes by placing code names in curly braces.  Within curly braces, you may use the caret (^) to indicate Control characters or the &quot;at&quot; symbol (@) to indicate ALT characters.   For example, &quot;{^M}&quot; indicates Control+M and &quot;{@L}&quot; indicates ALT+L.   
+</p>
+<a name="wp1038838"> </a><p class="pBody">
+You may also use a special key's two-character name as found in the Table of Keys in the <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>, section 4.3.2.3.   For example, you may refer to function key 2 with &quot;{k2}&quot;. 
+</p>
+<a name="wp1038839"> </a><p class="pBody">
+Menu selections are encoded as {m#} where &quot;#&quot; is the numeric ID of the menu item.  
+</p>
+<a name="wp1038840"> </a><p class="pBody">
+You may insert specific pauses in a simulated input stream using the following character sequences:
+</p>
+<a name="wp1038841"> </a><p class="pBodyRelative">
+   </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1083619"> </a><p class="pCellBody">
+<b class="cBold">{p#}</b>
+</p>
+</td>
+    <td><a name="wp1083621"> </a><p class="pCellBody">
+where # is in hundredths of a second
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083623"> </a><p class="pCellBody">
+<b class="cBold">{P#}</b>
+</p>
+</td>
+    <td><a name="wp1083625"> </a><p class="pCellBody">
+where # is in seconds
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083627"> </a><p class="pCellBody">
+<b class="cBold">{P} </b>
+</p>
+</td>
+    <td><a name="wp1083629"> </a><p class="pCellBody">
+1-second pause
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1083614"> </a><p class="pBody">
+A programmed pause also includes any pause introduced by op-code &quot;10&quot;, described above. You can terminate a pause early by pressing any key.
+</p>
+<a name="wp1038846"> </a><p class="pBody">
+Finally, if you require an opening curly brace on its own, specify it twice.   For example:  &quot;{{&quot;.   
+</p>
+<a name="wp1038847"> </a><p class="pBody">
+The following line specifies that the next characters processed should be &quot;abc&quot;, Tab, &quot;def&quot;, and function key 1:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+     CALL &quot;W$KEYBUF&quot; USING 1, &quot;abc{^I}def{k1}&quot;.<a name="wp1038848"> </a>
+</pre></div>
+<a name="wp1038849"> </a><p class="pBody">
+The keystroke recording mechanism records normal keys as native characters.  The keystroke recorder will not record a &quot;time out&quot; event.  
+</p>
+<a name="wp1038850"> </a><p class="pBody">
+In order to operate correctly with graphical controls on Windows systems, the W$KEYBUF routine converts characters placed into the keyboard buffer into keyboard scan codes.  Thus, you can use only those characters that have a corresponding keyboard scan code.  As a result, you can &quot;play back&quot; non-English characters only when you have installed a keyboard that contains those characters.
+</p>
+<a name="wp1083666"> </a><p class="pBody">
+The behavior of this routine is affected by the FILENAME_SPACES configuration variable. The value of  FILENAME_SPACES determines whether spaces are allowed in a file name.  See the entry for FILENAME_SPACES in Appendix&#160;H for more information.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

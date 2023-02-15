@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:24" />
+  <title>3.7.3  Creating the Button</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt23.htm">Chapter 3:  Graphical Controls</a> &gt; <a href="gt238.htm">3.7  Bitmap Buttons</a> &gt; </p>
+<a name="wp1026344"> </a><h2 class="pHeading2">
+3.7.3  Creating the Button
+</h2>
+<a name="wp1026346"> </a><p class="pBody">
+After you have loaded the bitmaps, you can create the buttons. Bitmap buttons are created in the same manner as regular push buttons (see the &quot;DISPLAY Control-Type&quot; statement in section 6.6, Book 3, <em class="cEmphasis">Reference Manual</em>.  You turn a push button, check box, or radio button into a bitmap button by using the following styles and special properties:
+</p>
+<a name="wp1026348"> </a><h5 class="pHeading4">
+BITMAP   (style, required)
+</h5>
+<a name="wp1029542"> </a><p class="pBody">
+This style informs the system that the button should be drawn as a bitmap button instead of a regular button.  You must have this style set when the button is created, and you cannot change this style after the button is created. 
+</p>
+<a name="wp1026350"> </a><h5 class="pHeading4">
+BITMAP-NUMBER    (numeric, special property, required)
+</h5>
+<a name="wp1029543"> </a><p class="pBody">
+This property identifies which image in the bitmap strip will be used for this button.  The first image in the strip is number &quot;1&quot;, the second number &quot;2&quot;, and so on.  If this value is set to zero, a blank button is displayed.  If this number is a negative value, or higher than the number of images in the strip, the results are unpredictable.  If a bitmap strip contains only one image, you should specify the number &quot;1&quot;.  Note that you can change which bitmap appears on a button by changing this value.  
+</p>
+<a name="wp1026351"> </a><h5 class="pHeading4">
+BITMAP-HANDLE     (numeric, special property, optional)
+</h5>
+<a name="wp1029550"> </a><p class="pBody">
+This property identifies which bitmap strip to use for the button.  If you do not specify a bitmap handle, then the last bitmap loaded is used.  If you specify a handle, the handle must hold a value returned by W$BITMAP when the bitmap was loaded.  You can change bitmap strips after a button has been created by changing this value.  
+</p>
+<a name="wp1026354"> </a><p class="pBody">
+You may optionally use the following styles to affect the appearance of the buttons:
+</p>
+<a name="wp1026355"> </a><h5 class="pHeading4">
+FRAMED    (style, optional) 
+</h5>
+<a name="wp1029571"> </a><p class="pBody">
+This style requests that a frame be drawn around the button.  Typically the frame is a thin black line.   Note that not all systems support frames, in which case the request is ignored.  By default, buttons are framed under Windows NT/Windows 2000.  
+</p>
+<a name="wp1026357"> </a><h5 class="pHeading4">
+UNFRAMED     (style, optional) 
+</h5>
+<a name="wp1029570"> </a><p class="pBody">
+This style requests that the button be drawn without a frame.  Not all systems support unframed buttons; on these systems the request is ignored.  By default, buttons are not framed under Windows 98.  
+</p>
+<a name="wp1026359"> </a><h5 class="pHeading4">
+SQUARE    (style, optional)
+</h5>
+<a name="wp1029569"> </a><p class="pBody">
+This style is used only with framed bitmap buttons.  It forces the button to have square corners.  Without this style, the button will have slightly rounded corners.  Not all systems support square buttons; on these systems the request is ignored.   
+</p>
+<a name="wp1026361"> </a><p class="pBody">
+The following Screen Section entry describes two default size bitmap push buttons: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  SCREEN-1.<a name="wp1026362"> </a>
+  03  PUSH-BUTTON, ROW 1, COL 2, <a name="wp1038722"> </a>
+        BITMAP, BITMAP-NUMBER = 1.<a name="wp1037299"> </a>
+  03  PUSH-BUTTON, OVERLAP-LEFT, <a name="wp1037301"> </a>
+        BITMAP, BITMAP-NUMBER = 2.<a name="wp1037303"> </a>
+</pre></div>
+<a name="wp1026364"> </a><p class="pBody">
+Specifying the OVERLAP-LEFT style (see <a  href="gt259.htm#wp1027434">section 5.2, &quot;Global Styles,&quot;</a> in <a  href="gt25.htm#wp1231089">Chapter 5</a>.) on the second button causes the two buttons to share a border if they are framed.  Note that this example assumes that you want to pull images from the last bitmap loaded in your program.  
+</p>
+<a name="wp1026365"> </a><p class="pBody">
+Here is a more complete example that could be used with the six bitmaps shown earlier in this section.  It creates six bitmap buttons.  The first two buttons are push buttons, the third is a check box, and the final three are radio buttons.  The styles and properties used are appropriate for grouping the buttons into a toolbar.  Note that the &quot;toolbar.cbl&quot; sample program does this.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+* Screen Section<a name="wp1026366"> </a>
+01  TOOLS-1. <a name="wp1037290"> </a>
+<a name="wp1037292"> </a>
+  03  PUSH-BUTTON, COL 2, <a name="wp1037295"> </a>
+        BITMAP, BITMAP-NUMBER = 1, <a name="wp1037297"> </a>
+        EXCEPTION-VALUE = 101. <a name="wp1037305"> </a>
+<a name="wp1037307"> </a>
+  03  PUSH-BUTTON, OVERLAP-LEFT, <a name="wp1037309"> </a>
+        BITMAP, BITMAP-NUMBER = 2, <a name="wp1037311"> </a>
+        EXCEPTION-VALUE = 102. <a name="wp1037313"> </a>
+<a name="wp1037315"> </a>
+  03  CHECK-BOX, COL + 2, BITMAP, <a name="wp1037318"> </a>
+        BITMAP-NUMBER = 3, NOTIFY, <a name="wp1037324"> </a>
+        EXCEPTION-VALUE = 103. <a name="wp1037326"> </a>
+<a name="wp1037328"> </a>
+  03  RADIO-BUTTON, COL + 2, BITMAP, <a name="wp1037330"> </a>
+        BITMAP-NUMBER = 4, NOTIFY, <a name="wp1037332"> </a>
+        EXCEPTION-VALUE = 104. <a name="wp1037334"> </a>
+<a name="wp1037336"> </a>
+  03  RADIO-BUTTON, OVERLAP-LEFT, <a name="wp1037338"> </a>
+        BITMAP, BITMAP-NUMBER = 5, <a name="wp1037340"> </a>
+        NOTIFY, EXCEPTION-VALUE = 105. <a name="wp1037342"> </a>
+<a name="wp1037344"> </a>
+  03  RADIO-BUTTON, OVERLAP-LEFT, <a name="wp1037346"> </a>
+        BITMAP, BITMAP-NUMBER = 6, <a name="wp1037348"> </a>
+        NOTIFY, EXCEPTION-VALUE = 106.<a name="wp1037350"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

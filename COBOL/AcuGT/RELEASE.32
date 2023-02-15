@@ -1,0 +1,119 @@
+Release notes for ACUCOBOL-GT(R), Version 7.2.0
+===============================================
+
+This file contains documentation for features or changes
+not found in the online or printed documentation.  For
+information about new features at Version 7.2.0,
+please see the online or printed Release Overview.
+
+
+Web Runtime and Web Thin Client Display Problem
+===============================================
+
+Due to a problem in the underlying Microsoft Foundation Class (MFC)
+libraries, under certain conditions the ACUCOBOL-GT Web Runtime and Web
+Thin Client may exhibit an undesirable display behavior.  This behavior
+occurs only when the COBOL application runs embedded in the browser
+window (applications set to run in a separate window are unaffected).
+If the COBOL application window is larger than the viewable area of the
+browser's window, the browser automatically includes horizontal and/or
+vertical scrollbars as needed.  When the user moves either of these
+scrollbars, the COBOL application's display may noticeably flicker.
+In severe instances, the COBOL application's display may become corrupt
+(for example, appearing to be broken into numerous overlapping strips).
+
+Acucorp is working with Microsoft to remedy the problem.  When a
+correction is available, we will post the necessary updates to the
+Support download area of the Acucorp website.
+
+HP e3000
+========
+
+MPE files are now accessed using the ACUCOBOL-GT file system interface.
+This was done to allow access to both Vision and KSAM indexed files in the
+same COBOL program.  In previous versions to allow access to KSAM files you
+needed to specify the following runtime configuration variable:
+
+        DEFAULT_HOST KSAM
+
+With this version you need to specify:
+
+        DEFAULT_FILESYSTEM MPE
+
+See section H.2 Configuration File Entries for more information related to
+the DEFAULT_FILESYSTEM runtime configuration variable.
+
+HP e3000 Printing
+=================
+
+The following statement:
+
+   PRINTER1 -P /SYS/HPBIN/LP -d LP -s
+
+in a configuration file or in a COBOL program will no longer work with the
+new MPE file system interface in Version 7.0.0.  This was used as a
+workaround because the runtime had not fully supported the HP COBOL method
+for printing files.
+
+You must now use the standard HP COBOL method for printing files either by
+setting a file equation before running the program like:
+
+  FILE PRINTER1;DEV=LP,1,1
+
+or by specifying LP in the COBOL ASSIGN statement like:
+
+  ASSIGN TO "PRINTER1,,,LP(NOCCTL)"
+
+
+DOCUMENTATION UPDATES
+=====================
+
+   For information about new features at Version 7.2.0,
+please see the online or printed Release Overview.
+
+
+
+Acucorp Technical Support Numbers
+=================================
+
+Acucorp Technical Support in the U.S.A. can be reached from 6:00 a.m.
+to 6:00 p.m. Pacific Time at 800 399 7220 or +1 858 689 4502.  Our fax
+number is +1 858 689 4550 or +1 858 689 4552.  Our e-mail address is
+support@acucorp.com.  Please be sure to always include your company
+name, Acucorp product and version, machine, operating system and
+version when e-mailing Technical Support.
+
+
+In Benelux:            phone:  +31 30 272 7050
+                       fax:    +31 30 272 7041
+                       e-mail: nlsupport@acucorp.com
+
+In France:             phone:  +33 (0) 1 53 34 9005
+                       fax:    +33 (0) 1 53 34 9001
+                       e-mail  frsupport@acucorp.com
+
+In Germany:            phone:  +49 89 455 659 55
+                       fax:    +49 89 455 659 50
+                       e-mail: desupport@acucorp.com
+
+In Italy:              phone:  39 0523.071230
+                       fax:    39 0523.623155
+                       e-mail: itsupport@acucorp.com
+
+In the United Kingdom:
+                       phone:  +44 (0) 20 8843 7101
+                       fax:    +44 (0) 20 8744 9401
+                       e-mail: uksupport@acucorp.com
+
+For other locations, please contact your local Acucorp distributor.
+
+(c) Copyright Acucorp, Inc. 1988-2006.  ALL RIGHTS RESERVED.
+
+"COBOL Virtual Machine" is a trademark of Acucorp, Inc.
+Acucorp, ACUCOBOL-GT, Acu4GL, AcuBench, AcuConnect, AcuODBC,
+AcuServer, AcuSQL, and extend are registered trademarks of
+Acucorp, Inc.  "The new face of COBOL" is a registered service
+mark of Acucorp, Inc.  Acu4GL is protected by U.S. patent 5,640,550,
+and AcuODBC is protected by U.S. patent 5,826,076.  Other brand
+and product names are trademarks or registered trademarks of
+their respective holders.

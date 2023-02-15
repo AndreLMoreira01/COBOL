@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:01:17" />
+  <title>11.8  File System Initialization</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr11.htm">Chapter 11: Working with Non-Vision Data</a> &gt; </p>
+<a name="wp1044791"> </a><h2 class="pHeading1">
+11.8  File System Initialization
+</h2>
+<a name="wp1044793"> </a><p class="pBody">
+By default, with the exception of the EXTFH interface, ACUCOBOL-GT initializes enabled file systems upon runtime startup, before the first COBOL program begins execution.  Initialization of the EXTFH interface, by default, is deferred until the first file operation on the file system.  This provides the best runtime performance.
+</p>
+<a name="wp1051494"> </a><p class="pBody">
+If you want to force initialization of EXTFH at startup, or you want to defer initialization of another file system, you can do so by setting a variable in &quot;filetbl.c&quot; and relinking the runtime.  &quot;filetbl.c&quot; holds the ACUCOBOL-GT file system table.  Settings in &quot;filetbl.c&quot; determine which file systems are enabled and when each system is initialized.  &quot;filetbl.c&quot; is located in the lib subdirectory of your ACUCOBOL-GT installation.
+</p>
+<a name="wp1044932"> </a><p class="pBody">
+To specify file system initialization for a given file system:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1044933"> </a><div class="pSmartList1"><li>Open &quot;filetbl.c&quot; in a text editor.  </li></div>
+<a name="wp1044934"> </a><div class="pSmartList1"><li>Locate the TABLE_ENTRY for the file system you want to control, and change the <em class="cEmphasis">defer_init</em> parameter to the desired value.  A value of &quot;0&quot; causes the file system to be initialized at startup.  A value of &quot;1&quot; causes file system initialization to be deferred.  The <em class="cEmphasis">defer_init</em> flag is set to &quot;0&quot; by default for all file systems except EXTFH.</li></div>
+<a name="wp1044951"> </a><p class="pIndented1">
+For example, following is the TABLE_ENTRY for Vision:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+TABLE_ENTRY  file_table[] = {<a name="wp1044953"> </a>
+#if   USE_VISION<a name="wp1044954"> </a>
+   {   &amp;v5_dispatch,   &quot;VISIO&quot;, 0 },<a name="wp1044955"> </a>
+#endif /* USE_VISION */<a name="wp1044956"> </a>
+</pre></div>
+<a name="wp1044958"> </a><p class="pIndented1">
+The <em class="cEmphasis">defer_init</em> value is the value that follows &quot;VISIO&quot; on the third line.  
+</p>
+<a name="wp1044979"> </a><div class="pSmartList1"><li>When you have made your changes, save and close the file and relink the runtime.  Instructions on relinking the runtime are located in <a  href="itr616.htm#wp1137388">section 6.3.6, &quot;Creating a New Runtime System.&quot;</a></li></div>
+</ol></div>
+<a name="wp1044981"> </a><p class="pBody">
+If a deferred file system initialization fails, the file status is set to 9B (32 for IBM DOS/VS) to indicate that the requested operation is not supported.
+</p>
+<a name="wp1044983"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Starting the runtime with the &quot;-v&quot; option forces startup initialization of all enabled file systems, as well as output of version information.  For a complete description of the &quot;-v&quot; option, see section 2.2 in Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>.  
+<hr />
+</p>
+<a name="wp1044371"> </a><p class="pBody">
+
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

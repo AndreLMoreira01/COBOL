@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>6.5.3.2  Calling COBOL subroutines that call C routines</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr638.htm">6.5  Calling COBOL From C Programs</a> &gt; <a href="itr645.htm">6.5.3  Calling COBOL Routines</a> &gt; </p>
+<a name="wp1122405"> </a><h2 class="pHeading3">
+6.5.3.2  Calling COBOL subroutines that call C routines
+</h2>
+<a name="wp1122406"> </a><p class="pBody">
+If you are calling COBOL subroutines in Windows, which in turn call C routines, you may want to locate those routines in the calling executable file.  You can do this without relinking the runtime by registering your own &quot;sub&quot; function in the C main program.  You must add the following declaration to your main program:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+typedef    int    (*ACU_SUB_FUNC)(int argc, char **argv);<a name="wp1122407"> </a>
+ACU_SUB_FUNC      *acu_register_sub( ACU_SUB_FUNC *pFunc );<a name="wp1122408"> </a>
+</pre></div>
+<a name="wp1122409"> </a><p class="pBody">
+The routine <b class="cBold">acu_register_sub()</b> registers its argument (pFunc) as an additional &quot;sub&quot; function to call.  If pFunc is set to NULL, any existing registration is removed.  
+</p>
+<a name="wp1122410"> </a><p class="pBody">
+The registered function is called just like &quot;sub&quot;, but it is called before &quot;sub&quot;.  Note that &quot;sub&quot; is still called if the registered function returns the constant NotFound.  
+</p>
+<a name="wp1122411"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1122412"> </a><p class="pBody">
+The following C routine calls a COBOL program which, in turn, calls a C program named &quot;MSGBOX&quot;:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#include &lt;stdio.h&gt;<a name="wp1122414"> </a>
+#include &lt;windows.h&gt;<a name="wp1122415"> </a>
+#include &quot;sub.h&quot;<a name="wp1122416"> </a>
+<a name="wp1122417"> </a>
+<a name="wp1122418"> </a>
+extern     int   __stdcall AcuInitialize( char *cmdLine );<a name="wp1122419"> </a>
+extern    void   __stdcall AcuShutdown(void);<a name="wp1122420"> </a>
+<a name="wp1122421"> </a>
+// This is the &quot;sub&quot; function that will be registered<a name="wp1122423"> </a>
+int __cdecl local_sub( int argc, char **argv )<a name="wp1122424"> </a>
+{<a name="wp1122425"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+if ( strcmp( argv[0], &quot;MSGBOX&quot; ) == 0 ) {<a name="wp1122426"> </a>
+MessageBox( NULL, argv[1], NULL, MB_OK );<a name="wp1122427"> </a>
+return Okay;<a name="wp1122428"> </a>
+}<a name="wp1122429"> </a>
+return NotFound;<a name="wp1122430"> </a>
+</pre></div>
+}   <a name="wp1122431"> </a>
+// local_sub<a name="wp1122432"> </a>
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE
+    hPrevInstance, LPSTR lpCmdLine, int nCmdShow )<a name="wp1153917"> </a>
+{<a name="wp1153918"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MessageBox( NULL, &quot;Starting in &#39;C&#39;&quot;, NULL, MB_OK );<a name="wp1122436"> </a>
+</pre></div>
+<a name="wp1122437"> </a>
+// Initialize the runtime using the Visual Basic initializer.<a name="wp1122438"> </a>
+// This prevents the runtime from calling exit() when halting.<a name="wp1122439"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+AcuInitialize( &quot;&quot; );<a name="wp1122440"> </a>
+<a name="wp1122441"> </a>
+</pre></div>
+// Install our &quot;sub&quot; handler<a name="wp1122442"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acu_register_sub( local_sub );<a name="wp1122443"> </a>
+<a name="wp1122444"> </a>
+</pre></div>
+// Call the COBOL program. This one takes no parameters
+// Assume that this program calls MSGBOX at some point.
+// MSGBOX is located in &quot;cblprog&quot;.  It will be found<a name="wp1122445"> </a>
+// because &quot;cblprog&quot; got registered with the runtime.<a name="wp1122446"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+struct a_cobol_info cblinfo; <a name="wp1122447"> </a>
+memset(&amp;cblinfo, 0, sizeof(cblinfo)); 
+cblinfo.a_cobol_info_size = sizeof(cblinfo); 
+cblinfo.pgm_name = &quot;cblprog&quot;; <a name="wp1122448"> </a>
+cblinfo.num_params = 0; <a name="wp1122449"> </a>
+cblinfo.params = cblinfo.no_stop = 1; <a name="wp1122450"> </a>
+acu_cobol(&amp;cblinfo); <a name="wp1122451"> </a>
+</pre></div>
+<a name="wp1122452"> </a>
+// De-initialize the runtime.<a name="wp1122453"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+AcuShutdown();<a name="wp1122454"> </a>
+MessageBox( NULL, &quot;Back in &#39;C&#39; - finished&quot;, NULL, 
+    MB_OK );<a name="wp1122455"> </a>
+return 0;<a name="wp1122456"> </a>
+</pre></div>
+}<a name="wp1122457"> </a>
+</pre></div>
+<a name="wp1122458"> </a><p class="pBody">
+Here is the COBOL program called above:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+program-id. test.<a name="wp1122459"> </a>
+working-storage section.<a name="wp1122460"> </a>
+77  message-text         pic x(80).<a name="wp1145584"> </a>
+procedure division.<a name="wp1122461"> </a>
+main-logic.<a name="wp1145629"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+display &quot;In COBOL program&quot;.<a name="wp1122462"> </a>
+display &quot;Calling MSGBOX&quot;<a name="wp1122463"> </a>
+move &quot;This is a message&quot; to message-text<a name="wp1122464"> </a>
+inspect message-text replacing trailing spaces by
+   low-values<a name="wp1153984"> </a>
+call &quot;MSGBOX&quot; using message-text<a name="wp1153985"> </a>
+display &quot;Back from MSGBOX&quot;.<a name="wp1145719"> </a>
+display &quot;Press enter to execute STOP RUN &quot;, no
+   advancing.<a name="wp1122466"> </a>
+accept omitted.<a name="wp1145720"> </a>
+stop run.<a name="wp1145721"> </a>
+</pre></div>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

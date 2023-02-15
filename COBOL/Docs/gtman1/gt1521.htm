@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:06" />
+  <title>5.3  XFD Files</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt15.htm"><br />Chapter 5:  File Processing</a> &gt; </p>
+<a name="wp1032471"> </a><h2 class="pHeading1">
+5.3  XFD Files
+</h2>
+<a name="wp1032476"> </a><p class="pBody">
+The ACUCOBOL-GT compiler is capable of generating <em class="cEmphasis">data dictionaries</em> that store a map of COBOL record structures.  These dictionaries are also called <em class="cEmphasis">extended file descriptors</em> (XFDs) because they're based on the standard COBOL file descriptors (FDs).
+</p>
+<a name="wp1032477"> </a><p class="pBody">
+XFDs are used by Acu4GL to interface to database management systems and by AcuXML to interact with data in XML files.  They are also used by <b class="cBold">alfred</b>, Acucorp's record editor, and by AcuODBC, Acucorp's Vision ODBC driver.  In addition, they are used to help guide the mapping of international character sets between machines that use different underlying character codes.
+</p>
+<a name="wp1032480"> </a><p class="pBody">
+The compiler creates an XFD for each indexed file in the compiled program when you specify the &quot;-Fx&quot; compile-time option.  The &quot;-Fa&quot; option generates XFD files for all indexed, relative, and sequential files in the compiled program.  Ordinarily, XFDs are generated in flat text file format.  Use the &quot;-Fe&quot; option to generate XFD files in XML format instead.  Acu4GL, AcuODBC, and <b class="cBold">alfred</b> can all read the XFD files in either format.  XFDs are fully portable, and thus no recompilation is necessary if you change hardware.
+</p>
+<a name="wp1037994"> </a><p class="pBodyRelative">
+</p><div><img src="ch5_xfds.gif" height="81" width="408" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1032483"> </a><p class="pBody">
+The effects of all compile-time options, COPY REPLACING, and source-code control lines are reflected correctly in the XFDs.
+</p>
+<a name="wp1036052"> </a><h3 class="pHeadingRef">
+Understanding how the XFD file is formed
+</h3>
+<a name="wp1036054"> </a><p class="pBody">
+Acucorp data dictionaries (XFDs) enable the Acu4GL and AcuXML interfaces to create a table (or access an existing one) in a database for each indexed, relative, or sequential file.  Each column in the table contains the values for one field.  The column names are essentially the field names.
+</p>
+<a name="wp1032487"> </a><p class="pBody">
+XFDs also allow the <b class="cBold">alfred</b> record editor to display and accept data in an indexed file at the field level, instead of character-by-character.  If an XFD is available to <b class="cBold">alfred</b>, it has enough information to display fields on the screen, instead of just groups of characters.  This makes the screen easier to read, and helps make editing more efficient.
+</p>
+<a name="wp1032488"> </a><p class="pBody">
+Each XFD file is <em class="cEmphasis">based on the largest record in the COBOL file</em>, and contains the fields from that record, plus any key fields (key fields are those which are named in KEY IS phrases of SELECT verbs in the File-Control section). This ensures that data from all COBOL records will fit within database tables, and simplifies the storage and retrieval process.  If you were to examine the XFD file, only the fields from the largest record, and the key fields, would appear.  
+</p>
+<a name="wp1032493"> </a><p class="pNote">
+<hr />
+<b>Note:  </b> If the field named in the KEY IS phrase is a group item, it will not be named as a field in the XFD file.  This means it will <em class="cEmphasis">not</em> be used as a column in a database table, if you are using an Acu4GL interface, and it will <em class="cEmphasis">not</em> appear on the screen if you use the <b class="cBold">alfred</b> editor.  Instead, all elementary items subordinate to the named group item will be named in the XFD.  You can force the group item to be a named field by using the USE GROUP directive (see <a  href="gt1546.htm#wp1032937"><span style="font-family: Arial, Verdana, Helvetica, sans-serif">Section 5.3.3.9, &quot;Use Group directive&quot;</span></a>).
+<hr />
+</p>
+<a name="wp1032494"> </a><p class="pBody">
+With multiple record formats (level 01), not all COBOL fields are named in the XFD file, but all fields <em class="cEmphasis">are</em> storable and retrievable.  The data dictionary maps fields from all records of a file to the corresponding locations in the <em class="cEmphasis">master</em> (largest) record of the file.  Since Acu4GL and <b class="cBold">alfred</b> have access to the data dictionary, they <em class="cEmphasis">know</em> where the data from a given COBOL record fits.  This activity is invisible to the COBOL application. 
+</p>
+<a name="wp1032495"> </a><p class="pBody">
+For example, if your program has one file with the three records shown below, the underlined fields will be included as fields in the XFD file by default (this example assumes that <b class="cBold">ar-codes-key</b> is named in a KEY IS phrase).  Some fields will not appear by name in the file, but will be mapped to the <em class="cEmphasis">master</em> field names.  The interface thus will eliminate redundancies and give you optimum performance.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  ar-codes-record.<a name="wp1032496"> </a>
+  03  ar-codes-key.<a name="wp1032497"> </a>
+    05  <u class="cUnderline">ar-code-type</u>      pic x.<a name="wp1032498"> </a>
+    05  <u class="cUnderline">ar-code-num</u>       pic 999.<a name="wp1032499"> </a>
+<a name="wp1036880"> </a>
+01  ship-code-record.<a name="wp1032500"> </a>
+  03  filler              pic x(4).<a name="wp1032501"> </a>
+  03  ship-weight         pic s999v9.<a name="wp1032502"> </a>
+  03  ship-instruct       pic x(15).<a name="wp1032503"> </a>
+<a name="wp1036933"> </a>
+01  terms-code-record.<a name="wp1032504"> </a>
+  03  filler              pic x(4).<a name="wp1032505"> </a>
+  03  <u class="cUnderline">terms-rate-1</u>        pic s9v999.<a name="wp1032506"> </a>
+  03  <u class="cUnderline">terms-days-1</u>        pic 9(3).<a name="wp1032507"> </a>
+  03  <u class="cUnderline">terms-rate-2</u>        pic s9v999.<a name="wp1032508"> </a>
+  03  <u class="cUnderline">terms-descript</u>      pic x(15).<a name="wp1032509"> </a>
+</pre></div>
+<a name="wp1032510"> </a><p class="pBody">
+The following diagram shows how Acu4GL creates database columns for some of the fields in the COBOL record, while other fields are mapped to those columns by the data dictionary; this means that <em class="cEmphasis">all</em> the fields are accessible to the COBOL program.
+</p>
+<a name="wp1038112"> </a><p class="pBodyRelative">
+</p><div><img src="ch5_data.gif" height="515" width="408" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1032512"> </a><p class="pBody">
+The next section describes the rules that the interface follows as it builds the XFD file, and explains how you can override those rules when necessary. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

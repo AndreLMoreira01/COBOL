@@ -1,0 +1,578 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>MERGE Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1039952"> </a><h2 class="pHeading2">
+MERGE Statement
+</h2>
+<a name="wp1039954"> </a><p class="pBody">
+The MERGE statement combines two or more identically ordered files by selected ASCENDING or DESCENDING key fields.
+</p>
+<a name="wp1039955"> </a><p class="pBody">
+Unlike SORT, MERGE doesn't allow you to manipulate the records before they are merged.  Like SORT, MERGE does allow you to modify records after they are merged via the OUTPUT PROCEDURE phrase.
+</p>
+<a name="wp1039956"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This manual entry includes code examples and highlights for first-time users following the General Rules section.
+<hr />
+</p>
+<a name="wp1039958"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">MERGE</u> merge-file <a name="wp1039959"> </a>
+<a name="wp1066217"> </a>
+    { <u class="cUnderline">KEY</u> <u class="cUnderline">AREA</u> IS key-table       }<a name="wp1039960"> </a>
+<a name="wp1066226"> </a>
+    { ON {<u class="cUnderline">ASCENDING</u> } KEY {key-name}  } ...<a name="wp1039961"> </a>
+         {<u class="cUnderline">DESCENDING</u>}<a name="wp1039962"> </a>
+<a name="wp1039963"> </a>
+    [ COLLATING <u class="cUnderline">SEQUENCE</u> IS alpha-name ]<a name="wp1039964"> </a>
+<a name="wp1039965"> </a>
+      <u class="cUnderline">USING</u> {in-file} ...<a name="wp1039966"> </a>
+<a name="wp1039967"> </a>
+    { <u class="cUnderline">OUTPUT</u> <u class="cUnderline">PROCEDURE</u> IS proc-name  }<a name="wp1039968"> </a>
+    { <u class="cUnderline">GIVING</u> {out-file} ...          }<a name="wp1039969"> </a>
+</pre></div>
+<a name="wp1039970"> </a><p class="pBody">
+<em class="cEmphasis">proc-name</em> has the following format:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    start-proc [ {<u class="cUnderline">THRU</u>   } end-proc ]<a name="wp1039971"> </a>
+                 {<u class="cUnderline">THROUGH</u>}<a name="wp1039972"> </a>
+</pre></div>
+<a name="wp1039974"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039975"> </a><div class="pSmartList1"><li><em class="cEmphasis">Merge-file</em> names a sort file described by an SD entry in the Data Division.</li></div>
+<a name="wp1039976"> </a><div class="pSmartList1"><li><em class="cEmphasis">Key-table </em>must name a data item that is <em class="cEmphasis">not</em> located in the record for merge-file.  <em class="cEmphasis">Key-table</em> may not be subordinate to an OCCURS clause, nor may it be reference modified.  </li></div>
+<a name="wp1039977"> </a><div class="pSmartList1"><li><em class="cEmphasis">Key-table</em> must reference a data item whose size is an even multiple of 7.  <em class="cEmphasis">Key-table </em>is processed as if it had the following structure:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  KEY-TABLE.<a name="wp1039978"> </a>
+    03  MERGE-KEY OCCURS N TIMES.<a name="wp1039979"> </a>
+        05  KEY-ASCENDING   PIC X  COMP-X.<a name="wp1039980"> </a>
+        05  KEY-TYPE        PIC X  COMP-X.<a name="wp1039981"> </a>
+        05  KEY-OFFSET      PIC XX COMP-X.<a name="wp1039982"> </a>
+        05  KEY-SIZE        PIC XX COMP-X.<a name="wp1039983"> </a>
+        05  KEY-DIGITS      PIC X  COMP-X.<a name="wp1039984"> </a>
+</pre></div>
+<a name="wp1039985"> </a><p class="pIndented1">
+Typically, programs will declare <em class="cEmphasis">key-table</em> with a similar format.  
+</p>
+<a name="wp1039986"> </a><div class="pSmartList1"><li><em class="cEmphasis">Key-name</em> is a data item in the record description associated with <em class="cEmphasis">merge-file</em>.  It may not be subordinate to an OCCURS clause, nor may it be a group item containing variable occurrence data items.  </li></div>
+<a name="wp1039987"> </a><div class="pSmartList1"><li><em class="cEmphasis">Alpha-name</em> is an alphabet-name defined in the SPECIAL-NAMES paragraph of the Environment Division.</li></div>
+<a name="wp1039988"> </a><div class="pSmartList1"><li><em class="cEmphasis">In-file</em> and <em class="cEmphasis">out-file</em> are files described by FD entries in the Data Division.  They may not be sort files.  </li></div>
+<a name="wp1039989"> </a><div class="pSmartList1"><li><em class="cEmphasis">Start-proc</em> and <em class="cEmphasis">end-proc</em> are paragraph or section names in the Procedure Division.</li></div>
+<a name="wp1039990"> </a><div class="pSmartList1"><li>A MERGE statement may not appear in Declaratives or in the input or output procedure of a SORT or MERGE statement.</li></div>
+<a name="wp1039991"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">merge-file</em> contains variable length records, <em class="cEmphasis">in-file</em> records must not be smaller than the smallest record in <em class="cEmphasis">merge-file</em> nor larger than the largest.  If <em class="cEmphasis">merge-file</em> contains fixed length records, <em class="cEmphasis">in-file</em> records may not be larger than the size of <em class="cEmphasis">merge-file's</em> records.</li></div>
+<a name="wp1039992"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">out-file</em> contains variable length records, <em class="cEmphasis">merge-file</em> records must not be smaller than the smallest record in <em class="cEmphasis">out-file</em> nor larger than the largest.  If <em class="cEmphasis">out-file</em> contains fixed length records, <em class="cEmphasis">merge-file</em> records may not be larger than the size of <em class="cEmphasis">out-file'</em>s records.</li></div>
+<a name="wp1039993"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">merge-file</em> contains more than one record description, <em class="cEmphasis">key-name</em> need appear in only one of them.  The character positions referenced by <em class="cEmphasis">key-name</em> are used as the key for all the file's records.</li></div>
+<a name="wp1039994"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">out-file</em> is an indexed file, the first <em class="cEmphasis">key-name</em> must be ASCENDING and must specify the same character positions in its record as the primary record key for <em class="cEmphasis">out-file</em>.  </li></div>
+<a name="wp1039995"> </a><div class="pSmartList1"><li>THRU is an abbreviation for THROUGH.</li></div>
+</ol></div>
+<a name="wp1039997"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039998"> </a><div class="pSmartList1"><li>The MERGE statement merges all the records in the <em class="cEmphasis">in-file</em> files into <em class="cEmphasis">merge-file</em> and then either writes these records to each <em class="cEmphasis">out-file</em> or makes these records available to the specified OUTPUT PROCEDURE.</li></div>
+<a name="wp1039999"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">merge-file</em> contains fixed length records, any shorter <em class="cEmphasis">in-file</em> records are space-filled on the right to match the record size.</li></div>
+<a name="wp1040000"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">out-file</em> contains fixed length records, any shorter <em class="cEmphasis">merge-file</em> records are space-filled on the right to match the record size.  </li></div>
+<a name="wp1040001"> </a><div class="pSmartList1"><li>The first <em class="cEmphasis">key-name</em> is the major key, and the next <em class="cEmphasis">key-name</em> is the next most significant key.  This pattern continues for each <em class="cEmphasis">key-name</em> specified.  </li></div>
+<a name="wp1040002"> </a><div class="pSmartList1"><li>The ASCENDING phrase specifies that key values are to be ordered from lowest to highest.  The DESCENDING phrase specifies the reverse ordering.  Once ASCENDING or DESCENDING is specified, it applies to each <em class="cEmphasis">key-name</em> until another ASCENDING or DESCENDING adjective is encountered. </li></div>
+<a name="wp1040006"> </a><div class="pSmartList1"><li>Use the KEY AREA option when you do not know the specifics of the merge key until the program is run.  You can use this to allow users to enter merge key specifications, typically in conjunction with some form of data dictionary. </li></div>
+<a name="wp1040008"> </a><div class="pSmartList1"><li>Your program must fill in a table of information that describes the merge keys.  This table, <em class="cEmphasis">key-table</em>, should have the format described by Syntax Rule 3 above.  The number of merge keys is determined by the number of occurrences in the table.  The keys are listed in order of precedence: table entry 1 describes the highest precedence key, table entry 2 the second highest, and so on.  If you need to process a variable number of keys, use a variable-size table (by using OCCURS DEPENDING ON). </li></div>
+<a name="wp1066265"> </a><div class="pSmartList1"><li>For each key, you must specify the following information:</li></div>
+<a name="wp1066280"> </a><p class="pBodyRelative">
+<div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1066283"> </a><p class="pCellBody">
+KEY-ASCENDING:  
+</p>
+</td>
+    <td><a name="wp1066285"> </a><p class="pCellBody">
+This should be 0 or 1.  Enter 1 to have an ascending merge sequence, 0 for descending.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066287"> </a><p class="pCellBody">
+KEY-TYPE:  
+</p>
+</td>
+    <td><a name="wp1066289"> </a><p class="pCellBody">
+Describes the underlying data format.  The allowed values are listed in the next rule.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066291"> </a><p class="pCellBody">
+KEY-OFFSET:  <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1066293"> </a><p class="pCellBody">
+Describes the distance (in standard character positions) from the beginning of the merge record to the beginning of the key field.  The first field in a merge record is at offset 0.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066295"> </a><p class="pCellBody">
+KEY-SIZE:  
+</p>
+</td>
+    <td><a name="wp1066297"> </a><p class="pCellBody">
+Describes the size of the key field in standard character positions.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066299"> </a><p class="pCellBody">
+KEY-DIGITS:  
+</p>
+</td>
+    <td><a name="wp1066301"> </a><p class="pCellBody">
+This is used only for numeric keys.  It describes the number of digits contained in the key (counting digits on both sides of the decimal point).  
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1066276"> </a><div class="pSmartList1"><li>The KEY-TYPE field uses a code to describe the type and internal storage format of the data item.  Select from the following values: </li></div>
+<a name="wp1040025"> </a><p class="pBodyRelative">
+   <div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1040028"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1040030"> </a><p class="pCellBody">
+Numeric edited
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040032"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1040034"> </a><p class="pCellBody">
+Unsigned numeric (DISPLAY)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040036"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1040038"> </a><p class="pCellBody">
+Signed numeric (DISPLAY, trailing separate)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040040"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1040042"> </a><p class="pCellBody">
+Signed numeric (DISPLAY, trailing combined)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040044"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1040046"> </a><p class="pCellBody">
+Signed numeric (DISPLAY, leading separate)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040048"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1040050"> </a><p class="pCellBody">
+Signed numeric (DISPLAY, leading combined)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040052"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1040054"> </a><p class="pCellBody">
+Signed COMP-2
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040056"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1040058"> </a><p class="pCellBody">
+Unsigned COMP-2
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040060"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1040062"> </a><p class="pCellBody">
+Unsigned COMP-3
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040064"> </a><p class="pCellBody">
+9
+</p>
+</td>
+    <td><a name="wp1040066"> </a><p class="pCellBody">
+Signed COMP-3
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040068"> </a><p class="pCellBody">
+10
+</p>
+</td>
+    <td><a name="wp1040070"> </a><p class="pCellBody">
+COMP-6
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040072"> </a><p class="pCellBody">
+11
+</p>
+</td>
+    <td><a name="wp1040074"> </a><p class="pCellBody">
+Signed binary (COMP-1, COMP-4, COMP-X)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040076"> </a><p class="pCellBody">
+12
+</p>
+</td>
+    <td><a name="wp1040078"> </a><p class="pCellBody">
+Unsigned binary (COMP-1, COMP-4, COMP-X)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040080"> </a><p class="pCellBody">
+13
+</p>
+</td>
+    <td><a name="wp1040082"> </a><p class="pCellBody">
+Signed native (COMP-5, COMP-N)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040084"> </a><p class="pCellBody">
+14
+</p>
+</td>
+    <td><a name="wp1040086"> </a><p class="pCellBody">
+Unsigned native (COMP-5, COMP-N)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040088"> </a><p class="pCellBody">
+15
+</p>
+</td>
+    <td><a name="wp1040090"> </a><p class="pCellBody">
+Floating point (FLOAT, DOUBLE)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040092"> </a><p class="pCellBody">
+16
+</p>
+</td>
+    <td><a name="wp1040094"> </a><p class="pCellBody">
+Alphanumeric
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040096"> </a><p class="pCellBody">
+17
+</p>
+</td>
+    <td><a name="wp1040098"> </a><p class="pCellBody">
+Alphanumeric (justified)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040100"> </a><p class="pCellBody">
+18
+</p>
+</td>
+    <td><a name="wp1040102"> </a><p class="pCellBody">
+Alphabetic
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040104"> </a><p class="pCellBody">
+19
+</p>
+</td>
+    <td><a name="wp1040106"> </a><p class="pCellBody">
+Alphabetic (justified)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040108"> </a><p class="pCellBody">
+20
+</p>
+</td>
+    <td><a name="wp1040110"> </a><p class="pCellBody">
+Alphanumeric edited
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040112"> </a><p class="pCellBody">
+22
+</p>
+</td>
+    <td><a name="wp1040114"> </a><p class="pCellBody">
+Group
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1040116"> </a><p class="pIndented1">
+This coding is the same one used by the C interface, and is also used by Acu4GL.  When specifying the key type, you may safely use &quot;alphanumeric&quot; for all nonnumeric keys.  (The merge rules are the same for each of these types).  For numeric data, however, you must specify the correct type or you may get merging errors.
+</p>
+<a name="wp1040117"> </a><div class="pSmartList1"><li>The results are undefined if you provide invalid data in the <em class="cEmphasis">key-table</em>.  If you fail to specify any keys (by specifying a table whose size is zero), you receive a file error on <em class="cEmphasis">merge-file</em>.  Under the default file status codes, this is file error 94 with a secondary status of 63.</li></div>
+<a name="wp1040118"> </a><div class="pSmartList1"><li>For nonnumeric keys, the COLLATING SEQUENCE phrase establishes the ordering.  If this phrase is omitted, the NATIVE collating sequence is used.  For numeric keys, the ordering is specified by the algebraic value of the key.  </li></div>
+<a name="wp1040119"> </a><div class="pSmartList1"><li>When the contents of all key fields in one input record equal the contents of the key fields in another, the order of return:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1040120"> </a><div class="pSmartList2"><li>follows the order of the associated <em class="cEmphasis">in-files</em> in the MERGE statement</li></div>
+<a name="wp1040121"> </a><div class="pSmartList2"><li>causes all records with equal key values from one input file to be returned before any are returned from another</li></div>
+</ol></div>
+<a name="wp1040122"> </a><div class="pSmartList1"><li>The MERGE statement transfers all records from each <em class="cEmphasis">in-file</em> to <em class="cEmphasis">merge-file</em>.  When the MERGE statement executes, <em class="cEmphasis">in-file</em> must not be open.  The results of the MERGE statement are undefined if the <em class="cEmphasis">in-file </em>records are not ordered according to the KEY clause of the MERGE statement.  </li></div>
+<a name="wp1040123"> </a><div class="pSmartList1"><li>For each <em class="cEmphasis">in-file</em>, the MERGE statement:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1040124"> </a><div class="pSmartList2"><li>opens the file as if it had been the object of an OPEN INPUT statement with no options.  This occurs before any associated output procedure executes.  </li></div>
+<a name="wp1040125"> </a><div class="pSmartList2"><li>retrieves the records of the file and releases them to the merge operation.  The retrieval is performed as if the program had executed a READ statement with the NEXT and AT END phrases.</li></div>
+<a name="wp1040126"> </a><div class="pSmartList2"><li>closes the file as if it were the object of a CLOSE statement with no options.  This occurs after any associated output procedure has finished execution.</li></div>
+<a name="wp1040128"> </a><p class="pIndented2">
+These actions cause any associated USE procedures to execute if an exception condition occurs.  
+</p>
+</ol></div>
+<a name="wp1040129"> </a><div class="pSmartList1"><li>The OUTPUT PROCEDURE, if specified, is executed by the MERGE statement when the records are ready to be processed in merged order.  The statements in the range of the output procedure must contain one or more RETURN statements to retrieve the merged records.  Control is passed to the output procedure by the MERGE statement according to the rules of the PERFORM statement.  When the last statement of the output procedure is executed, control returns to the MERGE statement.  The MERGE statement then closes the <em class="cEmphasis">in-files</em> and terminates. </li></div>
+<a name="wp1040131"> </a><div class="pSmartList1"><li>If the MERGE statement is in a fixed segment, the range of the output procedure must be contained completely in the fixed segments and no more than one independent segment.  If the MERGE statement is in an independent segment, the range must be completely contained in the fixed segments and the same independent segment.  </li></div>
+<a name="wp1040134"> </a><div class="pSmartList1"><li>If the GIVING phrase is used, the MERGE statement writes all merged records to each <em class="cEmphasis">out-file</em>.  <em class="cEmphasis">Out-file</em> must not be open when the MERGE statement executes.  </li></div>
+<a name="wp1040135"> </a><div class="pSmartList1"><li>The MERGE statement writes records to <em class="cEmphasis">out-file</em> with the following steps:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1040136"> </a><div class="pSmartList2"><li><em class="cEmphasis">Out-file</em> is opened as if it were the object of an OPEN OUTPUT statement with no options.</li></div>
+<a name="wp1040137"> </a><div class="pSmartList2"><li>Each merged record is retrieved and written to <em class="cEmphasis">out-file</em> as if it were the object of a WRITE statement.  </li></div>
+<a name="wp1040138"> </a><div class="pSmartList2"><li><em class="cEmphasis">Out-file</em> is closed as if it were the object of a CLOSE statement with no options.</li></div>
+</ol></div>
+<a name="wp1040140"> </a><div class="pSmartList1"><li>The implicit OPEN, WRITE, and CLOSE operations cause associated USE procedures to execute if an exception condition occurs.  If the MERGE statement tries to write beyond the boundaries of <em class="cEmphasis">out-file</em>, the applicable USE procedure executes.  If that procedure returns, or no USE procedure is specified, the processing of that <em class="cEmphasis">out-file</em> terminates with an implied CLOSE operation.  </li></div>
+<a name="wp1040141"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">out-file</em> is a relative file, the value of the RELATIVE KEY data item is updated to contain the record number of each record after it is written.  </li></div>
+<a name="wp1040142"> </a><div class="pSmartList1"><li>The MERGE statement updates the value of the FILE STATUS data item associated with <em class="cEmphasis">merge-file</em>.  </li></div>
+<a name="wp1040143"> </a><div class="pSmartList1"><li>If a MERGE statement is executed in a wrong context, the runtime displays the error &quot;Illegal MERGE.&quot;  This error belongs to the class of &quot;intermediate&quot; runtime errors that, upon occurrence, call installed error procedures.  See Book 4, <em class="cEmphasis">Appendices</em>, Appendix I &quot;Library Routines,&quot; CBL_ERROR_PROC for details.</li></div>
+</ol></div>
+<a name="wp1040147"> </a><h3 class="pHeadingRef">
+Code examples 
+</h3>
+<a name="wp1040148"> </a><h3 class="pHeadingRef">
+Example 1:
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+*Merge sales prospects lists.<a name="wp1040150"> </a>
+   MERGE NATIONAL-MERGE-FILE<a name="wp1040151"> </a>
+      ON ASCENDING KEY PROSPECT-CLASS<a name="wp1040152"> </a>
+                       SALES-REP-NUMBER<a name="wp1040153"> </a>
+      USING  WESTERN-REGION-FILE,<a name="wp1040154"> </a>
+             EASTERN-REGION-FILE,<a name="wp1040155"> </a>
+             SOUTHERN-REGION-FILE<a name="wp1040156"> </a>
+      GIVING NATIONAL-PROSPECT-FILE.<a name="wp1040157"> </a>
+</pre></div>
+<a name="wp1040158"> </a><h3 class="pHeadingRef">
+Example 2:
+</h3>
+<a name="wp1040159"> </a><p class="pBody">
+(An extended code sample of this example may be found at the end of this reference entry.)
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*Merge sales prospects lists and use an<a name="wp1040160"> </a>
+*OUTPUT PROCEDURE to do processing on the list <a name="wp1040161"> </a>
+*before writing it to the output file.<a name="wp1040162"> </a>
+   MERGE NATIONAL-MERGE-FILE<a name="wp1040163"> </a>
+      ON ASCENDING KEY PROSPECT-CLASS<a name="wp1040164"> </a>
+                       SALES-REP-NUMBER<a name="wp1040165"> </a>
+      USING  WESTERN-REGION-FILE,<a name="wp1040166"> </a>
+             EASTERN-REGION-FILE,<a name="wp1040167"> </a>
+             SOUTHERN-REGION-FILE<a name="wp1040168"> </a>
+      OUTPUT PROCEDURE IS PROCESS-PROSPECT-LIST.<a name="wp1040169"> </a>
+</pre></div>
+<a name="wp1040171"> </a><h3 class="pHeadingRef">
+Highlights for first-time users 
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1040172"> </a><div class="pSmartList1"><li>MERGE can be thought of as a specialized version of SORT that has been optimized to give better processing performance than can be achieved using SORT.  Bear in mind, however, that MERGE, like SORT, does all of its I/O on disk files and will, therefore, take a variable amount of time to complete, depending on the size of the input files, the number of records in the files and the speed of the disk subsystems.</li></div>
+<a name="wp1040173"> </a><div class="pSmartList1"><li>MERGE does not allow the use of an input procedure for manipulating records before they are merged.</li></div>
+<a name="wp1040174"> </a><div class="pSmartList1"><li>The files to be merged must have identical record formats and be identically ordered by the same key fields.</li></div>
+<a name="wp1040175"> </a><div class="pSmartList1"><li>The result of the merge may be written directly to an output file or made available to an output procedure.</li></div>
+<a name="wp1040176"> </a><div class="pSmartList1"><li>The output procedure may not reference any of the input files or their records.  You can access the records contained in the input files, in merged order, by using RETURN to fetch records from the merge file.</li></div>
+<a name="wp1040177"> </a><div class="pSmartList1"><li>The KEY AREA phrase is a means for defining the merge keys at runtime.  When you use KEY AREA, it is not required that the merge file record descriptor contain entries for potential sort keys.  Definition of the sort key(s) in the merge file is handled internally by the MERGE routine, using the key table.  See syntax rules 2 and 3 and general rules 6 through 10.</li></div>
+<a name="wp1040178"> </a><div class="pSmartList1"><li>Summary of the merge process:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1040179"> </a><div class="pSmartList2"><li>At the beginning of the MERGE process all input files (in-files) and the temporary merge file (merge-file) are opened and positioned at the head of the file.  The input files cannot already be open when the MERGE statement begins.</li></div>
+<a name="wp1040180"> </a><div class="pSmartList2"><li>The records of each input file are sequentially READ and released to the merge operation.</li></div>
+<a name="wp1040181"> </a><div class="pSmartList2"><li>When all of the records in all of the input files have been read, the input files are closed and MERGE completes its merging process.</li></div>
+<a name="wp1040182"> </a><div class="pSmartList2"><li>Following merge processing, if OUTPUT PROCEDURE is specified, control is passed to the output procedure.  In the output procedure, each record in the merge file is fetched, in sort order, by the RETURN verb for processing (see the entry for the RETURN statement in this section).  When the last statement of the output procedure is executed, control returns to the MERGE statement.</li></div>
+<a name="wp1040183"> </a><div class="pSmartList2"><li>If the GIVING phrase is used, the merged records are written to the specified output file(s).</li></div>
+</ol></div>
+</ol></div>
+<a name="wp1040184"> </a><h3 class="pHeadingRef">
+Extended code example 2:
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+IDENTIFICATION DIVISION.<a name="wp1040185"> </a>
+PROGRAM-ID.  SAMPLE-FILE-MERGE.<a name="wp1040186"> </a>
+ENVIRONMENT DIVISION.<a name="wp1040187"> </a>
+INPUT-OUTPUT SECTION.<a name="wp1040188"> </a>
+FILE-CONTROL.<a name="wp1040189"> </a>
+   SELECT WESTERN-REGION-FILE<a name="wp1040190"> </a>
+      ASSIGN TO ....<a name="wp1040191"> </a>
+   SELECT EASTERN-REGION-FILE<a name="wp1040192"> </a>
+      ASSIGN TO ....<a name="wp1040193"> </a>
+   SELECT SOUTHERN-REGION-FILE<a name="wp1040194"> </a>
+      ASSIGN TO ....<a name="wp1040195"> </a>
+   SELECT NATIONAL-PROSPECT-FILE<a name="wp1040196"> </a>
+      ASSIGN TO ....<a name="wp1040197"> </a>
+   SELECT NATIONAL-MERGE-FILE<a name="wp1040198"> </a>
+      ASSIGN TO ....<a name="wp1040199"> </a>
+DATA DIVISION.<a name="wp1040200"> </a>
+FILE SECTION.<a name="wp1040201"> </a>
+FD  WESTERN-REGION-FILE.<a name="wp1040202"> </a>
+01  W-REGION-RECORD        PIC X(30).<a name="wp1040203"> </a>
+FD  EASTERN-REGION-FILE.<a name="wp1040204"> </a>
+01  E-REGION-RECORD        PIC X(30).<a name="wp1040205"> </a>
+<a name="wp1040206"> </a>
+FD  SOUTHERN-REGION-FILE.<a name="wp1040207"> </a>
+<a name="wp1040208"> </a>
+01  S-REGION-RECORD        PIC X(30).<a name="wp1040209"> </a>
+<a name="wp1040210"> </a>
+SD  NATIONAL-MERGE-FILE.<a name="wp1040211"> </a>
+<a name="wp1040212"> </a>
+01  SORT-DATA.<a name="wp1040213"> </a>
+    05  PROSPECT-NUMBER    PIC X(5).<a name="wp1040214"> </a>
+    05  PROSPECT-NAME      PIC X(7).<a name="wp1040215"> </a>
+    05  PROSPECT-CLASS     PIC X.<a name="wp1040216"> </a>
+    05  ESTIMATED-VALUE    PIC 9999V9.<a name="wp1040217"> </a>
+    05  SALES-REP-NUMBER   PIC X(3).<a name="wp1040218"> </a>
+    05  SALES-REP-NAME     PIC X(7).<a name="wp1040219"> </a>
+    05  FILLER             PIC XX.<a name="wp1040220"> </a>
+FD  NATIONAL-PROSPECT-FILE.<a name="wp1040221"> </a>
+01  NATIONAL-RECORD        PIC X(30).<a name="wp1040222"> </a>
+WORKING-STORAGE SECTION.<a name="wp1040223"> </a>
+01  FLAGS.<a name="wp1040224"> </a>
+    05   MERGE-LIST-EMPTY   PIC X VALUE &quot;N&quot;.<a name="wp1040225"> </a>
+         88 NO-MORE-RECORDS       VALUE &quot;Y&quot;.<a name="wp1040226"> </a>
+...<a name="wp1040227"> </a>
+PROCEDURE DIVISION.<a name="wp1040228"> </a>
+PROSPECT-LIST-MERGE-PROCEDURE.<a name="wp1040229"> </a>
+    MERGE NATIONAL-MERGE-FILE<a name="wp1040230"> </a>
+       ON ASCENDING KEY PROSPECT-CLASS<a name="wp1040231"> </a>
+                        SALES-REP-NUMBER<a name="wp1040232"> </a>
+       USING  WESTERN-REGION-FILE,<a name="wp1040233"> </a>
+              EASTERN-REGION-FILE,<a name="wp1040234"> </a>
+              SOUTHERN-REGION-FILE<a name="wp1040235"> </a>
+       OUTPUT PROCEDURE IS PROCESS-PROSPECT-LIST.<a name="wp1040236"> </a>
+<a name="wp1040237"> </a>
+PROCESS-PROSPECT-LIST SECTION.<a name="wp1040238"> </a>
+CREATE-NATIONAL-PROSPECT-FILE.<a name="wp1040239"> </a>
+   OPEN OUTPUT NATIONAL-PROSPECT-FILE.<a name="wp1040240"> </a>
+   RETURN NATIONAL-MERGE-FILE<a name="wp1040241"> </a>
+      AT END MOVE &quot;Y&quot; TO MERGE-LIST-EMPTY.<a name="wp1040242"> </a>
+   PERFORM UPDATE-PROSPECT-DATA <a name="wp1040243"> </a>
+      UNTIL NO-MORE-RECORDS.<a name="wp1040244"> </a>
+   CLOSE NATIONAL-PROSPECT-FILE.<a name="wp1040245"> </a>
+   GO TO EXIT-MERGE-OUTPUT-PROCESSING.<a name="wp1040246"> </a>
+   <a name="wp1040247"> </a>
+UPDATE-PROSPECT-DATA.<a name="wp1040248"> </a>
+*do not write records tagged &quot;TestRep&quot;<a name="wp1040249"> </a>
+   IF SALES-REP-NAME NOT = &quot;TestRep&quot;<a name="wp1040250"> </a>
+*write the record to the output file<a name="wp1040251"> </a>
+      WRITE NATIONAL-RECORD FROM SORT-DATA.<a name="wp1040252"> </a>
+   END-IF.<a name="wp1040253"> </a>
+*fetch the next record<a name="wp1040254"> </a>
+   RETURN NATIONAL-MERGE-FILE<a name="wp1040255"> </a>
+      AT END MOVE &quot;Y&quot; TO MERGE-LIST-EMPTY.<a name="wp1040256"> </a>
+<a name="wp1040257"> </a>
+EXIT-MERGE-OUTPUT-PROCESSING.<a name="wp1040258"> </a>
+   EXIT.<a name="wp1040259"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

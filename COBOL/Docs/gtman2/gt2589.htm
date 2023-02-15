@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:34" />
+  <title>5.20  Tree View </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt25.htm">Chapter 5:  Control Types Reference</a> &gt; </p>
+<a name="wp1029698"> </a><h2 class="pHeading1">
+5.20  Tree View 
+</h2>
+<a name="wp1029702"> </a><p class="pBody">
+The TREE-VIEW control presents hierarchical data in a list.  This list is indented to show the relationships among the data items.  Users can &quot;expand&quot; or &quot;collapse&quot; items in the list to view or hide subsidiary items.
+</p>
+<a name="wp1029704"> </a><p class="pBodyRelative">
+</p><div><img src="ch5_tree.gif" height="220" width="236" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1029705"> </a><h3 class="pHeadingRef">
+Items
+</h3>
+<a name="wp1029708"> </a><p class="pBody">
+In a tree view control, each item in the hierarchical list is identified by an ID that is assigned at the time the element is added to the control.  This provides a unique way to identify each item and thus allows for duplicate items at different points in the hierarchy without any confusion.  Tree view ID's are declared in COBOL as USAGE POINTER data items.  
+</p>
+<a name="wp1029709"> </a><p class="pBody">
+Tree view controls have a variety of special properties, including the ability to store hidden data with any item and to display bitmaps adjacent to the items.  The special property called ITEM is used to identify which item in the hierarchy is to be affected by the property values you provide.  Typically, you set the value of the ITEM property to the ID of the item to be acted on, and then you set another property (such as ITEM-TEXT or ENSURE-VISIBLE or HAS-CHILDREN or BITMAP-NUMBER) to assign a value or setting to that item.  Note that you must set the value of ITEM before you set the other property value in order to get the desired results.  ITEM is the &quot;index&quot; for the tree view control (see the MODIFY and INQUIRE statements for a description of indexes).  
+</p>
+<a name="wp1029710"> </a><h3 class="pHeadingRef">
+Parent and child relationships
+</h3>
+<a name="wp1029713"> </a><p class="pBody">
+Items in a tree view control are placed within the hierarchical list according to &quot;parent&quot; and &quot;child&quot; relationships that you specify.  The special property PARENT allows you to specify whether an item is at the top level of the hierarchy (PARENT = 0, the default) or is the child of another item in the hierarchy (PARENT value set to the ID of the parent item).  
+</p>
+<a name="wp1029714"> </a><p class="pBody">
+Another special property of the tree view control, HAS-CHILDREN, enables you to specify whether new child items can be <u style="font-style: italic; text-decoration: none" class="cUnderline">added</u> underneath a specific item in the list.  When HAS-CHILDREN = 0 (the default), an item has children only if they are already physically present in the control.  This means that no additional child items can be added to that item by the user.
+</p>
+<a name="wp1029715"> </a><p class="pBody">
+If HAS-CHILDREN is set to a non-zero value (such as HAS-CHILDREN = 1), this indicates that the item identified by the ITEM property is entitled to have child items added.  This setting is useful when it is impractical to place all of a tree's items in the control at once (see examples immediately following).  In this situation, you populate the highest level of the tree and then use this property to identify which of the top-level items are entitled to have children.  Then, when the user expands a particular item, you have the program respond to the MSG-TV-EXPANDING event by adding the appropriate child items to the control. The HAS-CHILDREN property tells the control which items can be expanded.  
+</p>
+<a name="wp1029716"> </a><h3 class="pHeadingRef">
+Adding child items
+</h3>
+<a name="wp1029719"> </a><p class="pBody">
+In many cases, it is impractical to fully load a tree view with all of the items it logically contains.  For example, if you want to represent every file on a local disk drive in its directory hierarchy, a tree view is a natural way to do this.  However, it could take a long time to populate this tree: every file on the entire drive would have to be located.  One way to solve this problem is to populate only the top level of the tree at first, and then populate only those sub-levels that the user visits.  
+</p>
+<a name="wp1029720"> </a><p class="pBody">
+In order to do this, you have to tell the tree view whether an item is entitled to have children when you add the item to the control.  If you did not do this, the control would not allow the user to expand that item.  You establish the ability to add children to an item by setting the property HAS-CHILDREN to &quot;1&quot; when you add the parent item.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+MODIFY TV-1, ITEM-TO-ADD = &quot;Parent Item&quot; <a name="wp1029721"> </a>
+   GIVING PARENT-1, HAS-CHILDREN = 1<a name="wp1115828"> </a>
+</pre></div>
+<a name="wp1029722"> </a><p class="pBody">
+This informs the control that the item has children, even though the children are not physically present in the control.  
+</p>
+<a name="wp1029723"> </a><p class="pBody">
+There are two approaches you can take when managing the children of a particular item.  You can add them the first time the parent item expands, and then leave them in the control, or you can add them as the parent expands and delete them when the parent collapses.  
+</p>
+<a name="wp1029724"> </a><h3 class="pHeadingRef">
+Adding child items once
+</h3>
+<a name="wp1029727"> </a><p class="pBody">
+The first approach is to add child items the first time the parent is expanded, and them leave them in the control.  To code this, respond to the MSG-TV-EXPANDING message by seeing if there are any children of the parent item.  If not, then add them at this point.  A typical event procedure for this would look like this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+TREE-VIEW-EVENT-1.<a name="wp1029728"> </a>
+    EVALUATE EVENT-TYPE<a name="wp1115842"> </a>
+      WHEN MSG-TV-EXPANDING<a name="wp1115856"> </a>
+          IF EVENT-DATA-1 = TVFLAG-EXPAND    |Item expanding<a name="wp1115870"> </a>
+              MODIFY TV-1( EVENT-DATA-2 ), <a name="wp1115884"> </a>
+                NEXT-ITEM = TVNI-CHILD GIVING ITEM-1<a name="wp1115898"> </a>
+              IF ITEM-1 = NULL               |No children<a name="wp1115912"> </a>
+                PERFORM ADD-CHILDREN<a name="wp1115926"> </a>
+            END-IF<a name="wp1115940"> </a>
+         END-IF<a name="wp1115954"> </a>
+    END-EVALUATE<a name="wp1115968"> </a>
+</pre></div>
+<a name="wp1029729"> </a><p class="pBody">
+The paragraph ADD-CHILDREN would do the work needed to add the child items.  In this example, EVENT-DATA-1 contains a flag that describes whether the parent item is being expanded or collapsed, and EVENT-DATA-2 contains the ID of the parent item.  See the description of the event MSG-TV-EXPANDING for details.  
+</p>
+<a name="wp1029730"> </a><h3 class="pHeadingRef">
+Adding child items on each expansion
+</h3>
+<a name="wp1029733"> </a><p class="pBody">
+The second approach is to add child items each time the parent expands, and then remove them when the parent collapses.  The code for adding the items is slightly easier because you do not have to guard against adding multiple times.  However, you have additional code to handle the removal of the child items.  A typical event procedure for this approach looks like this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+TREE-VIEW-EVENT-1.<a name="wp1029734"> </a>
+<a name="wp1115982"> </a>
+    EVALUATE EVENT-TYPE<a name="wp1115988"> </a>
+      WHEN MSG-TV-EXPANDING<a name="wp1115994"> </a>
+          IF EVENT-DATA-1 = TVFLAG-EXPAND<a name="wp1116000"> </a>
+             PERFORM ADD-CHILDREN<a name="wp1116006"> </a>
+          END-IF<a name="wp1116012"> </a>
+<a name="wp1116018"> </a>
+      WHEN MSG-TV-EXPANDED<a name="wp1116024"> </a>
+          IF EVENT-DATA-1 = TVFLAG-COLLAPSE<a name="wp1116030"> </a>
+             MODIFY TV-1, ITEM-TO-EMPTY = EVENT-DATA-2<a name="wp1116036"> </a>
+          END-IF<a name="wp1116042"> </a>
+</pre></div>
+<a name="wp1029735"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>It is important that you add the children in response to the MSG-TV-EXPANDING event, and remove them in response to the MSG-TV-EXPANDED event.  Any other approach can confuse the control and produce odd results.  
+<hr />
+</p>
+<a name="wp1123685"> </a><h3 class="pHeadingRef">
+Navigating a tree view with the keyboard
+</h3>
+<a name="wp1123836"> </a><p class="pBody">
+Typically, users use a mouse to interact with a tree view control.  However, users can also use the keyboard to accomplish many actions. 
+</p>
+<a name="wp1124000"> </a><p class="pBody">
+The down arrow key selects the next visible item in the tree (i.e. moves the selection down one row).
+</p>
+<a name="wp1124001"> </a><p class="pBody">
+The up arrow key selects the previous visible item in the tree (i.e. moves the selection up one row).
+</p>
+<a name="wp1124002"> </a><p class="pBody">
+If the current item is collapsed (i.e. has a plus sign to its left):
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1124003"> </a><div class="pSmartList1"><li>The right arrow key expands the item</li></div>
+<a name="wp1124004"> </a><div class="pSmartList1"><li>The left arrow key selects the parent item</li></div>
+</ul></div>
+<a name="wp1124005"> </a><p class="pBody">
+If the current item is expanded (i.e. has a minus sign to its left):
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1124006"> </a><div class="pSmartList1"><li>The right arrow key selects the first child item</li></div>
+<a name="wp1124007"> </a><div class="pSmartList1"><li>The left arrow key collapses the item</li></div>
+</ul></div>
+<a name="wp1124008"> </a><p class="pBody">
+If the current item has no children:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1124009"> </a><div class="pSmartList1"><li>The right arrow key has no affect</li></div>
+<a name="wp1124010"> </a><div class="pSmartList1"><li>The left arrow key selects the parent item</li></div>
+</ul></div>
+<a name="wp1124011"> </a><p class="pBody">
+The page up (PgUp) and page down (PgDn) keys select items one page minus one item away from the current item.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>acu_cobol()</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr621.htm">6.4  Calling COBOL from C</a> &gt; </p>
+<a name="wp1121884"> </a><h2 class="pHeading2">
+acu_cobol()
+</h2>
+<a name="wp1121885"> </a><p class="pBody">
+The <b class="cBold">acu_cobol()</b> function allows you to call COBOL programs and control how they are executed. This function is required in order to build and invoke the ACUCOBOL-GT runtime with a transaction processing environment like CICS.  
+</p>
+<a name="wp1121887"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This function deprecates the <b class="cBold">cobol()</b> and <b class="cBold">cobol_no_stop()</b> functions.  
+<hr />
+</p>
+<a name="wp1121888"> </a><p class="pBody">
+To call COBOL subroutines directly from C, you can use the <b class="cBold">acu_cobol()</b> routine anytime <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">after</span> <b class="cBold">acu_initv()</b> has been called and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">before </span><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: normal">acu_shutdown()</span> has been called.  For more information, see <a  href="itr640.htm#wp1122335">section 6.5.2, &quot;Calling the Runtime From a C Main Program.&quot;</a>  
+</p>
+<a name="wp1121892"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<a name="wp1121893"> </a><p class="pBody">
+The <b class="cBold">acu_cobol()</b> function has the following prototype:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+int ASTDCALL acu_cobol(struct ACUCOBOLINFO *data);<a name="wp1121894"> </a>
+</pre></div>
+<a name="wp1121895"> </a><p class="pBody">
+The struct a_cobol_info structure is defined in lib/sub.h:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+struct  a_cobol_info <a name="wp1121896"> </a>
+{<a name="wp1121897"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+size_t       a_cobol_info_size;<a name="wp1121898"> </a>
+char         *pgm_name;<a name="wp1121899"> </a>
+int          num_params;<a name="wp1121900"> </a>
+Argument     *params;<a name="wp1121901"> </a>
+int          exit_code;<a name="wp1121902"> </a>
+const char   *exit_msg;<a name="wp1121903"> </a>
+int          signal_number;<a name="wp1121904"> </a>
+int          call_error;<a name="wp1121905"> </a>
+long         cobol_return_code; <a name="wp1121906"> </a>
+unsigned     no_stop:1; <a name="wp1121907"> </a>
+unsigned     cache:1; <a name="wp1121908"> </a>
+ADM_t        debug_method; <a name="wp1121909"> </a>
+char         *debug_method_string; <a name="wp1121910"> </a>
+</pre></div>
+};<a name="wp1121911"> </a>
+typedef struct a_cobol_info ACUCOBOLINFO;<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1121912"> </a>
+</pre></div>
+<a name="wp1121913"> </a><p class="pBody">
+The ADM_t type is described in lib/sub.h as an enumeration.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+typedef enum tag_ACUCOBOL_DEBUG_METHODS <a name="wp1121914"> </a>
+	{<a name="wp1121915"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ADM_NONE,<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1121916"> </a>
+ADM_XTERM,<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1121917"> </a>
+ADM_TERMINAL,<a name="wp1121918"> </a>
+ADM_THINCLIENT,<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1121919"> </a>
+</pre></div>
+} ACUCOBOL_DEBUG_METHOD, ADM_t;<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1121921"> </a>
+</pre></div>
+<a name="wp1121923"> </a><p class="pBody">
+The enumeration values describe the debugging method to be used for the program. See the Parameters section below for more information.
+</p>
+<a name="wp1121924"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1142099"> </a><p class="pBody">
+The a_cobol_info structure has the following parameters.  Input variables are set before the call to <b class="cBold">acu_cobol()</b> and output variables set after <b class="cBold">acu_cobol()</b> returns:
+</p>
+<a name="wp1143094"> </a><p class="pBody">
+a_cobol_info_size - a size_t initialized to sizeof(a_cobol_info) to allow for future expansion <em class="cEmphasis">(input)</em>
+</p>
+<a name="wp1143121"> </a><p class="pBody">
+pgm_name - a char* that contains the name of the COBOL program to call <em class="cEmphasis">(input)</em>
+</p>
+<a name="wp1143126"> </a><p class="pBody">
+num_params - an int that contains the number of elements in the params array <em class="cEmphasis">(input)</em>
+</p>
+<a name="wp1143135"> </a><p class="pBody">
+params - an Argument* that contains an array of arguments sent to the COBOL program <em class="cEmphasis">(input)</em>
+</p>
+<a name="wp1143142"> </a><p class="pBody">
+exit_code<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal"> </span>- <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">an int that contains the exit code. Refer</span> to the exit_code values in the Return Values section below <em class="cEmphasis">(output)</em>
+</p>
+<a name="wp1143149"> </a><p class="pBody">
+exit_msg<b class="cBold"> </b>- a const char* that contains the exit message. Its contents should not be modified.  This pointer may be NULL.  (o<em class="cEmphasis">utput)</em>
+</p>
+<a name="wp1143156"> </a><p class="pBody">
+signal_number - an int value of a signal that caused the COBOL_SIGNAL or COBOL_FATAL_ERROR.  If the value is non-zero, the error was caused by this signal.  <em class="cEmphasis">(output)</em>
+</p>
+<a name="wp1143163"> </a><p class="pBody">
+call_error<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal"> </span> - an int value that contains the call error.  Refer to the call_error values listed in the Return Values section below <em class="cEmphasis">(output)</em>
+</p>
+<a name="wp1143170"> </a><p class="pBody">
+cobol_return_code - a long value returned in &quot;exit program.nnn&quot; by a COBOL program called from <b class="cBold">acu_cobol()</b>.  The COBOL program can set this value by either setting the return-code or exiting the program.  <em class="cEmphasis">(output)</em>
+</p>
+<a name="wp1143177"> </a><p class="pBody">
+no_stop - an unsigned value that, when set to &quot;1&quot;, causes STOP RUN to be ignored <em class="cEmphasis">(input)</em>
+</p>
+<a name="wp1143326"> </a><p class="pBody">
+cache - an unsigned value that determines whether the runtime should maintain the program in a memory cache after it has been canceled.  This parameter is useful for application servers like CICS that allow each program to be configured as resident or nonresident.<em class="cEmphasis">  (input)</em>
+</p>
+<a name="wp1143324"> </a><p class="pBody">
+If  cache is FALSE (&quot;0&quot;), <b class="cBold">acu_cancel()</b> removes the program from memory and sets the Working-Storage to its initial state on subsequent calls.  If  cache is TRUE (&quot;1&quot;), <b class="cBold">acu_cancel()</b> marks the program as &quot;cached&quot; and resets Working-Storage for the next call; the program remains in memory according to the caching rules. For information on managing logical and physical cancels that may affect the behavior of cache, refer also to the LOGICAL_CANCELS configuration variable in Appendix H in <em class="cEmphasis">ACUCOBOL-GT Appendices</em>.
+</p>
+<a name="wp1143536"> </a><p class="pBody">
+debug_method - <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">an ADM_t type that </span>defines the debugger method to use for the program when <b class="cBold">acu_cobol()</b> is called.  The debug_method is deinitialized when the COBOL program returns.  <em class="cEmphasis">(input)</em>
+</p>
+<a name="wp1153425"> </a><p class="pBody">
+To enable background debugging, specify one of the following types:</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1153432"> </a><p class="pCellBody">
+ADM_NONE 
+</p>
+</td>
+    <td><a name="wp1153434"> </a><p class="pCellBody">
+For no debugging
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1153436"> </a><p class="pCellBody">
+ADM_XTERM 
+</p>
+</td>
+    <td><a name="wp1153438"> </a><p class="pCellBody">
+Debug using a new xterm.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1153440"> </a><p class="pCellBody">
+ADM_TERMINAL 
+</p>
+</td>
+    <td><a name="wp1153442"> </a><p class="pCellBody">
+Debug using an existing terminal through <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">runcbl</span>.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1153444"> </a><p class="pCellBody">
+ADM_THINCLIENT 
+</p>
+</td>
+    <td><a name="wp1153446"> </a><p class="pCellBody">
+Debug using a waiting thin client.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1153422"> </a><p class="pBody">
+Based on the debug_method selected, you may need to also specify debug_method_string.
+</p>
+<a name="wp1143928"> </a><p class="pBody">
+debug_method_string - <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">a char* that sets the display setting for the </span>debug_method <em class="cEmphasis">(input)</em>
+</p>
+<a name="wp1143929"> </a><p class="pBody">
+For ADM_XTERM, set to the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Xservername:displaynumber</span> of the xterm or set to NULL to allow the xterm to use the default display given by the DISPLAY environment variable.  For ADM_TERMINAL, set the string to the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">tty</span> device on which you will execute <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">runcbl</span>.  For ADM_THINCLIENT, set to <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">client:port</span> where the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">client</span> is the host on which <b class="cBold">acuthin</b> is executing and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">port</span> is the port on which it is listening.
+</p>
+<a name="wp1143882"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The value of debug_method_string overrides the value, if any, in the DISPLAY configuration variable for the xterm.
+<hr />
+</p>
+<a name="wp1144289"> </a><p class="pBody">
+See <a  href="itr916.htm#wp1040313">section 9.8, &quot;Background Debugging Options,&quot;</a> for more information on background debugging.
+</p>
+<a name="wp1121991"> </a><h3 class="pHeadingRef">
+Return values
+</h3>
+<a name="wp1121992"> </a><p class="pBody">
+The <b class="cBold">acu_cobol()</b> function returns &quot;0&quot; if the call is successful and &quot;-1&quot; if the call failed.
+</p>
+<a name="wp1121993"> </a><p class="pBody">
+The<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold"> </span>exit_code<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold"> </span>returns one of the following values defined in &quot;sub.h&quot;:
+</p>
+<a name="wp1122031"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1144580"> </a>
+Value
+
+</th>
+    <th><a name="wp1144734"> </a>
+&#160;
+
+</th>
+    <th><a name="wp1144582"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1144584"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">COBOL_EXIT_PROGRAM</span>
+</p>
+</td>
+    <td><a name="wp1144736"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1144586"> </a><p class="pCellBody">
+The called program finished via an EXIT PROGRAM statement (or equivalent, such as GOBACK). 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1144588"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">COBOL_REMOTE_CALL</span>
+</p>
+</td>
+    <td><a name="wp1144738"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1144590"> </a><p class="pCellBody">
+The called program is a remote program being run by AcuConnect<sup class="cSuperscript">®</sup>.  In this case, the exact reason why the remote program finished is not available.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1144592"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">COBOL_STOP_RUN</span>
+</p>
+</td>
+    <td><a name="wp1144740"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1144594"> </a><p class="pCellBody">
+The run unit halted due to a STOP RUN statement, and the runtime has been configured to return to the caller instead of exiting to the system.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1144596"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">COBOL_CALL_ERROR</span>
+</p>
+</td>
+    <td><a name="wp1144742"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1144598"> </a><p class="pCellBody">
+The called program could not be run and the <b class="cBold">acu_cobol()</b> function has returned &quot;-1&quot;.  This applies only to programs called directly by <b class="cBold">acu_cobol()</b>.  On an error loading a subroutine, <b class="cBold">acu_cobol()</b> returns COBOL_FATAL_ERROR.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1144600"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">COBOL_SIGNAL*</span>
+</p>
+</td>
+    <td><a name="wp1144744"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1144602"> </a><p class="pCellBody">
+The runtime caught a system signal that would normally shut down the runtime, but the runtime has been configured to return to the caller instead.  Any error message associated with this signal is returned in exit_msg.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1144604"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">COBOL_FATAL_ERROR*</span>
+</p>
+</td>
+    <td><a name="wp1144746"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1144606"> </a><p class="pCellBody">
+A fatal error has occurred that would normally shut down the runtime, but the runtime has been configured to return to the caller instead.  Any message associated with the error is returned in exit_msg.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1144608"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">COBOL_NONFATAL_ERROR</span>
+</p>
+</td>
+    <td><a name="wp1144748"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1144610"> </a><p class="pCellBody">
+An error has occurred that causes the <b class="cBold">acu_cobol()</b> function to return and prevents the runtime from continuing to run the current program only.  The runtime remains in a stable state and it is safe to make subsequent calls to <b class="cBold">acu_cobol()</b>.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1144612"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">COBOL_DEBUGGER</span>
+</p>
+</td>
+    <td><a name="wp1144750"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1144614"> </a><p class="pCellBody">
+The user has quit the ACUCOBOL-GT debugger.  It is safe to make subsequent calls to <b class="cBold">acu_cobol()</b> after this error occurs.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1122033"> </a><div style="color: #000000; font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 30pt; margin-right: 18pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: -12pt; text-transform: none">
+*	After a COBOL_SIGNAL or COBOL_FATAL_ERROR error, the process should not make any further calls to acu_cobol().  If another call is necessary, you must first unload and reload the runtime.  If you are dynamically loading the runtime shared library on UNIX/Linux or runtime DLL on Windows, you can do this using dlclose()/dlopen() or FreeLibrary()/LoadLibrary() respectively.  If you are linking directly to the runtime libraries,  you will need to exit and restart the current process.  Consider wrapping your executable in a shell script or another main() program that checks for a particular exit code and then loops. 
+</div>
+<a name="wp1159022"> </a><p class="pBody">
+The call_error can be one of the following values:
+</p>
+<a name="wp1122137"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1154802"> </a>
+Value
+
+</th>
+    <th><a name="wp1154804"> </a>
+&#160;
+
+</th>
+    <th><a name="wp1154806"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154808"> </a><p class="pCellBody">
+CS_SUCCESSFUL
+</p>
+</td>
+    <td><a name="wp1154810"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1154812"> </a><p class="pCellBody">
+Call was successful.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154814"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_MISSING</span>
+</p>
+</td>
+    <td><a name="wp1154816"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1154818"> </a><p class="pCellBody">
+Program file is missing or inaccessible.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154820"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_NOT_COBOL</span>
+</p>
+</td>
+    <td><a name="wp1154822"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1154824"> </a><p class="pCellBody">
+Called file is not a COBOL program.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154826"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_INTERNAL </span>
+</p>
+</td>
+    <td><a name="wp1154828"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1154830"> </a><p class="pCellBody">
+Corrupted program file
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154832"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_MEMORY</span>
+</p>
+</td>
+    <td><a name="wp1154834"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1154836"> </a><p class="pCellBody">
+Inadequate memory is available to load program.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154838"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_VERSION</span>
+</p>
+</td>
+    <td><a name="wp1154840"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1154842"> </a><p class="pCellBody">
+Unsupported object code version number
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154844"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_RECURSIVE</span>
+</p>
+</td>
+    <td><a name="wp1154846"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1154848"> </a><p class="pCellBody">
+Recursive CALL of a program; program already in use.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154850"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_EXTERNAL</span>
+</p>
+</td>
+    <td><a name="wp1154852"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1154854"> </a><p class="pCellBody">
+Too many external segments
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154856"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_LARGE_MODEL</span>
+</p>
+</td>
+    <td><a name="wp1154858"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1154860"> </a><p class="pCellBody">
+Large-model program is not supported.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154862"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_JAPANESE </span>
+</p>
+</td>
+    <td><a name="wp1154864"> </a><p class="pCellBody">
+14
+</p>
+</td>
+    <td><a name="wp1154866"> </a><p class="pCellBody">
+Japanese extensions are not supported.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154868"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_MULTITHREADED </span>
+</p>
+</td>
+    <td><a name="wp1154870"> </a><p class="pCellBody">
+22
+</p>
+</td>
+    <td><a name="wp1154872"> </a><p class="pCellBody">
+Multithreaded CALL RUN is illegal.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154874"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_AUTHORIZATION</span>
+</p>
+</td>
+    <td><a name="wp1154876"> </a><p class="pCellBody">
+23
+</p>
+</td>
+    <td><a name="wp1154878"> </a><p class="pCellBody">
+Access denied. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154880"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_CONNECT_REFUSED</span>
+</p>
+</td>
+    <td><a name="wp1154882"> </a><p class="pCellBody">
+25
+</p>
+</td>
+    <td><a name="wp1154884"> </a><p class="pCellBody">
+Connection refused; user count is exceeded on remote server.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154886"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_MISMATCHED_CPU </span>
+</p>
+</td>
+    <td><a name="wp1154888"> </a><p class="pCellBody">
+27
+</p>
+</td>
+    <td><a name="wp1154890"> </a><p class="pCellBody">
+Program contains object code for a different processor.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154892"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_SERIAL_NUMBER</span>
+</p>
+</td>
+    <td><a name="wp1154894"> </a><p class="pCellBody">
+28
+</p>
+</td>
+    <td><a name="wp1154896"> </a><p class="pCellBody">
+Incorrect serial number
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154898"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_USER_COUNT_EXCEEDED </span>
+</p>
+</td>
+    <td><a name="wp1154900"> </a><p class="pCellBody">
+29
+</p>
+</td>
+    <td><a name="wp1154902"> </a><p class="pCellBody">
+Connection refused; user count is exceeded on remote server.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154904"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">CS_LICENSE</span>
+</p>
+</td>
+    <td><a name="wp1154906"> </a><p class="pCellBody">
+30
+</p>
+</td>
+    <td><a name="wp1154908"> </a><p class="pCellBody">
+License error
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

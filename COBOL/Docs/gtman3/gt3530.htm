@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.4.11  LINAGE Clause</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3519.htm">5.4  File Section</a> &gt; </p>
+<a name="wp1035004"> </a><h2 class="pHeading2">
+5.4.11  LINAGE Clause
+</h2>
+<a name="wp1035007"> </a><p class="pBody">
+The LINAGE clause is used to specify the number of lines on a logical page, and optionally provide margin information.
+</p>
+<a name="wp1035008"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">LINAGE</u> IS page-lines LINES<a name="wp1035009"> </a>
+<a name="wp1035010"> </a>
+   [ WITH <u class="cUnderline">FOOTING</u> AT footing-line ]<a name="wp1035011"> </a>
+<a name="wp1035012"> </a>
+   [ LINES AT <u class="cUnderline">TOP</u> top-lines ]<a name="wp1035013"> </a>
+<a name="wp1035014"> </a>
+   [ LINES AT <u class="cUnderline">BOTTOM</u> bottom-lines ]<a name="wp1035015"> </a>
+</pre></div>
+<a name="wp1035016"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035018"> </a><div class="pSmartList1"><li><em class="cEmphasis">Page-lines</em> is a numeric literal or numeric data item whose value must be a positive integer.  It specifies the number of lines on the logical page.  <em class="cEmphasis">Page-lines</em> may be qualified.  </li></div>
+<a name="wp1035019"> </a><div class="pSmartList1"><li><em class="cEmphasis">Footing-line</em> is a positive integer or numeric data item.  Its values must be greater than zero and less than or equal to <em class="cEmphasis">page-lines</em>.  It specifies the line number where the footing area begins on the page.  <em class="cEmphasis">Footing-line</em> may be qualified.  </li></div>
+<a name="wp1035020"> </a><div class="pSmartList1"><li><em class="cEmphasis">Top-lines</em> and <em class="cEmphasis">bottom-lines</em> are integers or numeric data items.  Their values must be greater than or equal to zero.  They represent the numbers of lines in the top and bottom margins respectively.  <em class="cEmphasis">Top-lines</em> and <em class="cEmphasis">bottom-lines</em> may be qualified.  </li></div>
+<a name="wp1035021"> </a><div class="pSmartList1"><li>The LINAGE clause may be specified for a Sequential file only.</li></div>
+</ol></div>
+<a name="wp1035022"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035023"> </a><div class="pSmartList1"><li>The LINAGE clause specifies the number of lines on a logical page.  The total page size is the sum of <em class="cEmphasis">page-lines</em>, <em class="cEmphasis">top-lines,</em> and <em class="cEmphasis">bottom-lines</em>.  If the TOP or BOTTOM phrase is omitted, the corresponding value is treated as zero.  Note that <em class="cEmphasis">footing-line</em> is <em class="cEmphasis">not </em>added to the page size. </li></div>
+<a name="wp1035025"> </a><div class="pSmartList1"><li><em class="cEmphasis">Page-lines</em> specifies the size of the page body.  This is the area of the logical page in which the program can write or space lines. </li></div>
+<a name="wp1035027"> </a><div class="pSmartList1"><li>Each logical page follows the preceding logical page with no additional spacing.  ACUCOBOL-GT does not provide physical page ejects (form-feeds) when the LINAGE clause is used.  Device positioning occurs by line spacing rather than by page ejection. </li></div>
+<a name="wp1035029"> </a><div class="pSmartList1"><li>The footing area is composed of the area between <em class="cEmphasis">footing-line</em> and <em class="cEmphasis">page-lines</em>, inclusive.  The footing area causes a page-overflow condition when written in.  If the FOOTING phrase is omitted, there is no footing area.</li></div>
+<a name="wp1035030"> </a><div class="pSmartList1"><li>Evaluation of the logical page size occurs as follows:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1035031"> </a><div class="pSmartList2"><li>When the file is opened with the OUTPUT or EXTEND phrases, the LINAGE clause values are evaluated and applied to the first logical page.  The device is assumed to be positioned at the beginning of the logical page.</li></div>
+<a name="wp1035032"> </a><div class="pSmartList2"><li>When the program executes a WRITE statement with the ADVANCING PAGE option, or when a page-overflow condition occurs, the LINAGE clause values are evaluated and applied to the next logical page.  </li></div>
+</ol></div>
+<a name="wp1035033"> </a><div class="pSmartList1"><li>For each file that has a LINAGE clause associated with it, the compiler creates an implicit data item called LINAGE-COUNTER associated with that file.  If more than one file in the program specifies a LINAGE clause, reference to a LINAGE-COUNTER will have to be qualified by the appropriate file name.  The LINAGE-COUNTER is an elementary numeric data item that contains the same number of digits as <em class="cEmphasis">page-lines</em>. </li></div>
+<a name="wp1035035"> </a><div class="pSmartList1"><li>At any time, the value of LINAGE-COUNTER is the line number in the current page body at which the device is positioned.</li></div>
+<a name="wp1035036"> </a><div class="pSmartList1"><li>LINAGE-COUNTER may be treated as a normal numeric data item except that it may never be explicitly modified by the program.  </li></div>
+<a name="wp1035037"> </a><div class="pSmartList1"><li>The LINAGE-COUNTER is set to one when the file is opened.</li></div>
+<a name="wp1035038"> </a><div class="pSmartList1"><li>Every WRITE statement that refers to a file with a LINAGE clause affects the associated LINAGE-COUNTER in the following manner: </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1035041"> </a><div class="pSmartList2"><li>If the WRITE statement has the ADVANCING PAGE phrase, the LINAGE-COUNTER is set to one.</li></div>
+<a name="wp1035042"> </a><div class="pSmartList2"><li>If the WRITE statement has the ADVANCING LINES phrase, the LINAGE-COUNTER is incremented by the value in the ADVANCING phrase.</li></div>
+<a name="wp1035043"> </a><div class="pSmartList2"><li>If the WRITE statement does not have an ADVANCING phrase, the LINAGE-COUNTER is incremented by one.</li></div>
+</ol></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

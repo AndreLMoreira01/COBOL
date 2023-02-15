@@ -1,0 +1,26 @@
+function BookData_Search(x,y)
+{
+if(x.t("700"))y.f("280,1");
+if(x.t("stop_run_rollback"))y.f("288,30");
+if(x.t("networked"))y.f("450,1,360,1");
+if(x.t("integrate"))y.f("366,1");
+if(x.t("apparent"))y.f("366,1");
+if(x.t("pulling"))y.f("369,1");
+if(x.t("establishes"))y.f("370,1");
+if(x.t("cwa"))y.f("373,1");
+if(x.t("my-table"))y.f("392,1");
+if(x.t("extract"))y.f("410,9,404,2,427,1,426,2");
+if(x.t("low-values"))y.f("410,1");
+if(x.t("outfile.seq"))y.f("411,2");
+if(x.t("7.11"))y.f("416,30");
+if(x.t("warns"))y.f("420,1,419,1");
+if(x.t("version5"))y.f("419,1");
+if(x.t("73header"))y.f("427,2");
+if(x.t("diskfile"))y.f("429,3");
+if(x.t("believes"))y.f("430,1");
+if(x.t("cp"))y.f("435,1");
+if(x.t("descriptor"))y.f("437,1");
+if(x.t("12345"))y.f("445,1");
+if(x.t("2005"))y.f("449,5");
+if(x.t("nov"))y.f("449,2");
+}

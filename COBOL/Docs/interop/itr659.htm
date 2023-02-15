@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>6.7.1  Memory Debugging via C</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr658.htm">6.7  Tracking, Monitoring and Debugging Memory</a> &gt; </p>
+<a name="wp1132654"> </a><h2 class="pHeading2">
+6.7.1  Memory Debugging via C
+</h2>
+<a name="wp1132655"> </a><p class="pBody">
+If you are using and writing C routines, you can access an abundance of memory tracking information. 
+</p>
+<a name="wp1132656"> </a><p class="pBody">
+If you allocate memory and want to tie into the ACUCOBOL-GT memory debugging facilities, you can use the following functions to allocate, reallocate, and free memory.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+void *Amalloc(size_t size, int subsys, const char *file, long line,<a name="wp1132658"> </a>
+             const char *call_desc);<a name="wp1132659"> </a>
+<a name="wp1132789"> </a>
+void *Arealloc(void *ptr, size_t newsize, const char *file, long line,<a name="wp1132661"> </a>
+             const char *call_desc);<a name="wp1132662"> </a>
+<a name="wp1132800"> </a>
+void  Afree(void *ptr, const char *file, long line, <a name="wp1132664"> </a>
+             const char *call_desc);<a name="wp1132665"> </a>
+</pre></div>
+<a name="wp1132668"> </a><p class="pBody">
+size, ptr, and newsize are equivalent to the same parameters passed to <b class="cBold">malloc()</b>, <b class="cBold">realloc()</b> and <b class="cBold">free()</b>.
+</p>
+<a name="wp1132669"> </a><p class="pBody">
+subsys is one of: M_OVERHEAD (0), M_PROGRAMS (1), M_FILES (2), M_WINDOWS (3), M_DYNAMIC (4), M_NOT_TRACKED (5).  It can be modified by ORing with the value M_NO_ZERO (0x8000) in order for the memory to not be set to low-values before being returned to the application.  This parameter is used only if the memory tracking debugging feature is turned on.  The first five values (0 - 4) are what the runtime sends to the debugger to report memory usage when the &quot;U&quot; command is specified.
+</p>
+<a name="wp1132670"> </a><p class="pBody">
+file and line are the filename and line number of the operation, and are best set by the standard C macros __FILE__ and __LINE__.  These values are used only if the memory description debugging feature is turned on.
+</p>
+<a name="wp1132671"> </a><p class="pBody">
+description is a text description of the memory and is printed in the memory description report.
+</p>
+<a name="wp1154363"> </a><p class="pBody">
+call_desc is a text description of the call.  If null, it defaults to M_alloc(size) for <b class="cBold">Amalloc</b>, M_realloc(ptr, newsize) for <b class="cBold">Arealloc</b>, and M_free(ptr) for <b class="cBold">Afree</b>.  This text is printed in the memory description report. 
+</p>
+<a name="wp1140126"> </a><p class="pBody">
+Note that you are not required to use these functions to allocate and free memory used by your C routines.  However, it is essential that memory allocated by <b class="cBold">Amalloc()</b> or <b class="cBold">Arealloc()</b> not be freed by the system <b class="cBold">free()</b> function.  It must be freed with <b class="cBold">Afree()</b>.  Similarly, memory allocated by <b class="cBold">malloc()</b>, <b class="cBold">calloc()</b>, or <b class="cBold">realloc()</b> must be freed with the system <b class="cBold">free()</b> function, and not the ACUCOBOL-GT <b class="cBold">Afree()</b> function.  Disregarding these rules will almost certainly result in a memory access violation.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

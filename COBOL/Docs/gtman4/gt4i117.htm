@@ -1,0 +1,701 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>W$BITMAP Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1038265"> </a><h2 class="pHeading2">
+W$BITMAP Routine
+</h2>
+<a name="wp1038271"> </a><p class="pBody">
+This routine is a collection of related operations that handle bitmapped (BMP and JPG) images.  Only Windows machines can actually display bitmaps.  On all other machines, this routine returns an error code. 
+</p>
+<a name="wp1038274"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;W$BITMAP&quot;<a name="wp1038276"> </a>
+    USING OP-CODE, parameters,<a name="wp1038277"> </a>
+    GIVING BITMAP-HANDLE<a name="wp1038278"> </a>
+</pre></div>
+<a name="wp1038280"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1038281"> </a><p class="pBody">
+<b class="cBold">OP-CODE   </b>Numeric parameter 
+</p>
+<a name="wp1038284"> </a><p class="pBody">
+Selects the W$BITMAP operation to perform.  The file &quot;acugui.def&quot; contains level 78 symbolic names for these operations. Unless otherwise noted, these operations can be used in a thin client environment. The specific operations are described below.
+</p>
+<a name="wp1250569"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">parameters</span>   Vary depending on the op-code chosen.
+</p>
+<a name="wp1250570"> </a><p class="pBody">
+<b class="cBold">BITMAP-HANDLE</b>   PIC S9(9) COMP-4 (or COMP-5)
+</p>
+<a name="wp1250571"> </a><p class="pBody">
+BITMAP-HANDLE holds the return value of W$BITMAP.  Values less than or equal to zero indicate errors.  If you are loading or destroying ImageLists, this should be a COMP-5 field.
+</p>
+<a name="wp1132152"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1296524"> </a><p class="pBody">
+W$BITMAP can be used to display a bitmapped image, load a bitmapped image into memory, or remove a bitmapped image and free its memory. You can use this routine to load a bitmapped image into memory as a Windows API data type called an &quot;ImageList&quot;, which treats the bitmap file as a series of fixed-width images.  This provides a simplified way to load and destroy ImageLists when using the thin client. This routine can be used to capture screen shots of an active window or desktop. This routine can also be used to load IPictureDisp objects.
+</p>
+<a name="wp1296525"> </a><p class="pBody">
+When it is trying to locate a bitmap file, W$BITMAP will search first for a <em class="cEmphasis">resource</em> with the specified name, and then for a disk file.  Resources are named in a fashion similar to disk files, but without any directory information.  (See the COPY RESOURCE statement in section 2.4.1 of Book&#160;3, <em class="cEmphasis">ACUCOBOL-GT Reference Manual</em> for more information about including resources.)
+</p>
+<a name="wp1269379"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>When you are running in a thin client environment, and a file name beginning with &quot;@[DISPLAY]&quot; is passed to this routine, it will attempt to access the file in the display host's file system.  It does not download the file from the server.  For more information, refer to section 6.5, &quot;Using Library Routines and DLLs in Thin Client,&quot; in the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">AcuConnect User's Guide</span>.
+<hr />
+</p>
+<a name="wp1038298"> </a><p class="pBody">
+W$BITMAP will examine files to determine the type of image format. If the file suffix is &quot;.jpg&quot;, &quot;.jpe&quot; or &quot;.jpeg&quot;, W$BITMAP assumes the file is a JPG image. Otherwise, it assumes the files are in BMP format. In order to read JPG files, you must have the file &quot;ajpg32.dll&quot; installed in the runtime directory.  Only 32-bit runtimes support JPG format images.
+</p>
+<a name="wp1038299"> </a><p class="pBody">
+W$BITMAP loads 24-bit color or 8-bit grayscale images in the JPEG File Interchange Format (JFIF).  It reads baseline and extended DCT sequential and progressive files that are Huffman encoded (file types SOF0, SOF1, SOF2). The JPG lossless mode format is not supported.   
+</p>
+<a name="wp1080897"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The behavior of this library routine is affected by the setting of the FILENAME_SPACES configuration variable that may or may not allow spaces in a file name.  See the documentation on <a  href="gt4h132.htm#wp1035905">FILENAME_SPACES</a> in Appendix H.
+<hr />
+</p>
+<a name="wp1080898"> </a><h3 class="pHeadingRef">
+OP-CODES and parameters
+</h3>
+<a name="wp1329653"> </a><h3 class="pHeadingRef">
+WBITMAP-DISPLAY (op-code 1)
+</h3>
+<a name="wp1329655"> </a><p class="pBody">
+This operation retrieves a bitmapped image from disk and displays it on the screen.  This op-code takes four additional parameters:  
+</p>
+<a name="wp1038337"> </a><p style="text-align: left" class="pListOptions">
+<b style="font-style: italic" class="cBold">name</b><b style="font-style: normal" class="cBold">	</b>This is an alphanumeric literal or data item that is the file name of the bitmap to display.  This must be a file that contains a device-independent bitmap (usually called &quot;.bmp&quot; files).  Create this file with a bitmap editor.  For example, the bitmap contained in the sample program &quot;tour.cbl&quot; was created using the Paint program that comes with Windows.  The file name is not interpreted--it should be the exact file name of the image.  
+</p>
+<a name="wp1081655"> </a><p style="text-align: left" class="pListOptions">
+<b style="font-style: italic" class="cBold">row</b><b style="font-style: normal" class="cBold">	</b>This is a numeric parameter.  This value is the row where you want to place the upper-left corner of the image.  Row values are treated just as they are in a DISPLAY statement.  This means that row &quot;1&quot; is the top row of the current ACUCOBOL-GT window.  You may also refer to fractional row positions.  For example, row &quot;1.5&quot; is halfway between the top of row &quot;1&quot; and the top of row &quot;2&quot;.  
+</p>
+<a name="wp1081656"> </a><p style="text-align: left" class="pListOptions">
+<b style="font-style: italic" class="cBold">column</b><b style="font-style: normal" class="cBold">	</b>This is a numeric parameter.  This identifies the column where the upper-left corner of the image is to be placed.  COLUMN is processed in the same manner as ROW.  
+</p>
+<a name="wp1192255"> </a><p style="text-align: left" class="pListOptions">
+<em style="font-style: italic; font-weight: bold" class="cEmphasis">flags</em><b style="font-style: normal" class="cBold">	</b>This is a numeric parameter that contains display options. Currently, the only option is WBITMAP-NO-FILL. When this is set, it inhibits the background-fill operation described below. This parameter can be omitted, in which case the fill option behaves as described. 
+</p>
+<a name="wp1038341"> </a><p class="pBody">
+The bitmapped image contained in the named file is loaded into memory, converted to a device-dependent bitmap and displayed at the position indicated by ROW and COLUMN.  The entire image in the file is displayed, except that it is truncated to fit in the current ACUCOBOL-GT window.  
+</p>
+<a name="wp1038342"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You should generally try to produce small bitmaps, because full-screen bitmaps occupy significant amounts of memory and can take noticeable time to process.  If you use Windows Paint to create the image, you should first use the &quot;Image Attributes&quot; option to set the size of the image (the default is a full page; you'll want to make it smaller).  
+<hr />
+</p>
+<a name="wp1038343"> </a><p class="pBody">
+Frequently, the edges of the image will not exactly match a row and column boundary.  ACUCOBOL-GT fills the tiny area between the edge of the bitmap and the next character cell with the current window's background color.  If you use the WBITMAP-NO-FILL parameter, then the runtime leaves this area alone.  Usually, this means that it will show arbitrary data as the program progresses.  This can be useful, however, if you are placing several bitmaps very close together and do not want the fill area of one bitmap to overwrite another bitmapped image.  
+</p>
+<a name="wp1038344"> </a><p class="pBody">
+When W$BITMAP returns, it sets BITMAP-HANDLE to a positive (non-zero) value that is the bitmap's <em class="cEmphasis">handle</em>.  This should be saved in a variable declared as PIC 9(9).  Use the handle when you make future reference to the displayed image (for example, you need the handle in order to remove the bitmap and free the memory that it occupies).  If BITMAP-HANDLE is less than or equal to zero, then an error has occurred.  (See the section on Error Handling below.)
+</p>
+<a name="wp1038355"> </a><p class="pBody">
+You may display data and pop-up windows over bitmapped images.  However, the current implementation may cause the image to <em class="cEmphasis">flash through</em> the data displayed on top when the runtime is repainting the screen.  The final image should be correct, but the flash can be annoying in some cases.  To avoid this, either do not display anything over the image, or display over the entire image (the runtime will not try to display the image if it is entirely hidden).  
+</p>
+<a name="wp1038356"> </a><p class="pBody">
+The effect of displaying overlapping bitmapped images is undefined.  
+</p>
+<a name="wp1038357"> </a><h3 class="pHeadingRef">
+WBITMAP-DESTROY (op-code 2) 
+</h3>
+<a name="wp1329676"> </a><p class="pBody">
+This operation removes a bitmapped image from the screen and frees the memory used by that bitmap.  It takes only one parameter,  the handle of the bitmap returned by WBITMAP-DISPLAY.  This should be either USAGE COMP-4 or unsigned DISPLAY.   
+</p>
+<a name="wp1038363"> </a><p class="pBody">
+When an image is removed from the screen, it's replaced by spaces using the current window's background color.  Only those parts of the screen that are currently showing the image are updated.  
+</p>
+<a name="wp1081606"> </a><p class="pBody">
+You can effectively remove an image from the screen by displaying over it.  However, this does <em class="cEmphasis">not</em> free the memory used by the image.  The runtime also spends some time whenever it updates the screen determining whether or not the image is visible.  For these reasons, you should destroy images when you are done with them.  
+</p>
+<a name="wp1038364"> </a><p class="pBody">
+The runtime automatically destroys all remaining images when it shuts down. 
+</p>
+<a name="wp1038369"> </a><h3 class="pHeadingRef">
+WBITMAP-LOAD (op-code 3) 
+</h3>
+<a name="wp1329684"> </a><p class="pBody">
+This operation loads bitmapped images from disk into memory so that they can be displayed with bitmapped buttons.  
+</p>
+<a name="wp1190081"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You may not use remote name notation with this operation.
+<hr />
+</p>
+<a name="wp1190059"> </a><p class="pBody">
+This op-code takes three additional parameters.  They are, in order:  
+</p>
+<a name="wp1038370"> </a><p style="text-align: left" class="pListOptions">
+<b style="font-style: italic" class="cBold">name	</b>A literal or data item containing the name of the file to load.  The length of the <em class="cEmphasis">name</em> (including path) should not exceed 90 characters. This limit may vary on different operating systems.
+</p>
+<a name="wp1038371"> </a><p style="text-align: left" class="pListOptions">
+<b style="font-style: italic" class="cBold">bitmap-handle	</b>A PIC S9(9) COMP-4 data item that stores a handle to the bitmapped image loaded into memory.  
+</p>
+<a name="wp1194079"> </a><p style="text-align: left" class="pListOptions">
+<em style="font-style: italic; font-weight: bold" class="cEmphasis">flags</em><b style="font-style: normal" class="cBold">	</b>A numeric parameter that contains loading options.  This parameter can be omitted.  
+</p>
+<a name="wp1194080"> </a><p style="text-align: left" class="pListOptions">
+	Currently the only option is WBITMAP-NO-DOWNLOAD.  This option is intended for programs that are deployed with the ACUCOBOL-GT Thin Client.  When the option is set, the server does not download the specified bitmap to the client.  The flag indicates to the server that the bitmap is already in the client's cache directory.  To properly use the option, the program must keep track of whether the bitmap is already in the client's cache.
+</p>
+<a name="wp1038372"> </a><p class="pBody">
+If the operation is successful, <em class="cEmphasis">bitmap-handle</em> holds a positive value.  If <em class="cEmphasis">bitmap-handle</em> is &quot;0&quot; or negative, an error occurred.
+</p>
+<a name="wp1038373"> </a><p class="pBody">
+If you have bitmapped images in more than one file, you need to load each file before using the images they contain.  Be sure to store separate handles for each file loaded.
+</p>
+<a name="wp1038374"> </a><p class="pBody">
+When you are done with an image and have destroyed all the buttons that reference that image, you can remove it from memory with the WBITMAP-DESTROY operation.  Do not destroy an image that is referenced by an active control or print job, because the results are unpredictable.
+</p>
+<a name="wp1135007"> </a><h3 class="pHeadingRef">
+WBITMAP-LOAD-IMAGELIST (op-code 5) 
+</h3>
+<a name="wp1329693"> </a><p class="pBody">
+This operation works in the same way as the WBITMAP-LOAD operation, except that the returned handle is a Win32 API ImageList handle instead of a bitmap handle.  This handle can be directly used by ActiveX controls which use ImageLists, and should be USAGE COMP-5.  When running under the thin client, the resulting ImageList resides on the desktop machine.  The ImageList handle is only meaningful to software components on that machine (such as a displayed ActiveX control).  Unlike images loaded with WBITMAP-LOAD, the runtime does not track ImageLists.  For this reason, you should destroy an ImageList once you no longer need it.  Error values returned by this operation are identical to those returned by the WBITMAP-LOAD operation.  This operation takes up to three additional parameters:
+</p>
+<a name="wp1135009"> </a><p style="text-align: left" class="pListOptions">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic; font-weight: bold">name</span> 	This required alphanumeric literal is the name of the file you wish to load.  It should be a BMP or JPG file.  The file is handled in exactly the same fashion as it is for the WBITMAP-LOAD operation.  
+</p>
+<a name="wp1135010"> </a><p style="text-align: left" class="pListOptions">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic; font-weight: bold">width</span><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">	</span>This numeric parameter is optional. The bitmap file is treated as a series of distinct images arranged horizontally.  The height of each image is determined by the height of the bitmap.  The width of each image is defined by this parameter, expressed in pixels.  Each image must be the same width.  If omitted, a default width of 16 pixels (a common width for toolbar images) is used.
+</p>
+<a name="wp1135011"> </a><p style="text-align: left" class="pListOptions">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic; font-weight: bold">transparent-color	</span><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic"> </span>This optional numeric literal is set to the value of a color that you designate as a &quot;transparent&quot; color.  Pixels of this color are not displayed when the bitmap is drawn, allowing the background to show through. Color values are expressed as integers composed of red, green and blue components. The mathematical expression for the composite value is:
+</p>
+<a name="wp1140544"> </a><p style="text-align: left" class="pListOptions">
+	(blue * 65536) + (green * 256) + (red)
+</p>
+<a name="wp1135013"> </a><p style="text-align: left" class="pListOptions">
+	where red, green, and blue are values between 0 and 255. You can use a hexadecimal numeric literal to express this value since each component of the color occupies one byte in a binary value.  For example, &quot;x#FF8000&quot; expresses an orange color with red at 255, green at 128, and blue at 0.  The first byte (x `FF') is the red value, the second byte (x'80') is the green value, and the last byte (x`00') is the blue value.  
+</p>
+<a name="wp1135014"> </a><p style="font-family: Arial, Verdana, Helvetica, sans-serif">
+<hr />
+<b>Note:  </b>The value &quot;x#C0C0C0&quot; is often used for the transparent color since this is the medium gray shade used in default Windows color schemes.  Images drawn using this as a &quot;background&quot; color adapt well when the user changes from the default color scheme. 
+<hr />
+</p>
+<a name="wp1135015"> </a><p style="text-align: left" class="pListOptions">
+	If this parameter is omitted, all colors are treated as usual and the image is drawn without modification.
+</p>
+<a name="wp1296629"> </a><h3 class="pHeadingRef">
+WBITMAP-DESTROY-IMAGELIST (op-code 6) 
+</h3>
+<a name="wp1329701"> </a><p class="pBody">
+This operation destroys an ImageList.  Normally this will be an ImageList created by the WBITMAP-LOAD-IMAGELIST operation, but it may be any ImageList that resides on the desktop machine.  When running under the thin client, the ImageList is destroyed on the desktop machine. This operation takes a single parameter, the handle of the ImageList to destroy.  This should be USAGE COMP-5.  Because the runtime cannot verify this parameter, you should take extra care to ensure that it is valid.  
+</p>
+<a name="wp1296632"> </a><h3 class="pHeadingRef">
+WBITMAP-CAPTURE-IMAGE (op-code 7) 
+</h3>
+<a name="wp1329709"> </a><p class="pBody">
+This operation captures a screen shot of a window, and stores it as a BMP file.  (If you are using this operation in a thin client environment, refer to section 5.1.3.11 of the <em class="cEmphasis">AcuConnect User's Guide </em>for special considerations.)  This operation takes four additional parameters:
+</p>
+<a name="wp1296715"> </a><p style="text-align: left" class="pListOptions">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic; font-weight: bold">name</span> 	This required alphanumeric literal is the name of the file in which the image is saved. The <em class="cEmphasis">name</em> may include embedded spaces.  This parameter is not affected by the FILE_PREFIX configuration variable.  If a file of the specified name already exists, it is overwritten unless it is read-only.  If this parameter is omitted or set to spaces, the image is saved to the Windows clipboard.  
+</p>
+<a name="wp1296716"> </a><p style="text-align: left" class="pListOptions">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic; font-weight: bold">window-handle</span> 	This optional PIC S9(9) COMP-4 data item is the Windows system handle of the image to capture.  If this parameter is omitted or set to &quot;0&quot;, the currently active window is captured.  (Active means the window that responds to a keystroke.)  If no <em class="cEmphasis">window-handle</em> is available or there is no currently active window, an image of the desktop is captured.
+</p>
+<a name="wp1252255"> </a><p class="pNoteList2Head">
+<hr />
+<b>Note:  </b>The Windows system handle is not the same as the Acucorp window handle.  You may determine the value of <em class="cEmphasis">window-handle </em>using the following code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+   DISPLAY WINDOW HANDLE IN acu-handle.<a name="wp1252256"> </a>
+<a name="wp1258078"> </a><p class="pBodyRelative">
+or
+</p>
+   DISPLAY ENTRY-FIELD HANDLE IN acu-handle.<a name="wp1252257"> </a>
+   INQUIRE acu-handle SYSTEM HANDLE IN window-handle.<a name="wp1252258"> </a>
+</pre></div>
+<a name="wp1252259"> </a><p class="pNoteList2End">
+where <em class="cEmphasis">acu-handle</em> is the handle of a window or control, and <em class="cEmphasis">window-handle</em> is a PIC 9(9) COMP-5 or PC X(4) COMP-N data item.
+<hr />
+</p>
+<a name="wp1252261"> </a><p style="text-align: left" class="pListOptions">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic; font-weight: bold">client</span> 	This optional numeric data item is used to specify whether to capture the entire window, or just the interior of the window.  If you specify this parameter, you must also specify <em class="cEmphasis">window-handle</em>.  This parameter may have one of two values:
+</p>
+<a name="wp1254014"> </a><p class="pBodyRelative">
+ <div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1254007"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1254009"> </a><p class="pCellBody">
+(default) The entire window is captured, including the title bar, window frame, menu, etc.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1254011"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1254013"> </a><p class="pCellBody">
+Only the interior of the window specified by <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">window-handle</span> is captured.  This can be useful if you are displaying a scanned image, and want to capture only that image, not the window frame.
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1252265"> </a><p style="text-align: left" class="pListOptions">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic; font-weight: bold">colordepth</span> 	This optional numeric data item sets the number of color bits per pixel used when capturing the image.  If this value is not specified, the screen default is used.  The default color density of a screen is a property of the video adapter driver.  On most modern PCs this is set to 24-bits per pixel.  This parameter is not used when images are saved to the clipboard.  This parameter may be set to one of the following values:
+</p>
+<a name="wp1254169"> </a><p class="pBodyRelative">
+<div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1254190"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1254192"> </a><p class="pCellBody">
+Monochrome
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1254194"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1254196"> </a><p class="pCellBody">
+4-bits per pixel
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1254198"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1254200"> </a><p class="pCellBody">
+8-bits per pixel (256 colors)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1254202"> </a><p class="pCellBody">
+16
+</p>
+</td>
+    <td><a name="wp1254204"> </a><p class="pCellBody">
+16-bits per pixel
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1254206"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1254208"> </a><p class="pCellBody">
+24-bits per pixel (True color)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1254210"> </a><p class="pCellBody">
+32
+</p>
+</td>
+    <td><a name="wp1254212"> </a><p class="pCellBody">
+32-bits per pixel (True color)
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1252272"> </a><p style="text-align: left" class="pListOptions">
+	When making copies of all or part of the screen, do not use higher color density than necessary.  Color is memory intensive and a higher color density does not improve image quality as much as it results in a larger file size.  Consider what you will use the image for and set <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">colordepth</span> accordingly.  Many tools do not support bitmaps with more than 256 colors.  A color density setting of &quot;8&quot; is adequate for most situations.
+</p>
+<a name="wp1252277"> </a><h3 class="pHeadingRef">
+WBITMAP-CAPTURE-DESKTOP (op-code 8) 
+</h3>
+<a name="wp1329749"> </a><p class="pBody">
+This operation captures a screen shot of the entire desktop and stores it as a BMP file.  (If you are using this operation in a thin client environment, refer to section 5.1.3.11 of the <em class="cEmphasis">AcuConnect User's Guide </em>for special considerations.) This operation takes two additional parameters:
+</p>
+<a name="wp1254339"> </a><p style="text-align: left" class="pListOptions">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic; font-weight: bold">name</span> 	This required alphanumeric literal is the name of the file in which the image is saved. The <em class="cEmphasis">name</em> may include embedded spaces. The length of <em class="cEmphasis">name</em> (including path) should not exceed 90 characters. This limit may vary on different operating systems. This parameter is not affected by the FILE_PREFIX configuration variable.  If a file of the same name already exists, it is overwritten unless it is read-only.  If this parameter is omitted or set to spaces, the image is saved to the Windows clipboard.  
+</p>
+<a name="wp1254340"> </a><p style="text-align: left" class="pListOptions">
+	If you plan to use this operation in a thin client environment, refer to section 5.1.3.11 of the <em class="cEmphasis">AcuConnect User's Guide </em>for special considerations.
+</p>
+<a name="wp1254451"> </a><p style="text-align: left" class="pListOptions">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic; font-weight: bold">colordepth</span> 	This optional numeric data item sets the number of color bits per pixel used when capturing the image.  If this value is not specified, the screen default is used.  The default color density of a screen is a property of the video adapter driver.  On most modern PCs it is 24-bits per pixel.  This parameter is not used when images are saved to the clipboard.  This parameter may be set to one of the following values:
+</p>
+<a name="wp1254477"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1254454"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1254456"> </a><p class="pCellBody">
+Monochrome
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1254458"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1254460"> </a><p class="pCellBody">
+4-bits per pixel
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1254462"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1254464"> </a><p class="pCellBody">
+8-bits per pixel (256 colors)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1254466"> </a><p class="pCellBody">
+16
+</p>
+</td>
+    <td><a name="wp1254468"> </a><p class="pCellBody">
+16-bits per pixel
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1254470"> </a><p class="pCellBody">
+24
+</p>
+</td>
+    <td><a name="wp1254472"> </a><p class="pCellBody">
+24-bits per pixel (True color)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1254474"> </a><p class="pCellBody">
+32
+</p>
+</td>
+    <td><a name="wp1254476"> </a><p class="pCellBody">
+32-bits per pixel (True color)
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1296759"> </a><p style="text-align: left" class="pListOptions">
+	When making copies of all or part of the screen, do not use higher color density than necessary.  Color is memory intensive and a higher color density does not improve image quality as much as it results in a larger file size.  Consider what you will use the image for and set <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">colordepth</span> accordingly.  Many tools do not support bitmaps with more than 256 colors.  A color density setting of &quot;8&quot; is adequate for most situations.
+</p>
+<a name="wp1252295"> </a><h3 class="pHeadingRef">
+WBITMAP-CAPTURE-CLIPBOARD (op-code 9) 
+</h3>
+<a name="wp1329765"> </a><p class="pBody">
+This operation saves the current content of the Windows clipboard as a BMP file.  If the clipboard is empty or contains an unsupported datatype, such as text, an error is returned.  (If you are using this operation in a thin client environment, refer to section 5.1.3.11 of the <em class="cEmphasis">AcuConnect User's Guide </em>for special considerations.)  This operation takes only one parameter, the filename to which the clipboard content must be saved. 
+</p>
+<a name="wp1254400"> </a><p style="text-align: left" class="pListOptions">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic; font-weight: bold">name</span> 	This required alphanumeric literal is the name of the file in which the image is saved. The <em class="cEmphasis">name</em> may include embedded spaces. The length of <em class="cEmphasis">name</em> (including path) should not exceed 90 characters. This limit may vary on different operating systems. This parameter is not affected by the FILE_PREFIX configuration variable.  If a file of the specified name already exists, it is overwritten unless it is read-only.
+</p>
+<a name="wp1317389"> </a><h3 class="pHeadingRef">
+WBITMAP-LOAD-PICTURE  (op-code 10) 
+</h3>
+<a name="wp1329777"> </a><p class="pBody">
+This operation accepts a filename and returns a handle to an IPictureDisp object.  This is similar to the Visual Basic LoadPicture function.  You must use the &quot;acuclass.def&quot; file to obtain the definition of the IPictureDisp object.  
+</p>
+<a name="wp1331933"> </a><p class="pBody">
+An IPictureDisp object uses the IPictureDisp interface to expose its properties through Automation.  It provides a subset of the functionality available through IPicture methods.  For more information, go to: msdn.microsoft.com/library and search for IPictureDisp and/or IPicture.
+</p>
+<a name="wp1331950"> </a><p class="pBody">
+The following image formats are supported:
+</p>
+<a name="wp1331997"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1331978"> </a><p class="pCellBody">
+Bitmaps &amp; device independent bitmaps (DIB)
+</p>
+</td>
+    <td><a name="wp1331980"> </a><p class="pCellBody">
+.bmp
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1331982"> </a><p class="pCellBody">
+Icons
+</p>
+</td>
+    <td><a name="wp1331984"> </a><p class="pCellBody">
+.ico
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1331986"> </a><p class="pCellBody">
+Joint Photographic Experts Group (JPEG)
+</p>
+</td>
+    <td><a name="wp1331988"> </a><p class="pCellBody">
+.jpg
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1331990"> </a><p class="pCellBody">
+Windows MetaFile
+</p>
+</td>
+    <td><a name="wp1331992"> </a><p class="pCellBody">
+.wmf
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1331994"> </a><p class="pCellBody">
+Graphics Interchange Format
+</p>
+</td>
+    <td><a name="wp1331996"> </a><p class="pCellBody">
+.gif
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1331998"> </a><p class="pBody">
+This operation takes one parameter:
+</p>
+<a name="wp1317415"> </a><p style="text-align: left" class="pListOptions">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic; font-weight: bold">name</span> 	This required alphanumeric literal is the name of the file you want to load.  The filename must include an absolute path. The length of <em class="cEmphasis">name</em> (including path) should not exceed 90 characters.  
+</p>
+<a name="wp1317373"> </a><p class="pBody">
+If the operation is successful, <em class="cEmphasis">bitmap-handle</em> holds a positive value.  If <em class="cEmphasis">bitmap-handle</em> is &quot;0&quot; or negative, an error occurred.  Note that the runtime does not manage memory consumed by this function.  When you are done with an image, you should remove it from memory with a &quot;DESTROY IPictureDisp_handle&quot; statement.  See Example 3, below.
+</p>
+<a name="wp1318821"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The IPictureDisp handle will not accept negative values. If an error (a negative value) is returned, you must use a REDEFINES, or move the value to a signed numeric variable, in order to read the error code.  See Example 3 below.
+<hr />
+</p>
+<a name="wp1296805"> </a><h3 class="pHeadingRef">
+Error Handling
+</h3>
+<a name="wp1296809"> </a><p class="pBody">
+If the value of BITMAP-HANDLE is &quot;0&quot; or negative, an error has occurred. These errors are defined in &quot;acugui.def&quot;. 
+</p>
+<a name="wp1252307"> </a><p class="pBody">
+<b style="font-weight: bold" class="cBold">WBERR-UNSUPPORTED</b><b style="font-weight: normal" class="cBold"> (value &quot;0&quot;) -- </b>The system does not support bitmapped images.  Currently, ACUCOBOL-GT supports the display of bitmaps on Windows systems only.  
+</p>
+<a name="wp1252308"> </a><p class="pBody">
+<b style="font-weight: bold" class="cBold">WBERR-FILE-ERROR </b><b style="font-weight: normal" class="cBold">(value &quot;-1&quot;) -- </b>A file error occurred when trying to open <em class="cEmphasis">name</em>.  The most common cause is that <em class="cEmphasis">name</em> does not exist.  Other possibilities include a permissions error or running out of file handles.  
+</p>
+<a name="wp1252309"> </a><p class="pBody">
+<b style="font-weight: bold" class="cBold">WBERR-NO-MEMORY </b><b style="font-weight: normal" class="cBold">(value &quot;-2&quot;) -- </b>The system ran out of memory trying to allocate space for the image.
+</p>
+<a name="wp1252310"> </a><p class="pBody">
+<b style="font-weight: bold" class="cBold">WBERR-NOT-BITMAP</b><b style="font-weight: normal" class="cBold"> (value &quot;-3&quot;) -- </b>The named file does not contain a device-independent bitmap.  
+</p>
+<a name="wp1252311"> </a><p class="pBody">
+<b class="cBold">WBERR-FORMAT-UNSUPPORTED </b>(value &quot;-4&quot;) -- The format of the current image is not supported. 
+</p>
+<a name="wp1252312"> </a><p class="pBody">
+<b style="font-weight: bold" class="cBold">WBERR-MISSING-DLL </b><b style="font-weight: normal" class="cBold">(value &quot;-5&quot;) -- </b>The runtime has attempted to load a &quot;.jpg&quot; file and the file &quot;ajpg32.dll&quot; cannot be found.
+</p>
+<a name="wp1252313"> </a><p class="pBody">
+<b class="cBold">WBERR-INVALID-HWND</b> (value &quot;-6&quot;) -- The runtime cannot capture the current image. The window handle provided was invalid.
+</p>
+<a name="wp1252314"> </a><p class="pBody">
+<b class="cBold">WBERR-INVALID-DATA</b> (value &quot;-7&quot;) -- The runtime cannot access the bitmap object. This can happen if the window has been closed, or if the image is corrupt.
+</p>
+<a name="wp1252315"> </a><p class="pBody">
+<b class="cBold">WBERR-INVALID-CLIPBOARD</b> (value &quot;-8&quot;) -- The runtime has been denied access to the clipboard. This may be because another application has locked the clipboard.
+</p>
+<a name="wp1252316"> </a><p class="pBody">
+<b class="cBold">WBERR-INVALID-PALETTE </b>(value &quot;-9&quot;) -- The runtime is not able to create the palette for this image. The most common cause is that the image is corrupt or has a palette size that is not supported.
+</p>
+<a name="wp1134117"> </a><h3 class="pHeadingRef">
+Example 1
+</h3>
+<a name="wp1134194"> </a><p class="pBody">
+The following example shows the first two op-codes in use.  After the example, the parameters are described.  For an example of the WBITMAP-LOAD operation, see section 3.7.2 in Book 2, <em class="cEmphasis">ACUCOBOL-GT User Interface Programming</em>.
+</p>
+<a name="wp1134195"> </a><p class="pBody">
+Notice the two calls to W$BITMAP in the sample code.  First we use W$BITMAP to display the Acucorp logo, and then we use the DISPLAY verb to place two lines of text on the screen.  The second call to W$BITMAP removes the logo from the screen and releases the memory it occupies.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+* Displays the Acucorp logo for 2 seconds. <a name="wp1134196"> </a>
+<a name="wp1134197"> </a>
+display window, line 7, column 26, lines 9, size 30, color black +<a name="wp1134198"> </a>
+   bckgrnd-white, erase, shadow, no scroll, pop-up area is window-1.<a name="wp1134199"> </a>
+<a name="wp1134200"> </a>
+* Now we give the name of the bitmap file and <a name="wp1134201"> </a>
+* the row and column of the upper left corner: <a name="wp1134202"> </a>
+<a name="wp1134203"> </a>
+call &quot;w$bitmap&quot; using wbitmap-display, &quot;sample/acucob85.bmp&quot;, 2, 5.<a name="wp1134204"> </a>
+<a name="wp1134205"> </a>
+* We save the handle so we'll have it when we want <a name="wp1134206"> </a>
+* to remove the image: move return-code to bitmap-handle.<a name="wp1134207"> </a>
+<a name="wp1134208"> </a>
+* Check to make sure the logo file was found and <a name="wp1134209"> </a>
+* that no error occurred: <a name="wp1134210"> </a>
+<a name="wp1134211"> </a>
+if bitmap-handle &lt;= zero<a name="wp1134212"> </a>
+   close window window-1 <a name="wp1134213"> </a>
+else<a name="wp1134214"> </a>
+   display &quot;Copyright (c) 1985 - 2000&quot;, line 7, size 30, centered<a name="wp1134215"> </a>
+   display &quot;Acucorp, Inc.&quot;, line 8, size 30, centered<a name="wp1134216"> </a>
+   accept single-char, auto, before time 200 <a name="wp1134217"> </a>
+end-if<a name="wp1134218"> </a>
+close window window-1<a name="wp1134219"> </a>
+<a name="wp1134220"> </a>
+* We remove the bitmapped image and release the <a name="wp1134221"> </a>
+* memory it uses: <a name="wp1134222"> </a>
+<a name="wp1134223"> </a>
+call &quot;w$bitmap&quot; using wbitmap-destroy, bitmap-handle.<a name="wp1134224"> </a>
+</pre></div>
+<a name="wp1252960"> </a><h3 class="pHeadingRef">
+Example 2
+</h3>
+<a name="wp1252961"> </a><p class="pBody">
+Following are several examples of different W$BITMAP calls to capture screen shots and desktop images:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+* This call captures the standard active window as a file <a name="wp1252963"> </a>
+* named &quot;myfile.bmp&quot;<a name="wp1254571"> </a>
+call &quot;W$BITMAP&quot; using WBITMAP-CAPTURE-IMAGE &quot;myfile.bmp&quot;.<a name="wp1252964"> </a>
+<a name="wp1252965"> </a>
+* This call captures the standard active window onto <a name="wp1252966"> </a>
+* the Windows clipboard<a name="wp1254572"> </a>
+call &quot;W$BITMAP&quot; using WBITMAP-CAPTURE-IMAGE &quot; &quot;.<a name="wp1252967"> </a>
+<a name="wp1252968"> </a>
+* This call captures the client area of the active <a name="wp1252969"> </a>
+* window as a file named &quot;myfile.bmp&quot; using 8-bit color<a name="wp1254573"> </a>
+call &quot;W$BITMAP&quot; <a name="wp1252971"> </a>
+   using WBITMAP-CAPTURE-IMAGE &quot;myfile.bmp&quot; 0 1 8.<a name="wp1254597"> </a>
+<a name="wp1252972"> </a>
+* This call captures the indicated window handle using 16-bit 
+* color and saves it as a file named &quot;myfile.bmp&quot;<a name="wp1252973"> </a>
+inquire mycontrol system handle in hWND<a name="wp1252975"> </a>
+call &quot;W$BITMAP&quot; <a name="wp1252976"> </a>
+   using WBITMAP-CAPTURE-IMAGE &quot;myfile.bmp&quot; hWND 0 16.<a name="wp1254614"> </a>
+<a name="wp1252977"> </a>
+* This call captures the entire desktop as a file named<a name="wp1252978"> </a>
+* &quot;myfile.bmp&quot; using 32-bit color<a name="wp1254622"> </a>
+call &quot;W$BITMAP&quot; using WBITMAP-CAPTURE-DESKTOP &quot;myfile.bmp&quot; 32.<a name="wp1252979"> </a>
+<a name="wp1252980"> </a>
+* This call captures the current bitmap content of the Windows<a name="wp1252981"> </a>
+* clipboard as a file named &quot;myfile.bmp&quot; <a name="wp1254627"> </a>
+call &quot;W$BITMAP&quot; using WBITMAP-CAPTURE-CLIPBOARD &quot;myfile.bmp&quot;.<a name="wp1252983"> </a>
+</pre></div>
+<a name="wp1318026"> </a><h3 class="pHeadingRef">
+Example 3
+</h3>
+<a name="wp1318056"> </a><p class="pBody">
+The following sample program calls W$BITMAP to load an IPicture object.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+       ...<a name="wp1318082"> </a>
+<a name="wp1318083"> </a>
+       SPECIAL-NAMES.<a name="wp1318084"> </a>
+           COPY &quot;acuclass.def&quot;.<a name="wp1318085"> </a>
+           .<a name="wp1318086"> </a>
+<a name="wp1318087"> </a>
+       WORKING-STORAGE SECTION.<a name="wp1318088"> </a>
+           COPY &quot;acugui.def&quot;.<a name="wp1318089"> </a>
+       77  myIPictureDisp           HANDLE OF IPictureDisp.<a name="wp1318090"> </a>
+       77  myErrorTest REDEFINES myIPictureDisp PIC S9(9) COMP-5.<a name="wp1318091"> </a>
+<a name="wp1318092"> </a>
+       ...<a name="wp1318093"> </a>
+       PROCEDURE DIVISION.<a name="wp1318094"> </a>
+       MAIN-001.<a name="wp1318095"> </a>
+<a name="wp1318096"> </a>
+           CALL &quot;W$BITMAP&quot; USING WBITMAP-LOAD-PICTURE<a name="wp1318097"> </a>
+                 &quot;C:\MyDir\MyBitmaps.bmp&quot;<a name="wp1318098"> </a>
+                 GIVING myIPictureDisp.<a name="wp1318099"> </a>
+<a name="wp1318100"> </a>
+           EVALUATE myErrorTest<a name="wp1318101"> </a>
+                WHEN WBERR-FILE-ERROR<a name="wp1318102"> </a>
+                   DISPLAY MESSAGE BOX<a name="wp1318103"> </a>
+                      &quot;File not found&quot;<a name="wp1318104"> </a>
+                      TITLE &quot;Error&quot;<a name="wp1318105"> </a>
+                      INITIALIZE myIPictureDisp<a name="wp1318106"> </a>
+                WHEN WBERR-FORMAT-UNSUPPORTED<a name="wp1318107"> </a>
+                      DISPLAY MESSAGE BOX<a name="wp1318108"> </a>
+                      &quot;Format not supported&quot;<a name="wp1318109"> </a>
+                      TITLE &quot;Error&quot;<a name="wp1318110"> </a>
+                      INITIALIZE myIPictureDisp<a name="wp1318111"> </a>
+                WHEN OTHER<a name="wp1318112"> </a>
+                      DISPLAY MESSAGE BOX<a name="wp1318113"> </a>
+                      &quot;File successfully loaded&quot;<a name="wp1318114"> </a>
+                      TITLE &quot;Success&quot;<a name="wp1318115"> </a>
+           END-EVALUATE.<a name="wp1318116"> </a>
+           DESTROY myIPictureDisp.<a name="wp1318117"> </a>
+           GOBACK.<a name="wp1318118"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

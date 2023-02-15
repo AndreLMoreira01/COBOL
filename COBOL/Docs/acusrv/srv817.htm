@@ -1,0 +1,433 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:46:11" />
+  <title>8.5  Frequently Asked Questions</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv8.htm">Chapter 8: System Management</a> &gt; </p>
+<a name="wp1038827"> </a><h2 class="pHeading1">
+8.5  Frequently Asked Questions
+</h2>
+<a name="wp1038828"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1035705"> </a><p class="pBody">
+Is AcuServer faster or more secure than using mapped drives in Windows or Novell environments?
+</p>
+<a name="wp1038878"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1038924"> </a><p class="pBody">
+Some operating environments implement aggressive file caching techniques such as mapped drives to improve file processing speed.  However, errors in these buffering techniques can occasionally lead to corrupted files.  AcuServer cannot always match the file processing speeds of the caching methods, but it is faster in certain situations and provides better file integrity.  One situation in which use of file caching techniques (instead of AcuServer) could lead to a caching error and corrupted files is described below.  
+</p>
+<a name="wp1035706"> </a><p class="pBody">
+When an ACUCOBOL-GT runtime asks that a record be rewritten to a file that is shared among multiple clients, the runtime might receive a response indicating that the operating system has correctly rewritten the record, when in fact the record may still be in a memory cache.  If a second runtime (on a separate system) then asks for the same record, it will receive a copy of the unchanged record from the shared disk.  When this second runtime &quot;rewrites&quot; the record, the data may actually be cached on this second system, just as it was cached on the first.   In this situation, somebody's update to the record is going to be lost when the actual rewrites occur.  If the rewrites contain index information as well as data, the problem might include structural file damage, leading to &quot;broken&quot; files.
+</p>
+<a name="wp1035707"> </a><p class="pBody">
+Windows-based clients with mapped drives on a Windows NT server can easily fall into this category due to a caching bug.  An ACUCOBOL-GT runtime executing on Windows client machines with data files on mapped drives on a Windows NT server can run faster than AcuServer, because the Windows client systems are caching data writes in their local memory.  This approach can give increased file performance as long as the number of clients remains small.  This file performance advantage begins to disappear as user counts increase.  However, at <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">any</span> number of users, this scheme is at risk for data corruption, which is entirely dependent on timing vagaries.  Even with a small user count, the scenario noted in the previous paragraph could occur.  AcuServer provides better file integrity than the caching approach.
+</p>
+<a name="wp1035708"> </a><p class="pBody">
+AcuServer <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">can</span> improve file performance in certain situations.  For example, we have found that AcuServer is faster than shared drives in situations where two or more users are accessing a single file in an interactive mode.  This is because Windows caches mapped disk network files if only one user is in the file, but as soon as another user enters the file caching is terminated.  Windows does not seem to know when caching can recommence.
+</p>
+<a name="wp1035709"> </a><p class="pBody">
+In addition, consider the case of a keyed READ or START to a Vision file that has an average index tree height of four.  The root node of the index tree is located by a field in the header, so a read of the header is necessary, followed by an average of four reads to move through the levels of index records, finally followed by a read of the data record.  If a client runtime is using Novell or mapped drives, each of those reads must be transmitted across the network, with possibly hundreds of bytes of information returning to the client runtime for each read.  If AcuServer is being used, the client runtime calls the appropriate file routine in AcuServer via one socket call.  AcuServer knows how to issue all the reads to find the root node of the indexes, to track the needed record through the index tree and to read the data record, and all of this is done on the server with no network traffic.  The requested data record is then transmitted back to the client runtime over the network.  This approach represents significantly less network traffic than having the client runtime itself do each of the I/Os across the network.
+</p>
+<a name="wp1038934"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1035710"> </a><p class="pBody">
+In my Windows NT or Novell environment, I would like AcuServer to serve some of the COBOL objects and data files for my application, but I would also like to access some of the objects and data files via mapped drives.  May I do so?
+</p>
+<a name="wp1038945"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1035711"> </a><p class="pBody">
+Yes.  You can use CODE_PREFIX, FILE_PREFIX, or file aliases in the client runtime configuration file.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CODE_PREFIX @server1:C:\path\sub H:\path\sub<a name="wp1035712"> </a>
+FILE_PREFIX @server1:C:\path\sub H:\path\sub<a name="wp1035713"> </a>
+filea @server1:C:\path\sub<a name="wp1035714"> </a>
+fileb H:\path\sub\fileb<a name="wp1035715"> </a>
+</pre></div>
+<a name="wp1035716"> </a><p class="pBody">
+The first two examples above rely on the fact that a runtime will use the CODE_PREFIX or FILE_PREFIX entries left to right, in a continuing search to find the COBOL object or data file.  The first two examples will direct the client runtime to first ask AcuServer to serve the COBOL objects and data files.  If AcuServer can't find them, the runtime is directed to look for them on the mapped drive.  You could reverse the search by reversing the sequence of the entries in CODE_PREFIX or FILE_PREFIX.  Specifying individual file aliases will be faster than FILE_PREFIX in opening data files.
+</p>
+<a name="wp1038976"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1035717"> </a><p class="pBody">
+Which releases of AcuServer are currently supported by Acucorp?
+</p>
+<a name="wp1039007"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1035718"> </a><p class="pBody">
+Acucorp Technical Support continues to offer telephone and fax support for every release of AcuServer and would be pleased to answer your questions about any version of the product.  However, all releases of AcuServer prior to Version 4.0.0 have been &quot;retired&quot; from our sales portfolio.  This means that the older versions are no longer sold, and that you obtain a correction to a problem uncovered in a retired version by upgrading your site to the latest version that contains the fix.
+</p>
+<a name="wp1039025"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1035719"> </a><p class="pBody">
+Is AcuServer able to print files?
+</p>
+<a name="wp1039038"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1035720"> </a><p class="pBody">
+AcuServer is a file server.  This means that it services <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">file operations</span>.  To print, the runtime submits a <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">process</span> to the printer (in the case of Windows NT, it submits a spooler job).  Because AcuServer is not intended to service (or start) processes, it is not able to print files to a printer.  However, the programmer could use AcuConnect<sup class="cSuperscript">®</sup> in conjunction with AcuServer to achieve this functionality.  Another option is to assign the print file to disk by establishing an alias for the file in the runtime configuration file with the &quot;-f&quot; flag, as shown in this example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+printer1 -f /usr2/users/jsmith/printer1<a name="wp1035721"> </a>
+</pre></div>
+<a name="wp1035722"> </a><p class="pBody">
+This causes a file named printer1 to be created in the /usr2/users/jsmith directory.  This file is a line sequential file with additional formatting characters.
+</p>
+<a name="wp1039055"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1035723"> </a><p class="pBody">
+Is AcuServer &quot;multi-threaded&quot;?
+</p>
+<a name="wp1039066"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1035724"> </a><p class="pBody">
+AcuServer is single-threaded.  AcuServer processes each request to completion, on a first-come-first-served basis.  This means that while AcuServer is engaged in handling a request from one client runtime, other runtime requests are queued in a manner appropriate to the server's operating system, awaiting AcuServer's completion of the current request.  
+</p>
+<a name="wp1035725"> </a><p class="pBody">
+Multiple instances of AcuServer can be executed on the same server or on multiple servers.  Each separate instance of AcuServer is a single-threaded program.
+</p>
+<a name="wp1039080"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1035726"> </a><p class="pBody">
+AcuServer's response to &quot;-info&quot; is larger than will fit on my screen, and I lose the information that scrolls past the top.  How can I see it all?
+</p>
+<a name="wp1039093"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1035727"> </a><p class="pBody">
+Use the properties ability of a command prompt to increase the size of the window or:
+</p>
+<a name="wp1035728"> </a><p class="pBody">
+On UNIX:
+</p>
+<a name="wp1035729"> </a><p class="pBody">
+For the sh and ksh shells, use:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acuserve -info 2&gt; somefilename<a name="wp1035730"> </a>
+</pre></div>
+<a name="wp1039118"> </a><p class="pBody">
+for the csh shell, use:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acuserve -info &gt;&amp; somefilename<a name="wp1035732"> </a>
+</pre></div>
+<a name="wp1035733"> </a><p class="pBody">
+On Windows NT:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acuserve -info 2&gt; somefilename <a name="wp1035734"> </a>
+</pre></div>
+<a name="wp1035735"> </a><p class="pBody">
+Then use any editor to view &quot;somefilename&quot;.  
+</p>
+<a name="wp1039136"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1035736"> </a><p class="pBody">
+The entries I previously used for FILE_PREFIX and CODE_PREFIX in the configuration file when AcuServer was on UNIX don't work for Windows NT (or vice versa).  Which is correct?
+</p>
+<a name="wp1039145"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1035737"> </a><p class="pBody">
+The entries need to comply with operating system naming conventions.
+</p>
+<a name="wp1035738"> </a><p class="pBody">
+On UNIX, the use of the colon and the direction of the slash are relevant:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE_PREFIX @servername:/path<a name="wp1035739"> </a>
+CODE_PREFIX @servername:/path<a name="wp1035740"> </a>
+</pre></div>
+<a name="wp1035741"> </a><p class="pBody">
+On Windows NT, the direction of the slash is not important, but the drive designation must be included along with the pathname:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE_PREFIX @servername:C:\path					<a name="wp1035742"> </a>
+CODE_PREFIX @servername:C:\path<a name="wp1035743"> </a>
+</pre></div>
+<a name="wp1035744"> </a><p class="pBody">
+(where C is a drive letter)
+</p>
+<a name="wp1039178"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1035745"> </a><p class="pBody">
+I'm sure I have sufficient values specified in MAX_FILES, MAX_LOCKS, and LOCKS_PER_FILE in the client configuration file and in the AcuServer configuration file.  But I still can't open all the files my application needs, or my application runs out of locks.  How can I solve this?
+</p>
+<a name="wp1039189"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1035746"> </a><p class="pBody">
+In most UNIX operating environments, there is a limit to the maximum number of files that can be opened by any process and the maximum number of locks that can be held by any process.  These limits are set in the UNIX kernel.  If the settings of these kernel parameters are too low, AcuServer may reach these kernel limits before ever reaching the values you have specified in MAX_FILES, MAX_LOCKS, or LOCKS_PER_FILE.
+</p>
+<a name="wp1035747"> </a><p class="pBody">
+If you have a C compiler on your UNIX system, you might want to make use of a C utility program (numfiles.c) that is available from Acucorp Technical Support.  This utility can help you determine how many files your UNIX system will allow a process to open.  The utility simply attempts to open 1,000 files and reports the number of the last file it was able to open successfully (if you would like to attempt a smaller or larger number of file opens, change the &quot;#define NUM_FILES&quot;).
+</p>
+<a name="wp1039210"> </a><p class="pBody">
+The tuning of the kernel parameters on your UNIX systems is specific to your site and should be determined by your local specialist.  Please contact your UNIX system administrator to research or change the values of the kernel parameters that control maximum files per process or maximum locks per process at your site.
+</p>
+<a name="wp1039215"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1035749"> </a><p class="pBody">
+I'm sure my client system has a valid connection to the server and that the files I'm trying to reach exist, but my attempts to access the files lead to an &quot;access denied&quot; error (File error 37,07 on @servername:/path/sub/file).  How can I solve this?
+</p>
+<a name="wp1039231"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1035750"> </a><p class="pBody">
+This file error indicates that file permissions are probably not set up in a way that allows access.  It may stem from variables set in your client system, so let's examine those variables first.  
+</p>
+<a name="wp1035751"> </a><p class="pBody">
+When a client runtime attempts to connect to AcuServer, it passes two variables to AcuServer: the client machine name and client user name.  AcuServer checks the values of these two variables against the server access file (called AcuAccess by default).  AcuAccess contains one or more access records.  These access records define which users of which clients are permitted access to AcuServer.  AcuAccess is designed to support a wide range of access security, from very open to very restrictive.  You choose the level of security best suited to your needs.
+</p>
+<a name="wp1035752"> </a><p class="pBody">
+The first variable passed from the client is matched against the AcuAccess field &quot;Client-Machine-Name,&quot; and the second is matched against &quot;Client-Username.&quot;  (See <a  href="srv88.htm#wp1035162">section 8.3, &quot;Diagnosing Errors with C$PING,&quot;</a> for a complete description of where those variables come from on various client systems.  <a  href="srv618.htm#wp1035648">Section 6.5, &quot;AcuServer Connection Logic,&quot;</a> describes how AcuServer uses these variables to determine which account will be used on the server for file access.)  AcuAccess will look first for a specific match for the client variables, and (if that's not found) will then look for a wildcard that might allow access to the client.  Let's look at a specific example that shows how you can uncover the source of a permissions problem at your site.
+</p>
+<a name="wp1035753"> </a><p class="pBody">
+Execute AcuServer with a trace file, as shown here:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acuserve -start -e errorfile -t3<a name="wp1035754"> </a>
+</pre></div>
+<a name="wp1035755"> </a><p class="pBody">
+Attempt to connect to AcuServer, then after the failure, examine &quot;errorfile&quot;.  You should see lines that resemble this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acuserve: 08/13/99 17:48:39 - AUTHORIZATION request from user: klevine<a name="wp1035756"> </a>
+&gt;&gt; Socket:0, client:klevine-ntw, pid:282, PASSWORD-ATTEMPTS allowed:3<a name="wp1041430"> </a>
+&gt;&gt;&gt;key 0 = &#39;klevine-ntw         klevine         &#39;<a name="wp1041443"> </a>
+&gt;&gt;&gt;key 0 = &#39;klevine-ntw                         &#39;<a name="wp1043150"> </a>
+&gt;&gt;&gt;key 0 = &#39;*                   klevine         &#39;<a name="wp1043151"> </a>
+&gt;&gt;&gt;key 0 = &#39;*                                   &#39;<a name="wp1043244"> </a>
+&gt;&gt; Mapping user: klevine to local user:guest   acuserve: LookupAccountName for guest<a name="wp1041507"> </a>
+</pre></div>
+<a name="wp1035757"> </a><p class="pBody">
+In the above example, &quot;klevine-ntw&quot; is the variable from the client that is matched to &quot;Client-Machine-Name,&quot; and &quot;klevine&quot; is the variable that is matched to &quot;Client-Username&quot; in AcuAccess.  
+</p>
+<a name="wp1035758"> </a><p class="pBody">
+In the above example, the AcuAccess file on the server had a single access record:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Client Machine Name  Client Username  Local Username   Password   Umask<a name="wp1035759"> </a>
+-------------------  ---------------  --------------   --------   -----<a name="wp1043073"> </a>
+*                                     guest            &lt;none&gt;     002<a name="wp1043086"> </a>
+</pre></div>
+<a name="wp1035760"> </a><p class="pBody">
+Note that the Client-Machine-Name is a wildcard (matches any name).  The Client Username is set to spaces.  As outlined in <a  href="srv618.htm#wp1035648">Section 6.5, &quot;AcuServer Connection Logic,&quot;</a> AcuServer attempts to find an AcuAccess record that has &quot;klevine-ntw&quot; as Client-Machine-Name AND &quot;klevine&quot; as Client-Username.  There is no such record in the file.
+</p>
+<a name="wp1035761"> </a><p class="pBody">
+Next, AcuServer attempts to find a record that has &quot;klevine-ntw&quot; as Client-Machine-Name AND spaces as Client-Username.  There is no such record in the file.
+</p>
+<a name="wp1035762"> </a><p class="pBody">
+Next, AcuServer attempts to find a record that has &quot;*&quot; as Client-Machine-Name AND &quot;klevine&quot; as Client-Username.  There is no such record in the file.
+</p>
+<a name="wp1039751"> </a><p class="pBody">
+Finally, AcuServer attempts to find a record that has &quot;*&quot; as Client-Machine-Name AND spaces as Client-Username.  Such a record exists in the AcuAccess file, with the Local-Username set to &quot;guest&quot;.  
+</p>
+<a name="wp1035764"> </a><p class="pBody">
+AcuServer verifies that &quot;guest&quot; (in the sample above) is valid on this server.  Because &quot;guest&quot; is valid on this server, future file requests from this client will be treated on the server as if &quot;guest&quot; had made the requests.  
+</p>
+<a name="wp1035765"> </a><p class="pBody">
+If the user specified in Local Username of the AcuAccess file is not valid on the server, the AcuServer configuration variable DEFAULT_USER will be used.  If this is a valid user on the server, future file requests from this client will be treated on the server as if DEFAULT_USER had made the requests.
+</p>
+<a name="wp1035766"> </a><p class="pBody">
+(If neither the Local Username of the appropriate record in the AcuAccess file nor DEFAULT_USER is valid on the server, the Authorization Request is denied.)
+</p>
+<a name="wp1035767"> </a><p class="pBody">
+In our example, suppose we received an &quot;access denied&quot; error (File error 37,07 on @servername:/path/sub/file).  We know that the Client-Machine-Name and Client-Username are acceptable for the AcuAccess file shown above.  Thus, in this case the error message must indicate that Local Username &quot;guest&quot; doesn't have permission to access the files the application needs.
+</p>
+<a name="wp1039347"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1035768"> </a><p class="pBody">
+I'm sure my client system has a valid connection to the server and that the files I'm trying to reach exist, but my attempts to access the files lead to a &quot;File not found&quot; error (File error 35 on @servername:/path/sub/file).  How do I solve this?
+</p>
+<a name="wp1039402"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1039391"> </a><p class="pBody">
+This might be caused by insufficient file permissions or by a client runtime that is not AcuServer-enabled.  
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035770"> </a><div class="pSmartList1"><li>Verify that the client runtime being used is AcuServer-enabled.  At a command line prompt, type:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;name-of-your-runtime&gt; -v<a name="wp1035771"> </a>
+</pre></div>
+<a name="wp1035772"> </a><p class="pIndented1">
+Depending on your client platform and runtime version, the response may include a line like:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+AcuServer client<a name="wp1035773"> </a>
+</pre></div>
+<a name="wp1035774"> </a><p class="pIndented1">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Network enabled<a name="wp1035775"> </a>
+</pre></div>
+<a name="wp1035776"> </a><p class="pIndented1">
+Absence of a line similar to one of the two shown above indicates that your runtime does not have the ability to communicate with AcuServer.  Contact your Acucorp sales representative to obtain a runtime that does have that capacity.
+</p>
+<a name="wp1035777"> </a><div class="pSmartList1"><li>See the discussion in the preceding question about how AcuServer authorizes a client runtime.  The most likely cause of this error is that the local user who was finally selected on the server machine does not have &quot;write&quot; permissions in the named directory, and the COBOL program is trying to open the file OUTPUT.</li></div>
+</ol></div>
+<a name="wp1039473"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1035778"> </a><p class="pBody">
+Client runtimes experience slow response times during heavy loads (perhaps sometimes even exhausting the DEFAULT_TIMEOUT value and returning &quot;9D,05&quot;).  Is there anything I can do?
+</p>
+<a name="wp1039486"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1039492"> </a><p class="pBody">
+Here are several options to consider:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035780"> </a><div class="pSmartList1"><li>AcuServer is single-threaded, handling a single request from a single client runtime to completion before attending to requests from other client runtimes, which are queued up in a manner dependent on the server's operating system.  Slow response time may indicate that a single copy of AcuServer cannot keep ahead of the queued requests at times of peak load.  </li></div>
+<a name="wp1035781"> </a><p class="pIndented1">
+If the load on AcuServer is variable, the DEFAULT_TIMEOUT tolerance allowed by client runtimes may be sufficient most of the time, but may be too brief to allow for the times when AcuServer is heavily burdened.  In those cases, setting DEFAULT_TIMEOUT to a higher value can avoid the timeout errors.  (On the other hand, if AcuServer is actually unable to access the data for some other reason-such as insufficient file permissions-then increasing DEFAULT_TIMEOUT only increases the amount of time that transpires before the client runtime returns the error message.)
+</p>
+<a name="wp1035782"> </a><p class="pIndented1">
+If there are sufficient system resources available on the server (memory, CPU cycles, I/O bandpass to multiple disks, and so forth), you may gain relief by acquiring an appropriate license and executing multiple instances of AcuServer on the same server.  On the server, the operating system will use the time while one instance of AcuServer is waiting for the completion of an I/O process to allow another instance of AcuServer to have the CPU.  This second instance of AcuServer will also then issue some I/O command of its own, and (assuming that there are multiple I/O subsystems capable of independent action), the I/O wait time of the multiple instances will interleave.  A server with multiple CPUs may gain even more improvement with this approach.
+</p>
+<a name="wp1035783"> </a><p class="pIndented1">
+If you choose to run multiple instances of AcuServer, please note that there is no automatic balancing of the load among them.  You must direct each specific client runtime to use a particular AcuServer by (a) starting each instance of AcuServer with a particular ACUSERVER_PORT number and (b) setting the client runtime configuration variable of the same name to that value.  
+</p>
+<a name="wp1035784"> </a><div class="pSmartList1"><li>You can choose to execute multiple instances of AcuServer on separate servers.  In this case, you need not start each AcuServer with a separate ACUSERVER_PORT setting, as noted above.  Rather, you would use FILE_PREFIX or file aliases in the client runtime configuration file to direct specific client runtimes to AcuServers running on specific servers.  For example:</li></div>
+<a name="wp1035785"> </a><p class="pIndented1">
+In the runtime configuration file of client A:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE_PREFIX @server1:/path/sub<a name="wp1035786"> </a>
+</pre></div>
+<a name="wp1035787"> </a><p class="pIndented1">
+In the runtime configuration file of client B:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE_PREFIX @server2:/path/sub<a name="wp1035788"> </a>
+</pre></div>
+<a name="wp1035789"> </a><div class="pSmartList1"><li>You could combine approaches 1) and 2) and run multiple instances of AcuServer on multiple servers.  In that case, each instance of AcuServer would need to be started with a ACUSERVER_PORT unique on that server.  FILE_PREFIX or file aliases would be needed in each client runtime configuration file to point to the appropriate server.  Also, ACUSERVER_PORT would need to be set to point to the appropriate instance of AcuServer on that server.  </li></div>
+<a name="wp1035790"> </a><div class="pSmartList1"><li>If there are no runtimes executing on the server, or if the runtimes executing on the server don't use the same files that are being requested by the client runtimes, you can improve performance by directing AcuServer to open data files for exclusive use.  To do this, set the AcuServer configuration variable LOCK_ALL_FILES to 1.  With this variable on, AcuServer will open data files for exclusive use rather than using individual record locks; this will improve throughput.  Please note that this is not a workable option if multiple instances of AcuServer will be executed on the same server and will be accessing the same data files.</li></div>
+<a name="wp1035791"> </a><p class="pIndented1">
+(If the runtimes executing on the server do use the same files as client runtimes, you can direct the runtimes on the server to also use AcuServer, rather than opening the files themselves, by setting USE_LOCAL_SERVER to 1 in their configuration files.  This will allow use of LOCK_ALL_FILES as noted above, so AcuServer can again open the data files for exclusive use, which is faster.
+</p>
+<a name="wp1035792"> </a><div class="pSmartList1"><li>If client runtimes need to open files that may be located in various directories on one server or may be located on various servers, it is faster to use file aliases rather than a FILE_PREFIX that points to multiple paths or multiple servers.  A great deal of network traffic can be avoided in those cases where the file that a client runtime is seeking happens to be in the last directory or on the last server specified in FILE_PREFIX.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE_PREFIX @server1:/path1a/sub1a @server1:/path1b/sub1b @server1:/path1c/sub1c <a name="wp1035793"> </a>
+</pre></div>
+<a name="wp1035794"> </a><p class="pIndented1">
+The above method would be slower at opening files than:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+filea @server1:/path1a/sub1a/filea<a name="wp1039572"> </a>
+fileb @server1:/path1b/sub1b/fileb<a name="wp1041573"> </a>
+filec @server1:/path1c/sub1c/filec<a name="wp1041574"> </a>
+</pre></div>
+<a name="wp1039573"> </a><p class="pIndented1">
+And notice:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE_PREFIX @server1:/path/sub @server2:/path/sub @server3:/path/sub <a name="wp1035797"> </a>
+</pre></div>
+<a name="wp1035798"> </a><p class="pIndented1">
+The above settings would be slower at opening files than:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+filea @server1:/path/sub/filea<a name="wp1035799"> </a>
+fileb @server2:/path/sub/fileb<a name="wp1041593"> </a>
+filec @server3:/path/sub/filec<a name="wp1041594"> </a>
+</pre></div>
+<a name="wp1035800"> </a><div class="pSmartList1"><li>The AcuServer server configuration file can use the following variables:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+V_BUFFERS<a name="wp1039611"> </a>
+V_BUFFER_DATA<a name="wp1041598"> </a>
+V_READ_AHEAD<a name="wp1041599"> </a>
+</pre></div>
+<a name="wp1035802"> </a><p class="pIndented1">
+Setting those variables in the AcuServer server configuration file overrides any setting of the identically named variables in the client runtime configuration file.  These variables have the same function on AcuServer as they have on a client runtime, and they can affect file performance.  Consult Appendix H in the ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic"> </span>manual set for specifics.  
+</p>
+<a name="wp1035803"> </a><div class="pSmartList1"><li>You have chosen AcuServer for its ability to serve COBOL object files and data files for your application.  However, these data accesses may be overloading your network.  If analysis of network performance indicates that network overloading is contributing to your application response time slowdown, consider that some data files in your application might be able to reside on the client system.  The goal is to reduce the amount of traffic over the network.  Some possibilities in this regard are:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1035804"> </a><div class="pSmartList2"><li>If the application creates temporary files, also consider placing them on a local drive.  If the file is useful only on a particular client, and need never be seen by other client systems on the network, you can reduce the network burden by using a file alias in the client configuration file to place this file on a local drive.</li></div>
+<a name="wp1035805"> </a><div class="pSmartList2"><li>If the application has some data files that do need to be seen by every client runtime, but are only updated periodically, consider placing copies of these files on each client system and pointing at them with file aliases.  Again the goal is to reduce network traffic.  You would have to balance the administrative work of getting correct copies of these files placed on each client in a timely fashion against the gain in network performance by keeping access to these files off the network.</li></div>
+</ol></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

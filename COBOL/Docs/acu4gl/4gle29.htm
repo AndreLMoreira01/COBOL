@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:40" />
+  <title>A_SYB_FAST_ACCESS</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gle.htm">Appendix E:  Acu4GL for Sybase Information </a> &gt; <a href="4gle17.htm">E.4  Acu4GL for Sybase Configuration File Variables</a> &gt; </p>
+<a name="wp1049549"> </a><h2 class="pHeading2">
+A_SYB_FAST_ACCESS
+</h2>
+<a name="wp1049552"> </a><p class="pBody">
+A_SYB_FAST_ACCESS is a configuration variable that is set from your COBOL program.  Files opened while this variable is set to a non-zero value are optimized for forward sequential access.  While the default value is &quot;0&quot; (off, false, no), this configuration variable can also take values of  &quot;On&quot; (true, yes).
+</p>
+<a name="wp1049553"> </a><p class="pBody">
+Acucorp implemented this option to substantially improve the READ NEXT performance in some cases.  For example, testing the Acucorp benchmark program <b class="cBold">iobench.cbl</b> in three different ways, yielded the following results for the READ AND SKIP operation:
+</p>
+<a name="wp1049572"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1049557"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; vertical-align: baseline">No FAST_ACCESS:</span>
+</p>
+</td>
+    <td><a name="wp1049559"> </a><p class="pCellBody">
+72.76 seconds
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049561"> </a><p class="pCellBody">
+FAST_ACCESS, ROWCOUNT 0:
+</p>
+</td>
+    <td><a name="wp1049563"> </a><p class="pCellBody">
+148.88 seconds
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049565"> </a><p class="pCellBody">
+FAST_ACCESS, ROWCOUNT 10:&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1049567"> </a><p class="pCellBody">
+8.09 seconds  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1049573"> </a><p class="pBody">
+(10 is the perfect value for ROWCOUNT in this benchmark, because the program does a START, 10 READ NEXT operations, and does it again.)
+</p>
+<a name="wp1053635"> </a><p class="pBody">
+For certain reporting programs, this option can dramatically improve performance.  However, please note the following restrictions.
+</p>
+<a name="wp1049574"> </a><p class="pBody">
+Files must be opened INPUT or opened IO with MASS-UPDATE.  FAST_ACCESS gives a performance boost only when no locking is required.  In files that allow locking, a record must be reread after being locked; this prevents an uninterrupted forward sequential traversal.
+</p>
+<a name="wp1049575"> </a><p class="pBody">
+Files opened with FAST_ACCESS use a dedicated connection for reading from the file.  Since connections are memory-intensive (both on the client and on the server), the number of files opened with FAST_ACCESS should be kept to a minimum.  In the event that opening a connection fails, the file open still continues, but FAST_ACCESS mode is disabled, with the following message appearing in the trace file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FAST_ACCESS mode not available.<a name="wp1049576"> </a>
+</pre></div>
+<a name="wp1049577"> </a><p class="pBody">
+Also, a new connection technically uses a new concurrent Sybase license from Sybase.
+</p>
+<a name="wp1049578"> </a><p class="pBody">
+Files open with FAST_ACCESS will not participate in transactions, and may even cause the runtime to hang if transactions are used, especially if the FAST_ACCESS file is updated within the transaction.  We suggest that if you use transactions, you don't use FAST_ACCESS.  At the minimum, if you use transactions, we suggest that you use FAST_ACCESS only for files open INPUT.
+</p>
+<a name="wp1049579"> </a><p class="pBody">
+Files open with FAST_ACCESS can not be read backwards.  In other words, READ PREVIOUS does not work with FAST_ACCESS files.  In fact, if you try to READ PREVIOUS on a file opened with FAST_ACCESS, you get an error 9D,20.
+</p>
+<a name="wp1049580"> </a><p class="pBody">
+The ANSI standard states that READ NEXT after a READ will return the next record.  Some applications depend on this, and some applications just want to read dynamically from a file, and don't use the positioning facility.  Because of this ambiguity, files that are open with FAST_ACCESS cannot be READ dynamically.  If you try to READ on a file open with FAST_ACCESS, you get an error 9D,20.
+</p>
+<a name="wp1049581"> </a><p class="pBody">
+There are no restrictions on WRITE, REWRITE, and DELETE.  However, these operations use the cursor-based connection, not the dedicated connection.  This is the reason transactions may hang.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

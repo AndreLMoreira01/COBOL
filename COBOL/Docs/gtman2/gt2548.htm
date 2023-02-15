@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:34" />
+  <title>5.11.1  Grid: Common Properties</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt25.htm">Chapter 5:  Control Types Reference</a> &gt; <a href="gt2547.htm">5.11  Grid</a> &gt; </p>
+<a name="wp1162022"> </a><h2 class="pHeading2">
+5.11.1  Grid: Common Properties
+</h2>
+<a name="wp1162023"> </a><h3 class="pHeadingRef">
+TITLE
+</h3>
+<a name="wp1162026"> </a><p class="pBody">
+Grids do not have titles.
+</p>
+<a name="wp1162027"> </a><h3 class="pHeadingRef">
+VALUE
+</h3>
+<a name="wp1162030"> </a><p class="pBody">
+A grid does not have a (single) value.  You can set or inquire the contents of each cell using the CELL-DATA property described below.  You can also retrieve an entire record at once with the RECORD-DATA property described below.  
+</p>
+<a name="wp1162031"> </a><h3 class="pHeadingRef">
+SIZE
+</h3>
+<a name="wp1162034"> </a><p class="pBody">
+The SIZE of a grid is the number of characters across that you want to be visible in the grid.  This is measured using the grid's default font.  The LINES of a grid is the number of rows you want to be visible.  Note that this is not the same as the number of records in the case where a record occupies more than one row.  Normally, you should ensure that the LINES setting of a grid is an even multiple of the number of rows per record.  
+</p>
+<a name="wp1162035"> </a><p class="pBody">
+Space is added as needed to accommodate the grid's scroll bars and any border or grid lines.  
+</p>
+<a name="wp1162036"> </a><h3 class="pHeadingRef">
+COLOR
+</h3>
+<a name="wp1162039"> </a><p class="pBody">
+Grids will use any specified foreground or background color.  If either color is omitted, then that color uses a system-dependent default value. Under Microsoft Windows, the default values are determined by the settings defined by the user in the Control Panel (usually black on bright-white).  Note that the grid's &quot;color&quot; is its default color.  You can override this default for a specific row, column, or cell using various special properties (see ROW-COLOR, COLUMN-COLOR, CELL-COLOR, CURSOR-COLOR, HEADING-COLOR and ROW-COLOR-PATTERN below).  The grid uses a priority rule for determining which color to use when several are specified for a cell (for example, a cell that has a ROW-COLOR and a different COLUMN-COLOR specified for it).  This is discussed in detail in the introduction to the grid above.  
+</p>
+<a name="wp1213827"> </a><h3 class="pHeadingRef">
+EVENT-LIST, EXCLUDE-EVENT-LIST
+</h3>
+<a name="wp1213828"> </a><p class="pBody">
+EVENT-LIST is an exclusive list of events that are either sent to or withheld (blocked) from the program depending on the value of EXCLUDE-EVENT-LIST.  See section 6.4.9, &quot;Common Screen Options,&quot; in Book 3.
+</p>
+<a name="wp1162041"> </a><h3 class="pHeadingRef">
+STYLES
+</h3>
+<a name="wp1162044"> </a><h5 class="pHeading4">
+3-D
+</h5>
+<a name="wp1162045"> </a><p class="pBody">
+Displays 3-D shading around the border of the control. (<em class="cEmphasis">create, modify</em>)
+</p>
+<a name="wp1162048"> </a><h5 class="pHeading4">
+ADJUSTABLE-COLUMNS   
+</h5>
+<a name="wp1162049"> </a><p class="pBody">
+Allows the user to change the size of the columns by dragging the column dividers with the mouse.  The grid must have only one row per record for this style to have any effect.  When the grid has column headers, the user will be able to change the column widths only by dragging the header dividers (this is to reduce the likelihood of the user's accidentally changing a column's width when just clicking on a cell).  If the grid does not have column headers, then the user can drag any part of the divider.  
+</p>
+<a name="wp1162050"> </a><p class="pBody">
+The minimum column size is &quot;1&quot;.  The maximum is the visible portion of the grid.  If the grid allows for horizontal scrolling, then the VIRTUAL-WIDTH property will change as the user changes column sizes.  When the user changes a column size, your program will be informed via a MSG-COL-WIDTH-CHANGED message.  Because grids use integer character widths for measuring columns, the user will not be able to place the column divider at just any pixel location.  The grid will adjust the location given by the user to the nearest character position.  (<em class="cEmphasis">create, modify</em>)
+</p>
+<a name="wp1208838"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>Single column grids are not adjustable (the column already occupies all of the grid's display space).  If a single column grid has the ADJUSTABLE-COLUMNS property, the column may appear to be adjustable, but when the user releases the mouse after dragging to change the width, the column will return to its original width.
+<hr />
+</p>
+<a name="wp1162053"> </a><h5 class="pHeading4">
+BOXED   
+</h5>
+<a name="wp1162054"> </a><p class="pBody">
+Displays a border around the grid.  If neither BOXED nor NO-BOX is specified, then the default is machine-dependent.  Under Windows, a box is displayed.  (<em class="cEmphasis">create, modify</em>)
+</p>
+<a name="wp1162057"> </a><h5 class="pHeading4">
+CENTERED-HEADINGS   
+</h5>
+<a name="wp1162058"> </a><p class="pBody">
+Draws column headings centered, regardless of the alignment of the rest of the column.  If this is not specified, then the column headings match the alignment of the corresponding column.  Note that the alignment of row headings is specified as the first entry in the ALIGNMENT property, so there is no need for any special row heading alignment styles.  (<em class="cEmphasis">create, modify</em>)
+</p>
+<a name="wp1162061"> </a><h5 class="pHeading4">
+COLUMN-HEADINGS   
+</h5>
+<a name="wp1162062"> </a><p class="pBody">
+Causes the first record to be treated as column headers.  See the discussion on headers above for details.  (<em class="cEmphasis">create, modify</em>)
+</p>
+<a name="wp1162065"> </a><h5 class="pHeading4">
+HSCROLL   
+</h5>
+<a name="wp1162066"> </a><p class="pBody">
+Specifies a horizontally scrolling grid.  A grid with this style may not specify more than one row per record (see DISPLAY-COLUMNS below).  (<em class="cEmphasis">create, modify</em>)
+</p>
+<a name="wp1162069"> </a><h5 class="pHeading4">
+NO-BOX   
+</h5>
+<a name="wp1162070"> </a><p class="pBody">
+Causes the grid to display without a surrounding border.  See BOXED.  (<em class="cEmphasis">create, modify</em>)
+</p>
+<a name="wp1162073"> </a><h5 class="pHeading4">
+PAGED  
+</h5>
+<a name="wp1162074"> </a><p class="pBody">
+Makes the grid a &quot;paged&quot; grid. Paged grids are typically used when the number of records in the grid is too many for a normal grid.  When you set this style for a grid that contains data, records above the first visible record and records after the last visible record are deleted.  See <a  href="gt2320.htm#wp1026506">section 3.9</a> for a complete description of paged grids.  <em class="cEmphasis">(create, modify)</em>
+</p>
+<a name="wp1162080"> </a><h5 class="pHeading4">
+ROW-HEADINGS   
+</h5>
+<a name="wp1162081"> </a><p class="pBody">
+Treats the first column of each record as a row header.  Note that this is typically useful only when you have one record per row.  See the discussion on headers above for more details.  (<em class="cEmphasis">create, modify</em>)
+</p>
+<a name="wp1162084"> </a><h5 class="pHeading4">
+TILED-HEADINGS   
+</h5>
+<a name="wp1162085"> </a><p class="pBody">
+Draws the headings with some shading that causes the headings to look like tiles.  This gives a light 3-D look to the grid.  This style is effective only if the background color for the heading cells is low-intensity and not black.  This looks best if you set the heading's background color to low-intensity white (<em class="cEmphasis">i.e., </em>gray) and set the heading's divider color to black.  Using the constants found in the COPY library &quot;acucobol.def&quot;, you can most easily specify this with:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+HEADING-COLOR = BCKGRND-WHITE, <a name="wp1162086"> </a>
+HEADING-DIVIDER-COLOR = BLACK<a name="wp1162087"> </a>
+</pre></div>
+<a name="wp1162088"> </a><p class="pBody">
+<em class="cEmphasis">(create, modify)</em>
+</p>
+<a name="wp1162091"> </a><h5 class="pHeading4">
+USE-TAB   
+</h5>
+<a name="wp1162092"> </a><p class="pBody">
+Causes the grid to use the Tab and Backtab keys as navigation keys within the grid.  Without this style, the Tab and Backtab keys move between the grid and other controls in the grid's window.  (<em class="cEmphasis">create, modify</em>)
+</p>
+<a name="wp1162095"> </a><h5 class="pHeading4">
+VSCROLL   
+</h5>
+<a name="wp1168914"> </a><p class="pBody">
+Specifies a vertical scroll bar for the grid.  Grids without vertical scroll bars may still contain more records than seen on the screen, and the user can still reach these records using the keyboard.  The usual reason for creating a grid without a vertical scroll bar is if you are going to limit the number of records to an amount that fits on the screen (see NUM-ROWS below).  (<em class="cEmphasis">create, modify</em>)  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

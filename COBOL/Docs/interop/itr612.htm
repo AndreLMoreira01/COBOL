@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>6.3.3.1  The &quot;sub&quot; interface</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr64.htm">6.3  Calling C Programs From COBOL</a> &gt; <a href="itr611.htm">6.3.3  Calling C Programs via the Interface Method</a> &gt; </p>
+<a name="wp1121490"> </a><h2 class="pHeading3">
+6.3.3.1  The &quot;sub&quot; interface
+</h2>
+<a name="wp1148543"> </a><p class="pBody">
+Every time a CALL statement executes, it calls a C routine called &quot;sub&quot;.  This routine is passed the name of the called program and its USING parameters.  You may modify this routine to recognize the call name that you want to assign to a C subprogram and perform the appropriate code.  This routine is contained in the &quot;sub.c&quot; file.  
+</p>
+<a name="wp1121494"> </a><p class="pBody">
+The &quot;sub&quot; routine is passed two arguments: argc and argv.  The argv parameter is an array of character pointers.  The argc parameter is an integer count of the number of elements in the argv array.  The first element in argv points to the call name exactly as it appears in the COBOL CALL statement.  This name is terminated with a NULL character.  The remaining elements of argv point to each of the USING arguments.  
+</p>
+<a name="wp1121495"> </a><p class="pBody">
+The &quot;sub&quot; function should check to see if the called name is one that should be handled in C.  It can do this by comparing &quot;argv[0]&quot; with the desired routine name using the &quot;strcmp&quot; C library routine.  If the routine is one that is not handled by a C subroutine, then &quot;sub&quot; should return a negative value.  This indicates to <b class="cBold">runcbl</b> that the CALL statement has not been fulfilled and that it should try to find a COBOL subprogram by that name.  If the routine is handled by the &quot;sub&quot; function, then a zero should be returned.  In this case, <b class="cBold">runcbl</b> assumes that the CALL statement has been completed and it continues with the next statement.  Finally, if &quot;sub&quot; returns a positive value, then <b class="cBold">runcbl</b> executes a STOP RUN, returning the value to the operating system as <b class="cBold">runcbl</b>'s exit value.  See &quot;sub.c&quot; for an example of this interface.  
+</p>
+<a name="wp1121497"> </a><p class="pBody">
+When processing a USING parameter, note that the C subroutine must know what internal format the parameter uses.  Also note, that in COBOL, literal values are <em class="cEmphasis">not</em> terminated by a NULL character.  Thus, you should not treat a passed value as a C string unless the calling program ensures that the passed value is NULL terminated.  This can be accomplished in the following fashion:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+STRING   &quot;literal&quot;, LOW-VALUES, DELIMITED BY SIZE<a name="wp1121498"> </a>
+         INTO ITEM-1<a name="wp1121499"> </a>
+CALL NAME-1 USING ITEM-1.<a name="wp1121500"> </a>
+</pre></div>
+<a name="wp1121501"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The &quot;sub&quot; interface provides compatibility with the RM/COBOL-85 interface.  At run time &quot;sub&quot; performs a linear search for a called routine.  This can be inefficient if your program calls a large number of C routines.  We recommend that you use the &quot;sub85&quot; or &quot;direct&quot; interface.
+<hr />
+</p>
+<a name="wp1121502"> </a><h3 class="pHeadingRef">
+Placing the &quot;sub&quot; routine in a DLL
+</h3>
+<a name="wp1121506"> </a><p class="pBody">
+In addition to linking the &quot;sub&quot; function directly into the runtime, Windows users may place the &quot;sub&quot; routine into one or more DLL files.
+</p>
+<a name="wp1121507"> </a><p class="pBody">
+You must specify which routine to use as the &quot;sub&quot; interface routine by setting the DLL_SUB_INTERFACE configuration variable.  Then you call the DLL from your COBOL program. The runtime loads the DLL, then checks DLL_SUB_INTERFACE for the name of the routine to use as the &quot;sub&quot; interface routine.  For example, the following C program (subdll.c) is the source for the DLL that contains the &quot;sub&quot; interface, called AcuSub in this example: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#include &lt;stdio.h&gt;<a name="wp1121510"> </a>
+#include &lt;windows.h&gt;<a name="wp1121511"> </a>
+#include &quot;sub.h&quot;<a name="wp1121512"> </a>
+<a name="wp1121513"> </a>
+#define   DllExport             __declspec(dllexport)<a name="wp1121514"> </a>
+#define   CCallingConvention    __cdecl<a name="wp1121515"> </a>
+<a name="wp1121516"> </a>
+DllExport int CcallingConvention<a name="wp1121517"> </a>
+AcuSub( int argc, char *argv[] )<a name="wp1121518"> </a>
+{<a name="wp1121519"> </a>
+<a name="wp1121520"> </a>
+    if ( strcmp( argv[0], &quot;MSGBOX&quot; ) == 0 ) {<a name="wp1121521"> </a>
+             MessageBox( NULL, argv[1], NULL, MB_OK );<a name="wp1121522"> </a>
+             return Okay;<a name="wp1121523"> </a>
+    }<a name="wp1121524"> </a>
+<a name="wp1121525"> </a>
+    return NotFound;<a name="wp1121526"> </a>
+<a name="wp1121527"> </a>
+}   /* AcuSub */<a name="wp1121528"> </a>
+<a name="wp1121529"> </a>
+/* end of subdll.c */<a name="wp1121530"> </a>
+</pre></div>
+<a name="wp1121531"> </a><p class="pBody">
+The following COBOL program (&quot;callsub.cbl&quot;) shows how the DLL is loaded and called:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+program-id.  test.<a name="wp1121532"> </a>
+working-storage section.<a name="wp1121533"> </a>
+<a name="wp1121534"> </a>
+77  message-text          pic x(80).<a name="wp1121535"> </a>
+<a name="wp1121536"> </a>
+procedure division.<a name="wp1121537"> </a>
+main-logic.<a name="wp1121538"> </a>
+    display standard window.<a name="wp1121539"> </a>
+<a name="wp1121540"> </a>
+* Load DLL and establish &quot;sub&quot; interface<a name="wp1121541"> </a>
+<a name="wp1121542"> </a>
+    set environment &quot;dll-sub-interface&quot; to &quot;AcuSub&quot;.<a name="wp1121543"> </a>
+    call &quot;subdll&quot;.<a name="wp1121544"> </a>
+<a name="wp1121545"> </a>
+* Call &quot;MSGBOX&quot;, one of the routines handled by &quot;AcuSub&quot; <a name="wp1121546"> </a>
+<a name="wp1121547"> </a>
+    move &quot;This is a test message&quot; to message-text.<a name="wp1121548"> </a>
+    inspect message-text replacing trailing spaces by <a name="wp1121549"> </a>
+        low-values.<a name="wp1121550"> </a>
+    call &quot;msgbox&quot; using message-text.<a name="wp1121551"> </a>
+<a name="wp1121552"> </a>
+    accept omitted.<a name="wp1121553"> </a>
+    stop run.<a name="wp1121554"> </a>
+</pre></div>
+<a name="wp1121555"> </a><p class="pBody">
+If DLL_SUB_INTERFACE is blank when the DLL is loaded, no &quot;sub&quot; routine is used in that DLL.
+</p>
+<a name="wp1121556"> </a><p class="pBody">
+When a CALL statement executes, the &quot;sub&quot; interface routine in each loaded DLL is called, in the order that they were loaded, until one of them returns that it has executed the subroutine.  If none of the DLLs returns success, the normal, or linked-in, &quot;sub&quot; routine is called.  If that does not return success, then the standard calling sequence resumes.  As soon as any routine returns success, the CALL is considered satisfied and no further processing of the CALL is done.  
+</p>
+<a name="wp1121557"> </a><p class="pBody">
+If you CANCEL a DLL with an active &quot;sub&quot; interface, that interface is removed from the list of available interfaces and the DLL is unloaded.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

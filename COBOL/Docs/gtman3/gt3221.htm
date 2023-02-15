@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:44" />
+  <title>2.4.2  The REPLACE Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt32.htm"><br />Chapter 2:  Program Structure</a> &gt; <a href="gt3219.htm">2.4  Source Management Statements</a> &gt; </p>
+<a name="wp1034779"> </a><h2 class="pHeading2">
+2.4.2  The REPLACE Statement
+</h2>
+<a name="wp1034781"> </a><p class="pBody">
+The REPLACE statement provides the ability to modify source text selectively.  Text replacement is accomplished by the compiler immediately prior to source compilation.
+</p>
+<a name="wp1034782"> </a><p class="pBody">
+REPLACE is frequently used to help facilitate single source code maintenance across multiple COBOL versions, or multiple hardware or operating system environments.  REPLACE may be used wherever there is a need to make temporary text substitutions for compilation purposes.
+</p>
+<a name="wp1034783"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This manual entry includes code examples and highlights for first-time users following the General Rules section.
+<hr />
+</p>
+<a name="wp1034784"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<a name="wp1034785"> </a><h3 class="pHeadingRef">
+Format 1
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">REPLACE</u>  {  { old-text <u class="cUnderline">BY</u> new-text                }  } ... ] .<a name="wp1034786"> </a>
+         {  { {<u class="cUnderline">LEADING</u> } literal-1 <u class="cUnderline">BY</u> {literal-2} }  }<a name="wp1034787"> </a>
+         {  { {<u class="cUnderline">TRAILING</u>}              {<u class="cUnderline">SPACE</u>    } }  }<a name="wp1034788"> </a>
+         {  {                         {<u class="cUnderline">SPACES</u>   } }  }<a name="wp1034789"> </a>
+</pre></div>
+<a name="wp1034790"> </a><h3 class="pHeadingRef">
+Format 2
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">REPLACE</u> <u class="cUnderline">OFF</u>.<a name="wp1034791"> </a>
+</pre></div>
+<a name="wp1034792"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034794"> </a><div class="pSmartList1"><li>The REPLACE statement must be terminated by a period.  The period is part of the REPLACE statement and does not otherwise affect the program. </li></div>
+<a name="wp1034795"> </a><div class="pSmartList1"><li>The REPLACE statement may be used anywhere a separator may occur.  It may be placed in Area A or Area B.  </li></div>
+<a name="wp1034796"> </a><div class="pSmartList1"><li><em class="cEmphasis">Old-text</em> and <em class="cEmphasis">new-text</em> may be any of the following:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1034797"> </a><div class="pSmartList2"><li>A series of text words placed between &quot;==&quot; delimiters.  For example &quot;==WORD-1 WORD-2==&quot; specifies a two-word sequence.  In old-text, at least one word must be specified.  In new-text, zero words may be used.  </li></div>
+<a name="wp1034798"> </a><div class="pSmartList2"><li>A numeric or nonnumeric literal.</li></div>
+<a name="wp1034799"> </a><div class="pSmartList2"><li>A data name, including qualifiers, subscripts and reference modification.  </li></div>
+<a name="wp1034800"> </a><div class="pSmartList2"><li>Any single text word.  </li></div>
+</ol></div>
+<a name="wp1034801"> </a><div class="pSmartList1"><li>For purposes of the REPLACE statement, a &quot;text word&quot; is a contiguous sequence of characters in Area A or Area B that form one of the following:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1034802"> </a><div class="pSmartList2"><li>A separator, except for: space, a pseudo-text delimiter (&quot;==&quot;), and the opening and closing delimiters for nonnumeric literals.</li></div>
+<a name="wp1034803"> </a><div class="pSmartList2"><li>A numeric or nonnumeric literal.</li></div>
+<a name="wp1034804"> </a><div class="pSmartList2"><li>Any of a sequence of characters except comment lines and the word &quot;COPY,&quot; bounded by separators, which is neither a separator nor a literal. </li></div>
+</ol></div>
+<a name="wp1034805"> </a><div class="pSmartList1"><li><em class="cEmphasis">Literal-1</em> and <em class="cEmphasis">literal-2</em> are nonnumeric literals.</li></div>
+<a name="wp1034806"> </a><div class="pSmartList1"><li>The phrases SPACE and SPACES are equivalent. When one of these is used instead of <em class="cEmphasis">literal-2</em>, <em class="cEmphasis">literal-1</em> is deleted and no spaces are actually substituted. </li></div>
+</ol></div>
+<a name="wp1034807"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034808"> </a><div class="pSmartList1"><li>The REPLACE statement specifies conversion of source statements containing <em class="cEmphasis">old-text</em> into <em class="cEmphasis">new-text</em>.  The scope of a REPLACE statement continues from the first text word following the REPLACE statement to the beginning of the next REPLACE statement, or the end of the program.  A Format 2 REPLACE statement terminates the scope of any preceding REPLACE statement. </li></div>
+<a name="wp1034810"> </a><div class="pSmartList1"><li>REPLACE statements are processed after COPY statements.  The text produced by the action of a REPLACE statement must not contain a REPLACE statement.  </li></div>
+<a name="wp1034811"> </a><div class="pSmartList1"><li>Within the scope of a REPLACE statement, any source text that matches <em class="cEmphasis">old-text</em> is logically replaced by <em class="cEmphasis">new-text</em>.  The comparison operation that determines text replacement is done as follows:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1034812"> </a><div class="pSmartList2"><li>The leftmost source text word is the first text word used for comparison.  Starting with this word, and the first old-text specified, the entire old-text sequence is compared with an equivalent number of contiguous source text words.</li></div>
+<a name="wp1034813"> </a><div class="pSmartList2"><li>Old-text matches the source text only if the ordered sequence of text words of old-text is identical to the ordered sequence of source text words.  For purposes of matching, a separator semicolon, comma, or space is considered a space, and a sequence of one or more spaces is considered a single space.  Also, lower-case characters are considered the same as upper-case characters in all text words except for nonnumeric literals.  </li></div>
+<a name="wp1034814"> </a><div class="pSmartList2"><li>If no match occurs, the comparison is repeated for each old-text specified until a match is found or each old-text has been tried.</li></div>
+<a name="wp1034815"> </a><div class="pSmartList2"><li>After all old-text comparisons have been tried and no match has occurred, the next source text word is then considered as the leftmost word and the cycle is repeated.  </li></div>
+<a name="wp1034816"> </a><div class="pSmartList2"><li>Whenever a match occurs between the source text and old-text, the corresponding new-text replaces old-text in the source program.  The source text word that follows the rightmost word that participated in the match then becomes the new leftmost word for subsequent cycles.</li></div>
+<a name="wp1034817"> </a><div class="pSmartList2"><li>When you are using the LEADING/TRAILING option, a match between library text and <em class="cEmphasis">literal-1 </em>will replace only the specific LEADING or TRAILING characters indicated in the REPLACE statement with the text in <em class="cEmphasis">literal-2</em>. These characters can be a substring or a whole word. If a SPACE or SPACES phrase is used, the LEADING or TRAILING characters are deleted.  </li></div>
+<a name="wp1034818"> </a><div class="pSmartList2"><li>The comparison cycle continues until the rightmost text word in the REPLACE scope has either participated in a match or has been the leftmost word of a comparison cycle.</li></div>
+</ol></div>
+<a name="wp1034819"> </a><div class="pSmartList1"><li>Comment lines and blank lines occurring in <em class="cEmphasis">old-text</em> are ignored for purposes of matching.  </li></div>
+<a name="wp1034820"> </a><div class="pSmartList1"><li>Debugging lines may appear in <em class="cEmphasis">old-text</em>.  Text words appearing in a debugging line participate in the matching rules as if the line were a normal text line.</li></div>
+<a name="wp1034821"> </a><div class="pSmartList1"><li>When <em class="cEmphasis">new-text</em> is copied into the source program, the first word of <em class="cEmphasis">new-text</em> is copied into the same Area as the leftmost word of the replaced text.  Subsequent words of <em class="cEmphasis">new-text</em> are copied into Area B.  </li></div>
+</ol></div>
+<a name="wp1034822"> </a><h3 class="pHeadingRef">
+Code Examples
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+REPLACE <a name="wp1034823"> </a>
+   ==STANDARD-ALPHA==    BY   ==ALPHA-UPPER-CASE==<a name="wp1034824"> </a>
+   ==TABLE-SIZE==        BY   ==MAX-TABLE-SIZE==<a name="wp1034825"> </a>
+   ==PAGE-BUFFER-SIZE==  BY   ==SHORT-PAGE-SIZE==<a name="wp1034826"> </a>
+   ==WITH-DEBUG-MODE==   BY   ====.<a name="wp1034827"> </a>
+*delete matched text<a name="wp1034828"> </a>
+...<a name="wp1034829"> </a>
+REPLACE OFF.<a name="wp1034830"> </a>
+*turns off REPLACE <a name="wp1034832"> </a>
+</pre></div>
+<a name="wp1034834"> </a><h3 class="pHeadingRef">
+Highlights for first-time users
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034835"> </a><div class="pSmartList1"><li>Multiple REPLACE statements are permitted.  The REPLACE statement can appear anywhere in the program source.</li></div>
+<a name="wp1034836"> </a><div class="pSmartList1"><li>The substitution actions of the REPLACE statement continue to affect program source until the REPLACE statement is either superseded by a new REPLACE statement or turned off by the REPLACE OFF statement.</li></div>
+<a name="wp1034837"> </a><div class="pSmartList1"><li>REPLACE statements are processed after COPY statements. </li></div>
+<a name="wp1034838"> </a><div class="pSmartList1"><li>REPLACE statements can not contain COPY statements.  COPY statements may contain REPLACE statements.</li></div>
+<a name="wp1034839"> </a><div class="pSmartList1"><li>The replaced text does <em class="cEmphasis">not</em> appear in the listing produced by the ACUCOBOL-GT compiler (&quot;-Lo <em class="cEmphasis">filename</em>&quot; compiler argument).  This is a common source of confusion for users who check the compilation listing file for verification that the replacing action occurred.  You can, however, use the &quot;-Lp&quot; compiler option to create an output file that includes the replaced text.  See &quot;-Lp&quot; in section 2.1.3 of Book 1.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

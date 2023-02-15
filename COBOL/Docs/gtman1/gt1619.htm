@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.1.7  Performance Considerations</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt162.htm">6.1 Handling Files</a> &gt; </p>
+<a name="wp1040247"> </a><h2 class="pHeading2">
+6.1.7  Performance Considerations
+</h2>
+<a name="wp1032671"> </a><p class="pBody">
+File performance varies considerably from machine to machine and from program to program.  This section discusses general measures that can be taken to improve file handling performance for most situations.
+</p>
+<a name="wp1032672"> </a><p class="pBody">
+Generally speaking, sequential files are fastest and indexed files are slowest.  Relative files are usually in between in performance, but are generally close to sequential files in speed.  
+</p>
+<a name="wp1032674"> </a><p class="pBody">
+When designing indexed files, you should try to keep the size and number of keys to a minimum.  Each key added to a file significantly increases the processing time required.  The key size is important because it affects how many keys can be stored in one disk block.  If you are faced with a decision that trades off making a new key or making an old key larger, it usually is better to make the old key larger.  
+</p>
+<a name="wp1032676"> </a><p class="pBody">
+One important and often overlooked aspect of file performance is file locking.  Generally speaking, the more restrictive the access to a file, the more efficiently that file can be processed.  On some machines, the difference can be quite dramatic.  For example, under RMS, writes to a sequential file are usually at least five times faster if that file is locked for exclusive use.  If this is a report file, there is no reason not to lock the file, and the report program will run much faster if you do so.  
+</p>
+<a name="wp1032677"> </a><p class="pBody">
+As a general rule of thumb, you should lock files as restrictively as you can, given the needs of your application.  Note that if you have a file that is read by many programs, but rarely or never written to, you can open the file for INPUT ALLOWING READERS.  This allows many users to access the file, but also tells the runtime system that it is not being updated by anyone.  The runtime system can use this knowledge to buffer the file more effectively.  One common form of file where this technique can be used is a file that contains menu options or screen layouts.  
+</p>
+<a name="wp1032680"> </a><p class="pBody">
+On the other hand, you should lock records only when you need to.  While locking a record is generally fairly fast, the time to do so increases proportionally to the number of locks you are holding.  Also, on networked file systems, locking records can be fairly slow because the networked machines must all be informed of the lock.  Note that this is another reason to lock files when possible: when the file is locked, the runtime does not need to establish locks on individual records.  
+</p>
+<a name="wp1032682"> </a><p class="pBody">
+If you have enough memory, you can also increase your indexed file performance by increasing the V-BUFFERS configuration option described in Appendix H.  This will increase the number of disk buffers used by the runtime system to hold key information.  
+</p>
+<a name="wp1032683"> </a><p class="pBody">
+Finally, you should read the information on the MASS-UPDATE option described in <a  href="gt1617.htm#wp1032446">section 6.1.6.2</a>, as well as that on the Bulk Addition option described in <a  href="gt1618.htm#wp1032461">section 6.1.6.3</a>.  Using these options can significantly improve performance on some machines.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

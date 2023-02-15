@@ -1,0 +1,402 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$OPENSAVEBOX Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1036313"> </a><h2 class="pHeading2">
+C$OPENSAVEBOX Routine
+</h2>
+<a name="wp1197787"> </a><p class="pBody">
+C$OPENSAVEBOX provides a facility for creating an Open or Save As dialog box.  These dialogs allow the user to browse the system's file directories and select a file or folder.  
+</p>
+<a name="wp1199527"> </a><p class="pBody">
+This routine can be used by applications that are deployed in Acucorp's Thin Client environment.  In this scenario, C$OPENSAVEBOX allows the user to choose a directory or file on the <em class="cEmphasis">client</em> (Windows) machine.
+</p>
+<a name="wp1197796"> </a><p class="pBody">
+Not all systems support C$OPENSAVEBOX.  However, you can determine at runtime whether the host system supports it.  
+</p>
+<a name="wp1197789"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$OPENSAVEBOX&quot; <a name="wp1036322"> </a>
+    USING OP-CODE, OPENSAVE-DATA<a name="wp1036323"> </a>
+    GIVING OPENSAVE-STATUS<a name="wp1036324"> </a>
+</pre></div>
+<a name="wp1036325"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1036326"> </a><p class="pBody">
+<b class="cBold">OP-CODE   </b>Numeric value
+</p>
+<a name="wp1036327"> </a><p class="pBody">
+Selects which C$OPENSAVEBOX function to perform.  The values are described below.
+</p>
+<a name="wp1036330"> </a><p class="pBody">
+<b class="cBold">OPENSAVE-DATA</b>   Group item as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  OPENSAVE-DATA.<a name="wp1036331"> </a>
+    03  OPNSAV-FILENAME         PIC X(256).<a name="wp1036332"> </a>
+    03  OPNSAV-FLAGS            PIC 9(4) COMP-X.<a name="wp1036333"> </a>
+    03  OPNSAV-DEFAULT-EXT      PIC X(12).<a name="wp1036334"> </a>
+    03  OPNSAV-TITLE            PIC X(80).<a name="wp1036335"> </a>
+    03  OPNSAV-FILTERS          PIC X(512).<a name="wp1036336"> </a>
+    03  OPNSAV-DEFAULT-FILTER   PIC 9(4) COMP-X.<a name="wp1036337"> </a>
+    03  OPNSAV-DEFAULT-DIR      PIC X(128).<a name="wp1036338"> </a>
+    03  OPNSAV-BASENAME         PIC X(128).<a name="wp1036339"> </a>
+</pre></div>
+<a name="wp1260618"> </a><p class="pBody">
+This item holds the results of a C$OPENSAVEBOX routine call. The values are described below.
+</p>
+<a name="wp1036341"> </a><p class="pBody">
+<b class="cBold">OPENSAVE-STATUS   </b>Signed numeric data item
+</p>
+<a name="wp1036342"> </a><p class="pBody">
+This item returns the status of the operation.  A value of &quot;1&quot; indicates that the operation completed successfully.  A zero or negative value indicates that the operation failed.
+</p>
+<a name="wp1036346"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1036347"> </a><p class="pBody">
+C$OPENSAVEBOX performs a variety of operations depending on the operation passed.   All of the data items and definitions required by this routine can be found in &quot;opensave.def&quot;.  The operations are as follows:
+</p>
+<a name="wp1260392"> </a><h3 class="pHeadingRef">
+OPENSAVE-SUPPORTED (op-code 1) 
+</h3>
+<a name="wp1328555"> </a><p class="pBody">
+This operation returns a value that indicates whether the host system supports C$OPENSAVEBOX.  If the system supports it, OPENSAVE-STATUS is set to &quot;1&quot;.  Otherwise, it is set to OPNSAVERR-UNSUPPORTED (value &quot;0&quot;).  The OPENSAVE-DATA parameter is not used with this op-code and should be omitted.  (Note that Microsoft Windows hosts support C$OPENSAVEBOX.)  
+</p>
+<a name="wp1260394"> </a><h3 class="pHeadingRef">
+OPENSAVE-OPEN-BOX (op-code 2)  
+</h3>
+<a name="wp1328574"> </a><p class="pBody">
+This operation initiates an Open File dialog with the user.  The OPENSAVE-DATA structure initializes the dialog box and returns the results.
+</p>
+<a name="wp1328576"> </a><h3 class="pHeadingRef">
+OPENSAVE-SAVE-BOX (op-code 3)  
+</h3>
+<a name="wp1328579"> </a><p class="pBody">
+This operation initiates a Save As dialog with the user.  The OPENSAVE-DATA structure initializes the dialog box and returns the results.  On some systems, there is no difference between an Open and Save As dialog box.  On other systems, there are some differences.  
+</p>
+<a name="wp1171553"> </a><h3 class="pHeadingRef">
+OPENSAVE-BROWSE-FOLDER (op-code 4)  
+</h3>
+<a name="wp1328615"> </a><p class="pBody">
+This operation initiates a Browse for Folder dialog with the user.  The OPENSAV-TITLE and OPENSAV-FILENAME fields in the OPENSAVE-DATA structure initialize the dialog box and return the result, respectively.  When C$OPENSAVE BOX is called, the Browse for Folder dialog box displays the contents of OPENSAV-FILENAME as the root folder to be browsed.  Only folders which are descendants of this folder are shown in the dialog box.  If OPENSAV-FILENAME is blank when the routine is called, the dialog shows all folders in the user's default working folder, and a number of other items, such as the Recycle Bin. You may select an empty folder, however, if the folder specified as a root does not exist or is inaccessible, the dialog shows all folders in the user's default working folder, just as though no root was specified. The &quot;OK&quot; button is disabled if any item other than a folder is selected.
+</p>
+<a name="wp1266705"> </a><h3 class="pHeadingRef">
+OPENSAVE-DATA
+</h3>
+<a name="wp1266720"> </a><p class="pBody">
+You should use the INITIALIZE verb on OPENSAVE-DATA before you fill in the data fields.  This ensures that you have set all the fields to the default values and protects you from possible future changes to the OPENSAVE-DATA structure. 
+</p>
+<a name="wp1266725"> </a><p class="pBody">
+The OPENSAVE-DATA item is fairly large (1120 bytes).  You can conserve memory by using C$OPENSAVEBOX from a utility subprogram that you write.   This subprogram would include OPENSAVE-DATA.  After using the subprogram, you can free the memory with the CANCEL verb.  In this way, you need to keep OPENSAVE-DATA in memory only while you are using it.  Alternatively, you can use the M$ALLOC library routine to allocate memory to hold OPENSAVE-DATA, and then free that memory after you are done.  
+</p>
+<a name="wp1266726"> </a><p class="pBody">
+The fields contained in the OPENSAVE-DATA structure are used as follows:
+</p>
+<a name="wp1266727"> </a><p class="pBody">
+<b class="cBold">OPNSAV-FILENAME --</b> On input to the routine, this item contains the default file name to use as the initial prompt.  Set OPNSAV-FILENAME to spaces if there should be no default name.  When the routine returns, this item contains the name of the file selected by the user.  When used with the OPENSAVE-BROWSE-FOLDER operation, this item returns the file specifications of the selected folder, if any.  If the user selects a folder which is not accessible, this item is blank.
+</p>
+<a name="wp1266728"> </a><p class="pBody">
+<b class="cBold">OPNSAV-FLAGS</b> -- This item is used to pass information to the OPENSAVE-OPEN-BOX, OPENSAVE-SAVE-BOX, and OPENSAVE-BROWSE-FOLDER operations to modify the behavior of the associated dialog boxes.  Constants for these flags are defined in &quot;opensave.def&quot;. 
+</p>
+<a name="wp1266729"> </a><p class="pBody">
+The following flags can be used with the OPENSAVE-OPEN-BOX and OPENSAVE-SAVE-BOX operations: 
+</p>
+<a name="wp1266732"> </a><h5 class="pHeading4">
+OPENSAVE-OVERWRITEPROMPT
+</h5>
+<a name="wp1266733"> </a><p class="pBody">
+This flag causes the Save As dialog box to generate a message box if the selected file already exists. The user must confirm whether to overwrite the file.
+</p>
+<a name="wp1266739"> </a><h5 class="pHeading4">
+OPENSAVE-PATHMUSTEXIST
+</h5>
+<a name="wp1266740"> </a><p class="pBody">
+This flag specifies that the user can type only valid paths and file names. If this flag is used and the user types an invalid path and file name in the File Name entry field, the dialog box function displays a warning in a message box. 
+</p>
+<a name="wp1266741"> </a><h5 class="pHeading4">
+OPENSAVE-FILEMUSTEXIST 
+</h5>
+<a name="wp1266742"> </a><p class="pBody">
+This flag specifies that the user can type only names of existing files in the File Name entry field. If this flag is specified and the user enters an invalid name, the dialog box procedure displays a warning in a message box.  If this flag is specified, the OPENSAVE-PATHMUSTEXIST flag is also used. 
+</p>
+<a name="wp1266743"> </a><h5 class="pHeading4">
+OPENSAVE-CREATEPROMPT
+</h5>
+<a name="wp1266744"> </a><p class="pBody">
+If the user specifies a file that does not exist, this flag causes the dialog box to prompt the user for permission to create the file.  If the user chooses to create the file, the dialog box closes and the function returns the specified name. 
+</p>
+<a name="wp1266745"> </a><h5 class="pHeading4">
+OPENSAVE-NOREADONLYRETURN
+</h5>
+<a name="wp1266746"> </a><p class="pBody">
+This flag specifies that the returned file does not have the Read Only check box selected and is not in a write-protected directory.
+</p>
+<a name="wp1266747"> </a><p class="pBody">
+The following flags can be used with the OPENSAVE-BROWSE-FOLDER operation:
+</p>
+<a name="wp1266748"> </a><h5 class="pHeading4">
+OPENSAVE-BROWSE-DONTGOBELOWDOMAIN
+</h5>
+<a name="wp1266749"> </a><p class="pBody">
+When this flag is set, network folders below the domain level in the dialog box's tree view control are not included.
+</p>
+<a name="wp1266750"> </a><h5 class="pHeading4">
+OPENSAVE-BROWSE-RETURNFSANCESTORS 
+</h5>
+<a name="wp1266751"> </a><p class="pBody">
+When this flag is set, only file system ancestors are returned.  An ancestor is a subfolder that is beneath the root folder in the namespace hierarchy.  If the user selects an ancestor of the root folder that is not part of the file system, the OK button is disabled. 
+</p>
+<a name="wp1266752"> </a><h5 class="pHeading4">
+OPENSAVE-BROWSE-EDITBOX
+</h5>
+<a name="wp1266753"> </a><p class="pBody">
+This flag includes an edit control in the browse dialog box allowing the user to type the name of an item. 
+</p>
+<a name="wp1266754"> </a><h5 class="pHeading4">
+OPENSAVE-BROWSE-NEWDIALOGSTYLE 
+</h5>
+<a name="wp1266755"> </a><p class="pBody">
+This flag provides the user with a larger dialog box that can be resized.  The dialog box has several new capabilities including: drag and drop capability within the dialog box, reordering, shortcut menus, new folders, delete, and other shortcut menu commands. 
+</p>
+<a name="wp1266756"> </a><h5 class="pHeading4">
+OPENSAVE-BROWSE-BROWSEINCLUDEURLS
+</h5>
+<a name="wp1266757"> </a><p class="pBody">
+When this flag is set, the OPENSAVE-BROWSE-NEWDIALOGSTYLE, OPENSAVE-BROWSE-EDITBOX, and OPENSAVE-BROWSE-BROWSEINCLUDEFILES flags must also be set.  Otherwise, the browser dialog box rejects URLs.  Even when these flags are set, the browse dialog box displays URLs only if the folder containing the selected item supports them. 
+</p>
+<a name="wp1266758"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>When the folder's &quot;IShellFolder::GetAttributesOf&quot; method is called, the folder must set the SFGAO_FOLDER  flag.  If this is not set, the browse dialog box does not display the URL. 
+<hr />
+</p>
+<a name="wp1266759"> </a><h5 class="pHeading4">
+OPENSAVE-BROWSE-UAHINT
+</h5>
+<a name="wp1266760"> </a><p class="pBody">
+When combined with OPENSAVE-BROWSE-NEWDIALOGSTYLE, this flag adds a usage hint to the dialog box in place of the edit box. OPENSAVE-BROWSE-EDITBOX overrides this flag. 
+</p>
+<a name="wp1266761"> </a><h5 class="pHeading4">
+OPENSAVE-BROWSE-NONEWFOLDERBUTTON
+</h5>
+<a name="wp1266762"> </a><p class="pBody">
+When this flag is set, the New Folder button in the browse dialog box is not included.
+</p>
+<a name="wp1266763"> </a><h5 class="pHeading4">
+OPENSAVE-BROWSE-BROWSEFORCOMPUTER
+</h5>
+<a name="wp1266764"> </a><p class="pBody">
+When this flag is set, if the user selects anything other than a computer, the OK button is disabled. 
+</p>
+<a name="wp1266765"> </a><h5 class="pHeading4">
+OPENSAVE-BROWSE-BROWSEFORPRINTER 
+</h5>
+<a name="wp1266766"> </a><p class="pBody">
+When this flag is set, if the user selects anything other than a printer, the OK button is disabled.
+</p>
+<a name="wp1266767"> </a><h5 class="pHeading4">
+OPENSAVE-BROWSE-BROWSEINCLUDEFILES 
+</h5>
+<a name="wp1266768"> </a><p class="pBody">
+When this flag is set, the browse dialog box displays files as well as folders.
+</p>
+<a name="wp1266769"> </a><p class="pBody">
+<b class="cBold">OPNSAV-DEFAULT-EXT -- </b>This item holds the default file name <em class="cEmphasis">extension</em>.  The extension is the string of characters that appear after the &quot;.&quot; in the file name.  The value of OPNSAV-DEFAULT-EXT is added to the file name typed by the user, if the user does not type an extension.  The default extension should not include the period &quot;.&quot;.  Set this item to spaces to avoid having a default extension.   
+</p>
+<a name="wp1266770"> </a><p class="pBody">
+<b class="cBold">OPNSAV-TITLE -- </b>This item holds the title of the dialog box.  If it is set to spaces, a generic title is applied.  The generic title is host-specific.  When used with the OPENSAVE-BROWSE-FOLDER operation, the title of the Browse for Folder dialog is always &quot;Browse for Folder&quot;.  The OPENSAV-TITLE item is displayed inside the Browse for Folder dialog box below the title bar and above the tree view control.  
+</p>
+<a name="wp1266771"> </a><p class="pBody">
+<b class="cBold">OPNSAV-FILTERS -- </b> The value of OPNSAV-FILTERS describes the set of filters that the dialog box uses to restrict the set of files shown to the user.  Filters make it easier for a user to navigate through a large directory by limiting the files shown at once.
+</p>
+<a name="wp1266772"> </a><p class="pBody">
+Each filter consists of a pair of descriptors.  These descriptors are separated by a vertical bar character (&quot;|&quot;).  The first descriptor in the pair is displayed in the file type selection box of the Open or Save As dialog box.  In Windows, it appears in the List of File Types drop-down box (see the illustration below).  The second descriptor is the file name pattern that defines the filter.  The file name pattern is formatted as &quot;A [ . B ]&quot; where &quot;A&quot; and &quot;B&quot; are optional text followed by an optional asterisk.  An asterisk matches any sequence of characters excluding periods.  This descriptor is what the system uses to look for matching files. 
+</p>
+<a name="wp1266773"> </a><p class="pBody">
+Here is a sample OPNSAV-FILTERS setting that contains two filters:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&quot;COBOL source files (*.cbl)|*.cbl|All files (*.*)|*.*&quot;<a name="wp1266774"> </a>
+</pre></div>
+<a name="wp1266775"> </a><p class="pBody">
+The first filter in the example shows only &quot;.cbl&quot; files to the user.  The second filter shows all files.  The user selects which filter to use based on the descriptions supplied.  
+</p>
+<a name="wp1266776"> </a><p class="pBody">
+Filters do not restrict the user from entering names that do not match the supplied pattern.  Filters do not limit the user's choices, they only simplify the process of choosing.  
+</p>
+<a name="wp1266777"> </a><p class="pBody">
+Set OPNSAV-FILTERS to spaces if you don't want any filters.
+</p>
+<a name="wp1266778"> </a><p class="pBody">
+Some systems do not support multiple filters.  In this case, only the initial filter is used.  See OPNSAV-DEFAULT-FILTER to determine how to select the initial filter.  
+</p>
+<a name="wp1266779"> </a><p class="pBody">
+<b class="cBold">OPNSAV-DEFAULT-FILTER -- </b>This item is used in conjunction with OPNSAV-FILTERS.  The value of OPNSAV-DEFAULT-FILTER determines which of the given filters to use as the initial filter.  A value of &quot;1&quot; selects the first filter pair, &quot;2&quot; selects the second pair, and so on.  A value of zero also selects the first pair.  This setting is not used if no filters are defined.
+</p>
+<a name="wp1266780"> </a><p class="pBody">
+<b class="cBold">OPNSAV-DEFAULT-DIR -- </b>This item holds the default directory to use for the selected file.  The dialog box initially displays the files found in this directory.  If this item is set to spaces, the current directory is used.  Note that the value of this item only defines the default directory. It does not prevent the user from selecting files in a different directory.
+</p>
+<a name="wp1036402"> </a><p class="pBody">
+<b class="cBold">OPNSAV-BASENAME -- </b>When the routine returns, this item contains the base file name of the file chosen by the user.  This differs from the value of OPNSAV-FILENAME in that all directory information is removed, leaving only the file name.   
+</p>
+<a name="wp1036403"> </a><h3 class="pHeadingRef">
+Error Handling
+</h3>
+<a name="wp1036411"> </a><p class="pBody">
+C$OPENSAVEBOX returns a value of &quot;1&quot; when successful.  Otherwise, it returns one of the following values (found in &quot;opensave.def&quot;):
+</p>
+<a name="wp1062269"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1062280"> </a><p class="pCellBody">
+OPNSAVERR-UNSUPPORTED
+</p>
+</td>
+    <td><a name="wp1062282"> </a><p class="pCellBody">
+This error indicates that the C$OPENSAVEBOX routine is not supported by the current host system. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1062284"> </a><p class="pCellBody">
+OPNSAVERR-CANCELLED
+</p>
+</td>
+    <td><a name="wp1062286"> </a><p class="pCellBody">
+This error indicates that the user clicked the &quot;Cancel&quot; button or typed the Escape key while using the dialog box.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1062288"> </a><p class="pCellBody">
+OPNSAVERR-NO-MEMORY
+</p>
+</td>
+    <td><a name="wp1062290"> </a><p class="pCellBody">
+This error indicates that not enough memory could be allocated to load the dialog box.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1062292"> </a><p class="pCellBody">
+OPNSAVERR-NAME-TOO-LARGE
+</p>
+</td>
+    <td><a name="wp1062294"> </a><p class="pCellBody">
+This error indicates that the name entered by the user does not fit in OPNSAV-FILENAME.  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1036424"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1036425"> </a><p class="pBody">
+This example uses C$OPENSAVEBOX to prompt for a text file name, and uses M$ALLOC to dynamically allocate OPENSAVE-DATA, freeing it after it is no longer needed.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+WORKING-STORAGE SECTION.<a name="wp1036426"> </a>
+77  OPENSAVE-DATA-SIZE    PIC 9(4) BINARY.<a name="wp1036427"> </a>
+77  OPENSAVE-DATA-ADDR    POINTER.<a name="wp1036428"> </a>
+77  OPENSAVE-STATUS       PIC S99.<a name="wp1036429"> </a>
+    88  OPENSAVE-OK       VALUE 1.<a name="wp1036430"> </a>
+77  FILE-NAME             PIC X(256).<a name="wp1036431"> </a>
+<a name="wp1036432"> </a>
+LINKAGE SECTION.<a name="wp1036433"> </a>
+COPY &quot;opensave.def&quot;.<a name="wp1036434"> </a>
+<a name="wp1036435"> </a>
+PROCEDURE DIVISION.<a name="wp1036436"> </a>
+MAIN-LOGIC.<a name="wp1036437"> </a>
+   SET OPENSAVE-DATA-SIZE TO SIZE OF OPENSAVE-DATA.<a name="wp1036438"> </a>
+   CALL &quot;M$ALLOC&quot; <a name="wp1036439"> </a>
+      USING OPENSAVE-DATA-SIZE, OPENSAVE-DATA-ADDR.<a name="wp1036440"> </a>
+   IF OPENSAVE-DATA-ADDR = NULL<a name="wp1036441"> </a>
+      {error handling here}<a name="wp1036442"> </a>
+   ELSE<a name="wp1036443"> </a>
+      SET ADDRESS OF OPENSAVE-DATA<a name="wp1036444"> </a>
+          TO OPENSAVE-DATA-ADDR<a name="wp1036445"> </a>
+      INITIALIZE OPENSAVE-DATA<a name="wp1036446"> </a>
+      MOVE <a name="wp1036447"> </a>
+          &quot;Text files (*.txt)|*.txt|All files (*.*)|*.*&quot; <a name="wp1036448"> </a>
+          TO OPNSAV-FILTERS<a name="wp1036449"> </a>
+      MOVE &quot;txt&quot; TO OPNSAV-DEFAULT-EXT<a name="wp1036450"> </a>
+      CALL &quot;C$OPENSAVEBOX&quot; USING OPENSAVE-SAVE-BOX, <a name="wp1036451"> </a>
+                                 OPENSAVE-DATA<a name="wp1036452"> </a>
+                           GIVING OPENSAVE-STATUS<a name="wp1036453"> </a>
+<a name="wp1036454"> </a>
+      IF OPENSAVE-OK<a name="wp1036455"> </a>
+          MOVE OPNSAV-FILENAME TO FILE-NAME<a name="wp1036456"> </a>
+      END-IF<a name="wp1036457"> </a>
+      CALL &quot;M$FREE&quot; USING OPENSAVE-DATA-ADDR<a name="wp1036458"> </a>
+   END-IF.<a name="wp1036459"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

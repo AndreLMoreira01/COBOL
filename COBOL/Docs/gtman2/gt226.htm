@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:23" />
+  <title>2.5  Creating, Inquiring, Modifying, and Destroying Windows</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt22.htm">Chapter 2:  Floating Windows</a> &gt; </p>
+<a name="wp1026149"> </a><h2 class="pHeading1">
+2.5  Creating, Inquiring, Modifying, and Destroying Windows
+</h2>
+<a name="wp1026150"> </a><p class="pBody">
+You create a floating window with the DISPLAY FLOATING WINDOW statement.  This statement constructs the specified window and returns a handle to it.  A window created with the above statement is modal by default (the MODAL phrase can be added as commentary).  To create a modeless window, you can add the MODELESS phrase.  Note that managing multiple modeless windows is greatly simplified by associating a separate <em class="cEmphasis">thread</em> with each modeless window.  See section 6.8, &quot;Multiple Execution Threads,&quot; in Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>.  
+</p>
+<a name="wp1026151"> </a><p class="pBody">
+The program's initial window, or <em class="cEmphasis">main application window</em>, is created either automatically, via the runtime, or programmatically via the DISPLAY INITIAL WINDOW statement.  If the first DISPLAY statement is not a DISPLAY INITIAL WINDOW (or DISPLAY STANDARD WINDOW statement), the runtime automatically creates the initial window.  The main application window is always a modeless window.
+</p>
+<a name="wp1026154"> </a><p class="pBody">
+Because floating windows can be moved and, optionally, resized, their position and size are dynamic.  To retrieve the current position and size of a floating window, you use the INQUIRE verb.  INQUIRE returns information for the <em class="cEmphasis">current</em> window or the window identified by the specified handle.
+</p>
+<a name="wp1026156"> </a><p class="pBody">
+To programmatically reposition or change the size or title of a window, you use the MODIFY verb.  The MODIFY statement applies the specified values to the window identified by the handle or, if omitted, the current floating window.
+</p>
+<a name="wp1026158"> </a><p class="pBody">
+Windows have a property called &quot;ACTION&quot; that can be used in DISPLAY and MODIFY statements.  The ACTION property allows you to programmatically maximize, minimize, or restore a window.  To use ACTION, assign it one of the following values (these names are found in &quot;acugui.def&quot;):
+</p>
+<a name="wp1026159"> </a><h5 class="pHeading4">
+ACTION-MAXIMIZE
+</h5>
+<a name="wp1026253"> </a><p class="pBody">
+Maximizes the window.  It has the same effect as if the user clicked the &quot;maximize&quot; button.  Allowed only for windows that have RESIZABLE or AUTO-RESIZE specified or implied for them.  In windows with RESIZABLE specified, when ACTION-MAXIMIZE causes the window to change size, an NTF-RESIZED event occurs.
+</p>
+<a name="wp1026160"> </a><h5 class="pHeading4">
+ACTION-MINIMIZE
+</h5>
+<a name="wp1026263"> </a><p class="pBody">
+Minimizes the window.  It has the same effect as if the user clicked the &quot;minimize&quot; button.  Allowed only for windows that have RESIZABLE or AUTO-RESIZE specified or implied for them.  In windows with RESIZABLE specified, when ACTION-MAXIMIZE causes the window to change size, an NTF-RESIZED event occurs.
+</p>
+<a name="wp1026161"> </a><h5 class="pHeading4">
+ACTION-RESTORE
+</h5>
+<a name="wp1026270"> </a><p class="pBody">
+If the window is currently maximized or minimized, restores the window to its previous size and position; otherwise, it has no effect.  It has the same effect as if the user selected Restore from the menu.    Allowed only for windows that can be maximized or minimized.  In windows with RESIZABLE specified, when ACTION-MAXIMIZE causes the window to change size, an NTF-RESIZED event occurs.
+</p>
+<a name="wp1026162"> </a><p class="pBody">
+If you assign an ACTION value that is not allowed, there is no effect other than to trigger the ON EXCEPTION phrase of the MODIFY statement (if present).  Note that you can use the ACTION phrase to create a window that is initially maximized or minimized.
+</p>
+<a name="wp1026163"> </a><p class="pBody">
+You destroy a floating window with either the CLOSE WINDOW statement or DESTROY verb.  You specify the handle of the window you want to destroy.  Both verbs behave identically when acting on floating windows.<em class="cEmphasis">  You cannot destroy the main application window.  </em>It is closed automatically when the application terminates.<b class="cBold"> </b>
+</p>
+<a name="wp1026165"> </a><p class="pBody">
+For a complete description of each of the above verbs, see section 6.6 in Book 3, <em class="cEmphasis">Reference Manual</em>.  For detailed information regarding creating and managing floating windows via the Screen Section, see section 5.9, Book 3, <em class="cEmphasis">Reference Manual</em>.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

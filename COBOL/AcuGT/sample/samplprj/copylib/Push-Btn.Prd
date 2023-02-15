@@ -1,0 +1,94 @@
+      * Push-Btn.prd
+      * Push-Btn.prd is generated from C:\Acucorp\Acucbl720\AcuGT\sample\samplprj\Push-Btn.Psf
+      * This is a generated file. DO NOT modify this file directly.      
+
+       Acu-Initial-Routine.
+      *    Before-Init
+      * get system information
+           ACCEPT System-Information FROM System-Info
+      * get terminal information
+           ACCEPT Terminal-Abilities FROM Terminal-Info
+      * load bitmap
+           PERFORM Acu-Init-Bmp
+      *    After-Init
+           .
+
+       Acu-Init-Bmp.
+      * bitmap loading
+           COPY RESOURCE "bmpbtn.bmp".
+           CALL "W$BITMAP" USING WBITMAP-LOAD "bmpbtn.bmp", GIVING 
+              bmpbtn-bmp
+           .
+
+       Acu-Exit-Rtn.
+      *    After-Program
+           EXIT PROGRAM
+           STOP RUN
+           .
+
+       Acu-Screen-1-Routine.
+      *    Before-Routine
+           PERFORM Acu-Screen-1-Scrn
+           PERFORM Acu-Screen-1-Proc
+      *    After-Routine
+           .
+
+       Acu-Screen-1-Scrn.
+           PERFORM Acu-Screen-1-Create-Win
+           PERFORM Acu-Screen-1-Init-Data
+           .
+
+       Acu-Screen-1-Create-Win.
+      *    Before-Create
+      * display screen
+              DISPLAY Standard GRAPHICAL WINDOW
+                 LINES 36.00, SIZE 36.00, CELL HEIGHT 10, 
+                 CELL WIDTH 10, AUTO-MINIMIZE, COLOR IS 65793, 
+                 CONTROL FONT Default-Font, ERASE, LABEL-OFFSET 0, 
+                 MODELESS, WITH SYSTEM MENU, 
+                 TITLE "Push Button Sample - pushbtn.cbl", TITLE-BAR, 
+                 USER-GRAY, USER-WHITE, 
+                 HANDLE IS Form1-Handle
+      * toolbar
+           DISPLAY Screen-1 UPON Form1-Handle
+      *    After-Create
+           .
+
+       Acu-Screen-1-Init-Data.
+      *    Before-Initdata
+      *    After-Initdata
+           .
+      * Screen-1
+       Acu-Screen-1-Proc.
+           PERFORM UNTIL Exit-Pushed
+              ACCEPT Screen-1  
+                 ON EXCEPTION PERFORM Acu-Screen-1-Evaluate-Func
+              END-ACCEPT
+           END-PERFORM
+           DESTROY Form1-Handle
+           INITIALIZE Key-Status
+           .
+
+      * Screen-1
+       Acu-Screen-1-Evaluate-Func.
+           EVALUATE TRUE
+              WHEN Exit-Pushed
+                 PERFORM Acu-Screen-1-Exit
+              WHEN Event-Occurred
+                 IF Event-Type = Cmd-Close
+                    PERFORM Acu-Screen-1-Exit
+                 END-IF
+      * DefaultStyle-PB Link To
+              WHEN Key-Status = 1
+                 PERFORM Update-ReturnCode
+      * Bitmap-PB Link To
+              WHEN Key-Status = 2
+                 PERFORM Update-Returncode
+           END-EVALUATE
+           MOVE 1 TO Accept-Control
+           . 
+
+       Acu-Screen-1-Exit.
+           SET Exit-Pushed TO TRUE
+           .
+

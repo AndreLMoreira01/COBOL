@@ -1,0 +1,341 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:45:21" />
+  <title>To close stranded files from the command line</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb">
+<a href="srv5.htm">Chapter 5: AcuServer Functions</a> &gt; 
+<a href="srv521.htm">5.8  Closing Stranded Files</a> &gt; 
+</p>
+<a name="wp1040886"> </a><h2 class="pHeadingProc">
+To close stranded files from the command line
+</h2>
+<a name="wp1040871"> </a><p class="pBody">
+The &quot;acuserve -unlock&quot; command provides a mechanism for closing stranded files from the command line.
+</p>
+<a name="wp1035843"> </a><p class="pBody">
+Before you use &quot;-unlock&quot; it is best to generate a current AcuServer status report using &quot;acuserve -info&quot;.  The status report provides a complete list of open files on the server, including client name, user name, PID, FID, file type, and the file name of each open file.  With information from this report, you can use &quot;-unlock&quot; to close specific files.
+</p>
+<a name="wp1035844"> </a><p class="pBody">
+The &quot;-unlock&quot; command syntax is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    acuserve -unlock [server] [-a] [-c client] [-u user]<a name="wp1035845"> </a>
+                     [-p PID] [-f FID] [-n portnum]<a name="wp1062410"> </a>
+</pre></div>
+<a name="wp1035846"> </a><p class="pBody">
+&quot;-unlock&quot; has two modes of operation: an interactive mode, in which the user is prompted for information about the files to be closed; and a command line mode, in which the user specifies all of the requisite information as additional arguments on the command line.
+</p>
+<a name="wp1040864"> </a><p class="pBody">
+Optional arguments to &quot;-unlock&quot; include:   </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1065515"> </a>
+Option
+
+</th>
+    <th><a name="wp1065517"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040837"> </a><p class="pCellBody">
+<em class="cEmphasis">server</em> 
+</p>
+</td>
+    <td><a name="wp1040839"> </a><p class="pCellBody">
+Specifies the name of the AcuServer server.  If no server is specified, the server is assumed to be the local host.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040841"> </a><p class="pCellBody">
+-a
+</p>
+</td>
+    <td><a name="wp1040843"> </a><p class="pCellBody">
+Causes all open files on the server to be immediately closed.  &quot;-a&quot; does <em class="cEmphasis">not</em> ask the user for confirmation before closing all files.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040845"> </a><p class="pCellBody">
+-f&#160;<em class="cEmphasis">FID</em>
+</p>
+</td>
+    <td><a name="wp1040847"> </a><p class="pCellBody">
+Causes the file associated with the specified FID to be unlocked and closed. &quot;-f&quot; must be followed by a space and the FID of an open file.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040849"> </a><p class="pCellBody">
+-c&#160;<em class="cEmphasis">client</em>
+</p>
+</td>
+    <td><a name="wp1040851"> </a><p class="pCellBody">
+When &quot;-c&quot; is used with no other options, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve </span>unlocks and closes all files and sockets held open for the named client on the current host.  &quot;-c&quot; must be followed by a space and the name of an AcuServer client.  Use &quot;-c&quot; in combination with the <em class="cEmphasis">server</em> option to specify a server other than the current host.  &quot;-c&quot; can be qualified by the &quot;-u&quot; or &quot;-p&quot; options.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040853"> </a><p class="pCellBody">
+-u&#160;<em class="cEmphasis">user</em>
+</p>
+</td>
+    <td><a name="wp1040855"> </a><p class="pCellBody">
+Used as a qualifier to the &quot;-c&quot; option.  &quot;-u&quot; must be followed by a space and the name of an AcuServer user.  The &quot;-c <em class="cEmphasis">client</em> -u <em class="cEmphasis">user</em>&quot; combination causes <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve </span>to close all files and sockets associated with the named user on the named client.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040857"> </a><p class="pCellBody">
+-p&#160;<em class="cEmphasis">PID</em>
+</p>
+</td>
+    <td><a name="wp1040859"> </a><p class="pCellBody">
+Used as a qualifier to the &quot;-c&quot; option.  &quot;-p&quot; must be followed by a space and the PID of a client process.  The &quot;-c <em class="cEmphasis">client</em> -p <em class="cEmphasis">PID</em>&quot; combination causes <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve </span>to close all files and sockets associated with the specified PID on the named client.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1040861"> </a><p class="pCellBody">
+-n&#160;<em class="cEmphasis">port</em>
+</p>
+</td>
+    <td><a name="wp1040863"> </a><p class="pCellBody">
+Identifies a particular instance of the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve </span>program by port number.  The &quot;-n&quot; must be followed by a space and then an integer, e.g., &quot;6524&quot;.  This option causes only those files associated with the specified instance of the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve </span>program to be unlocked and closed.  If no port number is specified, then files for the default port are unlocked and closed.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1035847"> </a><h3 class="pHeadingRef">
+Interactive mode
+</h3>
+<a name="wp1035849"> </a><p class="pBody">
+To initiate interactive mode, enter: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    acuserve -unlock [server] [-n port]<a name="wp1035850"> </a>
+</pre></div>
+<a name="wp1035851"> </a><p class="pBody">
+The absence of other options triggers interactive mode.  If the <em class="cEmphasis">server</em> option is omitted, the server is assumed to be the current host.  If the <em class="cEmphasis">-n port</em> option is omitted, the port number is assumed to be &quot;6523&quot;.
+</p>
+<a name="wp1035852"> </a><p class="pBody">
+Interactive mode prompts the user for specific information that describes the files to be closed (any locks are removed).  The more general the information entered, the larger the classification of files to be closed.  If you specify a client name, user name, or PID, in addition to closing all associated files, all associated sockets are closed.   For example, if only a client name is given, then all files and sockets associated with that client are closed (see the examples that follow).
+</p>
+<a name="wp1035853"> </a><p class="pBody">
+After prompting for information, interactive mode redisplays the information entered and prompts for confirmation before closing any files and sockets. 
+</p>
+<a name="wp1035854"> </a><p class="pBody">
+The following examples demonstrate how interactive mode can be used to close specific files and classes of files.  When you enter interactive mode, the unlock program displays the following text:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+This program allows you to force acuserve to unlock and close<a name="wp1035855"> </a>
+a single file or group of files.  To unlock and close a single<a name="wp1060058"> </a>
+file, enter the file's unique hexadecimal identifier (FID). <a name="wp1060059"> </a>
+Leave the FID blank if you want to specify files by client<a name="wp1060060"> </a>
+name, user name or process identifier (PID).<a name="wp1060061"> </a>
+Enter FID []:<a name="wp1035856"> </a>
+</pre></div>
+<a name="wp1035857"> </a><p class="pBody">
+To close a single file, enter the file ID at the prompt.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Enter FID []: 5fb58<a name="wp1035858"> </a>
+</pre></div>
+<a name="wp1035859"> </a><p class="pBody">
+The unlock program then redisplays the information and prompts for confirmation.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Server : condor<a name="wp1035860"> </a>
+Port Number : 6523<a name="wp1037121"> </a>
+FID : 5fb58<a name="wp1037122"> </a>
+Is this correct [N]:<a name="wp1037123"> </a>
+</pre></div>
+<a name="wp1035864"> </a><p class="pBody">
+If you enter &quot;y&quot; (or &quot;Y&quot;, &quot;YES&quot;, &quot;yes&quot;) the program will unlock and close the file and report the results:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+acuserve: unlocked and closed 1 file(s) on: condor<a name="wp1035865"> </a>
+</pre></div>
+<a name="wp1035866"> </a><p class="pBody">
+To close all files open on the server and all sockets held open by this instance of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span>, leave the FID prompt blank and accept the default value &quot;ALL&quot; for the client machine name prompt:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Enter FID []:<a name="wp1035867"> </a>
+Enter client machine name [ALL]:<a name="wp1035868"> </a>
+</pre></div>
+<a name="wp1035869"> </a><p class="pBody">
+The program then redisplays your entry and prompts for confirmation:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Server : condor<a name="wp1035870"> </a>
+Port Number : 6523<a name="wp1035871"> </a>
+Client : ALL<a name="wp1035872"> </a>
+Is this correct [N]:<a name="wp1035873"> </a>
+</pre></div>
+<a name="wp1035874"> </a><p class="pBody">
+To close all files and sockets held open by a single client, leave the FID prompt blank, specify the client machine name at the client machine name prompt, and accept the default value &quot;ALL&quot; at the user name prompt:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Enter FID []:<a name="wp1035875"> </a>
+Enter client machine name [ALL]: starling<a name="wp1035876"> </a>
+Enter name of user [ALL]:<a name="wp1035877"> </a>
+</pre></div>
+<a name="wp1035878"> </a><p class="pBody">
+The program then redisplays your entry and prompts for confirmation:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Server : condor<a name="wp1035879"> </a>
+Port Number : 6523<a name="wp1035880"> </a>
+Client : starling<a name="wp1035881"> </a>
+User : ALL<a name="wp1035882"> </a>
+Is this correct [N]:<a name="wp1035883"> </a>
+</pre></div>
+<a name="wp1037143"> </a><p class="pBody">
+To close all files and sockets associated with a specific user on a specific machine, leave the FID prompt blank, specify the client machine name at the client machine name prompt, specify the user name at the user name prompt, and accept the default value &quot;ALL&quot; at the PID prompt:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Enter FID []:<a name="wp1037144"> </a>
+Enter client machine name [ALL]: starling<a name="wp1037145"> </a>
+Enter name of user [ALL]: bernie<a name="wp1037146"> </a>
+Enter PID [ALL]:<a name="wp1037147"> </a>
+</pre></div>
+<a name="wp1037148"> </a><p class="pBody">
+The program then redisplays your entry and prompts for confirmation:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Server : condor<a name="wp1035890"> </a>
+Port Number : 6523<a name="wp1035891"> </a>
+Client : starling<a name="wp1035892"> </a>
+User : bernie<a name="wp1035893"> </a>
+PID : ALL<a name="wp1035894"> </a>
+Is this correct [N]:<a name="wp1035895"> </a>
+</pre></div>
+<a name="wp1035896"> </a><p class="pBody">
+To close all files and sockets associated with a single PID, leave the FID prompt blank, specify the client machine name at the client machine name prompt, specify the user name at the user name prompt, and specify the PID at the PID prompt:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Enter FID []:<a name="wp1035897"> </a>
+Enter client machine name [ALL]: starling<a name="wp1035898"> </a>
+Enter name of user [ALL]: bernie<a name="wp1035899"> </a>
+Enter PID [ALL]: 1726<a name="wp1035900"> </a>
+</pre></div>
+<a name="wp1035901"> </a><p class="pBody">
+The program then redisplays your entry and prompts for confirmation:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Server : condor<a name="wp1035902"> </a>
+Port Number : 6523<a name="wp1035903"> </a>
+Client : starling<a name="wp1035904"> </a>
+User : bernie<a name="wp1035905"> </a>
+PID : 1726<a name="wp1035906"> </a>
+Is this correct [N]:<a name="wp1035907"> </a>
+</pre></div>
+<a name="wp1035908"> </a><h3 class="pHeadingRef">
+Command line mode
+</h3>
+<a name="wp1035910"> </a><p class="pBody">
+Command line mode requires that the description of the files to be closed be specified as options to &quot;-unlock&quot; on the command line.  The unlock and close actions are carried out immediately, <em class="cEmphasis">without</em> a prompt for confirmation, and the results are reported.  Command line mode is well suited to use in shell scripts and batch files that are run without user input.
+</p>
+<a name="wp1035911"> </a><p class="pBody">
+To unlock and close a specific file you would enter:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+acuserve -unlock [server] -f FID<a name="wp1035912"> </a>
+</pre></div>
+<a name="wp1035913"> </a><p class="pBody">
+The unlock program closes the file and reports its actions:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+acuserve: unlocked and closed 1 file(s) on: condor<a name="wp1035914"> </a>
+</pre></div>
+<a name="wp1035915"> </a><p class="pBody">
+To unlock and close all files and sockets associated with a PID, enter:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+acuserve -unlock [server] -c client -p PID<a name="wp1035916"> </a>
+</pre></div>
+<a name="wp1035917"> </a><p class="pBody">
+To unlock and close all files and sockets associated with a single user on a client, enter:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+acuserve -unlock [server] -c client -u user<a name="wp1035918"> </a>
+</pre></div>
+<a name="wp1035919"> </a><p class="pBody">
+To unlock and close all files and sockets associated with a client, enter:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+acuserve -unlock [server] -c client<a name="wp1035920"> </a>
+</pre></div>
+<a name="wp1035921"> </a><p class="pBody">
+To unlock and close all files and sockets held open by the server, enter:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+acuserve -unlock [server] -a<a name="wp1035922"> </a>
+</pre></div>
+<a name="wp1035923"> </a><p class="pBody">
+Note that closing <em class="cEmphasis">all</em> files requires the &quot;-a&quot; option.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

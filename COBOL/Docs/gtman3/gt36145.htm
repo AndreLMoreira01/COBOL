@@ -1,0 +1,332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>USE Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1042722"> </a><h2 class="pHeading2">
+USE Statement
+</h2>
+<a name="wp1042725"> </a><p class="pBody">
+The USE statement specifies procedures for handling Input/Output errors and other errors.  USE is a comprehensive error handling construct.  The USE statement locates all error routines centrally within the DECLARATIVES section of the PROCEDURE DIVISION when used to specify I/O error handling routines.  USE is a valuable supplement to the AT END and INVALID KEY I/O error handling phrases.
+</p>
+<a name="wp1042726"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This manual entry includes code examples and highlights for first-time users following the General Rules section.
+<hr />
+</p>
+<a name="wp1042728"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<a name="wp1042729"> </a><h3 class="pHeadingRef">
+Format 1
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">USE</u> AFTER STANDARD {<u class="cUnderline">EXCEPTION</u>} PROCEDURE ON { {file}...   }<a name="wp1042730"> </a>
+                   {<u class="cUnderline">ERROR</u>    }              { <u class="cUnderline">INPUT</u>       }<a name="wp1042731"> </a>
+                                            { <u class="cUnderline">OUTPUT</u>      }<a name="wp1042732"> </a>
+                                            { <u class="cUnderline">I-O</u>         }<a name="wp1042733"> </a>
+                                            { <u class="cUnderline">EXTEND</u>      }<a name="wp1042734"> </a>
+                                            { <u class="cUnderline">TRANSACTION</u> }<a name="wp1042735"> </a>
+</pre></div>
+<a name="wp1042736"> </a><h3 class="pHeadingRef">
+Format 2
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">USE</u> AFTER STANDARD {<u class="cUnderline">EXCEPTION</u>} PROCEDURE ON <u class="cUnderline">OBJECT</u><a name="wp1042737"> </a>
+                   {<u class="cUnderline">ERROR</u>    }<a name="wp1042738"> </a>
+</pre></div>
+<a name="wp1042739"> </a><h3 class="pHeadingRef">
+Format 3
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">USE</u> FOR <u class="cUnderline">REPORTING</u> ON {index-file} ...<a name="wp1042740"> </a>
+</pre></div>
+<a name="wp1042742"> </a><h3 class="pHeadingRef">
+Format 4
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">USE</u> AFTER STANDARD <u class="cUnderline">ERROR</u> PROCEDURE ON file-name <u class="cUnderline">GIVING</u><a name="wp1042743"> </a>
+       data-name-1  [ data-name-2 ]<a name="wp1042744"> </a>
+</pre></div>
+<a name="wp1042745"> </a><h3 class="pHeadingRef">
+Format 5
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">USE</u> { active-x-control-item }<a name="wp1042746"> </a>
+    { com-object-item  }<a name="wp1042747"> </a>
+    { property-1 [ ( param-1 ... ) ]<a name="wp1042748"> </a>
+      [ :: property-2 [ ( param2 ... ) ] ] ... }<a name="wp1042749"> </a>
+    { statement }<a name="wp1042750"> </a>
+[<u class="cUnderline">END-USE</u>]<a name="wp1042751"> </a>
+</pre></div>
+<a name="wp1109933"> </a><h3 class="pHeadingRef">
+Format 6
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">USE</u> AT <u class="cUnderline">PROGRAM</u> {<u class="cUnderline">START</u>}<a name="wp1109861"> </a>
+               {<u class="cUnderline">END</u>  }<a name="wp1110010"> </a>
+</pre></div>
+<a name="wp1042752"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042753"> </a><div class="pSmartList1"><li><em class="cEmphasis">File</em> is a file described in the Data Division.  It may be a sort file.  </li></div>
+<a name="wp1042754"> </a><div class="pSmartList1"><li><em class="cEmphasis">Index-file</em> is a file described in the Data Division.  It must be an indexed file.</li></div>
+<a name="wp1042755"> </a><div class="pSmartList1"><li><em class="cEmphasis">Data-name-1</em> is an eight-byte data item of the type PICTURE 9(8) USAGE DISPLAY.  A compile-time error message is generated if <em class="cEmphasis">data-name-1</em> is not of that type.   </li></div>
+<a name="wp1042756"> </a><div class="pSmartList1"><li><em class="cEmphasis">Data-name-2</em> may be of any type but must be at least as long as the file buffer.  A compile-time error message is generated if this is not the case.</li></div>
+<a name="wp1042757"> </a><div class="pSmartList1"><li>When used, a USE statement must immediately follow a section header in the Declaratives portion of the Procedure Division and must appear in a sentence by itself.  The remainder of the section must consist of zero, one, or more paragraphs that define the exception procedure to be used.</li></div>
+<a name="wp1042758"> </a><div class="pSmartList1"><li>ERROR and EXCEPTION are interchangeable.</li></div>
+<a name="wp1042759"> </a><div class="pSmartList1"><li>The INPUT, OUTPUT, I-O, and EXTEND and TRANSACTION phrases may each be specified in only one USE statement in a Procedure Division.</li></div>
+<a name="wp1042760"> </a><div class="pSmartList1"><li>A particular <em class="cEmphasis">file</em> may not appear in more than one Format 1<b class="cBold"> </b>USE statement in a program.</li></div>
+<a name="wp1042761"> </a><div class="pSmartList1"><li>A particular <em class="cEmphasis">index-file</em> may not appear in more than one Format 3<b class="cBold"> </b>USE statement in a program.</li></div>
+<a name="wp1042763"> </a><div class="pSmartList1"><li><em class="cEmphasis">Active-x-control-item</em> and <em class="cEmphasis">com-object-item</em> must be USAGE HANDLE OF <em class="cEmphasis">class-name</em>, where <em class="cEmphasis">class-name</em> is defined as an ActiveX control or an COM object in SPECIAL-NAMES.</li></div>
+<a name="wp1042764"> </a><div class="pSmartList1"><li><em class="cEmphasis">Statement</em> is an imperative statement.</li></div>
+<a name="wp1042765"> </a><div class="pSmartList1"><li><em class="cEmphasis">Property-1</em> is the name of a property of the ActiveX control or COM object.  <em class="cEmphasis">Property-1</em> must not be a write-only property.</li></div>
+<a name="wp1042766"> </a><div class="pSmartList1"><li><em class="cEmphasis">Property-2</em> is the name of a property of the ActiveX control or COM object which is the value of <em class="cEmphasis">property-1</em>.  <em class="cEmphasis">Property-2</em> must not be a write-only property.</li></div>
+<a name="wp1042767"> </a><div class="pSmartList1"><li><em class="cEmphasis">Param-1</em> and <em class="cEmphasis">param-2</em> are literals, data items, or numeric expressions. </li></div>
+</ol></div>
+<a name="wp1042768"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042769"> </a><div class="pSmartList1"><li>The USE statement is not executed; it merely defines the conditions calling for the execution of the USE procedure.  The USE procedure consists of all the paragraphs contained in the section the USE statement appears in. </li></div>
+<a name="wp1042770"> </a><div class="pSmartList1"><li>The procedure associated with a Format 1 USE statement is executed after the unsuccessful execution of an I/O operation unless an AT END or INVALID KEY phrase takes precedence.  It also executes <em class="cEmphasis">during</em> an I/O operation when a duplicate key error is detected for a file open for BULK-ADDITION.  The following rules apply:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1042771"> </a><div class="pSmartList2"><li>If <em class="cEmphasis">file</em> is specified, the associated procedure is executed when an unsuccessful I/O operation occurs for that file.</li></div>
+<a name="wp1042772"> </a><div class="pSmartList2"><li>If the INPUT phrase is specified, the procedure executes when the OPEN operation is unsuccessful for a file being opened in INPUT mode, unless that file is specified by <em class="cEmphasis">file</em> in another USE statement.  This also applies to a file being opened for INPUT.</li></div>
+<a name="wp1042773"> </a><div class="pSmartList2"><li>The OUTPUT, I-O, and EXTEND phrases operate as described in rule b), except that they apply to files opened in the corresponding mode.</li></div>
+<a name="wp1042774"> </a><div class="pSmartList2"><li>If TRANSACTION is specified, the procedure executes when an error occurs during a START TRANSACTION, COMMIT, ROLLBACK, or call to C$RECOVER.  Note that the status-code will be in the TRANSACTION-STATUS variable.  See Appendix&#160;<span style="font-family: Arial, Verdana, Helvetica, sans-serif">E</span>, Book 4, <em class="cEmphasis">Appendices</em> for a list of transaction status codes.  </li></div>
+</ol></div>
+<a name="wp1042775"> </a><div class="pSmartList1"><li>After the USE procedure executes, control is returned to the next executable statement after the I/O statement that caused the USE procedure to execute.  If the USE procedure executed during a file operation, the control returns to that file operation instead.</li></div>
+<a name="wp1042776"> </a><div class="pSmartList1"><li>Within a USE procedure, no statement may be executed that would result in the execution of a USE procedure that has been invoked but has not yet returned.</li></div>
+<a name="wp1042777"> </a><div class="pSmartList1"><li>The procedure associated with a Format 2 USE statement is executed after an object exception occurs.</li></div>
+<a name="wp1042778"> </a><div class="pSmartList1"><li>After the Format 2 USE statement executes, control is returned to the next executable statement after the statement that caused the USE procedure to execute.</li></div>
+<a name="wp1042779"> </a><div class="pSmartList1"><li>A Format 2 USE statement executes when an object exception is &quot;raised&quot; during a DISPLAY, MODIFY, INQUIRE or calls to C$GETEVENTDATA, C$SETEVENTDATA, C$GETEVENTPARAM or C$SETEVENTPARAM. </li></div>
+<a name="wp1042780"> </a><p class="pIndented1">
+An object exception can either be raised by the object itself or by the runtime to indicate that an error has occurred. ActiveX controls and COM objects are currently the only objects that can raise exceptions. These are called COM exceptions in Microsoft terminology.  
+</p>
+<a name="wp1042781"> </a><p class="pIndented1">
+Information about an object exception can be retrieved with the C$EXCEPINFO routine.
+</p>
+<a name="wp1042782"> </a><div class="pSmartList1"><li>Within a Format 2 USE statement, no statement can be executed that would result in the execution of a USE procedure that has been invoked but has not yet returned.</li></div>
+<a name="wp1042783"> </a><div class="pSmartList1"><li>A Format<b class="cBold"> </b>3 USE statement executes at periodic times for files opened with the BULK-ADDITION phrase.  The purpose of this procedure is to report to the user the progress of writing keys for a large number of records written to <em class="cEmphasis">index-file</em>.  See section 6.1.6.3 of the <em class="cEmphasis">ACUCOBOL-GT User's Guide</em> for more details.</li></div>
+<a name="wp1042784"> </a><div class="pSmartList1"><li>When a Format 1 USE procedure executes due to a duplicate key error for a file open with BULK-ADDITION, no file I/O statements may be executed.  This also applies to Format 3 USE procedures.  In addition, no run units may be started or stopped, and the program containing the declarative may not perform an EXIT PROGRAM. </li></div>
+<a name="wp1197801"> </a><div class="pSmartList1"><li>A Format 4 USE procedure is valid only when the &quot;-Cv&quot; option is in effect.  When an error handler introduced by this statement is invoked, the runtime puts special error codes into the eight-byte data item <em class="cEmphasis">data-item-1</em>.  See Chapter 5, &quot;IBM DOS/VS COBOL Conversions,&quot; in <em class="cEmphasis">Transitioning to ACUCOBOL-GT</em> for complete information on DOS/VS COBOL compatibility mode.  See Appendix E.5 for the IBM DOS/VS COBOL error codes.</li></div>
+<a name="wp1042786"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">data-name-2</em> is present, when the error handler is invoked, it will also load <em class="cEmphasis">data-name-2</em> with the contents of the file buffer.  ACUCOBOL-GT always loads <em class="cEmphasis">data-name-2</em>, and if the data-item is larger than the file buffer, the excess bytes at the right end are left unchanged.</li></div>
+<a name="wp1042787"> </a><div class="pSmartList1"><li>The Format 5 USE verb sets up a context for more efficient coding and processing of MODIFY and INQUIRE statements that operate on ActiveX controls or objects. It allows you to execute a series of MODIFY and INQUIRE statements on a specified object without respecifying the object. For example, to change a number of different properties on a single object, place the MODIFY statement within the USE statement, referring to the object once instead of referring to it in each MODIFY clause. </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+USE MyChart Legend::Font<a name="wp1042788"> </a>
+MODIFY    ^Size = 10<a name="wp1042789"> </a>
+          ^Name = &quot;Courier&quot;<a name="wp1042790"> </a>
+          ^Bold = 1<a name="wp1042791"> </a>
+END-USE<a name="wp1042792"> </a>
+</pre></div>
+<a name="wp1042793"> </a><div class="pSmartList1"><li><em class="cEmphasis">Param-1</em> is the first parameter passed when getting the value of <em class="cEmphasis">property-1</em>.</li></div>
+<a name="wp1042794"> </a><div class="pSmartList1"><li><em class="cEmphasis">Param-2</em> is the first parameter passed when getting the value of <em class="cEmphasis">property-2</em>.</li></div>
+<a name="wp1042795"> </a><div class="pSmartList1"><li>Runtime errors announced as &quot;Use of a LINKAGE data item not passed by the caller&quot; and &quot;Passed USING item smaller than corresponding LINKAGE item&quot; belong to the class of  &quot;intermediate&quot; runtime errors that, upon occurrence, call installed error procedures.</li></div>
+<a name="wp1110094"> </a><div class="pSmartList1"><li>When placed in a program's Declarative section, a Format 6 USE statement creates a START or END procedure for the program. Each program may contain no more than one START and one END procedure. Every program in a run unit may contain such procedures. </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1110165"> </a><div class="pSmartList2"><li>A START procedure executes immediately before the first normal COBOL statement in the Procedure Division when the program is in its initial state.  The START procedure executes only once regardless of the number of times the program is entered, until the program is returned to its initial state (e.g. via CANCEL).  A START procedure executes regardless of which entry point is used to start the program when a program contains multiple entry points (see the ENTRY statement).  </li></div>
+<a name="wp1110166"> </a><div class="pSmartList2"><li>An END procedure executes immediately before a program is placed into its initial state or it is about to leave memory, providing the program has been entered at least once.  An END procedure executes before open files are closed as part of the shutdown process.  </li></div>
+<a name="wp1110221"> </a><div class="pSmartList2"><li>It is normal for an END procedure to execute when the program that contains it is inactive.  For example, if a program is canceled, its END procedure will execute when the program is otherwise inactive.  For this reason, an END procedure should not reference data passed to the program through Linkage.  This data will not be defined in many cases.  </li></div>
+<a name="wp1110226"> </a><div class="pSmartList2"><li>END procedures are executed during abnormal shutdown when possible.  However, certain operating system errors (such as a fatal memory error) cannot be caught in some operating environments, and in these cases the END procedures will not be able to execute.  If a fatal error occurs during an END procedure, that procedure stops, but other unprocessed END procedures execute where possible.  </li></div>
+<a name="wp1110240"> </a><div class="pSmartList2"><li>When multiple END procedures execute (e.g. STOP RUN when several programs are in memory), the order of their execution is arbitrary.  </li></div>
+</ol></div>
+</ol></div>
+<a name="wp1110096"> </a><h3 class="pHeadingRef">
+Code examples
+</h3>
+<a name="wp1042797"> </a><h3 class="pHeadingRef">
+Format 1:
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+PROCEDURE DIVISION.<a name="wp1042798"> </a>
+DECLARATIVES.<a name="wp1042799"> </a>
+NAMED-FILE-IO-ERROR-HANDLING SECTION.<a name="wp1042800"> </a>
+   USE AFTER STANDARD ERROR PROCEDURE ON <a name="wp1042801"> </a>
+      REPORT-FILE.<a name="wp1042802"> </a>
+NAMED-FILE-IO-ERROR-HANDLER.<a name="wp1042803"> </a>
+{ . . . }<a name="wp1042804"> </a>
+IO-INPUT-ERROR-HANDLING SECTION.<a name="wp1042805"> </a>
+   USE AFTER STANDARD ERROR PROCEDURE ON INPUT.<a name="wp1042806"> </a>
+IO-INPUT-ERROR-HANDLER.<a name="wp1042807"> </a>
+{ . . . }<a name="wp1042808"> </a>
+IO-OUTPUT-ERROR-HANDLING SECTION.<a name="wp1042809"> </a>
+   USE AFTER STANDARD ERROR PROCEDURE ON OUTPUT.<a name="wp1042810"> </a>
+IO-OUTPUT-ERROR-HANDLER.<a name="wp1042811"> </a>
+{ . . . }<a name="wp1042812"> </a>
+END DECLARATIVES.<a name="wp1042813"> </a>
+MAIN-PROGRAM SECTION.<a name="wp1042814"> </a>
+{ . . . }<a name="wp1042815"> </a>
+</pre></div>
+<a name="wp1042816"> </a><h3 class="pHeadingRef">
+Highlights for first-time users
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042818"> </a><div class="pSmartList1"><li>The USE statement can be used to handle program file I/O errors.  USE is not executed, but, rather, describes the conditions under which the contained procedures are to be executed.</li></div>
+<a name="wp1042819"> </a><div class="pSmartList1"><li>The USE statement is located in a DECLARATIVES section in a program's PROCEDURE DIVISION.  The USE statement may contain one or many error handling procedures.  Each USE statement may specify a file, set of files or OPEN mode for which the enclosed procedures apply.  No file name or OPEN mode (INPUT, OUTPUT, I-O, EXTEND) may be named more than once in the DECLARATIVES section of that PROCEDURE DIVISION.  If an I/O error raises an ambiguity between an error handling procedure that names the file and an error handling procedure with a matching OPEN mode description, the procedure naming the file takes precedence.  </li></div>
+<a name="wp1042820"> </a><div class="pSmartList1"><li>Detecting and handling I/O errors:</li></div>
+<a name="wp1042821"> </a><p class="pIndented1">
+Every I/O operation returns a two-digit status code that indicates the result of the operation.  A status code that begins with &quot;0&quot; indicates a successful operation.  A status code that begins with a number other than &quot;0&quot; indicates that the I/O operation failed.  For a complete list of file status codes see Appendix E, Book 4, <em class="cEmphasis">Appendices.</em>
+</p>
+<a name="wp1042822"> </a><p class="pIndented1">
+When an I/O operation takes place, the file status code is set and sent back to the calling statement.
+</p>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1042823"> </a><div class="pSmartList2"><li>If the status code begins with the number &quot;1&quot;, an AT END error has occurred.</li></div>
+<a name="wp1042824"> </a><div class="pSmartList2"><li>If the status code begins with a &quot;2&quot;, an INVALID KEY error has occurred.</li></div>
+<a name="wp1042825"> </a><div class="pSmartList2"><li>If the programmer has included a corresponding AT END or INVALID KEY phrase in the I/O statement (where supported), the respective clause is executed and the program, if not terminated, continues after the I/O statement that raised the error.</li></div>
+<a name="wp1042826"> </a><div class="pSmartList2"><li>If the status code begins with any other number (except &quot;0&quot;), or there is no AT END or INVALID KEY phrase, the system searches for an applicable USE statement in the DECLARATIVES section.</li></div>
+<a name="wp1042827"> </a><div class="pSmartList2"><li>If an applicable USE statement is found, the search stops, the applicable error handler is executed, and if the program has not been terminated, program execution continues after the I/O statement that raised the error.</li></div>
+<a name="wp1042828"> </a><div class="pSmartList2"><li>If no applicable USE statement is found, the runtime determines the action.  Usually, a message is presented and the program halts.</li></div>
+</ul></div>
+<a name="wp1042829"> </a><p class="pIndented1">
+For more about file status and the AT END, and INVALID KEY phrases, see <a  href="gt3629.htm#wp1034856">section 6.4.8</a>.
+</p>
+<a name="wp1042830"> </a><div class="pSmartList1"><li>The set of I/O verbs that return a status code includes:  CLOSE, DELETE, OPEN, READ, REWRITE, START, UNLOCK, WRITE.</li></div>
+<a name="wp1042831"> </a><div class="pSmartList1"><li>There are five different standards specifying the values of file status codes: ANSI85, ANSI74, DG ICOBOL, VAX COBOL, and IBM DOS/VS COBOL.  See Appendix E, Book 4, for the complete definitions of the status codes corresponding to each standard.  By default, ACUCOBOL-GT uses the ANSI85 status code standard.  You can change to any of the alternate standards by changing the setting of the &quot;FILE-STATUS-CODES&quot; runtime configuration variable.</li></div>
+<a name="wp1042835"> </a><p class="pIndented1">
+The ANSI85 (default) definitions of the major error classes are:
+</p>
+<a name="wp1042866"> </a><p class="pBodyRelative">
+ <div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1059456"> </a>
+Status Code
+
+</th>
+    <th><a name="wp1059458"> </a>
+Status
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1059460"> </a><p class="pCellBody">
+0<em class="cEmphasis">x</em>
+</p>
+</td>
+    <td><a name="wp1059462"> </a><p class="pCellBody">
+I/O operation succeeded
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1059464"> </a><p class="pCellBody">
+1<em class="cEmphasis">x</em>
+</p>
+</td>
+    <td><a name="wp1059466"> </a><p class="pCellBody">
+AT END ERROR
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1059468"> </a><p class="pCellBody">
+2<em class="cEmphasis">x</em>
+</p>
+</td>
+    <td><a name="wp1059470"> </a><p class="pCellBody">
+INVALID KEY ERROR
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1059472"> </a><p class="pCellBody">
+3<em class="cEmphasis">x</em>
+</p>
+</td>
+    <td><a name="wp1059474"> </a><p class="pCellBody">
+PERMANENT ERROR
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1059476"> </a><p class="pCellBody">
+4<em class="cEmphasis">x</em>
+</p>
+</td>
+    <td><a name="wp1059478"> </a><p class="pCellBody">
+LOGIC ERROR
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1059480"> </a><p class="pCellBody">
+9<em class="cEmphasis">x</em>
+</p>
+</td>
+    <td><a name="wp1059482"> </a><p class="pCellBody">
+ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>DEFINED
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1042868"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>Some errors such as 30, 98, and 9D also return additional information in the secondary or tertiary file codes.  These may be retrieved with the library routine C$RERR.
+<hr />
+</p>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

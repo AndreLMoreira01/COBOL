@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/01/05 10:10:26" />
+  <title>5.9.4  How the Authorization File Works</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Programmer's Guide to the Internet <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="int5.htm">Chapter 5: Using the ACUCOBOL-GT Web Runtime</a> &gt; <a href="int550.htm">5.9  Security</a> &gt; </p>
+<a name="wp1038309"> </a><h2 class="pHeading2">
+5.9.4  How the Authorization File Works
+</h2>
+<a name="wp1033505"> </a><p class="pBody">
+When a user first installs the Web runtime, the installation creates a default authorization file, &quot;acuauth.txt&quot;, and places it in the same directory that contains &quot;acugtax.ocx&quot;.  If downloaded from Acucorp's Web site, these files are installed into a hidden directory such as &quot;Temporary Internet Files&quot; or &quot;Downloaded Program Files,&quot; depending on the browser configuration. 
+</p>
+<a name="wp1091955"> </a><p class="pBody">
+If installed from Acucorp distribution media, &quot;acuauth.txt&quot; and &quot;acugtax.ocx&quot; are placed in the &quot;c:\Acucorp\Acucbl700\AcuGT\bin\&quot; directory.
+</p>
+<a name="wp1091912"> </a><p class="pBody">
+By default, the &quot;acuauth.txt&quot; file contains one line that specifies a list of directories where COBOL programs may create or delete files and subdirectories.  The directories are specified as a sequence of pathnames delimited by quotation marks.  The purpose of this file is to allow applications that create local temporary files to work immediately.
+</p>
+<a name="wp1033506"> </a><p class="pBody">
+If you install the Web runtime as part of the ACUCOBOL-GT Development System, &quot;acuauth.txt&quot; contains only the following line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&quot;c:\acucorp\controldir\plgndata&quot;<a name="wp1033507"> </a>
+</pre></div>
+<a name="wp1033508"> </a><p class="pBody">
+where <em class="cEmphasis">controldir </em>is the directory that contains &quot;acugtax.ocx&quot;.  
+</p>
+<a name="wp1033509"> </a><p class="pBody">
+If a COBOL application requires access to other directories or disks on the user's machine, you must instruct your <em class="cEmphasis">end users</em> to add those directories to the &quot;acuauth.txt&quot; file manually.  In this way, end users can accept responsibility for specifying which directories on the client machine may be made accessible to Web runtime applications.  
+</p>
+<a name="wp1033510"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You cannot change this file programmatically.
+<hr />
+</p>
+<a name="wp1033512"> </a><p class="pBody">
+We recommend designing your application so that this is not necessary.  Using AcuServer and/or AcuConnect, you can design your application to utilize remote application and data resources.
+</p>
+<a name="wp1033513"> </a><p class="pBody">
+However, if you do need access to the client machine, you might want to use messages to help users manage the file.  For example, if an application receives file status &quot;37,07&quot; (access denied) when trying to open a file on the local machine, the program can display a message that indicates the problem and instructs the user to add the directory name to the file. 
+</p>
+<a name="wp1033514"> </a><p class="pBody">
+You can also instruct users to add other information to the file, for example, to access restricted library routines.  See <a  href="int558.htm#wp1033556">section 5.9.4.4</a> for more information.
+</p>
+<a name="wp1033515"> </a><p class="pBody">
+Once the file is edited, applications executed by the Web controls are allowed to read and write data in these directories, as well as create and delete subdirectories.  No other area of the user's local or network file system will be accessible to the COBOL programs executed by the Web controls.  This provides some measure of protection for the end user's machine and network.  
+</p>
+<a name="wp1033516"> </a><p class="pBody">
+If the &quot;acuauth.txt&quot; file is empty or missing when the Web runtime is invoked, the COBOL application is denied access to the local machine's file system. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

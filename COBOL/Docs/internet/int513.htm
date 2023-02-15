@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/01/05 10:10:26" />
+  <title>W$BROWSERINFO routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Programmer's Guide to the Internet <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="int5.htm">Chapter 5: Using the ACUCOBOL-GT Web Runtime</a> &gt; <a href="int59.htm">5.5  Preparing Your ACUCOBOL-GT Application for the Web Runtime </a> &gt; <a href="int512.htm">5.5.1  Coding for the Web Runtime</a> &gt; </p>
+<a name="wp1032151"> </a><h2 class="pHeading3">
+W$BROWSERINFO routine
+</h2>
+<a name="wp1032152"> </a><p class="pBody">
+Sometimes, you may want your application to respond in different ways to different browsers.  In this case, you can use the W$BROWSERINFO library routine to determine the version and name of the requesting browser, that is, the one that will be hosting the COBOL application. 
+</p>
+<a name="wp1032154"> </a><p class="pBody">
+CALL this routine using the following syntax:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;W$BROWSERINFO&quot; USING BROWSERINFO-DATA<a name="wp1032155"> </a>
+</pre></div>
+<a name="wp1032156"> </a><p class="pBody">
+<em class="cEmphasis">Parameters:</em>
+</p>
+<a name="wp1032157"> </a><p class="pBody">
+BROWSERINFO-DATA					  Group item as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  BROWSERINFO-DATA.<a name="wp1032158"> </a>
+    03  USER-AGENT-STRING          PIC X(50).<a name="wp1032159"> </a>
+    03  BROWSER-MAJOR-VERSION      PIC X COMP-X.<a name="wp1032160"> </a>
+    03  BROWSER-MINOR-VERSION      PIC X COMP-X.<a name="wp1032161"> </a>
+</pre></div>
+<a name="wp1032162"> </a><p class="pBody">
+BROWSERINFO-DATA is found in the COPY library &quot;ACUCOBOL.DEF.&quot;
+</p>
+<a name="wp1032163"> </a><p class="pBody">
+Upon return from W$BROWSERINFO, all of the data elements contained in BROWSERINFO-DATA are filled in.  If you call W$BROWSERINFO and the COBOL application is not running in a Web browser via the Web runtime, the first field is set to spaces and the last two fields are set to zero.  The BROWSERINFO-DATA fields have the following meaning:
+</p>
+<a name="wp1032188"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1034152"> </a>
+Field
+
+</th>
+    <th><a name="wp1034154"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1032172"> </a><p class="pCellBody">
+USER-AGENT-STRING
+</p>
+</td>
+    <td><a name="wp1032174"> </a><p class="pCellBody">
+The browser's user_agent field.  This contains the name of the browser software as it is sent to the HTTP server.  It may also contain version numbers, product name, and operating system name.  Netscape browsers set the first seven characters of this field to &quot;Mozilla&quot;. Microsoft Internet Explorer sets this field to &quot;Microsoft Internet Explorer&quot;.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1032177"> </a><p class="pCellBody">
+BROWSER-MAJOR-VERSION
+</p>
+</td>
+    <td><a name="wp1032180"> </a><p class="pCellBody">
+The major version number reported by the browser.  This is not the same as the major version number displayed in the browser&#39;s &quot;About&quot; screen.  For example, both Netscape and Internet Explorer put &quot;0&quot; in this field.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1032183"> </a><p class="pCellBody">
+BROWSER-MINOR-VERSION
+</p>
+</td>
+    <td><a name="wp1032186"> </a><p class="pCellBody">
+The minor version number reported by the browser.  This is not the same as the minor version number displayed in the browser's &quot;About&quot; screen.  For example, both Netscape and Internet Explorer put &quot;9&quot; in this field.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

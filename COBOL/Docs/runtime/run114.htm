@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:23:30" />
+  <title>11.2.1  Indicating Programs to Share</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run11.htm"><br />Chapter 11: Shared Memory</a> &gt; <a href="run113.htm">11.2  Using Shared Memory</a> &gt; </p>
+<a name="wp1036213"> </a><h2 class="pHeading2">
+11.2.1  Indicating Programs to Share
+</h2>
+<a name="wp1036216"> </a><p class="pBody">
+Use your COBOL configuration file to indicate which programs you want to share code.  By default, no programs share code.  To use shared code for all of your programs, add the following line to the configuration file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SHARED_CODE  1<a name="wp1036217"> </a>
+</pre></div>
+<a name="wp1036218"> </a><p class="pBody">
+This causes all programs to attempt to share code.  Every code segment loaded into memory is placed into shared memory until the shared memory area becomes full.  Further code segments are then placed in conventional memory.  The UNIX default for SHARED_CODE is &quot;0&quot; (no programs share code).
+</p>
+<a name="wp1036219"> </a><p class="pBody">
+Because shared memory is a limited resource under UNIX and Linux, you will probably want to restrict the use of shared code to those programs that render the most benefit.  This ensures that other programs do not unnecessarily use up the available shared memory.  To do this, specify in your runtime configuration file each program that you want to share as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SHARED_CODE  <em class="cEmphasis">Program1</em><a name="wp1036220"> </a>
+SHARED_CODE  <em class="cEmphasis">Program2</em><a name="wp1036221"> </a>
+SHARED_CODE  <em class="cEmphasis">Program3</em><a name="wp1036222"> </a>
+</pre></div>
+<a name="wp1036223"> </a><p class="pBody">
+(The program name may also be enclosed in single or double quotes, for example, &quot;Program1&quot; or `Program2'.)  When you are using this method, &quot;<em class="cEmphasis">Program1</em>&quot;, &quot;<em class="cEmphasis">Program2</em>&quot;, and so forth, specify the PROGRAM-IDs from the programs' Identification Division (note that a program's object file name is <em class="cEmphasis">not</em> used).  If you use this method, setting SHARED_CODE to &quot;1&quot; has no effect.  
+</p>
+<a name="wp1036224"> </a><p class="pBody">
+To maximize the benefits of code sharing, begin by restricting the use of shared code to large programs that have many users.  Later, if you find that you have enough shared memory in your system, you can extend its use to small programs that have many users.  Use <b class="cBold">acushare</b>'s reporting facility to help you optimize the use of shared memory.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:31" />
+  <title>4.8.3  Minimum and Maximum Control Dimensions</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt24.htm">Chapter 4:  Supporting Concepts and Related Issues</a> &gt; <a href="gt2414.htm">4.8  Layout Managers</a> &gt; </p>
+<a name="wp1029482"> </a><h2 class="pHeading2">
+4.8.3  Minimum and Maximum Control Dimensions
+</h2>
+<a name="wp1029483"> </a><p class="pBody">
+All controls have four properties that can be used to describe their minimum and maximum allowed dimensions. Layout managers can use these properties to determine how to size a control.  The properties are:
+</p>
+<a name="wp1029484"> </a><p style="text-align: left" class="pListOptions">
+<b class="cBold">MIN-HEIGHT</b>	The control's minimum height.
+</p>
+<a name="wp1029485"> </a><p style="text-align: left" class="pListOptions">
+<b class="cBold">MAX-HEIGHT</b>	The control's maximum height.
+</p>
+<a name="wp1029486"> </a><p style="text-align: left" class="pListOptions">
+<b class="cBold">MIN-WIDTH</b>	The control's minimum width.
+</p>
+<a name="wp1030218"> </a><p style="text-align: left" class="pListOptions">
+<b class="cBold">MAX-WIDTH</b>	The control's maximum width.
+</p>
+<a name="wp1030224"> </a><p class="pBody">
+Each of these properties take a numeric value using the same units as the control's SIZE (width) and LINES (height) properties.  Each property has a default value of zero.  A value of zero for MAX-HEIGHT and MAX-WIDTH means &quot;no maximum.&quot;  
+</p>
+<a name="wp1030225"> </a><p class="pBody">
+A layout manager uses these values to limit how much it will modify a control's dimensions.  A particular layout manager is free to interpret these values to suit its purposes.  The resize manager will treat them as absolute limits.  
+</p>
+<a name="wp1029490"> </a><p class="pBody">
+For example, when creating a multiline entry field, you might want to limit its vertical dimension to have both a minimum and maximum height.  One implementation might look like this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+DISPLAY ENTRY-FIELD, MULTILINE<a name="wp1029491"> </a>
+      LINE 5, COL 10 <a name="wp1029492"> </a>
+      SIZE 50 CELLS, LINES 10 CELLS<a name="wp1029493"> </a>
+      MIN-HEIGHT = 1.5<a name="wp1029494"> </a>
+      MAX-HEIGHT = 20<a name="wp1029495"> </a>
+</pre></div>
+<a name="wp1029496"> </a><p class="pBody">
+In this example, the layout manager will not change the height of the entry field to be less than 1.5 cells or more than 20 cells.  
+</p>
+<a name="wp1029497"> </a><p class="pBody">
+The four properties apply to all controls.  Like all property names, they are not reserved words.  Therefore, you may use these words as user-defined names anywhere in your program where property names are not allowed (i.e., outside of the Screen Section and the scope of DISPLAY, MODIFY, and INQUIRE statements).  
+</p>
+<a name="wp1029498"> </a><p class="pBody">
+Typically, you would start out by leaving the properties at their default values.  The default values do not constrain the control's dimensions.  Then, to address a particular layout problem, you would set one or more of the properties to resolve the problem.  For example, you may want to set a minimum height for a control if the user can resize the window such that the unconstrained control is reduced to a height of zero.  Or, you may want to limit an entry field to show no more than the total of lines of data it allows.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

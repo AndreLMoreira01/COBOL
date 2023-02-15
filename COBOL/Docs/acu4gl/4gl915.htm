@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:43" />
+  <title>9.2.3.3  Retrieving messages using C$RERR</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl9.htm">Chapter 9:  Performance and Troubleshooting</a> &gt; <a href="4gl99.htm">9.2  Troubleshooting</a> &gt; <a href="4gl912.htm">9.2.3  Retrieving Runtime Errors</a> &gt; </p>
+<a name="wp1041414"> </a><h2 class="pHeading3">
+9.2.3.3  Retrieving messages using C$RERR
+</h2>
+<a name="wp1041415"> </a><p class="pBody">
+You might want to separate the error codes and their associated text, and store them in variables.  The variables can then be displayed to the screen or handled in whatever way you deem appropriate.
+</p>
+<a name="wp1041416"> </a><p class="pBody">
+You saw an example of the usage of C$RERR in the sample program in <a  href="4gl2.htm#wp1038776">Chapter 2, &quot;Getting Started.&quot;</a>  The simplified example shown below uses the library routine C$RERR with two parameters to retrieve the complete error code (first parameter) and its associated text (second parameter).  
+</p>
+<a name="wp1041423"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>See &quot;<a  href="4gl915.htm#wp1041449">For Informix</a>,&quot; at the end of this section, for code that is specific to Informix.
+<hr />
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+DATA DIVISION.<a name="wp1041424"> </a>
+   .<a name="wp1041425"> </a>
+   .<a name="wp1041426"> </a>
+working-storage section.<a name="wp1041427"> </a>
+01  file-status                   pic xx.<a name="wp1041428"> </a>
+01  error-status.<a name="wp1041429"> </a>
+    03 primary-error              pic x(2).<a name="wp1041430"> </a>
+    03 secondary-error            pic x(40).<a name="wp1041431"> </a>
+01  error-text                    pic x(40).<a name="wp1041432"> </a>
+<a name="wp1041433"> </a>
+PROCEDURE DIVISION.<a name="wp1041434"> </a>
+   .<a name="wp1041435"> </a>
+   .<a name="wp1041436"> </a>
+get-file-err.<a name="wp1041437"> </a>
+call &quot;C$RERR&quot; using error-status, error-text, status-type.<a name="wp1041438"> </a>
+display &quot;FILE ERROR:&quot;, primary-error.<a name="wp1041439"> </a>
+display &quot;DATABASE ERROR:&quot;,  secondary-error.<a name="wp1041440"> </a>
+display error-text.<a name="wp1041441"> </a>
+accept omitted.<a name="wp1041442"> </a>
+stop run.<a name="wp1041443"> </a>
+</pre></div>
+<a name="wp1041444"> </a><p class="pBody">
+Here's an example of the output you might get from this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+FILE ERROR: 9D<a name="wp1041445"> </a>
+DATABASE ERROR: 1608<a name="wp1041446"> </a>
+</pre></div>
+<a name="wp1041447"> </a><p class="pBody">
+A network error was encountered when results were sent to the front end.  Check the error log for more information.
+</p>
+<a name="wp1041449"> </a><h3 class="pHeadingRef">
+For Informix
+</h3>
+<a name="wp1041450"> </a><p class="pBody">
+Remember that the extended code can consist of two parts (database error and ISAM error), separated by a comma.  In the example shown below, we use the library routine C$RERR with two parameters to retrieve the complete error code (first parameter) and its associated text (second parameter).  Then we use the UNSTRING verb to separate the code into its parts:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+DATA DIVISION<a name="wp1041451"> </a>
+   .<a name="wp1041452"> </a>
+   .<a name="wp1041453"> </a>
+   .<a name="wp1041454"> </a>
+working-storage section.<a name="wp1041455"> </a>
+01  file-status                          pic xx.<a name="wp1041456"> </a>
+01  error-status.<a name="wp1041457"> </a>
+    03 primary-error                     pic x(2).<a name="wp1041458"> </a>
+    03 extended-error                    pic x(40).<a name="wp1041459"> </a>
+01  secondary-error                      pic x(10).<a name="wp1041460"> </a>
+01  isam-error                           pic x(40).<a name="wp1041461"> </a>
+01  error-text                           pic x(40).<a name="wp1041462"> </a>
+<a name="wp1041463"> </a>
+PROCEDURE DIVISION<a name="wp1041464"> </a>
+   .<a name="wp1041465"> </a>
+   .<a name="wp1041466"> </a>
+   .<a name="wp1041467"> </a>
+get-file-err.<a name="wp1041468"> </a>
+   call &quot;C$RERR&quot; using error-status, error-text.<a name="wp1041469"> </a>
+   unstring extended-error delimited by &quot;,&quot; into<a name="wp1041470"> </a>
+      secondary-error, isam-error.<a name="wp1041471"> </a>
+<a name="wp1041472"> </a>
+   display &quot;FILE ERROR:&quot;, primary-error.<a name="wp1041473"> </a>
+   display &quot;DATABASE ERROR:&quot;, secondary-error.<a name="wp1041474"> </a>
+   display &quot;ISAM ERROR:&quot;, isam-error.<a name="wp1041475"> </a>
+<a name="wp1041476"> </a>
+   display error-text.<a name="wp1041477"> </a>
+   accept omitted.<a name="wp1041478"> </a>
+   stop run.<a name="wp1041479"> </a>
+</pre></div>
+<a name="wp1041480"> </a><p class="pBody">
+Here's an example of the output you might get from this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE ERROR: 9D<a name="wp1041481"> </a>
+DATABASE ERROR: 350<a name="wp1041482"> </a>
+ISAM ERROR: 108<a name="wp1041483"> </a>
+Index already exists on column.<a name="wp1041484"> </a>
+</pre></div>
+<a name="wp1041485"> </a><h3 class="pHeadingRef">
+Using the Informix error number and &quot;finderr&quot;
+</h3>
+<a name="wp1041486"> </a><p class="pBody">
+One more method, also for Informix only, allows you to take the Informix error number and use the &quot;finderr&quot; syntax to discover error information.  More information on this syntax can be found in your Informix documentation.
+</p>
+<a name="wp1041487"> </a><p class="pBody">
+The syntax is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+finderr <em class="cEmphasis">xxxxx</em> <a name="wp1041488"> </a>
+</pre></div>
+<a name="wp1041489"> </a><p class="pBody">
+(where <em class="cEmphasis">xxxxx</em> is the Informix error number).
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

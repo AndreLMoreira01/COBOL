@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-GET-PRINTER-MEDIA</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1041155"> </a><h2 class="pHeading3">
+WINPRINT-GET-PRINTER-MEDIA
+</h2>
+<a name="wp1041157"> </a><p class="pBody">
+This operation code allows you to access the paper sizes and paper trays supported by the printer driver.
+</p>
+<a name="wp1041161"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1041162"> </a>
+    USING WINPRINT-GET-PRINTER-MEDIA, WINPRINT-MEDIA<a name="wp1041163"> </a>
+    GIVING RESULT<a name="wp1041164"> </a>
+</pre></div>
+<a name="wp1041165"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1041166"> </a><p class="pBody">
+<b class="cBold">WINPRINT-MEDIA</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  WINPRINT-MEDIA.<a name="wp1041167"> </a>
+   03  WINPRINT-MEDIA-PRINTER       PIC X(80).<a name="wp1041168"> </a>
+   03  WINPRINT-MEDIA-PORT          PIC X(80).<a name="wp1041169"> </a>
+   03  WINPRINT-MEDIA-PAPERCOUNT    SIGNED-SHORT.<a name="wp1041170"> </a>
+   03  WINPRINT-MEDIA-TRAYCOUNT     SIGNED-SHORT.<a name="wp1041171"> </a>
+   03  WINPRINT-MEDIA-PAPER         SIGNED-SHORT<a name="wp1041172"> </a>
+                                    OCCURS MAX-PAPER-SIZES.<a name="wp1041173"> </a>
+   03  WINPRINT-MEDIA-TRAYS         SIGNED-SHORT<a name="wp1041174"> </a>
+                                    OCCURS MAX-PAPER-TRAYS.<a name="wp1041175"> </a>
+</pre></div>
+<a name="wp1041176"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1041177"> </a><p class="pBody">
+This operation may be called at any time a print job has started, or has started and closed.  There is no need to reset this function.  WINPRINT-MEDIA should be initialized prior to use.
+</p>
+<a name="wp1041178"> </a><p class="pBody">
+WINPRINT-MEDIA has the following values:
+</p>
+<a name="wp1041179"> </a><p class="pBody">
+<b class="cBold">WINPRINT-MEDIA-PRINTER</b> -- Should be set to the value of WINPRINT-NAME as obtained through a call to WINPRINT-GET-PRINTER-INFO(-EX) or WINPRINT-GET-CURRENT-INFO(-EX). 
+</p>
+<a name="wp1041180"> </a><p class="pBody">
+<b class="cBold">WINPRINT-MEDIA-PORT</b> -- Should be set to the value of WINPRINT-PORT from the WINPRINT-SELECTION op-code.
+</p>
+<a name="wp1041181"> </a><p class="pBody">
+<b class="cBold">WINPRINT-MEDIA-PAPERCOUNT</b> -- Returns the total number of paper sizes supported by the selected printer driver. This number varies from printer to printer. The maximum value is 41, even if the printer driver actually supports more sizes of paper.
+</p>
+<a name="wp1041182"> </a><p class="pBody">
+<b class="cBold">WINPRINT-MEDIA-TRAYCOUNT</b> -- Returns the total number of paper trays supported by the printer driver.  This number varies from printer to printer. The maximum value is 13, even if the printer driver actually supports more paper trays.
+</p>
+<a name="wp1041183"> </a><p class="pBody">
+<b class="cBold">WINPRINT-MEDIA-PAPER</b> -- Returns an array of supported paper sizes. The array is limited to a maximum of 41 possible sizes.  Each number in the array corresponds to a paper size defined by WINPRINT-CURR-PAPERSIZE in &quot;winprint.def&quot;.  The numbers in the array may not appear in sequential order (1,2,3...).  If WINPRINT-MEDIA-PAPERCOUNT returns a value less than 41, values between the returned count and 41 are undefined.  Values over 41 are not defined by the Windows API, and may be undefined, device specific or user-defined.  
+</p>
+<a name="wp1041184"> </a><p class="pBody">
+<b class="cBold">WINPRINT-MEDIA-TRAYS</b> -- Returns an array of supported paper trays. The array is limited to a maximum of 13 possible trays.  Each number in the array corresponds to a paper tray defined by WINPRINT-CURR-TRAY in &quot;winprint.def&quot;.  The numbers in the array may not appear in sequential order (1,2,3...).  If WINPRINT-MEDIA-TRAYS returns a value less than 13, values between the returned count and 13 are undefined.  Values over 13 are not defined by the Windows API, and may be undefined, device specific or user-defined.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

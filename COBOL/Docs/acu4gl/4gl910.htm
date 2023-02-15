@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:43" />
+  <title>9.2.1  Compiler Errors  </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl9.htm">Chapter 9:  Performance and Troubleshooting</a> &gt; <a href="4gl99.htm">9.2  Troubleshooting</a> &gt; </p>
+<a name="wp1036815"> </a><h2 class="pHeading2">
+9.2.1  Compiler Errors  
+</h2>
+<a name="wp1036820"> </a><p class="pBody">
+The errors listed below could occur when you compile with the &quot;-Fx&quot; option.  <em class="cEmphasis">In some cases, the data dictionary cannot be built until you remove the error condition.  </em>(Data dictionary errors do not, however, prevent the object code from being generated.)
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Bad picture for DATE: <em class="cEmphasis">keyname</em><a name="wp1036821"> </a>
+</pre></div>
+<a name="wp1038993"> </a><p class="pBody">
+The PICTURE must be six or eight bytes in length, either alphanumeric or numeric with no sign.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Data missing from key segment <em class="cEmphasis">keyname</em><a name="wp1036823"> </a>
+</pre></div>
+<a name="wp1039017"> </a><p class="pBody">
+This occurs when some part of the named key cannot be placed in the dictionary; the dictionary cannot be generated in this situation.
+</p>
+<a name="wp1036825"> </a><p class="pBody">
+This usually occurs because of filler.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  my-record.<a name="wp1036826"> </a>
+    03  my-key.<a name="wp1036827"> </a>
+        05  filler            pic xx.<a name="wp1036828"> </a>
+        05  field-1           pic xx.<a name="wp1036829"> </a>
+</pre></div>
+<a name="wp1036830"> </a><p class="pBody">
+If my-key is declared as a record key, you will receive this error because the area of the key described by filler is not included in the dictionary.
+</p>
+<a name="wp1036831"> </a><p class="pBody">
+To correct this error, ensure that every character that is part of the key is included in some field that is part of the dictionary.  Use an XFD to give a field name to each filler, to ensure that fillers are included:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ 01  my-record.<a name="wp1036832"> </a>
+     03  my-key.<a name="wp1036833"> </a>
+*(( xfd name=myfiller ))<a name="wp1036834"> </a>
+         05   filler            pic xx.<a name="wp1036835"> </a>
+         05   field-1           pic xx.<a name="wp1036836"> </a>
+     <a name="wp1036837"> </a>
+Directive word too long: <em class="cEmphasis">keyname</em><a name="wp1036838"> </a>
+</pre></div>
+<a name="wp1039046"> </a><p class="pBody">
+With one exception the words contained in a directive, including field names, cannot exceed 30 characters.  The value of a <a  href="4gl415.htm#wp1036748">WHEN</a> directive may consist of up to 50 characters.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+GROUP expected after USE<a name="wp1036840"> </a>
+</pre></div>
+<a name="wp1039061"> </a><p class="pBody">
+The <a  href="4gl413.htm#wp1034754">USE GROUP</a> directive must include both words.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Missing `=' in XFD directive<a name="wp1041278"> </a>
+</pre></div>
+<a name="wp1039063"> </a><p class="pBody">
+The <a  href="4gl410.htm#wp1035551">NAME</a> directive requires an equal (&quot;=&quot;) sign.  The <a  href="4gl415.htm#wp1036748">WHEN</a> directive requires a comparison operator.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Missing field name after WHEN<a name="wp1036844"> </a>
+</pre></div>
+<a name="wp1039086"> </a><p class="pBody">
+A valid field name, or the word OTHER, must be specified with the <a  href="4gl415.htm#wp1036748">WHEN</a> directive.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+xxx: unknown XFD directive<a name="wp1036846"> </a>
+</pre></div>
+<a name="wp1039093"> </a><p class="pBody">
+The compiler did not recognize the directive you used.  The <em class="cEmphasis">xxx</em> is the directive found.  Check for a typographical error.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Value should be a name: xxx<a name="wp1036848"> </a>
+</pre></div>
+<a name="wp1039100"> </a><p class="pBody">
+This error occurs when the item to the right of an &quot;=&quot; should be a name and it isn't.  For example, it would be an error to use a quoted string with the <a  href="4gl410.htm#wp1035551">NAME</a> directive: $XFD NAME=some text.  
+</p>
+<a name="wp1039101"> </a><p class="pBody">
+The <em class="cEmphasis">xxx</em> in the message is the value found.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Value should be numeric: xxx<a name="wp1036851"> </a>
+</pre></div>
+<a name="wp1039108"> </a><p class="pBody">
+This error occurs when the item to the right of an &quot;=&quot; should be numeric and it isn't.  The <em class="cEmphasis">xxx</em> in the message is the value found.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Value should be a literal: xxx<a name="wp1036853"> </a>
+</pre></div>
+<a name="wp1039115"> </a><p class="pBody">
+This error occurs when the item to the right of an &quot;=&quot; should be a literal and it isn't.  The xxx in the message is the value found.  A literal is either a quoted string or a numeric integer.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Variable file name requires File directive<a name="wp1036855"> </a>
+</pre></div>
+<a name="wp1039122"> </a><p class="pBody">
+This message occurs when the compiler cannot assign a name to the .xfd file because the ASSIGN phrase for the file names a variable file name.  In this case, you must use a <a  href="4gl49.htm#wp1034600">FILE</a> directive to name the .xfd file.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+WHEN variable xxx not found in record<a name="wp1036857"> </a>
+</pre></div>
+<a name="wp1039135"> </a><p class="pBody">
+This happens if you have a <a  href="4gl415.htm#wp1036748">WHEN</a> directive that mentions a variable that doesn't exist in the record.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

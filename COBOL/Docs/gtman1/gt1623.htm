@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.2.2  Terminal Manager Restrictions</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt1621.htm">6.2  Terminal I/O</a> &gt; </p>
+<a name="wp1032712"> </a><h2 class="pHeading2">
+6.2.2  Terminal Manager Restrictions
+</h2>
+<a name="wp1032714"> </a><p class="pBody">
+Because of the windowing capabilities of the Terminal Manager, the programmer must abide by certain restrictions.  This section describes these restrictions and how to work with them.  
+</p>
+<a name="wp1032715"> </a><p class="pBody">
+The primary restriction is that the Terminal Manager must retain control of the terminal.  It needs to do this in order to implement the windowing functions.  Also, by doing this, it can significantly improve screen performance over a &quot;dumb&quot; screen interface.  
+</p>
+<a name="wp1032717"> </a><p class="pBody">
+The main effect of this restriction is that you may not send arbitrary &quot;escape&quot; sequences to the terminal.  Sending &quot;escape&quot; sequences that command the terminal in a hardware-specific fashion will confuse the Terminal Manager because it will not know what effect the &quot;escape&quot; sequence had on the screen.  This will result in the Terminal Manager's making incorrect assumptions about the screen and, eventually, will cause it to display incorrect data.  
+</p>
+<a name="wp1032718"> </a><p class="pBody">
+This restriction is not too serious, however, because the Terminal Manager can perform most functions that are normally accomplished through these &quot;escape&quot; sequences.  Using the Terminal Manager to perform these functions has the added benefit of making them terminal-independent.  This allows you to run the same application on any kind of terminal without having to keep a database of terminal capabilities maintained by the program.  
+</p>
+<a name="wp1032720"> </a><p class="pBody">
+The following points outline the Terminal Manager's solution to various functions that are usually implemented via &quot;escape&quot; sequences.
+</p>
+<a name="wp1049864"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1049881"> </a><p class="pCellBody">
+<b class="cBold">Line Drawing</b>
+</p>
+</td>
+    <td><a name="wp1049883"> </a><p class="pCellBody">
+Many programs draw special-forms on the user's screen using the terminal's line drawing characters.  This works fine if the line drawing characters are part of the terminal's default character set (such as on a PC), but does not work if you need to send an &quot;escape&quot; sequence to switch character sets. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1049885"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1049887"> </a><p class="pCellBody">
+With ACUCOBOL-GT, you can use DISPLAY BAR, DISPLAY LINE, and DISPLAY BOX to perform line drawing.  These verbs have the advantage that you can simply draw the form using screen coordinates without having to worry about different character sets on different terminals or using special characters to handle the intersections.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050058"> </a><p class="pCellBody">
+<b class="cBold">132-Column Handling</b>
+</p>
+</td>
+    <td><a name="wp1050060"> </a><p class="pCellBody">
+Some programs send &quot;escape&quot; sequences to switch between 80-column and 132-column mode on the terminal.   This can be accomplished with the DISPLAY SCREEN verb in ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif">.</span> 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050054"> </a><p class="pCellBody">
+<b class="cBold">Attached Devices</b>
+</p>
+</td>
+    <td><a name="wp1050056"> </a><p class="pCellBody">
+ACUCOBOL-GT can send data to a device attached to the terminal.   For example, a printer or a cash register might be attached.  The built-in library routine &quot;C$LOCALPRINT&quot; can send data to the attached device with a variety of line spacing options.  This routine is described in Book 4, Appendix I.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050050"> </a><p class="pCellBody">
+<b class="cBold">Scrolling</b>
+</p>
+</td>
+    <td><a name="wp1050052"> </a><p class="pCellBody">
+ACUCOBOL-GT directly supports scrolling with the SCROLL option of the DISPLAY verb. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1050456"> </a><p class="pCellBody">
+<b class="cBold">Function Key Labels</b>
+</p>
+</td>
+    <td><a name="wp1050458"> </a><p class="pCellBody">
+you can program function key labels by providing the appropriate command string in the &quot;is&quot; entry in &quot;a_termcap&quot;.  For details, see <a  href="gt1444.htm#wp1035078">section 4.6.9, &quot;Initialization.&quot;</a>  Currently, ACUCOBOL-GT does not provide a way to program function key labels at run time.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

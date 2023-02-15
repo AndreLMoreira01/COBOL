@@ -1,0 +1,69 @@
+      * custsql.evt
+      * custsql.evt is generated from C:\Acucorp\Acucbl720\AcuGT\sample\samplprj\custsql.Psf
+      * This is a generated file. DO NOT modify this file directly.
+      
+
+       Acu-CUST-SCREEN-Event-Extra.
+           EVALUATE Event-Type
+           WHEN Msg-Close
+              PERFORM Acu-CUST-SCREEN-Msg-Close
+           END-EVALUATE
+           .
+
+       Acu-CUST-SCREEN-Msg-Close.
+           ACCEPT Quit-Mode-Flag FROM ENVIRONMENT "QUIT_MODE"
+           IF Quit-Mode-Flag = ZERO
+              PERFORM Acu-CUST-SCREEN-Exit
+              IF Exit-Pushed
+                 PERFORM Acu-Exit-Rtn
+              ELSE
+                 MOVE Event-Action-Fail TO Event-Action
+              END-IF
+           END-IF
+           .
+
+       Exception-Proc.
+           PERFORM CUST-SCREEN-Ex-Other
+           .
+      ***   start event editor code   ***
+      *
+       CUST-SCREEN-Ex-Other.
+           EVALUATE TRUE
+               WHEN FIRST-RECORD
+                   PERFORM GET-FIRST-RECORD
+               WHEN PREVIOUS-RECORD
+                   PERFORM GET-PREVIOUS-RECORD
+               WHEN NEXT-RECORD
+                   PERFORM GET-NEXT-RECORD
+               WHEN LAST-RECORD
+                   PERFORM GET-LAST-RECORD
+               WHEN NEW-RECORD
+                   PERFORM GET-NEW-RECORD
+               WHEN DELETE-RECORD
+                   PERFORM DELETE-THE-RECORD
+               WHEN WRITE-RECORD
+                   PERFORM WRITE-THE-RECORD
+           END-EVALUATE.
+           PERFORM UPDATE-SCREEN-FIELDS.
+           DISPLAY CUST-SCREEN.    
+      *
+       UPDATE-SCREEN-FIELDS.          
+           MOVE CUSTOMER-NAME TO WS-CUSTOMER-NAME.
+           MOVE CUSTOMER-ADDR-1 TO WS-CUSTOMER-ADDR-1.
+           MOVE CUSTOMER-ADDR-2 TO WS-CUSTOMER-ADDR-2.
+           MOVE CUSTOMER-CITY TO WS-CUSTOMER-CITY.
+           MOVE CUSTOMER-STATE TO WS-CUSTOMER-STATE.
+           MOVE CUSTOMER-ZIP TO WS-CUSTOMER-ZIP.
+           MOVE CUSTOMER-PHONE TO WS-CUSTOMER-PHONE.
+           MOVE CUSTOMER-CONTACT TO WS-CUSTOMER-CONTACT.
+      *
+       UPDATE-RECORD-FIELDS.
+           MOVE WS-CUSTOMER-NAME TO CUSTOMER-NAME.
+           MOVE WS-CUSTOMER-ADDR-1 TO CUSTOMER-ADDR-1.
+           MOVE WS-CUSTOMER-ADDR-2 TO CUSTOMER-ADDR-2.
+           MOVE WS-CUSTOMER-CITY TO CUSTOMER-CITY.
+           MOVE WS-CUSTOMER-STATE TO CUSTOMER-STATE.
+           MOVE WS-CUSTOMER-ZIP TO CUSTOMER-ZIP.
+           MOVE WS-CUSTOMER-PHONE TO CUSTOMER-PHONE.
+           MOVE WS-CUSTOMER-CONTACT TO CUSTOMER-CONTACT.       
+       

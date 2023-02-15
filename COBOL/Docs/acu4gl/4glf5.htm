@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:45:15" />
+  <title>F.2.2  UNIX Installation Steps for Acu4GL for DB2 </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4glf.htm">Appendix F:  Acu4GL for DB2 Information </a> &gt; <a href="4glf3.htm">F.2  Acu4GL for DB2 Installation and Setup </a> &gt; </p>
+<a name="wp1052084"> </a><h2 class="pHeading2">
+F.2.2  UNIX Installation Steps for Acu4GL for DB2 
+</h2>
+<a name="wp1052089"> </a><p class="pBody">
+The Acu4GL for DB2 product on UNIX is an add-on module that must be linked with the ACUCOBOL-GT runtime system.  For this reason, you'll need a C compiler to install the Acu4GL product.  In order to interface, you must use the ACUCOBOL-GT compiler and runtime.  The version of the runtime must match the version of Acu4GL.
+</p>
+<a name="wp1052090"> </a><p class="pBody">
+The Acu4GL product is shipped using either TAR or CPIO format, depending on the type of machine you have.  The label on the medium shipped to you tells you which format has been used.  
+</p>
+<a name="wp1052091"> </a><p class="pBody">
+From your Acucorp directory, choose where you want to install the Acu4GL product (or create a new directory for it) and then enter one of the following commands: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+tar xfv <em class="cEmphasis">device</em> <a name="wp1052092"> </a>
+</pre></div>
+<a name="wp1052093"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+cpio -icvBd &lt; <em class="cEmphasis">device</em> <a name="wp1052094"> </a>
+</pre></div>
+<a name="wp1052095"> </a><p class="pBody">
+This will copy the files from the distribution medium to your Acucobol directory structure.  <em class="cEmphasis">device</em> is the appropriate hardware device name (for example, /dev/rdiskette or /dev/rmt0).  Sites using Texas Instruments System 1500 should add an uppercase &quot;T&quot; to the <b class="cBold">cpio</b> options (-icvBdT).  
+</p>
+<a name="wp1052096"> </a><h3 class="pHeadingRef">
+Contents of the medium
+</h3>
+<a name="wp1052097"> </a><p class="pBody">
+Note that each Acu4GL product has its own <em class="cEmphasis">license file</em> which must be located in the same directory as the ACUCOBOL-GT runtime.  For DB2, the license file is distributed with the name &quot;runcbl.klc&quot;.
+</p>
+<a name="wp1052098"> </a><h3 class="pHeadingRef">
+Step 1: Install DB2
+</h3>
+<a name="wp1052099"> </a><p class="pBody">
+The DB2 RDBMS, version 6.01 must be installed and configured prior to the installation of Acu4GL for DB2.
+</p>
+<a name="wp1052100"> </a><h3 class="pHeadingRef">
+Step 2: Create a new runtime system
+</h3>
+<a name="wp1052101"> </a><p class="pBody">
+Complete steps 2a and 2b to create a new runtime that includes the Acu4GL for DB2 product.
+</p>
+<a name="wp1066137"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In the following directions, the term &quot;runtime system&quot; refers to the runtime shared object on systems where the ACUCOBOL-GT runtime is a shared object and to <b class="cBold">runcbl</b> on other systems, where the runtime is static.  The runtime is a shared object on the following systems:  AIX 5.1 and later, HP-UX 11 and later, and Solaris 7 and later.  To check, look at the contents of the &quot;lib&quot; subdirectory of your ACUCOBOL-GT installation.  If the files &quot;libruncbl.so&quot; or &quot;libruncbl.sl&quot; reside in that directory, the runtime is a shared object on your system.
+<hr />
+</p>
+<a name="wp1052102"> </a><h3 class="pHeadingRef">
+2a. Link the runtime system.
+</h3>
+<a name="wp1052107"> </a><p class="pBody">
+Edit the Makefile in the &quot;lib&quot; subdirectory.  Change the CFLAGS file to read as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CFLAGS = $(ACUSERVER_FLAGS) $(ACUCONNECT_FLAGS)<a name="wp1052108"> </a>
+   $(ACUSQL_FLAGS) -DACU4GL -DUSE_DB2<a name="wp1055705"> </a>
+</pre></div>
+<a name="wp1052109"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Be sure to include the first word: &quot;CFLAGS&quot;.
+<hr />
+</p>
+<a name="wp1052110"> </a><p class="pBody">
+Edit the FSI_SUBS line to read as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FSI_SUBS = a4db2.o<a name="wp1052111"> </a>
+</pre></div>
+<a name="wp1052112"> </a><p class="pBody">
+Edit the FSI_LIBS line to read as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FSI_LIBS = $(ACU_LIBDIR)/libexpat.a &lt;ibm DB2
+  directory&gt;/lib/libdb2.so<a name="wp1052113"> </a>
+</pre></div>
+<a name="wp1052114"> </a><p class="pBody">
+Make sure you are in the directory containing the ACUCOBOL-GT runtime system.  Then, at the UNIX prompt, enter the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+make<a name="wp1052115"> </a>
+</pre></div>
+<a name="wp1052116"> </a><p class="pBody">
+This compiles &quot;sub.c&quot; and &quot;filetbl.c&quot;, and then links the runtime system.
+</p>
+<a name="wp1052117"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>Make sure you have set all of the flags specific to your platform correctly before you relink your library and object files.
+</p>
+<a name="wp1055737"> </a><p class="pBody">
+If the make fails because of an out-of-date symbol table, execute the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ranlib *.a<a name="wp1055757"> </a>
+</pre></div>
+<a name="wp1055762"> </a><p class="pNoteEnd">
+and then execute the make again.  If the make fails for any other reason, call Acucorp Technical Support.
+<hr />
+</p>
+<a name="wp1052118"> </a><h3 class="pHeadingRef">
+2b. Verify the link.
+</h3>
+<a name="wp1052119"> </a><p class="pBody">
+Enter the following command: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+./runcbl -vv<a name="wp1052120"> </a>
+</pre></div>
+<a name="wp1052121"> </a><p class="pBody">
+to verify the link.  This returns version information on all of the products linked into your runtime system.  Make sure it reports the version of Acu4GL for DB2.
+</p>
+<a name="wp1052122"> </a><h3 class="pHeadingRef">
+Shared libraries
+</h3>
+<a name="wp1052127"> </a><p class="pBody">
+If you have relinked the ACUCOBOL-GT runtime and receive an error message of this type when you try to execute it:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&quot;Could <b class="cBold">not</b> load library; no such file or directory&quot;<a name="wp1052128"> </a>
+<a name="wp1054157"> </a>
+&quot;Can't open shared library . . . &quot;<a name="wp1052129"> </a>
+</pre></div>
+<a name="wp1052130"> </a><p class="pBody">
+this may mean that your operating system is using shared libraries and cannot find them.  This can occur even if the shared libraries reside in the same directory where you are currently located.
+</p>
+<a name="wp1052131"> </a><p class="pBody">
+Set the environment variable LD_LIBRARY_PATH to find these shared libraries.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

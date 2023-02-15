@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:45:44" />
+  <title>6.5  AcuServer Connection Logic</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv6.htm">Chapter 6: System Security</a> &gt; </p>
+<a name="wp1035648"> </a><h2 class="pHeading1">
+6.5  AcuServer Connection Logic
+</h2>
+<a name="wp1035651"> </a><p class="pBody">
+The AcuServer connection validation logic is described here to clarify the use of the server access file and the DEFAULT_USER configuration variable.
+</p>
+<a name="wp1035653"> </a><p class="pBody">
+When a client process (running application) makes its first request to AcuServer, AcuServer performs the following access validation procedure whether AcuServer system security or native system security is being used.
+</p>
+<a name="wp1035654"> </a><p class="pBody">
+To validate the requester's access privileges, AcuServer:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035655"> </a><div class="pSmartList1"><li>opens the server access file</li></div>
+<a name="wp1035656"> </a><div class="pSmartList1"><li>searches for a record that matches both the client machine name and the client user name</li></div>
+<a name="wp1038159"> </a><div class="pSmartList1"><li>(if no match is found) searches for a record that matches the client machine name and a &quot;match all&quot; (blank) client user name</li></div>
+<a name="wp1035658"> </a><div class="pSmartList1"><li>(if no match is found) searches for a record that has the &quot;match all&quot; (&quot;*&quot;) client machine name and the client user name</li></div>
+<a name="wp1035659"> </a><div class="pSmartList1"><li>(if no match is found) searches for a record that has the &quot;match all&quot; (&quot;*&quot;) client machine name and the &quot;match all&quot; (blank) client user name</li></div>
+<a name="wp1035660"> </a><div class="pSmartList1"><li>(if no match is found) refuses the connection.</li></div>
+</ol></div>
+<a name="wp1035661"> </a><p class="pBody">
+When a match is found, and the NAMED-PIPE form of security is turned on (via the SECURITY_METHOD variable), and the client user has an account on the server, AcuServer automatically grants the user permission to connect.  The AcuAccess file does not set the client user's local username, nor does it determine whether the client is required to enter a password.
+</p>
+<a name="wp1047342"> </a><p class="pBody">
+When a match is found and the LOGON form of security is turned on, AcuServer attempts to use the value of the matching password field in the AcuAccess file to log the user on.  If the password isn't valid or the password field is empty, the user is prompted to enter a password.  If a valid password is given, the requester is logged on, otherwise the connection is refused.
+</p>
+<a name="wp1035663"> </a><p class="pBody">
+When a match is found and AcuServer system security is being used:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035664"> </a><div class="pSmartList1"><li>If the Local Username is valid, it is used.</li></div>
+<a name="wp1035665"> </a><div class="pSmartList1"><li>If the Local Username is not valid, DEFAULT_USER is used.</li></div>
+<a name="wp1035666"> </a><div class="pSmartList1"><li>If the Local Username is not valid and DEFAULT_USER is not valid, the connection is refused.</li></div>
+</ol></div>
+<a name="wp1035667"> </a><p class="pBody">
+If the Local Username is valid and the password field is defined, a message is sent back to the requester asking for a password.  For more about password handling, see <a  href="srv619.htm#wp1035715">section 6.5.1, &quot;Passwords.&quot;</a>
+</p>
+<a name="wp1035669"> </a><p class="pBody">
+When the client process terminates, the client-server connection is broken.  New client applications requesting AcuServer services will go through the verification process to establish a connection.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

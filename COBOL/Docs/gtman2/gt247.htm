@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:31" />
+  <title>4.5.1  ActiveX Example</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt24.htm">Chapter 4:  Supporting Concepts and Related Issues</a> &gt; <a href="gt246.htm">4.5  Methods</a> &gt; </p>
+<a name="wp1031457"> </a><h2 class="pHeading2">
+4.5.1  ActiveX Example
+</h2>
+<a name="wp1026154"> </a><p class="pBody">
+Consider the ActiveX control, &quot;Microsoft Rich Textbox Control 6.0&quot;.  Here is an excerpt from its COPY file, created with the AXDEFGEN utility.  (See Chapter 4 of <em class="cEmphasis">A Guide to Interoperating with ACUCOBOL-GT</em> for more information on AXDEFGEN):
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+...<a name="wp1026156"> </a>
+      * LoadSave constants.<a name="wp1026157"> </a>
+           <a name="wp1026158"> </a>
+      * LoadSaveConstants<a name="wp1026159"> </a>
+           CLASS @LoadSaveConstants<a name="wp1026160"> </a>
+               CLSID, 9FAEAB20-894B-11CE-9576-0020AF039CA3<a name="wp1026161"> </a>
+               NAME, &quot;LoadSaveConstants&quot;<a name="wp1026162"> </a>
+      * long rtfRTF<a name="wp1026163"> </a>
+               ENUMERATOR, @rtfRtf, 0<a name="wp1026164"> </a>
+      * long rtfText<a name="wp1026165"> </a>
+               ENUMERATOR, @rtfText, 1<a name="wp1026166"> </a>
+           <a name="wp1026167"> </a>
+...<a name="wp1026168"> </a>
+      * Microsoft Rich Textbox Control 6.0<a name="wp1026169"> </a>
+           <a name="wp1026170"> </a>
+      *** Primary Interface ***<a name="wp1026171"> </a>
+           <a name="wp1026172"> </a>
+      * RichTextBox<a name="wp1026173"> </a>
+           CLASS @RichTextBox<a name="wp1026174"> </a>
+               CLSID, 3B7C8860-D78F-101B-B9B5-04021C009402<a name="wp1026175"> </a>
+               NAME, &quot;RichTextBox&quot;<a name="wp1026176"> </a>
+...<a name="wp1026177"> </a>
+      * LoadFile<a name="wp1026178"> </a>
+      * Loads an .RTF or text file into a RichTextBox control.<a name="wp1026179"> </a>
+               METHOD, 37, @LoadFile,<a name="wp1026180"> </a>
+                   &quot;BSTR bstrFilename&quot;,<a name="wp1026181"> </a>
+                   &quot;VARIANT vFileType&quot;<a name="wp1026182"> </a>
+                       OPTIONAL 1<a name="wp1026183"> </a>
+...<a name="wp1026184"> </a>
+</pre></div>
+<a name="wp1026186"> </a><p class="pBody">
+The LoadFile method takes two parameters:  &quot;bstrFilename&quot; and &quot;vFileType&quot;. &quot;vFileType&quot; is an OPTIONAL parameter. &quot;bstrFileName&quot; is a BSTR type and &quot;vFileType&quot; is a VARIANT type.  To invoke this method from COBOL, you use the MODIFY verb:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+	MODIFY RICH-TEXT-BOX-1 LoadFile (&quot;myfile.rtf&quot;, rtfRtf).<a name="wp1026187"> </a>
+</pre></div>
+<a name="wp1026188"> </a><p class="pBody">
+The ACUCOBOL-GT runtime automatically converts the parameters to the appropriate type and invokes the method. The LoadFile method does not have a return value.  If the method had a return value that was not &quot;void&quot;, it would be converted and moved to the item specified in the GIVING clause of the MODIFY statement. 
+</p>
+<a name="wp1032049"> </a><p class="pBody">
+The syntax is as if LoadFile is a property whose value is its parameter list. For example, the following is also valid:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+	MODIFY RICH-TEXT-BOX-1 PROPERTY 37 = (&quot;myfile.rtf&quot;, rtfRtf).<a name="wp1026189"> </a>
+</pre></div>
+<a name="wp1026190"> </a><p class="pBody">
+Note that 37 is the &quot;property&quot; number of LoadFile. The equals sign is optional. Commas in the parameter list are optional. The parameters may be arithmetic expressions.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

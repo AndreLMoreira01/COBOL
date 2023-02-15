@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:35:43" />
+  <title>2.8  Error Handling</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql2.htm">Chapter 2: Program Preparation</a> &gt; </p>
+<a name="wp1034698"> </a><h2 class="pHeading1">
+2.8  Error Handling
+</h2>
+<a name="wp1034699"> </a><p class="pBody">
+To strengthen error handling, you should consider embedding the SQL WHENEVER directive in your source code.  The WHENEVER directive is used to direct program logic when the application encounters a warning or an error.  You can choose to ignore errors or redirect them with WHENEVER.
+</p>
+<a name="wp1034700"> </a><p class="pBody">
+The default behavior of AcuSQL is to attempt to ignore warnings and error conditions, and continue processing, if possible.  Your application can either explicitly check error conditions or, for more automatic error processing, use the WHENEVER directive.  Your application can contain more than one WHENEVER directive.  A WHENEVER directive applies to all embedded ESQL statements that follow it, until it is superseded by another WHENEVER directive.
+</p>
+<a name="wp1034701"> </a><p class="pBody">
+Use the WHENEVER directive to specify what actions the program takes when it encounters one of the following conditions:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034702"> </a><div class="pSmartList1"><li>SQLERROR</li></div>
+<a name="wp1034703"> </a><div class="pSmartList1"><li>SQLWARNING</li></div>
+<a name="wp1034704"> </a><div class="pSmartList1"><li>NOT FOUND.  This condition applies only to SELECT and FETCH statements.</li></div>
+</ul></div>
+<a name="wp1034705"> </a><p class="pBody">
+Specify one of the following actions when an error condition occurs:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034706"> </a><div class="pSmartList1"><li>CONTINUE - control passes to the next statement </li></div>
+<a name="wp1034707"> </a><div class="pSmartList1"><li>PERFORM <em class="cEmphasis">paragraph_name</em> - the program performs <em class="cEmphasis">paragraph_name</em> and then returns to read the next statement.</li></div>
+<a name="wp1034709"> </a><div class="pSmartList1"><li>GOTO <em class="cEmphasis">paragraph_name</em> - the program branches to <em class="cEmphasis">paragraph_name</em>, a specified procedure in the program.  Flow of the program continues down this branch.</li></div>
+<a name="wp1034710"> </a><div class="pSmartList1"><li>STOP </li></div>
+</ul></div>
+<a name="wp1034712"> </a><h3 class="pHeadingRef">
+Syntax
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+EXEC SQL WHENEVER  {SQLERROR}   | {CONTINUE}<a name="wp1034713"> </a>
+                   {SQLWARNING} | {PERFORM paragraph}<a name="wp1034714"> </a>
+                   {NOT FOUND}  | {GO TO paragraph}<a name="wp1034715"> </a>
+                                | {STOP}<a name="wp1034716"> </a>
+</pre></div>
+<a name="wp1034717"> </a><p class="pBody">
+where <em class="cEmphasis">paragraph </em>is a specified procedure in the program.
+</p>
+<a name="wp1034720"> </a><p class="pBody">
+See <a  href="sql55.htm#wp1040445">section 5.3.1</a> for an example of the WHENEVER directive.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

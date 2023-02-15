@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:10" />
+  <title>6.4  Menu Events</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt26.htm">Chapter 6:  Events Reference</a> &gt; </p>
+<a name="wp1026354"> </a><h2 class="pHeading1">
+6.4  Menu Events
+</h2>
+<a name="wp1026358"> </a><p class="pBody">
+The following events are associated with pop-up menus that are tied to a control.  You can detect pop-up menu selections directly in a control's event procedure.  The following messages are generated as the user goes through the process of selecting a pop-up menu item: 
+</p>
+<a name="wp1026361"> </a><h5 class="pHeading4">
+MSG-INIT-MENU (value 16398)  
+</h5>
+<a name="wp1028683"> </a><p class="pBody">
+This event occurs immediately prior to the display of a control's pop-up menu.  EVENT-DATA-2 contains the control's menu handle.  The control's event procedure can use this event to update any state information in the menu, such as enabling/disabling items or setting/removing check marks.  If the event procedure sets EVENT-ACTION to EVENT-ACTION-FAIL, or sets the control's menu handle to NULL, then the menu is not displayed.  In this case, any host-defined built-in menu for the control class will display instead (<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">e.g.</span>, Windows Cut/Copy/Paste/Undo menu associated with entry fields).  If there is no host-defined menu, then no menu is shown. 
+</p>
+<a name="wp1026362"> </a><p class="pBody">
+MSG-INIT-MENU applies to windows in the same manner that it does for controls.  When a window's pop-up menu is about to appear, you can pass the information that came with this event to the window's event procedure to update the menu's state before the menu is shown.  You can also prevent  the menu from being seen by setting EVENT-ACTION to EVENT-ACTION-FAIL.
+</p>
+<a name="wp1026365"> </a><h5 class="pHeading4">
+MSG-MENU-INPUT (value 16397)  
+</h5>
+<a name="wp1028690"> </a><p class="pBody">
+This event occurs when the user has activated a control's pop-up menu and selected an item on the menu.  For windows, the information from this message event is passed to a window's event procedure when the user does any of the following:
+</p>
+<div class="pSmartList1"><ol type="a" class="pSmartList1">
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1026366"> </a><div class="pSmartList2"><li>selects an item from the window's pop-up menu bar,</li></div>
+<a name="wp1026367"> </a><div class="pSmartList2"><li>selects an item from the window's pop-up menu,</li></div>
+<a name="wp1026368"> </a><div class="pSmartList2"><li>selects an item from a pop-up menu owned by a control contained in the window, and that control's event procedure did not stop further processing of the menu selection, or</li></div>
+<a name="wp1026369"> </a><div class="pSmartList2"><li>selects the &quot;Close&quot; option from the initial window's system menu (or clicks the &quot;Close&quot; button), and you have set the configuration option QUIT-MODE to a positive value.  This configuration option causes the runtime to treat the close operation as if it were an item on the initial window's menu bar.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp1026372"> </a><p class="pBody">
+EVENT-DATA-2 contains the menu item's ID.  Setting EVENT-ACTION to EVENT-ACTION-CONTINUE prevents further processing of the menu selection.  Otherwise, the menu selection is treated as a normal menu selection from the menu bar (<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">i.e.</span>, it terminates the ACCEPT with an exception value equal to the menu item's ID).
+</p>
+<a name="wp1026375"> </a><h5 class="pHeading4">
+MSG-END-MENU (value 16399)  
+</h5>
+<a name="wp1028700"> </a><p class="pBody">
+This event occurs when the pop-up menu of either a control or a window has been removed from the screen.  EVENT-DATA-2 contains the control's (or window's) menu handle.  The only normal reason for processing this event would be to undo some effect created in response to MSG-INIT-MENU. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

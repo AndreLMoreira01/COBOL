@@ -1,0 +1,321 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>6.3.3.2  The &quot;sub85&quot; interface</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr64.htm">6.3  Calling C Programs From COBOL</a> &gt; <a href="itr611.htm">6.3.3  Calling C Programs via the Interface Method</a> &gt; </p>
+<a name="wp1121559"> </a><h2 class="pHeading3">
+6.3.3.2  The &quot;sub85&quot; interface
+</h2>
+<a name="wp1121562"> </a><p class="pBody">
+The &quot;sub85&quot; interface can be more useful than the &quot;sub&quot; interface because more information about each USING parameter is passed to the C subroutines.  However, using the &quot;sub85&quot; interface also involves more programming.  
+</p>
+<a name="wp1121563"> </a><p class="pBody">
+The &quot;sub85.c&quot; file contains a table called LIBTABLE.  This table consists of a variable number of entries.  Each entry contains a routine name and the name of the corresponding C subroutine.  The last entry in this table must be NULL to mark the end of the table.  When a CALL statement executes, this table is searched for a matching routine name.  If a match is found, the corresponding routine is executed.  
+</p>
+<a name="wp1121564"> </a><p class="pBody">
+When the routine is called, it is passed four parameters: name, num_args, args, and initial (in that order).  The name argument is a character pointer to the name that the CALL statement used to access the subroutine.  The num_args<em class="cEmphasis"> </em>parameter is an integer that contains the number of USING arguments specified by the CALL statement.  
+</p>
+<a name="wp1121566"> </a><p class="pBody">
+The args parameter is defined as an array of type Argument.  This type (a structure) is declared in &quot;sub.h&quot;.  For each USING parameter, the corresponding array element contains the following series of fields that describes that parameter:
+</p>
+<a name="wp1121567"> </a><p class="pBody">
+a_address - a character pointer that points to the first byte of the USING parameter
+</p>
+<a name="wp1121568"> </a><p class="pBody">
+a_length - a long integer that contains the number of bytes contained in the USING parameter  
+</p>
+<a name="wp1121569"> </a><p class="pBody">
+a_type - a short integer that contains one of the following values depending on the passed data type:
+</p>
+<a name="wp1121663"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1121572"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; vertical-align: baseline">0</span>
+</p>
+</td>
+    <td><a name="wp1121574"> </a><p class="pCellBody">
+Numeric edited
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121576"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1121578"> </a><p class="pCellBody">
+Unsigned numeric (DISPLAY)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121580"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1121582"> </a><p class="pCellBody">
+Signed numeric (DISPLAY, trailing separate)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121584"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1121586"> </a><p class="pCellBody">
+Signed numeric (DISPLAY, trailing combined)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121588"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1121590"> </a><p class="pCellBody">
+Signed numeric (DISPLAY, leading separate)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121592"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1121594"> </a><p class="pCellBody">
+Signed numeric (DISPLAY, leading combined)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121596"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1121598"> </a><p class="pCellBody">
+Signed COMP-2
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121600"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1121602"> </a><p class="pCellBody">
+Unsigned COMP-2
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121604"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1121606"> </a><p class="pCellBody">
+Unsigned COMP-3
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121608"> </a><p class="pCellBody">
+9
+</p>
+</td>
+    <td><a name="wp1121610"> </a><p class="pCellBody">
+Signed COMP-3
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121612"> </a><p class="pCellBody">
+10
+</p>
+</td>
+    <td><a name="wp1121614"> </a><p class="pCellBody">
+COMP-6
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121616"> </a><p class="pCellBody">
+11
+</p>
+</td>
+    <td><a name="wp1121618"> </a><p class="pCellBody">
+Signed binary (COMP-1, COMP-4, COMP-X)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121620"> </a><p class="pCellBody">
+12
+</p>
+</td>
+    <td><a name="wp1121622"> </a><p class="pCellBody">
+Unsigned binary (COMP-1, COMP-4, COMP-X)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121624"> </a><p class="pCellBody">
+13
+</p>
+</td>
+    <td><a name="wp1121626"> </a><p class="pCellBody">
+Signed native (COMP-5, COMP-N, SIGNED-SHORT, SIGNED-INT, SIGNED-LONG)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121628"> </a><p class="pCellBody">
+14
+</p>
+</td>
+    <td><a name="wp1121630"> </a><p class="pCellBody">
+Unsigned native (COMP-5, COMP-N, UNSIGNED-SHORT, <br />UNSIGNED-INT, UNSIGNED-LONG)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121632"> </a><p class="pCellBody">
+15
+</p>
+</td>
+    <td><a name="wp1121634"> </a><p class="pCellBody">
+Floating point (FLOAT, DOUBLE)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121636"> </a><p class="pCellBody">
+16
+</p>
+</td>
+    <td><a name="wp1121638"> </a><p class="pCellBody">
+Alphanumeric
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121640"> </a><p class="pCellBody">
+17
+</p>
+</td>
+    <td><a name="wp1121642"> </a><p class="pCellBody">
+Alphanumeric (justified)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121644"> </a><p class="pCellBody">
+18
+</p>
+</td>
+    <td><a name="wp1121646"> </a><p class="pCellBody">
+Alphabetic
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121648"> </a><p class="pCellBody">
+19
+</p>
+</td>
+    <td><a name="wp1121650"> </a><p class="pCellBody">
+Alphabetic (justified)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121652"> </a><p class="pCellBody">
+20
+</p>
+</td>
+    <td><a name="wp1121654"> </a><p class="pCellBody">
+Alphanumeric edited
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121656"> </a><p class="pCellBody">
+21
+</p>
+</td>
+    <td><a name="wp1121658"> </a><p class="pCellBody">
+Not used
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1121660"> </a><p class="pCellBody">
+22
+</p>
+</td>
+    <td><a name="wp1121662"> </a><p class="pCellBody">
+Group
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1121664"> </a><p class="pBody">
+a_digits - a char that contains the total number of digits in a numeric data type.  For non-numeric data types, this value is always zero.
+</p>
+<a name="wp1121665"> </a><p class="pBody">
+a_scale - a char that contains the power of 10 to multiply the number by.  This indicates the location of the decimal point.  For example, a value of &quot;-1&quot; indicates that there is one digit to the right of the decimal point.  Note that since this is defined as a &quot;char&quot;, you may not be able to treat this as a signed value on all machines.  The macro &quot;Scale&quot; in &quot;sub.h&quot; converts one of these fields to a signed integer in a machine independent manner.  
+</p>
+<a name="wp1121666"> </a><p class="pBody">
+The final argument to the C subroutine, initial, is set to a non-zero value if the routine is being called for the first time.  It is also set to a non-zero value for the first call after a CANCEL statement has been executed for the routine.  On any other call, initial is set to zero.
+</p>
+<a name="wp1141639"> </a><p class="pBody">
+The external variable return-code can be set to any value.  The COBOL variable RETURN-CODE will have that value when control returns to the COBOL program.  By convention, when a C routine finishes it should return zero if everything was okay.  Any other positive return value causes a STOP RUN to be executed, and that value is returned to the operating system as the RETURN-CODE for the run.  The C routine should never return a negative value.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

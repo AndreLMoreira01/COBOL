@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:58:17" />
+  <title>Call</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr5.htm">Chapter 5: Working With .NET Assemblies</a> &gt; <a href="itr55.htm">5.4  Calling COBOL from .NET</a> &gt; <a href="itr511.htm">5.4.2  Using the .NET API, &quot;wrunnet.dll&quot;</a> &gt; </p>
+<a name="wp1037844"> </a><h2 class="pHeading3">
+Call
+</h2>
+<a name="wp1037845"> </a><p class="pBody">
+Executes an ACUCOBOL-GT program.
+</p>
+<a name="wp1037846"> </a><p class="pBody">
+Usage:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+public unsafe errorTypes Call (string        pgmName, <a name="wp1037847"> </a>
+                               ref object[]  CobolParams,<a name="wp1037848"> </a>
+                               ref byte[]    CobolTypes,<a name="wp1037849"> </a>
+                               string        CallOptions,		<a name="wp1037850"> </a>
+                               ref int       ProgramReturnCode)<a name="wp1037851"> </a>
+</pre></div>
+<a name="wp1037852"> </a><p class="pBody">
+Where:
+</p>
+<a name="wp1037889"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1037855"> </a>
+Variable
+
+</th>
+    <th><a name="wp1037857"> </a>
+Definition
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037859"> </a><p class="pCellBody">
+pgmName		
+</p>
+</td>
+    <td><a name="wp1037861"> </a><p class="pCellBody">
+Is the file path of an ACUCOBOL-GT program.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037863"> </a><p class="pCellBody">
+CobolParams	
+</p>
+</td>
+    <td><a name="wp1037865"> </a><p class="pCellBody">
+Is an array of parameter objects.  They must match the Procedure Division USING parameters and be native types int, uint, short, ushort, long, ulong, float, double, char, byte, and/or string.  Parameters should correspond one-to-one with the Linkage Section of the COBOL program.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037867"> </a><p class="pCellBody">
+CobolTypes   
+</p>
+</td>
+    <td><a name="wp1037872"> </a><p class="pCellBody">
+Is an array of COBOL types.  (See &quot;<a  href="itr520.htm#wp1038426">CompilerTypes</a>&quot; later in this section.)  This field is 				optional, meaning it can be a null reference.  When used, it must be 				allocated with the same number of entries as CobolParams, one type 				corresponding to each parameter.  These entries are needed when a 				COBOL program has a mix of unicode, double byte, and ANSI strings.  			.NET treats all strings as unicode and &quot;wrunnet&quot;, by default, converts 				them to ANSI strings.  In order for &quot;wrunnet&quot; to convert the unicode to a 				wide character, double byte, or pass it as a unicode string to a 					COBOL program, the corresponding entry in CobolTypes must be set.
+</p>
+<a name="wp1037873"> </a><p class="pCellBody">
+			If all strings in the COBOL program are unicode or all are double byte, a 				property may be set.  This field is automatically generated when using 				the compiler option, &quot;--netdll&quot;.  The applicable fields are NAT, NATJ,	 	NATE, WID, WIDJ and EWID.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037875"> </a><p class="pCellBody">
+CallOptions
+</p>
+</td>
+    <td><a name="wp1037877"> </a><p class="pCellBody">
+	The following runtime options can be set using the Call method:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1037878"> </a><div class="pSmartList1"><li>&quot;-d&quot;, debug</li></div>
+<a name="wp1037879"> </a><div class="pSmartList1"><li>&quot;-show&quot;, display error text</li></div>
+<a name="wp1037880"> </a><div class="pSmartList1"><li>&quot; -uni&quot;, unicode</li></div>
+<a name="wp1037881"> </a><div class="pSmartList1"><li>&quot;-wide&quot;, double byte characters</li></div>
+<a name="wp1037882"> </a><div class="pSmartList1"><li>&quot;-cache&quot;, cache program  </li></div>
+</ul></div>
+<a name="wp1037883"> </a><p class="pCellBody">
+These are the only options that can be set after Initialize is called.  They may also be set using a property 	assignment before a Call is executed.   For example: <br />&quot;-d 1&quot; or &quot;-d 0&quot;  turns debug mode on in the first instance and off in the second instance.
+</p>
+<a name="wp1037884"> </a><p class="pCellBody">
+	This is the only place where a boolean option can be set on and off in this manner.  All other boolean options set via Initialize can be turned only on.  In this case the syntax does not include a &quot;1&quot; or &quot;0&quot;. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037886"> </a><p class="pCellBody">
+ProgramReturnCode
+</p>
+</td>
+    <td><a name="wp1037888"> </a><p class="pCellBody">
+Upon return from Call, ProgramReturnCode contains the COBOL program return code.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

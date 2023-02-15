@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:13:56" />
+  <title>3.3  Automated Code Generation</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuBench User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="wkb3.htm">Chapter 3: Workbench Concepts</a> &gt; </p>
+<a name="wp1034395"> </a><h2 class="pHeading1">
+3.3  Automated Code Generation
+</h2>
+<a name="wp1034398"> </a><p class="pBody">
+AcuBench includes several special tools that allow you to develop program elements in an interactive, graphical environment.  The product of the work accomplished with these tools is saved in a program structure file or a data layout file.  When you initiate a generate action (click <b class="cBold">Generate </b>or <b class="cBold">Regenerate Workspace</b>), AcuBench reads the contents of the program structure file or data layout file to generate COBOL code.  These code generation facilities are designed to speed and simplify application development and maintenance, while also creating programs that are more reliable and robust.  Use of these facilities is entirely optional.  If you choose to use these tools, you should be prepared to change the way you think about how a program is developed and stitched together.  For example, consider how the Screen Designer is used to create a screen and generate code.
+</p>
+<a name="wp1034399"> </a><p class="pBody">
+In the Screen Designer, screens are created by dragging and dropping graphical controls and other screen elements onto a composition area.  Special properties and values are set in each control's Property window.  When a screen is done, at your direction, AcuBench generates code into COPY files and, possibly, directly into the COBOL program file (&quot;.cbl&quot;).  Code generation is performed based on the representation of the screen that is saved and maintained in the program structure file.  
+</p>
+<a name="wp1034400"> </a><p class="pBody">
+In addition to the Screen Designer, AcuBench includes specialized support for:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034401"> </a><div class="pSmartList1"><li>building file descriptors with the File Designer</li></div>
+<a name="wp1034402"> </a><div class="pSmartList1"><li>creating data set associations with the Data Set Designer</li></div>
+<a name="wp1034403"> </a><div class="pSmartList1"><li>adding Working-Storage and Linkage section items with the Working Storage Editor and Linkage Editor</li></div>
+<a name="wp1034404"> </a><div class="pSmartList1"><li>creating event and embedded procedures with the Event Editor</li></div>
+</ul></div>
+<a name="wp1034407"> </a><p class="pBody">
+In general, AcuBench code generation facilities take the approach of generating the bulk of the associated code into COPY files that are then included in the program with COPY statements.  These COPY statements can be automatically inserted into the program between special tags (see <a  href="wkb38.htm#wp1034473">section 3.3.1</a>), or you can insert the statements yourself.  You can also control whether specific tag pairs are automatically generated or suppressed via the Tools/Options/Code Generator/Program Tag interface.  For more information about this dialog, refer to <a  href="wkb444.htm#wp1039993">section 4.7.2, &quot;Setting Program Tag Options.&quot;</a>
+</p>
+<a name="wp1034408"> </a><p class="pBody">
+Depending on the workbench tools used to develop the program, AcuBench may generate the following files:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034411"> </a><div class="pSmartList1"><li><em class="cEmphasis">Program_name.</em>scr (screen COPY file) </li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1034412"> </a><div class="pSmartList2"><li>Screen section description entries</li></div>
+<a name="wp1034413"> </a><div class="pSmartList2"><li>If needed, CHARACTER or GRAPHICAL syntax to distinguish between graphical and character-based screens with the same name</li></div>
+<a name="wp1034414"> </a><div class="pSmartList2"><li>EVENT PROCEDURE IS syntax when event or embedded procedures are defined</li></div>
+</ul></div>
+<a name="wp1034417"> </a><div class="pSmartList1"><li><em class="cEmphasis">Program_name.</em>mnu (menu COPY file) </li></div>
+<a name="wp1034418"> </a><p class="pIndented1">
+Menu bar descriptions and calls to W$MENU
+</p>
+<a name="wp1034421"> </a><div class="pSmartList1"><li><em class="cEmphasis">Program_name.</em>evt (event and embedded procedure COPY file) </li></div>
+<a name="wp1059110"> </a><p class="pIndented1">
+This COPY file contains both the code that you add in the Event Editor and code that AcuBench generates for event and exception handling.  The portion of the code that is created by AcuBench does not appear in the Event Editor and is not intended for modification.  These generated paragraphs include:
+</p>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1034422"> </a><div class="pSmartList2"><li>For a main screen (standard or initial):</li></div>
+<a name="wp1058957"> </a><p class="pIndented2">
+Acu-<em class="cEmphasis">screen-name</em>-Event-Extra paragraph
+</p>
+<a name="wp1058974"> </a><p class="pIndented2">
+Acu-<em class="cEmphasis">screen-name</em>-Msg-Close paragraph
+</p>
+<a name="wp1034426"> </a><div class="pSmartList2"><li>When an event procedure is specified for the window:</li></div>
+<a name="wp1034427"> </a><p class="pIndented2">
+<em class="cEmphasis">screen-name</em>-Event-Proc paragraph
+</p>
+<a name="wp1034428"> </a><div class="pSmartList2"><li>When an event procedure is specified for a control:</li></div>
+<a name="wp1059114"> </a><p class="pIndented2">
+<em class="cEmphasis">control-name</em>-Event-Proc paragraph
+</p>
+<a name="wp1059115"> </a><div class="pSmartList2"><li>When an exception procedure is specified for a screen:</li></div>
+<a name="wp1059116"> </a><p class="pIndented2">
+<em class="cEmphasis">screen-name</em>-Exception-Proc paragraph
+</p>
+<a name="wp1034432"> </a><div class="pSmartList2"><li>When an exception procedure is specified for a control:</li></div>
+<a name="wp1034433"> </a><p class="pIndented2">
+<em class="cEmphasis">control-name</em>-Exception-Proc paragraph
+</p>
+</ul></div>
+<a name="wp1034442"> </a><div class="pSmartList1"><li><em class="cEmphasis">Program_name.</em>prd (Procedure Division COPY file) </li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1034443"> </a><div class="pSmartList2"><li>Program initialization and exit routines:</li></div>
+<a name="wp1034444"> </a><p class="pIndented2">
+Acu-Initial-Routine
+</p>
+<a name="wp1059126"> </a><p class="pIndented2">
+Acu-Exit-Routine
+</p>
+<a name="wp1034445"> </a><div class="pSmartList2"><li>If the program includes one or more screens:</li></div>
+<a name="wp1059128"> </a><p class="pIndented2">
+Acu-<em class="cEmphasis">screen-name</em>-Routine
+</p>
+<a name="wp1059132"> </a><p class="pIndented2">
+Acu-<em class="cEmphasis">screen-name</em>-Screen
+</p>
+<a name="wp1059162"> </a><p class="pIndented2">
+Acu-<em class="cEmphasis">screen-name</em>-Create-Win
+</p>
+<a name="wp1059167"> </a><p class="pIndented2">
+Acu-<em class="cEmphasis">screen-name</em>-Init-Data
+</p>
+<a name="wp1059172"> </a><p class="pIndented2">
+Acu-<em class="cEmphasis">screen-name</em>-Proc
+</p>
+<a name="wp1059182"> </a><p class="pIndented2">
+Acu-<em class="cEmphasis">screen-name</em>-Exit
+</p>
+<a name="wp1059127"> </a><div class="pSmartList2"><li>If a screen uses exception or termination values:</li></div>
+<a name="wp1034446"> </a><p class="pIndented2">
+Acu-<em class="cEmphasis">screen-name</em>-Evaluate-Func
+</p>
+</ul></div>
+<a name="wp1034449"> </a><div class="pSmartList1"><li><em class="cEmphasis">Program_name.</em>wrk (Working-Storage COPY file) </li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1034450"> </a><div class="pSmartList2"><li>Variables defined for control properties</li></div>
+<a name="wp1034451"> </a><div class="pSmartList2"><li>Variables defined in the Working Storage Editor</li></div>
+<a name="wp1034452"> </a><div class="pSmartList2"><li>When a data set is defined for the program, the file status data item</li></div>
+</ul></div>
+<a name="wp1034455"> </a><div class="pSmartList1"><li><em class="cEmphasis">Program_name.</em>lks (Linkage Section COPY file) </li></div>
+<a name="wp1034456"> </a><p class="pIndented1">
+Variables defined in the Linkage Editor
+</p>
+<a name="wp1034458"> </a><div class="pSmartList1"><li><em class="cEmphasis">Program_name.</em>cbl (all code is generated between tag sets) </li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1034459"> </a><div class="pSmartList2"><li>Attributes and comments from the Program Properties dialog</li></div>
+<a name="wp1034460"> </a><div class="pSmartList2"><li>COPY statements for generated files</li></div>
+</ul></div>
+</ol></div>
+<a name="wp1034461"> </a><h3 class="pHeadingRef">
+Controlling code generation
+</h3>
+<a name="wp1034462"> </a><p class="pBody">
+You can refine your control over automated code generation by:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034463"> </a><div class="pSmartList1"><li>setting code generation options in the Tools/Options/Code Generator dialog.</li></div>
+<a name="wp1034464"> </a><div class="pSmartList1"><li>adding or removing tag pairs from the program.  The workbench cannot insert code into areas that are not tagged.  If you remove a tag pair, AcuBench does not insert code in that area.  Code generation is restored to an area if the tags are reinserted.  </li></div>
+<a name="wp1037666"> </a><p class="pIndented1">
+You can control whether specific tag pairs are automatically generated or suppressed via the Tools/Options/Code Generator/Program Tag interface.  For more information about this dialog, refer to <a  href="wkb444.htm#wp1039993">section 4.7.2, &quot;Setting Program Tag Options.&quot;</a>
+</p>
+</ol></div>
+<a name="wp1036323"> </a><p class="pBody">
+For information on the following facilities, see:
+</p>
+<a name="wp1036349"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1036326"> </a><p class="pCellBody">
+Screen Designer
+</p>
+</td>
+    <td><a name="wp1036328"> </a><p class="pCellBody">
+<a  href="wkb10.htm#wp1034342">Chapter 10</a>
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1036330"> </a><p class="pCellBody">
+Event Editor
+</p>
+</td>
+    <td><a name="wp1036332"> </a><p class="pCellBody">
+<a  href="wkb1135.htm#wp1034938"><span style="font-family: Arial, Verdana, Helvetica, sans-serif">Section 11.7.3</span></a>
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1036334"> </a><p class="pCellBody">
+File Designer, Data Set Designer,<br />Working-Storage Editor,<br />Linkage Editor
+</p>
+</td>
+    <td><a name="wp1036336"> </a><p class="pCellBody">
+<a  href="wkb16a.htm#wp1034342">Chapter 16</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1036350"> </a><p class="pBody">
+Note that to use these facilities, your program must have a program structure file.  If you want AcuBench to generate COPY statements into the program file, you must upgrade your program to include AcuBench tags. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuBench-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

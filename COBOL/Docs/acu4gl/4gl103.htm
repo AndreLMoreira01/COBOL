@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:54" />
+  <title>10.2  Questions and Answers</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl10.htm">Chapter 10:  General Questions and Answers</a> &gt; </p>
+<a name="wp1036954"> </a><h2 class="pHeading1">
+10.2  Questions and Answers
+</h2>
+<a name="wp1035944"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1035945"> </a><p class="pBody">
+I can't seem to get Acu4GL to create the files in my database or ODBC data source.  They keep coming up as Vision files.
+</p>
+<a name="wp1035946"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1035953"> </a><p class="pBody">
+Check to see that the <a  href="4gl815.htm#wp1036068">DEFAULT_HOST</a> variable is set in the runtime configuration file or the environment.  Setting DEFAULT_HOST in the environment overrides the setting in the runtime configuration file.
+</p>
+<a name="wp1035954"> </a><p class="pBody">
+Enter one of  the following commands, depending on your operating system.
+</p>
+<a name="wp1036177"> </a><p class="pBody">
+For UNIX systems:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+runcbl  -vv <a name="wp1035955"> </a>
+</pre></div>
+<a name="wp1036151"> </a><p class="pBody">
+For Windows systems:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+wrun32 -vv<a name="wp1036164"> </a>
+</pre></div>
+<a name="wp1035956"> </a><p class="pBody">
+to make sure that the version number of the Acu4GL interface for your RDBMS is reported.  This tells you that the Acu4GL product has been installed successfully.
+</p>
+<a name="wp1036210"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>In Windows environments, if &quot;-vv&quot; does not return the Acu4GL product information, make sure the runtime has the name you used and is the first so-named executable on the PATH, and that the &quot;.dll&quot; is in the same directory.
+</p>
+<a name="wp1036599"> </a><p class="pNoteEnd">
+If you are running Acu4GL for Sybase and &quot;-vv&quot; does not return the Sybase Acu4GL product information, make sure the linked runtime has the name you used and is the first so-named executable on the PATH.  If you cannot locate a runtime that displays a Sybase Acu4GL product version number using &quot;-vv&quot;, you must create one by re-linking the runtime.  If you must do that, make sure that USE_SYBASE is set to &quot;1&quot; in the file &quot;filetbl.c&quot; before you relink.
+<hr />
+</p>
+<a name="wp1035957"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1035958"> </a><p class="pBody">
+Can I use both an RDBMS or ODBC data source and Vision at the same time?
+</p>
+<a name="wp1035959"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1035960"> </a><p class="pBody">
+Yes, you can.  In the configuration file, set <a  href="4gl815.htm#wp1036068">DEFAULT_HOST</a> to the file system you want the runtime to use automatically.  Then, for select files, assign them to an alternate file system with the variable <a  href="4gl816.htm#wp1036081">filename_HOST</a>.  For example, to put CUSTFILE into a specified RDBMS and everything else into Vision, you would add:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+DEFAULT_HOST   Vision<a name="wp1035961"> </a>
+CUSTFILE_HOST  name_of_file_system<a name="wp1035962"> </a>
+</pre></div>
+<a name="wp1034611"> </a><p class="pBody">
+where <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">name_of_file_system</span> is one of the following:  Informix, Microsoft SQL Server, Oracle, ODBC, Sybase, or DB2.
+</p>
+<a name="wp1035984"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1035985"> </a><p class="pBody">
+How can I find out what an error message is?
+</p>
+<a name="wp1035986"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1035987"> </a><p class="pBody">
+If you run your application with the &quot;-x&quot; option, you will receive extended error numbers that include those returned by your RDBMS or ODBC application.
+</p>
+<a name="wp1036674"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>For Informix, two types of errors are returned:  the Informix error and the ISAM error.
+</p>
+<a name="wp1036684"> </a><p class="pNoteEnd">
+For Oracle, the error code must include five digits.  If your error code does not already include five digits, you must add leading zeros to complete this requirement.  For example, if your error code is code number 150, the syntax for this option would be OERR  ORA  00150.
+<hr />
+</p>
+<a name="wp1036675"> </a><p class="pBody">
+If you have sent the errors to an output file with the &quot;-e&quot; option, the runtime will also attempt to include the text that explains the errors.  You can also use the C$RERR library routine.  You can also retrieve error codes from within your COBOL program.  See the example in <a  href="4gl912.htm#wp1041363">section 9.2.3, &quot;Retrieving Runtime Errors.&quot;</a>
+</p>
+<a name="wp1036023"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1036024"> </a><p class="pBody">
+Do my XFD files have to be in the same directory as my object files?
+</p>
+<a name="wp1036025"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1036626"> </a><p class="pBody">
+No.  You can instruct the compiler to put the XFD files in an alternate directory with the &quot;-Fo&quot; compiler option.  Then at run time, make sure you have the configuration variable XFD_PREFIX set to include that same directory.  See <a  href="4gl8.htm#wp1046258">Chapter 8, &quot;Compiler and Runtime Options,&quot;</a> for information on the &quot;-Fo&quot; option and the XFD_PREFIX configuration variable.
+</p>
+<a name="wp1036633"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1036034"> </a><p class="pBody">
+Why aren't my KEYs being retrieved in the correct order?
+</p>
+<a name="wp1036035"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1036036"> </a><p class="pBody">
+If your KEY field is numeric or alphanumeric, you may have illegal data in the field.  For example, if you've used LOW-VALUES or HIGH-VALUES to mark control records, those values are considered invalid and can cause the records containing them to be retrieved in an unexpected sequence.  
+</p>
+<a name="wp1036040"> </a><p class="pBody">
+To enable special values such as these to be processed, use the <a  href="4gl46.htm#wp1034476">BINARY</a> directive in front of the key field.  This allows data of any classification to be processed.  Either designate an individual field as binary, or specify USE GROUP, BINARY in front of a group of fields.
+</p>
+<a name="wp1036041"> </a><p class="pBody">
+The method of storing variables declared as binary is database-specific.  For example, for Informix databases, these are stored as char fields with an extra leading character that always contains a space.  For Oracle databases, to use another example, variables declared as binary are stored as raw fields.  Refer to your database documentation for information specific to your data source or RDBMS.
+</p>
+<a name="wp1036969"> </a><h5 class="pHeading4">
+Question: 
+</h5>
+<a name="wp1036970"> </a><p class="pBody">
+Is it possible to use the same XFD file for data files with different names, if they all have the same structure?  This would be useful when I create several customer files that use the same record definitions.
+</p>
+<a name="wp1036971"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1036972"> </a><p class="pBody">
+At run time, it is possible to use a single XFD for files that have different names.  For example, suppose a site has customer files that have identical structures but different names (CUST0001, CUST0002, CUST0003, etc.).  It's not necessary to have a separate XFD for each file, so long as their record definitions are the same.  
+</p>
+<a name="wp1036973"> </a><p class="pBody">
+The individual files can all be mapped to the same XFD via a runtime configuration variable called <a  href="4gl818.htm#wp1036113">XFD_MAP</a>.  Here's how it works.
+</p>
+<a name="wp1036977"> </a><p class="pBody">
+Suppose your COBOL application has a SELECT with a variable ASSIGN name, such as customer-file.  This variable assumes different values (such as CUST0001 and CUST0002) during program execution.  
+</p>
+<a name="wp1036978"> </a><p class="pBody">
+Before compiling the application, you would use the FILE directive to provide a base name for the XFD.  Suppose you provide CUST as the base.  The compiler would then generate an XFD named cust.xfd.  (The compiler always converts XFD names to lower case.)
+</p>
+<a name="wp1036979"> </a><p class="pBody">
+To ensure that all customer files, each having a unique name, will use this same XFD, you make this entry in your runtime configuration file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+XFD_MAP  CUST* = CUST<a name="wp1036980"> </a>
+</pre></div>
+<a name="wp1036981"> </a><p class="pBody">
+The asterisk (*) in the example is a wildcard that matches any number of characters.  Note that the extension .xfd should not be included in the map.  This statement would cause the XFD cust.xfd to be used for all files whose names begin with CUST.
+</p>
+<a name="wp1036982"> </a><p class="pBody">
+The XFD_MAP variable has this syntax:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+XFD_MAP   [pattern = base-xfd-name]  ...<a name="wp1036983"> </a>
+</pre></div>
+<a name="wp1036984"> </a><p class="pBody">
+where pattern consists of any valid filename characters and may include * or ?.  These two characters have special meanings in the pattern:
+</p>
+<a name="wp1036994"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1036987"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; vertical-align: baseline">*</span>
+</p>
+</td>
+    <td><a name="wp1036989"> </a><p class="pCellBody">
+matches any number of characters
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1036991"> </a><p class="pCellBody">
+?
+</p>
+</td>
+    <td><a name="wp1036993"> </a><p class="pCellBody">
+matches a single occurrence of any character
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1036995"> </a><p class="pBody">
+For example:
+</p>
+<a name="wp1037013"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1036998"> </a><p class="pCellBody">
+CUST????&#160;&#160; 
+</p>
+</td>
+    <td><a name="wp1037000"> </a><p class="pCellBody">
+matches CUST0001 and CUSTOMER;<br />does not match CUST001 or CUST00001
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037002"> </a><p class="pCellBody">
+CUST*     
+</p>
+</td>
+    <td><a name="wp1037004"> </a><p class="pCellBody">
+matches all of the above
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037006"> </a><p class="pCellBody">
+CUST*1    
+</p>
+</td>
+    <td><a name="wp1037008"> </a><p class="pCellBody">
+matches CUST001 and CUST0001 and CUST00001;<br />does not match CUSTOMER
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037010"> </a><p class="pCellBody">
+*OMER     
+</p>
+</td>
+    <td><a name="wp1037012"> </a><p class="pCellBody">
+matches CUSTOMER;<br />does not match CUST001 or CUST0001
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1037014"> </a><p class="pBody">
+The XFD_MAP variable is read during the open file stage of any Acu4GL products linked into the runtime.  
+</p>
+<a name="wp1035982"> </a><p class="pBody">
+
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

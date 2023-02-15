@@ -1,0 +1,343 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>REG_CREATE_KEY_EX, DISPLAY_REG_CREATE_KEY_EX Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1037521"> </a><h2 class="pHeading2">
+REG_CREATE_KEY_EX, DISPLAY_REG_CREATE_KEY_EX Routine
+</h2>
+<a name="wp1037527"> </a><p class="pBody">
+Creates a specified registry key by providing access to the Windows registry routine RegCreateKeyEx.  If the key already exists, this function opens it (same functionality as REG_OPEN_KEY_EX).  If the key does not exist, it is created and then opened. 
+</p>
+<a name="wp1206370"> </a><p class="pBody">
+Use DISPLAY_REG_CREATE_KEY_EX when you want the action to be performed on the display host's registry (the local host when the application is run with a standard runtime; the <em class="cEmphasis">thin client</em> when the application is run with the thin client).  Use REG_CREATE_KEY_EX when you want the action to be performed on the server host's registry (the local host when the application is run with a standard runtime, and the application host when the application is run with the thin client). 
+</p>
+<a name="wp1037528"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;REG_CREATE_KEY_EX&quot; <a name="wp1037529"> </a>
+    USING OPEN-KEY-HANDLE, SUBKEY-TO-BE-CREATED,CLASS-NAME,<a name="wp1481517"> </a>
+        OPTIONS, SAM-DESIRED, SUBKEY-HANDLE, DISPOSITION<a name="wp1481518"> </a>
+    GIVING STATUS-CODE<a name="wp1037537"> </a>
+</pre></div>
+<a name="wp1037538"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1037539"> </a><p class="pBody">
+<b class="cBold">OPEN-KEY-HANDLE</b>  Usage unsigned-long 
+</p>
+<a name="wp1037540"> </a><p class="pBody">
+Handle of a currently open key or one of the following predefined handles of keys that are always open (defined in &quot;acugui.def&quot;): 
+</p>
+<a name="wp1037541"> </a><p class="pBody">
+HKEY_CLASSES_ROOT
+</p>
+<a name="wp1037542"> </a><p class="pBody">
+HKEY_CURRENT_USER
+</p>
+<a name="wp1037543"> </a><p class="pBody">
+HKEY_LOCAL_MACHINE
+</p>
+<a name="wp1037544"> </a><p class="pBody">
+HKEY_USERS
+</p>
+<a name="wp1037545"> </a><p class="pBody">
+The key created or opened by REG_CREATE_KEY_EX is a subkey of  the key identified by OPEN-KEY-HANDLE. 
+</p>
+<a name="wp1037546"> </a><p class="pBody">
+<b class="cBold">SUBKEY-TO-BE-CREATED</b>  PIC X(n) 
+</p>
+<a name="wp1037547"> </a><p class="pBody">
+Name of the subkey to create or open. 
+</p>
+<a name="wp1037548"> </a><p class="pBody">
+<b class="cBold">CLASS-NAME</b>  PIC X(n)
+</p>
+<a name="wp1037549"> </a><p class="pBody">
+Specifies the class (object type) of the key to be created.  This parameter is ignored if the key already exists.
+</p>
+<a name="wp1037550"> </a><p class="pBody">
+<b class="cBold">OPTIONS</b>  Usage unsigned-long 
+</p>
+<a name="wp1037551"> </a><p class="pBody">
+Specifies special options for the key.  This parameter must be one of the following values (defined in &quot;acugui.def&quot;):
+</p>
+<a name="wp1055839"> </a><p class="pBody">
+ </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1055034"> </a>
+Value
+
+</th>
+    <th><a name="wp1055036"> </a>
+Meaning
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055038"> </a><p class="pCellBody">
+REG_OPTION_VOLATILE
+</p>
+</td>
+    <td><a name="wp1055040"> </a><p class="pCellBody">
+The value of this key varies depending on the Windows operating system used:
+</p>
+<a name="wp1055837"> </a><p class="pCellBody">
+<b class="cBold">Windows 98</b>: This value is ignored. That is, even if REG_OPTION_VOLATILE is specified, the RegCreateKeyEx function creates a nonvolatile key and returns ERROR_SUCCESS.
+</p>
+<a name="wp1055838"> </a><p class="pCellBody">
+<b class="cBold">Windows NT 4.0, Windows 2000</b>: This key is volatile; the information is stored in memory and is not preserved when the system is restarted.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055042"> </a><p class="pCellBody">
+REG_OPTION_NON_VOLATILE
+</p>
+</td>
+    <td><a name="wp1055044"> </a><p class="pCellBody">
+This key is not volatile; the information is stored in a file and is preserved when the system is restarted.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1037568"> </a><p class="pBody">
+By default, keys are not volatile.  This option is ignored if the key already exists. 
+</p>
+<a name="wp1037569"> </a><p class="pBody">
+<b class="cBold">SAM-DESIRED</b>  Usage unsigned-long
+</p>
+<a name="wp1037570"> </a><p class="pBody">
+Specifies a security access mask (SAM) that describes the desired security access for the new key. This parameter can be a combination of the following values (defined in &quot;acugui.def&quot;): 
+</p>
+<a name="wp1056639"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1056268"> </a>
+Value
+
+</th>
+    <th><a name="wp1056270"> </a>
+Meaning
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056272"> </a><p class="pCellBody">
+KEY_ALL_ACCESS
+</p>
+</td>
+    <td><a name="wp1056274"> </a><p class="pCellBody">
+Combination of KEY_QUERY_VALUE, KEY_ENUMERATE_SUB_KEYS, KEY_NOTIFY, EY_CREATE_SUB_KEY, KEY_CREATE_LINK, and KEY_SET_VALUE access.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056276"> </a><p class="pCellBody">
+KEY_CREATE_LINK
+</p>
+</td>
+    <td><a name="wp1056278"> </a><p class="pCellBody">
+Permission to create a symbolic link.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056280"> </a><p class="pCellBody">
+KEY_CREATE_SUB_KEY
+</p>
+</td>
+    <td><a name="wp1056282"> </a><p class="pCellBody">
+Permission to create subkeys.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056284"> </a><p class="pCellBody">
+KEY_ENUMERATE_SUB_KEYS
+</p>
+</td>
+    <td><a name="wp1056286"> </a><p class="pCellBody">
+Permission to enumerate subkeys.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056288"> </a><p class="pCellBody">
+KEY_EXECUTE
+</p>
+</td>
+    <td><a name="wp1056290"> </a><p class="pCellBody">
+Permission for read access.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056292"> </a><p class="pCellBody">
+KEY_NOTIFY
+</p>
+</td>
+    <td><a name="wp1056294"> </a><p class="pCellBody">
+Permission for change notification.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056296"> </a><p class="pCellBody">
+KEY_QUERY_VALUE
+</p>
+</td>
+    <td><a name="wp1056298"> </a><p class="pCellBody">
+Permission to query subkey data.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056300"> </a><p class="pCellBody">
+KEY_READ
+</p>
+</td>
+    <td><a name="wp1056302"> </a><p class="pCellBody">
+Combination of KEY_QUERY_VALUE, KEY_ENUMERATE_SUB_KEYS, and KEY_NOTIFY access.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056304"> </a><p class="pCellBody">
+KEY_SET_VALUE
+</p>
+</td>
+    <td><a name="wp1056306"> </a><p class="pCellBody">
+Permission to set subkey data.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056308"> </a><p class="pCellBody">
+KEY_WRITE
+</p>
+</td>
+    <td><a name="wp1056310"> </a><p class="pCellBody">
+Combination of KEY_SET_VALUE and KEY_CREATE_SUB_KEY access.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1037617"> </a><p class="pBody">
+The above values may be combined in COBOL applications by using the &quot;CBL_OR&quot; library routine.
+</p>
+<a name="wp1037618"> </a><p class="pBody">
+<b class="cBold">SUBKEY-HANDLE</b>  Usage unsigned-long 
+</p>
+<a name="wp1037619"> </a><p class="pBody">
+Data item to receive the handle of the newly created or opened key. 
+</p>
+<a name="wp1037620"> </a><p class="pBody">
+<b class="cBold">DISPOSITION</b>  Usage unsigned-long 
+</p>
+<a name="wp1037621"> </a><p class="pBody">
+Points to a variable that receives one of the following disposition values (defined in &quot;acugui.def&quot;):
+</p>
+<a name="wp1056671"> </a><p class="pBody">
+ </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1056660"> </a>
+Value
+
+</th>
+    <th><a name="wp1056662"> </a>
+Meaning
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056664"> </a><p class="pCellBody">
+REG_CREATED_NEW_KEY
+</p>
+</td>
+    <td><a name="wp1056666"> </a><p class="pCellBody">
+The key did not exist and was created.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056668"> </a><p class="pCellBody">
+REG_OPENED_EXISTING_KEY
+</p>
+</td>
+    <td><a name="wp1056670"> </a><p class="pCellBody">
+The key existed and was simply opened without being changed.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1037636"> </a><p class="pBody">
+<b class="cBold">STATUS-CODE</b>  Numeric data item 
+</p>
+<a name="wp1037637"> </a><p class="pBody">
+Receives the return status of the call to Microsoft's &quot;RegCreateKeyEx&quot; function.  A return status of zero indicates success; non-zero indicates that an error occurred. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.6.1  Using AcuBench With Existing Applications </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp68.htm">4.6  AcuBench </a> &gt; </p>
+<a name="wp1042152"> </a><h2 class="pHeading2">
+4.6.1  Using AcuBench With Existing Applications 
+</h2>
+<a name="wp1042153"> </a><p class="pBody">
+AcuBench is an excellent tool for developing a Windows-native graphical user interface (GUI) to replace an application's existing user interface.   Depending on various characteristics of your applications, such as the format of source and library files, the use of VPLUS, the use of Qedit files, and other HP e3000 specific attributes, some special needs may have to be addressed.  These special needs are discussed in this section.
+</p>
+<a name="wp1042156"> </a><h3 class="pHeadingRef">
+Source code residency
+</h3>
+<a name="wp1042159"> </a><p class="pBody">
+In order for AcuBench to access program source files, the source files must reside in a local Windows directory or in a Windows shared-drive.  If you want to keep your COBOL objects and files on the HP&#160;e3000, you can install special software (such as SambaIX) on your HP&#160;e3000 to allow your Windows machine to map directories on the HP&#160;e3000. 
+</p>
+<a name="wp1042162"> </a><h3 class="pHeadingRef">
+Compiling with AcuBench
+</h3>
+<a name="wp1042166"> </a><p class="pBody">
+AcuBench uses the Windows version of the ACUCOBOL-GT compiler to compile source code.  The ACUCOBOL-GT compiler includes a capability called Acucorp Remote File Access Protocol, or <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">acurfap</span>.  With <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">acurfap</span>, the compiler can create the resulting object file directly on the remote system, if AcuServer or AcuConnect<sup class="cSuperscript">®</sup> is running on the remote machine.  AcuConnect can be deployed on the HP&#160;e3000, making it is possible to compile on a Windows system and have the resulting object file placed automatically on the designated HP&#160;e3000 machine.  The exact location is specified in the Project Properties area of AcuBench.  For complete information on acurfap and its use with AcuBench, see the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">AcuBench User's Guide</span> and the ACUCOBOL-GT documentation set.
+</p>
+<a name="wp1042167"> </a><p class="pNote">
+<hr />
+<b>Note:  </b><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">acurfap</span> can be used only when AcuConnect is running on the HP&#160;e3000.
+<hr />
+</p>
+<a name="wp1042170"> </a><h3 class="pHeadingRef">
+Handling KSAM file format and multiple-file COPY libraries 
+</h3>
+<a name="wp1042175"> </a><p class="pBody">
+AcuBench requires that COPY files be in plain text format.  AcuBench does not support the inclusion of macros in COPY files.  Neither does it support COPY libraries.   KSAM format COPY files and libraries must be converted to individual text files.  See <a  href="ch4-hp29.htm#wp1041420">section 4.2.7, &quot;The libutil Utility,&quot;</a> for information about converting KSAM files and COPY libraries.  
+</p>
+<a name="wp1042178"> </a><h3 class="pHeadingRef">
+Using terminal emulators with AcuBench
+</h3>
+<a name="wp1042181"> </a><p class="pBody">
+AcuBench is particularly helpful in developing a graphical user interface for your HP&#160;e3000 applications for deployment using Acucorp's Thin Client technology.  However, at present, this development scenario requires, in most cases, that you compile your updated application on the HP e3000 using ACUCOBOL-GT's HP COBOL compatibility option (&quot;-Cp&quot;).  One way to facilitate this activity is to use WRQ's Reflection to help transfer files between MPE/iX MPE/iX and Windows and to initiate ACUCOBOL-GT compilation and runtime execution on the HP e3000.  The following outlines the basic steps. 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042182"> </a><div class="pSmartList1"><li>Use <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Reflection</span> to import the source code from the HP&#160;e3000 to the Windows machine on which AcuBench is installed.</li></div>
+<a name="wp1042183"> </a><div class="pSmartList1"><li>Use the Screen Designer to develop and generate code for your GUI screens and perform any source code editing in the AcuBench Code Editor.</li></div>
+<a name="wp1042184"> </a><div class="pSmartList1"><li>When you are ready to compile the updated code, use <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Reflection</span> to export the source code back to the HP&#160;e3000.</li></div>
+<a name="wp1042185"> </a><div class="pSmartList1"><li>Use <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Reflection</span> to invoke the ACUCOBOL-GT compiler on the HP e3000.</li></div>
+<a name="wp1042186"> </a><div class="pSmartList1"><li>Use <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Reflection</span> to invoke the ACUCOBOL-GT runtime and debugger on the HP&#160;e3000.</li></div>
+</ol></div>
+<a name="wp1042189"> </a><h3 class="pHeadingRef">
+Handling source files in Qedit format
+</h3>
+<a name="wp1042192"> </a><p class="pBody">
+Qedit files must be converted to a flat file format before they can be used in the AcuBench Code Editor.  To use Qedit files with AcuBench, you should move them as <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">keep files</span>, not as <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Qedit format files</span>.  You can use a third-party tool (such as QCOPY.QLIB.ROBELLE) to convert the file to <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">keep file format</span>, or you can use Qedit for Windows to copy and paste the file into a PC file.
+</p>
+<a name="wp1042195"> </a><h3 class="pHeadingRef">
+Handling programs containing VPLUS screens
+</h3>
+<a name="wp1042198"> </a><p class="pBody">
+VPLUS screens cannot be displayed on the Windows host using the Thin Client.  HP&#160;e3000 programs that contain VPLUS screens can be coded in the AcuBench Code Editor and compiled with the Windows compiler.  However, runtime-related activities, such as execution and debugging, must be performed on the HP&#160;e3000.  You can handle this by complementing AcuBench with a product such as <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Reflection</span>, which contains a terminal emulator.  See the subsection titled &quot;Using terminal emulators with AcuBench&quot; in this section.
+</p>
+<a name="wp1042201"> </a><h3 class="pHeadingRef">
+Handling IMAGE data files 
+</h3>
+<a name="wp1042205"> </a><p class="pBody">
+There are no limitations associated with IMAGE data.  We recommend that execution be on the HP&#160;e3000.  This could be considered a requirement, except that there are third-party software products (such as OMNIDEX by DISC) that allow your program to be run on Windows and access IMAGE data files on the HP&#160;e3000.  The Graphical Working Storage Section of AcuBench can import existing COPY files which describe the buffers and variables used to make intrinsic calls.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

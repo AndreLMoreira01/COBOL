@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:40" />
+  <title>E.9  Common Questions and Answers </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gle.htm">Appendix E:  Acu4GL for Sybase Information </a> &gt; </p>
+<a name="wp1050090"> </a><h2 class="pHeading1">
+E.9  Common Questions and Answers 
+</h2>
+<a name="wp1063305"> </a><p class="pBody">
+This section contains some questions and answers specific to Acu4GL for Sybase.  Refer to <a  href="4gl10.htm#wp1038172">Chapter 10</a> for additional questions and answers that pertain to the Acu4GL family of products.
+</p>
+<a name="wp1050101"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1051449"> </a><p class="pBody">
+What files do I need in order to link my C routines into Acu4GL?
+</p>
+<a name="wp1050102"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1051448"> </a><p class="pBody">
+Relinking is not necessary on Windows platforms.  To add your own C routines to the runtime, relink the runtime as discussed in the runtime manual.  You do not need to add anything special to use Acu4GL for Sybase.
+</p>
+<a name="wp1050103"> </a><p class="pBody">
+(UNIX only)<br />all files in the lib subdirectory of your ACUCOBOL-GT distribution
+</p>
+<a name="wp1050104"> </a><p class="pBody">
+sub.c<br />sub85.c<br />filetbl.c<br />config85.c<br />sub.h
+</p>
+<a name="wp1050105"> </a><p class="pBody">
+From your Acu4GL media you need:
+</p>
+<a name="wp1050106"> </a><p class="pBody">
+sybase.o<span style="font-family: Arial, Verdana, Helvetica, sans-serif">  </span>
+</p>
+<a name="wp1050107"> </a><p class="pBody">
+From Sybase you need the platform-specific Open Client DB-Library/C product.  
+</p>
+<a name="wp1050108"> </a><p class="pBody">
+Instructions for linking are given in the installation portion of this appendix.
+</p>
+<a name="wp1050119"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1051433"> </a><p class="pBody">
+When I try to open a file for output, I get the error 9D,2714.  There is already an object named * in the database.  Why?
+</p>
+<a name="wp1050120"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1051432"> </a><p class="pBody">
+One of your record's data items probably has the same name as a Sybase reserved word.  Locate the column by comparing a file trace of the CREATE TABLE to Sybase's list of reserved words.  Apply the <a  href="4gl410.htm#wp1035551">NAME</a> directive to the field in the FD that is associated with the invalid column, then recompile the program to create a new XFD file.
+</p>
+<a name="wp1050121"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1051431"> </a><p class="pBody">
+Can I open tables in different databases?
+</p>
+<a name="wp1050122"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1051430"> </a><p class="pBody">
+Yes.  Use a file name like:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+database.owner.tablename  <a name="wp1050123"> </a>
+</pre></div>
+<a name="wp1050124"> </a><p class="pBody">
+Note that, because Acu4GL for Sybase automatically determines an owner, you can also specify a file name like &quot;database..tablename&quot;.  The two dots are mandatory in this case.
+</p>
+<a name="wp1050125"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1051422"> </a><p class="pBody">
+Can I use multiple servers (on the same machine or on different machines) on my network?
+</p>
+<a name="wp1050126"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1051421"> </a><p class="pBody">
+Yes.  Each server has a unique name.  To see if the necessary setup has been done, enter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+isql -S <em class="cEmphasis">servername</em><a name="wp1050127"> </a>
+</pre></div>
+<a name="wp1050128"> </a><p class="pBody">
+If this connects you to the server you want, you can open tables on that server by giving them a name like <em class="cEmphasis">servername.database.owner.tablename</em>.  Note that this naming can be done in your runtime configuration file.
+</p>
+<a name="wp1050129"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1051416"> </a><p class="pBody">
+I'm getting an error 9D,11 ACUCOBOL-GT lock table missing.  I know that I added the lock table during installation.
+</p>
+<a name="wp1050130"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1051415"> </a><p class="pBody">
+This is probably a permissions problem.  All users must have READ, WRITE, UPDATE, and DELETE access to AcuLocks (and therefore to the database that contains it).  Be sure to check your permissions.
+</p>
+<a name="wp1050131"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1051414"> </a><p class="pBody">
+I keep receiving an error  message saying that my login is invalid.  But I'm sure I'm using the correct username and password.
+</p>
+<a name="wp1050132"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1051403"> </a><p class="pBody">
+All usernames, passwords, and database names are case-sensitive.  Be sure that you are typing the names exactly as they are set up.
+</p>
+<a name="wp1050133"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1051404"> </a><p class="pBody">
+The runtime system can't seem to locate my XFD file, but when I check the XFD directory, the file is definitely there.
+</p>
+<a name="wp1050134"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1051402"> </a><p class="pBody">
+Check the case of the XFD filename.  The Acu4GL product may be looking for upper case on the base name.
+</p>
+<a name="wp1050178"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1051385"> </a><p class="pBody">
+Are there any ACUCOBOL-GT library routines that do not work with or would not make sense to use with Acu4GL for Sybase?
+</p>
+<a name="wp1050179"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1051384"> </a><p class="pBody">
+Yes. There are two ACUCOBOL-GT library routines that either don't work with or do not make sense to use with Acu4GL for Sybase: C$COPY and C$RECOVER.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:01:15" />
+  <title>5.2.15  EXAMINE</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch5-dosv.htm">Chapter 5:  IBM DOS/VS COBOL Conversions</a> &gt; <a href="ch5-dos3.htm">5.2  ACUCOBOL-GT and IBM DOS/VS COBOL-Specific Features</a> &gt; </p>
+<a name="wp1034875"> </a><h2 class="pHeading2">
+5.2.15  EXAMINE
+</h2>
+<a name="wp1034878"> </a><p class="pBody">
+IBM DOS/VS COBOL has an EXAMINE statement, which duplicates some of the functionality of the ACUCOBOL-GT INSPECT statement, but with slightly different syntax.  ACUCOBOL-GT accepts this statement in the IBM DOS/VS COBOL compatibility mode.
+</p>
+<a name="wp1034879"> </a><h3 class="pHeadingRef">
+Format 1:
+</h3>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<u class="cUnderline">EXAMINE</u> identifier-1 <u class="cUnderline">TALLYING</u> {<u class="cUnderline">ALL</u>        } literal-1 [<u class="cUnderline">REPLACING</u> <u class="cUnderline">BY</u> literal-2]<a name="wp1034880"> </a>
+                              {<u class="cUnderline">LEADING</u>    }<a name="wp1034881"> </a>
+                              {<u class="cUnderline">UNTIL FIRST</u>}<a name="wp1034882"> </a>
+</pre></div>
+<a name="wp1034883"> </a><h3 class="pHeadingRef">
+Format 2:
+</h3>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<u class="cUnderline">EXAMINE</u> identifier-1 <u class="cUnderline">REPLACING</u> {<u class="cUnderline">ALL</u>        } literal-1 <u class="cUnderline">BY</u> literal-2<a name="wp1034884"> </a>
+                               {<u class="cUnderline">FIRST</u>      }<a name="wp1034885"> </a>
+                               {<u class="cUnderline">LEADING</u>    }<a name="wp1034886"> </a>
+                               {<u class="cUnderline">UNTIL FIRST</u>}<a name="wp1034887"> </a>
+</pre></div>
+<a name="wp1034888"> </a><p class="pBody">
+Here <em class="cEmphasis">identifier-1</em> is the name of a data item containing characters to be counted or replaced.  Its USAGE must be DISPLAY (implicitly or explicitly).  Each literal is a single-character literal or one of the following figurative literals:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ZERO<a name="wp1034889"> </a>
+ZEROS<a name="wp1034890"> </a>
+ZEROES<a name="wp1034891"> </a>
+SPACE<a name="wp1034892"> </a>
+SPACES<a name="wp1034893"> </a>
+QUOTE<a name="wp1034894"> </a>
+QUOTES<a name="wp1034895"> </a>
+LOW-VALUE<a name="wp1034896"> </a>
+LOW-VALUES<a name="wp1034897"> </a>
+HIGH-VALUE<a name="wp1034898"> </a>
+HIGH-VALUES<a name="wp1034899"> </a>
+</pre></div>
+<a name="wp1034900"> </a><p class="pBody">
+ACUCOBOL-GT does not enforce the one-character limitation.  If a string literal has two or more characters, it uses only the first character. 
+</p>
+<a name="wp1034901"> </a><p class="pBody">
+The special register TALLY, whose PICTURE is 9(5) and whose USAGE is <br />COMP-N, counts the number of characters in Format 1 that obey certain conditions.
+</p>
+<a name="wp1034902"> </a><p class="pBody">
+The characters to be counted and replaced are determined by the key words following TALLYING or REPLACING.  Counting is done only in Format 1, and replacement is done only in Format 2 and when specified in Format 1.
+</p>
+<a name="wp1035989"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1035927"> </a>
+Key Words
+
+</th>
+    <th><a name="wp1035929"> </a>
+Characters To Be Counted And Replaced
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035931"> </a><p class="pCellBody">
+ALL
+</p>
+</td>
+    <td><a name="wp1035933"> </a><p class="pCellBody">
+Count all instances of <em class="cEmphasis">literal-1</em> in the data item and replace them with <em class="cEmphasis">literal-2</em>.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035935"> </a><p class="pCellBody">
+FIRST
+</p>
+</td>
+    <td><a name="wp1035937"> </a><p class="pCellBody">
+Replace the first (leftmost) instance of <em class="cEmphasis">literal-1</em> in the data item to <em class="cEmphasis">literal-2</em>.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035939"> </a><p class="pCellBody">
+LEADING
+</p>
+</td>
+    <td><a name="wp1035941"> </a><p class="pCellBody">
+Count the instances of <em class="cEmphasis">literal-1</em> in the data item that appear before (to the left of) any other character in the data item, and replace them with <em class="cEmphasis">literal-2</em>.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035943"> </a><p class="pCellBody">
+UNTIL FIRST
+</p>
+</td>
+    <td><a name="wp1035945"> </a><p class="pCellBody">
+Count the characters to the left of the first (leftmost) instance of <em class="cEmphasis">literal-1</em> and replace them with <em class="cEmphasis">literal-2</em>. If <em class="cEmphasis">literal-1</em> does not appear in the data item, count and replace all characters in the data item.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1034925"> </a><p class="pBody">
+It should be noted that the substitution of <em class="cEmphasis">literal-2</em> for characters other than <em class="cEmphasis">literal-1</em> occurs only in the last case. 
+</p>
+<a name="wp1034926"> </a><p class="pBody">
+The contents of the TALLY register are unchanged in Format 2.  In Format 1, its contents are replaced by the appropriate character count, regardless of the previous contents.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$REDIRECT Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1148637"> </a><h2 class="pHeading2">
+C$REDIRECT Routine
+</h2>
+<a name="wp1148643"> </a><p class="pBody">
+This routine is used to install and uninstall file I/O handlers.  The routine gives you the ability to <em class="cEmphasis">redirect</em> file I/O operations to other, separate COBOL programs (handlers) that perform file I/O operations in addition to, or instead of the original operation.
+</p>
+<a name="wp1036534"> </a><p class="pBody">
+For example, you can augment a file I/O operation to act on an additional file without rewriting the original application. C$REDIRECT specifies the name of the handler(s) that performs the additional operations.  The handler is simply a COBOL program. This feature is activated or deactivated by calling C$REDIRECT.  Information is passed to the handler program using standard COBOL linkage items. Each program has its own set of I/O handlers.  This means that only the module (or sub-program) calling C$REDIRECT is affected.
+</p>
+<a name="wp1036535"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$REDIRECT&quot; <a name="wp1036536"> </a>
+    USING HANDLER-FUNCTION, HANDLER-VERSION, HANDLER-NAME, <a name="wp1036537"> </a>
+        [PREVIOUS-HANDLER-NAME],<a name="wp1036538"> </a>
+    GIVING HANDLER-STATUS<a name="wp1036539"> </a>
+</pre></div>
+<a name="wp1036540"> </a><h3 class="pHeadingRef">
+Parameter
+</h3>
+<a name="wp1036541"> </a><p class="pBody">
+<b class="cBold">HANDLER-FUNCTION</b>   any numeric value
+</p>
+<a name="wp1036542"> </a><p class="pBody">
+This parameter has three possible values, HANDLER-FUNCTION-PRE, HANDLER-FUNCTION-REPLACE, and HANDLER-FUNCTION-POST (defined in &quot;filesys.def&quot;).  
+</p>
+<a name="wp1036543"> </a><p class="pBody">
+<b class="cBold">HANDLER-VERSION</b>   any numeric value
+</p>
+<a name="wp1036544"> </a><p class="pBody">
+Specifies the version of the linkage items to be passed to the handler program (defined in &quot;filesys.def&quot;).  The linkage items are defined in &quot;handler.cpy&quot;.  If later releases change the format of the linkage items, you can use HANDLER-VERSION to specify which version of the linkage items to use.  Currently, the only legal values for this parameter are &quot;1&quot; and &quot;2&quot;.
+</p>
+<a name="wp1036545"> </a><p class="pBody">
+<b class="cBold">HANDLER-NAME</b>   PIC X(n)
+</p>
+<a name="wp1036546"> </a><p class="pBody">
+Specifies the name of the handler program to be installed.  Use NULL to uninstall a handler that has been previously installed.
+</p>
+<a name="wp1036547"> </a><p class="pBody">
+<b class="cBold">PREVIOUS-HANDLER-NAME</b>   PIC X(n) (optional)
+</p>
+<a name="wp1036548"> </a><p class="pBody">
+After a successful call to C$REDIRECT, this data item holds the name of the previously installed HANDLER-FUNCTION.  It will contain spaces if there was no previous handler of this type.
+</p>
+<a name="wp1036549"> </a><p class="pBody">
+<b class="cBold">HANDLER-STATUS</b>   signed numeric value (optional)
+</p>
+<a name="wp1036550"> </a><p class="pBody">
+After a call to C$REDIRECT, this data item contains the status of the action.  A &quot;1&quot; indicates that the install or uninstall action has succeeded and &quot;0&quot; indicates failure.  Possible reasons for failure include an unsupported HANDLER-VERSION or an unsupported operation version.
+</p>
+<a name="wp1036551"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1036552"> </a><p class="pBody">
+C$REDIRECT allows you to install as many as three discrete handlers:  
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1036553"> </a><div class="pSmartList1"><li>The &quot;pre&quot; handler executes before the file I/O statement.  </li></div>
+<a name="wp1036554"> </a><div class="pSmartList1"><li>The &quot;replace&quot; handler executes in place of the file I/O statement.  </li></div>
+<a name="wp1036555"> </a><div class="pSmartList1"><li>The &quot;post&quot; handler executes after the file I/O statement.  </li></div>
+</ul></div>
+<a name="wp1036556"> </a><p class="pBody">
+These handlers may be used together in any combination, but each must be installed with a separate call to C$REDIRECT.  All standard file I/O statements trigger the installed handlers (standard file I/O statements include: OPEN, CLOSE, READ, READ NEXT, READ PREVIOUS, WRITE, REWRITE, DELETE, DELETE FILE, START, COMMIT, and ROLLBACK).  Information is passed to the handlers via standard COBOL linkage items.  These items are described in the file &quot;handler.cpy&quot; that is installed with the ACUCOBOL-GT development system.  Once a handler is installed, all<em class="cEmphasis"> </em>file I/O for all files is redirected through the handler.
+</p>
+<a name="wp1270392"> </a><p class="pBody">
+This routine can be used with the SORT and MERGE statements.  The I/O handlers are used on the files listed in the USING and GIVING phrases when these verbs execute implicit OPEN, READ, NEXT, WRITE, AND CLOSE operations. In this situation, the handlers will be called more than once for each execution of the verb.
+</p>
+<a name="wp1036557"> </a><p class="pBody">
+When an installed handler executes, it can return its status via the linkage item HANDLER-STATUS-CODE.  This item is meant to return the standard COBOL file status code that is normally returned by a file operation.  The value returned is made available in the file's status variable.  The set of codes used is up to the developer, as long as they follow these rules:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1036558"> </a><div class="pSmartList1"><li>Any code that starts with a &quot;0&quot; is considered successful.</li></div>
+<a name="wp1036559"> </a><div class="pSmartList1"><li>Any code that starts with a &quot;1&quot; is considered to be an &quot;at end&quot; condition.</li></div>
+<a name="wp1036560"> </a><div class="pSmartList1"><li>Any code that starts with a &quot;2&quot; is considered to be an &quot;invalid key&quot; condition.</li></div>
+</ul></div>
+<a name="wp1036561"> </a><p class="pBody">
+The first handler to return an unsuccessful status code will be the last portion of the file operation to be executed, whether the remaining operation is the regular file operation or another handler.  For example, a &quot;pre&quot; handler returning an error will preclude the execution of the normal file operation (or a &quot;replace&quot; handler, if defined) and the &quot;post&quot; handler, if defined.  Declaratives are run as appropriate when a handler returns an error.  
+</p>
+<a name="wp1036563"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>C$RERR and other library functions that report internal file error codes may not return the expected results after executing a handler program. 
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

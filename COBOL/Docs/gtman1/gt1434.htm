@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:48" />
+  <title>4.6.2  Additional Screen Functions</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt14.htm"><br />Chapter 4:  Terminal Manager</a> &gt; <a href="gt1432.htm">4.6  The Terminal Database File</a> &gt; </p>
+<a name="wp1034816"> </a><h2 class="pHeading2">
+4.6.2  Additional Screen Functions
+</h2>
+<a name="wp1034818"> </a><p class="pBody">
+Several additional functions are available to manipulate the screen display.  These should be included if the terminal supports these features.  The functions are: <b class="cBold">insert-line</b> (al), <b class="cBold">delete-line</b> (dl), <b class="cBold">non-destructive-space</b> (nd), <b class="cBold">backspace-cursor </b>(bc), <b class="cBold">cursor-down</b> (do), <b class="cBold">cursor-up</b> (up), <b class="cBold">set-width-132</b> (W3) and <b class="cBold">set-width-80</b> (W8).  
+</p>
+<a name="wp1034819"> </a><p class="pBody">
+The four cursor movement commands are available to optimize cursor motion.  The non-destructive-space function should move the cursor to the right one column; the backspace-cursor function should move the cursor left one column.  Finally, the cursor-down function should move the cursor down one line and cursor-up should move it up one line.  If omitted, cursor-down defaults to a line-feed character, and backspace-cursor defaults to a backspace character.  There are no defaults for non-destructive-space and cursor-up.  
+</p>
+<a name="wp1034820"> </a><p class="pBody">
+The insert-line function should insert a blank line at the cursor line, moving the cursor line and all following lines downward.  The delete-line function should delete the cursor line, moving all following lines up and inserting a blank line at the bottom of the screen.  
+</p>
+<a name="wp1034821"> </a><p class="pBody">
+NS should be added to the terminal database file entry for a terminal that does not scroll if the lower right corner of the screen is filled.  This tells the ACUCOBOL-GT program that it is all right to use this position.  NS is the complete sequence (... :NS: ...).
+</p>
+<a name="wp1034822"> </a><p class="pBody">
+The set-width functions should change the display between 132-column mode and 80-column mode.  Both must be specified to use this feature.  
+</p>
+<a name="wp1034823"> </a><p class="pBody">
+You can also specify when the cursor should be visible.  These entries should handle cursor modification:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ve = set cursor to normal<a name="wp1034824"> </a>
+vs = set cursor to bright<a name="wp1037985"> </a>
+vi = set cursor to invisible<a name="wp1037986"> </a>
+</pre></div>
+<a name="wp1034825"> </a><p class="pBody">
+After &quot;vi&quot; has rendered the cursor invisible, &quot;ve&quot; is used to make it visible.  
+</p>
+<a name="wp1034826"> </a><p class="pBody">
+If your terminal does not have both a normal and a bright cursor, then set the &quot;ve&quot; entry to turn the cursor on and do not use the &quot;vs&quot; entry.
+</p>
+<a name="wp1034827"> </a><p class="pBody">
+The VT-100 supports only one of these functions: Non-destructive-space.  This is accomplished by sending <span style="font-family: Arial, Verdana, Helvetica, sans-serif">&quot;ESC</span>[C&quot;.  Our current entry is now:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+vt100|vt-100|DEC VT-100 :\<a name="wp1037912"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:cl=\E[;H\E[2J:ce=\E[K:cd=\E[J:\<a name="wp1037948"> </a>
+:cm=\E[%i%d;%dH:\<a name="wp1037962"> </a>
+<b class="cBold">:nd=\E[C:</b><a name="wp1037963"> </a>
+</pre></div>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

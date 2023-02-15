@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:24" />
+  <title>3.7.2  Loading Bitmaps</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt23.htm">Chapter 3:  Graphical Controls</a> &gt; <a href="gt238.htm">3.7  Bitmap Buttons</a> &gt; </p>
+<a name="wp1026309"> </a><h2 class="pHeading2">
+3.7.2  Loading Bitmaps
+</h2>
+<a name="wp1026315"> </a><p class="pBody">
+In your program, you must load bitmap images (BMP or JPG) from disk into memory before they can be displayed as buttons. To load a bitmap, you must use the WBITMAP-LOAD operation.  The call looks like this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;W$BITMAP&quot; USING WBITMAP-LOAD, filename <a name="wp1026316"> </a>
+   GIVING bitmap-handle<a name="wp1029529"> </a>
+</pre></div>
+<a name="wp1046071"> </a><p class="pBody">
+where <em class="cEmphasis">filename</em> is a literal or data item that holds the name of the bitmap file to load, and <em class="cEmphasis">bitmap-handle</em> is a PIC 9(9) COMP-4 data item.  This call opens the <em class="cEmphasis">filename</em> file, loads the bitmap into memory and closes the file.  If the operation is successful, <em class="cEmphasis">bitmap-handle</em> will contain a positive value.  If <em class="cEmphasis">bitmap-handle</em> is zero or negative, an error occurred.  For a complete description of W$BITMAP and all error values returned by it, see Book 4, Appendix I.
+</p>
+<a name="wp1046072"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In order to use JPG files, you must have the file &quot;ajpg32.dll&quot; installed in the same directory as the runtime.
+<hr />
+</p>
+<a name="wp1026319"> </a><p class="pBody">
+If you have multiple bitmap files, you need to load each before you can use the images they contain.  Make certain to store the returned handles in different data items.  
+</p>
+<a name="wp1026327"> </a><p class="pBody">
+W$BITMAP searches for resources before it searches for disk files.  For example, the &quot;tour.cbl&quot; sample program contains the following lines: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+COPY RESOURCE &quot;gtanima.bmp&quot;.<a name="wp1026328"> </a>
+<a name="wp1029532"> </a>
+CALL &quot;W$BITMAP&quot; USING WBITMAP-LOAD, <a name="wp1029533"> </a>
+&quot;gtanima.bmp&quot; GIVING GT-BITMAP<a name="wp1029534"> </a>
+</pre></div>
+<a name="wp1026329"> </a><p class="pBody">
+The bitmap loaded is the resource specified in the COPY RESOURCE statement because the referenced file name is the same as the resource name.  Replacing the COPY RESOURCE statement with 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+COPY RESOURCE &quot;mybmps/gtanima.bmp&quot;<a name="wp1026330"> </a>
+</pre></div>
+<a name="wp1026331"> </a><p class="pBody">
+produces the same results (assuming &quot;mybmps/gtanima.bmp&quot; existed at compile time) because resource names are not stored with directory information.  Note that 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;W$BITMAP&quot; USING WBITMAP-LOAD, <a name="wp1026332"> </a>
+&quot;mybmps/gtanima.bmp&quot;  . . . <a name="wp1029535"> </a>
+</pre></div>
+<a name="wp1026333"> </a><p class="pBody">
+also load the resource &quot;gtanima.bmp&quot; because W$BITMAP looks for a resource first, stripping directory information as part of the lookup.  If no resource is found, W$BITMAP loads the file in the specified directory.
+</p>
+<a name="wp1026334"> </a><p class="pBody">
+You can include JPG files as a resource in your COBOL programs with the COPY RESOURCE statement or by using &quot;cblutil&quot;, in exactly the same manner as BMP files.  cblutil &quot;-info&quot; will identify JPG resources contained within an object library.
+</p>
+<a name="wp1026335"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>A resource name with a hyphen (&quot;MY-FILE&quot;) is considered equivalent to the same resource name given with an underscore (&quot;MY_FILE&quot;).
+<hr />
+</p>
+<a name="wp1026339"> </a><p class="pBody">
+When you are done with an image and have destroyed all the buttons that reference that image, you can remove it from memory with the WBITMAP-DESTROY operation.  Do not destroy an image that is referenced by an existing button; the results are unpredictable.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

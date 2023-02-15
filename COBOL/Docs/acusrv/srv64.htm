@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:45:44" />
+  <title>6.3  Access Records</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv6.htm">Chapter 6: System Security</a> &gt; </p>
+<a name="wp1041023"> </a><h2 class="pHeading1">
+6.3  Access Records
+</h2>
+<a name="wp1041028"> </a><p class="pBody">
+The server access file contains one or more <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">access records</span>.  You must create access records for each user whether you are using AcuServer's system security or native system security.  Each access record is composed of five fields.</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1041032"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; vertical-align: baseline">Client Machine Name:</span>
+</p>
+</td>
+    <td><a name="wp1041034"> </a><p class="pCellBody">
+The name of the client system
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041036"> </a><p class="pCellBody">
+Client Username:
+</p>
+</td>
+    <td><a name="wp1041038"> </a><p class="pCellBody">
+The user's login name on the client system  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041040"> </a><p class="pCellBody">
+Local Username:
+</p>
+</td>
+    <td><a name="wp1041042"> </a><p class="pCellBody">
+The local user name that AcuServer will use when fulfilling requests for the client user.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041044"> </a><p class="pCellBody">
+Password:
+</p>
+</td>
+    <td><a name="wp1041046"> </a><p class="pCellBody">
+Optional password protection.  When used, the requester must supply the password specified in this field.  Ignored when you use the Windows NT security NAMED-PIPE option.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041048"> </a><p class="pCellBody">
+Umask:
+</p>
+</td>
+    <td><a name="wp1041050"> </a><p class="pCellBody">
+A three-digit file creation mask.  The umask is used when AcuServer creates a new file for the requester.  The default value is 002.  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1037235"> </a><p class="pBody">
+From the command line, a typical server access record might look like:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Client Machine Name    Client Username    Local Username    Password    Umask<a name="wp1035115"> </a>
+-------------------    ---------------    --------------    --------    -----<a name="wp1044674"> </a>
+starling               bernie             bsmith             &lt;none&gt;      002<a name="wp1039660"> </a>
+</pre></div>
+<a name="wp1039661"> </a><p class="pBody">
+Using the AcuServer Control Panel in Windows, the record might look like:</p><div><img src="images/odbcser2.gif" height="75" width="427" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1035116"> </a><p class="pBody">
+This record will allow user <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">bernie</span> to connect from machine <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">starling</span>.  AcuServer will use the local user name <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">bsmith</span>  (Bernie's account on the file server) when executing requests for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">bernie</span>.  No password is required.  Any files created for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">bernie</span> will be created with a umask of 002 (<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">read</span> and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">write</span> permissions for owner and group; <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">read</span> only permissions for others).
+</p>
+<a name="wp1035118"> </a><p class="pBody">
+Three fields, Client Machine Name, Client Username, and Local Username, can have a <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">wild card</span> value to indicate a general behavior.  These wild cards are:</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1046839"> </a>
+Field name
+
+</th>
+    <th><a name="wp1046841"> </a>
+Wild card
+
+</th>
+    <th><a name="wp1046843"> </a>
+Meaning
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037282"> </a><p class="pCellBody">
+Client Machine Name
+</p>
+</td>
+    <td><a name="wp1037284"> </a><p class="pCellBody">
+*
+</p>
+</td>
+    <td><a name="wp1037286"> </a><p class="pCellBody">
+Match all client machines
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037288"> </a><p class="pCellBody">
+Client Username
+</p>
+</td>
+    <td><a name="wp1037290"> </a><p class="pCellBody">
+(empty field)
+</p>
+</td>
+    <td><a name="wp1037292"> </a><p class="pCellBody">
+Match all client users
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037294"> </a><p class="pCellBody">
+Local Username
+</p>
+</td>
+    <td><a name="wp1037296"> </a><p class="pCellBody">
+same as client
+</p>
+</td>
+    <td><a name="wp1037298"> </a><p class="pCellBody">
+Use the Client Username
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1035147"> </a><p class="pBody">
+When the string &quot;same as client&quot; is specified in the Local Username field, if the Client Username is not a valid name on the server, DEFAULT_USER is used.  In addition, if the Local Username field is blank, DEFAULT_USER is used.
+</p>
+<a name="wp1035151"> </a><p class="pBody">
+On Windows client systems, Client Username is set to the name given by the user at logon.  If the operating system does not provide a logon, or the user bypasses the logon, the value of the environment variable USER is applied.  If USER is not defined the value of the environment variable USERNAME is applied.  Note that the values assigned to these variables are case-sensitive.  Be sure that the case used in the AcuAccess file matches the case of the value set in the variable.  If neither USER nor USERNAME is defined, the literal string &quot;USER&quot; is used. 
+</p>
+<a name="wp1035154"> </a><p class="pBody">
+For illustrative purposes, here is a set of common access records as seen from the command line: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Client Machine Name    Client Username    Local Username    Password    Umask<a name="wp1035155"> </a>
+-------------------    ---------------    --------------    --------    -----<a name="wp1044692"> </a>
+support-pc                                techie            &lt;none&gt;      002<a name="wp1039776"> </a>
+warehouse-pc                                                &lt;none&gt;      002<a name="wp1039777"> </a>
+president-pc           diamond            &lt;same as client&gt;  &lt;none&gt;      002<a name="wp1039778"> </a>
+robin                                     &lt;same as client&gt;  &lt;none&gt;      002<a name="wp1039779"> </a>
+falcon                 rjones             &lt;same as client&gt;  *           002<a name="wp1046704"> </a>
+starling               felice             &lt;same as client&gt;  &lt;none&gt;      002<a name="wp1039780"> </a>
+starling               baxter                               ......      002<a name="wp1039781"> </a>
+swallow                hartley            hartley           &lt;none&gt;      002<a name="wp1039782"> </a>
+swallow                                   acct              &lt;none&gt;      002<a name="wp1039783"> </a>
+</pre></div>
+<a name="wp1039784"> </a><p class="pBody">
+Here is the same set of access records seen in the AcuServer Control Panel's Access tab:</p><div><img src="images/access_3.gif" height="220" width="556" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1035156"> </a><p class="pBody">
+These entries are interpreted as follows:
+</p>
+<a name="wp1035157"> </a><p class="pBody">
+The entry for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">support-pc</span> allows any user of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">support-pc</span> to use AcuServer.  AcuServer will use the local user name <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">techie </span>when executing requests for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">support-pc</span>.
+</p>
+<a name="wp1035158"> </a><p class="pBody">
+The entry for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">warehouse-pc</span> allows any user of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">warehouse-pc</span> to use AcuServer.  Because the Local Username field is empty, AcuServer will use the value of DEFAULT_USER as the local user name when executing requests for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">warehouse-pc</span>.
+</p>
+<a name="wp1035159"> </a><p class="pBody">
+The entry for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">president-pc</span> allows user <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">diamond</span> to access AcuServer.  For this record to match, the environment variable USERNAME or USER must be defined with the value &quot;diamond&quot;. AcuServer will also attempt to use <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">diamond</span> as the Local Username.  If <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">diamond</span> is not a valid local user name, the value of DEFAULT_USER will be used.
+</p>
+<a name="wp1035160"> </a><p class="pBody">
+The entry for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">robin</span> allows all users of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">robin</span> to access AcuServer.  If the requester has an account on the server by the same name, AcuServer will use that name; otherwise AcuServer will use the value of DEFAULT_USER.
+</p>
+<a name="wp1046728"> </a><p class="pBody">
+The entry for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">falcon</span> specifies that user <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">rjones</span> will not be allowed to access files through AcuServer.  If <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">rjones</span> tries to access an AcuServer file, she will receive an error 9D,103, indicating that access is denied.
+</p>
+<a name="wp1035161"> </a><p class="pBody">
+One entry for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">starling</span> allows user <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">felice</span> to access AcuServer.  AcuServer will follow the same rules as the previous entry to assign a local user name.
+</p>
+<a name="wp1035162"> </a><p class="pBody">
+The other entry for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">starling</span> allows user <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">baxter</span> to access AcuServer.  AcuServer will use the value of DEFAULT_USER when executing requests for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">baxter</span>.  <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">baxter</span> will need to provide a password before a connection will be established.
+</p>
+<a name="wp1035163"> </a><p class="pBody">
+One entry for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">swallow</span> allows user <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">hartley</span> to access AcuServer.  AcuServer will use the local user name <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">hartley</span> when executing requests for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">hartley</span>.
+</p>
+<a name="wp1035164"> </a><p class="pBody">
+The other entry for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">swallow</span> allows all users of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">swallow</span> to access AcuServer.  AcuServer will use the local user name <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">acct</span> for all users of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">swallow, </span>except <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">hartley</span> (or other records for swallow that explicitly name a client user).
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

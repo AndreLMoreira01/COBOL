@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:52:54" />
+  <title>2.4  Memory and Environment Issues</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con2.htm">Chapter 2: Distributed Processing: Preparing Your Application</a> &gt; </p>
+<a name="wp1029622"> </a><h2 class="pHeading1">
+2.4  Memory and Environment Issues
+</h2>
+<a name="wp1029623"> </a><p class="pBody">
+As you design your application, you should be aware of certain memory/environment issues with the ACUCOBOL-GT runtime.
+</p>
+<a name="wp1029102"> </a><h3 class="pHeadingRef">
+Runtimes
+</h3>
+<a name="wp1029105"> </a><p class="pBody">
+Remotely CALLed programs cause the AcuConnect server to start a new runtime on the server machine.  Spawned runtimes can start runtimes on other server machines, if desired, or they can call other programs on the same server. 
+</p>
+<a name="wp1029106"> </a><p class="pBody">
+AcuConnect can spawn Acu4GL<sup class="cSuperscript">®</sup> or AcuServer<sup class="cSuperscript">®</sup> linked runtimes even if the client runtime is not so linked.
+</p>
+<a name="wp1029109"> </a><h3 class="pHeadingRef">
+Memory 
+</h3>
+<a name="wp1029112"> </a><p class="pBody">
+The remote program and remote runtime live in memory on the server machine. 
+</p>
+<a name="wp1029115"> </a><h3 class="pHeadingRef">
+Environment
+</h3>
+<a name="wp1029118"> </a><p class="pBody">
+The runtime started by AcuConnect on the server takes on whatever environment that the AcuConnect daemon itself was started in when it was started on the server.  For example if you log on as root and start AcuConnect, AcuConnect will inherit root's environment.  If you log on as userX and then start AcuConnect by issuing the superuser account, AcuConnect will inherit userX's environment.
+</p>
+<a name="wp1029119"> </a><p class="pBody">
+The important thing to note is that the CALLed program does not inherit the client environment of the CALLing program.
+</p>
+<a name="wp1029122"> </a><h3 class="pHeadingRef">
+Open Connections
+</h3>
+<a name="wp1029126"> </a><p class="pBody">
+The runtime started by AcuConnect on the server in response to a CALL is kept running until a &quot;stop run&quot; is encountered on the client.  This has the effect of maintaining any items in memory on the server machine until the client program is shut down.
+</p>
+<a name="wp1029127"> </a><p class="pBody">
+One exception to this is in the case of asynchronous program execution, when the C$ASYNCPOLL library routine is CALLed.  In this case, the runtime on the server is immediately shut down when a status of &quot;1&quot; (CALL completed) is returned by C$ASYNCPOLL.
+</p>
+<a name="wp1029130"> </a><p class="pBody">
+Another exception is in response to a CANCEL command (see <a  href="con28.htm#wp1028778">section 2.2.1, &quot;Terminating the Remote Application,&quot;</a> for more information). 
+</p>
+<a name="wp1029134"> </a><h3 class="pHeadingRef">
+EXTERNAL Data Items
+</h3>
+<a name="wp1029137"> </a><p class="pBody">
+Data items declared as EXTERNAL are not shared between client and remote programs using AcuConnect.
+</p>
+<a name="wp1029140"> </a><h3 class="pHeadingRef">
+CHAIN Command
+</h3>
+<a name="wp1029143"> </a><p class="pBody">
+The CHAIN command cannot be used to start a remote program through AcuConnect.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

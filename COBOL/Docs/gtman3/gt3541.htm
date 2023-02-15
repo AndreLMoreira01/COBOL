@@ -1,0 +1,481 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.7.1.7  PICTURE clause</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3533.htm">5.7  Record Description Entry</a> &gt; <a href="gt3534.htm">5.7.1  Data Description Entry</a> &gt; </p>
+<a name="wp1035366"> </a><h2 class="pHeading3">
+5.7.1.7  PICTURE clause
+</h2>
+<a name="wp1035371"> </a><p class="pBody">
+The PICTURE clause describes the general characteristics and editing formats of an elementary item.
+</p>
+<a name="wp1035373"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+{<u class="cUnderline">PICTURE</u>} IS picture-string<a name="wp1035374"> </a>
+{<u class="cUnderline">PIC</u>    }<a name="wp1035375"> </a>
+</pre></div>
+<a name="wp1035377"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035378"> </a><div class="pSmartList1"><li>A PICTURE clause can appear for elementary items only.</li></div>
+<a name="wp1035379"> </a><div class="pSmartList1"><li>The maximum size of the <em class="cEmphasis">picture-string</em> is 100 characters.</li></div>
+<a name="wp1035380"> </a><div class="pSmartList1"><li>A PICTURE clause is required for every elementary data item except for those items with a USAGE clause that disallows a PICTURE, or those items that are the subject of a RENAMES clause.  A PICTURE clause is prohibited for these items.  </li></div>
+<a name="wp1035381"> </a><div class="pSmartList1"><li>PIC and PICTURE may be used interchangeably.</li></div>
+<a name="wp1043606"> </a><div class="pSmartList1"><li>A picture is invalid if it specifies more than 31 digits to the left of the decimal point or more than 32 digits to the right of the decimal point, including assumed zero digits represented by &quot;P&quot; and floating insertion positions that may hold digits.  If a picture exceeds these scaling limitations, a compile-time error message is produced.</li></div>
+</ol></div>
+<a name="wp1043608"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<a name="wp1043609"> </a><p class="pBody">
+The PICTURE clause defines a data item as belonging to one of five categories and determines what the item can contain.  The five categories are:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1035387"> </a><div class="pSmartList1"><li>Alphabetic</li></div>
+<a name="wp1035389"> </a><div class="pSmartList1"><li>Numeric</li></div>
+<a name="wp1035391"> </a><div class="pSmartList1"><li>Alphanumeric</li></div>
+<a name="wp1035393"> </a><div class="pSmartList1"><li>Alphanumeric Edited</li></div>
+<a name="wp1035395"> </a><div class="pSmartList1"><li>Numeric Edited</li></div>
+</ul></div>
+<a name="wp1035396"> </a><h3 class="pHeadingRef">
+Alphabetic:
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035397"> </a><div class="pSmartList1"><li>An item is <em class="cEmphasis">alphabetic</em> when its <em class="cEmphasis">picture-string</em> consists solely of &quot;A&quot; symbols.</li></div>
+<a name="wp1035398"> </a><div class="pSmartList1"><li>An alphabetic item may contain only one or more alphabetic characters.  </li></div>
+</ol></div>
+<a name="wp1069656"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The alphabetic declaration show's the programmer's intent to store only alphabetic data, however the system does not provide any checks to ensure compliance.
+<hr />
+</p>
+<a name="wp1035399"> </a><h3 class="pHeadingRef">
+Numeric:
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1070884"> </a><div class="pSmartList1"><li>An item is <em class="cEmphasis">numeric</em> when its <em class="cEmphasis">picture-string</em> contains only the symbols &quot;9&quot;, &quot;P&quot;, &quot;S&quot;, and &quot;V&quot;.  The number of digit positions described by <em class="cEmphasis">picture-string</em> must range from 1 to 18 inclusive. This increases to 31 digit positions if 31-digit support (-Dd31) is in effect.</li></div>
+<a name="wp1070885"> </a><div class="pSmartList1"><li>If unsigned, its contents must be one or more numeric characters.  If signed, then the item may also contain a &quot;+&quot; or &quot;-&quot; (or other representation of the sign--see <a  href="gt3543.htm#wp1036221">section 5.7.1.9, &quot;SIGN clause&quot;</a>).</li></div>
+<a name="wp1035402"> </a><div class="pSmartList1"><li>The numeric category of the PICTURE clause includes an external floating-point data item, which is defined by a picture that strongly resembles a floating-point numeric literal.  For more information about External Floating-Point, see section 5.5 in <em class="cEmphasis">Transitioning to ACUCOBOL-GT</em>.</li></div>
+</ol></div>
+<a name="wp1035403"> </a><h3 class="pHeadingRef">
+Alphanumeric:
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035404"> </a><div class="pSmartList1"><li>An item is <em class="cEmphasis">alphanumeric</em> when its <em class="cEmphasis">picture-string</em> consists solely of the symbols &quot;A&quot;, &quot;X&quot;, and &quot;9&quot;.  A <em class="cEmphasis">picture-string</em> containing all &quot;A&quot; or all &quot;9&quot; symbols is <em class="cEmphasis">not</em> alphanumeric.  When used in an alphanumeric item, the &quot;A&quot; and &quot;9&quot; symbols are treated as if they were &quot;X&quot; symbols.</li></div>
+<a name="wp1035405"> </a><div class="pSmartList1"><li>Its contents may contain one or more characters in the computer's character set.</li></div>
+</ol></div>
+<a name="wp1035406"> </a><h3 class="pHeadingRef">
+Alphanumeric edited:
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035407"> </a><div class="pSmartList1"><li>An item is <em class="cEmphasis">alphanumeric edited</em> when its <em class="cEmphasis">picture-string</em> contains certain combinations of the symbols &quot;A&quot;, &quot;X&quot;, &quot;9&quot;, &quot;B&quot;, &quot;0&quot;, and &quot;/&quot;.  The <em class="cEmphasis">picture-string</em> must contain at least one &quot;A&quot; or &quot;X&quot; symbol and at least one &quot;B&quot;, &quot;0&quot;, or &quot;/&quot; symbol.</li></div>
+<a name="wp1035408"> </a><div class="pSmartList1"><li>Its contents may contain two or more characters in the computer's character set.</li></div>
+</ol></div>
+<a name="wp1035409"> </a><h3 class="pHeadingRef">
+Numeric edited:
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035410"> </a><div class="pSmartList1"><li>An item is <em class="cEmphasis">numeric edited</em> when its <em class="cEmphasis">picture-string</em> contains certain combinations of the symbols &quot;B&quot;, &quot;/&quot;, &quot;P&quot;, &quot;V&quot;, &quot;Z&quot;, &quot;0&quot;, &quot;9&quot;, comma, period, &quot;*&quot;, &quot;+&quot;, &quot;-&quot;, &quot;CR&quot;, &quot;DB&quot;, and the currency symbol.  The number of digit positions that can be represented by the <em class="cEmphasis">picture-string</em> must range between 1 and 18 inclusive. This increases to 31 digit positions if 31-digit support (-Dd31) is in effect. The <em class="cEmphasis">picture-string</em> must contain at least one &quot;0&quot;, &quot;B&quot;, &quot;/&quot;, &quot;Z&quot;, &quot;*&quot;, &quot;+&quot;, comma, period, &quot;-&quot;, &quot;CR&quot;, &quot;DB&quot;, or currency symbol.</li></div>
+<a name="wp1035411"> </a><div class="pSmartList1"><li>The content of each character position must be consistent with the corresponding PICTURE symbol.</li></div>
+</ol></div>
+<a name="wp1035412"> </a><h3 class="pHeadingRef">
+All types:
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035413"> </a><div class="pSmartList1"><li>Some PICTURE symbols represent character positions and some do not.  A data item's size is determined by adding up all the symbols that represent character positions.</li></div>
+<a name="wp1035414"> </a><div class="pSmartList1"><li>A <em class="cEmphasis">picture-string</em> may contain repeat counts for its symbols.  You denote this by placing the repeat count in parentheses immediately after the symbol that is being repeated.  For example, &quot;X(4)&quot; and &quot;XXXX&quot; are equivalent PICTURE strings.  </li></div>
+<a name="wp1035415"> </a><div class="pSmartList1"><li>Only one &quot;S&quot; may appear in a PICTURE string, and it must be the leftmost character. Only one of the following symbols may appear in a PICTURE string: &quot;V&quot; or the period character.  It may appear only once.  At least one of the symbols &quot;A&quot;, &quot;X&quot;, &quot;Z&quot;, &quot;9&quot;, or &quot;*&quot; or at least two occurrences of the symbols &quot;+&quot;, &quot;-&quot;, or the currency symbol must be present in a PICTURE string.  </li></div>
+</ol></div>
+<a name="wp1035416"> </a><p class="pBody">
+The PICTURE symbols and their functions are the following:</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1045559"> </a><p class="pCellBody">
+<b class="cBold">A&#160;&#160;&#160;&#160;&#160;</b>
+</p>
+</td>
+    <td><a name="wp1045561"> </a><p class="pCellBody">
+Represents a character position that can contain only an alphabetic character.  It is counted in the size of an item.  An alphabetic character is any character &quot;A&quot; through &quot;Z&quot;, &quot;a&quot; through &quot;z&quot;, or a space.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045563"> </a><p class="pCellBody">
+<b class="cBold">B</b>
+</p>
+</td>
+    <td><a name="wp1045565"> </a><p class="pCellBody">
+Represents a character position where a space will be inserted.  It is counted in the size of an item.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045567"> </a><p class="pCellBody">
+<b class="cBold">E</b>
+</p>
+</td>
+    <td><a name="wp1045569"> </a><p class="pCellBody">
+A delimiter directly preceding the (signed or unsigned) exponent part of an External Floating-Point notation.  The exponent is always exactly two digits long, so the last two characters of the picture must be &quot;99&quot;.  This delimiter is counted in the size of an item.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045575"> </a><p class="pCellBody">
+<b class="cBold">P</b>
+</p>
+</td>
+    <td><a name="wp1045577"> </a><p class="pCellBody">
+This symbol is used to specify an assumed scaling position in a number.  The &quot;P&quot; character is not counted in the size of the data item.  Instead, each &quot;P&quot; represents a scaling of the data item by a power of ten.  &quot;P&quot; elements can appear only as a contiguous string of &quot;P&quot;s in either the leftmost or rightmost digit positions of a <em class="cEmphasis">picture-string</em>.  If the &quot;V&quot; character is used, it must be to the left of all leading &quot;P&quot;s or to the right of all trailing &quot;P&quot;s.  The assumed decimal point for the item is located at the point where the &quot;V&quot; character may be placed.  For example, the PICTURE string &quot;9P&quot; is a one-digit item that can have numeric values of &quot;10&quot;, &quot;20&quot;, ..., &quot;90&quot;, and a PICTURE string of &quot;PPP9&quot; is a one-digit item that can have numeric values of &quot;0.0001&quot; though &quot;0.0009&quot;.  The &quot;.&quot; character may not be specified in the same <em class="cEmphasis">picture-string</em> as a &quot;P&quot; character.  When a data item is treated as a numeric value, each &quot;P&quot; position acts as if it were a digit position that contained a zero.  When a data item is not treated as a numeric value, then its &quot;P&quot; positions are ignored.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045579"> </a><p class="pCellBody">
+<b class="cBold">S</b>
+</p>
+</td>
+    <td><a name="wp1045581"> </a><p class="pCellBody">
+Indicates the presence of an operational sign for a numeric item.  It does not specify the sign representation or position.  Only one &quot;S&quot; may appear in a PICTURE string, and it must be the leftmost character.  It does not count in the size of the data item unless the SIGN IS SEPARATE clause is also specified.  
+</p>
+<a name="wp1097548"> </a><p class="pCellBody">
+Note that the PICTURE definition for a PIC X(n) COMP-5 cannot be signed.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045583"> </a><p class="pCellBody">
+<b class="cBold">V</b>
+</p>
+</td>
+    <td><a name="wp1045585"> </a><p class="pCellBody">
+Specifies the location of an assumed decimal point.  It may appear only once in a PICTURE string.  It does not represent a character position and is not counted in the size of the data item.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045587"> </a><p class="pCellBody">
+<b class="cBold">X</b>
+</p>
+</td>
+    <td><a name="wp1045589"> </a><p class="pCellBody">
+Represents a character position that can contain any character from the computer's character set.  It is counted in the size of an item.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045591"> </a><p class="pCellBody">
+<b class="cBold">Z</b>
+</p>
+</td>
+    <td><a name="wp1045593"> </a><p class="pCellBody">
+Represents a leading digit position that is replaced by a space when its value and the digit positions to its left are all zero.  It is counted in the size of an item.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045595"> </a><p class="pCellBody">
+<b class="cBold">9</b>
+</p>
+</td>
+    <td><a name="wp1045597"> </a><p class="pCellBody">
+Represents a digit position which is counted in the size of an item.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045599"> </a><p class="pCellBody">
+<b class="cBold">0</b>
+</p>
+</td>
+    <td><a name="wp1045601"> </a><p class="pCellBody">
+Represents a digit position where a zero will be inserted.  It is counted in the size of an item.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045603"> </a><p class="pCellBody">
+<b class="cBold">/</b>
+</p>
+</td>
+    <td><a name="wp1045605"> </a><p class="pCellBody">
+Represents a character position where a slash will be inserted.  It is counted in the size of an item.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045607"> </a><p class="pCellBody">
+<b class="cBold">,</b>
+</p>
+</td>
+    <td><a name="wp1045609"> </a><p class="pCellBody">
+The comma character represents a character position where a comma will be inserted.  It counts in the size of an item.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045611"> </a><p class="pCellBody">
+<b class="cBold">.</b>
+</p>
+</td>
+    <td><a name="wp1045613"> </a><p class="pCellBody">
+The period character represents a character position where a decimal point will be inserted.  It also implies an operational decimal point for alignment purposes.  It counts in the size of an item.  Note that the functions of comma and period are exchanged if the DECIMAL-POINT IS COMMA clause is stated in the program's SPECIAL-NAMES paragraph.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045615"> </a><p class="pCellBody">
+<b class="cBold">+</b> <b class="cBold">-</b>
+</p>
+</td>
+    <td><a name="wp1045617"> </a><p class="pCellBody">
+Represent editing sign control symbols.  These can occur more than once.  Each counts in the size of an item.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045619"> </a><p class="pCellBody">
+<b class="cBold">CR</b>
+</p>
+</td>
+    <td><a name="wp1045621"> </a><p class="pCellBody">
+Represents an editing sign control symbol.  It may be used only once on the rightmost side of the PICTURE string.  It adds two to the size of a data item.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045623"> </a><p class="pCellBody">
+<b class="cBold">DB</b>
+</p>
+</td>
+    <td><a name="wp1045625"> </a><p class="pCellBody">
+Represents an editing sign control symbol.  It may be used only once on the rightmost side of the PICTURE string.  It adds two to the size of a data item.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045627"> </a><p class="pCellBody">
+*
+</p>
+</td>
+    <td><a name="wp1045629"> </a><p class="pCellBody">
+Represents a leading digit that is replaced by asterisks when its value and all of the digits to its left are zero.  It is counted in the size of an item.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045631"> </a><p class="pCellBody">
+<b class="cBold">$</b>
+</p>
+</td>
+    <td><a name="wp1045633"> </a><p class="pCellBody">
+Represents a character position into which the currency symbol is inserted.  It is counted toward the size of an item.  Note that the dollar sign is the default currency symbol.  It may be changed by the CURRENCY clause of the SPECIAL-NAMES paragraph.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1035437"> </a><h3 class="pHeadingRef">
+Editing Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035438"> </a><div class="pSmartList1"><li>The two methods of editing</li></div>
+<a name="wp1035440"> </a><p class="pIndented1">
+There are two general methods of performing editing in the PICTURE clause, either by <em class="cEmphasis">insertion</em> or by <em class="cEmphasis">suppression and replacement</em>.  
+</p>
+<a name="wp1035442"> </a><div class="pSmartList1"><li>The four types of insertion editing:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1035443"> </a><div class="pSmartList2"><li>Simple insertion</li></div>
+<a name="wp1035444"> </a><div class="pSmartList2"><li>Special insertion</li></div>
+<a name="wp1035445"> </a><div class="pSmartList2"><li>Fixed insertion</li></div>
+<a name="wp1035446"> </a><div class="pSmartList2"><li>Floating insertion</li></div>
+</ol></div>
+<a name="wp1035448"> </a><div class="pSmartList1"><li>The two types of suppression and replacement editing:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1035449"> </a><div class="pSmartList2"><li>Zero suppression and replacement with spaces</li></div>
+<a name="wp1035450"> </a><div class="pSmartList2"><li>Zero suppression and replacement with asterisks</li></div>
+</ol></div>
+<a name="wp1035451"> </a><div class="pSmartList1"><li>Types of editing allowed:</li></div>
+<a name="wp1035453"> </a><p class="pIndented1">
+The type of editing that may be performed on an item is dependent on the category of that item.  No editing may be performed on <em class="cEmphasis">alphabetic</em>, <em class="cEmphasis">numeric,</em> or <em class="cEmphasis">alphanumeric</em> items.  Simple insertion of types &quot;0&quot;, &quot;B&quot;, and &quot;/&quot; may be performed on <em class="cEmphasis">alphanumeric edited</em> types.  All forms of editing are allowed on <em class="cEmphasis">numeric edited</em> items.  
+</p>
+<a name="wp1035454"> </a><div class="pSmartList1"><li>Floating insertion, zero suppression, and the PICTURE clause</li></div>
+<a name="wp1035456"> </a><p class="pIndented1">
+Floating insertion and zero suppression and replacement are mutually exclusive in a PICTURE clause.  Only one type of zero suppression and replacement may be used in a PICTURE clause.
+</p>
+<a name="wp1035457"> </a><div class="pSmartList1"><li>Simple Insertion Editing</li></div>
+<a name="wp1035460"> </a><p class="pIndented1">
+The comma, &quot;B&quot;, &quot;0&quot;, and &quot;/&quot; are used as simple insertion characters.  The insertion characters represent positions in an item where those characters will be inserted.  If the comma is the last symbol in a PICTURE clause, the PICTURE clause must be the last clause in its data description entry, and the clause must be immediately followed by a period.
+</p>
+<a name="wp1035461"> </a><div class="pSmartList1"><li>Special Insertion Editing</li></div>
+<a name="wp1035463"> </a><p class="pIndented1">
+The period is used as an insertion character, as it is in simple insertion.  In addition to being used as an insertion character, it also represents the operational decimal point of the item.  The period may not appear in the same PICTURE clause as the &quot;V&quot; symbol.  If the period is the last symbol in the PICTURE clause, then the PICTURE clause must be the last clause in its data description entry, and the clause must be immediately followed by a period.
+</p>
+<a name="wp1035464"> </a><div class="pSmartList1"><li>Fixed Insertion Editing</li></div>
+<a name="wp1035467"> </a><p class="pIndented1">
+The currency symbol and the editing sign control symbols &quot;+&quot;, &quot;-&quot;, &quot;CR&quot;, and &quot;DB&quot; are the insertion characters.  Only one currency symbol and only one of the editing sign control symbols can be used in a given PICTURE clause.  The symbols &quot;CR&quot; and &quot;DB&quot;, when used, must appear as the rightmost symbols in the PICTURE string.  The symbol &quot;+&quot; or &quot;-&quot;, when used, must either be the leftmost or rightmost character position to be counted in the size of the item.  The currency symbol must be the leftmost character except that it may be preceded by either a &quot;+&quot; or &quot;-&quot; symbol.   
+</p>
+<a name="wp1035468"> </a><p class="pIndented1">
+Fixed insertion editing results in the insertion character's occupying the same character position in the edited item as it occupied in the PICTURE string.  Editing sign control symbols produce the following results depending on the value of the data item:
+</p>
+<a name="wp1038272"> </a><p class="pBodyRelative">
+<div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1038216"> </a>
+Editing Symbol
+
+</th>
+    <th><a name="wp1038218"> </a>
+Zero or Positive
+
+</th>
+    <th><a name="wp1038220"> </a>
+Negative
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038222"> </a><p class="pCellBody">
++
+</p>
+</td>
+    <td><a name="wp1038224"> </a><p class="pCellBody">
++
+</p>
+</td>
+    <td><a name="wp1038226"> </a><p class="pCellBody">
+-
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038228"> </a><p class="pCellBody">
+-
+</p>
+</td>
+    <td><a name="wp1038230"> </a><p class="pCellBody">
+space
+</p>
+</td>
+    <td><a name="wp1038232"> </a><p class="pCellBody">
+-
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038234"> </a><p class="pCellBody">
+CR
+</p>
+</td>
+    <td><a name="wp1038236"> </a><p class="pCellBody">
+2 spaces
+</p>
+</td>
+    <td><a name="wp1038238"> </a><p class="pCellBody">
+CR
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038240"> </a><p class="pCellBody">
+DB
+</p>
+</td>
+    <td><a name="wp1038242"> </a><p class="pCellBody">
+2 spaces
+</p>
+</td>
+    <td><a name="wp1038244"> </a><p class="pCellBody">
+DB
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1035501"> </a><div class="pSmartList1"><li>Floating Insertion Editing</li></div>
+<a name="wp1035504"> </a><p class="pIndented1">
+The currency symbol and editing sign control symbols &quot;+&quot; and &quot;-&quot; are the floating insertion characters.  They are mutually exclusive in a PICTURE clause.  You indicate floating insertion by using a string of at least two of the floating insertion characters.  This string may contain any of the simple insertion characters or have the simple insertion characters immediately to the right.  These simple insertion characters are part of the floating string.  
+</p>
+<a name="wp1035505"> </a><p class="pIndented1">
+The leftmost character of the floating insertion string represents the leftmost limit of the floating symbols in the data item.  The rightmost character represents the rightmost limit.  The second floating character from the left represents the leftmost limit of the numeric data that can be stored in the data item.  Non-zero numeric data may replace all the characters at or to the right of this limit.  
+</p>
+<a name="wp1035506"> </a><p class="pIndented1">
+In a PICTURE string, there are only two ways of representing floating insertion editing.  One way is to represent any or all of the leading numeric character positions on the left of the decimal point by the insertion character.  The other way is to represent all of the numeric character positions by the insertion character.
+</p>
+<a name="wp1035507"> </a><p class="pIndented1">
+If the insertion character positions are only to the left of the decimal point, the result is that a single floating insertion character will be placed into the character position immediately preceding either the decimal point or the first non-zero digit in the data represented by the insertion symbol string, whichever is leftmost.  The character positions preceding the insertion character are replaced by spaces.
+</p>
+<a name="wp1035508"> </a><p class="pIndented1">
+If all numeric character positions in the PICTURE string are represented by the insertion character, the results depend on the value of the data.  If the value is zero, the entire data item will contain spaces.  If the value is not zero, then the results are the same as when the insertion character is only to the left of the decimal point.
+</p>
+<a name="wp1035509"> </a><p class="pIndented1">
+The character inserted for the &quot;+&quot; symbol is &quot;+&quot; if the value is zero or positive and &quot;-&quot; if it is negative.  The character inserted for the &quot;-&quot; symbol is &quot;-&quot; if the value is negative and space otherwise.  
+</p>
+<a name="wp1035510"> </a><div class="pSmartList1"><li>Zero Suppression and Replacement Editing</li></div>
+<a name="wp1035514"> </a><p class="pIndented1">
+The suppression of leading zeros in numeric character positions is indicated by the use of the &quot;Z&quot; and &quot;*&quot; symbols.  These symbols are mutually exclusive in a PICTURE clause.  If a &quot;Z&quot; is used, the replacement character is a space.  If &quot;*&quot; is used, the replacement character is an asterisk.  
+</p>
+<a name="wp1035515"> </a><p class="pIndented1">
+You indicate zero suppression and replacement by using a string of one or more of the allowable symbols to represent leading numeric character positions which are to be replaced when the associated character position in the data contains a leading zero.  Any of the simple insertion characters embedded in the string of symbols or to the immediate right of this string are part of the string.
+</p>
+<a name="wp1035516"> </a><p class="pIndented1">
+In a PICTURE string, there are only two ways of representing zero suppression.  One way is to represent any or all of the leading numeric character positions to the left of the decimal point by suppression symbols.  The other is to represent all of the numeric character positions by suppression symbols.  
+</p>
+<a name="wp1035517"> </a><p class="pIndented1">
+If the suppression symbols appear only to the left of the decimal point, any leading zero in the data that corresponds to a symbol in the suppression string is replaced by the replacement character.  
+</p>
+<a name="wp1035518"> </a><p class="pIndented1">
+If all numeric positions in the PICTURE string are represented by suppression symbols and the value of the data is not zero, the result is the same as if the suppression characters were only to the left of the decimal point.  If the value is zero and the suppression symbol is &quot;Z&quot;, the entire data item is set to spaces.  If the suppression symbol is &quot;*&quot; instead, the entire data item is set to asterisks except for the decimal point (if any), which will appear in the data item.
+</p>
+<a name="wp1035519"> </a><div class="pSmartList1"><li>The symbols &quot;+&quot;, &quot;-&quot;, &quot;*&quot;, &quot;Z&quot;, and the currency symbol, when used as floating replacement characters, are mutually exclusive in a given PICTURE clause.  </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

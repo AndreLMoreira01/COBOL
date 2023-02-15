@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.12.3.2  Line and file directives</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt1261.htm">2.12  General Preprocessor Interface</a> &gt; <a href="gt1270.htm">2.12.3  Writing a Preprocessor</a> &gt; </p>
+<a name="wp1034107"> </a><h2 class="pHeading3">
+2.12.3.2  Line and file directives
+</h2>
+<a name="wp1034109"> </a><p class="pBody">
+Line and file directives are comment strings that a preprocessor uses to pass information to the next preprocessor in the sequence.  The information may include directory paths and filenames for the following preprocessor to access or specific instructions to be carried out.  (For more information related to directives, see <a  href="gt1535.htm#wp1042752">section 5.3.2</a> and <a  href="gt1537.htm#wp1032641">section 5.3.3</a>.)
+</p>
+<a name="wp1034111"> </a><p class="pBody">
+Every preprocessor that follows the first one invoked must scan its input for directives, and every preprocessor must put directives at the appropriate places in its output.
+</p>
+<a name="wp1034112"> </a><p class="pBody">
+A directive always begins with an asterisk (&quot;*&quot;), which is placed in column 7 if the file is in ANSI format or in column 1 if the file is in Terminal format.  The asterisk indicates a COBOL comment.  A preprocessor should accept directives in either ANSI or Terminal format.
+</p>
+<a name="wp1034113"> </a><p class="pBody">
+A directive of the following form indicates that subsequent input lines came from the specified source code file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+*(( PREPROC PPNAME FILE &quot;&lt;file specification&gt;&quot; ))<a name="wp1034114"> </a>
+</pre></div>
+<a name="wp1034115"> </a><p class="pBody">
+A preprocessor should replace the letters &quot;PPNAME&quot; in a directive with its own name (or any other name containing at most six alphanumeric characters).  This field is used only for diagnostic purposes.
+</p>
+<a name="wp1034116"> </a><p class="pBody">
+The <em class="cEmphasis">file specification</em> must be abbreviated if necessary, so that the directive will fit into a line of ANSI format without encroaching on the Identification Area.
+</p>
+<a name="wp1034117"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In the ANSI format, code is limited to columns 1-72.  Everything beyond this is part of the Identification Area and is not used, except for conditional compilation. If the directive is too long, it will extend into this area, possibly triggering spurious conditional compilation.
+<hr />
+</p>
+<a name="wp1034118"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Examples in this section show single spaces between items in directives.  Actually, any reasonable number of spaces is acceptable.
+<hr />
+</p>
+<a name="wp1034119"> </a><p class="pBody">
+The first preprocessor writes a directive of the preceding kind at the very beginning of its output file.  Each subsequent preprocessor will read a directive of this kind at the very beginning of its input file and will write it at the beginning of its output file with only the preprocessor name changed.
+</p>
+<a name="wp1034120"> </a><p class="pBody">
+Directives of this kind also appear whenever a preprocessor honors a COPY statement or its equivalent in other languages.  There will usually be one such directive at the beginning of the copied code and another at its end.
+</p>
+<a name="wp1034121"> </a><p class="pBody">
+Within each source file, the lines are numbered consecutively, beginning with line 1.  If a preprocessor always produced one line of output for each line of input, it would need no other directives for line numbers.  However, that is not usually the case and most preprocessors do need other directives.
+</p>
+<a name="wp1034122"> </a><p class="pBody">
+A directive of the following form indicates that, until line numbering is changed by a subsequent directive, every line that follows came from the line whose number is embedded in the directive.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( PREPROC PPNAME LINE BEGIN &lt;line number in decimal&gt; ))<a name="wp1034123"> </a>
+</pre></div>
+<a name="wp1034124"> </a><p class="pBody">
+Normally, the embedded line number will be the number of the next line in the current source file.  However, it might be larger if a previous preprocessor generated nothing from one or more lines in the source file.
+</p>
+<a name="wp1034125"> </a><p class="pBody">
+When there are two or more lines following this directive, it is presumed that <em class="cEmphasis">all</em> of them were generated from the same line of source code.  Although this is not always true, it is a necessary convention because preprocessors that do a lot of parsing and translation cannot always assign a specific source code line to each line of output.
+</p>
+<a name="wp1034126"> </a><p class="pBody">
+A directive of the following form restores regular line numbering; that is, it indicates that the first line following the directive came from the line after the one whose number is embedded in the directive, and that until line numbering is changed by a subsequent directive for the same source file, every subsequent line came from the line after the previous line.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+*(( PREPROC PPNAME LINE END &lt;line number in decimal&gt;))<a name="wp1034127"> </a>
+</pre></div>
+<a name="wp1034128"> </a><p class="pBody">
+These two directives normally come in matching pairs (although this is not required).  For example, the source file may contain the following code (line number in parentheses):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+(55)   display &quot;Making connection&quot;.<a name="wp1034129"> </a>
+(56)   EXEC SQL CONNECT TO :dsn-name as C1<a name="wp1038161"> </a>
+(57)      END-EXEC.<a name="wp1038162"> </a>
+(58)   display &quot;Connection made&quot;.<a name="wp1038163"> </a>
+</pre></div>
+<a name="wp1034130"> </a><p class="pBody">
+The output may be as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+     display &quot;Making Connection&quot;.<a name="wp1034131"> </a>
+*(( PREPROC ACUSQL LINE BEGIN 56 )) <a name="wp1038164"> </a>
+     PERFORM CALL &quot;SQL$START&quot; END-CALL CALL &quot;SQL$CONNECT&quot; USING<a name="wp1038165"> </a>
+     dsn-name `C1' END-CALL IF SQLCODE OF SQLCA &lt; 0 THEN GO TO<a name="wp1038166"> </a>
+     Error-Exit END-IF END-PERFORM<a name="wp1038167"> </a>
+*(( PREPROC ACUSQL LINE END 57 ))<a name="wp1038168"> </a>
+     display &quot;Connection made&quot;.<a name="wp1038169"> </a>
+</pre></div>
+<a name="wp1034132"> </a><p class="pBody">
+Preprocessors that process COBOL code may also use two other directives to indicate places where the source code format (ANSI or Terminal) may change.
+</p>
+<a name="wp1034133"> </a><p class="pBody">
+The following directive indicates that subsequent lines may be in a different format because they were taken from a COPY file (or its equivalent in modified COBOL):
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( PREPROC PPNAME INCLUDE BEGIN &quot;&lt;file specification&gt;&quot; ))<a name="wp1034134"> </a>
+</pre></div>
+<a name="wp1034135"> </a><p class="pBody">
+The following directive indicates that the code in the new format has ended and the format reverts to the one that prevailed before the matching INCLUDE BEGIN directive.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( PREPROC PPNAME INCLUDE END &quot;&lt;file specification&gt;&quot; ))<a name="wp1034136"> </a>
+</pre></div>
+<a name="wp1034137"> </a><p class="pBody">
+The file specification must be abbreviated, if necessary, so each directive will fit into a single line of ANSI format without encroaching on the Identification Area.
+</p>
+<a name="wp1038183"> </a><p class="pBody">
+In the above examples the INCLUDE directives are necessary to tell the compiler that the format may have changed, while the FILE directives are necessary to tell the compiler that a new file has begun and error messages should refer to it.  
+</p>
+<a name="wp1034138"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In the ANSI format, code is limited to columns 1-72.  Everything beyond this is part of the Identification Area and is not used, except for conditional compilation. If the directive is too long, it will extend into this area, possibly triggering spurious conditional compilation.
+<hr />
+</p>
+<a name="wp1034140"> </a><p class="pBody">
+Preprocessors that do not distinguish between COBOL formats should pass such directives along.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

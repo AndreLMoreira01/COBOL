@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:32" />
+  <title>Starting AcuODBC's trace functions</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb7.htm">Chapter 7: Troubleshooting</a> &gt; <a href="odb75.htm">7.4  AcuODBC Trace Files</a> &gt; </p>
+<a name="wp1028304"> </a><h2 class="pHeading2">
+Starting AcuODBC's trace functions
+</h2>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1029784"> </a><div class="pSmartList1"><li>Select <b class="cBold">Settings</b> from the Start menu and then select <b class="cBold">Control Panel</b>.  </li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1028318"> </a><div class="pSmartList2"><li>On Windows NT systems, double-click the ODBC Data Sources icon.</li></div>
+<a name="wp1029793"> </a><div class="pSmartList2"><li>On Windows 2000 systems, open the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">Administrative Tools</span> folder and then double click the Data Sources (ODBC) icon.</li></div>
+</ul></div>
+<a name="wp1032196"> </a><div class="pSmartList1"><li>Highlight the data source of interest, and click <b class="cBold">Configure</b>.  The AcuODBC Configuration property sheet appears.</li></div>
+<a name="wp1032203"> </a><div class="pSmartList1"><li>Click the Tracing tab.</li></div>
+<a name="wp1032204"> </a><p class="pIndented1">
+You can now specify a tracing level and a tracing log file for each of the three available types of tracing.  More information about types of tracing and trace files is provided later in this section.
+</p>
+<a name="wp1029956"> </a><div class="pSmartList1"><li>Click <b class="cBold">OK</b> when you are done.</li></div>
+<a name="wp1031053"> </a><p class="pIndented1">
+The next time an AcuODBC event occurs, it will be logged in the appropriate trace file.  The Vision trace can be found in the /tmp directory of the system where the XFD directory resides, under the name &quot;vision_trace.log&quot;.  The AcuODBC trace file can be found in the /tmp directory of the system where the XFD directory resides, under the name &quot;acuodbc_trace.log&quot;.  The SQL trace file can be found in the /tmp directory of the system where the XFD directory resides, under the name &quot;sql_trace.log&quot;.
+</p>
+</ol></div>
+<a name="wp1030055"> </a><h3 class="pHeadingRef">
+Naming Trace Files
+</h3>
+<a name="wp1029957"> </a><p class="pBody">
+By default, the log files are placed in the directory represented by the value of  the %TEMP% or %TMP% environment variable.  The &quot;%d&quot; represents the thread ID.  This is used so that different connections do not interfere with each other.
+</p>
+<a name="wp1029963"> </a><p class="pBody">
+If you wish to use names other than these defaults, note the following: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1029964"> </a><div class="pSmartList1"><li>You can use two types of escape sequences in the names of trace files.</li></div>
+<a name="wp1029965"> </a><div class="pSmartList1"><li>You can enter either %TEMP% or %TMP% as the first characters in the name of the trace file.  This sequence of characters is replaced by the value of the TEMP or TMP (respectively) environment (not configuration) variable.  This is allowed only as the first set of characters in the file name, and is ignored if it appears elsewhere in the name of the file. The values of the environment variables are replaced exactly.  Verify that there is a correct directory separator, either at the end of the environment variable or in the name of the trace file.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+TEMP=C:\Winnt\Temp<a name="wp1029966"> </a>
+Driver Trace File: %TEMP%\acuodbc_trace_log<a name="wp1029967"> </a>
+</pre></div>
+<a name="wp1029969"> </a><p class="pIndented1">
+resolves to &quot;C:\Winnt\Temp\acuodbc_trace_log&quot;.
+</p>
+<a name="wp1029970"> </a><div class="pSmartList1"><li>You can use a single &quot;%d&quot; in the filename (such as &quot;vision_trace%d.log&quot;, &quot;acuodbc_trace%d.log&quot;, or &quot;sql_trace%d.log&quot;).  If the filename contains only one &quot;%d&quot;, those characters are replaced by the thread ID so that different connections do not interfere with each other.  If &quot;%d&quot; is not part of the filename, or if the filename contains more than one &quot;%&quot;, no translation is done.  One exception exists to this rule: if &quot;%%&quot; (two consecutive % signs) is part of the filename, the &quot;%%&quot; is replaced by a single &quot;%&quot;.  (If the filename is $sql_trace%d.log%, for example, no translation is done.)  If your application makes multiple connections to the AcuODBC driver, and you send tracing to a file without this sequence, the trace file most likely will not be usable, because the different connections overwrite each other's information.</li></div>
+</ul></div>
+<a name="wp1029971"> </a><h3 class="pHeadingRef">
+Vision Tracing
+</h3>
+<a name="wp1029972"> </a><p class="pBody">
+The Vision trace file lists all the Vision file operations attempted by AcuODBC, such as file opens, reads, writes, etc.  By default, the file is named &quot;vision_trace.log&quot;.
+</p>
+<a name="wp1029982"> </a><p class="pBody">
+This field lets you turn Vision file tracing on and off.  Possible values are from &quot;0&quot; to &quot;9&quot;; the higher the number, the more detailed the trace file.  A value of &quot;0&quot; or &quot;-1&quot; turns file tracing off.
+</p>
+<a name="wp1029983"> </a><h3 class="pHeadingRef">
+AcuODBC Driver Tracing
+</h3>
+<a name="wp1029992"> </a><p class="pBody">
+The trace file lists all the SQL command operations attempted by AcuODBC.  This activity is essentially internal to the ODBC driver.  By default, the trace file is named &quot;acuodbc_trace.log&quot;.
+</p>
+<a name="wp1029993"> </a><p class="pBody">
+This field lets you turn AcuODBC tracing on and off.  Possible values are from &quot;0&quot; to &quot;2&quot;; the higher the number, the more detailed the trace file.  A value of &quot;0&quot; turns AcuODBC tracing off.   
+</p>
+<a name="wp1030008"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1029997"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1029999"> </a><p class="pCellBody">
+no trace
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1030001"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1030003"> </a><p class="pCellBody">
+ISAM trace
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1030005"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1030007"> </a><p class="pCellBody">
+SQL trace plus a message box with some errors (e.g., &quot;File not found!&quot;)
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1030009"> </a><h3 class="pHeadingRef">
+SQL Tracing 
+</h3>
+<a name="wp1030019"> </a><p class="pBody">
+This trace file lists calls that the ODBC Administrator is passing between the ODBC driver and the application driver.  By default, the trace file is named &quot;sql_trace.log&quot;.
+</p>
+<a name="wp1030020"> </a><p class="pBody">
+This field lets you turn SQL tracing on and off.  Possible values are from &quot;0&quot; to &quot;2&quot;; the higher the number, the more detailed the trace file.  A value of &quot;0&quot; means SQL tracing is turned off. 
+</p>
+<a name="wp1030021"> </a><h3 class="pHeadingRef">
+General notes about traces
+</h3>
+<a name="wp1030024"> </a><p class="pBody">
+You can run each trace operation individually or use the &quot;Start All&quot; and &quot;End All&quot; buttons at the bottom of the tab.  The Start buttons affect what happens the next time you use this data source.  Changing the settings does not affect currently active data sources.
+</p>
+<a name="wp1028324"> </a><p class="pBody">
+You can override the default filenames by entering new filenames or using the Browse buttons.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

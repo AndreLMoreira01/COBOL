@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:58:17" />
+  <title>5.5.3.1  COBOL development</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr5.htm">Chapter 5: Working With .NET Assemblies</a> &gt; <a href="itr522.htm">5.5  Calling .NET from COBOL </a> &gt; <a href="itr538.htm">5.5.3  Using Component Adapter Technology</a> &gt; </p>
+<a name="wp1039287"> </a><h2 class="pHeading3">
+5.5.3.1  COBOL development
+</h2>
+<a name="wp1039288"> </a><p class="pBody">
+To expose your ACUCOBOL-GT application as an object that a .NET application can consume, you install the component adapters' IDE and ACUCOBOL-GT language adapter on the development machine, then perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039289"> </a><div class="pSmartList1"><li>Create a new project in the Transoft Development Suite IDE.  Right-click the Projects folder in the Explorer view, and click Add.  Choose a name for the project and define the destination directories for project files.</li></div>
+<a name="wp1039290"> </a><div class="pSmartList1"><li>Add a new Service Description Language (SDL) file to the project.  This file is where you define the components and services that you want to expose.  To add the file, right-click the new project folder in the Explorer view, then select Add Using Property Sheet.  When you are prompted, provide a name for a new SDL file.  The Property sheet for the SDL file appears.</li></div>
+<a name="wp1039291"> </a><div class="pSmartList1"><li>On the General tab, specify the type of client proxies and server wrappers that you want to generate.  </li></div>
+<a name="wp1039292"> </a><p class="pIndented1">
+Proxies are stubs in the client's native language (C#) that present the service component to the consumer application in a familiar way.  You distribute these proxies to the Windows developer.
+</p>
+<a name="wp1039293"> </a><p class="pIndented1">
+Wrappers are source code (in ACUCOBOL-GT) designed for communicating with the component broker.  You extract business logic from your application and include it or link it into the wrapper code, resulting in your completed component program.
+</p>
+<a name="wp1039294"> </a><p class="pIndented1">
+For .NET, select C# proxies and ACUCOBOL-GT wrappers.  Click OK to create the SDL file.
+</p>
+<a name="wp1039295"> </a><div class="pSmartList1"><li>Define an application component for the SDL file.  An application component is a group of discrete services designed to perform a particular function.  Components can be derived from existing applications or built from scratch.</li></div>
+<a name="wp1039296"> </a><p class="pIndented1">
+To define a component, double-click the SDL filename in the Explorer view.  Right-click the Components folder and select Add Using Property Sheet.  Enter the name of the new component and press Enter.  The Property sheet for the component appears.  
+</p>
+<a name="wp1039297"> </a><div class="pSmartList1"><li>To associate your application component with the ACUCOBOL-GT runtime, select <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">Language Component</span> from the &quot;Component Type&quot; field and enter &quot;wrun32&quot; in the Process name field.  Provide arguments if desired.  Click OK to create the component.</li></div>
+<a name="wp1039298"> </a><div class="pSmartList1"><li>Add services and parameters to the new component.  Double-click the new component icon to display the Services folder.  Right-click the Services folder and select the Add Using Property Sheet.  Enter a name for the service and press Enter.  The Property sheet for the service appears.</li></div>
+<a name="wp1039299"> </a><div class="pSmartList1"><li>Click the Parameters tab and add new parameters to the service.  Review the IDE's online help system for instructions.  Click OK when done.  </li></div>
+<a name="wp1039300"> </a><div class="pSmartList1"><li>Add as many parameters to the service, and services to the component, as you like.</li></div>
+<a name="wp1039301"> </a><div class="pSmartList1"><li>Save the SDL file.  It is automatically saved in SDL format and added to an SDR.</li></div>
+<a name="wp1039302"> </a><div class="pSmartList1"><li>Generate the source code wrappers for your new component.  Right-click the parsed SDL filename and select Create, Wrappers.  The wrappers are generated in ACUCOBOL-GT.  </li></div>
+<a name="wp1039303"> </a><div class="pSmartList1"><li>Once you have selected the proxy format, generate the proxies for the .NET client.  Right-click the parsed SDL filename and select Create, Proxies. </li></div>
+<a name="wp1039304"> </a><div class="pSmartList1"><li>Double-click the component source file in the Explorer view to open it in the editor.  Extract the appropriate business logic from your ACUCOBOL-GT application and include or link it into the new component source code where placeholders have been provided.  You might place a CALL statement to invoke an existing subprogram, or include code using the COPY statement.</li></div>
+<a name="wp1039305"> </a><div class="pSmartList1"><li>Compile and debug the completed program in AcuBench.  </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

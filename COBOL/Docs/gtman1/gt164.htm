@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.1.2  Relative Files</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt162.htm">6.1 Handling Files</a> &gt; </p>
+<a name="wp1032275"> </a><h2 class="pHeading2">
+6.1.2  Relative Files
+</h2>
+<a name="wp1032277"> </a><p class="pBody">
+Relative files are generally used to store data where low overhead is required.  Records are available by record number.  On machines that directly support relative files (such as VMS), relative files are used.  
+</p>
+<a name="wp1046472"> </a><p class="pBody">
+On other machines (Windows, UNIX, and MPE/iX systems), relative files are treated the same as binary sequential files.  Each record is physically located at its record number, and writing record 1 and record 1000 causes 999 blank records to be written.  Block sizes are ignored, and each I/O uses the record size to determine how many bytes to transfer.  
+</p>
+<a name="wp1046474"> </a><p class="pBody">
+Records may be either fixed-length or variable-length.  With variable-length records, if the maximum record size is equal to or less than 65,535 bytes, two bytes indicating record size (VLI) are placed in front of each variable-length record when it is written to disk.  If the record size is larger than 65,535 bytes, four bytes are placed in front of each variable-length record.  <em class="cEmphasis">This two- or four-byte field is not specified in your COBOL program, but other non-COBOL programs that access the records need to be aware of the extra bytes. </em>Each record is padded to the maximum size so that records can be retrieved randomly in an efficient fashion.
+</p>
+<a name="wp1046338"> </a><p class="pBody">
+When a record is deleted, the physical record is filled with up to 256 null characters (LOW-VALUES in ACUCOBOL-GT).  (This deleted record marker can be changed through the use of the REL_DELETED_VALUE configuration variable.  See Book 4, Appendix H.)  Note that ACUCOBOL-GT checks only the first 256 characters of the record to determine if it is deleted.  
+</p>
+<a name="wp1032283"> </a><p class="pBody">
+Relative files may be assigned only to disk files.  
+</p>
+<a name="wp1032284"> </a><p class="pBody">
+On many (but not all) systems, the runtime system allows a relative file to be opened for input when the user does not have write-access to the file.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

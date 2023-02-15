@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-SET-TEXT-COLOR</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1040331"> </a><h2 class="pHeading3">
+WINPRINT-SET-TEXT-COLOR
+</h2>
+<a name="wp1040333"> </a><p class="pBody">
+This operation code specifies the foreground color for text.  
+</p>
+<a name="wp1040337"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040338"> </a>
+    USING WINPRINT-SET-TEXT-COLOR, WINPRINT-DATA<a name="wp1040339"> </a>
+    GIVING RESULT<a name="wp1040340"> </a>
+</pre></div>
+<a name="wp1040341"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040342"> </a><p class="pBody">
+<b class="cBold">WINPRINT-DATA</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 WINPRINT-DATA.<a name="wp1040343"> </a>
+   03 WPRTDATA-SET-STD-FONT.<a name="wp1040344"> </a>
+   03  WPRTDATA-TEXT-COLOR REDEFINES<a name="wp1040345"> </a>
+       WPRTDATA-SET-STD-FONT.   PIC 9(9) COMP-5.<a name="wp1040346"> </a>
+</pre></div>
+<a name="wp1040347"> </a><h3 class="pHeadingRef">
+Return Values
+</h3>
+<a name="wp1040348"> </a><p class="pBody">
+This option returns text color prior to the change.  Use this value to restore a temporary change.
+</p>
+<a name="wp1040349"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040350"> </a><p class="pBody">
+When printing, color resolution is a result of a combination of three basic colors; Red, Green, and Blue (RGB).  The intensity of each color in the mix is determined by a number between &quot;0&quot; and &quot;255&quot;. For example, the lowest possible intensity, (0,0,0), produces black, and the highest possible intensity (255,255,255), produces white.  This formula of three numbers is referred to as the COLORREF.  
+</p>
+<a name="wp1040351"> </a><p class="pBody">
+The ACUCOBOL-GT runtime does not provide a mechanism with which to determine the COLORREF.  If you want to specify a color, you must calculate the value yourself.  The following C formula can be used to calculate the COLORREF:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+(((BYTE) (R) | ((WORD) (BYTE 9g)) &lt;&lt;8))|(((DWORD) (BYTE) (b)) &lt;&lt;16))<a name="wp1040352"> </a>
+</pre></div>
+<a name="wp1040353"> </a><p class="pBody">
+See your Windows API documentation for more information about RGB colors and COLORREF values.
+</p>
+<a name="wp1040354"> </a><p class="pBody">
+The  printer must be open to perform this operation.  There is no need to reset this function.  WPRTDATA-TEXT-COLOR should be initialized prior to use.  This operation affects the color used with subsequent WRITE statements.  Cursor position is not affected by this operation.  This operation is ignored on non-color printers.  WINPRINT-SET-TEXT-COLOR has the following value:
+</p>
+<a name="wp1040355"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-TEXT-COLOR</b> -- Specifies the color used to write text.  The color is indicated by the COLORREF, representing the percentage used of the three basic colors; Red, Green, and Blue (RGB).  The default of &quot;0&quot; is solid black.  
+</p>
+<a name="wp1040356"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1040357"> </a><p class="pBody">
+This example will set the current text foreground color to light blue when printed on a color printer:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+INITIALIZE WPRTDATA-TEXT-COLOR.<a name="wp1040358"> </a>
+MOVE 96 TO RGB-RED.<a name="wp1040359"> </a>
+MOVE 106 TO RGB-GREEN.<a name="wp1040360"> </a>
+MOVE 232 TO RBG-BLUE.<a name="wp1040361"> </a>
+PERFORM CALC-COLORREF.<a name="wp1040362"> </a>
+MOVE COLORREF TO WPRTDATA-TEXT-COLOR.<a name="wp1040363"> </a>
+CALL &quot;WIN$PRINTER&quot; USING<a name="wp1040364"> </a>
+     WINPRINT-SET-TEXT-COLOR<a name="wp1040365"> </a>
+     WPRTDATA-TEXT-COLOR<a name="wp1040366"> </a>
+     GIVING CALL-RESULT.<a name="wp1040367"> </a>
+</pre></div>
+<a name="wp1040368"> </a><p class="pBody">
+The sample program &quot;graphprn.cbl&quot; contains an example of using the C formula described above to determine the RGB color value (CALC-COLORREF).
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

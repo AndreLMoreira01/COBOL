@@ -1,0 +1,44 @@
+@echo off
+
+if %1%. == clean. goto clean
+
+rem Assume we are in $ACUCOBOL\sample\alfred, as distributed
+set ACUCOBOL=..\..
+set CCBL=%ACUCOBOL%\bin\ccbl32
+set RUNCBL=%ACUCOBOL%\bin\wrun32
+set SAMPLE=%ACUCOBOL%\sample
+set GENMENU=%SAMPLE%\samplprj\source\genmenu.cbl
+
+rem If you want to compile in debug, modify and/or uncomment the following line
+rem Alternately, set an environment variable named DEBUGFLAGS
+set DEBUGFLAGS=-Gd
+
+rem To generate listings, modify and/or uncomment the following line
+rem Alternately, set an environment variable named LISTFLAGS
+rem set LISTFLAGS=-Lof @.lst
+
+rem First generate alfred.mnu - the alfred menu
+
+rem Make sure genmenu can be executed
+echo Building genmenu.acu
+%CCBL% -xv -Sp %SAMPLE% -o @.acu %GENMENU%
+echo Generating alfred.mnu from alfred.gmu
+%RUNCBL% -c .\cblconfi -1 genmenu alfred.gmu alfred.mnu
+del genmenu.acu
+
+rem Now we can build all the alfred objects (alfred and ParseXFD)
+echo Compiling ParseXFD.cbl
+%CCBL% -Z50 -xv -Sp %SAMPLE%;. %DEBUGFLAGS% %LISTFLAGS% ParseXFD.cbl
+echo Compiling alfred.cbl
+%CCBL% -Z50 -xv -Sp %SAMPLE%;. %DEBUGFLAGS% %LISTFLAGS% alfred.cbl
+
+rem All done
+
+goto end
+
+:clean
+echo cleaning *.acu *.mnu *.lst *.adb
+del *.acu *.mnu *.lst *.adb
+
+:end
+

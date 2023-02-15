@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:53:04" />
+  <title>6.5.1  Copying Files Between the Client and Server</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con6.htm">Chapter 6: Thin Client: Preparing the Server </a> &gt; <a href="con689.htm">6.5  Using Library Routines and DLLs in Thin Client</a> &gt; </p>
+<a name="wp1050467"> </a><h2 class="pHeading2">
+6.5.1  Copying Files Between the Client and Server
+</h2>
+<a name="wp1050506"> </a><p class="pBody">
+The C$COPY library routine allows the transfer of files between the application host and the display host in thin client and between directories on the display host.  A special name notation of &quot;@[DISPLAY]:&quot; indicates that a particular file is located on the display host, or client.  Use this designation for the source file or the destination file in the call to C$COPY.  If the copy operation is performed entirely on the client side, then the &quot;@[DISPLAY]:&quot; notation appears in both the source and destination file parameters.  As an example, for a file transfer from the server to the client, &quot;@[DISPLAY]:&quot; precedes the destination file name, as shown:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+C$COPY &quot;/usr/data/file1.ext&quot; &quot;@[DISPLAY]:C:\My Documents\file1.ext&quot;<a name="wp1050524"> </a>
+</pre></div>
+<a name="wp1050565"> </a><p class="pBody">
+For a file transfer from the client to the server, &quot;@[DISPLAY]:&quot; precedes the source file name.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+C$COPY &quot;@[DISPLAY]:C:\My Documents\file1.ext&quot; &quot;/usr/data/file1.ext&quot;<a name="wp1050580"> </a>
+</pre></div>
+<a name="wp1050587"> </a><p class="pBody">
+Path specifications on the client are relative to the directory identified in the TEMP user environment variable.  On the server, they are relative to the working directory specified in the application's alias definition.  For example, if TEMP is C:\Documents and Settings\joe\Local Settings\Temp and the application's working directory on the server is /usr/apps/app1, then the following statement:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+C$COPY &quot;@[DISPLAY]:file1.ext&quot; &quot;file2.ext&quot;<a name="wp1050606"> </a>
+</pre></div>
+<a name="wp1050626"> </a><p class="pBody">
+uploads &quot;C:\Documents and Settings\joe\Local Settings\Temp\file1.ext&quot; from the client to &quot;/usr/apps/app1/file2.ext&quot; on the server.  
+</p>
+<a name="wp1074515"> </a><p class="pBody">
+Access to files on the display host is also accomplished via a set of directory specifiers.  If the file name on the client starts with a special directory specifier, the thin client attempts to locate those files in special Windows directories.  The special directory names are as follows:</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1074948"> </a>
+Identifier
+
+</td>
+    <td><a name="wp1074950"> </a>
+Directory
+
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1074607"> </a><p class="pCellBody">
+&lt;APPDATA&gt;
+</p>
+</td>
+    <td><a name="wp1074609"> </a><p class="pCellBody">
+C:\Documents and Settings\&lt;user&gt;\Application Data
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1074611"> </a><p class="pCellBody">
+&lt;COMMON_APPDATA&gt;
+</p>
+</td>
+    <td><a name="wp1074613"> </a><p class="pCellBody">
+C:\Documents and Settings\All Users\Application Data
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1074615"> </a><p class="pCellBody">
+&lt;COMMON_DOCUMENTS&gt;
+</p>
+</td>
+    <td><a name="wp1074617"> </a><p class="pCellBody">
+C:\Documents and Settings\All Users\Documents
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1074619"> </a><p class="pCellBody">
+&lt;DESKTOP&gt;
+</p>
+</td>
+    <td><a name="wp1074621"> </a><p class="pCellBody">
+C:\Documents and Settings\&lt;user&gt;\Desktop
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1074623"> </a><p class="pCellBody">
+&lt;LOCAL_APPDATA&gt;
+</p>
+</td>
+    <td><a name="wp1074625"> </a><p class="pCellBody">
+C:\Documents and Settings\&lt;user&gt;\Local Settings\Application Data
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1074627"> </a><p class="pCellBody">
+&lt;MYDOCUMENTS&gt;
+</p>
+</td>
+    <td><a name="wp1074629"> </a><p class="pCellBody">
+C:\Documents and Settings\&lt;user&gt;\My Documents
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1074524"> </a><p class="pBody">
+Note that these directories are not necessarily the same for all versions of Windows, and may in fact be on network drives.  
+</p>
+<a name="wp1074525"> </a><p class="pBody">
+If further directory information is specified, the thin client attempts to create the directories added.  For example, when attempting to access &lt;APPDATA&gt;\ACUCOBOL-GT\settings.dat, the thin client ensures that the ACUCOBOL GT directory actually exists as a subdirectory of the Application Data directory.
+</p>
+<a name="wp1074526"> </a><p class="pBody">
+If the syntax for files on the display host is
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+C$COPY &quot;@[DISPLAY]:&quot;&lt;APPDATA&gt;/filename<a name="wp1074527"> </a>
+</pre></div>
+<a name="wp1074528"> </a><p class="pBody">
+the thin client would attempt to locate the specified file in 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+C:\Documents and Settings\&lt;user&gt;\Application Data<a name="wp1074529"> </a>
+</pre></div>
+<a name="wp1050671"> </a><p class="pBody">
+For security purposes, user authorization is required to allow a file transfer to the server using C$COPY.  Copying a file to a location other than the directory named in the TEMP user environment variable also needs user authorization.  The thin client displays a dialog box requesting the authorization.  
+</p>
+<a name="wp1056351"> </a><p class="pBody">
+Note that when the &quot;@[DISPLAY]:&quot; notation appears in the first or second parameter in the call to C$COPY, the optional parameter FILE-TYPE is not used.  Only the single file named as the source file is copied.  When an application is not running in the thin client, the &quot;@[DISPLAY]:&quot; notation is ignored.  
+</p>
+<a name="wp1056421"> </a><h3 class="pHeadingRef">
+Using C$COPY with AcuServer
+</h3>
+<a name="wp1056422"> </a><p class="pBody">
+A technical limitation in AcuConnect affects the ability to copy a file from a remote AcuServer server directly to the client in a thin client environment.  The following code, for example, does not accomplish the desired copy function:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$COPY&quot; USING &quot;@SERVER:c:\serverpath\test.dat&quot; 
+&quot;@[DISPLAY]:c:\clientpath\test.dat&quot;<a name="wp1056423"> </a>
+</pre></div>
+<a name="wp1056424"> </a><p class="pBody">
+A recommended workaround involves the use of three CALL statements in your code.  First, have the AcuConnect server runtime copy the file from AcuServer to a temporary file.  Use the &quot;@[DISPLAY]:&quot; notation to copy that file to the thin client.  Finally, delete the temporary file on the server.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$COPY&quot; USING &quot;@SERVER:e:\serverpath\test.dat&quot;   
+&quot;tempfile&quot;<a name="wp1056511"> </a>
+CALL &quot;C$COPY&quot; USING &quot;tempfile&quot;   
+&quot;@[DISPLAY]:e:\clientpath\test.dat&quot;<a name="wp1056512"> </a>
+CALL &quot;C$DELETE&quot; USING &quot;tempfile&quot; <a name="wp1056427"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

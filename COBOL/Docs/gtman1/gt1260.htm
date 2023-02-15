@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.11.3  acushare errors</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt1251.htm">2.11  acushare Utility Program</a> &gt; </p>
+<a name="wp1033941"> </a><h2 class="pHeading2">
+2.11.3  acushare errors
+</h2>
+<a name="wp1118982"> </a><p class="pBody">
+The runtime system gracefully handles errors relating to shared code and license management.  If the runtime cannot use shared code for some reason (such as running out of shared memory), the runtime simply loads the program into conventional memory and execution continues.  
+</p>
+<a name="wp1118983"> </a><p class="pBody">
+If <b class="cBold">acushare</b> stops running or is stopped while networked runtime processes are active, the runtime issues a warning message, alerting the user to restart <b class="cBold">acushare</b>.  If the runtime later detects that <b class="cBold">acushare</b> has not been restarted, the runtime exits.
+</p>
+<a name="wp1118430"> </a><p class="pBody">
+If runtime warning messages are enabled (see the WARNINGS configuration variable and the &quot;-w&quot; command line option), certain errors cause a warning message to be printed.  These messages include:
+</p>
+<a name="wp1119163"> </a><h5 class="pHeading4">
+&quot;Error sending message to acushare&quot;
+</h5>
+<a name="wp1119164"> </a><p class="pBody">
+The system has returned an error of an unknown nature when it tried to send a message to <b class="cBold">acushare</b>.  For shared memory, execution usually continues.  If you kill <b class="cBold">acushare</b> after some processes have attached to shared memory, those processes continue to use shared memory but new processes use conventional memory.   
+</p>
+<a name="wp1119367"> </a><h5 class="pHeading4">
+&quot;License manager (acushare) is not running&quot;   
+</h5>
+<a name="wp1119368"> </a><p class="pBody">
+This is a one-time message warning that the product will exit soon if <b class="cBold">acushare</b> is not restarted immediately.  It indicates that a multiple-user license file is in effect, and the product has detected that <b class="cBold">acushare</b> has been stopped and not restarted.  
+</p>
+<a name="wp1033948"> </a><h5 class="pHeading4">
+&quot;Shared memory and license manager (acushare) is not running&quot;
+</h5>
+<a name="wp1088868"> </a><p class="pBody">
+This indicates either:  (1) code sharing has been requested (with the SHARED_CODE configuration entry), but cannot be implemented because <b class="cBold">acushare</b> is not running, or (2) a multiple-user license file is in effect, and a runtime process cannot register itself with <b class="cBold">acushare</b> because <b class="cBold">acushare</b> is not running.  After outputting the message, the runtime exits.
+</p>
+<a name="wp1119391"> </a><h5 class="pHeading4">
+&quot;The license manager (acushare) has been killed and restarted.  You have exceeded the licensed number of users for ACUCOBOL-GT.  If you would like to add users, please contact your Customer Service representative.&quot;
+</h5>
+<a name="wp1119392"> </a><p class="pBody">
+This message indicates that a process detected that <b class="cBold">acushare</b> has been stopped and restarted, so the product attempted to re-register itself.  However, it could not register itself, either because the maximum number of users has already been reached, or the maximum number of processes has already been reached. 
+</p>
+<a name="wp1119243"> </a><h5 class="pHeading4">
+&quot;You have exceeded the licensed number of users for ACUCOBOL-GT.  If you would like to add users, please contact your customer service representative.&quot;
+</h5>
+<a name="wp1119244"> </a><p class="pBody">
+A new process cannot be registered with <b class="cBold">acushare</b>, either because the maximum number of users has already been reached, or because the maximum number of processes has been reached. 
+</p>
+<a name="wp1118482"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>If there are no shared memory identifiers, <b class="cBold">acushare</b> aborts and prints the following error message:
+</p>
+<a name="wp1038115"> </a><p class="pBody">
+<b class="cBold">&quot;acushare: cannot create shared memory&quot;</b>
+</p>
+<a name="wp1038110"> </a><p class="pNoteEnd">
+This message indicates that you do not have enough shared memory configured in your system.  Either your UNIX kernel does not have the resource configured, or all of the resources are in use by other programs.  In either case, you should regenerate your UNIX kernel for more shared memory.  See your UNIX system documentation.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

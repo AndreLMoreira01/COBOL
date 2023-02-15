@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:17" />
+  <title>6.2  Creating File Descriptors and SELECT Statements</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl6.htm">Chapter 6:  Working with COBOL</a> &gt; </p>
+<a name="wp1036202"> </a><h2 class="pHeading1">
+6.2  Creating File Descriptors and SELECT Statements
+</h2>
+<a name="wp1036203"> </a><p class="pBody">
+<b class="cBold">acu4glfd</b> is a Windows-based utility that can help you analyze tables and create File Descriptors and SELECT statements.  The utility uses ODBC technology to retrieve table information to list the fields in the table.  When possible, the utility also determines a unique index and uses that index as the primary key.  
+</p>
+<a name="wp1036204"> </a><p class="pBody">
+Upon request, <b class="cBold">acu4glfd</b> generates two kinds of output:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1036205"> </a><div class="pSmartList1"><li>a file descriptor (FD), listing the names of the columns in a table and their associated data types</li></div>
+<a name="wp1036206"> </a><div class="pSmartList1"><li>a SELECT statement for the file</li></div>
+</ul></div>
+<a name="wp1036207"> </a><p class="pBody">
+You can COPY the FD and SELECT statement into your COBOL program, although you may need to make some changes as indicated in this section.
+</p>
+<a name="wp1036530"> </a><p class="pBody">
+The <b class="cBold">acu4glfd</b> utility is intended to help you jump start preparing your table for use with a COBOL program.  The program determines the names of the columns, attempts to determine the appropriate ACUCOBOL-GT® data type for the column, and attempts to determine the primary key.  <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acu4glfd</span> does not attempt to identify alternate keys.
+</p>
+<a name="wp1036510"> </a><p class="pBody">
+Remember, though, that database data is flat, and COBOL data can contain group items and depth.  Because table data does not contain information about GROUP structure the way a COBOL program does, it may be necessary for you to tweak the code produced by <b class="cBold">acu4glfd</b> and specify a picture before the program compiles properly.  Any errors produced in this early compilation will assist in fine-tuning the FD for your COBOL program.  This saves the time and effort of completely analyzing the table and coding the FD and SELECT statements yourself.  
+</p>
+<a name="wp1036511"> </a><p class="pBody">
+The <b class="cBold">acu4glfd</b> utility operates only on data types that are understood by ODBC.  Database drivers can define their own data types as well; these driver-defined data types are not recognized by <b class="cBold">acu4glfd</b>.  Therefore, the utility may not be able to identify all data types represented in the table.  Refer to your database, driver, and ODBC documentation for additional information.
+</p>
+<a name="wp1036208"> </a><p class="pBody">
+Before starting the <b class="cBold">acu4glfd</b> utility, you must define your table/data as an ODBC data source.  See your ODBC documentation for information about drivers and data sources.
+</p>
+<a name="wp1039949"> </a><p class="pBody">
+Note that the examples are based on the following table in Microsoft Access.
+</p>
+<a name="wp1039953"> </a><p class="pBodyRelative">
+</p><div><img src="images/animals_.gif" height="211" width="754" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1039954"> </a><p class="pBodyRelative">
+
+</p>
+<a name="wp1036639"> </a><p class="pBody">
+Note that the phone number (PHONE field) is the table's key.
+</p>
+<a name="wp1036785"> </a><p class="pBodyRelative">
+</p><div><img src="images/key_cr.gif" height="480" width="383" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1036616"> </a><h3 class="pHeadingRef">
+More:
+</h3>
+<a name="wp1039881"> </a><p class="pBody">
+<a  href="4gl67.htm#wp1039873">To generate a list of columns and data types and a SELECT statement</a>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

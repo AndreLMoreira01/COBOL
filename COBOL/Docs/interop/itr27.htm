@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:25" />
+  <title>2.2.2.2  CALL_OPTIONS class </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr2.htm">Chapter 2: Working with Java Technology</a> &gt; <a href="itr23.htm">2.2  Calling COBOL from Java</a> &gt; <a href="itr25.htm">2.2.2  Using the Java API, &quot;CVM.jar&quot; </a> &gt; </p>
+<a name="wp1074693"> </a><h2 class="pHeading3">
+2.2.2.2  CALL_OPTIONS class 
+</h2>
+<a name="wp1056352"> </a><p class="pBody">
+The CALL_OPTIONS class represents the options for each called COBOL program.  If you want to pass program options to the &quot;cvm.callProgram&quot; method that runs the COBOL program, create a CALL_OPTIONS object, then add options to it.  The CALL_OPTIONS class is structured as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+class CALL_OPTIONS {<a name="wp1070613"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+	public String GetOption( String key );<a name="wp1070614"> </a>
+	public void SetOption( String key, String value );<a name="wp1070615"> </a>
+</pre></div>
+};<a name="wp1070942"> </a>
+</pre></div>
+<a name="wp1095766"> </a><p class="pBody">
+Valid call options include: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1103659"> </a><div class="pSmartList1"><li>cache - an unsigned value that determines whether the runtime should maintain the program in a memory cache after it has been canceled.  This parameter is useful for application servers like CICS that allow each program to be configured as resident or nonresident.  </li></div>
+<a name="wp1095767"> </a><p class="pIndented1">
+If  &quot;cache&quot; is FALSE (&quot;0&quot;), the runtime removes the program from memory and sets the Working-Storage to its initial state on subsequent calls.  If  &quot;cache&quot; is TRUE (&quot;1&quot;), it marks the program as &quot;cached&quot; and resets Working-Storage for the next call; the program remains in memory according to the caching rules. For information on managing logical and physical cancels that may affect the behavior of &quot;cache&quot;, refer also to the LOGICAL_CANCELS configuration variable in Appendix H of the ACUCOBOL-GT documentation set.
+</p>
+<a name="wp1096224"> </a><div class="pSmartList1"><li>debug_method (-d<em style="font-style: normal" class="cEmphasis">n</em>) where <em style="font-style: normal" class="cEmphasis">n</em> is 0-3:</li></div>
+<a name="wp1096577"> </a><p class="pIndented1">
+0 = ADM_NONE for no debugging<br />1 = ADM_XTERM to debug using a new xterm<br />2 = ADM_TERMINAL to debug using an existing terminal through runcbl<br />3 = ADM_THINCLIENT to debug using a waiting thin client
+</p>
+<a name="wp1103233"> </a><p class="pIndented1">
+Based on the debug_method selected, you may need to also specify debug_method_string.
+</p>
+<a name="wp1103368"> </a><div class="pSmartList1"><li>debug_method_string - <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">a char* that sets the display setting for the </span>debug_method  </li></div>
+<a name="wp1103369"> </a><p class="pIndented1">
+For ADM_XTERM, set to the Xservername:displaynumber of the xterm or set to NULL to allow the xterm to use the default display given by the DISPLAY environment variable.  For ADM_TERMINAL, set the string to the tty device on which you will execute runcbl.  For ADM_THINCLIENT, set to client:port where the client is the host on which <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">acuthin</span> is executing and port is the port on which it is listening.
+</p>
+<a name="wp1103372"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>The value of debug_method_string overrides the value, if any, in the DISPLAY configuration variable for the xterm.
+<hr />
+</p>
+<a name="wp1103376"> </a><p class="pIndented1">
+See <a  href="itr916.htm#wp1040313">section 9.8, &quot;Background Debugging Options,&quot;</a> for more information on background debugging.
+</p>
+<a name="wp1095846"> </a><div class="pSmartList1"><li>no.stop - an unsigned input value that, when set to &quot;1&quot;, causes STOP RUN to be ignored.  </li></div>
+<a name="wp1097054"> </a><div class="pSmartList1"><li>program.name -  the name of the COBOL program being called</li></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.1.6.3  Bulk addition mode for Vision</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt162.htm">6.1 Handling Files</a> &gt; <a href="gt1615.htm">6.1.6  Indexed File Considerations</a> &gt; </p>
+<a name="wp1032461"> </a><h2 class="pHeading3">
+6.1.6.3  Bulk addition mode for Vision
+</h2>
+<a name="wp1045291"> </a><p class="pBody">
+When Vision writes a record to a file, its normal algorithm is to first add the record, then add the primary key, then add the first alternate key and so on until all the keys have been added.  This is the algorithm one expects and is generally required to correctly support the WRITE verb.  
+</p>
+<a name="wp1032465"> </a><p class="pBody">
+Vision also has another technique that it can use to add records to a file.  This technique does not write the keys to the file when it adds the record.  Instead, it adds many records to the file first, then it gathers all the primary keys for those records and adds them, then it gathers all the first alternate keys and adds them and so on.  By adding many keys at once, Vision can be much more efficient in its handling.  This has two benefits:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1032466"> </a><div class="pSmartList1"><li>The time it takes to add a large number of records using this technique is generally much smaller than using the normal technique; and</li></div>
+<a name="wp1032467"> </a><div class="pSmartList1"><li>The resulting file is more efficiently organized, with all of the blocks associated with a particular key near each other on disk.  </li></div>
+</ol></div>
+<a name="wp1032468"> </a><p class="pBody">
+This technique of adding records to a file is called &quot;bulk addition&quot; mode.  It is available only for Vision files.  It may be used with any format Vision file.  
+</p>
+<a name="wp1032469"> </a><p class="pBody">
+You can use bulk addition mode in your programs.  This is most useful in programs that add a large number of records to a file at once.  It is less useful in programs that do operations other than WRITE on a file, or programs that do not write many records.  Some typical applications for bulk addition mode are:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1032470"> </a><div class="pSmartList1"><li>Programs that load externally supplied data into a file.  For example, a program that adds to an indexed file from the data contained in a sequential file.  </li></div>
+<a name="wp1032471"> </a><div class="pSmartList1"><li>File conversion programs, such as programs that change a record format.  These programs read from one file and write to a new one.  </li></div>
+<a name="wp1032472"> </a><div class="pSmartList1"><li>Archiving programs.  </li></div>
+<a name="wp1032473"> </a><div class="pSmartList1"><li>Programs that post transactions to permanent log files. </li></div>
+</ul></div>
+<a name="wp1032474"> </a><p class="pBody">
+While bulk addition mode has fairly specialized uses, its benefits are high in these cases.  
+</p>
+<a name="wp1032475"> </a><p class="pBody">
+Bulk addition mode can provide substantial performance improvements over other techniques, including MASS-UPDATE mode.  These improvements become more noticeable as the file grows and in files with a large number of alternate keys.  For files with few records, bulk addition mode can be slightly less efficient than the normal WRITE technique.  
+</p>
+<a name="wp1032476"> </a><p class="pBody">
+Using bulk addition affects some of the standard COBOL file handling rules.  These are described in a separate section below.  
+</p>
+<a name="wp1032478"> </a><h3 class="pHeadingRef">
+Using bulk addition
+</h3>
+<a name="wp1032479"> </a><p class="pBody">
+To use bulk addition on a file, open that file with the BULK-ADDITION phrase.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+OPEN OUTPUT MY-FILE FOR BULK-ADDITION<a name="wp1032480"> </a>
+</pre></div>
+<a name="wp1032481"> </a><p class="pBody">
+A file opened for bulk addition is locked for exclusive use by the program.  This is necessary because the file becomes internally inconsistent when the first WRITE occurs and does not become consistent again until the file is closed.  
+</p>
+<a name="wp1032482"> </a><p class="pBody">
+You may use BULK-ADDITION with the OUTPUT, EXTEND and I-O open modes.  
+</p>
+<a name="wp1032483"> </a><p class="pBody">
+If you specify BULK-ADDITION for a file other than a Vision file, the effect is the same as if you had specified MASS-UPDATE instead.  
+</p>
+<a name="wp1032484"> </a><p class="pBody">
+Vision allocates a memory buffer for each file opened for bulk addition.  The size of this buffer is controlled by the V_BULK_MEMORY configuration variable.  The default size of this buffer is 1 MB.  The default size is fairly large because it is assumed that only a few files will be open for bulk addition on a system at any one time.  If this buffer cannot be allocated, the OPEN fails with a status indicating inadequate memory.  
+</p>
+<a name="wp1032485"> </a><p class="pBody">
+When a WRITE occurs for a file opened for bulk addition, only the record is actually written to the file.  The keys for the record are not written out until later.  When an operation occurs on the file other than a WRITE, that operation is suspended and all of the records with missing keys have their keys added.  After this completes, the suspended file operation resumes.  
+</p>
+<a name="wp1032486"> </a><p class="pBody">
+The process of adding keys uses the memory buffer allocated when the file was opened.  The algorithm is to fill the buffer with keys, sort them, and then add them to the file.  This is repeated until all the missing keys have been added.  The larger the memory buffer, the more efficient this process is.  
+</p>
+<a name="wp1032487"> </a><p class="pBody">
+When adding records to the file, Vision always places the records at the end of the file when using bulk addition.  It does not re-used deleted record areas in this case.  It does this to make the process of gathering the missing keys efficient.  If you need to recover the deleted record disk space, you can rebuild the file with <b class="cBold">vutil</b> to do this.  
+</p>
+<a name="wp1032488"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Any operation on the file other than WRITE will trigger the addition of the keys.  Ideally, this operation will be the final CLOSE of the file.  In this case, all of the newly added records are keyed at once and efficiency is maximized.  In the worst case, each WRITE is followed by some other operation (such as a READ).  In this case, each record is keyed individually.  This is less efficient than just updating the file normally.  
+<hr />
+</p>
+<a name="wp1032489"> </a><p class="pBody">
+This process of delaying the keying of the records has several effects besides improving performance.  It affects the rules of COBOL, especially the handling of duplicate keys.  In addition, it makes it harder to report the program's progress to the user, since much of the program's time may be spent in a single COBOL statement (the file's CLOSE, for example, may take the majority of the program's running time as it adds all the missing keys).  These issues are discussed in the following sections.  
+</p>
+<a name="wp1032491"> </a><h3 class="pHeadingRef">
+Effect on COBOL rules
+</h3>
+<a name="wp1032492"> </a><p class="pBody">
+When you open a file for bulk addition, the regular rules of COBOL file handling are changed for that file, until that file is closed.  The following changes apply:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1032493"> </a><div class="pSmartList1"><li>File status &quot;02&quot; (record written contains an allowed duplicate key value) is never returned by WRITE.  </li></div>
+<a name="wp1032494"> </a><div class="pSmartList1"><li>File status &quot;22&quot; (record not written because it contained a disallowed duplicate key value) is not returned by WRITE.  See the next section for a discussion of how illegal duplicate keys are handled.  </li></div>
+<a name="wp1032495"> </a><div class="pSmartList1"><li>File status &quot;24&quot; (disk full) may occur on file verbs that normally cannot produce this status.  This occurs because the verb (for example, READ) triggered writing of the keys to the file and the disk became full while doing this.  </li></div>
+<a name="wp1032496"> </a><div class="pSmartList1"><li>Records may be rejected as having illegal duplicate keys that would not normally be rejected.  The circumstance under which this occurs is described in the next section.  </li></div>
+</ol></div>
+<a name="wp1032498"> </a><h3 class="pHeadingRef">
+Duplicate key handling
+</h3>
+<a name="wp1032499"> </a><p class="pBody">
+Because keys are not written at the time a new record is written, the WRITE statement never gets a duplicate key error status (status 22).  When you are using bulk addition, illegal duplicate keys are handled in a different manner.  
+</p>
+<a name="wp1032500"> </a><p class="pBody">
+When the keys are added to the file, any illegal duplicates are detected then.  Should a record be found that contains an illegal duplicate key value, that record is deleted.  Your program is informed of this only if it contains a valid declarative for the file.  If there is no declarative available, the record is quietly deleted.  Otherwise, the file status data item is set to &quot;22&quot;, the file's record area is filled with the contents of the rejected record, and the declarative executes.  When the declarative finishes, the file record area is restored to its previous contents so that it contains the correct data when the suspended file operation resumes.  
+</p>
+<a name="wp1032501"> </a><p class="pBody">
+When the file's declarative executes in this way, the program may not perform any file operations in the declarative.  This is because the program is in the middle of doing a file operation already, the one that triggered the addition of the keys. In addition, the declarative may not start or stop any run units (including chaining), nor may it do an EXIT PROGRAM from the program that contains the declarative.  Finally, note that the declarative runs as a locked thread--no other threads execute while the declarative runs.
+</p>
+<a name="wp1045335"> </a><p class="pBody">
+You can configure Vision to write any rejected records to a file.  This gives you a way to log the rejected records even though you may not perform a file operation from within your declarative.  To create this log, set the DUPLICATES_LOG configuration variable to the name of the file in which you want to store the records.  Vision will erase this file first if it already exists.  You must use a separate log file for each file opened with bulk addition.  You can do this by changing the setting of DUPLICATES_LOG between OPEN statements.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SET ENVIRONMENT &quot;DUPLICATES-LOG&quot; TO &quot;file1.rej&quot;<a name="wp1045336"> </a>
+    OPEN OUTPUT FILE-1 FOR BULK-ADDITION<a name="wp1045337"> </a>
+<a name="wp1045340"> </a>
+SET ENVIRONMENT &quot;DUPLICATES-LOG&quot; TO &quot;file2.rej&quot;<a name="wp1032505"> </a>
+    OPEN EXTEND FILE-2 FOR BULK-ADDITION<a name="wp1032506"> </a>
+</pre></div>
+<a name="wp1032507"> </a><p class="pBody">
+If DUPLICATES_LOG has not been set or is set to spaces, then no log file is created.
+</p>
+<a name="wp1032508"> </a><p class="pBody">
+In addition, the duplicate-key log file may not be placed on a remote machine using AcuServer.  The log file must be directly accessible by the machine that is running the program. 
+</p>
+<a name="wp1032509"> </a><p class="pBody">
+Any record that Vision rejects due to an illegal duplicate key value is written to the log file.  The format of the file is a binary sequential file with variable-size records.  You can read this file with a COBOL file that has the following layout:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE-CONTROL.<a name="wp1032510"> </a>
+     SELECT OPTIONAL LOG-FILE<a name="wp1032511"> </a>
+     ASSIGN TO DISK file-name<a name="wp1032512"> </a>
+     BINARY SEQUENTIAL.<a name="wp1032513"> </a>
+<a name="wp1032514"> </a>
+FILE SECTION.<a name="wp1032515"> </a>
+FD    LOG-FILE<a name="wp1032516"> </a>
+      RECORD IS VARYING IN SIZE DEPENDING ON REC-SIZE.<a name="wp1032517"> </a>
+01    LOG-RECORD.<a name="wp1032518"> </a>
+      &lt;&lt;indexed record layout goes here&gt;&gt;<a name="wp1032519"> </a>
+<a name="wp1032520"> </a>
+WORKING-STORAGE SECTION.<a name="wp1032521"> </a>
+77    REC-SIZE                PIC 9(5).<a name="wp1032522"> </a>
+</pre></div>
+<a name="wp1032523"> </a><p class="pBody">
+If no duplicate records are found, the log file is removed when the Vision file is closed.  
+</p>
+<a name="wp1032524"> </a><p class="pBody">
+There is an unusual circumstance that can cause a file opened for bulk addition to reject a record that would not have been rejected if the file had been opened normally.  This occurs only when the file has at least one alternate key that does not allow duplicates.  This happens due to the changed order in which the keys are written to the file.  
+</p>
+<a name="wp1032525"> </a><p class="pBody">
+Consider a case where a file has two numeric keys, the primary key and one alternate that does not allow duplicates.  Now suppose the following three records were written to this newly created file:
+</p>
+<a name="wp1032544"> </a><p class="pBody">
+ </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1036034"> </a>
+Primary key
+
+</th>
+    <th><a name="wp1036036"> </a>
+Alternate key
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1036038"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1036040"> </a><p class="pCellBody">
+1
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1036042"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1036044"> </a><p class="pCellBody">
+1
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1036046"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1036048"> </a><p class="pCellBody">
+2
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1032545"> </a><p class="pBody">
+In a file opened normally, the first record would be written to the file, the second record would be rejected because of an illegal duplicate on the alternate key, then the last record would be written.  The result would be a two-record file, the records (1,1) and (2,2).  
+</p>
+<a name="wp1032546"> </a><p class="pBody">
+If the file is opened for bulk addition, the three records are added, then the primary keys are added, then the alternate keys are added.  First the three records are added.  Then the first and second record's primary keys are added.  The third record's primary key is rejected because it duplicates the second record's key.  The third record is removed as a result of this.  Then the alternate keys are processed.  The first record's key adds fine.  The second record's key is rejected because it is a duplicate, and the second record is removed.  The third record's alternate key is not processed because that record has already been removed.  The result is a one record file, the record (1,1).  
+</p>
+<a name="wp1032547"> </a><p class="pBody">
+To summarize, as a result of bulk addition, you may end up with records rejected because of the duplicate key conflict with other (eventually) rejected records and not necessarily with any accepted records.  
+</p>
+<a name="wp1032548"> </a><p class="pBody">
+This difference would not occur if the keys were added &quot;row-wise&quot; instead of &quot;column-wise&quot;, but doing so would sacrifice much of the efficiency gained by bulk addition mode.  
+</p>
+<a name="wp1032549"> </a><p class="pBody">
+In most practical applications, this scenario is not very likely.  If need be, you can adjust for this difference by logging the rejected records and then trying to add them to the file normally after leaving bulk-addition mode.  The second attempt at writing out the records will still reject the records with illegal duplicates, but take any records that conflict only with other rejected records.  
+</p>
+<a name="wp1032550"> </a><p class="pBody">
+Because of the various issues surrounding illegal duplicate key values, it is best to use bulk addition in cases where illegal duplicates are rare.  Processing records with a great many illegal keys significantly reduces the performance benefits of using bulk addition.  
+</p>
+<a name="wp1032552"> </a><h3 class="pHeadingRef">
+Progress reporting
+</h3>
+<a name="wp1032553"> </a><p class="pBody">
+Programs that use bulk addition are frequently the types of programs where it is desirable to report the program's progress to the user.  For example, a program that reformats a file would typically display its percentage complete while running.  However, a single COBOL statement may represent the majority of the running time, so progress reporting is difficult to do.  The file reformatting program, for example, could spend 20% of its time writing out the reformatted records and 80% of its time in the CLOSE statement while the records are having their keys written.  
+</p>
+<a name="wp1032554"> </a><p class="pBody">
+You can use a special declarative section to do progress reporting.  This section is called directly by Vision in a periodic fashion while the keys are being added to the file.  To create the declarative, use the following form of the USE statement:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+USE FOR REPORTING ON file-name.<a name="wp1032555"> </a>
+</pre></div>
+<a name="wp1032556"> </a><p class="pBody">
+Vision executes this section at regular intervals.  This reporting period is approximately once for each percentage point completed per key.  
+</p>
+<a name="wp1032557"> </a><p class="pBody">
+Because the declarative is called from within a file operation, the declarative section's code may not execute any file operations. In addition, the declarative may not start or stop any run units (including chaining), nor may it do an EXIT PROGRAM from the program that contains the declarative.  Finally, note that the declarative runs as a locked thread--no other threads execute while the declarative runs.  
+</p>
+<a name="wp1032562"> </a><p class="pBody">
+To determine how far along Vision is in adding the keys, you can call the library routine &quot;C$KEYPROGRESS&quot;.  You pass this routine a single parameter which has the following layout:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  KEYPROGRESS-DATA, SYNC.<a name="wp1032563"> </a>
+    03  KEYPROG-CUR-KEY   PIC XX COMP-N.<a name="wp1032564"> </a>
+    03  KEYPROG-NUM-KEYS  PIC XX COMP-N.<a name="wp1032565"> </a>
+    03  KEYPROG-CUR-REC   PIC X(4) COMP-N.<a name="wp1032566"> </a>
+    03  KEYPROG-NUM-RECS  PIC X(4) COMP-N.<a name="wp1032567"> </a>
+</pre></div>
+<a name="wp1032568"> </a><p class="pBody">
+A copy of this group item can be found in the COPY library &quot;keyprog.def&quot;.  
+</p>
+<a name="wp1032569"> </a><p class="pBody">
+When C$KEYPROGRESS returns, the group item is filled with current data.  The individual items contain the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1032570"> </a><div class="pSmartList1"><li><b class="cBold">KEYPROG-CUR-KEY</b> - this is the current key being worked on by Vision.  The primary key is key &quot;1&quot;, the first alternate is key &quot;2&quot;, and so on.</li></div>
+<a name="wp1032571"> </a><div class="pSmartList1"><li><b class="cBold">KEYPROG-NUM-KEYS</b> - this is the total number of keys in the file.</li></div>
+<a name="wp1032572"> </a><div class="pSmartList1"><li><b class="cBold">KEYPROG-CUR-REC</b> - this is the number of the last record written for the current key, ranging from 1 to the total number of records to write.</li></div>
+<a name="wp1032573"> </a><div class="pSmartList1"><li><b class="cBold">KEYPROG-NUM-RECS</b> - this is the total number of records to be keyed.  </li></div>
+</ul></div>
+<a name="wp1032574"> </a><p class="pBody">
+You may report this information in any fashion.  If you want to report the actual percentage complete, the formula is the following:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+total-operations = keyprog-num-recs * keyprog-num-keys<a name="wp1032575"> </a>
+<a name="wp1045344"> </a>
+operations-complete = <a name="wp1032578"> </a>
+  (keyprog-cur-key - 1) * keyprog-num-recs + keyprog-cur-rec<a name="wp1032579"> </a>
+<a name="wp1045345"> </a>
+pct-complete = <a name="wp1032581"> </a>
+  (operations-complete / total-operations) * 100<a name="wp1051153"> </a>
+</pre></div>
+<a name="wp1032583"> </a><p class="pBody">
+That formula computes the percentage complete for just adding the keys.  If you want to treat the original record writes and the adding of the keys in a single percentage scale, the formula is slightly different:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+total-operations = keyprog-num-recs * (keyprog-num-keys + 1)<a name="wp1032584"> </a>
+<a name="wp1038983"> </a>
+operations-complete = <a name="wp1032587"> </a>
+  keyprog-cur-key * keyprog-num-recs + keyprog-cur-rec<a name="wp1038981"> </a>
+<a name="wp1038984"> </a>
+pct-complete = <a name="wp1045346"> </a>
+  (operations-complete / total-operations) * 100<a name="wp1051154"> </a>
+</pre></div>
+<a name="wp1045348"> </a><p class="pBody">
+Here is an example of a typical reporting declarative:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+77  PROGRESS-BAR-1      HANDLE OF FRAME.<a name="wp1032593"> </a>
+<a name="wp1038972"> </a>
+DECLARATIVES.<a name="wp1032595"> </a>
+MYFILE-REPORTING SECTION.<a name="wp1032596"> </a>
+   USE FOR REPORTING ON MYFILE.<a name="wp1032597"> </a>
+MYFILE-REPORT.<a name="wp1032598"> </a>
+   CALL &quot;C$KEYPROGRESS&quot; USING KEYPROGRESS-DATA<a name="wp1032599"> </a>
+   MODIFY PROGRESS-BAR-1, FILL-PERCENT = <a name="wp1032600"> </a>
+          ((((KEYPROG-CUR-KEY - 1) * KEYPROG-NUM-RECS<a name="wp1032601"> </a>
+          + KEYPROG-CUR-REC) / (KEYPROG-NUM-RECS<a name="wp1032602"> </a>
+          * KEYPROG-NUM-KEYS)) * 100).<a name="wp1032603"> </a>
+END DECLARATIVES.<a name="wp1032604"> </a>
+</pre></div>
+<a name="wp1060442"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>As mentioned above, the progress reporting code in the Declaratives Section tracks only the bulk addition of keys to the file.  To also indicate the time spent writing records, similar code should be added to the corresponding WRITE statements in the Procedure Division. 
+<hr />
+</p>
+<a name="wp1032606"> </a><h3 class="pHeadingRef">
+Bulk addition and AcuServer
+</h3>
+<a name="wp1032607"> </a><p class="pBody">
+You may not use bulk addition mode with files that you are accessing via AcuServer.  If you attempt to do so, AcuServer will open the file in MASS-UPDATE mode instead. 
+</p>
+<a name="wp1032608"> </a><p class="pBody">
+Programs that are appropriate targets for bulk addition mode are generally much more efficient when run directly on the server.  You can arrange to do this directly by manually starting the job on the server, or you can use AcuConnect from a workstation to remotely start the job on the server.  
+</p>
+<a name="wp1032609"> </a><p class="pBody">
+In addition, the duplicate-key log file may not be placed on a remote machine using AcuServer.  The log file must be directly accessible by the machine that is running the program. 
+</p>
+<a name="wp1032611"> </a><h3 class="pHeadingRef">
+Using bulk addition with transactions
+</h3>
+<a name="wp1032612"> </a><p class="pBody">
+You may use bulk addition for files that use transaction management.  No transaction management rules are affected by bulk addition.  
+</p>
+<a name="wp1032613"> </a><p class="pBody">
+The START TRANSACTION, COMMIT and ROLLBACK verbs are not treated as operations that trigger the bulk addition of keys.  However, a ROLLBACK can cause the bulk addition of keys if it has to delete or rewrite a record as part of its operation.  Note that a file's declaratives will not execute as part of a ROLLBACK process.  This applies to both the error handling declarative and the progress reporting declarative.  
+</p>
+<a name="wp1032615"> </a><h3 class="pHeadingRef">
+Performance tips
+</h3>
+<a name="wp1032616"> </a><p class="pBody">
+Using bulk addition can provide very substantial performance gains in appropriate cases.  Generally, it is best used when you are adding a large number of records to a file and has a more noticeable effect on files with a large number of records.  
+</p>
+<a name="wp1032617"> </a><p class="pBody">
+The following chart shows one set of execution times for creating a new file with eight 10-byte keys generated in random order and a 130-byte record size.  These were run on a Windows 98 machine.  
+</p>
+<a name="wp1032618"> </a><p class="pBody">
+Note that the times will vary widely from machine to machine and between different file organizations; use these number just as a comparison between techniques:
+</p>
+<a name="wp1051586"> </a><p class="pBodyRelative">
+</p><div><img src="ch6_perf.gif" height="257" width="408" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1032620"> </a><p class="pBody">
+Notice how the run times for MASS-UPDATE mode rise at a much steeper rate than those for bulk addition mode as the number of records grows.  
+</p>
+<a name="wp1032621"> </a><p class="pBody">
+You get best performance from bulk addition when you maximize the number of records being keyed at once.  This means that you want to WRITE as many records as possible to the file without performing any other intervening operations on the file.  
+</p>
+<a name="wp1032622"> </a><p class="pBody">
+There are two configuration variables that have an important effect on the bulk addition performance.  The first of these is V_BUFFERS, which determines the number of 512-byte blocks in the Vision cache.  Besides having its usual caching effect, the Vision cache is especially important when you are doing bulk addition because the cache is used to gather file blocks together into larger groups that are written out in a single call to the operating system.  While the cache always does this, the bulk addition algorithm tends to produce very large sets of adjacent modified blocks, which can all be written out at once.  By increasing the cache size, you can increase the number of blocks written out at once.  
+</p>
+<a name="wp1032623"> </a><p class="pBody">
+For this reason, you should use a cache size of at least 64 blocks.  Note that this is the default cache size for most systems.  If memory is plentiful, then a cache size of 128 or 256 blocks is recommended.  You can go higher if you want; however, there is usually little benefit seen after about 512 blocks (256K of memory).  
+</p>
+<a name="wp1032624"> </a><p class="pBody">
+The other important factor is the memory buffer used to hold the keys (V_BULK_MEMORY).  Unlike V_BUFFERS, this is most useful when it is large.  The default size is 1 MB.  Larger settings will improve performance when you are adding many records to a file.  Essentially, this buffer is used to hold record keys.  The more keys that it can hold, the better the overall performance.  For runs that will write out between 250,000 and 500,000 records, a setting of 4 MB generally works well.  For more than 500,000 records, we recommend at least an 8 MB setting.  Be careful that you do not set this too large, however.  If you set it so large that the operating system must do significantly more memory paging to disk, you could lose more performance than you gain.  You will need to experiment to see which setting works best for your system.  
+</p>
+<a name="wp1032625"> </a><p class="pBody">
+Finally, the process of removing records due to illegal duplicate keys is expensive.  You should try to arrange it so that bulk addition is used in cases where illegal duplicate keys are rare.  
+</p>
+<a name="wp1032627"> </a><h3 class="pHeadingRef">
+Summary
+</h3>
+<a name="wp1032628"> </a><p class="pBody">
+Using bulk addition can provide very significant performance gains in certain cases.  These cases involve writing a very large number of records to a file.  In order to optimize performance, certain rules of COBOL are changed and some other restrictions apply.  Here are the key points to remember:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1032629"> </a><div class="pSmartList1"><li>Files open for bulk addition are locked for exclusive use.</li></div>
+<a name="wp1032630"> </a><div class="pSmartList1"><li>WRITE does not add keys to the file.  The keys are added when some other file operation occurs.  </li></div>
+<a name="wp1032631"> </a><div class="pSmartList1"><li>Duplicate record errors (status &quot;22&quot;) are not returned by WRITE.  Instead, they are reported to the file's declarative procedure only during some other file operation.  </li></div>
+<a name="wp1032632"> </a><div class="pSmartList1"><li>The declarative must not perform any file operations or start or stop any run units when processing status &quot;22&quot;.  </li></div>
+<a name="wp1032633"> </a><div class="pSmartList1"><li>You may log records rejected due to illegal duplicated keys by setting the option DUPLICATES_LOG to the name of the desired log file.  </li></div>
+<a name="wp1032634"> </a><div class="pSmartList1"><li>Disk space occupied by deleted records is not re-used when you are adding records with bulk addition.</li></div>
+<a name="wp1032635"> </a><div class="pSmartList1"><li>You can report on the progress of adding the keys in a USE FOR REPORTING declarative.  This declarative may not perform any file operations or start or stop any run units.  </li></div>
+<a name="wp1032636"> </a><div class="pSmartList1"><li>You may not use bulk addition on files you are accessing via AcuServer.  Use AcuConnect or some other technique to start the job directly on the machine with the files.  </li></div>
+</ol></div>
+<a name="wp1032637"> </a><p class="pBody">
+Avoid doing an abnormal shutdown on a job running with bulk addition.  If the job aborts without completing its &quot;close&quot; operation, the file will almost certainly have keys missing and need to be rebuilt.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

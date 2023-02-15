@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:06" />
+  <title>5.3.4.2  Key Section</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt15.htm"><br />Chapter 5:  File Processing</a> &gt; <a href="gt1521.htm">5.3  XFD Files</a> &gt; <a href="gt1550.htm">5.3.4  XFD Format</a> &gt; </p>
+<a name="wp1043381"> </a><h2 class="pHeading3">
+5.3.4.2  Key Section
+</h2>
+<a name="wp1043615"> </a><p class="pBody">
+The key section contains an entry for each key in the file.  The following example refers to the SELECT cited in the previous section, and shows the key information in a simple text format:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+# [Key Section]<a name="wp1043645"> </a>
+01,0,005,0000000000<a name="wp1043646"> </a>
+01<a name="wp1043647"> </a>
+CL-CLIENT-ID<a name="wp1043648"> </a>
+02,1,015,0000000005,015,0000000020<a name="wp1043649"> </a>
+02<a name="wp1043650"> </a>
+CL-FIRST-NAME<a name="wp1043651"> </a>
+CL-LAST-NAME<a name="wp1043632"> </a>
+</pre></div>
+<a name="wp1043660"> </a><p class="pBody">
+For each key, there is a line describing the number of segments in the key, whether or not the key allows duplicates, and the size and offset for each segment in the key.  Segment size and offset are repeated as necessary to describe each segment in the key.
+</p>
+<a name="wp1043686"> </a><p class="pBody">
+In the example given, the primary key (CL-CLIENT-ID), is defined as having one segment and being a unique key (&quot;01,0&quot;).  The size of the segment is 5 (&quot;005&quot;), and the offset is 0.
+</p>
+<a name="wp1043687"> </a><p class="pBody">
+The alternate key is defined as having two segments and allowing alternates (&quot;02,1&quot;).  The first segment is described as having a size of 15 and an offset of 5; the second segment also has a size of 15, but its offset is 20.
+</p>
+<a name="wp1043685"> </a><p class="pBody">
+The next line in each key description contains the number of elementary field definitions defined in the key.  For the primary key in the example, there is one elementary field.  In the alternate key, there are two.
+</p>
+<a name="wp1043709"> </a><p class="pBody">
+The remaining lines in the key section give the name of each elementary field contained in the key.
+</p>
+<a name="wp1043742"> </a><p class="pBody">
+In XML format, the key section appears as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&lt;xfd:keys&gt;<a name="wp1043793"> </a>
+  &lt;xfd:key xfd:segment-count=&quot;1&quot; xfd:duplicates-allowed=&quot;false&quot;&gt;<a name="wp1043794"> </a>
+    &lt;xfd:segments&gt;<a name="wp1043762"> </a>
+      &lt;xfd:segment xfd:segment-size=&quot;5&quot; xfd:segment-offset=&quot;0&quot;/&gt;<a name="wp1043763"> </a>
+    &lt;/xfd:segments&gt;<a name="wp1043764"> </a>
+    &lt;xfd:key-columns xfd:key-column-count=&quot;1&quot;&gt;<a name="wp1043765"> </a>
+      &lt;xfd:key-column xfd:key-column-name=&quot;CL-CLIENT-ID&quot;/&gt;<a name="wp1043766"> </a>
+    &lt;/xfd:key-columns&gt;<a name="wp1043767"> </a>
+  &lt;/xfd:key&gt;<a name="wp1043768"> </a>
+  &lt;xfd:key xfd:segment-count=&quot;2&quot; xfd:duplicates-allowed=&quot;true&quot;&gt;<a name="wp1043769"> </a>
+    &lt;xfd:segments&gt;<a name="wp1043770"> </a>
+      &lt;xfd:segment xfd:segment-size=&quot;15&quot; xfd:segment-offset=&quot;5&quot;/&gt;<a name="wp1043771"> </a>
+      &lt;xfd:segment xfd:segment-size=&quot;15&quot; xfd:segment-offset=&quot;20&quot;/&gt;<a name="wp1043772"> </a>
+    &lt;/xfd:segments&gt;<a name="wp1043773"> </a>
+    &lt;xfd:key-columns xfd:key-column-count=&quot;2&quot;&gt;<a name="wp1043774"> </a>
+      &lt;xfd:key-column xfd:key-column-name=&quot;CL-FIRST-NAME&quot;/&gt;<a name="wp1043775"> </a>
+      &lt;xfd:key-column xfd:key-column-name=&quot;CL-LAST-NAME&quot;/&gt;<a name="wp1043776"> </a>
+    &lt;/xfd:key-columns&gt;<a name="wp1043777"> </a>
+  &lt;/xfd:key&gt;<a name="wp1043778"> </a>
+&lt;/xfd:keys&gt;<a name="wp1043747"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

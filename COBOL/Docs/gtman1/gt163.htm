@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.1.1  Sequential Files</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt162.htm">6.1 Handling Files</a> &gt; </p>
+<a name="wp1032243"> </a><h2 class="pHeading2">
+6.1.1  Sequential Files
+</h2>
+<a name="wp1032246"> </a><p class="pBody">
+ACUCOBOL-GT treats sequential files in one of two ways.  One form is called <em class="cEmphasis">binary sequential; </em>the other form is called <em class="cEmphasis">line sequential.</em>  Note that RECORD SEQUENTIAL is synonymous with BINARY SEQUENTIAL.
+</p>
+<a name="wp1032248"> </a><p class="pBody">
+<b class="cBold">Binary sequential files</b> are designed to contain non-ASCII information and are easy to move to foreign systems.  A binary sequential file consists of either fixed-length or variable-length records grouped together into blocks.  
+</p>
+<a name="wp1032250"> </a><p class="pBody">
+Variable-length binary sequential records occupy only as much disk space as necessary.  If the maximum record size is equal to or less than 65,535 bytes, two bytes indicating record size (VLI) are placed in front of each variable-length record when it is written to disk.  If the record size is larger than 65,535 bytes, four bytes are placed in front of each variable-length record.  <em class="cEmphasis">This two- or four-byte field is not specified in your COBOL program, and non-COBOL programs that access the records need to be aware of the extra bytes. </em>
+</p>
+<a name="wp1032252"> </a><p class="pBody">
+All I/O on the physical device is done using the block size, except for the last block.  Only that portion of the last block that contains records is read.  The default block size is one record.  You can change block size with the BLOCK CONTAINS clause.  
+</p>
+<a name="wp1032255"> </a><p class="pBody">
+On VMS systems, binary sequential files are sequential RMS files with fixed-length or variable-length records.  
+</p>
+<a name="wp1032256"> </a><p class="pBody">
+<b class="cBold">Line sequential files</b> contain variable-sized records.  These files are designed to be printed and to be used with other programs, such as editors.  The exact form of these files depends on the host system, and thus they should not generally be treated as portable files.  On many machines, these files consist of variable-length lines delimited by carriage-control characters.  These files should contain only USAGE DISPLAY data so as not to inadvertently introduce stray carriage-control characters.  
+</p>
+<a name="wp1032259"> </a><p class="pBody">
+On Windows systems, a line sequential file contains each data record followed by a carriage-return/line-feed pair.  On UNIX systems, these files use just a line feed as the delimiter. On VMS systems, a line sequential file is a sequential RMS file with variable-length records.  
+</p>
+<a name="wp1032263"> </a><p class="pBody">
+ACUCOBOL-GT performs all of its I/O on line sequential files according to the following rules.  If the file is blocked (i.e., it has a BLOCK CONTAINS clause), then all I/O is done by blocks.  Otherwise, all output is done one record at a time.  Input, on the other hand, is internally blocked by <b class="cBold">runcbl</b>.  This provides an efficient interface while still providing line-by-line control over a print device (which may be needed to do form alignment, for example).  
+</p>
+<a name="wp1032266"> </a><p class="pBody">
+Line sequential files further break into two types, <em class="cEmphasis">print files</em> and <em class="cEmphasis">variable-length</em> <em class="cEmphasis">files</em>.  Print files are similar to variable-length files except that different line-delimiting characters are used.  These characters are chosen so that the resulting file will print correctly.  Print files may not be opened for INPUT or I-O.  Print files are designed to be efficiently printed.  
+</p>
+<a name="wp1032267"> </a><p class="pBody">
+When a line sequential file is read, the default behavior is that any carriage-return, line-feed, or form-feed characters in the record are removed before the record is made available to the program.  To change this default behavior, see <a  href="gt1230.htm#wp1033431">section 2.7, &quot;Runtime Configuration.&quot;</a>
+</p>
+<a name="wp1032270"> </a><p class="pBody">
+Some line sequential files have automatic blank stripping.  This causes records written to the file to have any trailing spaces in the record removed before it is written to the file.  All print files have automatic blank stripping.  You can specify blank stripping for other line sequential files by choosing one of the following device types in the file's ASSIGN phrase: CARD-PUNCH, CARD-READER, CASSETTE, INPUT, INPUT-OUTPUT, MAGNETIC-TAPE or OUTPUT.  See the ACUCOBOL-GT <em class="cEmphasis">Reference Manual</em> for details on the ASSIGN phrase.  
+</p>
+<a name="wp1032272"> </a><p class="pBody">
+When reading from a variable-length sequential file, <b class="cBold">runcbl </b>treats short records in one of two ways.  If blank-stripping is specified for the file, then the short records are padded with spaces to fill out to the maximum record size.  If blank-stripping is not specified, then the trailing portion of the record is left unchanged (from the most recent contents of the record area).  
+</p>
+<a name="wp1032273"> </a><p class="pBody">
+The runtime system allows a sequential file to be opened for input when the user does not have write-access to the file.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

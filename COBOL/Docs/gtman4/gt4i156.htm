@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-SET-LINES-PER-PAGE</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1040394"> </a><h2 class="pHeading3">
+WINPRINT-SET-LINES-PER-PAGE
+</h2>
+<a name="wp1040396"> </a><p class="pBody">
+This operation code sets the number of lines that should be printed on a page. 
+</p>
+<a name="wp1040401"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040402"> </a>
+    USING WINPRINT-SET-LINES-PER-PAGE, WINPRINT-DATA<a name="wp1040403"> </a>
+    GIVING RESULT<a name="wp1040404"> </a>
+</pre></div>
+<a name="wp1040405"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040406"> </a><p class="pBody">
+<b class="cBold">WINPRINT-DATA</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 WINPRINT-DATA.<a name="wp1040407"> </a>
+   03 WPRTDATA-SET-STD-FONT.<a name="wp1040408"> </a>
+   03 WPRT-PAGE-LAYOUT REDEFINES <a name="wp1040409"> </a>
+      WPRTDATA-SET-STD-FONT.<a name="wp1040410"> </a>
+      05 WPRTDATA-LINES-PER-PAGE       UNSIGNED-SHORT.<a name="wp1040411"> </a>
+      05 WPRTDATA-COLUMNS-PER-PAGE     UNSIGNED-SHORT.<a name="wp1040412"> </a>
+</pre></div>
+<a name="wp1040413"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040414"> </a><p class="pBody">
+Printing forms using the Windows spooler is sometimes difficult because you cannot easily control the height of a chosen font.  Most Windows fonts do not conform to older standards about font height.  For example, 12 point Courier does not necessarily print at 6 lines per inch.  You can use the &quot;WINPRINT-GET-PAGE-LAYOUT&quot; operation to determine the number of lines that fit on a page for a given font.  Sometimes, however, you need to be able to set the line height explicitly.
+</p>
+<a name="wp1040415"> </a><p class="pBody">
+This operation allows you to do that.  It sets the number of lines that should be printed on a page.  The runtime uses this number to adjust the height of the printed font.  Note that the font is not scaled--it is simply printed in the specified vertical space.  
+</p>
+<a name="wp1040416"> </a><p class="pBody">
+In order to specify the number of lines that will fit on a page, you must consider the height or vertical resolution of each line. WINPRINT-SET-LINES-PER-PAGE obtains the page height, calculates the physical margins of the page, and sets the font height.  The value of the font height includes the visible height of a letter plus its top and bottom margins.  If your font height is 7 dots-per-inch (dpi), this includes the top and bottom margins of the font itself, so the <em class="cEmphasis">actual</em> font height might be only 5 dpi.  Note that these values differ from font to font.
+</p>
+<a name="wp1040417"> </a><p class="pBody">
+When using this option, set the number of lines desired in WPRTDATA-LINES-PER-PAGE (also defined in &quot;winprint.def&quot;).  Then pass WINPRINT-DATA to the routine.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+     * Set 60 lines per page <a name="wp1040418"> </a>
+          MOVE 60 TO WPRTDATA-LINES-PER-PAGE <a name="wp1040419"> </a>
+          CALL &quot;WIN$PRINTER&quot; <a name="wp1040420"> </a>
+             USING WINPRINT-SET-LINES-PER-PAGE,<a name="wp1040421"> </a>
+             WINPRINT-DATA<a name="wp1040422"> </a>
+</pre></div>
+<a name="wp1040423"> </a><p class="pBody">
+You can set the lines per page with the spooler open or closed.  If you set it when it is open, then the new font height takes effect the next time the page position is advanced.  In either case, the lines per page is reset to the default value the next time the spooler is closed.  You can explicitly reset to the default font height by setting WPRTDATA-LINES-PER-PAGE to zero.  
+</p>
+<a name="wp1040424"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>We do not recommend using this operation when printing with &quot;-P&#160;SPOOLER-DIRECT&quot; or &quot;-Q &lt;<em class="cEmphasis">printername</em>&gt; DIRECT=ON&quot;.  When you print in DIRECT mode, the Windows print spooler has no control over the printer, the printer is not initialized by the Windows printer driver.  This means that the print job uses the hardware defaults. For example, if you print in DIRECT mode to a printer with the hardware default paper size set to US letter format, that is the format used, even if the driver has A4 paper set as the default. In this situation, the operation is likely to return incorrect values.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

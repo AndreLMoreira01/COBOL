@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>aculongjmp()</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr621.htm">6.4  Calling COBOL from C</a> &gt; </p>
+<a name="wp1122155"> </a><h2 class="pHeading2">
+aculongjmp()
+</h2>
+<a name="wp1122156"> </a><p class="pBody">
+This <b class="cBold">aculongjmp()</b> routine cuts the C and COBOL call stacks to the point recorded in passed &quot;acujmp_buf&quot;.  This point must have been recorded by a prior call to both <b class="cBold">acusavenv()</b> and <b class="cBold">setjmp()</b>.  Once a state has been recorded, you can only jump to it one time using <b class="cBold">aculongjmp()</b>.  After that, it must be recorded again.
+</p>
+<a name="wp1122157"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+void <a name="wp1122158"> </a>
+aculongjmp(acujmp_buf *buffer)<a name="wp1122159"> </a>
+</pre></div>
+<a name="wp1122160"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Like <b class="cBold">acusavenv()</b>, <b class="cBold">aculongjmp()</b> is intended for use with batch programs or programs written for a transaction processing system and therefore is not recommended for programs that use the ACUCOBOL-GT graphical user interface.
+<hr />
+</p>
+<a name="wp1122161"> </a><h3 class="pHeadingRef">
+Return values
+</h3>
+<a name="wp1122162"> </a><p class="pBody">
+This routine does not return; instead, it internally calls the C library <b class="cBold">longjmp()</b> routine which transfers control to the point of the prior <b class="cBold">setjmp()</b> call and causes <b class="cBold">setjmp()</b> to return a value of &quot;1&quot;.  
+</p>
+<a name="wp1122163"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+#include &quot;acusetjmp.h&quot;<a name="wp1122164"> </a>
+acujmp_buf  mark1;<a name="wp1122165"> </a>
+<a name="wp1122166"> </a>
+/* A COBOL or &#39;C&#39; subroutine can CALL &quot;myexception&quot; to transfer <a name="wp1122167"> </a>
+/* control back to the point where &quot;mark1&quot; was recorded.  */<a name="wp1122168"> </a>
+<a name="wp1122169"> </a>
+void myexception()<a name="wp1122170"> </a>
+{<a name="wp1122171"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+aculongjmp( &amp;mark1 );<a name="wp1122172"> </a>
+</pre></div>
+}<a name="wp1122173"> </a>
+<a name="wp1122174"> </a>
+/* Prototypical &#39;C&#39; service routine to run a COBOL program with <a name="wp1122175"> </a>
+/* the ability to exit out of the COBOL code via call to <a name="wp1122176"> </a>
+/* &#39;myexception&#39; */<a name="wp1122177"> </a>
+<a name="wp1122178"> </a>
+void myservice()<a name="wp1122179"> </a>
+<a name="wp1122180"> </a>
+{<a name="wp1122186"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+/* Record our position in the &#39;C&#39; and COBOL call stacks.<a name="wp1145191"> </a>
+/* &#39;Setjmp&#39; will return &quot;0&quot; when executed first. We<a name="wp1145192"> </a>
+/* call it in a &quot;while&quot; loop so that the location <a name="wp1145193"> </a>
+/* recording re-executes in case we end<a name="wp1145194"> </a>
+/* up jumping here via &#39;aculongjmp&#39; */<a name="wp1145195"> </a>
+</pre></div>
+<a name="wp1122187"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+while( setjmp( *acusavenv(&amp;mark1) ) ) <a name="wp1145251"> </a>
+{<a name="wp1122188"> </a>
+</pre></div>
+<a name="wp1122189"> </a>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+/* If we get here, it's because &#39;aculongjmp&#39; jumped <a name="wp1122190"> </a>
+/* here. Put recovery/cleanup code here.<a name="wp1122191"> </a>
+/* If you do not want to re-execute the COBOL routine,<a name="wp1122192"> </a>
+/* add a &quot;return&quot; here.  Otherwise, just fall out of the<a name="wp1122193"> </a>
+/* while loop to re-execute the COBOL routine */<a name="wp1122194"> </a>
+}<a name="wp1145326"> </a>
+<a name="wp1122195"> </a>
+/* Setup to call COBOL here and call a COBOL routine */<a name="wp1122196"> </a>
+/* The COBOL program can jump back to the top of this <a name="wp1122197"> </a>
+/* routine by calling &quot;myexception&quot; at some point.  This <a name="wp1122198"> </a>
+/* will transfer control to the point of the &#39;setjmp&#39; <a name="wp1122199"> </a>
+/* call above and cause &#39;setjmp&#39; to return &quot;1&quot;.  */<a name="wp1122200"> </a>
+<a name="wp1145368"> </a>
+struct a_cobol_info cblinfo; <a name="wp1122203"> </a>
+memset(&amp;cblinfo, 0, sizeof(cblinfo)); 
+cblinfo.a_cobol_info_size = sizeof(cblinfo); 
+cblinfo.pgm_name = &quot;cblprog&quot;; <a name="wp1122204"> </a>
+cblinfo.num_params = 0; <a name="wp1122205"> </a>
+cblinfo.params = NULL; <a name="wp1122206"> </a>
+acu_cobol(&amp;cblinfo); <a name="wp1122207"> </a>
+</pre></div>
+}<a name="wp1122209"> </a>
+</pre></div>
+<a name="wp1122210"> </a><h3 class="pHeadingRef">
+Restrictions
+</h3>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1122211"> </a><div class="pSmartList1"><li>As with <b class="cBold">setjmp()</b>, the function that calls <b class="cBold">acusavenv()</b> must not exit before any calls to <b class="cBold">aculongjmp()</b> that use the same buffer.  Programs that do this will have undefined (and usually fatal) results.</li></div>
+<a name="wp1122212"> </a><div class="pSmartList1"><li><b class="cBold">aculongjmp()</b> works by simulating EXIT PROGRAM statements for each of the COBOL programs being exited.  This EXIT PROGRAM has all its normal effects.  If a program cannot exit for some reason, the call to <b class="cBold">aculongjmp()</b> fails and the runtime shuts down with a fatal error.  Reasons that EXIT PROGRAM can fail include:</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1122213"> </a><div class="pSmartList2"><li>The program is the main program.</li></div>
+<a name="wp1122214"> </a><div class="pSmartList2"><li>The program is currently running an event procedure.</li></div>
+<a name="wp1122215"> </a><div class="pSmartList2"><li>The program is the root program of a thread.</li></div>
+<a name="wp1122216"> </a><div class="pSmartList2"><li>The program is currently in a Declarative called directly by the BULK-ADDITION feature of Vision.</li></div>
+</ul></div>
+<a name="wp1122217"> </a><div class="pSmartList1"><li>Because the caller of <b class="cBold">aculongjmp()</b> must be in the same run unit as the caller of the corresponding <b class="cBold">acusavenv()</b>, avoid using the CHAIN verb.</li></div>
+<a name="wp1122218"> </a><div class="pSmartList1"><li>The caller of <b class="cBold">aculongjmp()</b> must be in the same COBOL thread as the caller of the corresponding <b class="cBold">acusavenv()</b>.  In addition, the effect of  <b class="cBold">aculongjmp()</b> on other COBOL threads is undefined.  We recommend that you stop any other threads prior to calling <b class="cBold">aculongjmp()</b>.</li></div>
+<a name="wp1122219"> </a><div class="pSmartList1"><li>After <b class="cBold">aculongjmp()</b> uses a buffer, that buffer is no longer valid and must be re-recorded by a new call to <b class="cBold">acusavenv()</b> and <b class="cBold">setjmp()</b>.  This behavior is different from the normal <b class="cBold">setjmp()</b>/<b class="cBold">longjmp()</b> convention.  If converting existing <b class="cBold">setjmp()</b> logic, you can usually accomplish this by replacing the &quot;if&quot; statement that contains the call to <b class="cBold">setjmp()</b> with a &quot;while&quot; statement.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+if ( setjmp(mybuf) == 1 )<a name="wp1122220"> </a>
+{<a name="wp1122221"> </a>
+/* longjmp lands here */<a name="wp1122222"> </a>
+}<a name="wp1122223"> </a>
+</pre></div>
+<a name="wp1122224"> </a><p class="pIndented1">
+becomes:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+while ( setjmp(*acusavenv(&amp;myacubuf)) == 1 )<a name="wp1122225"> </a>
+{<a name="wp1122226"> </a>
+/* aculongjmp lands here */<a name="wp1122227"> </a>
+}<a name="wp1122228"> </a>
+</pre></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

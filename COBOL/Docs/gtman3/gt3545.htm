@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.7.1.11  SYNCHRONIZED clause</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3533.htm">5.7  Record Description Entry</a> &gt; <a href="gt3534.htm">5.7.1  Data Description Entry</a> &gt; </p>
+<a name="wp1036284"> </a><h2 class="pHeading3">
+5.7.1.11  SYNCHRONIZED clause
+</h2>
+<a name="wp1036286"> </a><p class="pBody">
+The SYNCHRONIZED clause specifies elementary item alignment on word boundaries of the computer's memory.
+</p>
+<a name="wp1036288"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+{<u class="cUnderline">SYNCHRONIZED</u>}  [LEFT ]<a name="wp1036289"> </a>
+{<u class="cUnderline">SYNC</u>        }  [RIGHT]<a name="wp1036290"> </a>
+</pre></div>
+<a name="wp1036292"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036293"> </a><div class="pSmartList1"><li>SYNC is an abbreviation of SYNCHRONIZED.</li></div>
+<a name="wp1036294"> </a><div class="pSmartList1"><li>The SYNCHRONIZED clause can be used for elementary items only.</li></div>
+<a name="wp1036295"> </a><div class="pSmartList1"><li>A SYNCHRONIZED clause may not be used with an external floating-point data item.</li></div>
+</ol></div>
+<a name="wp1036296"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036297"> </a><div class="pSmartList1"><li>The SYNCHRONIZED clause is used to specify that word boundary alignment should be performed for the data item.  Normally, data contained in records is aligned on byte boundaries.  Only data items whose underlying representation is binary are affected by the SYNCHRONIZED clause.  </li></div>
+<a name="wp1036298"> </a><div class="pSmartList1"><li>The SYNCHRONIZED clause causes the data item to be placed on a boundary that is an even multiple of the natural size of the data item.  The following table lists the boundary used for each size of data item:</li></div>
+<a name="wp1042312"> </a><p class="pBodyRelative">
+<div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1042279"> </a>
+Data Size
+
+</th>
+    <th><a name="wp1042281"> </a>
+Boundary Multiple
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042283"> </a><p class="pCellBody">
+1-2
+</p>
+</td>
+    <td><a name="wp1042285"> </a><p class="pCellBody">
+2
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042287"> </a><p class="pCellBody">
+3-4
+</p>
+</td>
+    <td><a name="wp1042289"> </a><p class="pCellBody">
+4
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042291"> </a><p class="pCellBody">
+5-8
+</p>
+</td>
+    <td><a name="wp1042293"> </a><p class="pCellBody">
+8
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1036317"> </a><div class="pSmartList1"><li>A group item that contains a synchronized data item is also synchronized on the same boundary.  Regardless of the effects of synchronization, a group item always begins at the same location as its first elementary data item.</li></div>
+<a name="wp1036318"> </a><div class="pSmartList1"><li>Synchronization may result in the creation of filler bytes.  These bytes count in the size of any group item that contains them.  For this reason, a group item that contains synchronized data may be larger than the total size of its elementary items.  </li></div>
+<a name="wp1036319"> </a><div class="pSmartList1"><li>Level 01 and level 77 data items that are not otherwise synchronized are placed on a boundary that can be selected at compile time.  By default, these items are placed at word boundaries that are divisible by two.  </li></div>
+<a name="wp1036320"> </a><div class="pSmartList1"><li>Level 01 and level 77 data items that are POINTER or COMP-5 items are automatically synchronized to an appropriate machine boundary, regardless of any compile-time settings.  All C-style data types are automatically synchronized regardless of their level. This allows you to pass these items safely to C subroutines without having to concern yourself with alignment. </li></div>
+<a name="wp1036321"> </a><div class="pSmartList1"><li>A compile-time (&quot;-Dl&quot;) option can be used to cut back the maximum boundary multiple.  For example, &quot;-Dl4&quot; would cause items of size 1 or 2 to be synchronized on 2-byte boundaries, and all other items synchronized on 4-byte boundaries.  If this option is not specified, then the maximum boundary multiple depends on the compatibility mode being used:</li></div>
+<a name="wp1042352"> </a><p class="pBodyRelative">
+<div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1042337"> </a>
+Mode
+
+</th>
+    <th><a name="wp1042339"> </a>
+Boundary Limit
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042341"> </a><p class="pCellBody">
+VAX COBOL
+</p>
+</td>
+    <td><a name="wp1042343"> </a><p class="pCellBody">
+8
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042345"> </a><p class="pCellBody">
+RM/COBOL
+</p>
+</td>
+    <td><a name="wp1042347"> </a><p class="pCellBody">
+2
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1042349"> </a><p class="pCellBody">
+ICOBOL
+</p>
+</td>
+    <td><a name="wp1042351"> </a><p class="pCellBody">
+1
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1036340"> </a><p class="pIndented1">
+A limit of 1 effectively inhibits synchronization.  
+</p>
+<a name="wp1036341"> </a><div class="pSmartList1"><li>The LEFT and RIGHT options are treated as commentary.  They have the same effect as a SYNCHRONIZED clause without either option.  </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

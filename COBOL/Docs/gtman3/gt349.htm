@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:48" />
+  <title>4.3.2  I-O-Control Paragraph</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt34.htm"><br />Chapter 4:  Environment Division</a> &gt; <a href="gt347.htm">4.3  Input-Output Section</a> &gt; </p>
+<a name="wp1035039"> </a><h2 class="pHeading2">
+4.3.2  I-O-Control Paragraph
+</h2>
+<a name="wp1035041"> </a><p class="pBody">
+The I-O-CONTROL paragraph specifies input-output techniques to be used for the program's files.
+</p>
+<a name="wp1035042"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">I-O-CONTROL</u><a name="wp1035043"> </a>
+<a name="wp1035044"> </a>
+ [ <u class="cUnderline">APPLY</u> {<u class="cUnderline">LOCK-HOLDING</u> } ... <u class="cUnderline">ON</u> {file} ... ] ... <a name="wp1035045"> </a>
+         {<u class="cUnderline">PRINT-CONTROL</u>}<a name="wp1035046"> </a>
+<a name="wp1035047"> </a>
+ [ <u class="cUnderline">SAME</u> [<u class="cUnderline">RECORD</u>    ] AREA FOR {file} ... ] ... <a name="wp1035048"> </a>
+        [<u class="cUnderline">SORT</u>      ]<a name="wp1035049"> </a>
+        [<u class="cUnderline">SORT-MERGE</u>]<a name="wp1035050"> </a>
+<a name="wp1035051"> </a>
+ [ <u class="cUnderline">MULTIPLE</u> <u class="cUnderline">FILE</u> TAPE CONTAINS <a name="wp1035052"> </a>
+<a name="wp1035053"> </a>
+   { tape-file [ <u class="cUnderline">POSITION</u> pos ] } ... ] ... .<a name="wp1035054"> </a>
+</pre></div>
+<a name="wp1035055"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035057"> </a><div class="pSmartList1"><li><em class="cEmphasis">File</em> and <em class="cEmphasis">tape-file</em> name a file described by a SELECT clause in the FILE-CONTROL paragraph. </li></div>
+<a name="wp1035059"> </a><div class="pSmartList1"><li>A <em class="cEmphasis">file</em> name cannot appear in more than one SAME RECORD AREA clause.  </li></div>
+<a name="wp1035060"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">file</em> is a sort file, one of the RECORD, SORT, or SORT-MERGE options must be used in a SAME AREA clause.</li></div>
+<a name="wp1035061"> </a><div class="pSmartList1"><li>SORT and SORT-MERGE are equivalent. </li></div>
+<a name="wp1035062"> </a><div class="pSmartList1"><li>At least one <em class="cEmphasis">file</em> must be a sort file if the SORT or SORT-MERGE option is used.  </li></div>
+<a name="wp1035063"> </a><div class="pSmartList1"><li><em class="cEmphasis">Pos</em> must be an integer literal.</li></div>
+<a name="wp1035064"> </a><div class="pSmartList1"><li>You may put APPLY clauses of the IBM DOS/VS COBOL type into the I-O-CONTROL paragraph, but only when the compiler is in the IBM DOS/VS COBOL compatibility mode.  The clauses of the I-O-CONTROL paragraph may be arranged in any order, and the existing APPLY clause may be used, regardless of the compiler mode.  See Chapter 5, &quot;IBM DOS/VS COBOL Conversions,&quot; in <em class="cEmphasis">Transitioning to ACUCOBOL-GT</em> for more information.</li></div>
+</ol></div>
+<a name="wp1035065"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035068"> </a><div class="pSmartList1"><li>The APPLY clause modifies various characteristics of each <em class="cEmphasis">file</em>. </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1035070"> </a><div class="pSmartList2"><li>If the PRINT-CONTROL option is specified, then the named <em class="cEmphasis">file</em> must be a sequential file.  This option causes the file to be treated as a print file.  This has the same effect as specifying &quot;PRINT&quot; in the <em class="cEmphasis">file's</em> ASSIGN clause.  </li></div>
+<a name="wp1035073"> </a><div class="pSmartList2"><li>If the LOCK-HOLDING option is used, then record locks on the file<em class="cEmphasis"> </em>will not be automatically released by any I-O statement.  Instead, only the UNLOCK and CLOSE statements will release any record locks held on the file.  This option has the same effect as the LOCK ON MULTIPLE RECORDS phrase in the <em class="cEmphasis">file's</em> SELECT.  </li></div>
+</ol></div>
+<a name="wp1035075"> </a><div class="pSmartList1"><li>The SAME AREA clause indicates that the compiler should share file information areas for the named files.  ACUCOBOL-GT automatically applies the most efficient use of memory possible for file information areas and treats this clause as commentary.  In ICOBOL compatibility mode, the SAME AREA clause is treated as a SAME RECORD AREA clause (see below).  </li></div>
+<a name="wp1035077"> </a><div class="pSmartList1"><li>The SAME RECORD AREA clause indicates that the named files should share the same memory area for their current logical records.</li></div>
+<a name="wp1035078"> </a><div class="pSmartList1"><li>The SAME RECORD AREA clause is identical to an implicit redefinition of the shared files' record areas.  </li></div>
+<a name="wp1035080"> </a><div class="pSmartList1"><li>The SAME SORT AREA clause indicates that the same memory should be used for each <em class="cEmphasis">file</em>.  Because ACUCOBOL-GT dynamically allocates memory to sort files as needed, and then discards the memory when finished, this phrase is treated as commentary by the compiler.  </li></div>
+<a name="wp1035081"> </a><div class="pSmartList1"><li>The MULTIPLE FILE TAPE clause is treated as commentary.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

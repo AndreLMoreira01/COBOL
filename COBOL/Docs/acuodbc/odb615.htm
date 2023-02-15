@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:19" />
+  <title>6.3.6  HIDDEN Directive</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb6.htm">Chapter 6: Mapping COBOL Data Items and Database Fields</a> &gt; <a href="odb69.htm">6.3  Using Directives</a> &gt; </p>
+<a name="wp1036378"> </a><h2 class="pHeading2">
+6.3.6  HIDDEN Directive
+</h2>
+<a name="wp1036383"> </a><p class="pBody">
+The  HIDDEN directive allows you to hide specific data items from end users, while providing normal access to other data items.  When you place this directive immediately before a data item in an FD, that item is hidden from end users.  The HIDDEN directive applies only to the elementary data item it precedes.  Subsequent data items revert to normal read access.  Note that you cannot apply the HIDDEN directive to group items and you cannot hide the key.
+</p>
+<a name="wp1036384"> </a><h3 class="pHeadingRef">
+Syntax
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+$XFD HIDDEN<a name="wp1036385"> </a>
+</pre></div>
+<a name="wp1036386"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( XFD HIDDEN ))<a name="wp1036387"> </a>
+</pre></div>
+<a name="wp1036388"> </a><p class="pBody">
+In the following FD, &quot;fee&quot; is hidden from users in the resulting table.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+       FILE SECTION.<a name="wp1042274"> </a>
+       FD  qa-file.<a name="wp1042275"> </a>
+      $XFD COMMENT  This sample file demonstrates directives.<a name="wp1042276"> </a>
+       01  qa-record.<a name="wp1042277"> </a>
+           03  animal-info.<a name="wp1036389"> </a>
+               05  patient-id                  pic x(5).<a name="wp1036393"> </a>
+               05  atype                       pic x.<a name="wp1036394"> </a>
+               05  ctype redefines atype       pic x.<a name="wp1036395"> </a>
+               05  dtype redefines atype       pic x.<a name="wp1036396"> </a>
+               05  otype redefines atype       pic x.<a name="wp1036397"> </a>
+           03  owner-info.<a name="wp1036398"> </a>
+               05  phone                       pic x(8).<a name="wp1036399"> </a>
+               05  owner                       pic x(30). <a name="wp1036400"> </a>
+           03  financial.<a name="wp1036401"> </a>
+               05  acct_no.<a name="wp1036402"> </a>
+                   10  year                    pic x(2).<a name="wp1036403"> </a>
+                   10  seq_no                  pic x(4).<a name="wp1036404"> </a>
+      *(( XFD DATE=YYYYMMDD, USE GROUP ))<a name="wp1042280"> </a>
+               05  last_visit.<a name="wp1036405"> </a>
+                   10  yyyy                    pic 9(4).<a name="wp1042655"> </a>
+                   10  mm                      pic 9(2).<a name="wp1036406"> </a>
+                   10  dd                      pic 9(2).<a name="wp1036407"> </a>
+      $XFD HIDDEN<a name="wp1042662"> </a>
+               05  fee                         pic s9(5)v99.<a name="wp1036409"> </a>
+      $XFD DATE=YYYYMMDD<a name="wp1042292"> </a>
+               05  date_paid                   pic 9(8).<a name="wp1036411"> </a>
+</pre></div>
+<a name="wp1036412"> </a><p class="pBody">
+Note that in the resulting table, the &quot;fee&quot; column no longer appears:</p><div><img src="images/hidden.gif" height="251" width="396" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1036414"> </a><p class="pBody">
+This directive is useful for hiding data like passwords, telephone numbers, and financial information -- whatever information you do not want users to&#160;see.
+</p>
+<a name="wp1036417"> </a><p class="pBody">
+You cannot include a HIDDEN field in a WHENdirective with a TABLENAME clause, due to the complexities of editing or adding records.  In this situation, you must add the data, but since the field is hidden, you cannot see it and could add a value that would cause unexpected results.  See <a  href="odb620.htm#wp1029102">section 6.3.11, &quot;WHEN Directive,&quot;</a> for additional information.
+</p>
+<a name="wp1036422"> </a><p class="pBody">
+If you add the HIDDEN directive to the FD, you should use the <b class="cBold">xfdcrypt</b> utility included with AcuODBC to encrypt your XFDs.  Otherwise, users could remove this directive to gain access to privileged fields.  See <a  href="odb622.htm#wp1029382">section 6.4, &quot;Encrypting XFD Files,&quot;</a> for more information.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

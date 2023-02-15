@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:09" />
+  <title>3.1.9.1  Generating a report</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt13.htm"><br />Chapter 3:  Debugger and Utilities</a> &gt; <a href="gt132.htm">3.1 Runtime Debugger</a> &gt; <a href="gt1326.htm">3.1.9  Using the Abend Diagnostic Report (ADR)</a> &gt; </p>
+<a name="wp1096954"> </a><h2 class="pHeading3">
+3.1.9.1  Generating a report
+</h2>
+<a name="wp1097215"> </a><p class="pBody">
+To generate an Abend Diagnostic Report, you must set the ACU_DUMP configuration variable to &quot;1&quot; (on, true, yes).  The default value for the configuration variable is &quot;0&quot; (off, false, no).
+</p>
+<a name="wp1097216"> </a><p class="pBody">
+In order to add detailed information to the report, programs must be compiled with line number (&quot;-Gl&quot;) and symbol table (&quot;-Gs&quot;) information.  The &quot;-Ga&quot; compiler option may also be used, but since this includes full source information in the compiled object, it results in a much larger object file on disk.
+</p>
+<a name="wp1097217"> </a><h3 class="pHeadingRef">
+Configuration variables
+</h3>
+<a name="wp1097218"> </a><p class="pBody">
+In addition to ACU_DUMP, there are three other configuration variables that affect creation of an ADR.
+</p>
+<a name="wp1097219"> </a><h5 class="pHeading4">
+ACU_DUMP_FILE
+</h5>
+<a name="wp1097220"> </a><p class="pBody">
+This configuration file entry determines the name of the report file.  It allows two special parameters:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1097221"> </a><div class="pSmartList2"><li>If the file name starts with a plus sign (&quot;+&quot;), the report is appended to the specified file.  By default, a new report overwrites the specified file.  Note that the &quot;+&quot; character does not actually appear in the file name.</li></div>
+<a name="wp1097222"> </a><div class="pSmartList2"><li>If the name contains the string &quot;%p&quot;, when the report is generated, that string is replaced with the process ID (PID) of the runtime from which the report originates.</li></div>
+</ul></div>
+</ul></div>
+<a name="wp1097223"> </a><p class="pBody">
+The default value for ACU_DUMP_FILE is &quot;acudump.%p&quot;.
+</p>
+<a name="wp1097224"> </a><h5 class="pHeading4">
+ACU_DUMP_WIDTH
+</h5>
+<a name="wp1097225"> </a><p class="pBody">
+This configuration variable controls the width of the report and has a default value of 80 characters.  The minimum allowed value is 79 and the maximum is 2048.  Note that because the report uses dynamically computed columns for its hexadecimal data, making the report very wide can reduce readability by introducing excessive white space.
+</p>
+<a name="wp1097226"> </a><h5 class="pHeading4">
+ACU_DUMP_TABLE_LIMIT
+</h5>
+<a name="wp1097227"> </a><p class="pBody">
+This configuration variable limits how many elements of each table item to list.  The default value is 1000.  Note that if you increase this value substantially, and if you have tables that allow for large numbers of elements, you may get very large reports.
+</p>
+<a name="wp1097228"> </a><p class="pBody">
+In the following example, ACU_DUMP_TABLE_LIMIT is set to 5:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 MY-TABLE-R                     = (group)<a name="wp1097229"> </a>
+05 TABLE-ENTRY(1)                 =     1          h20202020 31<a name="wp1097230"> </a>
+05 TABLE-ENTRY(2)                 =     2          h20202020 32<a name="wp1097231"> </a>
+05 TABLE-ENTRY(3)                 =     3          h20202020 33<a name="wp1097232"> </a>
+05 TABLE-ENTRY(4)                 =     4          h20202020 34<a name="wp1097233"> </a>
+05 TABLE-ENTRY(5)                 =     5          h20202020 35<a name="wp1097234"> </a>
+Remaining table items suppressed due to ACU-DUMP-TABLE-LIMIT setting<a name="wp1097235"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

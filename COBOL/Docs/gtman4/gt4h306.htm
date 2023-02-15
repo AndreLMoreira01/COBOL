@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:24" />
+  <title>V_LOCK_METHOD </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4h.htm">Appendix H: Configuration File Entries</a> &gt; <a href="gt4h3.htm">H.2  Configuration File Entries</a> &gt; </p>
+<a name="wp1037738"> </a><h2 class="pHeading2">
+V_LOCK_METHOD 
+</h2>
+<a name="wp1037743"> </a><p class="pBody">
+This variable selects which locking method Vision will use to control simultaneous access to indexed files.  It affects only the Vision file system, and only files directly accessed by the runtime (it does not apply to files accessed via AcuServer).
+</p>
+<a name="wp1037744"> </a><p class="pBody">
+The default setting of &quot;0&quot; (zero) causes Vision to lock the first byte of the file for every access to the file (both reads and updates).  This ensures that the process is not interfered with by another process.  This locking method is always used by Vision Version 2 files.
+</p>
+<a name="wp1037745"> </a><p class="pBody">
+Setting this variable to &quot;1&quot; causes Vision to lock the first byte of the file for all operations except random READs or READ NEXTs.  These two operations proceed without the lock.  Instead they perform some additional reads of the file, to ensure that they get consistent results.  If they get inconsistent results, they are retried, this time locking the first byte as other operations do.  This locking method is available only for Vision Version 3, 4, and 5 files.
+</p>
+<a name="wp1037746"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This variable must have the same setting for all the runtimes accessing a file, whether they are reading or writing to it.  For example, if a runtime set with V_LOCK_METHOD=1 is reading from a file, any runtimes that are writing to that same file must also have V_LOCK_METHOD set to 1.
+<hr />
+</p>
+<a name="wp1037747"> </a><p class="pBody">
+Lock method &quot;1&quot; can produce better performance on some machines.  These machines fall into two categories:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1037748"> </a><div class="pSmartList1"><li>Machines that take a long time to place a lock.</li></div>
+<a name="wp1088157"> </a><div class="pSmartList1"><li>Machines that do not queue lock requests, and are very busy.  In this case, some users typically get good performance, while others get poor performance.</li></div>
+</ul></div>
+<a name="wp1088158"> </a><p class="pBody">
+Setting V_LOCK_METHOD to &quot;1&quot; might help improve performance with Vision Version 3, 4, or 5 files.  For example, setting V_LOCK_METHOD to &quot;1&quot; can be helpful on some Windows networks.  A peer-to-peer network of Windows 98 machines can exhibit problems reading Vision files when a process performs a tight read loop.  The problem usually surfaces as either an error 30,33 or an unexpected error 99.  This occurs because the runtime is unable to place a lock on the header of the file after 400 attempts over a 20-second period.  For other networks, setting V_LOCK_METHOD to &quot;1&quot; can substantially reduce the number of lock requests made by the runtime and can often resolve these problems. 
+</p>
+<a name="wp1037752"> </a><p class="pBody">
+To get statistics about header locks, select Trace Files level &quot;3&quot; in the debugger (for example, &quot;TF 3&quot;).  These statistics print on the runtime's error output each time a Vision file is closed.  They cover the operations in that file since it was last opened.  You can also view these statistics (without the full trace) by adding &quot;256&quot; to the lock method chosen (for example, setting V_LOCK_METHOD to &quot;257&quot; selects method &quot;1&quot; and prints statistics).  
+</p>
+<a name="wp1037753"> </a><p class="pBody">
+Setting the V_LOCK_METHOD variable to &quot;2&quot; enables &quot;asynchronous reads&quot; of Vision files.  This option is intended to further reduce the number of file locks required to perform random READs and READ NEXTs.  
+</p>
+<a name="wp1037754"> </a><p class="pBody">
+The advantage of the &quot;2&quot; setting is that it is less likely to require retrying a READ with a lock when a file is undergoing heavy modification.  With V_LOCK_METHOD=1, the READ is retried with a lock whenever it detects that the file has been updated in any way; with V_LOCK_METHOD=2, the READ is retried only when Vision encounters inconsistent data while traversing the index tree or reading the record data.  This leads to less locks and therefore greater performance for machines with slow locking functions.
+</p>
+<a name="wp1037755"> </a><p class="pBody">
+V_LOCK_METHOD=2 works only for Vision 4 and 5 files.
+</p>
+<a name="wp1037756"> </a><p class="pBody">
+If any process reading a particular file is using V_LOCK_METHOD=2, all other processes (runtimes) updating that file must be ACUCOBOL Version 5.0.0 or greater.  This is because Version 5.0.0 contains changes that affect the way Vision updates the tree structure of its files.  These changes allow for greater consistency of the tree from the viewpoint of an asynchronous reader.  This requirement is not enforced by Vision, however, so it is important for the users to pay careful attention to the versions of programs accessing their files to avoid receiving erroneous data.  Therefore, before enabling this option, make sure that all runtimes updating files on which asynchronous reads are to be performed (V_LOCK_METHOD=2) are Version 5.0.0 or later. <b class="cBold"> </b>
+</p>
+<a name="wp1037758"> </a><p class="pBody">
+As with V_LOCK_METHOD=1, adding 256 to the value of the V_LOCK_METHOD setting causes statistics about header locks to be printed to the runtime's error output each time a Vision file is closed.  So, setting V_LOCK_METHOD=258 selects method 2 and turns on the header lock statistics.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

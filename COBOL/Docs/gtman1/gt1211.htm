@@ -1,0 +1,621 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.1.9  Data Storage Options</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt122.htm">2.1 Using the Compiler</a> &gt; </p>
+<a name="wp1032646"> </a><h2 class="pHeading2">
+2.1.9  Data Storage Options
+</h2>
+<a name="wp1132006"> </a><p class="pBody">
+For more information about the format of a data item in memory, see section 5.7.1.8 in Book&#160;3, <em class="cEmphasis">Reference Manual</em>.
+</p>
+<a name="wp1132398"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1132009"> </a><p class="pCellBody">
+<b class="cBold">-Da<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</b>
+</p>
+</td>
+    <td><a name="wp1132014"> </a><p class="pCellBody">
+Allows you to specify the data alignment modulus for level 01 and level 77 data items.  Normally, level 01 and level 77 data items are aligned on a 4-byte boundary (modulus 4).  This is optimal for 32-bit architectures.  You can specify an alternate alignment boundary by following this option with the desired modulus.  This should be specified as a single digit that immediately follows the &quot;-Da&quot; as part of the same argument.  For example, &quot;-Da8&quot; specifies that data should be aligned on eight-byte boundaries, which can provide improved performance on a 64-bit machine. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132016"> </a><p class="pCellBody">
+<b class="cBold">-Db</b>
+</p>
+</td>
+    <td><a name="wp1132024"> </a><p class="pCellBody">
+Causes COMPUTATIONAL data items to be treated as if they were declared as BINARY data items.  This is the default when you are using VAX COBOL compatibility mode.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132026"> </a><p class="pCellBody">
+<b class="cBold">-De</b>
+</p>
+</td>
+    <td><a name="wp1132030"> </a><p class="pCellBody">
+Causes the compiler to generate MOVE code for all LINKAGE data items that works regardless of the alignment of the data item.  The move is, however, less efficient.  Please note that this option should be used only if the linkage is given values using the SET ADDRESS OF verb.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132033"> </a><p class="pCellBody">
+<b class="cBold">-Dca<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</b>
+</p>
+</td>
+    <td><a name="wp1132035"> </a><p class="pCellBody">
+This selects the ACUCOBOL-GT storage convention.  It is the default setting.  This convention is also compatible with data produced by RM/COBOL (<em class="cEmphasis">not</em> RM/COBOL-85) and previous versions of ACUCOBOL-GT.  It also produces slightly faster code.  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative"></p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1132038"> </a><p class="pCellBody">
+<b class="cBold">-Dcb</b>
+</p>
+</td>
+    <td><a name="wp1132041"> </a><p class="pCellBody">
+This selects the MBP COBOL sign storage convention.  See Book 3, section 5.7.1.8 for the specifics of sign storage.
+</p>
+<a name="wp1132042"> </a><p class="pCellBody">
+Note that the MBP COBOL sign storage convention for USAGE DISPLAY directly conflicts with that used by IBM COBOL and some other COBOLs.  As a result, signed USAGE DISPLAY items in the MBP format are correctly understood only when the program is compiled with &quot;-Dcb&quot;.  This is unlike the other sign conventions in which the runtime can usually extract the correct value even when a mismatched sign convention is specified at compile time. 
+</p>
+<a name="wp1132043"> </a><p class="pCellBody">
+Also note that MBP COBOL does not have the COMP-2 storage type.  The convention that ACUCOBOL-GT implements (Positive: x'0C'; Negative: x'0D') was chosen because MBP COBOL most closely matches the sign storage of other COBOLs that use that convention.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132045"> </a><p class="pCellBody">
+<b class="cBold">-Dci</b>
+</p>
+</td>
+    <td><a name="wp1132051"> </a><p class="pCellBody">
+This selects the IBM storage convention.  It is compatible with IBM COBOL, as well as with several others including RM/COBOL-85.  It is also compatible with the X/Open COBOL standard. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132053"> </a><p class="pCellBody">
+<b class="cBold">-Dcm</b>
+</p>
+</td>
+    <td><a name="wp1132058"> </a><p class="pCellBody">
+This selects the Micro Focus storage convention.  It is compatible with Micro Focus COBOL when the Micro Focus &quot;ASCII&quot; sign-storage option is used (this is the Micro Focus default). 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132060"> </a><p class="pCellBody">
+<b class="cBold">-Dcn</b>
+</p>
+</td>
+    <td><a name="wp1132064"> </a><p class="pCellBody">
+Causes a different numeric format to be used. The format is the same as the one used when the &quot;-Dci&quot; option is used, except that positive COMP-3 items use &quot;x0B&quot; as the positive sign value instead of &quot;x0C&quot;.  This option is compatible with NCR COBOL.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132066"> </a><p class="pCellBody">
+<b class="cBold">-Dcr</b>
+</p>
+</td>
+    <td><a name="wp1132069"> </a><p class="pCellBody">
+This selects the Realia sign storage convention.  Sign information for S9(<em class="cEmphasis">n</em>) variables is stored using the conventions for Realia COBOL, and their conversion to binary decimal is the same as that performed by the Realia compiler.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132071"> </a><p class="pCellBody">
+<b class="cBold">-Dcv</b>
+</p>
+</td>
+    <td><a name="wp1132076"> </a><p class="pCellBody">
+This creates numeric sign formats that are compatible with VAX COBOL.  These are identical to the IBM formats, except that unsigned COMP-3 fields place &quot;x0C&quot; in the sign position, instead of &quot;x0F&quot;.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132078"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1132080"> </a><p class="pCellBody">
+The ANSI definition of COBOL does not state how signs should be stored in numeric fields (except for the case of SIGN IS SEPARATE).  As a result, different COBOL vendors use different conventions.  By using the options &quot;-Dca&quot;, &quot;-Dci&quot;, &quot;-Dcm&quot;, &quot;-Dcn&quot;, or &quot;-Dcv&quot;, you may select alternate sign-storage conventions.  Doing so is useful in the following cases:
+</p>
+<a name="wp1132081"> </a><p class="pCellBody">
+<b class="cBold">If you need to export data</b> to another COBOL system and need to match its sign-storage convention.
+</p>
+<a name="wp1132082"> </a><p class="pCellBody">
+<b class="cBold">If you are importing data </b>from another COBOL system, and that data contains key fields with signed data.  Keys are treated alphanumerically,  so if you use the incorrect sign-storage convention, ACUCOBOL-GT will not find a matching key when it is doing a READ. 
+</p>
+<a name="wp1132083"> </a><p class="pCellBody">
+The storage-convention affects how data appears in USAGE DISPLAY, COMP-2 and COMP-3 data types.  For additional information and tables, see Book 3, <em class="cEmphasis">Reference Manual, </em>section 5.7.1.8, &quot;USAGE clause.&quot;
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132085"> </a><p class="pCellBody">
+<b class="cBold">-Dd31</b>
+</p>
+</td>
+    <td><a name="wp1132089"> </a><p class="pCellBody">
+This option supports data items with up to 31-digits or 16 bytes. When this option is in effect,  you may use as many as 31 &quot;X&quot; or &quot;9&quot; symbols in a PIC, instead of the usual 18. The maximum number of bytes in a COMP-X or COMP-N data item, whose picture contains only &quot;X&quot; symbols, is 16, instead of the usual 8. Intermediate results are calculated to 33 digits instead of the usual 20.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132091"> </a><p class="pCellBody">
+<b class="cBold">-Df</b>
+</p>
+</td>
+    <td><a name="wp1132098"> </a><p class="pCellBody">
+This option changes the way the compiler treats data items declared as COMP-1 and COMP-2. 
+</p>
+<a name="wp1132103"> </a><p class="pCellBody">
+Some compilers use COMP-1 and COMP-2 to specify single and double precision floating point data items.  However, ACUCOBOL-GT assigns a different meaning to COMP-1 and COMP-2 and uses FLOAT and DOUBLE to specify floating point data items.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1132105"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1132107"> </a><p class="pCellBody">
+When the &quot;-Df&quot; option is used, the compiler treats data items declared as COMP-1 as if they were declared FLOAT and data items declared as COMP-2 as if they were declared DOUBLE.  With the &quot;-Df&quot; option, you have the following correspondence:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+COMP-1  FLOAT    single precision<a name="wp1132108"> </a>
+COMP-2  DOUBLE   double precision<a name="wp1132109"> </a>
+</pre></div>
+<a name="wp1132110"> </a><p class="pCellBody">
+The &quot;-Df&quot; option makes it easier to compile code originally written for another compiler--one that used COMP-1 and COMP-2 to specify floating point data items.  The &quot;-Df&quot; option lets you compile such code without having to change COMP-1 and COMP-2 to FLOAT and DOUBLE.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132112"> </a><p class="pCellBody">
+<b class="cBold">-Di</b>
+</p>
+</td>
+    <td><a name="wp1132116"> </a><p class="pCellBody">
+This option causes the compiler to initialize Working-Storage.  Normally, the compiler will initialize all data items to spaces or the value specified with the &quot;-Dv&quot; option, except for those items given a VALUE clause.  If this option is specified, data items are initialized according to their type: 
+</p>
+<a name="wp1132117"> </a><p class="pCellBody">
+<b class="cBold">Alphabetic, alphanumeric, alphanumeric edited, and numeric edited items</b> are initialized to spaces.
+</p>
+<a name="wp1132118"> </a><p class="pCellBody">
+<b class="cBold">Numeric items</b> are initialized to zero.
+</p>
+<a name="wp1132119"> </a><p class="pCellBody">
+<b class="cBold">Pointer items</b> are initialized to null.
+</p>
+<a name="wp1132120"> </a><p class="pCellBody">
+<b class="cBold">Index items</b> are initialized to the value 1.
+</p>
+<a name="wp1132121"> </a><p class="pCellBody">
+Automatic initialization applies only to Working-Storage and does not apply to any item that (a) is given a VALUE clause, (b) is EXTERNAL, or (c) is subordinate to a REDEFINES phrase.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132123"> </a><p class="pCellBody">
+<b class="cBold">-Dl</b>
+</p>
+</td>
+    <td><a name="wp1132131"> </a><p class="pCellBody">
+Allows you to limit the maximum alignment modulus that will be used for SYNCHRONIZED data items.  Normally, a synchronized data item is aligned on a 2-, 4-, or 8-byte boundary depending on its type.  This option allows you to specify an upper bound to the modulus used.  This is specified as a single digit that immediately follows the &quot;-Dl&quot; as part of the same argument.  For example, &quot;-Dl4&quot; specifies that the maximum synchronization boundary is a 4-byte boundary.  If you want to make programs that are compliant with the 88/Open COBOL specification, you should specify &quot;-Dl4&quot;.  This option can be specified in a compiler directive.  <a  href="gt1222.htm#wp1090177">See <span style="font-family: Arial, Verdana, Helvetica, sans-serif">section 2.1.19, &quot;Compiler Directives.&quot; </span></a>
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132136"> </a><p class="pCellBody">
+<b class="cBold">-Dm</b>
+</p>
+</td>
+    <td><a name="wp1132141"> </a><p class="pCellBody">
+Causes any data item whose underlying type is binary to be stored in the minimum number of bytes needed to hold it.  Normally, binary types are stored in two, four, or eight bytes.  This option allows storage in any number of bytes ranging from one to eight.  The exact number of bytes used for a particular data item is described under the USAGE clause in the ACUCOBOL-GT <em class="cEmphasis">Reference Manual</em>. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132143"> </a><p class="pCellBody">
+<b class="cBold">-Ds</b>
+</p>
+</td>
+    <td><a name="wp1132148"> </a><p class="pCellBody">
+This causes USAGE DISPLAY numeric items with no SIGN clause to be treated as if they were described with the SIGN IS TRAILING SEPARATE clause. Several versions of RM/COBOL behave this way (all versions before 2.0, and some versions afterward). 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132151"> </a><p class="pCellBody">
+<b class="cBold">-Dv</b>
+</p>
+</td>
+    <td><a name="wp1132153"> </a><p class="pCellBody">
+Allows you to specify the default byte (initial value) used to initialize any data item not otherwise initialized when the program is loaded.  The option must be followed by an equals sign (&quot;=&quot;) and the decimal value of the byte to use (for all current platforms, this is the ASCII value of the desired character).  For example, to fill memory with the NULL character, use &quot;-Dv=0&quot;.  To fill memory with the ASCII space character, use &quot;-Dv=&quot;32&quot;.
+</p>
+<a name="wp1132154"> </a><p class="pCellBody">
+The default value is the space character.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132156"> </a><p class="pCellBody">
+<b class="cBold">-Dw</b>
+</p>
+</td>
+    <td><a name="wp1132161"> </a><p class="pCellBody">
+Lets you modify the definition of certain data types.  These data types are generally dependent on the host machine's native word size.  You may use this option to: 
+</p>
+<a name="wp1132162"> </a><p class="pCellBody">
+1.  Maintain compatibility with COBOL source code written specifically for 32-bit machines (for example, to set the size of USAGE POINTER data items to 4 bytes).
+</p>
+<a name="wp1132163"> </a><p class="pCellBody">
+2.  Make it easier to match a C structure for a particular machine.
+</p>
+<a name="wp1132164"> </a><p class="pCellBody">
+3.  Optimize your data storage for a particular class of machines. 
+</p>
+<a name="wp1132165"> </a><p class="pCellBody">
+&quot;-Dw&quot; selects the maximum word size of the set of machines that you expect to run on.  You follow this option with the maximum word size you desire, expressed as the number of bits per word.  Currently, the legal forms are &quot;-Dw32&quot; and &quot;-Dw64&quot;.  
+</p>
+<a name="wp1132166"> </a><p class="pCellBody">
+This option determines the <em class="cEmphasis">maximum</em> word size, not the exact word size. 
+</p>
+<a name="wp1132167"> </a><p class="pCellBody">
+The &quot;-Dw&quot; option affects the size of the following data types:<br /><br />SIGNED-SHORT<br />SIGNED-INT<br />SIGNED-LONG<br /> POINTER<br />UNSIGNED-SHORT<br />UNSIGNED-INT<br />UNSIGNED-LONG
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1132169"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1132171"> </a><p class="pCellBody">
+It also affects the size of the RETURN-CODE special register.  
+</p>
+<a name="wp1132173"> </a><p class="pCellBody">
+Selecting a maximum word size does not inhibit the portability of your code.  Instead, it limits the size of certain data items.  If you attempt to use a data item that is too small for a particular machine, you may lose precision.  For example, USAGE POINTER data items are stored in 4 bytes if you use &quot;-Dw32&quot;.  If you attempt to run a program that stores an address in 4 bytes on a 64-bit machine, you may lose some of the address.  While the program will technically run, the results may not be useful.
+</p>
+<a name="wp1132174"> </a><p class="pCellBody">
+For maximum portability, you should use &quot;-Dw64&quot;.  This will allow your code to run on all machines that run ACUCOBOL-GT.  However, if your program will call Windows DLLs, you should use &quot;-Dw32&quot;.  For strict compatibility with ACUCOBOL-85 Version 2.2 or earlier, you should use &quot;-Dw32&quot;.  For programs prior to Version 2.3, the only real effect of shifting from &quot;-Dw32&quot; to &quot;-Dw64&quot; is that USAGE POINTER data types expand from 4 bytes to 8 bytes.  If your program does not depend on the size of POINTER data items, then you should be able to use &quot;-Dw64&quot; with no harm.
+</p>
+<a name="wp1132175"> </a><p class="pCellBody">
+If you use any of the &quot;-C&quot; compile options that establish source compatibility with ACUCOBOL-85 Version 2.2 or earlier (e.g. &quot;-C21&quot;), then the default setting is &quot;-Dw32&quot;.  If you do not use these options, then the default setting is &quot;-Dw64&quot;.  You may override the default by using the &quot;-Dw&quot; option.  For example, to compile for source compatibility with Version 2.1, but to set the target architecture to 64 bits, you would use &quot;-C21 -Dw64&quot;.  In order to use &quot;-Dw64&quot;, you must use a Version 2.3 or later runtime.
+</p>
+<a name="wp1132176"> </a><p class="pCellBody">
+See the related information on USAGE types in Book 3, <em class="cEmphasis">Reference Manual</em>, section 5.7.1.8.  See also the information on RETURN-CODE and support for 64-bit architectures in section C.4 in Book 4, <em class="cEmphasis">Appendices</em>.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132178"> </a><p class="pCellBody">
+<b class="cBold">-Dy</b>
+</p>
+</td>
+    <td><a name="wp1132184"> </a><p class="pCellBody">
+Specifies that all data items whose underlying representation is binary should be treated as if they were described as SYNCHRONIZED.  This option is <em class="cEmphasis">not</em> recommended unless you have a particular need for it.  ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>is optimized for non-synchronized handling of binary data, so synchronization will usually not have beneficial results.  Note, however, that you must specify this option if you want to make programs that are compliant with the 88/Open COBOL specification.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132186"> </a><p class="pCellBody">
+<b class="cBold">-Dz</b>
+</p>
+</td>
+    <td><a name="wp1132191"> </a><p class="pCellBody">
+This option causes the compiler to modify its size checking rules for numeric items.  Instead of computing size error by examining the number of 9's in an item's picture, the compiler computes size error by examining the actual storage for that item.  For example, normally a PIC 99 BINARY data item cannot hold a number larger than 99, although the storage for the item can hold a value up to 255.  When &quot;-Dz&quot; is used, ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>will not cause a size error until a value greater than 255 is moved to this item.  This option also affects truncation in MOVE statements and implied moves. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132193"> </a><p class="pCellBody">
+<b class="cBold">-D1</b>
+</p>
+</td>
+    <td><a name="wp1132197"> </a><p class="pCellBody">
+Causes any data item whose underlying type is binary to be stored in one byte if that data item has only one or two digits.  Normally, such a data item would be stored in two bytes. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132199"> </a><p class="pCellBody">
+<b class="cBold">-D2</b>
+</p>
+</td>
+    <td><a name="wp1132205"> </a><p class="pCellBody">
+Causes COMPUTATIONAL data items to be treated as if they were declared as COMPUTATIONAL-2.  This is the default when you are using RM/COBOL compatibility mode. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132207"> </a><p class="pCellBody">
+<b class="cBold">-D5</b>
+</p>
+</td>
+    <td><a name="wp1132213"> </a><p class="pCellBody">
+Causes data items declared as BINARY to be treated as if they were declared as COMPUTATIONAL-5.  This causes the values to be stored in the host machine's native byte-ordering instead of the machine-independent byte-ordering normally used. This option is usually advised when converting Micro Focus applications on UNIX/Linux hosts.  This option should be used with caution, however, because it can lead to programs that are not portable. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132215"> </a><p class="pCellBody">
+<b class="cBold">-D6</b>
+</p>
+</td>
+    <td><a name="wp1132221"> </a><p class="pCellBody">
+Causes unsigned data items declared as PACKED-DECIMAL to be treated as if they were declared as COMPUTATIONAL-6.  This saves one-half of a byte because the compiler will not generate any storage for the sign. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132223"> </a><p class="pCellBody">
+<b class="cBold">-D7</b>
+</p>
+</td>
+    <td><a name="wp1132227"> </a><p class="pCellBody">
+Allows you to match one of the binary storage conventions used by Micro Focus COBOL.  That convention is identical to the ACUCOBOL-GT &quot;-Dm&quot; convention, except that a PIC 9(7) data item (unsigned) is stored in 3 bytes instead of 4 and a PIC 9(12) data item (unsigned) is stored in 5 bytes instead of 6.  When you use this option, the size of a binary item is determined as follows (the value in the table is the number of bytes occupied by the data item):
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative"></p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1132230"> </a>
+Number of 9's in PIC
+
+</th>
+    <th><a name="wp1132232"> </a>
+Signed Storage
+
+</th>
+    <th><a name="wp1132234"> </a>
+Unsigned Storage
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132236"> </a><p class="pCellBody">
+1 - 2
+</p>
+</td>
+    <td><a name="wp1132238"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1132240"> </a><p class="pCellBody">
+1
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132242"> </a><p class="pCellBody">
+3 - 4
+</p>
+</td>
+    <td><a name="wp1132244"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1132246"> </a><p class="pCellBody">
+2
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132248"> </a><p class="pCellBody">
+5 - 6
+</p>
+</td>
+    <td><a name="wp1132250"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1132252"> </a><p class="pCellBody">
+3
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132254"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1132256"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1132258"> </a><p class="pCellBody">
+3
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132260"> </a><p class="pCellBody">
+8 - 9
+</p>
+</td>
+    <td><a name="wp1132262"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1132264"> </a><p class="pCellBody">
+4
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132266"> </a><p class="pCellBody">
+10 - 11
+</p>
+</td>
+    <td><a name="wp1132268"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1132270"> </a><p class="pCellBody">
+5
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132272"> </a><p class="pCellBody">
+12
+</p>
+</td>
+    <td><a name="wp1132274"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1132276"> </a><p class="pCellBody">
+5
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132278"> </a><p class="pCellBody">
+13 - 14
+</p>
+</td>
+    <td><a name="wp1132280"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1132282"> </a><p class="pCellBody">
+6
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132284"> </a><p class="pCellBody">
+15 - 16
+</p>
+</td>
+    <td><a name="wp1132286"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1132288"> </a><p class="pCellBody">
+7
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132290"> </a><p class="pCellBody">
+17 - 18
+</p>
+</td>
+    <td><a name="wp1132292"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1132294"> </a><p class="pCellBody">
+8
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative"></p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1132297"> </a><p class="pCellBody">
+<b class="cBold">--lastWSDataSeg=#<br /></b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1132299"> </a><p class="pCellBody">
+&quot;#&quot; is an integer between &quot;1&quot; and &quot;32&quot;, inclusive.
+</p>
+<a name="wp1132300"> </a><p class="pCellBody">
+This option sets the data segment number that will be the last one used by data items contained in Working-Storage.  
+</p>
+<a name="wp1132301"> </a><p class="pCellBody">
+The compiler allocates up to 32 data segments per program, each of which can be up to 64 KB in size.  Data outside of Working-Storage must fit within these segments.  Data contained in Working-Storage need not, but it can be slightly more efficient to place Working-Storage data within these segments.  The compiler normally places Working-Storage data within these segments until it places some in the segment identified by &quot;--lastWSDataSeg&quot;.  After that point, the compiler places all Working-Storage data into a separate address space (identified by addresses larger than x&quot;40000000&quot; in the symbol table listing).  This reserves space for other data items that follow Working-Storage, such as the Screen Section or literals found in the Procedure Division.  
+</p>
+<a name="wp1132302"> </a><p class="pCellBody">
+The default setting is &quot;24&quot;.  This reserves 8 segments (512 KB) for use by the Screen Section and literals.  This is normally much more than needed.  If it is not enough, then setting &quot;--lastWSDataSeq&quot; to a lower value will reserve more space.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1132304"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1132306"> </a><p class="pCellBody">
+When compiling for Version 6.0 or earlier object format, the default setting is &quot;32&quot;.  This causes all of Working-Storage to be allocated in data segments.  This sets an absolute limit of about two MB on the amount of &quot;small&quot; data that a program can allocate.  The term &quot;small&quot; in this sense means data items individually smaller than 64 KB.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132308"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1132310"> </a><p class="pCellBody">
+Acucorp recommends leaving this option at its default value unless you receive the error message &quot;<em class="cEmphasis">Program exceeds 32 segments</em>&quot;.  Should this occur, try setting &quot;--lastWSDataSeq&quot; to a value smaller than the default of &quot;24&quot;. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132312"> </a><p class="pCellBody">
+<b class="cBold">--noAlignLit</b>
+</p>
+</td>
+    <td><a name="wp1132314"> </a><p class="pCellBody">
+Inhibits use of the default algorithm for aligning  literals in memory.  Use the &quot;-Da&quot; option (described above) to specify an alignment modulus other than the default of &quot;4.&quot;
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132316"> </a><p class="pCellBody">
+<b class="cBold">--TruncANSI</b>
+</p>
+</td>
+    <td><a name="wp1132318"> </a><p class="pCellBody">
+Causes truncation in binary to the capacity of the allocated storage for COMP-5 items.  This matches the effect of specifying the TRUNC&quot;ANSI&quot; directive with Micro Focus.  (By default, ACUCOBOL-GT truncates in decimal to the number of digits given in the PICTURE clause on arithmetic and non-arithmetic stores into COMP-5 items.)  Note that the &quot;-Dz&quot; option overrides &quot;--TruncANSI&quot;.  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

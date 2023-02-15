@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:10" />
+  <title>6.1 Overview of Events</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt26.htm">Chapter 6:  Events Reference</a> &gt; </p>
+<a name="wp1026054"> </a><h2 class="pHeading1">
+6.1 Overview of Events
+</h2>
+<a name="wp1026056"> </a><p class="pBody">
+ This chapter describes the events that can be generated when you are using graphical windows and controls in an event-driven environment.  
+</p>
+<a name="wp1026060"> </a><p class="pBody">
+Events are categorized into <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">command</span> events, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">notify</span> events, and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">messages</span>.  Generally speaking, command events correspond to actions taken by the user that the program needs to act on (for example, closing a window or pushing a button).  Notify events generally correspond to informational events that the program may not have to act on.  Messages pass information to a screen control's event procedure.  This division is somewhat arbitrary, but corresponds to the most common situations.  
+</p>
+<a name="wp1026066"> </a><p class="pBody">
+When a command or notify event occurs, the runtime system assigns a value to the EVENT STATUS data item and then terminates the current ACCEPT with an exception value of &quot;96&quot;.  Note that the termination occurs even if the particular ACCEPT statement does not normally allow exceptions.  The program should examine the EVENT STATUS data item to determine what happened.  
+</p>
+<a name="wp1026067"> </a><p class="pBody">
+Messages are different from other events, because they do not terminate the current ACCEPT.  Messages are sent only to a control's event procedure.  (See section 5.9.6, Book 3, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Reference Manual</span>, for a detailed discussion of event procedures.)  
+</p>
+<a name="wp1026068"> </a><p class="pBody">
+The EVENT STATUS phrase is described in section 4.2.3, Book 3, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Reference Manual</span>.  The EVENT STATUS data item should be defined as follows: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  EVENT-STATUS.<a name="wp1026069"> </a>
+  03  EVENT-TYPE              PIC X(4) COMP-X.<a name="wp1033739"> </a>
+  03  EVENT-WINDOW-HANDLE     USAGE HANDLE OF WINDOW.<a name="wp1033741"> </a>
+  03  EVENT-CONTROL-HANDLE    USAGE HANDLE.<a name="wp1033743"> </a>
+  03  EVENT-CONTROL-ID        PIC XX COMP-X.<a name="wp1033745"> </a>
+  03  EVENT-DATA-1            USAGE SIGNED-SHORT.<a name="wp1033747"> </a>
+  03  EVENT-DATA-2            USAGE SIGNED-LONG.<a name="wp1033749"> </a>
+  03  EVENT-ACTION            PIC X COMP-X.<a name="wp1033751"> </a>
+</pre></div>
+<a name="wp1026070"> </a><p class="pBody">
+A copy of this data item appears in the COPY file &quot;crtvars.def&quot;.  
+</p>
+<a name="wp1026072"> </a><p class="pBody">
+In the Screen Section, notification events are treated slightly differently from command events.  Normally, when an event triggers an EXCEPTION procedure, the ACCEPT-CONTROL field of the SCREEN CONTROL status item is initialized to &quot;0&quot;.  This causes the ACCEPT statement to terminate after the EXCEPTION procedure completes.  You can cause the ACCEPT statement to continue processing fields by moving alternate values to the ACCEPT-CONTROL data item.  When a notification event triggers an EXCEPTION procedure, the ACCEPT-CONTROL field is initialized to &quot;1&quot; instead.  This causes the ACCEPT statement to continue processing the current field when the EXCEPTION procedure terminates.  This is done as a convenience.  Most notification events can be handled entirely within the EXCEPTION procedure and should not terminate ACCEPT processing.  If you need to terminate the controlling ACCEPT, simply move a &quot;0&quot; to ACCEPT-CONTROL inside the EXCEPTION procedure.
+</p>
+<a name="wp1026449"> </a><p class="pBody">
+Event values can be found in the file &quot;acugui.def&quot;.  The names given in the next section are the level 78 data items found in that file.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.2.3  Reference Modification</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3512.htm">5.2  Data Names</a> &gt; </p>
+<a name="wp1088358"> </a><h2 class="pHeading2">
+5.2.3  Reference Modification
+</h2>
+<a name="wp1034608"> </a><p class="pBody">
+Reference modification is a syntax for referencing a portion (substring) of a data item.  The reference defines a temporary, unique data item.  Reference modification may be used anywhere in the Procedure Division. 
+</p>
+<a name="wp1034611"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This manual entry includes code examples and highlights for first-time users following the General Rules section.
+<hr />
+</p>
+<a name="wp1034612"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+data-name ( leftmost-position : [length] )<a name="wp1034613"> </a>
+</pre></div>
+<a name="wp1034614"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034615"> </a><div class="pSmartList1"><li><em class="cEmphasis">Leftmost-position</em> and <em class="cEmphasis">length</em> are arithmetic expressions.</li></div>
+<a name="wp1034616"> </a><div class="pSmartList1"><li>Unless otherwise specified, reference modification is allowed anywhere a data item of the class alphanumeric is permitted.</li></div>
+<a name="wp1034617"> </a><div class="pSmartList1"><li><em class="cEmphasis">Data-name</em> may be qualified or subscripted.  Reference modification is done after both qualification and subscripting.</li></div>
+</ol></div>
+<a name="wp1034618"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034619"> </a><div class="pSmartList1"><li>Each character of the data item referenced by <em class="cEmphasis">data-name</em> is assigned an ordinal number starting at one for the leftmost position and incrementing by one for each character in the item.</li></div>
+<a name="wp1034620"> </a><div class="pSmartList1"><li>Reference modification for an operand is evaluated as follows:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1034621"> </a><div class="pSmartList2"><li>If subscripting is specified, the reference modification is evaluated immediately after the evaluation of the subscripts.</li></div>
+<a name="wp1034622"> </a><div class="pSmartList2"><li>If subscripting is not specified, the reference modification is evaluated at the time subscripting would have been evaluated if subscripts had been specified.</li></div>
+</ol></div>
+<a name="wp1034623"> </a><div class="pSmartList1"><li>Reference modification creates a unique data item which is a subset of <em class="cEmphasis">data-name</em>.  This unique data item is defined as follows:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1034624"> </a><div class="pSmartList2"><li>The evaluation of <em class="cEmphasis">leftmost-position</em> specifies the leftmost character of the unique data item relative to the start of <em class="cEmphasis">data-name</em>.  Evaluation of <em class="cEmphasis">leftmost-position </em>must result in an integer greater than zero and less than or equal to the number of characters contained in <em class="cEmphasis">data-name</em>.</li></div>
+<a name="wp1034625"> </a><div class="pSmartList2"><li>The evaluation of <em class="cEmphasis">length</em> specifies the size of the unique data item.  The evaluation of <em class="cEmphasis">length</em> must result in a positive integer.  The sum of <em class="cEmphasis">leftmost-position</em> and <em class="cEmphasis">length</em> must be less than or equal to the number of characters contained in <em class="cEmphasis">data-name</em>, plus one.  If <em class="cEmphasis">length</em> is not specified, the unique data item extends through the rightmost character of <em class="cEmphasis">data-name</em>.  </li></div>
+</ol></div>
+<a name="wp1095000"> </a><div class="pSmartList1"><li>The unique data item is considered an elementary data item without the JUSTIFIED clause.  It has the same class and category as <em class="cEmphasis">data-name</em> except that categories numeric, numeric edited, and alphanumeric edited are treated as class and category alphanumeric.</li></div>
+<a name="wp1095551"> </a><div class="pSmartList1"><li>If the reference modification start or length parameter is out of range for the item it references, a runtime error occurs.  How the runtime responds depends on the value of the WARNINGS configuration variable (see Book 4, Appendix I).  By default, the runtime attempts to correct the error (see rule 6, below), and the warning message &quot;Reference modifier range error&quot; is displayed or sent to the error file.  This error is an <em class="cEmphasis">intermediate </em>runtime error that can trigger the execution of installed error procedures (see the entry for CBL_ERROR_PROC in Book 4, Appendix I).</li></div>
+<a name="wp1092399"> </a><div class="pSmartList1"><li>By default, the runtime silently corrects reference modification range errors by applying the following rules:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1093410"> </a><div class="pSmartList2"><li>A start reference less than 1 is treated as 1.  For example, var(0:3) is treated as var(1:3).</li></div>
+<a name="wp1093517"> </a><div class="pSmartList2"><li>A length reference less than 0 is treated as 0.  Moving a zero-byte item is equivalent to moving spaces to the destination item.  A zero-byte destination is not affected by the move.  In a STRING statement, a length of zero for a string source is treated as 1, not 0.  </li></div>
+<a name="wp1091250"> </a><div class="pSmartList2"><li>A start plus length reference that is past the end of the item is treated as meaning to the end of the item.  For example, if the var is a PIC X(5) item, var(4:23) is treated as var(4:2).</li></div>
+</ol></div>
+<a name="wp1092332"> </a><p class="pIndented1">
+The WARNINGS runtime configuration variable provides some control over how the runtime handles reference modification range errors.  See its entry in Appendix H of Book 4.
+</p>
+</ol></div>
+<a name="wp1087326"> </a><p class="pCaution">
+<hr />
+<b>Caution:  </b>Reference modification is allowed on <em class="cEmphasis">source-item</em> and <em class="cEmphasis">dest-item</em> of a Format 1 MOVE statement.  However, when reference modification is used, <em class="cEmphasis">source-item</em> and <em class="cEmphasis">dest-item</em> should not reference the same item (or memory location).  See general rule 7 of the <a  href="gt36124.htm#wp1040554">MOVE Statement</a> in Chapter 6.
+<hr />
+</p>
+<a name="wp1034629"> </a><h3 class="pHeadingRef">
+Code Examples
+</h3>
+<a name="wp1034631"> </a><p class="pBody">
+Reference modification is akin to substringing in other programming languages.  Reference modification is very useful for referencing a component part of a composite string.  For example, it might be used to reference the area code digits of a 10-character string containing a phone number (area code + seven digits):
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  PHONE-NUMBER  PIC 9(10) VALUE 3017728134.<a name="wp1034632"> </a>
+{ . . . }<a name="wp1034633"> </a>
+PHONE-NUMBER (1:3).<a name="wp1034634"> </a>
+*The reference modification begins at position 1<a name="wp1034635"> </a>
+*of string PHONE-NUMBER and has a length of 3.<a name="wp1034636"> </a>
+*The reference modification value = &quot;301&quot;<a name="wp1034637"> </a>
+</pre></div>
+<a name="wp1034638"> </a><p class="pBody">
+For the following code examples, assume these data items:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 ACCOUNT-CODE PIC X(20) VALUE &quot;AB700648xSMITHxxCLA1&quot;.<a name="wp1034639"> </a>
+01 ACCOUNT-NAME PIC X(6)  VALUE ALL SPACES.<a name="wp1034640"> </a>
+01 ACCT-CLASS-1 PIC X(4)  VALUE &quot;CLA1&quot;.<a name="wp1034641"> </a>
+</pre></div>
+<a name="wp1034642"> </a><h3 class="pHeadingRef">
+Code example 1:
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+MOVE ACCOUNT-CODE (10:6) TO ACCOUNT-NAME.<a name="wp1034643"> </a>
+*This reference modification selects the <a name="wp1034644"> </a>
+*characters that form the name portion of <a name="wp1034645"> </a>
+*ACCOUNT-CODE.  The reference starts at position <a name="wp1034646"> </a>
+*10 and has a length of 6 characters.<a name="wp1034647"> </a>
+*The ACCOUNT-CODE substring = &quot;SMITHx&quot;<a name="wp1034648"> </a>
+</pre></div>
+<a name="wp1034649"> </a><h3 class="pHeadingRef">
+Code example 2:
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+IF ACCOUNT-CODE (17:) = ACCT-CLASS-1 THEN<a name="wp1034650"> </a>
+*When the reference modification does not <a name="wp1034651"> </a>
+*include a length, the reference begins at the <a name="wp1034652"> </a>
+*value specified and extends to the end of the <a name="wp1034653"> </a>
+*data item.<a name="wp1097158"> </a>
+*The ACCOUNT-CODE substring = &quot;CLA1&quot;<a name="wp1097159"> </a>
+</pre></div>
+<a name="wp1097160"> </a><h3 class="pHeadingRef">
+Highlights for first-time users
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034658"> </a><div class="pSmartList1"><li>Reference modification may be used anywhere in the program where an alphanumeric data item may be referenced. </li></div>
+<a name="wp1034659"> </a><div class="pSmartList1"><li>A reference modification does not create a persistent data item.  Unless the result of the reference modification is assigned to a compatible data object, you can refer to the value of the reference modification later in the program only by repeating the reference modification. </li></div>
+<a name="wp1034660"> </a><div class="pSmartList1"><li>The reference-modified data item is treated as an alphanumeric field.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

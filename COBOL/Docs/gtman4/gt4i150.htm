@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-GRAPH-BRUSH</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1040136"> </a><h2 class="pHeading3">
+WINPRINT-GRAPH-BRUSH
+</h2>
+<a name="wp1040138"> </a><p class="pBody">
+This operation code specifies the pattern or solid color used to fill a shape drawn with WINPRINT-GRAPH-DRAW.
+</p>
+<a name="wp1040142"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040143"> </a>
+    USING WINPRINT-GRAPH-BRUSH, WINPRINT-DATA<a name="wp1040144"> </a>
+    GIVING RESULT<a name="wp1040145"> </a>
+</pre></div>
+<a name="wp1040146"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040147"> </a><p class="pBody">
+<b class="cBold">WINPRINT-DATA</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 WINPRINT-DATA.<a name="wp1040148"> </a>
+   03 WPRTDATA-SET-STD-FONT.<a name="wp1040149"> </a>
+   03  WPRTDATA-BRUSH REDEFINES<a name="wp1040150"> </a>
+   WPRTDATA-SET-STD-FONT.<a name="wp1040151"> </a>
+      05  WPRTDATA-BRUSH-STYLE        UNSIGNED-SHORT.<a name="wp1040152"> </a>
+      05  WPRTDATA-BRUSH-COLOR        PIC 9(9) COMP-5<a name="wp1040153"> </a>
+</pre></div>
+<a name="wp1040154"> </a><h3 class="pHeadingRef">
+Return Values
+</h3>
+<a name="wp1040155"> </a><p class="pBody">
+This operation returns the style and color of the brush used by WINPRINT-GRAPH-DRAW
+</p>
+<a name="wp1040156"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040157"> </a><p class="pBody">
+The printer must be open to perform this operation.  It must be called prior to WINPRINT-GRAPH-DRAW.  Once executed, the brush specified will apply to all graphic operations until a new call is executed.  The selected brush is released when the printer is closed and will not affect subsequent print jobs.  WPRTDATA-BRUSH must be initialized before use. There is no limit to the number of times this operation may be called.  
+</p>
+<a name="wp1040158"> </a><p class="pBody">
+WINPRINT-GRAPH-BRUSH has the following values:
+</p>
+<a name="wp1040159"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-BRUSH-COLOR</b> -- Specifies the color used to fill the shape drawn with WINPRINT-GRAPH-DRAW.  The color resolution (COLORREF) is a combination of Red, Green, and Blue (RGB).  The intensity of each color in the mix is determined by a number between &quot;0&quot; and &quot;255&quot;. The default color (0,0,0) is black.
+</p>
+<a name="wp1040160"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>See your Windows API documentation for more information about RGB colors and COLORREF values.
+<hr />
+</p>
+<a name="wp1087218"> </a><p class="pBody">
+<b style="font-weight: bold" class="cBold">WPRTDATA-BRUSH-STYLE</b><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal"> -- Specifies the pattern used to fill the shape drawn with WINPRINT-GRAPH-DRAW.  It may be set to one of the following values:</span>
+</p>
+<a name="wp1087264"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1087221"> </a><p class="pCellBody">
+WPRT-BRUSH-SOLID
+</p>
+</td>
+    <td><a name="wp1087223"> </a><p class="pCellBody">
+Selects a solid brush that fills the shape with the color selected in WPRTDATA-BRUSH-COLOR.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1087225"> </a><p class="pCellBody">
+WPRT-BRUSH-NULL (default)
+</p>
+</td>
+    <td><a name="wp1087227"> </a><p class="pCellBody">
+The shape is not filled, and the background layer will show through. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1087229"> </a><p class="pCellBody">
+WPRT-BRUSH-BDIAGONAL
+</p>
+</td>
+    <td><a name="wp1087231"> </a><p class="pCellBody">
+Fills the shape with a pattern of lines angled at 45-degrees. (<span style="font-family: Arial, Verdana, Helvetica, sans-serif">//////</span>)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1087233"> </a><p class="pCellBody">
+WPRT-BRUSH-CROSS
+</p>
+</td>
+    <td><a name="wp1087235"> </a><p class="pCellBody">
+Fills the shape with a pattern of crosses. (<span style="font-family: Arial, Verdana, Helvetica, sans-serif">++++++</span>)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1087237"> </a><p class="pCellBody">
+WPRT-BRUSH-DIAGCROSS
+</p>
+</td>
+    <td><a name="wp1087239"> </a><p class="pCellBody">
+Fills the shape with a pattern of diagonal crosses. (<span style="font-family: Arial, Verdana, Helvetica, sans-serif">xxxxxx</span>)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1087241"> </a><p class="pCellBody">
+WPRT-BRUSH-FDIAGONAL
+</p>
+</td>
+    <td><a name="wp1087243"> </a><p class="pCellBody">
+Fills the shape with a pattern of lines angled at -45-degrees. (<span style="font-family: Arial, Verdana, Helvetica, sans-serif">\\\\\\</span>)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1087245"> </a><p class="pCellBody">
+WPRT-BRUSH-HORIZONTAL
+</p>
+</td>
+    <td><a name="wp1087247"> </a><p class="pCellBody">
+Fills the shape with a pattern of dashes. (<span style="font-family: Arial, Verdana, Helvetica, sans-serif">------</span>)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1087249"> </a><p class="pCellBody">
+WPRT-BRUSH-VERTICAL
+</p>
+</td>
+    <td><a name="wp1087251"> </a><p class="pCellBody">
+Fills the shape with a pattern of vertical bars. (<span style="font-family: Arial, Verdana, Helvetica, sans-serif">||||||</span>)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1087253"> </a><p class="pCellBody">
+WPRT-BRUSH-DKGRAY
+</p>
+</td>
+    <td><a name="wp1087255"> </a><p class="pCellBody">
+Fills the shape with solid dark gray.  If color is specified, it is ignored. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1087257"> </a><p class="pCellBody">
+WPRT-BRUSH-GRAY
+</p>
+</td>
+    <td><a name="wp1087259"> </a><p class="pCellBody">
+ Fills the shape with solid gray.  If color is specified, it is ignored. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1087261"> </a><p class="pCellBody">
+WPRT-BRUSH-LTGRAY
+</p>
+</td>
+    <td><a name="wp1087263"> </a><p class="pCellBody">
+Fills the shape with solid light gray.  If color is specified, it is ignored. 
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1087265"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1040174"> </a><p class="pBody">
+See &quot;graphprn.cbl&quot; for examples of printing graphics.  This example will fill the shapes drawn with solid gray:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+INITIALIZE WPRTDATA-BRUSH.<a name="wp1040175"> </a>
+MOVE WPRT-BRUSH-GRAY  TO  WPRTDATA-BRUSH-STYLE.<a name="wp1040176"> </a>
+<a name="wp1040177"> </a>
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040178"> </a>
+    USING WINPRINT-GRAPH-BRUSH, WINPRINT-DATA<a name="wp1040179"> </a>
+    GIVING CALL-RESULT.<a name="wp1040180"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

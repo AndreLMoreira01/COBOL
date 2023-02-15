@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.7.1.1  Level-number</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3533.htm">5.7  Record Description Entry</a> &gt; <a href="gt3534.htm">5.7.1  Data Description Entry</a> &gt; </p>
+<a name="wp1035176"> </a><h2 class="pHeading3">
+5.7.1.1  Level-number
+</h2>
+<a name="wp1035179"> </a><p class="pBody">
+The level-number of a data item shows the hierarchy of that data item within its logical record.  It is also used to denote individual data items and condition names.
+</p>
+<a name="wp1035181"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035182"> </a><div class="pSmartList1"><li>Data description entries subordinate to an FD entry must have level-numbers with the values 01 through 49, 66, 78, or 88.</li></div>
+<a name="wp1035183"> </a><div class="pSmartList1"><li>Data description entries in Working-Storage may have level-numbers with the values 01 through 49, 66, 77, 78, or 88.</li></div>
+<a name="wp1035184"> </a><div class="pSmartList1"><li>Data description entries in Linkage may have level-numbers with the values 01 through 49, 66, 77, 78, or 88.  </li></div>
+</ol></div>
+<a name="wp1035186"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035187"> </a><div class="pSmartList1"><li>The level-number 01 indicates the first entry in a record description.  </li></div>
+<a name="wp1035188"> </a><div class="pSmartList1"><li>Each data description entry in a record description can be subdivided into multiple data description entries, each having the same level-number.  This level-number must be greater than the level-number of the subdivided entry, but less than 50.  These level-numbers do not have to be successive.  Thus you construct a record hierarchy of data items by using level-numbers.  </li></div>
+<a name="wp1035189"> </a><div class="pSmartList1"><li>An elementary data item may not be immediately followed by a data item with a higher level-number (except for levels 66, 77, 78, and 88). </li></div>
+<a name="wp1035191"> </a><div class="pSmartList1"><li>Multiple level 01 entries subordinate to a file description entry represent implicit redefinitions of the same area.  </li></div>
+<a name="wp1035192"> </a><div class="pSmartList1"><li>Level-number 66 may be used to identify only RENAMES entries (Format 2 data description entry).</li></div>
+<a name="wp1035193"> </a><div class="pSmartList1"><li>Level-number 77 identifies a non-contiguous data item entry.  Level-number 77 entries may not have subordinate data description entries except for level 88 items.</li></div>
+<a name="wp1035194"> </a><div class="pSmartList1"><li>A level 78 entry associates a value with the name of a constant.  The name of the constant can be used anywhere the corresponding literal can be used.</li></div>
+<a name="wp1035195"> </a><div class="pSmartList1"><li>You may use a level 78 named constant as a repeat count in a PICTURE string.  This means that, in a PICTURE string, you may substitute a level 78 for a number in parentheses.  In the following example, DATA-1 and DATA-2 are both the same size: </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    78  LENG-20     VALUE 20.<a name="wp1035197"> </a>
+    01  DATA-1      PIC X(20).<a name="wp1035198"> </a>
+    01  DATA-2      PIC X(LENG-20).<a name="wp1035199"> </a>
+</pre></div>
+<a name="wp1035200"> </a><p class="pIndented1">
+The PICTURE string that results from the substitution of the level 78 for its value must be legal.  Use this in programs when several data items must be the same size and you want to be able to easily change the size in the future.
+</p>
+<a name="wp1035201"> </a><div class="pSmartList1"><li>Level-number 88 defines a condition name.  It can be used only in a Format 4 data description entry.  </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

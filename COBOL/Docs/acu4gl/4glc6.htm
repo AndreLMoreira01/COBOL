@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:43:44" />
+  <title>C.2.3  Completing the Installation</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4glc.htm">Appendix C:  Acu4GL for Oracle Information</a> &gt; <a href="4glc3.htm">C.2  Acu4GL for Oracle Installation and Setup</a> &gt; </p>
+<a name="wp1045507"> </a><h2 class="pHeading2">
+C.2.3  Completing the Installation
+</h2>
+<a name="wp1045508"> </a><p class="pBody">
+With appropriate installation settings and procedures, Acu4GL  communicates with versions 9<em class="cEmphasis">i </em>or later of Oracle.  To install the Acu4GL product, perform the following steps.
+</p>
+<a name="wp1045509"> </a><h3 class="pHeadingRef">
+Step 1: Install Oracle
+</h3>
+<a name="wp1045510"> </a><p class="pBody">
+The Oracle RDBMS  must be installed and configured prior to the installation of Acu4GL for Oracle.
+</p>
+<a name="wp1045511"> </a><p class="pBody">
+We also recommend:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1045512"> </a><div class="pSmartList1"><li>Oracle's SQL*Plus® product, which is an interactive query tool.  This is not mandatory, but it will give you quite a bit of flexibility.  SQL*Plus allows you to do database work outside of COBOL, including interactive queries, table creation, table modification, and creation of views, constraints, and relationships between tables.</li></div>
+<a name="wp1045514"> </a><div class="pSmartList1"><li>Oracle's &quot;scott/tiger&quot; test schema, which can be used for testing.</li></div>
+</ul></div>
+<a name="wp1045515"> </a><p class="pBody">
+Acucorp does not provide these products.
+</p>
+<a name="wp1077533"> </a><p class="pBody">
+Make sure all environment variables Oracle requires such as ORACLE_HOME, ORACLE_SID, and LD_LIBRARY_PATH (or equivalent, if necessary) are set up in the environment of each user who will be accessing Acu4GL for Oracle (see your Oracle documentation for the list of variables required).  Verify Oracle's setup and configuration using an Oracle tool such as SQL*Plus.  Also verify that the PATH references the necessary Oracle subdirectories.
+</p>
+<a name="wp1077534"> </a><h3 class="pHeadingRef">
+Step 2: Create a new runtime system
+</h3>
+<a name="wp1077912"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In the following directions, the term &quot;runtime system&quot; refers to the runtime shared object on systems where the ACUCOBOL-GT runtime is a shared object and to <b class="cBold">runcbl</b> on other systems, where the runtime is static.  The runtime is a shared object on the following systems:  AIX 5.1 and later, HP-UX 11 and later, and Solaris 7 and later.  To check, look at the contents of the &quot;lib&quot; subdirectory of your ACUCOBOL-GT installation.  If the files &quot;libruncbl.so&quot; or &quot;libruncbl.sl&quot; reside in that directory, the runtime is a shared object on your system.
+<hr />
+</p>
+<a name="wp1077540"> </a><p class="pBody">
+Complete step 2a through 2c below to create a new runtime that includes the Oracle Acu4GL product.  
+</p>
+<a name="wp1045523"> </a><p class="pBody">
+You may also link your own C routines with the runtime system.  
+</p>
+<a name="wp1045524"> </a><h3 class="pHeadingRef">
+2a. Execute the script
+</h3>
+<a name="wp1045528"> </a><p class="pBody">
+The <b class="cBold">ora_inst</b> script is an interactive shell script that determines which libraries your version of Oracle has, and then creates a makefile suitable for linking Acu4GL for Oracle.  In the instructions below, <em class="cEmphasis">bold italicized</em> text within a message indicates that the script inserts what you had previously typed.
+</p>
+<a name="wp1045529"> </a><p class="pBody">
+Execute the shell script <b class="cBold">ora_inst</b> by enter the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+sh  ora_inst <a name="wp1045530"> </a>
+</pre></div>
+<a name="wp1045531"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You may exit the script at any time by pressing the system interrupt key (usually CTRL+C).  
+<hr />
+</p>
+<a name="wp1045532"> </a><p class="pBody">
+This is the first message that you see:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+If this script dies with an error like &quot;VAL=0: command not 
+found&quot;, try executing it with a bourne shell, as in sh ora_inst<a name="wp1045533"> </a>
+</pre></div>
+<a name="wp1045534"> </a><p class="pBody">
+If the script does terminate, and if re-entering the command does not work, call Acucorp Technical Support.
+</p>
+<a name="wp1045535"> </a><p class="pBody">
+When the script begins executing, the following message is displayed (no response is needed):
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+We first need to determine where you have installed ORACLE.<a name="wp1045536"> </a>
+</pre></div>
+<a name="wp1045537"> </a><p class="pBody">
+If the environment variable ORACLE_HOME has been set, the script continues, and the next message you see is the version inquiry below.  If ORACLE_HOME has <em class="cEmphasis">not</em> been set to the Oracle directory name, the installation script displays this message:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Enter the directory where ORACLE is installed:<a name="wp1045538"> </a>
+</pre></div>
+<a name="wp1045539"> </a><p class="pBody">
+Type the name of the directory where you installed Oracle, and then press <b class="cBold">Enter</b>.  The script then determines whether a directory by that name exists; if not, the script displays the following message:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<em class="cEmphasis">entered directory</em> isn't a directory.<a name="wp1045540"> </a>
+</pre></div>
+<a name="wp1045541"> </a><p class="pBody">
+and returns to the &quot;Enter the directory&quot; prompt to give you another chance.  After you have entered a legitimate directory name, the script responds with:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Creating Makefile.ora ...<a name="wp1045562"> </a>
+You should now be able to execute a make <a name="wp1054475"> </a>
+with the command make&#160;-f Makefile.ora in <a name="wp1063382"> </a>
+the <b class="cBold">...</b> &lt;ACUCOBOL-GT directory&gt;/lib<a name="wp1063383"> </a>
+</pre></div>
+<a name="wp1045563"> </a><p class="pBody">
+These are just informative messages.
+</p>
+<a name="wp1045564"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Be sure to review the &quot;makefile.ora&quot; file and make adjustments as necessary.
+<hr />
+</p>
+<a name="wp1045565"> </a><h3 class="pHeadingRef">
+2b. Link the runtime system
+</h3>
+<a name="wp1069111"> </a><p class="pBody">
+If you need to link in your own C routines, add them to the <b class="cBold">SUBS=</b> line of the file &quot;Makefile.ora&quot;.  See Chapter 6 in <em class="cEmphasis">A Guide to Interoperating with ACUCOBOL-GT</em> for details on linking C subroutines.
+</p>
+<a name="wp1045571"> </a><p class="pBody">
+Make sure you are in the directory containing the ACUCOBOL-GT runtime system.  Then, at the UNIX prompt, enter the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+make clean<a name="wp1076496"> </a>
+</pre></div>
+<a name="wp1076497"> </a><p class="pBody">
+to ensure that you have a clean directory in which to build your runtime.
+</p>
+<a name="wp1076501"> </a><p class="pBody">
+Now enter the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+make -f Makefile.ora <a name="wp1045572"> </a>
+</pre></div>
+<a name="wp1077778"> </a><p class="pBody">
+or 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+makerun <a name="wp1077779"> </a>
+</pre></div>
+<a name="wp1045573"> </a><p class="pBody">
+This compiles &quot;sub.c&quot; and &quot;filetbl.c&quot; and then links the runtime system.
+</p>
+<a name="wp1051630"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>Make sure you have correctly set all of the flags specific to your platform correctly before you relink your library and object files.
+</p>
+<a name="wp1051635"> </a><p class="pBody">
+If the make fails because of an out-of-date symbol table, execute the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ranlib *.a  <a name="wp1051648"> </a>
+</pre></div>
+<a name="wp1051656"> </a><p class="pBody">
+and then execute the make again.  If the make fails for any other reason, call Acucorp Technical Support.
+</p>
+<a name="wp1051660"> </a><p class="pNoteEnd">
+If you are relinking your runtime under SCO UNIX, you must add &quot;-lrpc -lsocket&quot; to the LIBS section of &quot;Makefile.ora&quot;.  If you place them on a line by themselves, remember to place a backslash at the end of the previous line.  You must also remove these two libraries from the &quot;ACUSERVER_LIBS&quot; line.
+<hr />
+</p>
+<a name="wp1045577"> </a><h3 class="pHeadingRef">
+2c. Verify the link
+</h3>
+<a name="wp1045578"> </a><p class="pBody">
+Enter the following command: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+./runcbl -vv<a name="wp1045579"> </a>
+</pre></div>
+<a name="wp1045580"> </a><p class="pBody">
+to verify the link.  This returns version information on all of the products linked into your runtime system.  Make sure it reports the version of Acu4GL for Oracle.
+</p>
+<a name="wp1045581"> </a><h3 class="pHeadingRef">
+Shared libraries
+</h3>
+<a name="wp1045586"> </a><p class="pBody">
+If you have relinked the ACUCOBOL-GT runtime and receive an error message of this type when you try to execute it:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&quot;Could <b class="cBold">not</b> load library; no such file or directory&quot;<a name="wp1045587"> </a>
+&quot;Can't open shared library . . . &quot;<a name="wp1045588"> </a>
+</pre></div>
+<a name="wp1045589"> </a><p class="pBody">
+this may mean that your operating system is using shared libraries and cannot find them.  This can occur even if the shared libraries reside in the same directory where you are currently located.
+</p>
+<a name="wp1045590"> </a><p class="pBody">
+Different versions of the UNIX operating system resolve this in different ways, so it is important that you consult your UNIX documentation to resolve this error.
+</p>
+<a name="wp1048500"> </a><p class="pBody">
+Some versions of UNIX require that you set an environment variable that points to shared libraries on your system.    
+</p>
+<a name="wp1048501"> </a><p class="pBody">
+For example, on an IBM RS/6000® running AIX® 4.1, the environment variable LIBPATH must point to the directory where the shared libraries are located.  On HP/UX, the environment variable that must be set to point to shared libraries is SHLIB_PATH.  On UNIX SVR4, the environment variable is LD_LIBRARY_PATH.  Note that 
+</p>
+<a name="wp1080680"> </a><p class="pBody">
+the correct version of the ORACLE_HOME/lib should be in your LD_LIBRARY_PATH. This might be ORACLE_HOME/lib64 or ORACLE_HOME/lib depending on what the default is for your system. If a lib32 directory exists, the 64 bit libraries may be the default. Please refer to your Oracle release notes for more information.
+</p>
+<a name="wp1045594"> </a><p class="pBody">
+Be sure to read the system documentation for your operating system to determine the appropriate way to locate shared libraries. 
+</p>
+<a name="wp1045595"> </a><p class="pBody">
+A second way to resolve this type of error is to link the libraries into the runtime with a static link.  Different versions of the C development system use different flags to accomplish this link.  Please consult the documentation for your C compiler to determine the correct flag for your environment.
+</p>
+<a name="wp1045596"> </a><h3 class="pHeadingRef">
+Step 3: Copy runcbl to the correct directory
+</h3>
+<a name="wp1045597"> </a><p class="pBody">
+If the runtime system is a statically linked <b class="cBold">runcbl</b>, copy the new executable to a directory mentioned in your execution path.  This file needs to have <em class="cEmphasis">execute</em> permission for everyone who will be using the runtime system.  The copy step is not necessary when the runtime system is a shared library.
+</p>
+<a name="wp1063342"> </a><p class="pBody">
+The ACUCOBOL-GT license file for the runtime (&quot;runcbl.alc&quot;) and the license file for the Acu4GL product to Oracle (&quot;runcbl.olc&quot;) must be copied into the same directory as the runtime executable.  If you rename your runtime executable, be sure to rename your license files to base name, with the extensions unchanged.  For example, if you rename your runtime to be &quot;myprog.bin&quot;, the license file for the Acu4GL product for Oracle should be renamed &quot;myprog.olc&quot;, and the license file for the runtime should be renamed &quot;myprog.alc.&quot;
+</p>
+<a name="wp1045599"> </a><p class="pBody">
+The remaining files can be left in the directory into which they were installed from the distribution medium.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

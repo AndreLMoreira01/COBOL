@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title> Chapter 2: Compiler and Runtime</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<a name="wp1034881"> </a><h2 class="pTitle">
+<br />Chapter 2: Compiler and Runtime
+</h2>
+<a name="wp1035476"> </a><h5 class="pHeading4">
+Key Topics
+</h5>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1035500"> </a><div class="pSmartList1"><a  href="gt122.htm#wp1032218">Using the Compiler</a></div>
+<a name="wp1035501"> </a><div class="pSmartList1"><a  href="gt1223.htm#wp1090230">Using the Runtime System</a></div>
+<a name="wp1036435"> </a><div class="pSmartList1"><a  href="gt1224.htm#wp1065658">Compatibility Modes</a></div>
+<a name="wp1036586"> </a><div class="pSmartList1"><a  href="gt1225.htm#wp1033286">Source Formats</a></div>
+<a name="wp1036546"> </a><div class="pSmartList1"><a  href="gt1226.htm#wp1033314">COPY Libraries</a></div>
+<a name="wp1036547"> </a><div class="pSmartList1"><a  href="gt1229.htm#wp1033410">Source Code Control</a></div>
+<a name="wp1036551"> </a><div class="pSmartList1"><a  href="gt1230.htm#wp1033431">Runtime Configuration</a></div>
+<a name="wp1036442"> </a><div class="pSmartList1"><a  href="gt1239.htm#wp1033680">File Name Interpretation</a></div>
+<a name="wp1036448"> </a><div class="pSmartList1"><a  href="gt1245.htm#wp1033786">Calling Subprograms</a></div>
+<a name="wp1036457"> </a><div class="pSmartList1"><a  href="gt1250.htm#wp1033847">Reducing the Size of the Runtime</a></div>
+<a name="wp1036466"> </a><div class="pSmartList1"><a  href="gt1251.htm#wp1033872">acushare Utility Program</a></div>
+<a name="wp1035502"> </a><div class="pSmartList1"><a  href="gt1261.htm#wp1033980">General Preprocessor Interface</a></div>
+</ul></div>
+<a name="wp1073939"> </a><p class="pBody">
+ACUCOBOL-GT is a single-pass ANSI X3.23-1985 COBOL compiler (<b class="cBold">ccbl</b>).  Errors encountered during compilation are displayed on the screen (or written to an error file if one is requested) referencing the line where the error was detected by source file and line number.  A source listing, a symbol table listing, and general information can be created on request.  
+</p>
+<a name="wp1073115"> </a><p class="pBody">
+A successful compile produces an object-code file.  This file is ready to be run by the ACUCOBOL-GT runtime system, <b class="cBold">runcbl</b>.  No linking is needed to run the program.  Any programs that are called during execution are loaded dynamically at runtime by <b class="cBold">runcbl</b>.  Subprograms written in C may be linked into the runtime system directly, or loaded dynamically if packaged in a Windows DLL or UNIX/Linux shared object library, and then called by a COBOL program using the CALL verb.  
+</p>
+<a name="wp1073116"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The compiler, the runtime, and some utility programs have different names, depending on the host system.  For simplicity in this manual, we refer to the compiler as <b class="cBold">ccbl</b>, the runtime as <b class="cBold">runcbl</b>, and the utilities by their base names (<b class="cBold">vutil</b>, <b class="cBold">vio</b>, <b class="cBold">logutil</b>, and <b class="cBold">cblutil</b>).  
+<hr />
+</p>
+<a name="wp1073117"> </a><p class="pBody">
+<b class="cBold">runcbl </b>has a symbolic source-level debugger built into it.  You can run any program under the debugger by specifying the debugger option (&quot;-d&quot;) at runtime.  The debugger runs in its own window that overlays the running program.  This prevents the debugger's output from interfering with the program's output. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

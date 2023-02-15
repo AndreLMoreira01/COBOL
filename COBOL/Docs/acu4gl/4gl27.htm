@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:41:27" />
+  <title>2.4.2  To Call sql.acu From a Program</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl2.htm">Chapter 2: Getting Started</a> &gt; <a href="4gl25.htm">2.4  Using the sql.acu Program</a> &gt; </p>
+<a name="wp1033761"> </a><h2 class="pHeading2">
+2.4.2  To Call sql.acu From a Program
+</h2>
+<a name="wp1033766"> </a><p class="pBody">
+You can also call <b class="cBold">sql.acu</b> from within a COBOL program.  The syntax is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+call &quot;sql.acu&quot; using <em class="cEmphasis">mysql-command</em><a name="wp1033767"> </a>
+</pre></div>
+<a name="wp1033768"> </a><p class="pBody">
+The SQL command may be up to 50,000 characters in length and may be a variable or a quoted command string in the CALL statement.
+</p>
+<a name="wp1033769"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The <b class="cBold">sql.acu</b> utility may be used only with SQL commands that are data definition statements (those that do not return data).  Be sure to end each SQL command with a semicolon (&quot;;&quot;).
+<hr />
+</p>
+<a name="wp1033770"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+IDENTIFICATION DIVISION.<a name="wp1035204"> </a>
+program-id.  command.<a name="wp1035210"> </a>
+* the sql.acu command to issue data <a name="wp1035274"> </a>
+* definition commands to the RDBMS.<a name="wp1035285"> </a>
+DATA DIVISION.<a name="wp1035302"> </a>
+working-storage section.<a name="wp1035311"> </a>
+01  sql-command                       pic x(75).<a name="wp1035320"> </a>
+01  error-status.<a name="wp1035329"> </a>
+    03 primary-error                  pic x(2).<a name="wp1035338"> </a>
+    03 secondary-error                pic x(40).<a name="wp1035347"> </a>
+01  error-text                        pic x(40).<a name="wp1035356"> </a>
+01  error-window                      pic x(10).<a name="wp1035365"> </a>
+PROCEDURE DIVISION.<a name="wp1035400"> </a>
+main-logic.  display window erase.<a name="wp1035401"> </a>
+     display window line 20, column 2 <a name="wp1035412"> </a>
+            size 75, lines 3, boxed, <a name="wp1035421"> </a>
+            top title &quot;SQL COMMAND&quot;, <a name="wp1035430"> </a>
+            bottom right title &quot;Return to exit&quot;.<a name="wp1035439"> </a>
+     perform do-sql-command, with test after, <a name="wp1035448"> </a>
+            until sql-command = spaces.<a name="wp1035457"> </a>
+stop run.<a name="wp1035466"> </a>
+do-sql-command.<a name="wp1035475"> </a>
+     accept sql-command, line 1, column 1, <a name="wp1035484"> </a>
+        erase to end of line.<a name="wp1035493"> </a>
+if sql-command not = spaces<a name="wp1035502"> </a>
+call &quot;sql.acu&quot; using sql-command<a name="wp1035511"> </a>
+if return-code not zero<a name="wp1035520"> </a>
+perform show-error.<a name="wp1035529"> </a>
+show-error.<a name="wp1035538"> </a>
+     display window line 2, column 2, <a name="wp1035547"> </a>
+        size 75 lines 6, boxed, erase,<a name="wp1035556"> </a>
+        pop-up area is error-window.<a name="wp1035565"> </a>
+     call &quot;C$RERR&quot; using error-status,  <a name="wp1039534"> </a>
+        error-text. <a name="wp1039535"> </a>
+     display &quot;DATABASE ERROR:&quot;, <a name="wp1035574"> </a>
+        secondary-error.<a name="wp1035601"> </a>
+display error-text.<a name="wp1035610"> </a>
+accept omitted.<a name="wp1035619"> </a>
+close window error-window.<a name="wp1035628"> </a>
+     display window line 20, column 2, <a name="wp1035637"> </a>
+        size 75, lines 3.<a name="wp1035646"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

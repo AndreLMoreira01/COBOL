@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:19" />
+  <title>6.2.1  How the Data Dictionary Is Formed</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb6.htm">Chapter 6: Mapping COBOL Data Items and Database Fields</a> &gt; <a href="odb63.htm">6.2  XFD Files</a> &gt; </p>
+<a name="wp1044190"> </a><h2 class="pHeading2">
+6.2.1  How the Data Dictionary Is Formed
+</h2>
+<a name="wp1044195"> </a><p class="pBody">
+Acucorp data dictionaries (XFDs) enable the AcuODBC interface to map COBOL records in the indexed or relative file system to &quot;rows&quot; and &quot;columns&quot; of data that can be accessed by common SQL commands.  The rows and columns of data make up a &quot;table&quot; in a what can be considered a &quot;virtual&quot; database.
+</p>
+<a name="wp1028291"> </a><p class="pBody">
+In the database table, each <em class="cEmphasis">column</em> contains the values for one <em class="cEmphasis">data item</em>.  The column names are essentially the field names.  The table that is built is <em class="cEmphasis">based on the largest record in the COBOL file</em>, and contains the fields from that record, plus any key fields (key fields are those that are named in KEY IS phrases of SELECT statements in the FILE CONTROL section).  This ensures that data from all COBOL records fits within the table, and simplifies the storage and retrieval process.  If you were to examine the database columns, only the fields from the largest record, and the key fields, would appear.  
+</p>
+<a name="wp1028292"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If the field named in the KEY IS phrase is a group item, it does not become a column in the data dictionary table.  Instead, the elementary items subordinate to the named group item each become a column.  
+<hr />
+</p>
+<a name="wp1028293"> </a><p class="pBody">
+You can force a group item to be a column by using the USE GROUP directive,<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>described in <a  href="odb619.htm#wp1044530">section 6.3.10</a>.
+</p>
+<a name="wp1028294"> </a><p class="pBody">
+With multiple record formats (level 01), not all COBOL fields are represented in the database by name, but all fields <em class="cEmphasis">are</em> storable and retrievable.  The data dictionary maps fields from all records of a file to the corresponding locations in the &quot;master&quot; (largest) record of the file, and thus to the &quot;virtual&quot; database table.  Only the fields included in the XFD will be available to ODBC applications.  Since AcuODBC has access to the data dictionary, it &quot;knows&quot; where the data from a given COBOL record fits in the database tables.  This activity is invisible to the COBOL application.
+</p>
+<a name="wp1028295"> </a><p class="pNote">
+<hr />
+<b>Note:  </b><em class="cEmphasis">Each field in your Windows application must correspond to a field or group of fields in your COBOL FD or XFD.  </em>To ensure that this is the case, you may need to add field names to the data dictionary using the NAME directive.  
+<hr />
+</p>
+<a name="wp1028296"> </a><p class="pBody">
+To help you determine whether any fields need to be added, the next section describes which fields are automatically included and excluded.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

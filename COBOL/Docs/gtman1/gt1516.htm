@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:06" />
+  <title>5.1.10  Recovery</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt15.htm"><br />Chapter 5:  File Processing</a> &gt; <a href="gt152.htm">5.1 Transaction Management</a> &gt; </p>
+<a name="wp1032381"> </a><h2 class="pHeading2">
+5.1.10  Recovery
+</h2>
+<a name="wp1032386"> </a><p class="pBody">
+If a program dies, or there is some other system failure, files may become corrupted, destroyed, or left in an inconsistent state.  If this occurs, the files may be recovered with the built-in library routine, C$RECOVER.  
+</p>
+<a name="wp1032387"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>For any Vision files or relative files, C$RECOVER can be successful only if every operation on the files, including file OPEN, was done within a transaction.
+<hr />
+</p>
+<a name="wp1032388"> </a><p class="pBody">
+To use the recovery function, you need the most recent backup copy of all the files that record their transactions.  You also need all of the log files that were started immediately after the backup was created.   Here's one way to perform a recovery:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1032389"> </a><div class="pSmartList1"><li>Get everyone off the system.</li></div>
+<a name="wp1032390"> </a><div class="pSmartList1"><li>Restore backup files to original locations.</li></div>
+<a name="wp1032391"> </a><div class="pSmartList1"><li>Run a program that calls the C$RECOVER library routine (for example, CALL &quot;C$RECOVER&quot;).  Use the same configuration file that the applications use. Note that the log files specified with the <em class="cEmphasis">filename</em>-LOG variables are not used.</li></div>
+</ol></div>
+<a name="wp1032396"> </a><p class="pBody">
+The C$RECOVER library routine only recovers the updates recorded in the log file specified by the configuration variable LOG-FILE. To recover updates recorded in multiple log files, specify each log file in the LOG-FILE variable and call C$RECOVER for each one.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    SET CONFIGURATION &quot;LOG-FILE&quot; TO &quot;default.log&quot;.<a name="wp1032397"> </a>
+    CALL &quot;C$RECOVER&quot;.<a name="wp1032398"> </a>
+    SET CONFIGURATION &quot;LOG-FILE&quot; TO &quot;file1.log&quot;.<a name="wp1032399"> </a>
+    CALL &quot;C$RECOVER&quot;.<a name="wp1032400"> </a>
+    SET CONFIGURATION &quot;LOG-FILE&quot; TO &quot;file2.log&quot;.<a name="wp1032401"> </a>
+    CALL &quot;C$RECOVER&quot;.<a name="wp1032402"> </a>
+    SET CONFIGURATION &quot;LOG-FILE&quot; TO &quot;file3.log&quot;.<a name="wp1032403"> </a>
+    CALL &quot;C$RECOVER&quot;.<a name="wp1032404"> </a>
+</pre></div>
+<a name="wp1032405"> </a><p class="pBody">
+To ensure that your data can be recovered, you should:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1032406"> </a><div class="pSmartList1"><li>Make sure all transactions are committed before you do a backup.</li></div>
+<a name="wp1032407"> </a><div class="pSmartList1"><li>Clear or delete the log files only after your backup is complete.</li></div>
+<a name="wp1032408"> </a><div class="pSmartList1"><li>Make sure there is <em class="cEmphasis">no file activity </em>between the time the backup is made and the time you clear or delete the log files.</li></div>
+<a name="wp1032409"> </a><div class="pSmartList1"><li>In between backups, you can periodically archive log files, then clear or delete them.</li></div>
+<a name="wp1032410"> </a><div class="pSmartList1"><li>If you use archived log files, make sure you recover using the logs in the chronological order in which they were written.</li></div>
+<a name="wp1032411"> </a><div class="pSmartList1"><li>Make sure there is <em class="cEmphasis">no other activity </em>on the files during recovery.</li></div>
+<a name="wp1032412"> </a><div class="pSmartList1"><li>Make backups and start new log files immediately if any log file gets corrupted or destroyed.</li></div>
+<a name="wp1032413"> </a><div class="pSmartList1"><li>Make sure you have good log files.</li></div>
+</ol></div>
+<a name="wp1032414"> </a><p class="pBody">
+The backup data files should have the same absolute or relative pathname as when the original programs were run.  If there are any cases where relative pathnames are used for the log or data files, run the program that calls the C$RECOVER routine from the same directory as the original programs.  For the program that calls the C$RECOVER routine, specify the log file in the configuration file or in the environment.
+</p>
+<a name="wp1032415"> </a><p class="pBody">
+If the recovery process terminates prematurely due to an error, and files are left open, they are automatically closed before the call to C$RECOVER returns.  
+</p>
+<a name="wp1032416"> </a><p class="pBody">
+If a failure occurs during the recovery process, and no other copies of the backup files are available, then automatic recovery is not possible.  This means that you should make sure to have an extra backup copy of your data files.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

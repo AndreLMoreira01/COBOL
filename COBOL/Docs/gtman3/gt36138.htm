@@ -1,0 +1,645 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>SORT Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1041807"> </a><h2 class="pHeading2">
+SORT Statement
+</h2>
+<a name="wp1041809"> </a><p class="pBody">
+The SORT statement sorts records according to selected key fields.  Record content can be modified before and after the actual sort process using INPUT PROCEDURE and OUTPUT PROCEDURE.
+</p>
+<a name="wp1041810"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This manual entry includes code examples and highlights for first-time users following the General Rules section.  In the highlights list,  item four discusses ways to improve SORT performance. 
+<hr />
+</p>
+<a name="wp1041812"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">SORT</u> sort-file <a name="wp1041813"> </a>
+<a name="wp1041814"> </a>
+  { <u class="cUnderline">KEY</u> <u class="cUnderline">AREA</u> IS key-table }<a name="wp1041815"> </a>
+  { ON {<u class="cUnderline">ASCENDING</u> } KEY {key-name} } ...<a name="wp1041816"> </a>
+       {<u class="cUnderline">DESCENDING</u>}<a name="wp1041817"> </a>
+<a name="wp1041818"> </a>
+  [ WITH <u class="cUnderline">DUPLICATES</u> IN ORDER ]<a name="wp1041819"> </a>
+<a name="wp1041820"> </a>
+  [ COLLATING <u class="cUnderline">SEQUENCE</u> IS alpha-name ]<a name="wp1041821"> </a>
+<a name="wp1041822"> </a>
+  { <u class="cUnderline">INPUT</u> <u class="cUnderline">PROCEDURE</u> IS proc-name  }<a name="wp1041823"> </a>
+  { <u class="cUnderline">USING</u> {in-file} ...           }<a name="wp1041824"> </a>
+<a name="wp1041825"> </a>
+  { <u class="cUnderline">OUTPUT</u> <u class="cUnderline">PROCEDURE</u> IS proc-name } <a name="wp1041826"> </a>
+  { <u class="cUnderline">GIVING</u> {out-file} ...         }<a name="wp1041827"> </a>
+<a name="wp1041828"> </a><p class="pIndented1">
+<em style="font-style: normal" class="cEmphasis">Note that </em><em class="cEmphasis">proc-name</em> has the following format:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+  start-proc [ {THRU   } end-proc ]<a name="wp1041830"> </a>
+               {THROUGH}<a name="wp1041831"> </a>
+</pre></div>
+</pre></div>
+<a name="wp1041833"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041834"> </a><div class="pSmartList1"><li><em class="cEmphasis">Sort-file</em> names a sort file described by an SD entry in the Data Division.</li></div>
+<a name="wp1041835"> </a><div class="pSmartList1"><li><em class="cEmphasis">Key-table</em> must name a data item that is <em class="cEmphasis">not</em> located in the record for sort-file.  <em class="cEmphasis">Key-table</em> may not be subordinate to an OCCURS clause, nor may it be reference modified.  </li></div>
+<a name="wp1041836"> </a><div class="pSmartList1"><li><em class="cEmphasis">Key-table</em> must reference a data item whose size is an even multiple of 7.  <em class="cEmphasis">Key-table</em> is processed as if it had the following structure: </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  KEY-TABLE.<a name="wp1041838"> </a>
+    03  SORT-KEY OCCURS N TIMES.<a name="wp1041839"> </a>
+        05  KEY-ASCENDING   PIC X  COMP-X.<a name="wp1041840"> </a>
+        05  KEY-TYPE        PIC X  COMP-X.<a name="wp1041841"> </a>
+        05  KEY-OFFSET      PIC XX COMP-X.<a name="wp1041842"> </a>
+        05  KEY-SIZE        PIC XX COMP-X.<a name="wp1041843"> </a>
+        05  KEY-DIGITS      PIC X  COMP-X.<a name="wp1041844"> </a>
+</pre></div>
+<a name="wp1041845"> </a><p class="pIndented1">
+Typically, programs will declare <em class="cEmphasis">key-table</em> with a similar format.  
+</p>
+<a name="wp1041846"> </a><div class="pSmartList1"><li><em class="cEmphasis">Key-name</em> is a data item in the record description associated with <em class="cEmphasis">sort-file</em>.  It may not be subordinate to an OCCURS clause nor may it be a group item containing variable occurrence data items.  </li></div>
+<a name="wp1041847"> </a><div class="pSmartList1"><li><em class="cEmphasis">Alpha-name</em> is an alphabet-name defined in the SPECIAL-NAMES paragraph of the Environment Division.</li></div>
+<a name="wp1041848"> </a><div class="pSmartList1"><li><em class="cEmphasis">In-file</em> and <em class="cEmphasis">out-file</em> are files described by FD entries in the Data Division.  They may not be sort files.  </li></div>
+<a name="wp1041849"> </a><div class="pSmartList1"><li><em class="cEmphasis">Start-proc</em> and <em class="cEmphasis">end-proc</em> are paragraph or section names in the Procedure Division.</li></div>
+<a name="wp1041850"> </a><div class="pSmartList1"><li>A SORT statement may not appear in Declaratives or in the input or output procedure of a SORT or MERGE statement.</li></div>
+<a name="wp1041851"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">sort-file</em> contains variable length records, <em class="cEmphasis">in-file</em> records must not be smaller than the smallest record in <em class="cEmphasis">sort-file</em> nor larger than the largest.  If <em class="cEmphasis">sort-file</em> contains fixed length records, <em class="cEmphasis">in-file</em> records may not be larger than the size of <em class="cEmphasis">sort-file's</em> records.</li></div>
+<a name="wp1041852"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">out-file</em> contains variable length records, <em class="cEmphasis">sort-file</em> records must not be smaller than the smallest record in <em class="cEmphasis">out-file</em> nor larger than the largest.  If <em class="cEmphasis">out-file</em> contains fixed length records, <em class="cEmphasis">sort-file</em> records may not be larger than the size of <em class="cEmphasis">out-files</em> records.</li></div>
+<a name="wp1041853"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">sort-file</em> contains more than one record description, <em class="cEmphasis">key-name</em> need appear in only one of them.  The character positions referenced by <em class="cEmphasis">key-name</em> are used as the key for all the file's records.</li></div>
+<a name="wp1041854"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">out-file</em> is an indexed file, the first <em class="cEmphasis">key-name</em> must be ASCENDING and must specify the same character positions in its record as the primary record key for <em class="cEmphasis">out-file</em>.  </li></div>
+<a name="wp1041855"> </a><div class="pSmartList1"><li>THRU is an abbreviation for THROUGH.</li></div>
+</ol></div>
+<a name="wp1041857"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041859"> </a><div class="pSmartList1"><li>The SORT statement sorts records received from the INPUT PROCEDURE or found in the <em class="cEmphasis">in-files</em>.  It<em class="cEmphasis"> </em>then either makes these sorted records available to the OUTPUT PROCEDURE or writes them to each <em class="cEmphasis">out-file</em>.  </li></div>
+<a name="wp1198135"> </a><div class="pSmartList1"><li>Sort records must be at least six bytes in size.</li></div>
+<a name="wp1041861"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">sort-file</em> contains fixed length records, any shorter <em class="cEmphasis">in-file</em> records are space-filled on the right to match the record size.</li></div>
+<a name="wp1041862"> </a><div class="pSmartList1"><li>If <em class="cEmphasis">out-file</em> contains fixed length records, any shorter <em class="cEmphasis">sort-file</em> records are space-filled on the right to match the record size.  </li></div>
+<a name="wp1041863"> </a><div class="pSmartList1"><li>The first <em class="cEmphasis">key-name</em> is the major key, and the next <em class="cEmphasis">key-name</em> is the next most significant key.  This pattern continues for each <em class="cEmphasis">key-name</em> specified.  </li></div>
+<a name="wp1041864"> </a><div class="pSmartList1"><li>The ASCENDING phrase specifies that key values are to be ordered from lowest to highest.  The DESCENDING phrase specifies the reverse ordering.  Once ASCENDING or DESCENDING is specified, it applies to each <em class="cEmphasis">key-name</em> until another ASCENDING or DESCENDING adjective is encountered. </li></div>
+<a name="wp1041868"> </a><div class="pSmartList1"><li>Use the KEY AREA option when you do not know the specifics of the sort key until the program is run.  You can use this to allow users to enter sort key specifications, typically in conjunction with some form of data dictionary. </li></div>
+<a name="wp1041870"> </a><div class="pSmartList1"><li>Your program must fill in a table of information that describes the sort keys.  This table, <em class="cEmphasis">key-table</em>, should have the format described by Syntax Rule 3 above.  The number of sort keys is determined by the number of occurrences in the table.  The keys are listed in order of precedence: table entry 1 describes the highest precedence key, table entry 2 the second highest, and so on.  If you need to process a variable number of keys, use a variable-size table (by using OCCURS DEPENDING ON).  </li></div>
+<a name="wp1041871"> </a><div class="pSmartList1"><li>For each key, you must specify the following information:</li></div>
+<a name="wp1066786"> </a><p class="pBodyRelative">
+<div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1066792"> </a><p class="pCellBody">
+KEY-ASCENDING:  <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1066794"> </a><p class="pCellBody">
+This should be 0 or 1.  Enter 1 to have an ascending sort sequence, 0 for descending.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066796"> </a><p class="pCellBody">
+KEY-TYPE:  
+</p>
+</td>
+    <td><a name="wp1066798"> </a><p class="pCellBody">
+Describes the underlying data format.  The allowed values are listed in the next rule.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066800"> </a><p class="pCellBody">
+KEY-OFFSET:  
+</p>
+</td>
+    <td><a name="wp1066802"> </a><p class="pCellBody">
+Describes the distance (in standard character positions) from the beginning of the sort record to the beginning of the key field.  The first field in a sort record is at offset 0.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066804"> </a><p class="pCellBody">
+KEY-SIZE:  
+</p>
+</td>
+    <td><a name="wp1066806"> </a><p class="pCellBody">
+Describes the size of the key field in standard character positions.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066808"> </a><p class="pCellBody">
+KEY-DIGITS:  
+</p>
+</td>
+    <td><a name="wp1066810"> </a><p class="pCellBody">
+This is used only for numeric keys.  It describes the number of digits contained in the key (counting digits on both sides of the decimal point).  
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1041882"> </a><div class="pSmartList1"><li>The KEY-TYPE field uses a code to describe the type and internal storage format of the data item.  Select from the following values:</li></div>
+<a name="wp1041884"> </a><p class="pBodyRelative">
+   <div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1041887"> </a><p class="pCellBody">
+0
+</p>
+</td>
+    <td><a name="wp1041889"> </a><p class="pCellBody">
+Numeric edited
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041891"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1041893"> </a><p class="pCellBody">
+Unsigned numeric (DISPLAY)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041895"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1041897"> </a><p class="pCellBody">
+Signed numeric (DISPLAY, trailing separate)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041899"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1041901"> </a><p class="pCellBody">
+Signed numeric (DISPLAY, trailing combined)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041903"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1041905"> </a><p class="pCellBody">
+Signed numeric (DISPLAY, leading separate)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041907"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1041909"> </a><p class="pCellBody">
+Signed numeric (DISPLAY, leading combined)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041911"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1041913"> </a><p class="pCellBody">
+Signed COMP-2
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041915"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1041917"> </a><p class="pCellBody">
+Unsigned COMP-2
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041919"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1041921"> </a><p class="pCellBody">
+Unsigned COMP-3
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041923"> </a><p class="pCellBody">
+9
+</p>
+</td>
+    <td><a name="wp1041925"> </a><p class="pCellBody">
+Signed COMP-3
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041927"> </a><p class="pCellBody">
+10
+</p>
+</td>
+    <td><a name="wp1041929"> </a><p class="pCellBody">
+COMP-6
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041931"> </a><p class="pCellBody">
+11
+</p>
+</td>
+    <td><a name="wp1041933"> </a><p class="pCellBody">
+Signed binary (COMP-1, COMP-4, COMP-X)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041935"> </a><p class="pCellBody">
+12
+</p>
+</td>
+    <td><a name="wp1041937"> </a><p class="pCellBody">
+Unsigned binary (COMP-1, COMP-4, COMP-X)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041939"> </a><p class="pCellBody">
+13
+</p>
+</td>
+    <td><a name="wp1041941"> </a><p class="pCellBody">
+Signed native (COMP-5, COMP-N)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041943"> </a><p class="pCellBody">
+14
+</p>
+</td>
+    <td><a name="wp1041945"> </a><p class="pCellBody">
+Unsigned native (COMP-5, COMP-N)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041947"> </a><p class="pCellBody">
+15
+</p>
+</td>
+    <td><a name="wp1041949"> </a><p class="pCellBody">
+Floating point (FLOAT, DOUBLE)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041951"> </a><p class="pCellBody">
+16
+</p>
+</td>
+    <td><a name="wp1041953"> </a><p class="pCellBody">
+Alphanumeric
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041955"> </a><p class="pCellBody">
+17
+</p>
+</td>
+    <td><a name="wp1041957"> </a><p class="pCellBody">
+Alphanumeric (justified)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041959"> </a><p class="pCellBody">
+18
+</p>
+</td>
+    <td><a name="wp1041961"> </a><p class="pCellBody">
+Alphabetic
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041963"> </a><p class="pCellBody">
+19
+</p>
+</td>
+    <td><a name="wp1041965"> </a><p class="pCellBody">
+Alphabetic (justified)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041967"> </a><p class="pCellBody">
+20
+</p>
+</td>
+    <td><a name="wp1041969"> </a><p class="pCellBody">
+Alphanumeric edited
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041971"> </a><p class="pCellBody">
+21
+</p>
+</td>
+    <td><a name="wp1041973"> </a><p class="pCellBody">
+Not used
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041975"> </a><p class="pCellBody">
+22
+</p>
+</td>
+    <td><a name="wp1041977"> </a><p class="pCellBody">
+Group
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1041979"> </a><p class="pIndented1">
+This coding is the same one used by the C interface, and is also used by Acu4GL to interface to relational DBMSs.  When specifying the key type, you may safely use &quot;alphanumeric&quot; for all nonnumeric keys.  (The sort rules are the same for each of these types).  For numeric data, however, you must specify the correct type or you may get sorting errors.
+</p>
+<a name="wp1041980"> </a><div class="pSmartList1"><li>The results are undefined if you provide invalid data in the <em class="cEmphasis">key-table</em>.  If you fail to specify any keys (by specifying a table whose size is zero), you receive a file error on <em class="cEmphasis">sort-file</em>.  Under the default file status codes, this is file error 94 with a secondary status of 63.</li></div>
+<a name="wp1041981"> </a><div class="pSmartList1"><li>For nonnumeric keys, the COLLATING SEQUENCE phrase establishes the ordering.  If this phrase is omitted, the NATIVE collating sequence is used.  For numeric keys, the ordering is specified by the algebraic value of the key. </li></div>
+<a name="wp1041987"> </a><div class="pSmartList1"><li>The DUPLICATES phrase affects the return order for records whose <em class="cEmphasis">key-name</em> values are equal.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1041989"> </a><div class="pSmartList2"><li>When there is a USING phrase, the return order is the same as the order of appearance of <em class="cEmphasis">in-file</em> names in the SORT statement.  Within a given <em class="cEmphasis">in-file</em>, the order is that in which the records are accessed from that file.  </li></div>
+<a name="wp1041990"> </a><div class="pSmartList2"><li>When there is an INPUT PROCEDURE, the return order is the same as the order in which records were released.  If the DUPLICATES phrase is not used, the return order for records with equal key values is unpredictable. </li></div>
+</ol></div>
+<a name="wp1041991"> </a><div class="pSmartList1"><li>The execution of a SORT statement consists of three distinct phases.  These are:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1041992"> </a><div class="pSmartList2"><li>Records are made available to the <em class="cEmphasis">sort-file</em>.  This is achieved either by executing RELEASE statements in the input procedure or by implicit execution of READ statements for each <em class="cEmphasis">in-file</em>.  When this phase starts, <em class="cEmphasis">in-file</em> must not be open.  When it finishes, <em class="cEmphasis">in-file</em> will not be open.</li></div>
+<a name="wp1108608"> </a><div class="pSmartList2"><li>The <em class="cEmphasis">sort-file</em> is sequenced according to the KEY phrase and the DUPLICATES clause.  No processing of <em class="cEmphasis">in-files</em> or <em class="cEmphasis">out-files</em> takes place during this phase.  </li></div>
+<a name="wp1108595"> </a><div class="pSmartList2"><li>The records in <em class="cEmphasis">sort-file</em> are made available in sorted order.  The sorted records are either written to the <em class="cEmphasis">out-files</em> or are made available to an output routine through execution of a RETURN statement.  When this phase starts, <em class="cEmphasis">out-file</em> must not be open.  When it finishes, <em class="cEmphasis">out-file</em> will be closed.</li></div>
+</ol></div>
+<a name="wp1041996"> </a><div class="pSmartList1"><li>If the INPUT PROCEDURE phrase is used, the named procedure is executed by the SORT statement according to the rules for the PERFORM verb.  This procedure must make records available to the input phase of the sort operation by executing RELEASE statements.  When this procedure returns, the sort operation proceeds to the sequencing phase.  The range of the input procedure may not cause the execution of a MERGE, RETURN, or SORT statement.</li></div>
+<a name="wp1041999"> </a><div class="pSmartList1"><li>If the USING phrase is specified, all records in each <em class="cEmphasis">in-file</em> are transferred to <em class="cEmphasis">sort-file</em>.  For each <em class="cEmphasis">in-file</em>, the following actions occur:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1042000"> </a><div class="pSmartList2"><li>The file is opened as if it were the object of an OPEN INPUT statement with no options.</li></div>
+<a name="wp1042001"> </a><div class="pSmartList2"><li>The records are obtained and released to the sort operation.  Each record is obtained as if a READ statement with the NEXT and AT END phrases had been executed.  For relative files, the RELATIVE KEY data item is undefined at the end of this phase.</li></div>
+<a name="wp1042002"> </a><div class="pSmartList2"><li>The file is closed as if it were the object of a CLOSE statement with no options.  This occurs prior to the sequencing of <em class="cEmphasis">sort-file</em>.  </li></div>
+<a name="wp1042003"> </a><p class="pIndented2">
+These implicit functions are performed such that any associated USE procedures are executed.  These USE procedures must not access <em class="cEmphasis">in-file</em> or its record area.  
+</p>
+</ol></div>
+<a name="wp1042004"> </a><div class="pSmartList1"><li>If an output procedure is specified, control passes to it after the <em class="cEmphasis">sort-file</em> has been sequenced.  Control passes to the output procedure according to the rules of the PERFORM statement.  The output procedure must execute RETURN statements to retrieve the sorted records.  When the output procedure returns, the SORT statement terminates and control passes to the next executable statement.  The range of the output procedure must not execute any MERGE, RELEASE, or SORT statements.</li></div>
+<a name="wp1042006"> </a><div class="pSmartList1"><li>If the GIVING phrase is used, all the sorted records are written to each <em class="cEmphasis">out-file</em>.  For each of these files, the following steps occur:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1042007"> </a><div class="pSmartList2"><li><em class="cEmphasis">Out-file</em> is opened as if it were the object of an OPEN OUTPUT statement with no options.</li></div>
+<a name="wp1042008"> </a><div class="pSmartList2"><li>The sorted records are returned and written to the file.  The records are written as if a WRITE statement without any options had been executed.  For a relative file, the value of the RELATIVE KEY data item is updated to reflect the record number written.  </li></div>
+<a name="wp1042009"> </a><div class="pSmartList2"><li>The file is closed as if it were the object of a CLOSE statement without any options.</li></div>
+</ol></div>
+<a name="wp1042010"> </a><p class="pIndented1">
+These implicit functions are performed such that any associated USE procedures are executed.  Such a USE procedure may not refer to <em class="cEmphasis">out-file</em> or its record area.  On the first attempt to write beyond the externally defined boundaries of the file, any applicable USE procedure is executed.  If control is returned from that USE procedure, or no USE procedure is applicable, the processing of that <em class="cEmphasis">out-file</em> is terminated.
+</p>
+<a name="wp1042011"> </a><div class="pSmartList1"><li>If the SORT statement is in a fixed segment, the range of any input and output procedures must be contained completely in the fixed segments and no more than one independent segment.  If the MERGE statement is in an independent segment, the range must be completely contained in the fixed segments and the same independent segment.  </li></div>
+<a name="wp1042013"> </a><div class="pSmartList1"><li>The SORT statement updates the value of the <em class="cEmphasis">sort-file's</em> FILE STATUS data item. </li></div>
+<a name="wp1042014"> </a><div class="pSmartList1"><li>Only one SORT may be active at a time.  See also &quot;CANCEL SORT.&quot;</li></div>
+<a name="wp1205935"> </a><div class="pSmartList1"><li>If a SORT statement is executed in a wrong context, the runtime displays the error &quot;Illegal SORT.&quot;  This error belongs to the class of &quot;intermediate&quot; runtime errors that, upon occurrence, call installed error procedures.  See Book 4, <em class="cEmphasis">Appendices</em>, Appendix I &quot;Library Routines,&quot; CBL_ERROR_PROC for details.</li></div>
+<a name="wp1206126"> </a><div class="pSmartList1"><li>For compatibility with other COBOLs, ACUCOBOL-GT includes a special register known as SORT-RETURN.  It can be used for two purposes.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1206127"> </a><div class="pSmartList2"><li>To determine the status of a SORT that's just finished.  You can determine the success or failure of a SORT by examining this variable after the SORT returns.  A value of &quot;0&quot; indicates success, and a non-zero value indicates failure.  </li></div>
+<a name="wp1206960"> </a><div class="pSmartList2"><li>To interrupt a SORT that is currently running.  By setting this variable in an input or output procedure, you stop SORT processing immediately after the next RELEASE or RETURN statement is performed.  By setting this variable in a DECLARATIVES paragraph (if you are not using input or output procedures), you stop SORT processing immediately after the next implicit RELEASE or RETURN is performed.</li></div>
+</ol></div>
+<a name="wp1207177"> </a><p class="pIndented1">
+The special register SORT-RETURN is of type SIGNED-INT.  Please note that this register is primarily for compatibility purposes, and there are better ways to perform these functions in ACUCOBOL-GT.  For instance, to get status on a SORT, use the FILE STATUS variable of the SORT file. This gives more information than just success or failure.  And if you are using input procedures, you can halt a SORT more simply by returning from the procedure as if you had reached the end of file.
+</p>
+</ol></div>
+<a name="wp1207349"> </a><h3 class="pHeadingRef">
+Code examples
+</h3>
+<a name="wp1207350"> </a><h3 class="pHeadingRef">
+Example 1:
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+SORT PRODUCT-SORT-FILE             |temporary SD file<a name="wp1042021"> </a>
+   ON ASCENDING KEY MODEL-TYPE,    |major sort key<a name="wp1042022"> </a>
+                    MODEL-NUMBER   |minor sort key<a name="wp1042023"> </a>
+   USING ATHLETIC-SHOES-LIST,      |input data file<a name="wp1042024"> </a>
+         DRESS-SHOES-LIST          |input data file<a name="wp1042025"> </a>
+   GIVING PRODUCT-LIST.            |permanent output data file<a name="wp1042026"> </a>
+</pre></div>
+<a name="wp1042027"> </a><h3 class="pHeadingRef">
+Example 2 
+</h3>
+<a name="wp1042028"> </a><p class="pBody">
+(An extended version of this example appears after the Highlights for First-Time Users section.):
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SORT PRODUCT-SORT-FILE                 |temporary SD file<a name="wp1042029"> </a>
+*duplicates sorted in the order acquired<a name="wp1042030"> </a>
+   ON ASCENDING  KEY MODEL-TYPE        |major sort key<a name="wp1042031"> </a>
+   ON DESCENDING KEY MODEL-NUMBER      |minor sort key<a name="wp1042032"> </a>
+   WITH DUPLICATES IN ORDER<a name="wp1042033"> </a>
+   INPUT  PROCEDURE IS WEED-PRODUCT-LIST<a name="wp1042034"> </a>
+   OUTPUT PROCEDURE IS UPDATE-PRODUCT-LIST.<a name="wp1042036"> </a>
+</pre></div>
+<a name="wp1042037"> </a><h3 class="pHeadingRef">
+Highlights for first-time users
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042038"> </a><div class="pSmartList1"><li>SORT is used to order records according to a set of key fields (sort keys).  Records may be stored in sequential, relative, or indexed files, or records may be acquired by use of an INPUT PROCEDURE.  Once ordered, the record set may be further processed by use of an OUTPUT PROCEDURE, or the records may be written directly to the named output file(s).</li></div>
+<a name="wp1042039"> </a><div class="pSmartList1"><li>SORT is most often used to order records stored in disk files.  However, by using an INPUT PROCEDURE you can acquire records from other input sources such as output from batch processes, internal application data structures, or screen input.</li></div>
+<a name="wp1042040"> </a><div class="pSmartList1"><li>SORT creates a special temporary disk file (the sort file) as a work space for collecting, sorting, and holding ordered records.  The sort file is defined by an SD entry in the DATA DIVISION.  The sort file record definition must immediately follow the SD entry and must include definitions for each sort key used, except when the KEY AREA phrase is used.  You can place temporary files used by the SORT verb in a specified directory-see the SORT_DIR configuration variable in Appendix H, Book 4<em class="cEmphasis">.</em>  The sort file is removed when the SORT statement completes. </li></div>
+<a name="wp1186168"> </a><div class="pSmartList1"><li><span style="font-weight: bold" class="cBoldItalic">Runtime performance:</span><em style="font-weight: normal" class="cEmphasis"> </em>Most SORT procedures involve the reading, sorting, and writing of records stored in disk files.  These disk I/O processes can be relatively slow and, therefore, the SORT process can take a lot of time.  However, you can tune performance.  To get the best runtime performance, give the process as much memory and as many temporary files as possible, without wasting resources or adversely affecting other processes running on the system.  You can use the runtime configuration variables SORT_MEMORY and SORT_FILES to specify the amount of memory and the number of temporary files available to the process.  The default values are relatively small.  Determining the optimal values depends on the number and size of the records being sorted, the amount of available memory, and the needs of other processes on the system.  Some experimentation may be necessary.</li></div>
+<a name="wp1186169"> </a><div class="pSmartList1"><li>The three basic steps of the SORT procedure are: </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1042044"> </a><div class="pSmartList2"><li>Acquiring and placing the records to be sorted in the sort file:</li></div>
+<a name="wp1042045"> </a><p class="pIndented2">
+When the USING phrase is used, SORT opens each named input file, reads the data records, one at a time, into the sort file and closes the input file.  Input files must not be open before the SORT statement begins.
+</p>
+<a name="wp1042046"> </a><p class="pIndented2">
+When an INPUT PROCEDURE is used the RELEASE verb is used to pass records to the sort file.  If records are acquired from disk files, it is the responsibility of the input procedure to open, read, process, RELEASE each individual record, and close the files.  For more information, see the <a  href="gt36131.htm#wp1041212">RELEASE Statement</a>.
+</p>
+<a name="wp1042047"> </a><div class="pSmartList2"><li>Sorting the records:</li></div>
+<a name="wp1042048"> </a><p class="pIndented2">
+Using the sort file, and a set of temporary files, records are sorted according to the key phrase, the DUPLICATES clause, and the COLLATING clause.  See also the configuration variables in Appendix H, Book 4, under SORT_DIR, SORT_MEMORY, and SORT_RESERVE.
+</p>
+<a name="wp1042049"> </a><div class="pSmartList2"><li>Disposition of the sorted records:</li></div>
+<a name="wp1042050"> </a><p class="pIndented2">
+When the GIVING phrase is used, the sorted records are written to the named permanent output file(s).
+</p>
+<a name="wp1042051"> </a><p class="pIndented2">
+When an OUTPUT PROCEDURE is used, the sorted records are made available to the output procedure for processing and writing to a permanent file(s).  The output procedure uses the verb RETURN to acquire the ordered records from the sort file.  It is the responsibility of the output procedure to open, write, and close the output file(s).  For more information see the description of the <a  href="gt36132.htm#wp1041234">RETURN Statement</a>.
+</p>
+</ol></div>
+<a name="wp1042052"> </a><div class="pSmartList1"><li>A SORT statement may not appear in a DECLARATIVES section or in an INPUT or OUTPUT PROCEDURE that is part of a SORT statement (nesting of SORT statements is not permitted).</li></div>
+<a name="wp1042053"> </a><div class="pSmartList1"><li>The KEY AREA phrase is a means for defining the sort keys at runtime, as the application is running.  When you use KEY AREA, it is not required that the sort file record descriptor contain entries for potential sort keys.  Definition of the sort key(s) in the sort file is handled internally by the SORT routine using the key table.  See syntax rules 2 and 3 and general rules 6 through 10.</li></div>
+<a name="wp1042054"> </a><div class="pSmartList1"><li>If the KEY AREA phrase is not used, the sort keys must be defined in the record description of the sort file.</li></div>
+<a name="wp1042055"> </a><div class="pSmartList1"><li>Use of INPUT PROCEDURE or OUTPUT PROCEDURE requires that all file I/O operations and record disposition be handled by the input or output procedure.  This means that the input and output procedures must explicitly perform the OPEN, READ, RELEASE (input), RETURN (output), WRITE, and CLOSE actions.  As with any I/O management, the procedure should consider and account for the handling of all I/O related errors.</li></div>
+<a name="wp1042056"> </a><div class="pSmartList1"><li>Use the DUPLICATES phrase when you want duplicate records to be sequenced in the same order that they are read in or RELEASEd.  Duplicate records are those that have identical key values.  In the absence of the DUPLICATES phrase sequencing of duplicate records is not predictable (see General Rule 12).</li></div>
+<a name="wp1125106"> </a><div class="pSmartList1"><li>Use the COLLATING SEQUENCE phrase to alter the ordering of nonnumeric keys.  The named collating sequence must be defined in the SPECIAL-NAMES paragraph of the ENVIRONMENT DIVISION.  In the SPECIAL-NAMES paragraph the user may define a unique character order, or the user may select one of the four predefined character sequences: STANDARD-1, STANDARD-2, NATIVE, and EBCDIC.  <a  href="gt346.htm#wp1034415">See <span style="font-family: Arial, Verdana, Helvetica, sans-serif">section 4.2.3, &quot;Special-Names Paragraph.&quot; </span></a> </li></div>
+<a name="wp1125107"> </a><p class="pIndented1">
+If no COLLATING SEQUENCE phrase is used, the default collating sequence is used. The default collating sequence is whatever is native to the operating system (usually the same as the predefined type NATIVE). 
+</p>
+<a name="wp1042059"> </a><div class="pSmartList1"><li>Use the STATUS variable to hold the execution status of the SORT operation.  The status variable is named in the SELECT/ASSIGN phrase of the FILE-CONTROL paragraph of the INPUT-OUTPUT SECTION.  <a  href="gt346.htm#wp1034415">See <span style="font-family: Arial, Verdana, Helvetica, sans-serif">section 4.2.3, &quot;Special-Names Paragraph.&quot; </span></a> </li></div>
+<a name="wp1042060"> </a><p class="pIndented1">
+For a complete list and description of file status codes, see Appendix&#160;E, Book 4.
+</p>
+<a name="wp1042061"> </a><div class="pSmartList1"><li>To specify the disk directory in which SORT will place any temporary files, set the SORT_DIR runtime configuration variable, located in the runtime configuration file.</li></div>
+</ol></div>
+<a name="wp1042062"> </a><h3 class="pHeadingRef">
+Extended version of code example 2: 
+</h3>
+<a name="wp1042063"> </a><p class="pBody">
+For simplicity, only one input file will be used.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+IDENTIFICATION DIVISION.<a name="wp1042064"> </a>
+PROGRAM-ID.  SAMPLE-FILE-SORT.<a name="wp1042065"> </a>
+ENVIRONMENT DIVISION.<a name="wp1042066"> </a>
+INPUT-OUTPUT SECTION.<a name="wp1042067"> </a>
+FILE-CONTROL.<a name="wp1042068"> </a>
+*SORT input file<a name="wp1042069"> </a>
+SELECT ATHLETIC-SHOES-LIST<a name="wp1042070"> </a>
+      ASSIGN TO ....<a name="wp1042071"> </a>
+*SORT output file<a name="wp1042072"> </a>
+   SELECT PRODUCT-LIST<a name="wp1042073"> </a>
+      ASSIGN TO ....<a name="wp1042074"> </a>
+*sort file (SD)<a name="wp1042075"> </a>
+   SELECT PRODUCT-SORT-FILE<a name="wp1042076"> </a>
+      ASSIGN TO ....<a name="wp1042077"> </a>
+DATA DIVISION.<a name="wp1042078"> </a>
+FILE SECTION.<a name="wp1042079"> </a>
+FD  ATHLETIC-SHOES-LIST.<a name="wp1042080"> </a>
+01  A-SHOE-RECORD            PIC X(38).<a name="wp1042081"> </a>
+FD  PRODUCT-LIST.<a name="wp1042082"> </a>
+01  B-SHOE-RECORD            PIC X(38).<a name="wp1042083"> </a>
+SD  PRODUCT-SORT-FILE.<a name="wp1042084"> </a>
+01  SORT-DATA.<a name="wp1042085"> </a>
+    05  MODEL-NAME         PIC X(10).<a name="wp1042086"> </a>
+    05  MODEL-TYPE         PIC X(3).<a name="wp1042087"> </a>
+    05  MODEL-NUMBER       PIC X(3).<a name="wp1042088"> </a>
+    05  STOCK-NUMBER       PIC X(7).<a name="wp1042089"> </a>
+    05  DESIGN-YEAR        PIC 99.<a name="wp1042090"> </a>
+    05  UNIT-COST          PIC 999V99.<a name="wp1042091"> </a>
+    05  UNIT-PRICE         PIC 999V99.<a name="wp1042092"> </a>
+    05  FACTORY-NUM        PIC 999.<a name="wp1042093"> </a>
+WORKING-STORAGE SECTION.<a name="wp1042094"> </a>
+01   FLAGS.<a name="wp1042095"> </a>
+     05   SHOE-LIST-EMPTY  PIC X  VALUE &quot;N&quot;.<a name="wp1042096"> </a>
+          88 NO-MORE-SHOE-RECORDS VALUE &quot;Y&quot;.<a name="wp1042097"> </a>
+     05   SORT-FILE-EMPTY  PIC X  VALUE &quot;N&quot;.<a name="wp1042098"> </a>
+          88 NO-MORE-SORT-RECORDS VALUE &quot;Y&quot;.<a name="wp1042099"> </a>
+01   HONG-KONG-NUMBER      PIC 99.<a name="wp1042100"> </a>
+01   TAIWAN-NUMBER         PIC 99.<a name="wp1042101"> </a>
+...<a name="wp1042102"> </a>
+PROCEDURE DIVISION.<a name="wp1042103"> </a>
+PRODUCT-LIST-SORT.<a name="wp1042104"> </a>
+*temporary SD file used by sort<a name="wp1042105"> </a>
+   SORT PRODUCT-SORT-FILE<a name="wp1042106"> </a>
+  *major sort key<a name="wp1042107"> </a>
+     ON ASCENDING  KEY MODEL-TYPE<a name="wp1042108"> </a>
+*minor sort key<a name="wp1042109"> </a>
+     ON DESCENDING KEY MODEL-NUMBER<a name="wp1042110"> </a>
+ *duplicates sorted in the order acquired<a name="wp1042111"> </a>
+      WITH DUPLICATES IN ORDER<a name="wp1042112"> </a>
+         INPUT  PROCEDURE IS WEED-PRODUCT-LIST<a name="wp1042113"> </a>
+         OUTPUT PROCEDURE IS UPDATE-PRODUCT-LIST.<a name="wp1042114"> </a>
+<a name="wp1042115"> </a>
+WEED-PRODUCT-LIST SECTION.<a name="wp1042116"> </a>
+OPEN-LIST-FILE.<a name="wp1042117"> </a>
+   OPEN INPUT ATHLETIC-SHOES-LIST.<a name="wp1042118"> </a>
+   PERFORM WEED-LIST <a name="wp1042119"> </a>
+      UNTIL NO-MORE-SHOE-RECORDS.<a name="wp1042120"> </a>
+   CLOSE ATHLETIC-SHOES-LIST.<a name="wp1042121"> </a>
+   GO TO EXIT-WEED-PRODUCT-LIST.<a name="wp1042122"> </a>
+   <a name="wp1042123"> </a>
+WEED-LIST.<a name="wp1042124"> </a>
+   READ ATHLETIC-SHOES-LIST NEXT<a name="wp1042125"> </a>
+      AT END MOVE &quot;Y&quot; TO SHOE-LIST-EMPTY<a name="wp1042126"> </a>
+      NOT AT END<a name="wp1042127"> </a>
+*stock numbers beginning with &quot;X&quot; are obsolete<a name="wp1042128"> </a>
+*do not RELEASE<a name="wp1042129"> </a>
+        IF STOCK-NUMBER(1:1) = &quot;X&quot; THEN <a name="wp1042130"> </a>
+           NEXT SENTENCE<a name="wp1042131"> </a>
+        ELSE<a name="wp1042132"> </a>
+*otherwise release the record to SORT<a name="wp1042133"> </a>
+           RELEASE SORT-DATA<a name="wp1042134"> </a>
+        END-IF.<a name="wp1042135"> </a>
+<a name="wp1042136"> </a>
+EXIT-WEED-PRODUCT-LIST.<a name="wp1042137"> </a>
+   EXIT.<a name="wp1042138"> </a>
+<a name="wp1042139"> </a>
+UPDATE-PRODUCT-LIST SECTION.<a name="wp1042140"> </a>
+CREATE-PRODUCT-LIST.<a name="wp1042141"> </a>
+   OPEN OUTPUT PRODUCT-LIST.<a name="wp1042142"> </a>
+   PERFORM UPDATE-RECORD <a name="wp1042143"> </a>
+      UNTIL NO-MORE-SORT-RECORDS.<a name="wp1042144"> </a>
+   CLOSE PRODUCT-LIST.<a name="wp1042145"> </a>
+   GO TO EXIT-UPDATE-PRODUCT-LIST.<a name="wp1042146"> </a>
+   <a name="wp1042147"> </a>
+UPDATE-RECORD.<a name="wp1042148"> </a>
+   RETURN PRODUCT-SORT-FILE INTO SORT-DATA<a name="wp1042149"> </a>
+      AT END MOVE &quot;Y&quot; TO SORT-FILE-EMPTY<a name="wp1042150"> </a>
+      NOT AT END<a name="wp1042151"> </a>
+         IF FACTORY-NUM = HONG-KONG-NUMBER THEN<a name="wp1042152"> </a>
+             MOVE TAIWAN-NUMBER TO FACTORY-NUM<a name="wp1042153"> </a>
+         END-IF<a name="wp1042154"> </a>
+         WRITE B-SHOE-RECORD FROM SORT-DATA.<a name="wp1042155"> </a>
+<a name="wp1042156"> </a>
+EXIT-UPDATE-PRODUCT-LIST.<a name="wp1042157"> </a>
+   EXIT.<a name="wp1042158"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

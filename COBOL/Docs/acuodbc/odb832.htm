@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:34" />
+  <title>Starting acuodbcs from the command line</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb8.htm">Chapter 8: The AcuODBC Server Environment</a> &gt; <a href="odb817.htm">8.4  AcuODBC Server Functions</a> &gt; <a href="odb831.htm">8.4.4  Starting and Stopping acuodbcs</a> &gt; </p>
+<a name="wp1053745"> </a><h2 class="pHeading3">
+Starting acuodbcs from the command line
+</h2>
+<a name="wp1053746"> </a><p class="pBody">
+The command &quot;acuodbcs -start&quot; causes <b class="cBold">acuodbcs </b>to<b class="cBold"> </b>start running.  On Windows NT and Windows 2000 servers, this option also installs AcuODBC Server as a Windows NT/2000 service, if it is not already installed.  In addition, if no startup options are stored, &quot;acuodbcs -start&quot; stores the startup options to be used as the default options.
+</p>
+<a name="wp1045048"> </a><p class="pBody">
+<b class="cBold">acuodbcs </b>is <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: normal">started</span> in background unless the &quot;-f&quot; option is specified.  If <b class="cBold">acuodbcs </b>is already running, AcuODBC Server outputs the message:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+The AcuODBCS Server 7.<em class="cEmphasis">x.x</em> on the default port &lt;20222&gt; service is already installed<a name="wp1045049"> </a>
+</pre></div>
+<a name="wp1050278"> </a><p class="pBody">
+A new <b class="cBold">acuodbcs </b>process will not be started.  If you want to start the AcuODBC Server with new options, you must stop and restart <b class="cBold">acuodbcs</b>.
+</p>
+<a name="wp1045051"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>On Windows NT and Windows 2000 systems, it is best to specify &quot;acuodbcs -start&quot; with no options.  This causes <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuodbcs</span> to use the startup parameters that have been stored for the service.  Typically, if you specify options with &quot;acuodbcs  -start&quot;, these options are in effect only until the <b class="cBold">acuodbcs </b>service is started again.  The exception to this is if no startup parameters have been stored for the service.  In this case, the parameters that you use to start <b class="cBold">acuodbcs</b> with will be stored for future startup use.
+<hr />
+</p>
+<a name="wp1045074"> </a><p class="pBody">
+Optional arguments to &quot;-start&quot; include:<span style="font-family: Arial, Verdana, Helvetica, sans-serif"></span></p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1045054"> </a>
+Option
+
+</th>
+    <th><a name="wp1045056"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045058"> </a><p class="pCellBody">
+-c
+</p>
+</td>
+    <td><a name="wp1045061"> </a><p class="pCellBody">
+Specifies the name and path of the server configuration file.  The &quot;-c&quot; must be followed by a space, and then the path and name of the server configuration file.  When &quot;-c&quot; is not used, <b class="cBold">acuodbcs </b>looks for the configuration file in its default location: &quot;/etc/odbcscfg&quot; for UNIX or &quot;\etc\odbcscfg&quot; for Windows NT/2000.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045063"> </a><p class="pCellBody">
+-f
+</p>
+</td>
+    <td><a name="wp1045066"> </a><p class="pCellBody">
+By default, <b class="cBold">acuodbcs </b>runs in the background.  Use the &quot;-f&quot; option to run <b class="cBold">acuodbcs </b>in the foreground.  When run in the foreground, the <b class="cBold">acuodbcs </b>process traps normal keyboard signals, such as Control-C.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1045069"> </a><p class="pCellBody">
+-n
+</p>
+</td>
+    <td><a name="wp1045071"> </a><p class="pCellBody">
+Assigns a port number to this instance of the <b class="cBold">acuodbcs </b>program.  The &quot;-n&quot; must be followed by a space and then an integer, e.g., &quot;6524&quot;.  It overrides the ACUODBCS_PORT value set in the server configuration file.  
+</p>
+<a name="wp1045072"> </a><p class="pCellBody">
+The &quot;-n&quot; option associates a port number with one instance of the <b class="cBold">acuodbcs </b>daemon.  Client applications can, in turn, be assigned to a particular instance of the <b class="cBold">acuodbcs </b>service via the Port Number field on the AcuODBC Server tab of the AcuODBC Configuration property sheet.
+</p>
+<a name="wp1045073"> </a><p class="pCellBody">
+The <b class="cBold">acuodbcs</b> daemon can work with <em class="cEmphasis">privileged</em> port numbers (from 0 to 1023), and with <em class="cEmphasis">non-privileged</em> port numbers (1024 and higher).  Privileged port numbers are useful for external, secure applications. 
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"><span style="font-family: Arial, Verdana, Helvetica, sans-serif"></span>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

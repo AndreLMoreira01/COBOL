@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:14:50" />
+  <title>14.2.3  Using Report Labels and Entry Fields</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuBench User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="wkb14a.htm">Chapter 14: Working with Reports</a> &gt; <a href="wkb149.htm">14.2  Graphical Sample Reports</a> &gt; </p>
+<a name="wp1036119"> </a><h2 class="pHeading2">
+14.2.3  Using Report Labels and Entry Fields
+</h2>
+<a name="wp1036120"> </a><p class="pBody">
+The first sample is a simple report that contains only entry fields and labels.  After you set up your project and work environment as described in the previous section, use the following instructions to finish creating this report.
+</p>
+<a name="wp1036145"> </a><h3 class="pHeadingRef">
+Create and refine the data set that corresponds to your data layout: 
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036146"> </a><div class="pSmartList1"><li>Create a new blank program called Report1a from the File/New/Program interface.  When you click <b class="cBold">OK</b>, the program appears in the workspace Structure view.   </li></div>
+<a name="wp1036147"> </a><div class="pSmartList1"><li>Create a new data set by right-clicking on the workspace Structure view data set node in your program and selecting <b class="cBold">New Data Set</b>.  In the Property window, assign the data set to the SalesData data layout file.  Change the name of the data set to <b class="cBold">SalesdataDS</b>.  Right-click on the data set icon and select <b class="cBold">Referenced FD/SL</b>.  In the Data Set Member Files dialog, set the data set <b class="cBold">Open Mode to Input</b>.    </li></div>
+</ol></div>
+<a name="wp1036149"> </a><h3 class="pHeadingRef">
+Design your report in the Report Composer interface:
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036150"> </a><div class="pSmartList1"><li>Open a new blank graphical report called Report1a from the File/New/Report interface, or right-click on the report node and select <b class="cBold">New Report</b>.  </li></div>
+<a name="wp1036151"> </a><div class="pSmartList1"><li>Select the View/Drag and Drop command.  The Drag and Drop interface lists all the variables you can enter into the Report Composer interface.  In the left-hand drop-down box, select Salesdata, the data set you have created.  In the right-hand drop-down box, select &quot;Rpt.Entry-Field&quot;.  Pressing the Ctrl key, click on Sales-State, Sales-Branch-No, Sales-LastName, and Sales-FirstName.  Press and hold down the right-click mouse button, and drag these four items to the detail section of the Report Composer window.  </li></div>
+<a name="wp1039295"> </a><p class="pIndented1">
+This action creates report labels with titles derived from the variable name.  The report entry fields have Value variables derived from the variable name.  
+</p>
+<a name="wp1036152"> </a><div class="pSmartList1"><li>Generate the program.  A report (&quot;.rpt&quot;) file and a Report Composer Section in the source (&quot;.cbl&quot;) file are created.   </li></div>
+</ol></div>
+<a name="wp1036153"> </a><h3 class="pHeadingRef">
+Make one-time modifications to the generated code: 
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036154"> </a><div class="pSmartList1"><li>Modify the Acu-RPT-Report1a-MASTER-PRINT-LOOP paragraph in &quot;Report1a.cbl&quot; so that it contains the following code statements.  To avoid having this code overwritten when you regenerate, you should add this code outside of the AcuBench program tags.  In the Program Properties/Code Generation interface, make sure that the &quot;Regenerate tagged area only&quot; check box is selected.    </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PERFORM BEFORE-MASTER-PRINT-LOOP<a name="wp1036155"> </a>
+PERFORM UNTIL NOT Valid-Salesdata<a name="wp1036156"> </a>
+    PERFORM Acu-RPT-Report1a-DO-PRINT-RTN<a name="wp1036157"> </a>
+    PERFORM END-MASTER-PRINT-LOOP<a name="wp1036158"> </a>
+END PERFORM<a name="wp1036159"> </a>
+</pre></div>
+<a name="wp1036160"> </a><div class="pSmartList1"><li>Note that the PERFORM . . . DO-PRINT-RTN statement is automatically generated by AcuBench.  </li></div>
+<a name="wp1042797"> </a><div class="pSmartList1"><li>Add code to engage the generated report code after the Acu-Initial-Routine paragraph in &quot;Report1a.cbl&quot;.  Be sure to add this code outside the AcuBench program tags so it is not overwritten in subsequent code generations.  For graphical reports, you can use one of three code statements here.  Using the PERFORM <em class="cEmphasis">reportname</em>-PRINT-TOFILE statement causes the HTML file to be written to disk.  PERFORM <em class="cEmphasis">reportname</em>-DO-PRINT causes the HTML file to be written and printed.  When you use a PERFORM Acu-<em class="cEmphasis">reportname</em>-PREVIEW statement, the HTML file is written and previewed.  Note that to use the preview feature, you must be running Microsoft Internet Explorer 5.5 or later. </li></div>
+</ol></div>
+<a name="wp1036166"> </a><h3 class="pHeadingRef">
+Compile and execute the program.  
+</h3>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuBench-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

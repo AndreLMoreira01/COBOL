@@ -1,0 +1,1 @@
+boomerangDebug.cmd -o acurfap://[server-name]:[port-number]:[server's-object-directory-pathname]/@.acu -x -Ga -Zd -Lo listing.lst [client-sample-program-directory-pathname]\%1

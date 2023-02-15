@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:09" />
+  <title>3.8.3  Code Sample</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt13.htm"><br />Chapter 3:  Debugger and Utilities</a> &gt; <a href="gt1389.htm">3.8  External Sort Utility - AcuSort</a> &gt; </p>
+<a name="wp1113256"> </a><h2 class="pHeading2">
+3.8.3  Code Sample
+</h2>
+<a name="wp1113263"> </a><p class="pBody">
+The following sample code describes the SELECT and FD for an &quot;orders-detail&quot; indexed file: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT OPTIONAL Orders-Detail<a name="wp1113269"> </a>
+           ASSIGN       TO DISK &quot;ORDRDETL&quot;<a name="wp1113270"> </a>
+           ORGANIZATION IS INDEXED<a name="wp1113271"> </a>
+           ACCESS MODE  IS DYNAMIC<a name="wp1113272"> </a>
+           LOCK MODE    IS AUTOMATIC<a name="wp1113273"> </a>
+           FILE STATUS  IS ORDERS-DETAIL-STATUS<a name="wp1113274"> </a>
+           RECORD KEY   IS Prime = ORDERS-DETAIL-PRIMARY-KEY<a name="wp1113275"> </a>
+<a name="wp1113276"> </a>
+<a name="wp1113277"> </a>
+       FD  ORDERS-DETAIL.<a name="wp1113278"> </a>
+       01 ORDERS-DETAIL-RECORD.<a name="wp1113279"> </a>
+           05 ORDERS-DETAIL-PRIMARY-KEY.<a name="wp1113280"> </a>
+               10 ORDETL-CUSTOMER  PIC  X(10).<a name="wp1113281"> </a>
+               10 ORDETL-DATE.<a name="wp1113282"> </a>
+                   15 ORDETL-DT-YYYY   PIC  9(4).<a name="wp1113283"> </a>
+                   15 ORDETL-DT-MM     PIC  99.<a name="wp1113284"> </a>
+                   15 ORDETL-DT-DD     PIC  99.<a name="wp1113285"> </a>
+               10 ORDETL-TIME.<a name="wp1113286"> </a>
+                   15 ORDETL-HR        PIC  99.<a name="wp1113287"> </a>
+                   15 ORDETL-MIN       PIC  99.<a name="wp1113288"> </a>
+                   15 ORDETL-SEC       PIC  99.<a name="wp1113289"> </a>
+                   15 ORDETL-TH-SEC    PIC  99.<a name="wp1113290"> </a>
+               10 ORDETL-PROD-NO   PIC  X(10).<a name="wp1113291"> </a>
+           05 ORDETL-DESCRIPTION           PIC  X(80).<a name="wp1113292"> </a>
+           05 ORDETL-QTY       PIC  9(5).<a name="wp1113293"> </a>
+           05 ORDETL-PRICE     PIC  9(9)v99.<a name="wp1113294"> </a>
+           05 ORDETL-TOTAL-PRICE           PIC  9(9)v99.<a name="wp1113295"> </a>
+</pre></div>
+<a name="wp1113344"> </a><p class="pBody">
+In this sample, we illustrate the sort of the &quot;orders-detail&quot; file based on three fields: orderl-customer, ordetl-price, and ordetl-description.  Each field is to be sorted in ascending order, and the resulting output file includes only records in which ordetl-date is equal to or greater than May 3, 2006.  
+</p>
+<a name="wp1113355"> </a><p class="pBody">
+The <b class="cBold">AcuSort</b> take file &quot;paramfile1&quot; contains the following options:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+sort fields (1, 10, ch, a, 122, 11, nu, a, 37, 80, ch, a)<a name="wp1113325"> </a>
+use c:\acuprod\data\ordrdetl org ix<a name="wp1113933"> </a>
+   record f 143<a name="wp1113999"> </a>
+   key (1, 36, P)<a name="wp1114010"> </a>
+give c:\acuprod\data\ordrdet_sorted<a name="wp1113977"> </a>
+   include cond = 11 8 nu ge 20060503<a name="wp1113988"> </a>
+</pre></div>
+<a name="wp1113362"> </a><p class="pBody">
+If we include our <b class="cBold">AcuSort</b> instructions in a take file named &quot;paramfile1&quot;, our command line would be
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+acusort take paramfile1<a name="wp1113363"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

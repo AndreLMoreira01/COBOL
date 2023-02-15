@@ -1,0 +1,77 @@
+      * Report2e.evt
+      * Report2e.evt is generated from C:\Acucorp\Acucbl720\AcuGT\sample\reports\Report2e.Psf
+      * This is a generated file. DO NOT modify this file directly.
+      
+      ***   start event editor code   ***
+      *
+       Report2e-GH-State-AfterPrint.
+           MOVE Sales-State to Sales-State-Save
+           .
+      *
+       Report2e-GH-Branch-AfterPrint.
+           MOVE Sales-Branch-No to Sales-Branch-No-Save
+           .
+      *
+       Report2e-Dtl-1-BeforePrint.
+      * increment GF-1 columns
+           ADD Heavy-Equipment-Sales to Total-State-Heavy-Sales.
+           ADD Supplies-Sales to Total-State-Supplies-Sales.
+      * increment GF-2 columns
+           ADD Heavy-Equipment-Sales to Total-Branch-Heavy-Sales.
+           ADD Supplies-Sales to Total-Branch-Supplies-Sales
+           .
+      *
+       Report2e-HeavySalesEF-BeforePrint.
+           MOVE Heavy-Equipment-Sales to PR-Heavy-Sales
+           .
+      *
+       Report2e-SuppliesSalesEF-BeforePrint.
+           MOVE Supplies-Sales to PR-Supplies-Sales
+           .
+      *
+       Report2e-SalesQuotaEF-BeforePrint.
+           Move Sales-Quota to PR-Quota
+           .
+      *
+       Report2e-TotalBranchHeavyEF-BeforePrint.
+           Move Total-Branch-Heavy-Sales to 
+                 PR-Total-Branch-Heavy-Sales.
+           Initialize Total-Branch-Heavy-Sales.
+           .
+      *
+       Report2e-TotalBranchSuppliesEF-BeforePrint.
+           Move Total-Branch-Supplies-Sales to 
+                 PR-Total-Branch-Supplies-Sales.
+           Initialize Total-Branch-Supplies-Sales
+           .
+      *
+       Report2e-TotalStateHeavyEF-BeforePrint.
+           Move Total-State-Heavy-Sales to 
+                 PR-Total-State-Heavy-Sales.
+           Initialize Total-State-Heavy-Sales
+           .
+      *
+       Report2e-TotalStateSuppliesEF-BeforePrint.
+           Move Total-State-Supplies-Sales to 
+                 PR-Total-State-Supplies-Sales.
+           Initialize Total-State-Supplies-Sales
+           .
+
+       
+      *
+       Before-Master-Print-Loop.
+            MOVE LOW-VALUES TO SALES-KEY.
+            START Salesdata KEY > SALES-KEY.
+            READ Salesdata NEXT RECORD
+              AT END
+                MOVE "10" TO SALESDATA-STATUS
+            END-READ
+           .
+      *
+       End-Master-Print-Loop.
+            READ Salesdata NEXT RECORD
+              AT END
+                MOVE "10" TO SALESDATA-STATUS
+            END-READ
+           .
+

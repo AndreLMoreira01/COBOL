@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>Printing Multiple Jobs Simultaneously</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i132.htm">Routine to Handle the Windows Print Spooler</a> &gt; </p>
+<a name="wp1411392"> </a><h2 class="pHeading3">
+Printing Multiple Jobs Simultaneously
+</h2>
+<a name="wp1411393"> </a><p class="pBody">
+If you need to print multiple jobs at the same time, you must open multiple File Descriptors that point to &quot;-P SPOOLER&quot; or &quot;-P SPOOLER-DIRECT&quot; simultaneously.  For example, you may have two simultaneous print jobs:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT FIRST-FILE<a name="wp1411394"> </a>
+       ASSIGN TO PRINTER &quot;-P SPOOLER&quot;.<a name="wp1411395"> </a>
+<a name="wp1411396"> </a>
+SELECT SECOND-FILE<a name="wp1411397"> </a>
+       ASSIGN TO PRINTER &quot;-P SPOOLER&quot;.<a name="wp1411398"> </a>
+<a name="wp1411399"> </a>
+..<a name="wp1411400"> </a>
+<a name="wp1411401"> </a>
+PROCEDURE DIVISION.<a name="wp1411402"> </a>
+<a name="wp1411403"> </a>
+..<a name="wp1411404"> </a>
+<a name="wp1411405"> </a>
+       OPEN OUTPUT FIRST-FILE.<a name="wp1411406"> </a>
+       OPEN OUTPUT SECOND-FILE.<a name="wp1411407"> </a>
+</pre></div>
+<a name="wp1414665"> </a><p class="pBody">
+and both will print to the default Windows printer without interfering with each other.  You can call WIN$PRINTER using WINPRINT-SETUP or WINPRINT-SETUP-USE-MARGINS before one or both of the OPEN statements.  Each file may have individual file status variables, or may refer to a common file status variable.  
+</p>
+<a name="wp1411409"> </a><p class="pBody">
+This does not mean that you can open a single File Descriptor multiple times.  For example, the following will return file status indicating that the file is already opened:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT FIRST-FILE<a name="wp1411410"> </a>
+       ASSIGN TO PRINTER &quot;-P SPOOLER&quot;.<a name="wp1411411"> </a>
+<a name="wp1411412"> </a>
+..<a name="wp1411413"> </a>
+<a name="wp1411414"> </a>
+PROCEDURE DIVISION.<a name="wp1411415"> </a>
+<a name="wp1411416"> </a>
+..<a name="wp1411417"> </a>
+<a name="wp1411418"> </a>
+       OPEN OUTPUT FIRST-FILE.<a name="wp1411419"> </a>
+       OPEN OUTPUT FIRST-FILE.<a name="wp1411420"> </a>
+</pre></div>
+<a name="wp1411421"> </a><p class="pBody">
+This is normal behavior and is consistent with the way file handling is implemented in COBOL and in other programming languages.  
+</p>
+<a name="wp1411422"> </a><p class="pBody">
+If you are using only the verbs OPEN, CLOSE, and WRITE, no further changes to your code are needed.  If you are using WIN$PRINTER (other than WINPRINT-SETUP or WINPRINT-SETUP-USE-MARGINS), you need to specify which print job is affected.  This can be done in one of two ways:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1411423"> </a><div class="pSmartList1"><li>The simplest way is to execute the WIN$PRINT operation immediately after an OPEN or WRITE statement on the intended job.  Every execution of OPEN and WRITE sets the current job as the default so that subsequent activity using WIN$PRINTER is automatically directed to the job that was last accessed with an OPEN or WRITE statement.</li></div>
+<a name="wp1411424"> </a><p class="pIndented1">
+In this situation, if you have multiple jobs running, and you close one of them, the runtime switches to the next job in the list.  For example, if you are printing jobs 1, 2, and 3, and you close job 2, the close command sets the current job to 3.  If there is no job 3, the runtime attempts to set to the job that preceded the closed job (which in this case is job 1). If there are no jobs, the current job is initialized.
+</p>
+<a name="wp1411199"> </a><div class="pSmartList1"><li>The other method is to use the WINPRINT-SET-JOB operation of the WIN$PRINTER library routine.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:25" />
+  <title>2.2.3.2  Java development</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr2.htm">Chapter 2: Working with Java Technology</a> &gt; <a href="itr23.htm">2.2  Calling COBOL from Java</a> &gt; <a href="itr212.htm">2.2.3  Using Component Adapter Technology</a> &gt; </p>
+<a name="wp1037810"> </a><h2 class="pHeading3">
+2.2.3.2  Java development
+</h2>
+<a name="wp1037811"> </a><p class="pBody">
+The application that will consume services must be modified to invoke the new COBOL component.  You use the tools and language originally used to develop the application to execute these changes.  
+</p>
+<a name="wp1037812"> </a><p class="pBody">
+Using JBuilder, WebLogic Workshop, WebSphere Studio, or whatever Java application development you choose, modify your Java application as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037814"> </a><div class="pSmartList1"><li>Import the Javabean proxies that were generated for the COBOL SDL files.  By default, this is a package of &quot;.java&quot; source files named &quot;services&quot;.  The package name can vary, however.  </li></div>
+<a name="wp1068341"> </a><p class="pIndented1">
+Note that the Java compiler expects to find the proxies package and its members in an accessible directory.  This directory can be a subdirectory of a location listed in the classpath (via command-line option or environment variable), or it can be included in a JAR file (also listed in the classpath).  When the compiler finds these &quot;.java&quot; files, it compiles them into classes (with the &quot;.class&quot; extension).  These classes must be accessible to the JVM at run time, either by inclusion in the classpath or within a JAR file.
+</p>
+<a name="wp1068342"> </a><p class="pIndented1">
+The proxies themselves each have an import statement: &quot;import com.transoft.cfa.*;&quot;.  This refers to the actual Java client connector classes, which are contained in a JAR file named &quot;Tcf.jar&quot; (provided by Transoft).  This JAR file also needs to be accessible via the classpath, both at compile time and run time.
+</p>
+<a name="wp1067198"> </a><div class="pSmartList1"><li>Create an object for the COBOL application and its service components.  </li></div>
+<a name="wp1066209"> </a><div class="pSmartList1"><li>Connect to the Transoft broker where the COBOL services are hosted. </li></div>
+<a name="wp1069712"> </a><div class="pSmartList1"><li>Populate and register the COBOL service objects. </li></div>
+<a name="wp1069804"> </a><div class="pSmartList1"><li>Set methods for the service objects. </li></div>
+<a name="wp1066223"> </a><div class="pSmartList1"><li>Invoke the services and their methods.</li></div>
+</ol></div>
+<a name="wp1068081"> </a><p class="pBody">
+Following is a sample Java consumer program for your reference.  This sample illustrates how to invoke travel agency services from the ACUCOBOL-GT application known as AcuTravels.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+//  Import the Javabean proxies that were generated for the COBOL SDL file.<a name="wp1065363"> </a>
+import services.*;<a name="wp1069951"> </a>
+<a name="wp1065364"> </a>
+class TCA_test {<a name="wp1065365"> </a>
+    public static void main(String[] args) {<a name="wp1065366"> </a>
+        // Create the application object <a name="wp1065367"> </a>
+        AcuTravelsApplication   AcuTravels      = new AcuTravelsApplication();<a name="wp1065368"> </a>
+        // Create service objects (only 2 used here)<a name="wp1065369"> </a>
+        GetResService           GetRes          = new GetResService();<a name="wp1065370"> </a>
+        ListPmtTypesService     ListPmtTypes    = new ListPmtTypesService();<a name="wp1065371"> </a>
+<a name="wp1065372"> </a>
+        try {<a name="wp1065373"> </a>
+            // Connect to the broker <a name="wp1065374"> </a>
+            // (hard-coded values used for brevity)<a name="wp1065375"> </a>
+            AcuTravels.connect(&quot;kron.acucorp.com&quot;, 7171);<a name="wp1065376"> </a>
+            // Populate and register service objects<a name="wp1065377"> </a>
+            GetRes          = AcuTravels.getGetResService();<a name="wp1065378"> </a>
+            ListPmtTypes    = AcuTravels.getListPmtTypesService();<a name="wp1065379"> </a>
+            <a name="wp1065380"> </a>
+            // Set the reservation ID for the GetRes service<a name="wp1065381"> </a>
+            // (hard-coded value used for brevity)<a name="wp1065382"> </a>
+            GetRes.setResID(&quot;54321  001&quot;);<a name="wp1065383"> </a>
+            // Execute the GetRes service<a name="wp1065384"> </a>
+            GetRes.execute();<a name="wp1065385"> </a>
+            System.out.print( &quot;\n\n&quot; );<a name="wp1065386"> </a>
+            // Check the status and get the desired outputs or error messages<a name="wp1065387"> </a>
+            if ( GetRes.getStatus() == false ) {<a name="wp1065388"> </a>
+                String FirstName = GetRes.getFirstName();<a name="wp1065389"> </a>
+                String LastName  = GetRes.getLastName();<a name="wp1065390"> </a>
+                System.out.println( &quot;Reservation Name:  &quot; );<a name="wp1065391"> </a>
+                System.out.println( &quot;===================&quot; );<a name="wp1065392"> </a>
+                System.out.println( &quot;\t&quot; + FirstName + &quot; &quot; + LastName );<a name="wp1065393"> </a>
+                System.out.print( &quot;\n\n&quot; );<a name="wp1065394"> </a>
+            } else {<a name="wp1065395"> </a>
+                System.err.println( &quot;Error:  &quot; + GetRes.getErrorDescription() );<a name="wp1065396"> </a>
+            }<a name="wp1065397"> </a>
+<a name="wp1065398"> </a>
+            ListPmtTypes.execute();<a name="wp1065399"> </a>
+            if ( ListPmtTypes.getStatus() == false ) {<a name="wp1065400"> </a>
+                System.out.println( &quot;Available Payment Types:  &quot; );<a name="wp1065401"> </a>
+                System.out.println( &quot;==========================&quot; );<a name="wp1065402"> </a>
+                while ( ListPmtTypes.fetch() ) {<a name="wp1065403"> </a>
+                    System.out.println( &quot;\t&quot; + ListPmtTypes.getPaymentType() );<a name="wp1065404"> </a>
+                }<a name="wp1065405"> </a>
+                System.out.print( &quot;\n\n&quot; );<a name="wp1065406"> </a>
+            } else {<a name="wp1065407"> </a>
+                System.err.println( &quot;Error:  &quot; + ListPmtTypes.getErrorDescription() );<a name="wp1065408"> </a>
+            }<a name="wp1065409"> </a>
+<a name="wp1065410"> </a>
+<a name="wp1065411"> </a>
+        }<a name="wp1065412"> </a>
+        catch( Exception err ) {<a name="wp1065413"> </a>
+            System.err.println( &quot;Error connecting to TCA broker\n&quot; + err );<a name="wp1065414"> </a>
+        }<a name="wp1065415"> </a>
+        <a name="wp1065416"> </a>
+    }<a name="wp1065417"> </a>
+}<a name="wp1065418"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

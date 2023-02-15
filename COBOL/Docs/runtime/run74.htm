@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:22:58" />
+  <title>7.3  Testing File Integrity</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run7.htm"><br />Chapter 7: vutil File Manager</a> &gt; </p>
+<a name="wp1038379"> </a><h2 class="pHeading1">
+7.3  Testing File Integrity
+</h2>
+<a name="wp1038384"> </a><p class="pBody">
+The &quot;check&quot; option of <b class="cBold">vutil</b> tests a file for internal consistency.  The command is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+vutil  -check  [ -afkqx ]  [ <em class="cEmphasis">files </em>]<a name="wp1038385"> </a>
+</pre></div>
+<a name="wp1038386"> </a><p class="pBody">
+With no options, <b class="cBold">vutil</b> reads a list of files from the standard input and tests each one for a non-zero user count and other quickly tested errors.  Files with errors or a non-zero user count are listed.  You may place the list of files to check on the command line instead of using the standard input.  
+</p>
+<a name="wp1038409"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1038390"> </a><p class="pCellBody">
+<b class="cBold">-a<br />&#160;&#160;&#160;&#160;&#160;&#160;</b>
+</p>
+</td>
+    <td><a name="wp1038392"> </a><p class="pCellBody">
+ (for &quot;automatic&quot;) This option causes <b class="cBold">vutil</b> to do a thorough test of each file that has a non-zero user count.  It will read every record in an attempt to see if the file is broken.  Any problems that are detected are printed.  You can use this option to test a large number of files for errors without exhaustively reading every record from every file.  Only those files that appear to have potential problems (because of the non-zero user count) are tested.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038394"> </a><p class="pCellBody">
+<b class="cBold">-f</b>
+</p>
+</td>
+    <td><a name="wp1038396"> </a><p class="pCellBody">
+ (full) This option forces a file to be checked (including files with a user count of zero).  When both &quot;-a&quot; and &quot;-f&quot; are specified, &quot;-f&quot; takes precedence.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038398"> </a><p class="pCellBody">
+<b class="cBold">-k</b>
+</p>
+</td>
+    <td><a name="wp1038400"> </a><p class="pCellBody">
+(key number) This option is used to specify the key to be used to read the file.  All the keys in the file are read sequentially by the specified key during the check of the file.  This option must be used in combination with the &quot;-a&quot; or &quot;-f&quot; option.  This option has no effect when used with the &quot;-x&quot; option.  &quot;-k&quot; must be followed (as the next separate argument) by the number of the key you want to use.  Zero (&quot;0&quot;) indicates the primary key, &quot;1&quot; indicates the first alternate, and so forth.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038402"> </a><p class="pCellBody">
+<b class="cBold">-q</b>
+</p>
+</td>
+    <td><a name="wp1038404"> </a><p class="pCellBody">
+This option causes <b class="cBold">vutil</b> to exit (with status 99) if user interaction is required.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038406"> </a><p class="pCellBody">
+<b class="cBold">-x</b>
+</p>
+</td>
+    <td><a name="wp1038408"> </a><p class="pCellBody">
+(extended tests) This option causes <b class="cBold">vutil</b> to run extended tests in place of those that are normally run by the &quot;-a&quot; or &quot;-f&quot; options.  The extended tests include: reading every record with every key, reading the records in their physical order in the file, and checking the deleted records list.  The filename is displayed along with a message that indicates which test <b class="cBold">vutil</b> is currently working on.  This option causes a <em class="cEmphasis">write </em>lock to be placed on the file to ensure exclusive access during the tests.  You must specify the &quot;-x&quot; option with either &quot;-a&quot; or &quot;-f&quot; on the same command line; used by itself, it does nothing.  The &quot;-x&quot; option disables the &quot;-k&quot; option when the two are specified on the same command line.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1038410"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Although the &quot;check&quot; option tests the file thoroughly, it is possible for a file to be corrupt and still pass the test.  If you're processing an indexed file outside of <b class="cBold">vutil</b> and you receive a file error &quot;98,&quot; that file is corrupt even if it passed the &quot;vutil -check&quot; test.  
+<hr />
+</p>
+<a name="wp1038411"> </a><p class="pBody">
+For convenience in building scripts, the &quot;check&quot; option will not complain if given a non-Vision file.  This allows &quot;check&quot; to be run on an entire directory without generating spurious errors from relative and sequential files.  
+</p>
+<a name="wp1038413"> </a><p class="pBody">
+When you perform &quot;vutil -check&quot;, one of the following status values is returned to the host operating system when <b class="cBold">vutil </b>quits:
+</p>
+<a name="wp1038440"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1038416"> </a><p class="pCellBody">
+  <b class="cBold">0</b>
+</p>
+</td>
+    <td><a name="wp1038418"> </a><p class="pCellBody">
+file passed all checks
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038420"> </a><p class="pCellBody">
+<b class="cBold">  1</b>
+</p>
+</td>
+    <td><a name="wp1038422"> </a><p class="pCellBody">
+checks not fully performed because the file was in use
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038424"> </a><p class="pCellBody">
+  <b class="cBold">2</b>
+</p>
+</td>
+    <td><a name="wp1038427"> </a><p class="pCellBody">
+non-zero user count found
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038429"> </a><p class="pCellBody">
+<b class="cBold">  3</b>
+</p>
+</td>
+    <td><a name="wp1038431"> </a><p class="pCellBody">
+file is corrupt
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038433"> </a><p class="pCellBody">
+<b class="cBold"> 99</b>
+</p>
+</td>
+    <td><a name="wp1038435"> </a><p class="pCellBody">
+user interaction was required, and the &quot;-q&quot; switch was set  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038437"> </a><p class="pCellBody">
+<b class="cBold">255</b>
+</p>
+</td>
+    <td><a name="wp1038439"> </a><p class="pCellBody">
+<b class="cBold">vutil</b> fatal error or incorrect command line
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1038441"> </a><p class="pBody">
+If more than one file is checked, the highest status value that applies is returned.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

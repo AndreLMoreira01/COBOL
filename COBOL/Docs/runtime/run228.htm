@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:20:41" />
+  <title>2.4.4  Double-Byte Character Handling</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run2.htm"><br />Chapter 2: Setting Up Your Terminals</a> &gt; <a href="run223.htm">2.4  The Display Interface</a> &gt; </p>
+<a name="wp1044538"> </a><h2 class="pHeading2">
+2.4.4  Double-Byte Character Handling
+</h2>
+<a name="wp1044542"> </a><p class="pBody">
+Asian character sets contain large numbers of ideographic characters that represent an entire or partial word or concept.  They may also contain interspersed phonetic characters.  They may therefore consist of tens of thousands of characters.  Because one 8-bit byte can hold only 256 unique codes, these languages require at least two bytes to represent each character, in order to accommodate the full range. 
+</p>
+<a name="wp1044543"> </a><p class="pBody">
+Most double-byte characters occupy two full character screen positions (each byte corresponds to one screen position).  Such data may be entered into and displayed from USAGE DISPLAY data items.  Most COBOL applications can therefore accept and store double-byte data without modification.
+</p>
+<a name="wp1044544"> </a><p class="pBody">
+Problems can arise when double-byte data is displayed on the screen.  For example, during an ACCEPT, one byte of a double-byte character may be deleted or overwritten.  When a window is displayed, the edge of the window might cover one byte of a double-byte character.  In these circumstances, the pairing of bytes can change, and the resulting codes may represent entirely different characters.  On most machines this confuses the operating system's display driver.  To overcome these potential problems, the runtime must follow two rules:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1044545"> </a><div class="pSmartList1"><li>Always display both bytes of a double-byte character together (never display only part of a double-byte character).</li></div>
+<a name="wp1044546"> </a><div class="pSmartList1"><li>Always overwrite, or change the attributes of, both bytes of a double-byte character together (never overwrite, or change the attributes of, only part of a double-byte character).</li></div>
+</ol></div>
+<a name="wp1044547"> </a><p class="pBody">
+These rules must be obeyed when an ACCEPT handles cursor movement, cursor placement, text selection, delete, backspace, and character overtyping.
+</p>
+<a name="wp1044548"> </a><p class="pBody">
+The rules must also be followed when the edges of windows are displayed, to avoid covering parts of double-byte characters.  
+</p>
+<a name="wp1044549"> </a><p class="pBody">
+To implement these rules, the runtime needs to know which of several double-byte character encoding schemes is being used.  It gets this information from the value of the configuration variable &quot;CODE-SYSTEM.&quot;  See Appendix H for a detailed discussion of this variable.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

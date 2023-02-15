@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-SET-MARGINS</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1040425"> </a><h2 class="pHeading3">
+WINPRINT-SET-MARGINS
+</h2>
+<a name="wp1040427"> </a><p class="pBody">
+This operation code allows you to set the margins on a report.  
+</p>
+<a name="wp1040433"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040434"> </a>
+    USING WINPRINT-SET-MARGINS, WINPRINT-DATA<a name="wp1040435"> </a>
+    GIVING RESULT<a name="wp1040436"> </a>
+</pre></div>
+<a name="wp1040437"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040438"> </a><p class="pBody">
+<b class="cBold">WINPRINT-DATA</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 WINPRINT-DATA.<a name="wp1040439"> </a>
+   03 WPRTDATA-SET-STD-FONT.<a name="wp1040440"> </a>
+   03 WPRTDATA-MARGINS REDEFINES<a name="wp1040441"> </a>
+      WPRTDATA-SET-STD-FONT.<a name="wp1040442"> </a>
+      05 WPRTDATA-TOP-MARGIN           PIC 9(7)V99 COMP-5.<a name="wp1040443"> </a>
+      05 WPRTDATA-BOTTOM-MARGIN        PIC 9(7)V99 COMP-5.<a name="wp1040444"> </a>
+      05 WPRTDATA-LEFT-MARGIN          PIC 9(7)V99 COMP-5.<a name="wp1040445"> </a>
+      05 WPRTDATA-RIGHT-MARGIN         PIC 9(7)V99 COMP-5.<a name="wp1040446"> </a>
+      05 WPRTDATA-MARGIN-UNITS         UNSIGNED-SHORT.<a name="wp1040447"> </a>
+</pre></div>
+<a name="wp1040448"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This group item should be initialized before it is used.
+<hr />
+</p>
+<a name="wp1040449"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040450"> </a><p class="pBody">
+When combined with the ability to set the exact height of a line (see WINPRINT-SET-LINES-PER-PAGE), this operation lets you reliably print on pre-printed forms with many different devices.  WINPRINT-SET-MARGINS sets the margins for the next report if the printer is not open, or for the current report if the printer is open.  If the printer is open and the current page is blank, the margin change occurs for the current page.  Otherwise, the margin change occurs on the next page.  
+</p>
+<a name="wp1040451"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Most printers have minimum margins that cannot physically be printed in, regardless of the setting of the logical margins.
+<hr />
+</p>
+<a name="wp1040452"> </a><h3 class="pHeadingRef">
+Setting margins
+</h3>
+<a name="wp1299046"> </a><p class="pBody">
+The four margin fields should be set to the values you want to use.  For example, to set half-inch top and bottom margins you would move &quot;.5&quot; to WPRTDATA-TOP-MARGIN and WPRTDATA-BOTTOM-MARGIN.  You can set a margin to zero to use the printer's default margins.  
+</p>
+<a name="wp1300915"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This operation is calculates the printable area of a report when determining the capacity for lines or columns. Setting a value for WPRTDATA-RIGHT-MARGIN does not cause the print line to be truncated. 
+<hr />
+</p>
+<a name="wp1040454"> </a><p class="pBody">
+Before you can set the margins, the MARGIN-UNITS field must be set to a level 78 that describes the measurement units.  The choices are:
+</p>
+<a name="wp1040455"> </a><p class="pBody">
+<b class="cBold">WPRTMARGIN-DEFAULT-MARGINS</b> -- Use printer default margins (this is the default).
+</p>
+<a name="wp1040456"> </a><p class="pBody">
+<b class="cBold">WPRTMARGIN-PIXELS</b> -- Margins expressed in printer-dependent units.  Laser printers, for example, use either 300 or 600 units per inch.
+</p>
+<a name="wp1040457"> </a><p class="pBody">
+<b class="cBold">WPRTMARGIN-CELLS</b> -- Margins expressed as a number of rows or columns based on the currently selected font.
+</p>
+<a name="wp1040458"> </a><p class="pBody">
+<b class="cBold">WPRTMARGIN-INCHES</b> -- Margins expressed in inches.
+</p>
+<a name="wp1040459"> </a><p class="pBody">
+<b class="cBold">WPRTMARGIN-CENTIMETERS</b> -- Margins expressed in centimeters. 
+</p>
+<a name="wp1040460"> </a><p class="pBody">
+To use the margin-setting feature to simplify printing on pre-printed forms, we suggest this sequence:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1040461"> </a><div class="pSmartList1"><li>Establish which printer you want to use.</li></div>
+<a name="wp1040462"> </a><div class="pSmartList1"><li>Select the font.</li></div>
+<a name="wp1040463"> </a><div class="pSmartList1"><li>Set the margins.</li></div>
+<a name="wp1040464"> </a><div class="pSmartList1"><li>Set the line height.</li></div>
+</ol></div>
+<a name="wp1040465"> </a><p class="pBody">
+It is important to note that step (3) should precede step (4) because the line height depends on the top and bottom margins that you have set.  For an 11&quot; form, a typical scenario might be:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Font: Courier New, 12 point<a name="wp1040466"> </a>
+Margins: .5&quot; top and bottom<a name="wp1040467"> </a>
+Lines per page: 60<a name="wp1040468"> </a>
+</pre></div>
+<a name="wp1040469"> </a><p class="pBody">
+This would result in 6 lines per inch with 3 blank lines at the top and bottom of each page.  The code to set the margins for this case would be:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+INITIALIZE WPRTDATA-MARGINS<a name="wp1040470"> </a>
+MOVE .5 TO WPRTDATA-TOP-MARGIN, WPRTDATA-BOTTOM-MARGIN<a name="wp1040471"> </a>
+MOVE WPRTMARGIN-INCHES TO WPRTDATA-MARGIN-UNITS<a name="wp1040472"> </a>
+CALL &quot;WIN$PRINTER&quot; USING WINPRINT-SET-MARGINS, <a name="wp1040473"> </a>
+      WINPRINT-DATA<a name="wp1040474"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

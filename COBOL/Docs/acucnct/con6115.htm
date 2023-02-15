@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:53:04" />
+  <title>6.7.7  Automatic Update Failure</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con6.htm">Chapter 6: Thin Client: Preparing the Server </a> &gt; <a href="con6103.htm">6.7  Thin Client Automatic Update </a> &gt; </p>
+<a name="wp1070996"> </a><h2 class="pHeading2">
+6.7.7  Automatic Update Failure
+</h2>
+<a name="wp1070997"> </a><p class="pBody">
+If the thin client automatic update process fails for any reason, a message box appears and a log file is created on the server by default.  This file contains a log of the update operations and details about the failure.  The configuration variables that affect the failure notification process are described in the following paragraphs.  
+</p>
+<a name="wp1071210"> </a><p class="pBody">
+The TC_AUTO_UPDATE_FAILED_TITLE configuration variable lets you set the title bar text for the message box that appears on update failure.  Its default value is
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ACUCOBOL-GT Thin Client<a name="wp1070998"> </a>
+</pre></div>
+<a name="wp1070999"> </a><p class="pBody">
+The TC_AUTO_UPDATE_FAILED_MESSAGE configuration variable lets you specify the text in this message box.  Its default value is
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ACUCOBOL-GT Thin Client: Automatic update was 
+unsuccessful<a name="wp1071000"> </a>
+</pre></div>
+<a name="wp1071371"> </a><p class="pBody">
+In some cases, you may not want the thin client to inform the user that the automatic update failed.  Set the TC_AUTO_UPDATE_NOTIFY_FAIL configuration variable to &quot;false&quot; (0, off, no) to configure the thin client so it does not notify the user if the automatic update fails.  The default value of TC_AUTO_UPDATE_NOTIFY_FAIL is &quot;true&quot; (1, on, yes).  
+</p>
+<a name="wp1071399"> </a><p class="pBody">
+Note that the message box does not appear if the user cancels the Windows installer download process.  
+</p>
+<a name="wp1071232"> </a><p class="pBody">
+The TC_SERVER_LOG_FILE configuration variable can be used to configure the location and name of the log file created on the server. The name can optionally include the hostname of the client machine and the process ID of the server runtime that was managing the automatic update at the time of the failure.
+</p>
+<a name="wp1071238"> </a><p class="pBody">
+By default, this file is named &quot;autoupdate.%c.%p.log&quot;, where &quot;%c&quot; is replaced by the client hostname and &quot;%p&quot; is replaced by the process ID of the server runtime. The default location is the working directory specified in the alias on the server.
+</p>
+<a name="wp1071243"> </a><p class="pBody">
+The directory must exist at the time of the failure. Otherwise, this file is not created.  The location of the log file is relative to the working directory specified in the alias.  For example, the following setting:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+TC_SERVER_LOG_FILE  updatefailed/%c.%p.log<a name="wp1071290"> </a>
+</pre></div>
+<a name="wp1071292"> </a><p class="pBody">
+configures the log files to be created in a directory named &quot;updatefailed&quot; relative to the working directory.  The files are named with the hostname of the client followed by a dot and the process ID of the server runtime, ending with the &quot;.log&quot; file extension.
+</p>
+<a name="wp1071297"> </a><p class="pBody">
+The client and server may be in different time zones. You can look at the file's creation date to see what time the update failed according to the clock on the server, and view the timestamps at the beginning of the lines in the log file to see what time it failed according to the clock on the client.
+</p>
+<a name="wp1071355"> </a><p class="pBody">
+Set the TC_DISABLE_SERVER_LOG configuration variable to &quot;true&quot; (1, on, yes) in order to prevent the creation of a log file for a thin client automatic update failure.  The default value of TC_DISABLE_SERVER_LOG is &quot;false&quot; (0, off, no).
+</p>
+<a name="wp1071001"> </a><p class="pBody">
+
+</p>
+<a name="wp1070543"> </a><p class="pBody">
+
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

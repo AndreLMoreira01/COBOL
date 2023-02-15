@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:43:13" />
+  <title>tablename_startnnn </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4glb.htm">Appendix B:  Acu4GL for Microsoft SQL Server Information</a> &gt; <a href="4glb47.htm">B.7  Stored Procedures</a> &gt; <a href="4glb48.htm">B.7.1  Developer- or Site-supplied Stored Procedures</a> &gt; </p>
+<a name="wp1039950"> </a><h2 class="pHeading3">
+tablename_startnnn 
+</h2>
+<a name="wp1039953"> </a><p class="pBody">
+<em class="cEmphasis">tablename</em>_start<em class="cEmphasis">nnn</em> is used to START a file.  The <em class="cEmphasis">nnn</em> value is the key number to start on, and will be 0 filled.  For example, the start procedure for the primary key for table mytab will be &quot;mytab_start000&quot;.  
+</p>
+<a name="wp1039954"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If <a  href="4glb34.htm#wp1039708">A_MSSQL_NO_23_ON_START</a> is set to &quot;Yes,&quot; the start stored procedure is disabled.
+<hr />
+</p>
+<a name="wp1039955"> </a><p class="pBody">
+Because there can be up to 119 alternate keys, the Acu4GL product does not search for a start procedure unless, or until, it is used.  The parameters passed to the stored procedure are a 2-char mode (it is a varchar(2) field), with one of the following values: &gt;, &gt;=, =, &lt;=, or &lt;.  The rest of the parameters are the columns of the key used to start.  Because the ANSI specification for START includes information about the size of the key being used (and in particular allows partial keys), the start procedure is used only if an entire key is given to the start verb.  This procedure is also special in that it does not return data, but needs to raise an error condition if the start fails.  The way to raise the error condition from within the stored procedure is to include code similar to the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+raiserror 22006 &quot;Record not found&quot;<a name="wp1039956"> </a>
+</pre></div>
+<a name="wp1039957"> </a><p class="pBody">
+The code 22006 is very important.  It is the code searched for in setting the error condition from within the Acu4GL product.  If you use a different number, your starts may succeed when they should actually fail.
+</p>
+<a name="wp1039958"> </a><p class="pBody">
+For example, based on the sample XFD, you might want to create the following stored procedure to start a file:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+create procedure ftestdat_start001<a name="wp1039959"> </a>
+@mode varchar(2),<a name="wp1039960"> </a>
+@ft2_key1_seg1 char(2),<a name="wp1039961"> </a>
+@ft2_key1_seg2 char(2)<a name="wp1039962"> </a>
+as<a name="wp1039963"> </a>
+<a name="wp1039964"> </a>
+if exists (select 1 from ftestdat where<a name="wp1039965"> </a>
+<a name="wp1039966"> </a>
+(ftest2_key1_seg1 = @ft2_key1_seg1 and<a name="wp1039967"> </a>
+((@mode = &quot;&gt;=&quot; and ftest2_key1_seg2 &gt;=@ft2_key1_seg2) or<a name="wp1039968"> </a>
+(@mode = &quot;&gt;&quot; and ftest2_key1_seg2 &gt; @ft2_key1_seg2) or<a name="wp1039969"> </a>
+(@mode = &quot;=&quot; and ftest2_key1_seg2 = @ft2_key1_seg2) or<a name="wp1039970"> </a>
+(@mode = &quot;&lt;&quot; and ftest2_key1_seg2 &lt; @ft2_key1_seg2) or<a name="wp1039971"> </a>
+(@mode = &quot;&lt;=&quot; and ftest2_key1_seg2 &lt;= @ft2_key1_seg2))))<a name="wp1039972"> </a>
+return<a name="wp1039973"> </a>
+if exists (select 1 from ftestdat where<a name="wp1039974"> </a>
+(((@mode = &quot;&gt;=&quot; or @mode = &quot;&gt;&quot;) and <a name="wp1039975"> </a>
+ftest2_key1_seg1 &gt; @ft2_key1_seg1) or<a name="wp1039976"> </a>
+((@mode = &quot;&lt;=&quot; or @mode = &quot;&lt;&quot;) and<a name="wp1039977"> </a>
+ftest2_key1_seg1 &lt; @ft2_key1_seg1)))<a name="wp1039978"> </a>
+return<a name="wp1039979"> </a>
+raiserror 22006 &quot;Record not found&quot;<a name="wp1039980"> </a>
+<a name="wp1039981"> </a>
+grant execute on ftestdat_start001 to public<a name="wp1039982"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

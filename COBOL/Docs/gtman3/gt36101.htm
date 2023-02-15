@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>DISPLAY src-item (ANSI format)</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1037951"> </a><h2 class="pHeading2">
+DISPLAY src-item (ANSI format)
+</h2>
+<a name="wp1037953"> </a><h3 class="pHeadingRef">
+Format 9
+</h3>
+<a name="wp1037959"> </a><p class="pBody">
+<span style="font-weight: bold" class="cBoldItalic">DISPLAY src-item</span><em style="font-weight: normal" class="cEmphasis"> (ANSI format)</em> sends data directly to the screen without using the ACUCOBOL-GT window manager.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">DISPLAY</u> {src-item} ... [ <u class="cUnderline">UPON</u> mnemonic-name ] [ WITH <u class="cUnderline">NO</u> <u class="cUnderline">ADVANCING</u> ]<a name="wp1037960"> </a>
+</pre></div>
+<a name="wp1037962"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037963"> </a><div class="pSmartList1"><li>Different formats of the DISPLAY statement may be mixed together in one DISPLAY statement, as long as no ambiguity results.  The effect is the same as specifying each DISPLAY statement separately.</li></div>
+<a name="wp1037964"> </a><div class="pSmartList1"><li><em class="cEmphasis">Src-item</em> is a literal or data item.  It must be USAGE DISPLAY unless the CONVERSION phrase is also specified.  <em class="cEmphasis">Src-item</em> specifies the data to be displayed.  </li></div>
+<a name="wp1037965"> </a><div class="pSmartList1"><li><em class="cEmphasis">Mnemonic-name</em> must be a user-defined word declared in Special-Names that refers to a display device, or it must be the name of the display device itself. See <a  href="gt346.htm#wp1034415">section 4.2.3, &quot;Special-Names Paragraph,&quot;</a> for a list of valid devices.</li></div>
+<a name="wp1037966"> </a><div class="pSmartList1"><li>If the UPON phrase is specified it must be the first optional phrase.</li></div>
+<a name="wp1037967"> </a><div class="pSmartList1"><li>If the UPON phrase is omitted, then the &quot;-Ca&quot; compiler option must be specified.  If it is not, then the statement is treated as a Format 1 DISPLAY statement instead. </li></div>
+</ol></div>
+<a name="wp1037970"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037971"> </a><div class="pSmartList1"><li>The data contained in <em class="cEmphasis">src-item</em> is sent to the output device named by the UPON phrase.  If the UPON phrase is omitted, the output device is assumed to be the user's console.  </li></div>
+<a name="wp1037972"> </a><div class="pSmartList1"><li>If the WITH NO ADVANCING phrase is omitted, then the device is advanced to the next line after the last <em class="cEmphasis">src-item </em>is displayed.  If WITH NO ADVANCING is specified, no additional action takes place after the data is sent to the output device.  If line advancing is used, trailing spaces are removed from the last <em class="cEmphasis">src-item </em>before it is sent to the device.</li></div>
+<a name="wp1037973"> </a><div class="pSmartList1"><li>If the output device is any of the following, the data is sent to the user's console:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CONSOLE, SYSOUT, SYSLST, SYSLIST<a name="wp1037974"> </a>
+</pre></div>
+<a name="wp1037975"> </a><p class="pIndented1">
+This data may be redirected with the &quot;-o&quot; runtime option or with operating system commands.  If line advancing is used, the system's output buffer is flushed, but if NO ADVANCING is specified, then the buffer is not flushed.  When data is sent to these devices, no editing or formatting of the data occurs. 
+</p>
+<a name="wp1037976"> </a><div class="pSmartList1"><li>If the output device is SYSOUT-FLUSH, the data is sent to the user's console.  After the last <em class="cEmphasis">src-item</em> is sent, the output buffer is flushed, forcing the data to be sent immediately.  No editing or formatting of the data occurs.</li></div>
+<a name="wp1037977"> </a><div class="pSmartList1"><li>If the output device is SYSERR, the data is sent to the runtime's error output.  This is either the user's screen or the file specified in the &quot;-e&quot; runtime option.</li></div>
+<a name="wp1037978"> </a><div class="pSmartList1"><li>Technical Note: This form of the DISPLAY statement sends data directly to the user's screen without using ACUCOBOL-GT's window manager.  On many machines, the window manager maintains an image of the user's screen in memory.  (This improves efficiency by omitting redundant screen displays and is used to implement &quot;pop-up&quot; windows.)  By sending data directly to the screen, you can cause the window manager's screen image to be in error.  This can cause strange effects when mixed with ACUCOBOL-GT-specific DISPLAY statements, including:</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1037979"> </a><div class="pSmartList2"><li>lost data</li></div>
+<a name="wp1037980"> </a><div class="pSmartList2"><li>incorrect functioning of CLOSE WINDOW</li></div>
+<a name="wp1037981"> </a><div class="pSmartList2"><li>incorrect cursor position</li></div>
+<a name="wp1037982"> </a><div class="pSmartList2"><li>incorrect character attributes</li></div>
+<a name="wp1037983"> </a><div class="pSmartList2"><li>incorrect display in debugger </li></div>
+</ul></div>
+<a name="wp1037985"> </a><p class="pIndented1">
+For these reasons, you must be careful when using ANSI DISPLAY.  Here are some useful guidelines:
+</p>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1037986"> </a><div class="pSmartList2"><li>If your DISPLAY does not affect the screen image, then it's OK to use it.  For example, you can use ANSI DISPLAY to send a control sequence to an attached printer or cash register.</li></div>
+<a name="wp1037987"> </a><div class="pSmartList2"><li>If you use only ANSI DISPLAY statements, then you should not experience any problems (except that the debugger will not be able to restore the user's screen).  With this approach, you should avoid all DISPLAY statements except for Format 9.</li></div>
+<a name="wp1037992"> </a><div class="pSmartList2"><li>If you must mix formats, then you can use the library routine &quot;W$FORGET&quot; to correct the behavior of the window manager.  This routine causes the window manager to enter its initial state, where it does not know the screen image or current attribute settings.  If you call this routine after a series of Format 9 DISPLAY statements, the window manager will be set to a state where it can correctly manage the screen.  Note that this routine will cause the cursor to be positioned to the last line on the screen.</li></div>
+<a name="wp1037993"> </a><div class="pSmartList2"><li>You can always use UPON SYSERR safely.  When sent to the screen, the output is directed through the window manager.  Normally, you would use this with the &quot;-e&quot; runtime option to direct error messages to an error log file.</li></div>
+<a name="wp1037994"> </a><div class="pSmartList2"><li>In the DOS/VS COBOL compatibility mode, output may be sent to a simulated card punch.  See &quot;DISPLAY UPON SYSPUNCH&quot; in section 5.2 of <em class="cEmphasis">Transitioning to ACUCOBOL-GT</em>.</li></div>
+</ul></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

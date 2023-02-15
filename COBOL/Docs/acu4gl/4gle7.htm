@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:40" />
+  <title>E.2.3.1  Installation steps on the UNIX client</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gle.htm">Appendix E:  Acu4GL for Sybase Information </a> &gt; <a href="4gle3.htm">E.2  Acu4GL for Sybase Installation and Setup</a> &gt; <a href="4gle6.htm">E.2.3  Installing Acu4GL for Sybase for Use with a UNIX Client  </a> &gt; </p>
+<a name="wp1049168"> </a><h2 class="pHeading3">
+E.2.3.1  Installation steps on the UNIX client
+</h2>
+<a name="wp1049169"> </a><p class="pBody">
+Acu4GL communicates with Sybase version 11.0 or later.  The client (your application) and the server (the RDBMS) may be located on the same UNIX machine, or on different UNIX machines.  The server may also be located on a Windows NT machine.
+</p>
+<a name="wp1049170"> </a><p class="pBody">
+To install the Acu4GL product, first perform the following steps on the UNIX client machine:
+</p>
+<a name="wp1049171"> </a><h3 class="pHeadingRef">
+Step 1: Install Sybase client library
+</h3>
+<a name="wp1049172"> </a><p class="pBody">
+The Open Client DB-Library/C from Sybase (version 11.0 or later) must be installed on the client machine before you install Acu4GL for Sybase.  Follow the installation instructions in your Sybase documentation.
+</p>
+<a name="wp1049173"> </a><h3 class="pHeadingRef">
+Step 2: Create a makefile
+</h3>
+<a name="wp1049181"> </a><p class="pBody">
+The script <b class="cBold">syb_inst</b> is an interactive shell script that determines which libraries your version of Sybase has, and then creates a makefile suitable for linking Acu4GL with an ACUCOBOL-GT runtime for UNIX.  It also generates the SQL script used to install ACUCOBOL-GT stored procedures.  
+</p>
+<a name="wp1049182"> </a><p class="pBody">
+Execute the shell script <b class="cBold">syb_inst</b> by entering the following command on your client machine:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+sh  syb_inst  <a name="wp1049183"> </a>
+</pre></div>
+<a name="wp1049184"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You may exit the script at any time by pressing the system interrupt key (usually CTRL+C).  
+<hr />
+</p>
+<a name="wp1049185"> </a><p class="pBody">
+If you entered only <b class="cBold">syb_inst</b> instead of the full command, this message may appear:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+VAL=0: command not found<a name="wp1049186"> </a>
+VAL:  Undefined variable<a name="wp1056454"> </a>
+</pre></div>
+<a name="wp1049187"> </a><p class="pBody">
+This can be fixed by entering <b class="cBold">sh syb_inst</b>.
+</p>
+<a name="wp1049188"> </a><p class="pBody">
+When the script begins executing, you see the following message:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+During the execution of this script, we will create an SQL 
+script which you will need to execute from isql, using a 
+command like:<a name="wp1049189"> </a>
+&#160;&#160;<a name="wp1056351"> </a>
+&quot;isql -Usa -P<em class="cEmphasis">password</em> &lt; syb_inst.sql&quot;<a name="wp1049190"> </a>
+&#160;&#160;<a name="wp1056365"> </a>
+This script will add some stored procedures, and create some 
+tables in a database that you specify during the execution of 
+this script.<a name="wp1049191"> </a>
+</pre></div>
+<a name="wp1049192"> </a><p class="pBody">
+In order to implement locking from ACUCOBOL-GT, we need to create a lock table.  This should be a pretty small table, but we need to decide which database to create this table in.  You should now enter the name of the database you want the lock tables created in.  If the database does not exist, it is created.
+</p>
+<a name="wp1049193"> </a><p class="pBody">
+The following question is asked until you enter a valid database name:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Which database would you like to create this table in?<a name="wp1049194"> </a>
+</pre></div>
+<a name="wp1049195"> </a><p class="pBody">
+This database will eventually be located on your server machine.  Enter a valid database name.  (<em class="cEmphasis">Invalid</em> names are master, model, temp, or sybsystemprocs.)  Names must start with a letter or underscore, must contain only letters, digits, and underscores, and may be up to 30 characters long.  Any other entry will be modified.
+</p>
+<a name="wp1049196"> </a><p class="pBody">
+Next you will see the following message:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Saving any old version of syb_inst.sql...<a name="wp1049197"> </a>
+</pre></div>
+<a name="wp1049198"> </a><p class="pBody">
+Old versions of &quot;syb_inst.sql&quot; are saved to &quot;syb_inst<em class="cEmphasis">nnn.</em>sql&quot; where <em class="cEmphasis">nnn</em> starts at 001 and goes to 999.  If a file &quot;syb_inst.sql&quot; exists, you see:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Saving syb_inst.sql as syb_inst<em class="cEmphasis">nnn</em>.sql<a name="wp1049199"> </a>
+</pre></div>
+<a name="wp1049200"> </a><p class="pBody">
+for some value of <em class="cEmphasis">nnn</em>.  Then you see:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Creating syb_inst.sql...<a name="wp1049201"> </a>
+</pre></div>
+<a name="wp1049202"> </a><p class="pBody">
+This uses the file &quot;syb_inst.in&quot; as a template, and creates &quot;syb_inst.sql&quot;, using the database name you entered above.
+</p>
+<a name="wp1049203"> </a><p class="pBody">
+You also see:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Creating cblconfig.syb...<a name="wp1049204"> </a>
+</pre></div>
+<a name="wp1049205"> </a><p class="pBody">
+This is a sample file of configuration variables you may want to add to your &quot;cblconfi&quot; file.
+</p>
+<a name="wp1049206"> </a><p class="pBody">
+You then see the following message:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+In order to use the Acu4GL for Sybase interface, you need to 
+relink the runtime system.  We are assuming that the Makefile 
+that came with your runtime system still has the &quot;FSI_SUBS=&quot; 
+and &quot;FSI_LIBS=&quot; lines in it, and will base our changes on that 
+Makefile.  However, we will create a new file called 
+Makefile.syb, that has these changes in it.<a name="wp1049207"> </a>
+&#160;&#160;<a name="wp1056386"> </a>
+Do you want to set up the Makefile for this system?<a name="wp1049208"> </a>
+</pre></div>
+<a name="wp1049209"> </a><p class="pBody">
+Type <b class="cBold">y</b> or <b class="cBold">Y</b> to continue.
+</p>
+<a name="wp1049210"> </a><p class="pBody">
+You then see the following message:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+We next need to determine where you have installed the SYBASE 
+client libraries.<a name="wp1049211"> </a>
+</pre></div>
+<a name="wp1049212"> </a><p class="pBody">
+The following prompt is repeated until you enter the directory that contains the Sybase files:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Enter the directory where the SYBASE client libraries are 
+installed<a name="wp1049213"> </a>
+</pre></div>
+<a name="wp1049214"> </a><p class="pBody">
+Type the full pathname of the directory containing the Sybase client libraries, and press <b class="cBold">Enter</b>.  Note that this is the directory that contains the Sybase &quot;lib&quot; directory.  For example, if the full path for the file &quot;libsybdb.a&quot; is &quot;/usr/sybase/lib/libsybdb.a&quot;, you would type &quot;/usr/sybase&quot;.
+</p>
+<a name="wp1049215"> </a><p class="pBody">
+The script checks for a file &quot;lib/libsybdb.a&quot; in the directory you entered.  You then see one of the following messages:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+We seem to have the ACUCOBOL-GT library files in this 
+directory.<a name="wp1049216"> </a>
+<a name="wp1053146"> </a>
+We need to find the ACUCOBOL-GT library files...Enter the 
+directory where ACUCOBOL-GT is installed:<a name="wp1049217"> </a>
+</pre></div>
+<a name="wp1049218"> </a><p class="pBody">
+If you are asked to enter the directory name, type the full pathname of the directory containing ACUCOBOL-GT, then press <b class="cBold">Enter</b>.
+</p>
+<a name="wp1049219"> </a><p class="pBody">
+Before the Makefile is created, we need to check for some alternate optional libraries.  You see the message:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Checking for -lnsl or -lnsl_s<a name="wp1049220"> </a>
+</pre></div>
+<a name="wp1049221"> </a><p class="pBody">
+If one of the libraries exists, you see:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+using -lnsl
+    -or-
+using -lnsl_s<a name="wp1049222"> </a>
+</pre></div>
+<a name="wp1049223"> </a><p class="pBody">
+If you instead see a message like this one:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+syb_inst: cc: not found<a name="wp1049224"> </a>
+</pre></div>
+<a name="wp1049225"> </a><p class="pBody">
+it's likely that your PATH environment variable does not include the location of your compiler.  In this case, exit from the script, fix the PATH variable, and start the script again.
+</p>
+<a name="wp1049226"> </a><p class="pBody">
+Finally, you see the message:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Creating Makefile.syb ...<a name="wp1049227"> </a>
+Makefile.syb created.  You should be able to execute 
+     &quot;make -f Makefile.syb&quot;<a name="wp1058551"> </a>
+</pre></div>
+<a name="wp1049228"> </a><p class="pBody">
+and the script exits.  
+</p>
+<a name="wp1049229"> </a><h3 class="pHeadingRef">
+Step 3: Move the makefile
+</h3>
+<a name="wp1049230"> </a><p class="pBody">
+Copy &quot;Makefile.syb&quot; to the ACUCOBOL-GT library subdirectory if it is not already there.
+</p>
+<a name="wp1049231"> </a><p class="pBody">
+Now you are ready to relink your ACUCOBOL-GT runtime.
+</p>
+<a name="wp1049232"> </a><h3 class="pHeadingRef">
+Step 4: Link the runtime system
+</h3>
+<a name="wp1095498"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In the following directions, the term &quot;runtime system&quot; refers to the runtime shared object on systems where the ACUCOBOL-GT runtime is a shared object and to <b class="cBold">runcbl</b> on other systems, where the runtime is static.  The runtime is a shared object on the following systems:  AIX 5.1 and later, HP-UX 11 and later, and Solaris 7 and later.  To check, look at the contents of the &quot;lib&quot; subdirectory of your ACUCOBOL-GT installation.  If the files &quot;libruncbl.so&quot; or &quot;libruncbl.sl&quot; reside in that directory, the runtime is a shared object on your system.
+<hr />
+</p>
+<a name="wp1092085"> </a><p class="pBody">
+Make sure you are in the directory containing the ACUCOBOL-GT runtime system.  Then, at the UNIX prompt, enter the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+make clean<a name="wp1092086"> </a>
+</pre></div>
+<a name="wp1092087"> </a><p class="pBody">
+to ensure that you have a clean directory in which to build your runtime.
+</p>
+<a name="wp1092088"> </a><p class="pBody">
+Now enter the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+make -f Makefile.syb <a name="wp1092089"> </a>
+</pre></div>
+<a name="wp1049237"> </a><p class="pBody">
+This compiles &quot;sub.c&quot; and &quot;filetbl.c&quot; and then links the runtime system.
+</p>
+<a name="wp1049241"> </a><h3 class="pHeadingRef">
+Step 5: Verify the link
+</h3>
+<a name="wp1049242"> </a><p class="pBody">
+Enter the following command: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+./runcbl -vv  <a name="wp1049243"> </a>
+</pre></div>
+<a name="wp1049244"> </a><p class="pBody">
+to verify the link.  This returns version information on all of the products linked into your runtime system.  Make sure it reports the version of Acu4GL for Sybase.
+</p>
+<a name="wp1086359"> </a><h3 class="pHeadingRef">
+Shared libraries
+</h3>
+<a name="wp1049250"> </a><p class="pBody">
+If you have relinked the ACUCOBOL-GT runtime and receive an error message of this type when you try to execute it:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&quot;Could not load library; no such file or directory&quot;<a name="wp1049251"> </a>
+<a name="wp1053149"> </a>
+&quot;Can't open shared library . . . &quot;<a name="wp1049252"> </a>
+</pre></div>
+<a name="wp1049253"> </a><p class="pBody">
+this may mean that your operating system is using shared libraries and cannot find them.  This can occur even if the shared libraries reside in the same directory where you are currently located.
+</p>
+<a name="wp1049254"> </a><p class="pBody">
+Different versions of the UNIX operating system resolve this in different ways, so it is important that you consult your UNIX documentation to resolve this error.
+</p>
+<a name="wp1049255"> </a><p class="pBody">
+Some versions of UNIX require that you set an environment variable that points to shared libraries on your system. 
+</p>
+<a name="wp1049256"> </a><p class="pBody">
+For example, on an IBM RS/6000 running AIX 4.1, the environment variable LIBPATH must point to the directory where the shared libraries are located.
+</p>
+<a name="wp1049257"> </a><p class="pBody">
+On HP/UX, the environment variable that must be set to point to shared libraries is SHLIB_PATH.  On UNIX SVR4, the environment variable is LD_LIBRARY_PATH.
+</p>
+<a name="wp1049258"> </a><p class="pBody">
+Be sure to read the system documentation for your operating system to determine the appropriate way to locate shared libraries. 
+</p>
+<a name="wp1049259"> </a><p class="pBody">
+A second way to resolve this type of error is to link the libraries into the runtime with a static link.  Different versions of the C development system use different flags to accomplish this link.   Please consult the documentation for your C compiler to determine the correct flag for your environment.
+</p>
+<a name="wp1049260"> </a><h3 class="pHeadingRef">
+Step 6: Copy runcbl to the correct directory 
+</h3>
+<a name="wp1049261"> </a><p class="pBody">
+If the runtime is a system is a statically linked executable, copy the new executable<b class="cBold"> </b>to a directory listed in your execution path.  This file needs to have execute permission for everyone who will be using the compiler or runtime system.  The copy step is not necessary when the runtime system is a shared library.
+</p>
+<a name="wp1049262"> </a><p class="pBody">
+The ACUCOBOL-GT license file for the runtime (&quot;runcbl.alc&quot;) and the license file for the Acu4GL product to Sybase (&quot;runcbl.ylc&quot;) must be copied into the same directory as the runtime executable.  
+</p>
+<a name="wp1049263"> </a><p class="pBody">
+If you rename your runtime executable, be sure to rename your license files to use the same base name, with the extensions unchanged.  
+</p>
+<a name="wp1049264"> </a><p class="pBody">
+For example, if you rename your runtime to be &quot;myprog&quot;, the license file for the Acu4GL product for Sybase should be renamed &quot;myprog.ylc&quot;, and the license file for the runtime should be renamed &quot;myprog.alc&quot;.
+</p>
+<a name="wp1049265"> </a><p class="pBody">
+The remaining files can be left in the directory to which they were unloaded from the distribution medium.  
+</p>
+<a name="wp1049266"> </a><h3 class="pHeadingRef">
+Step 7: Use rehash
+</h3>
+<a name="wp1049267"> </a><p class="pBody">
+If you are using the C shell, enter the command <b class="cBold">rehash</b>.  This tells the C shell that there is a new executable in the path.
+</p>
+<a name="wp1049268"> </a><p class="pBody">
+This completes the installation process on the client machine.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

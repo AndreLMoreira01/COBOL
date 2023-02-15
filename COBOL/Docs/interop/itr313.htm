@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:51" />
+  <title>3.3.1  Loading DLLs with the CALL Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr3.htm">Chapter 3: Working with Windows Technologies</a> &gt; <a href="itr312.htm">3.3  Calling DLLs from COBOL</a> &gt; </p>
+<a name="wp1065396"> </a><h2 class="pHeading2">
+3.3.1  Loading DLLs with the CALL Statement
+</h2>
+<a name="wp1065397"> </a><p class="pBody">
+To load the dynamic link library &quot;mylib.dll&quot;, you would CALL either &quot;mylib.dll&quot; or simply &quot;mylib&quot;.  The runtime automatically appends &quot;.dll&quot; when searching for a DLL.  The runtime searches for DLLs after it has searched for COBOL programs.  It first searches the paths defined in the CODE_PREFIX configuration variable, and then in the System and Windows folders, respectively (actually, folder names vary depending on the specific version of Windows and user customizations).  If you do not want the runtime to look in the System or Windows folders, set the DLL_USE_SYSTEM_DIR configuration variable to &quot;0&quot; (off, false, no).
+</p>
+<a name="wp1065402"> </a><p class="pBody">
+The CALL statement that loads a DLL simply makes the routines contained in the DLL available to the COBOL program.  The one exception to this is if the DLL contains a routine whose name is the same as the DLL.  In this case, the routine is immediately called.  For example, if the DLL &quot;mylib.dll&quot; contains a routine called &quot;mylib&quot;, then
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;mylib&quot;<a name="wp1065403"> </a>
+</pre></div>
+<a name="wp1065404"> </a><p class="pBody">
+both loads the DLL and executes the MYLIB routine.  To load the library and avoid calling the subroutine of the same name, specify &quot;.dll&quot; explicitly in the CALL statement, as shown below:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;mylib.dll&quot;<a name="wp1065405"> </a>
+</pre></div>
+<a name="wp1085557"> </a><p class="pBody">
+Thin client applications may call DLLs on the display host (client) by adding &quot;@[DISPLAY]:&quot; to the beginning of the CALL name.  For example, to call a DLL named &quot;mylib&quot; on the client, you would use the following code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;@[DISPLAY]:mylib.dll&quot;	<a name="wp1065407"> </a>
+</pre></div>
+<a name="wp1065408"> </a><p class="pBody">
+For complete information, see section 6.5.6, &quot;Calling Dynamic Link Libraries (DLLs),&quot; in the <em class="cEmphasis">AcuConnect User's Guide</em>.
+</p>
+<a name="wp1065409"> </a><p class="pBody">
+Once the library has been loaded, all of the routines it contains can be called. For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;funcA&quot;<a name="wp1065410"> </a>
+</pre></div>
+<a name="wp1065411"> </a><p class="pBody">
+Loaded DLLs are searched immediately prior to searching for COBOL programs on disk.  Routines contained in a DLL are called using either the direct C interface or the Pascal/WINAPI interface.  As a result, you may pass parameters BY VALUE if that is required by the routine.
+</p>
+<a name="wp1065413"> </a><p class="pBody">
+Routines called by this method are assumed to use either the cdecl (standard C) or stdcall (Pascal/WINAPI) parameter passing conventions.  Most of the Windows API library functions are stored in DLLs and must be called using the stdcall (Pascal/WINAPI) calling convention.  
+</p>
+<a name="wp1065416"> </a><p class="pBody">
+By default, the runtime uses the value of the DLL_CONVENTION configuration variable to determine the calling convention.  A maximum of 16 parameters can be passed using the stdcall DLL_CONVENTION.  A maximum of eight parameters can be passed using the cdecl (standard C) DLL_CONVENTION (the default).  See Appendix H in <em class="cEmphasis">ACUCOBOL-GT Appendices</em> for more details.  If you attempt to call a routine that uses a different calling convention, the results are undefined (and usually fatal). 
+</p>
+<a name="wp1065424"> </a><p class="pBody">
+You can override the calling convention for an individual function by specifying it after the function name in the CALL statement. 
+</p>
+<a name="wp1065425"> </a><p class="pBody">
+To specify the stdcall calling convention, append one of the following strings to the function name:  @, @1, @WINAPI, @__stdcall.  (The @__stdcall string has two underscores.)  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;funcA@&quot;<a name="wp1087947"> </a>
+</pre></div>
+<a name="wp1087948"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;funcA@1&quot;<a name="wp1087949"> </a>
+</pre></div>
+<a name="wp1065429"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;funcA@WINAPI&quot;<a name="wp1065430"> </a>
+</pre></div>
+<a name="wp1065431"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;funcA@__stdcall&quot;<a name="wp1065432"> </a>
+</pre></div>
+<a name="wp1065433"> </a><p class="pBody">
+calls funcA using the stdcall calling convention.
+</p>
+<a name="wp1065434"> </a><p class="pBody">
+To specify the cdecl calling convention, append one of the following strings to the function name: @0, @STDC, @__cdecl.  (The @__cdecl string has two underscores.)  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;funcB@0&quot;<a name="wp1065435"> </a>
+</pre></div>
+<a name="wp1065436"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;funcB@STDC&quot;<a name="wp1065437"> </a>
+</pre></div>
+<a name="wp1065438"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;funcB@__cdecl&quot;<a name="wp1065439"> </a>
+</pre></div>
+<a name="wp1065440"> </a><p class="pBody">
+calls funcB using the cdecl calling convention.
+</p>
+<a name="wp1065441"> </a><p class="pBody">
+The runtime uses the specified calling convention and ignores the value of the DLL_CONVENTION configuration variable.  Note that you cannot specify the calling convention for a DLL when specifying a DLL name in a CALL statement.  You can, however, specify the calling convention for DLLs using configuration variables.  Specifying conventions for individual functions in the CALL statement overrides any other conventions specified for the DLL name.
+</p>
+<a name="wp1065442"> </a><p class="pBody">
+If desired, you could specify the calling convention for individual functions in the runtime configuration file instead of in the CALL statement.  To do this, set the CODE_MAPPING variable to &quot;1&quot;.  If you use the following configuration entries:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CODE_MAPPING=1<a name="wp1065443"> </a>
+funcA=funcA@__stdcall<a name="wp1065444"> </a>
+funcB=funcB@__cdecl <a name="wp1065445"> </a>
+</pre></div>
+<a name="wp1065446"> </a><p class="pBody">
+then 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;funcA&quot;<a name="wp1065447"> </a>
+</pre></div>
+<a name="wp1065448"> </a><p class="pBody">
+calls funcA using the stdcall calling convention and 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;funcB&quot; <a name="wp1065449"> </a>
+</pre></div>
+<a name="wp1065450"> </a><p class="pBody">
+calls funcB using the cdecl convention.
+</p>
+<a name="wp1065451"> </a><p class="pBody">
+If you have access to a library (&quot;.lib&quot;) file for the DLL, you can determine the calling convention for a particular function using the Microsoft COFF Binary File Dumper utility.  Run &quot;dumpbin /exports &lt;library name&gt;&quot;.  If the function name is preceded by an underscore and followed by an &quot;at&quot; sign (&quot;@&quot;) and a decimal number, the function expects to be called using the stdcall calling convention. If the name of the function is not followed by an at sign, then the function expects to be called using the cdecl convention.
+</p>
+<a name="wp1066029"> </a><p class="pBody">
+Like other programs that are loaded with a CALL statement, you can unload a CALLed DLL with a CANCEL statement.  When you CANCEL a DLL, you may no longer call its component libraries.  Also, unless the <em class="cEmphasis">logical cancels</em> feature is enabled, all memory used by the program is released.  For information about runtime memory management and the logical cancels feature, see section 6.3, &quot;Memory Management,&quot; in the <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>.
+</p>
+<a name="wp1066033"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The CANCEL_ALL_DLLS configuration variable can be used to control whether CANCEL ALL frees DLLs.  See Appendix H in <em class="cEmphasis">ACUCOBOL-GT Appendices</em> for more details.  
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

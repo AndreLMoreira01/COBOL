@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.2.4.3  File name handling</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp3.htm">4.2  ACUCOBOL-GT in MPE/iX Environments</a> &gt; <a href="ch4-hp18.htm">4.2.4  Accessing MPE KSAM, Relative, and Sequential Files</a> &gt; </p>
+<a name="wp1041189"> </a><h2 class="pHeading3">
+4.2.4.3  File name handling
+</h2>
+<a name="wp1041192"> </a><p class="pBody">
+On MPE/iX systems, ACUCOBOL-GT can handle references to files, groups, and accounts in the traditional MPE syntax, e.g., FILE1.PUB.SYS.  When an ACUCOBOL-GT program attempts to access a KSAM file, the runtime expects the filename to be in MPE syntax.  The runtime treats the filenames of other file types differently.
+</p>
+<a name="wp1041193"> </a><p class="pBody">
+If the file being accessed is <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">not</span> a KSAM file, the runtime first assumes that the filename is in Hierarchical File System (HFS) syntax.  For example, if FILE1.PUB.SYS is referenced in your program, the runtime looks in the current directory for a file named &quot;FILE1.PUB.SYS&quot;.  If the file is not found, the runtime assumes that the filename is in traditional MPE/iX syntax.  It then converts the name to HFS syntax and tries again to find the file.  For example, FILE1.PUB.SYS is converted to /SYS/PUB/FILE1.
+</p>
+<a name="wp1041194"> </a><p class="pBody">
+In addition to ACUCOBOL-GT's built-in method of establishing filename aliases via the runtime configuration file (see section 2.7.1, &quot;File Name Assignments,&quot; in Book 1 of the ACUCOBOL-GT documentation set), ACUCOBOL-GT also supports file aliases created with the MPE/iX &quot;FILE&quot; command.  FILE equations and runtime configuration file entries provide a simple and flexible way to map logical names to physical files.
+</p>
+<a name="wp1061371"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>If you plan to migrate your application to another host and your application makes use of FILE equations, unless you will use an MPE emulator on the new host you will have to use other methods to accomplish file attribute specification and filename aliasing.  Precisely what is required will vary depending on the host operating system.  ACUCOBOL-GT always supports the following mechanisms:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1061471"> </a><div class="pSmartList1"><li>The SET ENVIRONMENT statement can be used in the runtime configuration file and within the program to define filename aliases.</li></div>
+<a name="wp1061472"> </a><div class="pSmartList1"><li>File information, including path and name information, can be stored in a special file that the program reads prior to manipulating files.</li></div>
+</ol></div>
+<a name="wp1063250"> </a><p class="pNoteEnd">
+If you plan to deploy your application with Acucorp's <em class="cEmphasis">thin client</em> technology, there is an additional consideration.  Frequently, thin client applications are initiated with a common (shared) runtime configuration file.  However, this approach prevents unique users from getting unique environment settings (such as those provided by FILE equates).  A recommended solution is to prepare unique runtime configuration files for every user (or group of users), and to place those configuration files on the application server.  The program is then modified to get the name of the user on startup and to then load the appropriate configuration file using the C$CONFIG library routine.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

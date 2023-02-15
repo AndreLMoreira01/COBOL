@@ -1,0 +1,97 @@
+      * Tour.prd
+      * Tour.prd is generated from C:\Acucorp\Acucbl720\AcuGT\sample\samplprj\Tour.Psf
+      * This is a generated file. DO NOT modify this file directly.      
+
+       Acu-Initial-Routine.
+      *    Before-Init
+      * get system information
+           ACCEPT System-Information FROM System-Info
+      * get terminal information
+           ACCEPT Terminal-Abilities FROM Terminal-Info
+      * load bitmap
+           PERFORM Acu-Init-Bmp
+      *    After-Init
+           .
+
+       Acu-Init-Bmp.
+      * bitmap loading
+           COPY RESOURCE "gtanima.bmp".
+           CALL "W$BITMAP" USING WBITMAP-LOAD "gtanima.bmp", GIVING 
+              gtanima-bmp
+           .
+
+       Acu-Exit-Rtn.
+      *    After-Program
+           EXIT PROGRAM
+           STOP RUN
+           .
+
+       Acu-Screen-1-Routine.
+      *    Before-Routine
+           PERFORM Acu-Screen-1-Scrn
+           PERFORM Acu-Screen-1-Proc
+      *    After-Routine
+           .
+
+       Acu-Screen-1-Scrn.
+           PERFORM Acu-Screen-1-Create-Win
+           PERFORM Acu-Screen-1-Init-Data
+           .
+
+       Acu-Screen-1-Create-Win.
+      *    Before-Create
+      * display screen
+              DISPLAY Standard GRAPHICAL WINDOW
+                 LINES 35.10, SIZE 46.20, CELL HEIGHT 10, 
+                 CELL WIDTH 10, AUTO-MINIMIZE, COLOR IS 65793, 
+                 CONTROL FONT Default-Font, ERASE, LABEL-OFFSET 0, 
+                 MODELESS, WITH SYSTEM MENU, 
+                 TITLE "Controls sample - tour.cbl", TITLE-BAR, 
+                 USER-GRAY, USER-WHITE, 
+                 HANDLE IS Form1-Handle
+      * toolbar
+           DISPLAY Screen-1 UPON Form1-Handle
+      *    After-Create
+           .
+
+       Acu-Screen-1-Init-Data.
+      *    Before-Initdata
+           PERFORM Acu-Form1-Cm-1-Content
+      *    After-Initdata
+           .
+      * Screen-1
+       Acu-Screen-1-Proc.
+           PERFORM UNTIL Exit-Pushed
+              ACCEPT Screen-1  
+                 ON EXCEPTION PERFORM Acu-Screen-1-Evaluate-Func
+              END-ACCEPT
+           END-PERFORM
+           DESTROY Form1-Handle
+           INITIALIZE Key-Status
+           .
+
+      * Form1-Cm-1
+       Acu-Form1-Cm-1-Content.
+           MODIFY Form1-Cm-1, MASS-UPDATE = 1, RESET-LIST = 1
+           MODIFY Form1-Cm-1, ITEM-TO-ADD = TABLE Form1-Cm-1-Container
+           MODIFY Form1-Cm-1, MASS-UPDATE = 0
+           MODIFY Form1-Cm-1, VALUE Form1-Cm-1-Value
+           .
+
+      * Screen-1
+       Acu-Screen-1-Evaluate-Func.
+           EVALUATE TRUE
+              WHEN Exit-Pushed
+                 PERFORM Acu-Screen-1-Exit
+              WHEN Event-Occurred
+                 IF Event-Type = Cmd-Close
+                    PERFORM Acu-Screen-1-Exit
+                 END-IF
+           END-EVALUATE
+           MOVE 1 TO Accept-Control
+           . 
+
+       Acu-Screen-1-Exit.
+           SET Exit-Pushed TO TRUE
+           .
+

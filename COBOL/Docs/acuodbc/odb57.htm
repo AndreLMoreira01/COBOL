@@ -1,0 +1,915 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:28:56" />
+  <title>5.3.1  SELECT Command</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb5.htm">Chapter 5: Writing Queries to Access Data</a> &gt; <a href="odb56.htm">5.3  SQL Syntax Supported by AcuODBC</a> &gt; </p>
+<a name="wp1028436"> </a><h2 class="pHeading2">
+5.3.1  SELECT Command
+</h2>
+<a name="wp1028437"> </a><p class="pBody">
+The SELECT command (which is also called a query) allows you to extract rows from a table, according to optional selection rules.  Syntax for a SELECT statement can be:
+</p>
+<a name="wp1028443"> </a><h3 class="pHeadingRef">
+Syntax
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT [DISTINCT] &lt;field-list-1&gt;<a name="wp1028444"> </a>
+FROM &lt;table-list&gt;<a name="wp1028445"> </a>
+[WHERE &lt;condition&gt;]<a name="wp1028446"> </a>
+[ORDER BY &lt;field-list-2&gt;]<a name="wp1028447"> </a>
+</pre></div>
+<a name="wp1028448"> </a><p class="pBody">
+This section begins by presenting a simple SELECT statement and builds on it to develop more complex queries.
+</p>
+<a name="wp1028449"> </a><h3 class="pHeadingRef">
+The SELECT and FROM clauses
+</h3>
+<a name="wp1028454"> </a><p class="pBody">
+At its most basic, a SELECT command indicates which fields you want to view in the specified table.  
+</p>
+<a name="wp1028455"> </a><h3 class="pHeadingRef">
+Syntax
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT [DISTINCT] &lt;field-list-1&gt;<a name="wp1028456"> </a>
+FROM &lt;table-name&gt;<a name="wp1028457"> </a>
+</pre></div>
+<a name="wp1037843"> </a><p class="pBody">
+where <b class="cBold">&lt;field-list&gt; </b>is the list of fields that must be selected, written according to the following syntax:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&lt;field-name-1&gt;[, &lt;field-name-2&gt;] . . .<a name="wp1037844"> </a>
+</pre></div>
+<a name="wp1037845"> </a><p class="pBody">
+All the fields in this list must belong to &lt;table-name&gt;.  
+</p>
+<a name="wp1028463"> </a><p class="pBody">
+ If you want to select all the fields in a table, replace &lt;field-list-1&gt; with the character &quot;*&quot; (asterisk), which means &quot;all the fields in &lt;table-name&gt;.&quot;
+</p>
+<a name="wp1028464"> </a><p class="pBody">
+<b class="cBold">&lt;table-name&gt; </b>is the name of a table containing fields specified in &lt;field-list&gt;.
+</p>
+<a name="wp1028466"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1028467"> </a><p class="pBody">
+Using the sample data from the &quot;clients&quot; table, enter the following statement to view a list of pet owners and the cities in which they live:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT owner, state_province<a name="wp1028468"> </a>
+FROM clients<a name="wp1028469"> </a>
+</pre></div>
+<a name="wp1028470"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The capitalization is not necessary for proper syntax.  The words are shown capitalized here for emphasis.  Some applications require that a semicolon (;) appear at the end of the query; other do not.  Check your program documentation for details.
+<hr />
+</p>
+<a name="wp1028471"> </a><p class="pBody">
+The following view is a result of this query:</p><div><img src="images/simple_s.gif" height="249" width="260" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028474"> </a><p class="pBody">
+For information on queries to more than one table, see <a  href="odb58.htm#wp1028859">section 5.3.2, &quot;JOIN Statements.&quot;</a>
+</p>
+<a name="wp1028475"> </a><p class="pBody">
+Use the SELECT DISTINCT command to view only one instance of each value in a column.  For example, to see which cities are represented in the &quot;clients&quot; table, without any duplicates, enter the following query:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT DISTINCT state_province<a name="wp1028476"> </a>
+FROM clients<a name="wp1028477"> </a>
+</pre></div>
+<a name="wp1039609"> </a><p class="pBody">
+The following view is a result of this query.  Note that California and Arizona each appear only once.  </p><div><img src="images/select_d.gif" height="157" width="128" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1039613"> </a><p class="pBody">
+You can use a <em class="cEmphasis">column alias</em> to give a column a different name in the view you are requesting.  For example, the &quot;clients&quot; table contains a column named &quot;street.&quot;  If you want to call this column &quot;street_address&quot; when you view the results of a query, use the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT owner, street AS street_address, city<a name="wp1028482"> </a>
+FROM clients<a name="wp1028483"> </a>
+</pre></div>
+<a name="wp1028484"> </a><p class="pBody">
+The following view is a result of this query:</p><div><img src="images/select_a.gif" height="254" width="335" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028486"> </a><h3 class="pHeadingRef">
+The WHERE clause
+</h3>
+<a name="wp1041725"> </a><p class="pBody">
+The WHERE clause imposes conditions on the SELECT command, enabling you to focus your query.  This section discusses those conditions and provides some examples. 
+</p>
+<a name="wp1041733"> </a><p class="pBody">
+When you include the WHERE clause, the format of the SELECT command becomes:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT [DISTINCT] &lt;field-list-1&gt;<a name="wp1028497"> </a>
+FROM &lt;table-name&gt;<a name="wp1028498"> </a>
+[WHERE &lt;condition&gt;]<a name="wp1028499"> </a>
+</pre></div>
+<a name="wp1037927"> </a><p class="pBody">
+<b class="cBold">&lt;condition&gt; </b>is a logical expression that identifies a useful set of rows from the rows in the table.  The logical expression can contain column values, literals, and operators as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1028503"> </a><div class="pSmartList1"><li><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">A </span><b class="cBold">column value </b>is the title of one of the columns in &lt;table-name&gt;.</li></div>
+<a name="wp1028505"> </a><div class="pSmartList1"><li><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">A</span><b class="cBold"> literal </b>is a numeric or alphanumeric (or character) string.  If it is alphanumeric, in AcuODBC, it must be enclosed between single quotation marks (&#39;  &#39;).</li></div>
+<a name="wp1028507"> </a><div class="pSmartList1"><li><span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: normal">An </span><b class="cBold">operator </b>is a comparison operator included in the following list:</li></div>
+<a name="wp1042222"> </a><p class="pBodyRelative">
+<div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1034588"> </a>
+Comparison Operator
+
+</th>
+    <th><a name="wp1034590"> </a>
+Meaning
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028519"> </a><p class="pCellBody">
+=
+</p>
+</td>
+    <td><a name="wp1028521"> </a><p class="pCellBody">
+Equal to
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028523"> </a><p class="pCellBody">
+&gt;
+</p>
+</td>
+    <td><a name="wp1028525"> </a><p class="pCellBody">
+Greater than
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028527"> </a><p class="pCellBody">
+&lt;
+</p>
+</td>
+    <td><a name="wp1028529"> </a><p class="pCellBody">
+Less than
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028531"> </a><p class="pCellBody">
+&gt;=
+</p>
+</td>
+    <td><a name="wp1028533"> </a><p class="pCellBody">
+Greater than or equal to
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028535"> </a><p class="pCellBody">
+&lt;=
+</p>
+</td>
+    <td><a name="wp1028537"> </a><p class="pCellBody">
+Less than or equal to
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028539"> </a><p class="pCellBody">
+&lt;&gt;    or     !=
+</p>
+</td>
+    <td><a name="wp1028541"> </a><p class="pCellBody">
+Not equal to
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028543"> </a><p class="pCellBody">
+LIKE
+</p>
+</td>
+    <td><a name="wp1028545"> </a><p class="pCellBody">
+Matches a pattern
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028547"> </a><p class="pCellBody">
+BETWEEN
+</p>
+</td>
+    <td><a name="wp1028549"> </a><p class="pCellBody">
+Included between two values
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028551"> </a><p class="pCellBody">
+IN
+</p>
+</td>
+    <td><a name="wp1028553"> </a><p class="pCellBody">
+Included in a list of values
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028555"> </a><p class="pCellBody">
+NOT IN
+</p>
+</td>
+    <td><a name="wp1028557"> </a><p class="pCellBody">
+Not included in a list of values
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+</ul></div>
+<a name="wp1028560"> </a><p class="pBody">
+Note that alphanumeric strings of different lengths are compared as though the shorter one were filled out with blanks at the right end.
+</p>
+<a name="wp1028561"> </a><h3 class="pHeadingRef">
+Example 1 - WHERE clause
+</h3>
+<a name="wp1028562"> </a><p class="pBody">
+Following the earlier example, enter the following statement to view a list of pet owners who live in San Diego:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT owner, state_province<a name="wp1028564"> </a>
+FROM clients<a name="wp1028565"> </a>
+WHERE state_province = &#39;California&#39;<a name="wp1028566"> </a>
+</pre></div>
+<a name="wp1028567"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Because it is an alphanumeric string, &quot;California&quot; is enclosed in single quotation marks.
+<hr />
+</p>
+<a name="wp1028568"> </a><p class="pBody">
+The following view is a result of this query:</p><div><img src="images/select_w.gif" height="107" width="228" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028570"> </a><p class="pBody">
+Compare this with the view created using just the SELECT and FROM clauses.
+</p>
+<a name="wp1028571"> </a><h3 class="pHeadingRef">
+Example 2 - WHERE clause with LIKE condition
+</h3>
+<a name="wp1028572"> </a><p class="pBody">
+Include the LIKE condition for pattern matching or to view values that contain a specified string.  For example, to see a list of owners who live in cities that contain the string &quot;go&quot;, enter the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT owner, city<a name="wp1028573"> </a>
+FROM clients<a name="wp1028574"> </a>
+WHERE city like &#39;*go*&#39;<a name="wp1028575"> </a>
+</pre></div>
+<a name="wp1028576"> </a><p class="pBody">
+The following view is a result of this query:</p><div><img src="images/where_li.gif" height="106" width="215" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028578"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Characters for wildcards and pattern matching vary between applications.  Check the documentation for your ODBC-enabled application for details.
+<hr />
+</p>
+<a name="wp1028579"> </a><h3 class="pHeadingRef">
+Example 3 - WHERE clause with BETWEEN condition
+</h3>
+<a name="wp1028580"> </a><p class="pBody">
+Include the BETWEEN condition to find values within a specified range.  For example, for a list of owners with a client_id between 600 and 699 (inclusive), enter the following query:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT owner, client_id<a name="wp1028581"> </a>
+FROM clients<a name="wp1028582"> </a>
+WHERE client_id between 600 and 699<a name="wp1028583"> </a>
+</pre></div>
+<a name="wp1028584"> </a><p class="pBody">
+The following view is the result of this query:</p><div><img src="images/where_be.gif" height="113" width="206" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028586"> </a><p class="pBody">
+Note that eight owners do not appear in this view.
+</p>
+<a name="wp1028587"> </a><h3 class="pHeadingRef">
+Example 4 - WHERE clause with IN condition
+</h3>
+<a name="wp1028588"> </a><p class="pBody">
+Use the IN condition to view entries that fall within a list of values.  For example, for a list of owners who reside in either Illinois or New Jersey, enter the following query:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT owner, state_province<a name="wp1028589"> </a>
+FROM clients<a name="wp1028590"> </a>
+WHERE state_province in (&#39;Illinois&#39;, &#39;New Jersey&#39;)<a name="wp1028591"> </a>
+</pre></div>
+<a name="wp1028592"> </a><p class="pBody">
+Note that Illinois and New Jersey are each enclosed in single quotation marks because they are alphanumeric literals, and note that the range of possible values is enclosed in parentheses.
+</p>
+<a name="wp1028593"> </a><p class="pBody">
+The following view is a result of this query:</p><div><img src="images/where_in.gif" height="73" width="217" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028595"> </a><h3 class="pHeadingRef">
+Example 5 - WHERE clause with NOT IN condition
+</h3>
+<a name="wp1028596"> </a><p class="pBody">
+Use the NOT IN condition when you want to view entries that fall outside of a range of values.  For example, for a list of owners who do <em class="cEmphasis">not </em>reside in either Illinois or New Jersey, enter the following query:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT owner, state_province<a name="wp1028597"> </a>
+FROM clients<a name="wp1028598"> </a>
+WHERE state_province not in (&#39;Illinois&#39;, &#39;New Jersey&#39;)<a name="wp1028599"> </a>
+</pre></div>
+<a name="wp1028600"> </a><p class="pBody">
+The following view is a result of this query:</p><div><img src="images/where_no.gif" height="218" width="228" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028602"> </a><h3 class="pHeadingRef">
+Example 6 - WHERE condition with logical operators
+</h3>
+<a name="wp1028603"> </a><p class="pBody">
+Conditions can be joined with the logical operators &quot;AND&quot; and &quot;OR.&quot;  According to normal precedence rules, AND conditions are evaluated before OR conditions.  Using parentheses, you can override these rules.  Enter the following statement to see the names and address of owners who live in either California or Canada:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT owner, city, state_province, country<a name="wp1028604"> </a>
+FROM  clients<a name="wp1028605"> </a>
+WHERE state_province = &#39;California&#39; or country = &#39;Canada&#39;<a name="wp1028606"> </a>
+</pre></div>
+<a name="wp1028607"> </a><p class="pBody">
+The following view is the result of this statement:</p><div><img src="images/where_or.gif" height="162" width="373" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028609"> </a><p class="pBody">
+Note that if you do not include the WHERE clause, your query returns data for all the rows in the table.
+</p>
+<a name="wp1028610"> </a><h3 class="pHeadingRef">
+Functions
+</h3>
+<a name="wp1028611"> </a><p class="pBody">
+AcuODBC supports operations functions for summarizing data in columns (aggregate functions) and across rows.  The &quot;accounts&quot; table contains information on patient accounts for six months.</p><div><img src="images/table_ac.gif" height="289" width="564" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028613"> </a><p class="pBody">
+You can determine, for example, either the amount outstanding in a month, or the amount owed on a given patient.  This section provides a partial listing of the supported functions and some simple examples.  For more details on row and aggregate functions, consult any standard SQL reference.
+</p>
+<a name="wp1028614"> </a><h3 class="pHeadingRef">
+Standard Aggregate Functions
+</h3>
+<a name="wp1028622"> </a><p class="pBody">
+AcuODBC supports a series of standard SQL aggregate functions that are specified inside a SELECT command on selected fields.  The field names to which these functions apply must follow the name of the function and be enclosed in parentheses.
+</p>
+<a name="wp1028623"> </a><p class="pBody">
+The standard aggregate functions are:
+</p>
+<a name="wp1028658"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1029616"> </a>
+Function
+
+</th>
+    <th><a name="wp1029618"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028631"> </a><p class="pCellBody">
+COUNT(*)
+</p>
+</td>
+    <td><a name="wp1028633"> </a><p class="pCellBody">
+Returns the number of rows of a table.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028635"> </a><p class="pCellBody">
+COUNT (DISTINCT)
+</p>
+</td>
+    <td><a name="wp1028637"> </a><p class="pCellBody">
+Counts the number of <em class="cEmphasis">unique</em> values in a column.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028639"> </a><p class="pCellBody">
+COUNT(column)
+</p>
+</td>
+    <td><a name="wp1028641"> </a><p class="pCellBody">
+Returns the number of non-null values in the column.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028643"> </a><p class="pCellBody">
+SUM
+</p>
+</td>
+    <td><a name="wp1028645"> </a><p class="pCellBody">
+Computes the sum of the non-null values in a column.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028647"> </a><p class="pCellBody">
+AVG
+</p>
+</td>
+    <td><a name="wp1028649"> </a><p class="pCellBody">
+Computes the arithmetic average of the non-null values in a column.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028651"> </a><p class="pCellBody">
+MAX
+</p>
+</td>
+    <td><a name="wp1028653"> </a><p class="pCellBody">
+Returns the highest non-null value in a column.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028655"> </a><p class="pCellBody">
+MIN
+</p>
+</td>
+    <td><a name="wp1028657"> </a><p class="pCellBody">
+Returns the lowest non-null value in a column.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1028659"> </a><p class="pBody">
+AcuODBC supports two additional column functions:
+</p>
+<a name="wp1028671"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1028664"> </a><p class="pCellBody">
+UPPER
+</p>
+</td>
+    <td><a name="wp1028666"> </a><p class="pCellBody">
+Returns column values in upper case (for conditions only).
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028668"> </a><p class="pCellBody">
+LOWER
+</p>
+</td>
+    <td><a name="wp1028670"> </a><p class="pCellBody">
+Returns column values in lower case (for conditions only).
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1028672"> </a><h3 class="pHeadingRef">
+Example 1 - SUM function
+</h3>
+<a name="wp1028673"> </a><p class="pBody">
+You may want to see the accounts total for a particular month.  You can accomplish this by entering a statement containing the SUM aggregate function.  For example, enter the following statement to obtain the sum of the January accounts:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT sum(January) AS January_Total<a name="wp1028674"> </a>
+FROM accounts<a name="wp1038050"> </a>
+</pre></div>
+<a name="wp1038051"> </a><p class="pBody">
+Your application returns the following:</p><div><img src="images/january_.gif" height="121" width="137" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1038052"> </a><p class="pBody">
+Note that in this case, including the AS clause creates a column with a new&#160;name.
+</p>
+<a name="wp1028679"> </a><h3 class="pHeadingRef">
+Example 2 - COUNT(*) function
+</h3>
+<a name="wp1028680"> </a><p class="pBody">
+The COUNT(*) function returns the number of rows in a table.  To see the number of rows in the clients table, enter the following query:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT count(*) as rows<a name="wp1028681"> </a>
+FROM pets<a name="wp1028682"> </a>
+</pre></div>
+<a name="wp1028683"> </a><p class="pBody">
+Your application returns the following:</p><div><img src="images/count_fu.gif" height="127" width="138" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028685"> </a><p class="pBody">
+The sample table has only 19 rows.  This function is quite useful, however, when tables are larger.
+</p>
+<a name="wp1028686"> </a><h3 class="pHeadingRef">
+Example 3 - COUNT(column) function
+</h3>
+<a name="wp1028687"> </a><p class="pBody">
+You&#39;ve just seen that the COUNT(*) function returns the number of rows in a table.  Use the COUNT(<em class="cEmphasis">column</em>) function to see the number of non-null values in the specified column.  For example, in the &quot;pets&quot; table, one item in the &quot;treatment&quot; column has no value; it is NULL.
+</p>
+<a name="wp1028688"> </a><p class="pBody">
+To see the number of non-null values in this column, enter the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT count(treatment) AS non_null_rows<a name="wp1028689"> </a>
+FROM pets<a name="wp1028690"> </a>
+</pre></div>
+<a name="wp1028691"> </a><p class="pBody">
+Your application returns the following:</p><div><img src="images/non_null.gif" height="100" width="105" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028693"> </a><p class="pBody">
+You can see that, in this case, the value returned is smaller than that returned from the COUNT(*) function.
+</p>
+<a name="wp1028694"> </a><h3 class="pHeadingRef">
+String Functions
+</h3>
+<a name="wp1028700"> </a><p class="pBody">
+AcuODBC supports the following string (or character or alphanumeric) functions inside a SELECT statement.  The table below illustrates some commonly used functions with SQL/92 fn syntax, which is the only syntax recognized by AcuODBC directly.  See <a  href="odb514.htm#wp1029137">section 5.6, &quot;Functions Supported by AcuODBC,&quot;</a> for a complete list. 
+</p>
+<a name="wp1028758"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1041895"> </a>
+Function
+
+</th>
+    <th><a name="wp1041897"> </a>
+Format in AcuODBC
+
+</th>
+    <th><a name="wp1041899"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041902"> </a><p class="pCellBody">
+CONCAT
+</p>
+</td>
+    <td><a name="wp1041904"> </a><p class="pCellBody">
+{fn CONCAT(`<em class="cEmphasis">string1</em>', `<em class="cEmphasis">string2</em>')}
+</p>
+</td>
+    <td><a name="wp1041906"> </a><p class="pCellBody">
+Concatenates two strings together.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041908"> </a><p class="pCellBody">
+LCASE
+</p>
+</td>
+    <td><a name="wp1041910"> </a><p class="pCellBody">
+{fn LCASE(`<em class="cEmphasis">string</em>')}
+</p>
+</td>
+    <td><a name="wp1041912"> </a><p class="pCellBody">
+Changes a string to lower case.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041914"> </a><p class="pCellBody">
+LENGTH
+</p>
+</td>
+    <td><a name="wp1041916"> </a><p class="pCellBody">
+{fn LENGTH(`<em class="cEmphasis">string</em>')}
+</p>
+</td>
+    <td><a name="wp1041918"> </a><p class="pCellBody">
+Returns the length of a string.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041920"> </a><p class="pCellBody">
+LOCATE
+</p>
+</td>
+    <td><a name="wp1041922"> </a><p class="pCellBody">
+{fn LOCATE(`<em class="cEmphasis">character</em>')}
+</p>
+</td>
+    <td><a name="wp1041924"> </a><p class="pCellBody">
+Locates a character in a string.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041926"> </a><p class="pCellBody">
+LTRIM
+</p>
+</td>
+    <td><a name="wp1041928"> </a><p class="pCellBody">
+{fn LTRIM(`<em class="cEmphasis">string</em>')}
+</p>
+</td>
+    <td><a name="wp1041930"> </a><p class="pCellBody">
+Removes leading spaces from a string.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041932"> </a><p class="pCellBody">
+RTRIM
+</p>
+</td>
+    <td><a name="wp1041934"> </a><p class="pCellBody">
+{fn RTRIM(`<em class="cEmphasis">string</em>')}
+</p>
+</td>
+    <td><a name="wp1041936"> </a><p class="pCellBody">
+Removes trailing spaces from a string.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041938"> </a><p class="pCellBody">
+SUBSTRING
+</p>
+</td>
+    <td><a name="wp1041940"> </a><p class="pCellBody">
+{fn SUBSTR(`<em class="cEmphasis">string</em>')}
+</p>
+</td>
+    <td><a name="wp1041942"> </a><p class="pCellBody">
+Locates a string within a string.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1041944"> </a><p class="pCellBody">
+UCASE
+</p>
+</td>
+    <td><a name="wp1041946"> </a><p class="pCellBody">
+{fn UCASE(`<em class="cEmphasis">string</em>')}
+</p>
+</td>
+    <td><a name="wp1041948"> </a><p class="pCellBody">
+Changes a string to upper case.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1028760"> </a><p class="pBody">
+Your application may accept other syntax.  See your program documentation for details.  
+</p>
+<a name="wp1028761"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1028762"> </a><p class="pBody">
+Depending on your application, enter one of the following SQL commands to trim right and left trailing spaces to combine &quot;street&quot; and &quot;city&quot; in a new column called &quot;street_city&quot;.   Note that the first command is SQL/92 syntax and should work in most applications.  The second command is specific to Microsoft Access.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT street, city, <a name="wp1028763"> </a>
+{fn rtrim(street)} + &#39;, &#39; + {fn ltrim(city)} AS street_city<a name="wp1028764"> </a>
+FROM clients<a name="wp1028765"> </a>
+</pre></div>
+<a name="wp1028766"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT street, city, <a name="wp1028767"> </a>
+rtrim(street) + &#39;, &#39; + ltrim(city) AS street_city<a name="wp1028768"> </a>
+FROM clients<a name="wp1028769"> </a>
+</pre></div>
+<a name="wp1028770"> </a><p class="pBody">
+Note that the plus sign is used here to combine strings.  This example is an alternative to using the CONCAT function.
+</p>
+<a name="wp1038126"> </a><p class="pBody">
+The following view is a result of this statement:</p><div><img src="images/street_c.gif" height="253" width="421" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1038129"> </a><p class="pBody">
+A<b class="cBold">rithmetic Expressions</b>
+</p>
+<a name="wp1028779"> </a><p class="pBody">
+AcuODBC supports the use of arithmetic expressions inside a SELECT command, including the following: 
+</p>
+<a name="wp1028780"> </a><p class="pBody">
+   </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1029517"> </a>
+Function
+
+</th>
+    <th><a name="wp1029519"> </a>
+Example
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028787"> </a><p class="pCellBody">
+Expressions in the SELECT list 
+</p>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+SELECT col1 + col2<a name="wp1028789"> </a>
+FROM table1<a name="wp1038765"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028791"> </a><p class="pCellBody">
+Expressions in functions
+</p>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+SELECT max(col1 + col2)<a name="wp1028793"> </a>
+FROM table1<a name="wp1038766"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028795"> </a><p class="pCellBody">
+Expressions as part of a BETWEEN predicate
+</p>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+SELECT col1, col2<a name="wp1028797"> </a>
+FROM table1 <a name="wp1038767"> </a>
+WHERE col1 BETWEEN col2 + 5 and col2 + 10<a name="wp1038768"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028799"> </a><p class="pCellBody">
+Expressions as part of  comparisons
+</p>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+SELECT col1, col2<a name="wp1028801"> </a>
+FROM table1<a name="wp1038769"> </a>
+WHERE col1 + col2 &gt; 10<a name="wp1038770"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028803"> </a><p class="pCellBody">
+Expressions as the test in an IN clause
+</p>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+SELECT col1<a name="wp1028805"> </a>
+FROM table1 <a name="wp1038771"> </a>
+WHERE col1 + col2 IN (10, 20, 30, 40)<a name="wp1038772"> </a>
+</pre></div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1028808"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1028809"> </a><p class="pBody">
+Using an arithmetic expression, you can add the contents of each cell in a row to determine the total charges for a patient in these months:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT patient_id, January, February, March, April, May, June,<a name="wp1028810"> </a>
+(january+february+march+april+may+june) AS Patient_Total<a name="wp1028811"> </a>
+FROM accounts<a name="wp1028812"> </a>
+</pre></div>
+<a name="wp1038271"> </a><p class="pBody">
+The following view, including a new column with each patient's total for six months, is a result of this query: </p><div><img src="images/patienta.gif" height="217" width="511" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1038272"> </a><p class="pBody">
+Note that because the statement did not contain the WHERE clause, AcuODBC returned data for every row in the table.  However, you can include the WHERE clause when using expressions as well.  For example, enter the following query to see the data and totals for patients with a patient_id greater than 100:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT patient_id, January, February, March, April, May, June,<a name="wp1028816"> </a>
+  (january+february+march+april+may+june) AS Patient_Total<a name="wp1028817"> </a>
+FROM accounts<a name="wp1028818"> </a>
+WHERE patient_id &gt; 200<a name="wp1028819"> </a>
+</pre></div>
+<a name="wp1028820"> </a><p class="pBody">
+The following view is a result of this statement:</p><div><img src="images/patient_.gif" height="126" width="707" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028822"> </a><h3 class="pHeadingRef">
+The ORDER BY clause
+</h3>
+<a name="wp1028823"> </a><p class="pBody">
+Include the ORDER BY clause to return rows in a specific order in response to your query.  Including both the WHERE and ORDER BY clauses, the syntax of the SELECT command is now:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT [DISTINCT] &lt;field-list-1&gt;<a name="wp1028828"> </a>
+FROM &lt;table-name&gt;<a name="wp1028829"> </a>
+[WHERE &lt;condition&gt;]<a name="wp1028830"> </a>
+[ORDER BY &lt;field-list-2&gt;]<a name="wp1028831"> </a>
+</pre></div>
+<a name="wp1028832"> </a><p class="pBody">
+where <b class="cBold">&lt;field-list-2&gt; </b>is a field or list of fields contained in &lt;table-name&gt;.  For example, to see the list of California pet owners ordered by city, enter the following query:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT *<a name="wp1028835"> </a>
+FROM clients<a name="wp1028836"> </a>
+WHERE state_province = &#39;California&#39;<a name="wp1028837"> </a>
+ORDER BY city<a name="wp1028838"> </a>
+</pre></div>
+<a name="wp1028839"> </a><p class="pBody">
+Your application returns the following view:</p><div><img src="images/order_by.gif" height="110" width="659" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028841"> </a><p class="pBody">
+Use multiple entries in the &lt;field-list&gt; to refine the sort order.  For example, enter the following statement to see the list of owners ordered by city, and then ordered by &quot;client_id&quot; because three owners live in San Diego.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT *<a name="wp1028842"> </a>
+FROM clients<a name="wp1028843"> </a>
+WHERE state_province = &#39;California&#39;<a name="wp1028844"> </a>
+ORDER BY city, client_id<a name="wp1028845"> </a>
+</pre></div>
+<a name="wp1028846"> </a><p class="pBody">
+The following view is the result of this statement:</p><div><img src="images/order_ba.gif" height="112" width="644" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028848"> </a><h3 class="pHeadingRef">
+The GROUP BY clause
+</h3>
+<a name="wp1028849"> </a><p class="pBody">
+AcuODBC supports the SQL GROUP BY clause.  
+</p>
+<a name="wp1028850"> </a><p class="pBody">
+For example, to see how many times each animal type is represented among the patients, enter the following query:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT animal_type, count(animal_type) AS number_of_patients<a name="wp1028851"> </a>
+FROM pets<a name="wp1028852"> </a>
+GROUP BY animal_type<a name="wp1041955"> </a>
+</pre></div>
+<a name="wp1041959"> </a><p class="pBody">
+Your application returns the following view:
+</p>
+<a name="wp1041963"> </a><p class="pBody">
+</p><div><img src="images/animal_t.gif" height="125" width="271" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody"> 
+</p>
+<a name="wp1041964"> </a><p class="pBody">
+Here you can see that this roster of patients lists four birds, six cats, five dogs, two reptiles, and two rodents.
+</p>
+<a name="wp1028857"> </a><p class="pBody">
+For detailed instructions on the SELECT statement and its clauses, refer to an ODBC or SQL reference manual, such as the <em class="cEmphasis">ODBC Programmer's Reference.</em>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

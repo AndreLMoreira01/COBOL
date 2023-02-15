@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.2.2  Using ACUCOBOL-GT in POSIX Environments</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp3.htm">4.2  ACUCOBOL-GT in MPE/iX Environments</a> &gt; </p>
+<a name="wp1071073"> </a><h2 class="pHeading2">
+4.2.2  Using ACUCOBOL-GT in POSIX Environments
+</h2>
+<a name="wp1041141"> </a><p class="pBody">
+The ACUCOBOL-GT development system can be run in HP COBOL compatibility mode in the MPE/iX POSIX shell.  This section discusses some basic issues related to the installation, startup, and running of ACUCOBOL-GT under the POSIX shell on HP&#160;e3000 platforms.  
+</p>
+<a name="wp1041142"> </a><p class="pBody">
+To install ACUCOBOL-GT on your system, you must have MPE/iX release 5.0 or later.  The installation procedure, including the installation of license files, is described in detail in the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Getting Started</span> booklet, section 1.6, &quot;Installing on HP&#160;e3000 Machines.&quot;  The installation procedure gives the exact command line syntax you should use, first to get from the basic MPE/iX level to the POSIX shell, and then to install and run ACUCOBOL-GT.  In addition, useful information on printing from the POSIX shell is included.
+</p>
+<a name="wp1041143"> </a><p class="pBody">
+To get your existing COBOL applications running with ACUCOBOL-GT, you need to recompile the source.  The name of the ACUCOBOL-GT compiler executable is &quot;ccbl&quot; and you invoke it with the following command.  (For complete information on invoking the compiler, see the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT User's Guide</span>, section 2.1.)
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl &lt;<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">filename</span>.cbl&gt;<a name="wp1041144"> </a>
+</pre></div>
+<a name="wp1041145"> </a><p class="pBody">
+The resulting object file has the same base name as the source file plus the extension &quot;.acu&quot;.  Unlike the native HP COBOL system, the ACUCOBOL-GT object does not require linking.
+</p>
+<a name="wp1041146"> </a><p class="pBody">
+To run your program, invoke it with ACUCOBOL-GT runtime (&quot;runcbl&quot;).  To invoke it, enter the following command.  (For complete information on using the runtime, see section 2.2 in Book 1,<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic"> ACUCOBOL-GT User's Guide</span>.)
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+runcbl &lt;<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">filename</span>.acu&gt;<a name="wp1041147"> </a>
+</pre></div>
+<a name="wp1046292"> </a><p class="pBody">
+Any programs that are called during execution are loaded dynamically by the runtime.  Subprograms written in C may be linked into the runtime system directly, and then called by a COBOL program using the CALL verb.  For details regarding linking a C program into the runtime, see Chapter 4 of the <em class="cEmphasis">Guide to Interoperating with ACUCOBOL-GT</em>.
+</p>
+<a name="wp1046293"> </a><p class="pBody">
+ There are many compile and runtime options that you can also include in the command arguments to compile or execute your ACUCOBOL-GT program.  To view a list of compiler options, entering the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ccbl -help<a name="wp1041150"> </a>
+</pre></div>
+<a name="wp1045578"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You should use the command line options in lieu of the HP COBOL $CONTROL directives.  See <a  href="ch4-hp59.htm#wp1041869">section 4.4.2</a> of this guide for a table that maps HP COBOL $CONTROL directives to the ACUCOBOL-GT command line options for the compiler and the runtime.
+<hr />
+</p>
+<a name="wp1070731"> </a><p class="pBody">
+For detailed descriptions of the ACUCOBOL-GT compiler and runtime, including all of the command line options and utility programs, see Chapters 2 and 3 in Book 1 of the ACUCOBOL-GT documentation set.  Book 1 also includes sections on how to get help and how to handle compilation and runtime problems (<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT</span> <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">User's Guide,</span> Chapter 1, section 1.7 and its subsections).
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>KEY Phrase</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3621.htm">6.4  Common Statement Rules</a> &gt; <a href="gt3630.htm">6.4.9  Common Screen Options</a> &gt; </p>
+<a name="wp1035319"> </a><h2 class="pHeading3">
+KEY Phrase
+</h2>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">KEY</u> {IS} key-letter<a name="wp1035320"> </a>
+    {= }<a name="wp1035321"> </a>
+</pre></div>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035324"> </a><div class="pSmartList1"><li>The KEY phrase assigns a <em class="cEmphasis">key letter</em> to the control.  The user can activate the control by typing its key letter in combination with some other special key.  Under Microsoft Windows, key letters are typed in conjunction with the &quot;Alt&quot; key.  The first character in <em class="cEmphasis">key-letter</em> becomes the control's key letter.  The key letter can be given in lower- or upper-case.</li></div>
+<a name="wp1035325"> </a><div class="pSmartList1"><li>If the KEY phrase is omitted, the control's key letter is derived from its title.  (See the TITLE phrase for details.)  If a key letter is not indicated in the title, the control does not have a key letter.  If a key letter is designated in both the title and the KEY phrase, the KEY phrase takes precedence.  If the letter specified in the KEY phrase is not the same as the letter indicated in the title, the letter indicated in the title is highlighted and the letter specified in the KEY phrase is the key letter (this could be confusing to the user).</li></div>
+<a name="wp1035326"> </a><div class="pSmartList1"><li>The activation technique for key letters is shared with the menu bar handler on most systems.  You should avoid assigning duplicate key letters in any one floating window, or assigning key letters that conflict with key letters used by the window's menu bar.</li></div>
+<a name="wp1035327"> </a><div class="pSmartList1"><li>Controls that cannot be activated, such as a label, may have key letters (see the example that follows).  In this case, the runtime system uses the following rules to determine which control to activate when the key letter is typed:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1035328"> </a><div class="pSmartList2"><li>if another control has the same key letter, then the first control created with that key letter is activated when that key letter is pressed; otherwise,</li></div>
+<a name="wp1035329"> </a><div class="pSmartList2"><li>the next control that can be activated (in the same floating window) is activated.  The runtime uses the order in which the controls were created to determine which control is next.</li></div>
+</ol></div>
+<a name="wp1035330"> </a><p class="pIndented1">
+In practice, these rules mean that you can usually assign a key letter in the title of a label and use rule b) to associate that key letter with a corresponding entry field.  In this case, you do not need to use the KEY phrase.  If rule (b) does not give you the effect you desire, you can use the KEY phrase and rule (a) to explicitly state the effect you want.  
+</p>
+<a name="wp1035331"> </a><p class="pIndented1">
+For example, the following Screen Section segment:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+   03 LABEL &quot;&amp;Customer: &quot;.<a name="wp1035332"> </a>
+   03 ENTRY-FIELD USING CUST-NO, COLUMN + 2.&quot;<a name="wp1035333"> </a>
+</pre></div>
+<a name="wp1035334"> </a><p class="pIndented1">
+would assign a key letter of &quot;C&quot; to the label (using the implied key letter assignment from the label's title).  Since labels cannot be activated, typing Alt-C would activate the CUST-NO entry field because it is the next control that can be activated.
+</p>
+<a name="wp1035335"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>If you use &quot;&amp;&quot; in the control title, the letter that directly follows it becomes the accelerator key for this control, indicated by an underline.  If you use the KEY IS construct to specify the accelerator key, that letter is not underlined in the control's title.
+<hr />
+</p>
+<a name="wp1035336"> </a><div class="pSmartList1"><li>A control's key letter is assigned when the control is created.  It cannot be changed.    </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

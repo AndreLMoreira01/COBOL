@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.7.1.4  IS EXTERNAL clause</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3533.htm">5.7  Record Description Entry</a> &gt; <a href="gt3534.htm">5.7.1  Data Description Entry</a> &gt; </p>
+<a name="wp1035260"> </a><h2 class="pHeading3">
+5.7.1.4  IS EXTERNAL clause
+</h2>
+<a name="wp1035264"> </a><p class="pBody">
+The IS EXTERNAL clause declares that a data item is shared by two or more programs.
+</p>
+<a name="wp1035266"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+[ IS <u class="cUnderline">EXTERNAL</u> ] <a name="wp1035267"> </a>
+</pre></div>
+<a name="wp1035269"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035270"> </a><div class="pSmartList1"><li>Only level 01 and 77 data items in Working-Storage may be declared to be external.</li></div>
+<a name="wp1035271"> </a><div class="pSmartList1"><li>Each program that declares an external data item must use the same name for that item, and the item must occupy the same number of bytes. </li></div>
+<a name="wp1035273"> </a><div class="pSmartList1"><li>External data items may not have a VALUE phrase.  </li></div>
+<a name="wp1035274"> </a><div class="pSmartList1"><li>The IS EXTERNAL clause may not be used with the REDEFINES clause. </li></div>
+</ol></div>
+<a name="wp1035276"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035277"> </a><div class="pSmartList1"><li>The phrase IS EXTERNAL must be included in the data description of the item in each program that accesses the item externally.  Each program of a run unit that declares an external data item may access that item.  Any change to the item made by one program is automatically seen by all the other programs.  External data items may be shared between both COBOL and C programs.</li></div>
+<a name="wp1035278"> </a><div class="pSmartList1"><li>An external data item belongs to the run unit, not to any of the programs that are part of the run unit.  This means that an external data item is allocated for the duration of the run, regardless of the action of CANCEL verbs.  </li></div>
+<a name="wp1035279"> </a><p class="pIndented1">
+The one exception to this rule is external data items that are also C data items.  These belong to the runtime system itself, not to the run unit.  The distinction is that you can initiate another run unit with the CALL RUN verb, but this does not initiate another runtime system.  In this case, you get new copies of the COBOL-only external data items, but keep the same data items that are shared with C programs.  
+</p>
+<a name="wp1035280"> </a><div class="pSmartList1"><li>Instructions for declaring a C data item external can be found in the file &quot;direct.c&quot; supplied with the runtime system.  External data items may not have a VALUE phrase.  They are initialized to binary zeros (NULL) by the runtime. </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

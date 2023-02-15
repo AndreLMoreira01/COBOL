@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.1.6.2  Mass update</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt162.htm">6.1 Handling Files</a> &gt; <a href="gt1615.htm">6.1.6  Indexed File Considerations</a> &gt; </p>
+<a name="wp1032446"> </a><h2 class="pHeading3">
+6.1.6.2  Mass update
+</h2>
+<a name="wp1032449"> </a><p class="pBody">
+The MASS-UPDATE option of the OPEN verb can provide significant performance benefits under some circumstances.  Several issues come into play, however, when you are deciding whether or not to use MASS-UPDATE.  Currently, the MASS-UPDATE clause affects only the systems that use Vision. 
+</p>
+<a name="wp1032451"> </a><p class="pBody">
+Normally, when Vision updates a file, it immediately writes all of the changed information to disk.  This is done for two reasons: to allow current information to be accessed by other concurrent processes, and to ensure that the file will be accurate should the program die suddenly without closing the file (e.g., when a machine's power goes out or the operating system crashes).  Note that a Vision file is really only at risk of being damaged during an update to the file.  
+</p>
+<a name="wp1032453"> </a><p class="pBody">
+The MASS-UPDATE option changes this strategy.  It allows Vision to retain information in memory until the file is closed.  This allows Vision to be much more efficient, particularly on Windows systems.  However, using this option means that the file is at risk from the time the first update is made until the time the file is closed.  Should the machine die during this period, the file will almost certainly be corrupt.  To mitigate this issue, Vision writes enough information to disk to ensure that the file can be rebuilt using <b class="cBold">vutil</b>.
+</p>
+<a name="wp1032454"> </a><p class="pBody">
+The MASS-UPDATE option also requires that the entire physical file be locked against other updaters because the disk version of the file is not always accurate.  This somewhat limits the opportunities in which MASS-UPDATE can be used.  
+</p>
+<a name="wp1032455"> </a><p class="pBody">
+Generally, programs might use MASS-UPDATE if they heavily update a file.  For many such programs, the fact that the file is at greater risk is not really an issue.  For example, many posting programs cannot recover from an incomplete run.  This is because the program cannot tell where it left off in the process.  This is particularly true for programs that update several files at once, because it is usually not clear which file got updated last.  For these programs, it is usually necessary to go to a backup of the affected files when the program dies.  These programs are obvious candidates for MASS-UPDATE because it does not matter if the files are corrupt after a program failure, since they are just going to be restored from backup.  Furthermore, these programs benefit the most from MASS-UPDATE because they do a lot of updating.  
+</p>
+<a name="wp1032456"> </a><p class="pBody">
+Interactive programs, however, make poor candidates for MASS-UPDATE.  Usually the volume of updates is low (at least for the time frame the program runs in).  Furthermore, interactive programs are often killed or left running overnight by their operators, thus increasing both the risk to the file and the inconvenience of the file lock that MASS-UPDATE implies.
+</p>
+<a name="wp1032457"> </a><p class="pBody">
+To summarize, MASS-UPDATE is appropriate for programs where the implied file lock is useful, the volume of updates is large, and where a system failure would usually require special attention for recovery (either restoring from backup or rebuilding the files).  
+</p>
+<a name="wp1032458"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>For convenience when you are converting programs written with other COBOL compilers, ACUCOBOL-GT can treat files opened WITH LOCK as if they were opened with MASS-UPDATE.  This is controlled by the MASS_UPDATE runtime configuration variable.  Configuration variables are described in Appendix H. 
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,1 @@
+PATH=[Acucobol-GT pathname]:$PATH

@@ -1,0 +1,807 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$EXCEPINFO Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1035447"> </a><h2 class="pHeading2">
+C$EXCEPINFO Routine
+</h2>
+<a name="wp1035454"> </a><p class="pBody">
+C$EXCEPINFO retrieves information about an object exception that has been raised. 
+</p>
+<a name="wp1035455"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$EXCEPINFO&quot; <a name="wp1035456"> </a>
+    USING ERROR-INFO, ERR-SOURCE, ERR-DESCRIPTION,<a name="wp1035457"> </a>
+        ERR-HELP-FILE, ERR-HELP-CONTEXT, ERR-OBJECT-HANDLE,<a name="wp1481918"> </a>
+        ERR-CONTROL-ID<a name="wp1210824"> </a>
+</pre></div>
+<a name="wp1035462"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1035463"> </a><p class="pBody">
+<b class="cBold">ERROR-INFO</b>    Group item to receive returned information.  
+</p>
+<a name="wp1035464"> </a><p class="pBody">
+ERROR-INFO must have the following structure (defined in &quot;activex.def&quot;):
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 ERROR-INFO.<a name="wp1164539"> </a>
+   03  ERROR-INFO-RESULT    USAGE UNSIGNED-INT.<a name="wp1164540"> </a>
+   03  ERROR-INFO-FACILITY  USAGE UNSIGNED-SHORT.<a name="wp1164541"> </a>
+   03  ERROR-INFO-CODE      USAGE UNSIGNED-SHORT.<a name="wp1035468"> </a>
+</pre></div>
+<a name="wp1035470"> </a><p class="pBody">
+ERROR-INFO is described in the Comments section below.
+</p>
+<a name="wp1035472"> </a><p class="pBody">
+<b class="cBold">ERR-SOURCE</b>    PIC X(n) (optional)
+</p>
+<a name="wp1035473"> </a><p class="pBody">
+A text string identifying the source of the exception. Typically, this is an application name. 
+</p>
+<a name="wp1035474"> </a><p class="pBody">
+<b class="cBold">ERR-DESCRIPTION</b>    PIC X(n) (optional)
+</p>
+<a name="wp1035475"> </a><p class="pBody">
+A text description of the error intended for the user. If no description is available, ERR-DESCRIPTION is filled with spaces.
+</p>
+<a name="wp1035476"> </a><p class="pBody">
+<b class="cBold">ERR-HELP-FILE</b>    PIC X(n) (optional)
+</p>
+<a name="wp1035477"> </a><p class="pBody">
+The fully qualified drive, path, and file name of a help file with more information about the error. If no help is available, ERR-HELP-FILE is filled with spaces. 
+</p>
+<a name="wp1035478"> </a><p class="pBody">
+<b class="cBold">ERR-HELP-CONTEXT</b>    Usage unsigned-long (optional)
+</p>
+<a name="wp1035479"> </a><p class="pBody">
+The help context ID of the topic within the help file. This parameter is filled in only if the ERR-HELP-FILE parameter is not spaces. The help context ID will be between 0 and 4294967295. 
+</p>
+<a name="wp1210871"> </a><p class="pBody">
+<b class="cBold">ERR-OBJECT-HANDLE</b>    Usage handle (optional)
+</p>
+<a name="wp1210829"> </a><p class="pBody">
+The handle of the COM object or ActiveX control that generated the exception.
+</p>
+<a name="wp1211046"> </a><p class="pBody">
+<b class="cBold">ERR-CONTROL-ID</b>   Usage PIC XX COMP-X (optional)
+</p>
+<a name="wp1211040"> </a><p class="pBody">
+The ID of the ActiveX control that generated the exception.  The value  is &quot;0&quot; if the object that generated the exception is not an ActiveX control.
+</p>
+<a name="wp1035480"> </a><h3 class="pHeadingRef">
+Comments
+</h3>
+<a name="wp1035481"> </a><p class="pBody">
+C$EXCEPINFO is typically called from an error handling procedure specified with a Format 2 USE statement in the declaratives.
+</p>
+<a name="wp1035482"> </a><p class="pBody">
+The following are the parameters for the ERROR-INFO group item:
+</p>
+<a name="wp1035483"> </a><p class="pBody">
+<b class="cBold">ERROR-INFO-RESULT</b> is a 32-bit number identifying the error. The error number will be greater than 1000 and less than 4294967296. This error number is divided into 4 fields: a severity code, a reserved portion, a facility field, and an error code. 
+</p>
+<a name="wp1035484"> </a><p class="pBody">
+The severity code is the high-order bit (31).  The next 4 bits are reserved (30-27).  The next eleven bits are the facility field (26-16), and the last sixteen bits are the error code (15-0).  The severity code is usually &quot;1&quot;, and the reserved bits are usually set to &quot;0&quot;. The error code is defined by the facility that raised the exception.  The facility field is one of the following:
+</p>
+<a name="wp1035494"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1035487"> </a><p class="pCellBody">
+FACILITY-ACU (4) 
+</p>
+</td>
+    <td><a name="wp1035489"> </a><p class="pCellBody">
+For status codes of exceptions raised by the ACUCOBOL-GT runtime.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035491"> </a><p class="pCellBody">
+FACILITY-ACTIVE-X (10) 
+</p>
+</td>
+    <td><a name="wp1035493"> </a><p class="pCellBody">
+For status codes of exceptions raised by an ActiveX control.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1035495"> </a><p class="pBody">
+The standard facility field values and error codes are defined as condition names (level 88) in &quot;activex.def&quot;.  
+</p>
+<a name="wp1035496"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If you receive a facility value that is anything other than the two listed above, you will need to look up the ERROR-INFO result number in the documentation for the specific ActiveX control you are using or in Microsoft's documentation.
+<hr />
+</p>
+<a name="wp1035498"> </a><p class="pBody">
+<b class="cBold">ERROR-INFO-FACILITY</b> contains the facility field extracted from ERROR-INFO-RESULT.
+</p>
+<a name="wp1035499"> </a><p class="pBody">
+<b class="cBold">ERROR-INFO-CODE</b> contains the error code extracted from ERROR-INFO-RESULT.  ERROR-INFO-CODE will be listed in the ACUCOBOL-GT error codes if the facility field is FACILITY-ACU.  If the facility is FACILITY-ACTIVE-X, the ERROR-INFO-CODE may be listed in an enumeration in the ActiveX control's COPY file or it may be one of the standard COM status codes for ActiveX controls.
+</p>
+<a name="wp1035500"> </a><p class="pBody">
+When called to get information about an object exception, the error code can either be an ACUCOBOL-GT defined code or a COM status code. 
+</p>
+<a name="wp1035501"> </a><p class="pBody">
+<b class="cBold">ACUCOBOL-GT Error Codes </b>(defined in &quot;activex.def&quot;):
+</p>
+<a name="wp1051836"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1051029"> </a>
+Name
+
+</th>
+    <th><a name="wp1051031"> </a>
+Description 
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051033"> </a><p class="pCellBody">
+ACU-E-UNEXPECTED
+</p>
+</td>
+    <td><a name="wp1051035"> </a><p class="pCellBody">
+Unexpected error
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051037"> </a><p class="pCellBody">
+ACU-E-INVALIDPARAMNAME
+</p>
+</td>
+    <td><a name="wp1051039"> </a><p class="pCellBody">
+Invalid parameter name
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051041"> </a><p class="pCellBody">
+ACU-E-INVALIDHANDLE
+</p>
+</td>
+    <td><a name="wp1051043"> </a><p class="pCellBody">
+Invalid handle
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051045"> </a><p class="pCellBody">
+ACU-E-INITIALSTATE
+</p>
+</td>
+    <td><a name="wp1051047"> </a><p class="pCellBody">
+Error loading INITIAL-STATE from resource file
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051049"> </a><p class="pCellBody">
+ACU-E-NOEXCEPINFO
+</p>
+</td>
+    <td><a name="wp1051051"> </a><p class="pCellBody">
+No exception information available
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051053"> </a><p class="pCellBody">
+ACU-E-INVALIDPROPNUM
+</p>
+</td>
+    <td><a name="wp1051055"> </a><p class="pCellBody">
+Invalid property number
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051057"> </a><p class="pCellBody">
+ACU-E-TOOMANYPARAMS
+</p>
+</td>
+    <td><a name="wp1051059"> </a><p class="pCellBody">
+Too many parameters
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051061"> </a><p class="pCellBody">
+ACU-E-TOOFEWPARAMS
+</p>
+</td>
+    <td><a name="wp1051063"> </a><p class="pCellBody">
+Too few parameters
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051065"> </a><p class="pCellBody">
+ACU-E-NOTPROPERTYGET
+</p>
+</td>
+    <td><a name="wp1051067"> </a><p class="pCellBody">
+Property can be modified but not inquired
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051069"> </a><p class="pCellBody">
+ACU-E-NOTPROPERTYPUT
+</p>
+</td>
+    <td><a name="wp1051071"> </a><p class="pCellBody">
+Property can be inquired but not modified
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1051073"> </a><p class="pCellBody">
+ACU-E-CREATE
+</p>
+</td>
+    <td><a name="wp1051075"> </a><p class="pCellBody">
+Error creating ActiveX control
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1035552"> </a><p class="pBody">
+<b class="cBold">COM Status Codes for ActiveX controls </b>(defined in &quot;activex.def&quot;):
+</p>
+<a name="wp1053059"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1370889"> </a>
+Name
+
+</th>
+    <th><a name="wp1370891"> </a>
+Description 
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370893"> </a><p class="pCellBody">
+AX-E-ILLEGALFUNCTIONCALL
+</p>
+</td>
+    <td><a name="wp1370895"> </a><p class="pCellBody">
+Illegal function call 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370897"> </a><p class="pCellBody">
+AX-E-OVERFLOW
+</p>
+</td>
+    <td><a name="wp1370899"> </a><p class="pCellBody">
+Overflow 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370901"> </a><p class="pCellBody">
+AX-E-OUTOFMEMORY
+</p>
+</td>
+    <td><a name="wp1370903"> </a><p class="pCellBody">
+Out of memory 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370905"> </a><p class="pCellBody">
+AX-E-DIVISIONBYZERO
+</p>
+</td>
+    <td><a name="wp1370907"> </a><p class="pCellBody">
+Division by zero 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370909"> </a><p class="pCellBody">
+AX-E-OUTOFSTRINGSPACE
+</p>
+</td>
+    <td><a name="wp1370911"> </a><p class="pCellBody">
+Out of string space 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370913"> </a><p class="pCellBody">
+AX-E-OUTOFSTACKSPACE
+</p>
+</td>
+    <td><a name="wp1370915"> </a><p class="pCellBody">
+Out of stack space 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370917"> </a><p class="pCellBody">
+AX-E-BADFILENAMEORNUMBER
+</p>
+</td>
+    <td><a name="wp1370919"> </a><p class="pCellBody">
+Bad file name or number 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370921"> </a><p class="pCellBody">
+AX-E-FILENOTFOUND
+</p>
+</td>
+    <td><a name="wp1370923"> </a><p class="pCellBody">
+File not found 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370925"> </a><p class="pCellBody">
+AX-E-BADFILEMODE
+</p>
+</td>
+    <td><a name="wp1370927"> </a><p class="pCellBody">
+Bad file mode 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370929"> </a><p class="pCellBody">
+AX-E-FILEALREADYOPEN
+</p>
+</td>
+    <td><a name="wp1370931"> </a><p class="pCellBody">
+File already open 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370933"> </a><p class="pCellBody">
+AX-E-DEVICEIOERROR
+</p>
+</td>
+    <td><a name="wp1370935"> </a><p class="pCellBody">
+Device I/O error 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370937"> </a><p class="pCellBody">
+AX-E-FILEALREADYEXISTS
+</p>
+</td>
+    <td><a name="wp1370939"> </a><p class="pCellBody">
+File already exists 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370941"> </a><p class="pCellBody">
+AX-E-BADRECORDLENGTH
+</p>
+</td>
+    <td><a name="wp1370943"> </a><p class="pCellBody">
+Bad record length 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370945"> </a><p class="pCellBody">
+AX-E-DISKFULL
+</p>
+</td>
+    <td><a name="wp1370947"> </a><p class="pCellBody">
+Disk full 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370949"> </a><p class="pCellBody">
+AX-E-BADRECORDNUMBER
+</p>
+</td>
+    <td><a name="wp1370951"> </a><p class="pCellBody">
+Bad record number 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370953"> </a><p class="pCellBody">
+AX-E-BADFILENAME
+</p>
+</td>
+    <td><a name="wp1370955"> </a><p class="pCellBody">
+Bad file name 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370957"> </a><p class="pCellBody">
+AX-E-TOOMANYFILES
+</p>
+</td>
+    <td><a name="wp1370959"> </a><p class="pCellBody">
+Too many files 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370961"> </a><p class="pCellBody">
+AX-E-DEVICEUNAVAILABLE
+</p>
+</td>
+    <td><a name="wp1370963"> </a><p class="pCellBody">
+Device unavailable 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370965"> </a><p class="pCellBody">
+AX-E-PERMISSIONDENIED
+</p>
+</td>
+    <td><a name="wp1370967"> </a><p class="pCellBody">
+Permission denied 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370969"> </a><p class="pCellBody">
+AX-E-DISKNOTREADY
+</p>
+</td>
+    <td><a name="wp1370971"> </a><p class="pCellBody">
+Disk not ready 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370973"> </a><p class="pCellBody">
+AX-E-PATHFILEACCESSERROR
+</p>
+</td>
+    <td><a name="wp1370975"> </a><p class="pCellBody">
+Path/file access error 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370977"> </a><p class="pCellBody">
+AX-E-PATHNOTFOUND
+</p>
+</td>
+    <td><a name="wp1370979"> </a><p class="pCellBody">
+Path not found 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370981"> </a><p class="pCellBody">
+AX-E-INVALIDPATTERNSTRING
+</p>
+</td>
+    <td><a name="wp1370983"> </a><p class="pCellBody">
+Invalid pattern string 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370985"> </a><p class="pCellBody">
+AX-E-INVALIDUSEOFNULL
+</p>
+</td>
+    <td><a name="wp1370987"> </a><p class="pCellBody">
+Invalid use of NULL 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370989"> </a><p class="pCellBody">
+AX-E-INVALIDFILEFORMAT
+</p>
+</td>
+    <td><a name="wp1370991"> </a><p class="pCellBody">
+Invalid file format 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370993"> </a><p class="pCellBody">
+AX-E-INVALIDPROPERTYVALUE
+</p>
+</td>
+    <td><a name="wp1370995"> </a><p class="pCellBody">
+Invalid property value 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1370997"> </a><p class="pCellBody">
+AX-E-INVALIDPROPERTYARRAYINDEX
+</p>
+</td>
+    <td><a name="wp1370999"> </a><p class="pCellBody">
+Invalid property array index 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1371001"> </a><p class="pCellBody">
+AX-E-SETNOTSUPPORTEDATRUNTIME
+</p>
+</td>
+    <td><a name="wp1371003"> </a><p class="pCellBody">
+Set not supported at run time 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1371005"> </a><p class="pCellBody">
+AX-E-SETNOTSUPPORTED
+</p>
+</td>
+    <td><a name="wp1371007"> </a><p class="pCellBody">
+Set not supported (read-only property) 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1371009"> </a><p class="pCellBody">
+AX-E-NEEDPROPERTYARRAYINDEX
+</p>
+</td>
+    <td><a name="wp1371011"> </a><p class="pCellBody">
+Need property array index 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1371013"> </a><p class="pCellBody">
+AX-E-SETNOTPERMITTED
+</p>
+</td>
+    <td><a name="wp1371015"> </a><p class="pCellBody">
+Set not permitted 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1371017"> </a><p class="pCellBody">
+AX-E-GETNOTSUPPORTEDATRUNTIME
+</p>
+</td>
+    <td><a name="wp1371019"> </a><p class="pCellBody">
+Get not supported at run time 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1371021"> </a><p class="pCellBody">
+AX-E-GETNOTSUPPORTED
+</p>
+</td>
+    <td><a name="wp1371023"> </a><p class="pCellBody">
+Get not supported (write-only property) 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1371025"> </a><p class="pCellBody">
+AX-E-PROPERTYNOTFOUND
+</p>
+</td>
+    <td><a name="wp1371027"> </a><p class="pCellBody">
+Property not found 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1371029"> </a><p class="pCellBody">
+AX-E-INVALIDCLIPBOARDFORMAT
+</p>
+</td>
+    <td><a name="wp1371031"> </a><p class="pCellBody">
+Invalid clipboard format 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1371033"> </a><p class="pCellBody">
+AX-E-INVALIDPICTURE
+</p>
+</td>
+    <td><a name="wp1371035"> </a><p class="pCellBody">
+Invalid picture 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1371037"> </a><p class="pCellBody">
+AX-E-PRINTERERROR
+</p>
+</td>
+    <td><a name="wp1371039"> </a><p class="pCellBody">
+Printer error 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1371041"> </a><p class="pCellBody">
+AX-E-CANTSAVEFILETOTEMP
+</p>
+</td>
+    <td><a name="wp1371043"> </a><p class="pCellBody">
+Can't save file to TEMP 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1371045"> </a><p class="pCellBody">
+AX-E-SEARCHTEXTNOTFOUND
+</p>
+</td>
+    <td><a name="wp1371047"> </a><p class="pCellBody">
+Search text not found 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1371049"> </a><p class="pCellBody">
+AX-E-REPLACEMENTSTOOLONG
+</p>
+</td>
+    <td><a name="wp1371051"> </a><p class="pCellBody">
+Replacements too long 
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1035719"> </a><p class="pBody">
+For an example of how this works, let's look at the standard COM error code for &quot;Out of Memory&quot;.  
+</p>
+<a name="wp1035720"> </a><p class="pBody">
+The code is hex 800A0007.  
+</p>
+<a name="wp1035721"> </a><p class="pBody">
+In binary this is &quot;1000 0000 0000 1010 0000 0000 0000 0111&quot;.  
+</p>
+<a name="wp1035722"> </a><p class="pBody">
+This error code can be broken down as follows:
+</p>
+<a name="wp1035740"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1035725"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1035727"> </a><p class="pCellBody">
+000 0
+</p>
+</td>
+    <td><a name="wp1035729"> </a><p class="pCellBody">
+000 0000 1010
+</p>
+</td>
+    <td><a name="wp1035731"> </a><p class="pCellBody">
+0000 0000 0000 0111
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035733"> </a><p class="pCellBody">
+Severity Code
+</p>
+</td>
+    <td><a name="wp1035735"> </a><p class="pCellBody">
+Reserved
+</p>
+</td>
+    <td><a name="wp1035737"> </a><p class="pCellBody">
+Facility Field
+</p>
+</td>
+    <td><a name="wp1035739"> </a><p class="pCellBody">
+Error Code
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1035741"> </a><p class="pBody">
+The severity code is 1 which makes ERROR-INFO-RESULT greater than or equal to 2147483648 (hex 80000000). The reserved portion is 0. The facility code is 10 (hex A) which is defined in &quot;activex.def&quot; as FACILITY-ACTIVE-X. The error code is 7 (hex 7) which is defined in &quot;activex.def&quot; as AX-E-OUTOFMEMORY.
+</p>
+<a name="wp1035742"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+DATA DIVISION.<a name="wp1035743"> </a>
+WORKING-STORAGE SECTION.<a name="wp1035744"> </a>
+COPY &quot;ACTIVEX.DEF&quot;<a name="wp1035745"> </a>
+77  ERR-SOURCE          PIC X(30).<a name="wp1035746"> </a>
+77  ERR-DESCRIPTION     PIC X(200).<a name="wp1035747"> </a>
+77  ERR-HELP-FILE       PIC X(200).<a name="wp1035748"> </a>
+77  ERR-HELP-CONTEXT    USAGE UNSIGNED-LONG.<a name="wp1035749"> </a>
+77  CHOICE              PIC 9.<a name="wp1035750"> </a>
+<a name="wp1035751"> </a>
+PROCEDURE DIVISION.<a name="wp1035752"> </a>
+DECLARATIVES.<a name="wp1035753"> </a>
+OBJECT-EXCEPTION-HANDLING SECTION.<a name="wp1035754"> </a>
+    USE AFTER EXCEPTION ON OBJECT.<a name="wp1035755"> </a>
+OBJECT-EXCEPTION-HANDLER.<a name="wp1035756"> </a>
+    CALL &quot;C$EXCEPINFO&quot; USING ERROR-INFO, ERR-SOURCE, <a name="wp1035757"> </a>
+        ERR-DESCRIPTION, ERR-HELP-FILE, <a name="wp1035758"> </a>
+        ERR-HELP-CONTEXT.<a name="wp1035759"> </a>
+    IF ERR-HELP-FILE = SPACES THEN<a name="wp1035760"> </a>
+        DISPLAY MESSAGE BOX ERR-DESCRIPTION<a name="wp1035761"> </a>
+            TITLE ERR-SOURCE<a name="wp1035762"> </a>
+            ICON MB-ERROR-ICON<a name="wp1035763"> </a>
+    ELSE<a name="wp1035764"> </a>
+        DISPLAY MESSAGE BOX ERR-DESCRIPTION H&#39;0d&#39; <a name="wp1035765"> </a>
+            &quot;Do you want help ?&quot;<a name="wp1035766"> </a>
+            TITLE ERR-SOURCE<a name="wp1035767"> </a>
+            ICON MB-ERROR-ICON<a name="wp1035768"> </a>
+            TYPE IS MB-YES-NO<a name="wp1035769"> </a>
+            DEFAULT IS MB-YES<a name="wp1035770"> </a>
+            GIVING CHOICE<a name="wp1035771"> </a>
+        IF CHOICE = 1 THEN<a name="wp1035772"> </a>
+            CALL &quot;$WINHELP&quot; USING ERR-HELP-FILE, HELP-CONTEXT<a name="wp1035773"> </a>
+                ERR-HELP-CONTEXT<a name="wp1035774"> </a>
+        END-IF<a name="wp1035775"> </a>
+    END-IF.<a name="wp1035776"> </a>
+    EVALUATE TRUE<a name="wp1035777"> </a>
+        WHEN FACILITY-ACU<a name="wp1035778"> </a>
+            EVALUATE TRUE<a name="wp1035779"> </a>
+                WHEN ACU-E-UNEXPECTED<a name="wp1035780"> </a>
+                    STOP RUN<a name="wp1035781"> </a>
+            END-EVALUATE<a name="wp1035782"> </a>
+        END-EVALUATE.<a name="wp1035783"> </a>
+END DECLARATIVES.<a name="wp1035784"> </a>
+<a name="wp1035785"> </a>
+MAIN-PROGRAM SECTION.<a name="wp1035786"> </a>
+{ . . . }<a name="wp1035788"> </a>
+* The following line causes an AX-E-SETNOTSUPPORTEDATRUNTIME<a name="wp1035790"> </a>
+* exception since Microsoft Chart&#39;s BorderStyle property is not<a name="wp1035791"> </a>
+* allowed to be modified at runtime<a name="wp1035792"> </a>
+    MODIFY MS-CHART-1 BorderStyle = VtBorderStyleBold.   <a name="wp1035793"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

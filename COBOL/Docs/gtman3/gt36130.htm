@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>RECEIVE Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1041158"> </a><h2 class="pHeading2">
+RECEIVE Statement
+</h2>
+<a name="wp1041162"> </a><p class="pBody">
+The RECEIVE statement retrieves messages sent by other threads.
+</p>
+<a name="wp1041164"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">RECEIVE</u> dest-item <u class="cUnderline">FROM</u> { <u class="cUnderline">THREAD</u> thread-1 }<a name="wp1041165"> </a>
+                       { <u class="cUnderline">LAST</u> <u class="cUnderline">THREAD</u>     }<a name="wp1041166"> </a>
+                       { <u class="cUnderline">ANY</u> <u class="cUnderline">THREAD</u>      }<a name="wp1041167"> </a>
+</pre></div>
+<a name="wp1041168"> </a><p class="pBody">
+Remaining phrases are optional, can appear in any order.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+{ <u class="cUnderline">BEFORE</u> TIME timeout }<a name="wp1041169"> </a>
+{ WITH <u class="cUnderline">NO</u> <u class="cUnderline">WAIT</u>        }<a name="wp1041170"> </a>
+<a name="wp1041171"> </a>
+<u class="cUnderline">THREAD</u> IN thread-2<a name="wp1041172"> </a>
+<a name="wp1041173"> </a>
+<u class="cUnderline">SIZE</u>   IN size-item<a name="wp1041174"> </a>
+<a name="wp1041175"> </a>
+<u class="cUnderline">STATUS</u> IN status-item<a name="wp1041176"> </a>
+<a name="wp1041177"> </a>
+[ ON <u class="cUnderline">EXCEPTION</u> statement-1 ]<a name="wp1041178"> </a>
+<a name="wp1041179"> </a>
+[ <u class="cUnderline">NOT</u> ON <u class="cUnderline">EXCEPTION</u> statement-2 ]<a name="wp1041180"> </a>
+<a name="wp1041181"> </a>
+[ <u class="cUnderline">END-RECEIVE</u> ]<a name="wp1041182"> </a>
+</pre></div>
+<a name="wp1041184"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041185"> </a><div class="pSmartList1"><li><em class="cEmphasis">Dest-item</em> is any data item.</li></div>
+<a name="wp1041186"> </a><div class="pSmartList1"><li><em class="cEmphasis">Thread-1</em> and <em class="cEmphasis">thread-2</em> are usage HANDLE or HANDLE OF THREAD data items.  <em class="cEmphasis">Thread-2</em> may not be indexed or reference modified.</li></div>
+<a name="wp1041187"> </a><div class="pSmartList1"><li><em class="cEmphasis">Timeout</em> is a numeric literal or data item.  </li></div>
+<a name="wp1041188"> </a><div class="pSmartList1"><li><em class="cEmphasis">Size-item</em> is a numeric data item.  It may not be indexed or reference modified.</li></div>
+<a name="wp1041189"> </a><div class="pSmartList1"><li><em class="cEmphasis">Status-item</em> is a two-character group item, PIC XX, or PIC 99 data item.  It may not be indexed or reference modified.  </li></div>
+<a name="wp1041190"> </a><div class="pSmartList1"><li><em class="cEmphasis">Statement-1</em> and <em class="cEmphasis">statement-2</em> are any imperative statements.  </li></div>
+</ol></div>
+<a name="wp1041193"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041194"> </a><div class="pSmartList1"><li>The RECEIVE statement returns the next available message into <em class="cEmphasis">dest-item</em>.  Only messages from the proper source are allowed as follows:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1041195"> </a><div class="pSmartList2"><li>FROM THREAD <em class="cEmphasis">thread-1</em> specifies that only messages from the thread identified by <em class="cEmphasis">thread-1</em> are allowed.</li></div>
+<a name="wp1041196"> </a><div class="pSmartList2"><li>FROM LAST THREAD specifies that only messages from the <em class="cEmphasis">last</em> <em class="cEmphasis">thread</em> are allowed (see section 6.8.1, Book 1, <em class="cEmphasis">ACUCOBOL-GT</em> <em class="cEmphasis">User's Guide</em> for a discussion of the <em class="cEmphasis">last</em> <em class="cEmphasis">thread</em>).  </li></div>
+<a name="wp1041197"> </a><div class="pSmartList2"><li>FROM ANY THREAD specifies that all messages are allowed.</li></div>
+</ol></div>
+<a name="wp1041198"> </a><div class="pSmartList1"><li>Messages are received in the order sent.  If a message is available when the RECEIVE statement executes, the RECEIVE statement finishes immediately.  Otherwise, the RECEIVE statement waits for a message to become available.  This provides an efficient method for threads to synchronize with each other.  </li></div>
+<a name="wp1041199"> </a><div class="pSmartList1"><li>When BEFORE TIME is specified, the RECEIVE statement will time out after the specified (<em class="cEmphasis">timeout</em>) number of hundredths of seconds.  If the RECEIVE statement times out before receiving a message, it terminates with an exception condition and does not modify <em class="cEmphasis">dest-item, thread-2,</em> or <em class="cEmphasis">size-item</em>.  If <em class="cEmphasis">timeout</em> is zero, then the RECEIVE statement times out immediately if a message is not available.  Specifying NO WAIT is equivalent to specifying a <em class="cEmphasis">timeout</em> value of zero.  </li></div>
+<a name="wp1041200"> </a><div class="pSmartList1"><li>If no message is available and the sending thread (as specified by rule1 above) does not exist or terminates before sending a message, the RECEIVE statement terminates with an exception condition and does not modify <em class="cEmphasis">dest-item</em> or <em class="cEmphasis">size-item</em>.  This condition is reflected in the status placed in <em class="cEmphasis">status-item</em>.  Note that the test occurs before the time-out test in the case that <em class="cEmphasis">timeout</em> is zero or NO WAIT is specified.  </li></div>
+<a name="wp1041201"> </a><div class="pSmartList1"><li>The RECEIVE statement places the thread ID of the sending thread in <em class="cEmphasis">thread-2</em>.</li></div>
+<a name="wp1041202"> </a><div class="pSmartList1"><li>The size of the message sent is placed in <em class="cEmphasis">size-item</em>.  The size is expressed in standard character positions (bytes).  If the message is longer than <em class="cEmphasis">dest-item</em>, it is truncated.  If the message is shorter than <em class="cEmphasis">dest-item</em>, it is padded on the right with spaces.  </li></div>
+<a name="wp1041203"> </a><div class="pSmartList1"><li>The status of the RECEIVE statement is placed in <em class="cEmphasis">status-item</em>.  The following values are possible (these approximate the standard file status codes):</li></div>
+<a name="wp1066476"> </a><p class="pBodyRelative">
+<div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1066497"> </a><p class="pCellBody">
+&quot;00&quot;
+</p>
+</td>
+    <td><a name="wp1066499"> </a><p class="pCellBody">
+Success - message received
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066501"> </a><p class="pCellBody">
+&quot;04&quot;
+</p>
+</td>
+    <td><a name="wp1066503"> </a><p class="pCellBody">
+Success - message received, but it was truncated
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066505"> </a><p class="pCellBody">
+&quot;10&quot;
+</p>
+</td>
+    <td><a name="wp1066507"> </a><p class="pCellBody">
+Exception - sending thread does not exist or terminated
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066509"> </a><p class="pCellBody">
+&quot;99&quot;
+</p>
+</td>
+    <td><a name="wp1066511"> </a><p class="pCellBody">
+Exception - timed out
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1041208"> </a><div class="pSmartList1"><li>If the RECEIVE statement is successful (as indicated in rule 7 above), <em class="cEmphasis">statement-2 </em>executes.   If an exception condition is returned, <em class="cEmphasis">statement-1</em> executes.  </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

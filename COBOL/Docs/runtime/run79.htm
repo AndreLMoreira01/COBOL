@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:22:58" />
+  <title>7.8  Recovering Deleted Records</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run7.htm"><br />Chapter 7: vutil File Manager</a> &gt; </p>
+<a name="wp1038692"> </a><h2 class="pHeading1">
+7.8  Recovering Deleted Records
+</h2>
+<a name="wp1038695"> </a><p class="pBody">
+The &quot;deleted&quot; function recovers records that have been marked as deleted, but which have not yet been overwritten by a new record.  This function can be used only with Vision 5 files.  
+</p>
+<a name="wp1038696"> </a><p class="pBody">
+The &quot;-deleted&quot; option looks for records marked as deleted and writes their contents to a sequential file.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+vutil -deleted -vb infile.vis outfile.seq<a name="wp1038697"> </a>
+</pre></div>
+<a name="wp1038698"> </a><p class="pBody">
+reads through the list of deleted record areas in &quot;infile.vis&quot; and writes the data to &quot;outfile.seq&quot; in the form of a sequential file with variable length records and a portable record header that indicates the size of the record.
+</p>
+<a name="wp1038699"> </a><p class="pBody">
+The file containing the deleted records may be loaded back into the Vision file with &quot;vutil -load&quot;, or opened by the runtime like any other sequential file.
+</p>
+<a name="wp1038700"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The &quot;deleted&quot; function works only with Vision 5 files.
+<hr />
+</p>
+<a name="wp1038701"> </a><p class="pBody">
+The command syntax is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+vutil -deleted [-v] [-b] [-t] [-q] <em class="cEmphasis">source destination</em><a name="wp1038702"> </a>
+<a name="wp1038731"> </a><p class="pBodyRelative">
+<div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1038707"> </a><p class="pCellBody">
+<b class="cBold">-v</b>
+</p>
+</td>
+    <td><a name="wp1038709"> </a><p class="pCellBody">
+creates a file that contains variable-length records.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038711"> </a><p class="pCellBody">
+<b class="cBold">-b</b>
+</p>
+</td>
+    <td><a name="wp1038713"> </a><p class="pCellBody">
+creates a binary sequential file that is compatible with the ACUCOBOL-GT runtime.
+</p>
+<a name="wp1038714"> </a><p class="pCellBody">
+If the &quot;-v&quot; option is also specified, variable length records are written.  Otherwise, fixed-length records are written.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038716"> </a><p class="pCellBody">
+<b class="cBold">-t</b>
+</p>
+</td>
+    <td><a name="wp1038718"> </a><p class="pCellBody">
+creates a line sequential file.  This option always writes variable length records.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038720"> </a><p class="pCellBody">
+<b class="cBold">-q<br /></b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1038722"> </a><p class="pCellBody">
+tells <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">vutil</span> to perform all actions without prompting the user for input.  This is useful when running &quot;vutil -deleted&quot; as a batch job.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038724"> </a><p class="pCellBody">
+<span class="cBoldItalic">source</span>
+</p>
+</td>
+    <td><a name="wp1038726"> </a><p class="pCellBody">
+is the name of an existing Vision 5 file.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038728"> </a><p class="pCellBody">
+<span class="cBoldItalic">destination</span>
+</p>
+</td>
+    <td><a name="wp1038730"> </a><p class="pCellBody">
+is the name of the file to be filled with the recovered data.
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+</pre></div>
+<a name="wp1038732"> </a><p class="pBody">
+By default, recovered records are written in a machine dependent binary sequential file format <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">that is not compatible with the runtime</span>.  To create a file that is compatibility with the ACUCOBOL-GT runtime, include either the &quot;-b&quot; or -t&quot; option.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

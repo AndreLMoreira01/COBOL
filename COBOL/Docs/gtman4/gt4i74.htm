@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$RESOURCE Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1036611"> </a><h2 class="pHeading2">
+C$RESOURCE Routine
+</h2>
+<a name="wp1036627"> </a><p class="pBody">
+Use C$RESOURCE to load a resource file and get a resource handle or to destroy the resource handle and free any memory associated with it.  The AcuBench Screen Designer saves changes made to an ActiveX control in a &quot;state&quot; resource file.  The runtime uses the information in this resource file when displaying the ActiveX control. 
+</p>
+<a name="wp1036628"> </a><p class="pBody">
+After an ActiveX control is displayed you may destroy the resource handle used to initialize it. The ActiveX control only references this resource handle during the first DISPLAY or MODIFY which sets the initial-state property (usually the first display).  In general, you should destroy resource handles to free memory after all ActiveX controls that use them have been displayed.
+</p>
+<a name="wp1036629"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$RESOURCE&quot; <a name="wp1036630"> </a>
+    USING OP-CODE, parameters<a name="wp1036631"> </a>
+    GIVING RESOURCE-HANDLE<a name="wp1036632"> </a>
+</pre></div>
+<a name="wp1036633"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1036634"> </a><p class="pBody">
+<b class="cBold">OP-CODE</b>    Numeric parameter
+</p>
+<a name="wp1036635"> </a><p class="pBody">
+Op-code indicates the desired operation.  The file &quot;activex.def&quot; contains level 78 symbolic names for these operations.
+</p>
+<a name="wp1036636"> </a><p class="pBody">
+<b class="cBold">Parameters</b>  Vary depending on the op-code chosen.  These are described in the Comments section below.
+</p>
+<a name="wp1036639"> </a><p class="pBody">
+<b class="cBold">RESOURCE-HANDLE</b>    PIC 9(9)
+</p>
+<a name="wp1036640"> </a><p class="pBody">
+RESOURCE-HANDLE holds the return value of C$RESOURCE. Values less than or equal to zero indicate errors. This is only used by the CRESOURCE-LOAD operation.
+</p>
+<a name="wp1036641"> </a><h3 class="pHeadingRef">
+Comments
+</h3>
+<a name="wp1036642"> </a><p class="pBody">
+There are two operations available in C$RESOURCE:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036643"> </a><div class="pSmartList1"><li>load a resource file and return a resource handle</li></div>
+<a name="wp1036644"> </a><div class="pSmartList1"><li>destroy a resource handle and free its associated memory</li></div>
+</ol></div>
+<a name="wp1036645"> </a><p class="pBody">
+To use C$RESOURCE, you pass an op-code as the first parameter, followed by one additional parameter.  The op-code determines which operation is performed and the meaning of the additional parameter.
+</p>
+<a name="wp1036646"> </a><p class="pBody">
+Currently, there are two operations: CRESOURCE-LOAD and CRESOURCE-DESTROY:
+</p>
+<a name="wp1169002"> </a><p class="pBody">
+<b class="cBold">CRESOURCE-LOAD</b>   This operation loads a resource file from disk and returns a resource handle.  It takes one additional parameter.<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>
+</p>
+<a name="wp1062600"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1062614"> </a><p class="pCellBody">
+<b class="cBold">NAME<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</b>
+</p>
+</td>
+    <td><a name="wp1062616"> </a><p class="pCellBody">
+This is an alphanumeric literal or data item that is the file name of the resource file.  This must be a resource file generated by AcuBench.  The file usually ends with &quot;.res&quot;. 
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1269326"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>When you are running in a thin client environment, and a file name beginning with &quot;@[DISPLAY]&quot; is passed to this routine, it will attempt to access the file in the display host's file system.  It does not download the file from the server.  For more information, refer to section 6.5, &quot;Using Library Routines and DLLs in Thin Client.&quot; of the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">AcuConnect User's Guide</span>.
+<hr />
+</p>
+<a name="wp1269227"> </a><p class="pBody">
+<b class="cBold">CRESOURCE-DESTROY</b>   This operation destroys a resource handle and releases its memory.  It takes one additional parameter.
+</p>
+<a name="wp1062637"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1062646"> </a><p class="pCellBody">
+<b class="cBold">RES-HANDLE</b>
+</p>
+</td>
+    <td><a name="wp1062648"> </a><p class="pCellBody">
+This is a resource handle returned by CRESOURCE-LOAD.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1036652"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The behavior of this library routine is affected by the setting of the FILENAME_SPACES configuration variable that may or may not allow spaces in a file name.  See the documentation on FILENAME_SPACES in Appendix H, &quot;Configuration File Entries,&quot; for information about the terminating character for path names.
+<hr />
+</p>
+<a name="wp1036653"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$RESOURCE&quot; USING CRESOURCE-LOAD, &quot;PROGRAM1.RES&quot; <a name="wp1036654"> </a>
+   GIVING RES-HANDLE.<a name="wp1036655"> </a>
+IF RES-HANDLE &gt; 0 THEN<a name="wp1036656"> </a>
+   DISPLAY MSCHART LINE 10 COLUMN 10 LINE 5 SIZE 40 <a name="wp1036657"> </a>
+      INITIAL-STATE = (RES-HANDLE, &quot;MSCHART-1-INITIAL-STATE&quot;)<a name="wp1036658"> </a>
+      HANDLE IN MSCHART-1<a name="wp1036660"> </a>
+   CALL &quot;C$RESOURCE&quot; USING CRESOURCE-DESTROY, RES-HANDLE<a name="wp1036661"> </a>
+END-IF  <a name="wp1036663"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

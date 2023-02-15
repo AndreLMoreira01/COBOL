@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.1.5  Device Locking Under UNIX</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt162.htm">6.1 Handling Files</a> &gt; </p>
+<a name="wp1032408"> </a><h2 class="pHeading2">
+6.1.5  Device Locking Under UNIX
+</h2>
+<a name="wp1032411"> </a><p class="pBody">
+On UNIX machines, handling devices poses a special problem.  The difficulty is that UNIX does not in any way limit access to a device, so that it is possible for two programs to intermix reports on the same printer.  This is usually not a problem with printers because the output is usually directed to the UNIX spooler.  However, for special-form printing, or writing to other types of devices, it is necessary to write directly to the device.  
+</p>
+<a name="wp1032412"> </a><p class="pBody">
+On UNIX systems, <b class="cBold">runcbl </b>can control concurrent access to a device by automatically performing file locking for all files identified as devices.  You must enable this feature if you want to use it.  When it is enabled, <b class="cBold">runcbl </b>will create a <em class="cEmphasis">lock file</em> whenever a device file is opened.  If the lock file exists when the open is made, then the open will fail and a file-locked condition will be returned to the program.  When an open device file is closed, its lock file will be removed.  
+</p>
+<a name="wp1040190"> </a><p class="pBody">
+You identify a device to <b class="cBold">runcbl </b>by using the &quot;-D&quot; flag in its name.  For information about this, see <a  href="gt1239.htm#wp1033680">section 2.8, &quot;File Name Interpretation.&quot;</a>  The lock file will be called &quot;LOCK.<em class="cEmphasis">name</em>&quot; where <em class="cEmphasis">name</em> is the base file name of the UNIX device (for example, &quot;lp&quot; or &quot;mt0&quot;).  
+</p>
+<a name="wp1032415"> </a><p class="pBody">
+You enable automatic device locking by specifying a lock directory.  Set the configuration variable LOCK_DIR to the desired directory.  
+</p>
+<a name="wp1032416"> </a><p class="pBody">
+For example, if you wanted to enable device locking and place the lock files in the directory &quot;/usr/locks&quot;, you could use the following configuration file entry:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+LOCK-DIR  /usr/locks<a name="wp1032417"> </a>
+</pre></div>
+<a name="wp1032418"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If a program that has established a device lock dies in a catastrophic fashion (e.g., a power failure), the lock file will be left around and should be removed manually.  
+<hr />
+</p>
+<a name="wp1032420"> </a><p class="pBody">
+Also note that enabling device locking will not prevent the UNIX spooler from printing to the device.  When you are using a printer as a special-form printer, the spooler should first be disabled (see the &quot;disable&quot; UNIX command) and then the program should be run that will print the special forms.  It will prevent other special-form printing programs from using that printer.  Programs that print through the spooler, meanwhile, will continue to run, because the UNIX spooler accepts queued reports when disabled.  After the special forms are printed, the spooler can be enabled and the queued reports will start printing.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

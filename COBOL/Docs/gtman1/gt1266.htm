@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.12.1.4  Calling a preprocessor without the compiler</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt1261.htm">2.12  General Preprocessor Interface</a> &gt; <a href="gt1262.htm">2.12.1  Use of Preprocessors</a> &gt; </p>
+<a name="wp1034046"> </a><h2 class="pHeading3">
+2.12.1.4  Calling a preprocessor without the compiler
+</h2>
+<a name="wp1034049"> </a><p class="pBody">
+Every preprocessor can be called as a separate application, without the ACUCOBOL-GT compiler, by a command line of one of the following forms (the second example is used with a preprocessor written in ACUCOBOL-GT):
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+preproc-1 -Po output-file [options] input-file<a name="wp1034050"> </a>
+<a name="wp1072253"> </a>
+runtime preproc-2.ACU -Po output-file [options] input-file<a name="wp1034051"> </a>
+</pre></div>
+<a name="wp1034052"> </a><p class="pBody">
+These command lines are very similar to the one used with the &quot;-Pg&quot; option, but there are some important differences:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034053"> </a><div class="pSmartList1"><li>The preprocessor executable, or the ACUCOBOL-GT runtime if the preprocessor is an ACUCOBOL_GT program, will be located according to the procedures used by the operating system for locating executables.</li></div>
+<a name="wp1034054"> </a><div class="pSmartList1"><li>The input and output files must be specified as shown.</li></div>
+<a name="wp1060041"> </a><div class="pSmartList1"><li>The option list must include any compiler options that the compiler would normally pass through to the preprocessor (see <a  href="gt1265.htm#wp1034032">section 2.12.1.3, &quot;Compiler options forwarded to preprocessors&quot;</a>).</li></div>
+<a name="wp1060042"> </a><div class="pSmartList1"><li>Options that might be passed to the compiler in combined form must be separated for the preprocessor.  For example, the compiler accepts &quot;-Six&quot; for include/exclude, while a preprocessor requires: &quot;-Si&quot; for include and &quot;-Sx&quot; for exclude.</li></div>
+</ul></div>
+<a name="wp1034057"> </a><p class="pBody">
+For diagnostic purposes, a preprocessor also accepts either of the following two options:
+</p>
+<a name="wp1055383"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1055389"> </a><p class="pCellBody">
+<b class="cBold">-help<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</b>
+</p>
+</td>
+    <td><a name="wp1055391"> </a><p class="pCellBody">
+do not preprocess; show command-line help on standard output device 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1055393"> </a><p class="pCellBody">
+<b class="cBold">-v</b>
+</p>
+</td>
+    <td><a name="wp1055395"> </a><p class="pCellBody">
+do not preprocess; show preprocessor version information on standard output device
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1034060"> </a><p class="pBody">
+When either of these options is used, the input and output files need not be specified.
+</p>
+<a name="wp1034061"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The &quot;-help&quot; and &quot;-v&quot; options are not acceptable when the preprocessor is called by the compiler.
+<hr />
+</p>
+<a name="wp1034062"> </a><p class="pBody">
+Some preprocessors may allow other combinations of options and files when called without the compiler.
+</p>
+<a name="wp1034063"> </a><p class="pBody">
+The input and output files should be files, not devices, because the preprocessor may not read or write them in strictly sequential order.
+</p>
+<a name="wp1034064"> </a><p class="pBody">
+A preprocessor returns an exit value &quot;0&quot; (zero) if the preprocessing was successful and the value &quot;1&quot; (one) if there were errors.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

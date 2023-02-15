@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-SET-JOB-STATUS</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1041119"> </a><h2 class="pHeading3">
+WINPRINT-SET-JOB-STATUS
+</h2>
+<a name="wp1041120"> </a><p class="pBody">
+This operation code allows you to modify the current status of a print job. 
+</p>
+<a name="wp1041121"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Due to a limitation in the Windows API, computers that run Windows 9x (Windows 98, and Windows ME) do not return the spooler job ID when opening a print job. This means that you cannot use the WINPRINT-SET-JOB-STATUS operation on these machines.  
+<hr />
+</p>
+<a name="wp1041123"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1041124"> </a>
+    USING WINPRINT-SET-JOB-STATUS, WINPRINT-JOB<em class="cEmphasis">-</em>STATUS<a name="wp1041125"> </a>
+    GIVING RESULT<a name="wp1041126"> </a>
+</pre></div>
+<a name="wp1041127"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1041128"> </a><p class="pBody">
+<b class="cBold">WINPRINT-JOB</b><em style="font-style: italic" class="cEmphasis">-</em><b style="font-style: normal" class="cBold">STATUS</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  WINPRINT-JOB-STATUS.<a name="wp1041129"> </a>
+   03  WINPRINT-JOB-PRINTER            PIC X(80).<a name="wp1041130"> </a>
+   03  WINPRINT-JOB-ID                 SIGNED-INT.<a name="wp1041131"> </a>
+   03  WINPRINT-JOB-STATUS-NO          PIC 9(9) COMP-5.<a name="wp1041132"> </a>
+      88 WPRT-JOB-PAUSE                VALUE 1.<a name="wp1041133"> </a>
+      88 WPRT-JOB-RESUME               VALUE 2.<a name="wp1041134"> </a>
+      88 WPRT-JOB-CANCEL               VALUE 3.<a name="wp1041135"> </a>
+      88 WPRT-JOB-RESTART              VALUE 4.<a name="wp1041136"> </a>
+   03  WINPRINT-JOB-POSITION           SIGNED-INT.<a name="wp1041137"> </a>
+   03  WINPRINT-JOB-PAGE-TOTAL         SIGNED-INT.<a name="wp1041138"> </a>
+   03  WINPRINT-JOB-PAGE-PRINTED       SIGNED-INT.<a name="wp1041139"> </a>
+   03  WINPRINT-JOB-STATUS-TEXT        PIC X(80).<a name="wp1041140"> </a>
+</pre></div>
+<a name="wp1041141"> </a><h3 class="pHeadingRef">
+Return Values
+</h3>
+<a name="wp1041142"> </a><p class="pBody">
+This operation returns the printer status as defined in the Windows API.  
+</p>
+<a name="wp1041143"> </a><p class="pBody">
+A great variety of conditions can affect a single print job and printer status may be the result of a combination of values.  This makes it impossible to catalog all possible status settings in &quot;winprint.def&quot;.  Refer to the Windows API documentation for a description of any status not covered in that file.
+</p>
+<a name="wp1041144"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1041145"> </a><p class="pBody">
+This operation may not be called while the printer is open.  WINPRINT-JOB-STATUS should be initialized prior to use.
+</p>
+<a name="wp1041146"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If this function is executed on a networked printer with a missing or malfunctioning network, your application may appear to hang.   Once the timeout has completed, your application will resume. This is a feature of the Windows API, not an effect of the runtime.
+<hr />
+</p>
+<a name="wp1041147"> </a><p class="pBody">
+WINPRINT-GET-JOB-STATUS has the following values:
+</p>
+<a name="wp1041148"> </a><p class="pBody">
+<b class="cBold">WINPRINT-JOB-PRINTER</b> -- Should be set to the value of WINPRINT-NAME as obtained through a call to WINPRINT-GET-PRINTER-INFO(-EX) or WINPRINT-GET-CURRENT-INFO(-EX). 
+</p>
+<a name="wp1041149"> </a><p class="pBody">
+<b class="cBold">WINPRINT-JOB-ID</b> -- Specifies the print job to be modified.  You must get the job ID number with WINPRINT-GET-JOB-STATUS, before you can set this value.  If set to &quot;0&quot;, the runtime will automatically look up the most recent print job. If a job is currently printing, that is the job that will be modified.  
+</p>
+<a name="wp1041150"> </a><p class="pBody">
+<b class="cBold">WINPRINT-JOB-STATUS-NO -- </b>Modify the current print job by setting one of the following values: WPRT-JOB-PAUSE, WPRT-JOB-RESUME, WPRT-JOB-CANCEL, or WPRT-JOB-RESTART.
+</p>
+<a name="wp1041151"> </a><p class="pBody">
+<b class="cBold">WINPRINT-JOB-PAGE-TOTAL</b> -- Specifies the total number of pages to print.
+</p>
+<a name="wp1041152"> </a><p class="pBody">
+<b class="cBold">WINPRINT-JOB-STATUS-TEXT</b> -- Specifies the status of the printer as a text string.  Depending on the error condition, this string may be empty. This is a feature of the Windows API. Use both this parameter and WINPRINT-JOB-STATUS-NO when checking job status to be sure that you have determined the correct error condition. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

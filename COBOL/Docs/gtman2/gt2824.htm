@@ -1,0 +1,557 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:15" />
+  <title>8.12  Menu Configuration With the Generic Menu Handler</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt28.htm">Chapter 8:  Menu Bars and Pop-up Menus</a> &gt; </p>
+<a name="wp1026610"> </a><h2 class="pHeading1">
+8.12  Menu Configuration With the Generic Menu Handler
+</h2>
+<a name="wp1026612"> </a><p class="pBody">
+The ACUCOBOL-GT generic menu handler allows you to configure several aspects of its look and feel.  This is done with get/set configuration operations described in the previous section.  For both of these operations, you must pass a parameter that has the following layout:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  MENU-CONFIGURATION.<a name="wp1026613"> </a>
+    03  MENU-STYLE                             PIC 9 COMP-X.<a name="wp1032928"> </a>
+        88  MENU-IS-STATIC                     VALUE 0.<a name="wp1032930"> </a>
+        88  MENU-IS-POPUP                      VALUE 1.<a name="wp1032932"> </a>
+    03  MENU-CHECK-MARK                        PIC X.<a name="wp1032934"> </a>
+    03  MENU-SUBMENU-MARK                      PIC X.<a name="wp1032936"> </a>
+    03  MENU-COLOR-ATTRIBUTES.<a name="wp1032938"> </a>
+        05  MENU-NORMAL-COLOR-ATTRIBUTES.<a name="wp1032940"> </a>
+            07  MENU-NORMAL-COLOR              PIC 9(4) COMP-X.<a name="wp1032942"> </a>
+            07  MENU-NORMAL-COLOR-KEY-1        PIC 9(4) COMP-X.<a name="wp1032944"> </a>
+            07  MENU-NORMAL-COLOR-KEY-2        PIC 9(4) COMP-X.<a name="wp1032946"> </a>
+        05  MENU-SELECTED-COLOR-ATTRIBUTES.<a name="wp1032948"> </a>
+            07  MENU-SELECTED-COLOR            PIC 9(4) COMP-X.<a name="wp1032950"> </a>
+            07  MENU-SELECTED-COLOR-KEY-1      PIC 9(4) COMP-X.<a name="wp1032952"> </a>
+            07  MENU-SELECTED-COLOR-KEY-2      PIC 9(4) COMP-X.<a name="wp1032954"> </a>
+        05  MENU-DISABLED-COLOR-ATTRIBUTES.<a name="wp1032956"> </a>
+            07  MENU-DISABLED-COLOR            PIC 9(4) COMP-X.<a name="wp1032958"> </a>
+            07  MENU-DISABLED-COLOR-KEY-1      PIC 9(4) COMP-X.<a name="wp1032960"> </a>
+            07  MENU-DISABLED-COLOR-KEY-2      PIC 9(4) COMP-X.<a name="wp1032962"> </a>
+    03  MENU-MONO-ATTRIBUTES.<a name="wp1032964"> </a>
+        05  MENU-NORMAL-MONO-ATTRIBUTES.<a name="wp1032966"> </a>
+            07  MENU-NORMAL-MONO               PIC 9(4) COMP-X.<a name="wp1032968"> </a>
+            07  MENU-NORMAL-MONO-KEY-1         PIC 9(4) COMP-X.<a name="wp1032970"> </a>
+            07  MENU-NORMAL-MONO-KEY-2         PIC 9(4) COMP-X.<a name="wp1032972"> </a>
+        05  MENU-SELECTED-MONO-ATTRIBUTES.<a name="wp1032974"> </a>
+            07  MENU-SELECTED-MONO             PIC 9(4) COMP-X.<a name="wp1032976"> </a>
+            07  MENU-SELECTED-MONO-KEY-1       PIC 9(4) COMP-X.<a name="wp1032978"> </a>
+            07  MENU-SELECTED-MONO-KEY-2       PIC 9(4) COMP-X.<a name="wp1032980"> </a>
+        05  MENU-DISABLED-MONO-ATTRIBUTES.<a name="wp1032982"> </a>
+            07  MENU-DISABLED-MONO             PIC 9(4) COMP-X.<a name="wp1032984"> </a>
+            07  MENU-DISABLED-MONO-KEY-1       PIC 9(4) COMP-X.<a name="wp1032986"> </a>
+            07  MENU-DISABLED-MONO-KEY-2       PIC 9(4) COMP-X.<a name="wp1032988"> </a>
+</pre></div>
+<a name="wp1026614"> </a><p class="pBody">
+A copy of this data item can be found in &quot;acugui.def&quot;. 
+</p>
+<a name="wp1026615"> </a><p class="pBody">
+When a menu is shown, the current configuration defines how it is presented.  The fields have the following meaning:
+</p>
+<a name="wp1026617"> </a><h5 class="pHeading4">
+MENU-STYLE 
+</h5>
+<a name="wp1030813"> </a><p class="pBody">
+Determines whether the menu is static (value 0) or pop-up (value 1).  The default is static. 
+</p>
+<a name="wp1026619"> </a><h5 class="pHeading4">
+MENU-CHECK-MARK  
+</h5>
+<a name="wp1030818"> </a><p class="pBody">
+Sets the character used to mark an item, to indicate that it has been selected.  The default character is an asterisk. 
+</p>
+<a name="wp1026622"> </a><h5 class="pHeading4">
+MENU-SUBMENU-MARK   
+</h5>
+<a name="wp1030830"> </a><p class="pBody">
+Sets the character used to indicate that the item is a submenu.  This is not used on the main menu bar.  The default character is a greater-than sign. 
+</p>
+<a name="wp1026625"> </a><h5 class="pHeading4">
+MENU-COLOR-ATTRIBUTES   
+</h5>
+<a name="wp1030844"> </a><p class="pBody">
+Defines the display attributes used if the station supports color.  This is described in detail below.
+</p>
+<a name="wp1026627"> </a><h5 class="pHeading4">
+MENU-MONO-ATTRIBUTES   
+</h5>
+<a name="wp1030845"> </a><p class="pBody">
+Defines the display attributes used if the station is monochrome.  See below for details. 
+</p>
+<a name="wp1026629"> </a><p class="pBody">
+Note that there are two sets of attributes, one for color stations and one for monochrome stations.  Within each set, there are three group items that determine the attributes used for a particular case.  Using color stations as an example, we have:
+</p>
+<a name="wp1026630"> </a><h5 class="pHeading4">
+MENU-NORMAL-COLOR-ATTRIBUTES
+</h5>
+<a name="wp1027831"> </a><p class="pBody">
+Determines the attributes used for the normal menu items.  This is used for the menu's background color and all items that are not highlighted or disabled. 
+</p>
+<a name="wp1026632"> </a><h5 class="pHeading4">
+MENU-SELECTED-COLOR-ATTRIBUTES   
+</h5>
+<a name="wp1027842"> </a><p class="pBody">
+Determines the attributes used for the currently selected (highlighted) menu items. 
+</p>
+<a name="wp1026635"> </a><h5 class="pHeading4">
+MENU-DISABLED-COLOR-ATTRIBUTES   
+</h5>
+<a name="wp1027881"> </a><p class="pBody">
+Determines the attributes used by disabled menu items. 
+</p>
+<a name="wp1026636"> </a><p class="pBody">
+Finally, within each group, there are three fields that determine the attributes used for the appropriate menu items.  For example, with normal menu items on a color station, we have:
+</p>
+<a name="wp1026639"> </a><h5 class="pHeading4">
+MENU-NORMAL-COLOR
+</h5>
+<a name="wp1027859"> </a><p class="pBody">
+This is the attribute used to draw the menu item and its background. 
+</p>
+<a name="wp1026641"> </a><h5 class="pHeading4">
+MENU-NORMAL-COLOR-KEY-1   
+</h5>
+<a name="wp1027856"> </a><p class="pBody">
+This is the attribute used to draw the key letter in the menu item (if any). 
+</p>
+<a name="wp1026642"> </a><h5 class="pHeading4">
+MENU-NORMAL-COLOR-KEY-2   
+</h5>
+<a name="wp1027943"> </a><p class="pBody">
+This is used only if MENU-NORMAL-COLOR-KEY-1 contains the underline attribute and the station does not support underlining.  In this case, the actual attribute used is determined by this field. 
+</p>
+<a name="wp1026644"> </a><p class="pBody">
+This scheme of having two possible attributes available for the key letter makes it easier to implement a portable set of attributes.  Traditionally, key letters are shown underlined, and so underlining is typically used in the &quot;KEY-1&quot; attribute.  Since many stations do not support underlining, having a second attribute provides a backup system.  
+</p>
+<a name="wp1026645"> </a><p class="pBody">
+Attributes are set using the same scheme as that used for the COLOR phrase in an ACCEPT or DISPLAY statement.  The only exception is that the &quot;Protected&quot; attribute (32768) has a special meaning when used in conjunction with disabled menu items.  If you specify &quot;protected&quot; as the disabled item's color, then disabled items will appear in parentheses on the menu.  This helps distinguish them from normal items.  
+</p>
+<a name="wp1026646"> </a><p class="pBody">
+Attribute values are numeric.  They represent combinations of colors and other video features such as intensity.  You make combinations by adding appropriate values together from these tables:
+</p>
+<a name="wp1028420"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1029791"> </a>
+Color
+
+</th>
+    <th><a name="wp1029793"> </a>
+Foreground
+
+</th>
+    <th><a name="wp1029795"> </a>
+Background
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029797"> </a><p class="pCellBody">
+Black
+</p>
+</td>
+    <td><a name="wp1029799"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1029801"> </a><p class="pCellBody">
+32
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029803"> </a><p class="pCellBody">
+Blue
+</p>
+</td>
+    <td><a name="wp1029805"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1029807"> </a><p class="pCellBody">
+64
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029809"> </a><p class="pCellBody">
+Green
+</p>
+</td>
+    <td><a name="wp1029811"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1029813"> </a><p class="pCellBody">
+96
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029815"> </a><p class="pCellBody">
+Cyan
+</p>
+</td>
+    <td><a name="wp1029817"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1029819"> </a><p class="pCellBody">
+128
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029821"> </a><p class="pCellBody">
+Red
+</p>
+</td>
+    <td><a name="wp1029823"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1029825"> </a><p class="pCellBody">
+160
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029827"> </a><p class="pCellBody">
+Magenta
+</p>
+</td>
+    <td><a name="wp1029829"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1029831"> </a><p class="pCellBody">
+192
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029833"> </a><p class="pCellBody">
+Brown
+</p>
+</td>
+    <td><a name="wp1029835"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1029837"> </a><p class="pCellBody">
+224
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029839"> </a><p class="pCellBody">
+White
+</p>
+</td>
+    <td><a name="wp1029841"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1029843"> </a><p class="pCellBody">
+256
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"> 
+</p>
+<a name="wp1026704"> </a><p class="pBody">
+   </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1029885"> </a>
+Attribute
+
+</th>
+    <th><a name="wp1029887"> </a>
+Value
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029889"> </a><p class="pCellBody">
+Reverse video
+</p>
+</td>
+    <td><a name="wp1029891"> </a><p class="pCellBody">
+1024
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029893"> </a><p class="pCellBody">
+Low intensity
+</p>
+</td>
+    <td><a name="wp1029895"> </a><p class="pCellBody">
+2048
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029897"> </a><p class="pCellBody">
+High intensity
+</p>
+</td>
+    <td><a name="wp1029899"> </a><p class="pCellBody">
+4096
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029901"> </a><p class="pCellBody">
+Underline
+</p>
+</td>
+    <td><a name="wp1029903"> </a><p class="pCellBody">
+8192
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029905"> </a><p class="pCellBody">
+Blink
+</p>
+</td>
+    <td><a name="wp1029907"> </a><p class="pCellBody">
+16384
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1029909"> </a><p class="pCellBody">
+Protected
+</p>
+</td>
+    <td><a name="wp1029911"> </a><p class="pCellBody">
+32768
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1026737"> </a><p class="pBody">
+The default settings for attributes are as follows:  
+</p>
+<a name="wp1026738"> </a><h3 class="pHeadingRef">
+Color Defaults
+</h3>
+<a name="wp1026774"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1028145"> </a>
+Type
+
+</th>
+    <th><a name="wp1028147"> </a>
+Main Attribute
+
+</th>
+    <th><a name="wp1028149"> </a>
+Key-1 Attribute
+
+</th>
+    <th><a name="wp1028151"> </a>
+Key-2 Attribute
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028153"> </a><p class="pCellBody">
+Normal
+</p>
+</td>
+    <td><a name="wp1028155"> </a><p class="pCellBody">
+Black on Cyan (129)
+</p>
+</td>
+    <td><a name="wp1028157"> </a><p class="pCellBody">
+Black on Cyan, Underlined (8321)
+</p>
+</td>
+    <td><a name="wp1028159"> </a><p class="pCellBody">
+High-intensity White on Cyan (4232)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028161"> </a><p class="pCellBody">
+Selected
+</p>
+</td>
+    <td><a name="wp1028163"> </a><p class="pCellBody">
+White on Blue  (72)
+</p>
+</td>
+    <td><a name="wp1028165"> </a><p class="pCellBody">
+White on Blue, Underlined (8264)
+</p>
+</td>
+    <td><a name="wp1028167"> </a><p class="pCellBody">
+High-intensity White on Blue (4168)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028169"> </a><p class="pCellBody">
+Disabled
+</p>
+</td>
+    <td><a name="wp1028171"> </a><p class="pCellBody">
+White on Cyan (136)
+</p>
+</td>
+    <td><a name="wp1028173"> </a><p class="pCellBody">
+White on Cyan (136)
+</p>
+</td>
+    <td><a name="wp1028175"> </a><p class="pCellBody">
+White on Cyan (136)
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1028081"> </a><h3 class="pHeadingRef">
+Monochrome Defaults
+</h3>
+<a name="wp1026776"> </a><p class="pBody">
+   </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1028263"> </a>
+Type
+
+</th>
+    <th><a name="wp1028265"> </a>
+Main Attribute
+
+</th>
+    <th><a name="wp1028267"> </a>
+Key-1 Attribute
+
+</th>
+    <th><a name="wp1028269"> </a>
+Key-2 Attribute
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028271"> </a><p class="pCellBody">
+Normal
+</p>
+</td>
+    <td><a name="wp1028273"> </a><p class="pCellBody">
+Black on White (257)
+</p>
+</td>
+    <td><a name="wp1028275"> </a><p class="pCellBody">
+Black on White, Underlined (8449)
+</p>
+</td>
+    <td><a name="wp1028277"> </a><p class="pCellBody">
+High-intensity Black on White (4353)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028279"> </a><p class="pCellBody">
+Selected
+</p>
+</td>
+    <td><a name="wp1028281"> </a><p class="pCellBody">
+White on Black (40)
+</p>
+</td>
+    <td><a name="wp1028283"> </a><p class="pCellBody">
+White on Black, Underlined (8232
+</p>
+</td>
+    <td><a name="wp1028285"> </a><p class="pCellBody">
+High-intensity White on Black (4136)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028287"> </a><p class="pCellBody">
+Disabled
+</p>
+</td>
+    <td><a name="wp1028289"> </a><p class="pCellBody">
+Black on White, Parenthesized (32935)
+</p>
+</td>
+    <td><a name="wp1028291"> </a><p class="pCellBody">
+Black on White (257)
+</p>
+</td>
+    <td><a name="wp1028293"> </a><p class="pCellBody">
+Black on White (257)
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1026811"> </a><p class="pBody">
+The ACUCOBOL-GT debugger always uses the default configuration for its own menu bar.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

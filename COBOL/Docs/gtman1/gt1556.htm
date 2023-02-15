@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:06" />
+  <title>5.4.1  Files Required for Translation</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt15.htm"><br />Chapter 5:  File Processing</a> &gt; <a href="gt1555.htm">5.4  International Character Handling</a> &gt; </p>
+<a name="wp1033170"> </a><h2 class="pHeading2">
+5.4.1  Files Required for Translation
+</h2>
+<a name="wp1033171"> </a><p class="pBody">
+International character mapping makes use of three files: your map file of corresponding character codes (explained above), an XFD file that the compiler creates to describe the structure of data files, and a runtime configuration file that points to the location of both the map file and the XFD file.  This section provides more details about each of these files.  Note that file <em class="cEmphasis">names</em> are not translated, so remote files should use only standard ASCII characters in their file names.
+</p>
+<a name="wp1033172"> </a><p class="pBody">
+<b class="cBold">Map File</b>: Your map file of corresponding character codes may be stored on either the client or the server machine.  One advantage of storing it on a server is that many clients can access the same map file.  If it needs to be changed, a single update benefits all clients.  To make a remote map file accessible to a client, you need to run the AcuServer remote file access product on the server.
+</p>
+<a name="wp1033173"> </a><p class="pBody">
+<b class="cBold">XFD File</b>: In order to determine whether a data item is alphanumeric, the mapping process for AcuServer and AcuODBC makes use of a data dictionary (also known as an XFD file).  (AcuConnect does not require this file.)  The XFD file stores the structure of the COBOL records in a format that the runtime can access.  An XFD file must be created at compile-time for each program that will use the mapping process.  It is created with the &quot;-Fx&quot; or &quot;-Fa&quot; compile-time option.  The XFD files may be stored on either the client machine or the server machine.  If they are located on the server, you must have the AcuServer product on that server, to enable client access.  If an XFD file cannot be found, no error message is generated, but no character translation occurs.
+</p>
+<a name="wp1033174"> </a><p class="pBody">
+<b class="cBold">Runtime Configuration File</b>: The runtime configuration file on the client machine must identify the location of the character map file and the XFD files.  Remote name notation can be used to specify remote locations.
+</p>
+<a name="wp1033175"> </a><p class="pBody">
+Set XFD_DIRECTORY to specify the directory for the XFD files (the default is the current directory).  AcuConnect does not require XFD files.
+</p>
+<a name="wp1033178"> </a><p class="pBody">
+Set DEFAULT_MAP_FILE to specify the name and location of the character map file.
+</p>
+<a name="wp1033182"> </a><p class="pBody">
+If you have more than one map file (because you have different types of servers), you can associate a map file with a particular server by using the configuration variable <em class="cEmphasis">&lt;server&gt;</em>_MAP_FILE to point to a map file on a particular server machine.  For example, if you are using AcuServer to access remote files on a machine named sun3, you would use remote name notation to specify the directory that contains the data files.  It might look like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+@sun3:/user/acct/inventory<a name="wp1033185"> </a>
+</pre></div>
+<a name="wp1033186"> </a><p class="pBody">
+Then, use this configuration variable to point to the map file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+sun3-map-file  @sun3:/user/acct/inventory/map.txt<a name="wp1033187"> </a>
+</pre></div>
+<a name="wp1033188"> </a><p class="pBody">
+If the map file is local, your value might look like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+sun3-map-file  C:\user\utility\map.txt<a name="wp1033189"> </a>
+</pre></div>
+<a name="wp1033190"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The server specified in the configuration variable name must match the server specified in the remote file name.  The map file may be stored on either the client machine or the server machine.  If it is located on the server, you must have the AcuServer product on that server, to enable client access.
+<hr />
+</p>
+<a name="wp1033191"> </a><p class="pBody">
+The runtime looks first for <em class="cEmphasis">&lt;server&gt;</em>-MAP-FILE.  If that variable is not set, the runtime looks for DEFAULT-MAP-FILE.  If that variable is also not set, no translation is done.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:22:58" />
+  <title>7.9.2  Specifying File Attributes in Advance </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run7.htm"><br />Chapter 7: vutil File Manager</a> &gt; <a href="run710.htm">7.9  Creating Empty Files</a> &gt; </p>
+<a name="wp1038817"> </a><h2 class="pHeading2">
+7.9.2  Specifying File Attributes in Advance 
+</h2>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+vutil  -gen  [&#160;-2345&#160;]  [&#160;-q&#160;]  <em class="cEmphasis">list  directory</em><a name="wp1038821"> </a>
+</pre></div>
+<a name="wp1038823"> </a><p class="pBody">
+The non-interactive version of &quot;gen&quot; allows you to specify a file (<em class="cEmphasis">list</em>) that contains the attributes for one or more new files.  The format of <em class="cEmphasis">list </em>is described below.  
+</p>
+<a name="wp1038824"> </a><p class="pBody">
+The <em class="cEmphasis">directory</em> parameter names the directory in which the new files are to be created.  Each file is tested to see if it exists before it is created.  If it does exist, and it is a Vision file, then it is left untouched.  Thus, you can use the &quot;gen&quot; function to generate missing files from a directory without having to first save the ones that are there.  
+</p>
+<a name="wp1038825"> </a><p class="pBody">
+The file <em class="cEmphasis">list</em> consists of one or more file entries, one per line.  Each entry pertains to exactly one file and consists of a series of fields.  
+</p>
+<a name="wp1038826"> </a><p class="pBody">
+The <em class="cEmphasis">list</em> file can have one of three formats.  There is a format for creating relative and sequential files.  A format for creating Vision Version 2 files (support is provided for compatibility with older applications; the format is not described here).  And a format for creating Vision Version 3, 4, and 5 files (documented below). 
+</p>
+<a name="wp1038827"> </a><p class="pBody">
+For indexed files, the fields are divided into five groups, separated with semicolons.  Fields within each group are separated with commas.
+</p>
+<a name="wp1038828"> </a><p class="pBody">
+For relative and sequential files, the fields are all separated with commas.
+</p>
+<a name="wp1038829"> </a><h3 class="pHeadingRef">
+Indexed format
+</h3>
+<a name="wp1038831"> </a><p class="pBody">
+The fields for the indexed format are listed here and then described below.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+filename,<a name="wp1038832"> </a>
+blocking factor,<a name="wp1038833"> </a>
+number of blocks to pre-allocate,<a name="wp1038834"> </a>
+number of blocks for extension,<a name="wp1038835"> </a>
+compression factor,<a name="wp1038836"> </a>
+Enable record encryption?<b class="cBold">;</b><a name="wp1038837"> </a>
+<a name="wp1038838"> </a>
+maximum record size,<a name="wp1038839"> </a>
+minimum record size,<a name="wp1038840"> </a>
+number of keys<b class="cBold">;</b><a name="wp1038841"> </a>
+<a name="wp1038842"> </a>
+For primary key:<a name="wp1038843"> </a>
+    number of segments,<a name="wp1038844"> </a>
+    Duplicates allowed?, <em class="cEmphasis">(always zero)</em>						<a name="wp1038845"> </a>
+    segment size, <a name="wp1038846"> </a>
+    segment offset, <em class="cEmphasis">(repeat the segment size and offset</em><a name="wp1038847"> </a>
+<em class="cEmphasis">                   pair for each segment)</em><a name="wp1038848"> </a>
+<a name="wp1038849"> </a>
+For each alternate key:<a name="wp1038850"> </a>
+    number of segments,<a name="wp1038851"> </a>
+    Duplicates allowed?,<a name="wp1038852"> </a>
+    segment size,  <a name="wp1038853"> </a>
+    segment offset, <em class="cEmphasis">(repeat the segment size and offset</em><a name="wp1038854"> </a>
+<em class="cEmphasis">                   pair for each segment);</em><a name="wp1038855"> </a>
+<a name="wp1038856"> </a>
+translation table filename<b class="cBold">;</b><a name="wp1038857"> </a>
+file comment<a name="wp1038858"> </a>
+</pre></div>
+<a name="wp1038859"> </a><p class="pBody">
+In the indexed format, the first field is the (physical) file name.  The second field is the blocking factor.  For Vision 5 files, the value can range from one to 16.  For Vision 3 and 4 files, the value must be one or two (if a larger value is specified, it is automatically reduced to two).  All I/O to the disk is done in blocks of one or two sectors.  Depending on the file and the underlying disk architecture, performance can be affected by this.  Although performance is difficult to predict, files that have very large keys may benefit from a larger blocking factor.  See section 6.1.3.7 in the <em class="cEmphasis">ACUCOBOL-GT User's Guide</em> for a more complete discussion.
+</p>
+<a name="wp1038863"> </a><p class="pBody">
+The third field is the number of blocks to allocate to the file initially.  This is usually set to one.  If you want to pre-allocate some disk to the file, then this can be set to a higher number.  Pre-allocation in no way limits the file, but may help performance by reducing disk fragmentation.  
+</p>
+<a name="wp1038864"> </a><p class="pBody">
+The fourth field is the number of blocks for extension.  This determines how many blocks are allocated each time space needs to be added to the file.  This helps keep fragmentation to a minimum. 
+</p>
+<a name="wp1038865"> </a><p class="pBody">
+The fifth field is the compression factor.   A compression factor of zero (0) means no compression.  A compression factor of one (1) is equivalent to the default compression (70).  For factors from 2 through 100, the factor is considered to be a percentage.  It specifies how much of the space saved by compression is actually removed from the record.  For example, suppose an 80-byte record is compressed to 30 bytes.  Then the compression factor is used to determine how much of the 50 bytes of saved space is actually removed from the record.  A compression factor of 70 means that 70% of the 50 bytes (35 bytes total) is removed.  This leaves 15 bytes for future expansion, and results in a compressed record size of 45 bytes (30 compressed size plus 15 extra for growth).  The larger the compression factor, the more of the saved space is removed.  A compression factor of 100 removes all saved space and is advisable only if the file is rarely updated. 
+</p>
+<a name="wp1038866"> </a><p class="pBody">
+The sixth field is a flag that determines whether record encryption is enabled.  A value of one (1) enables encryption.  A value of zero (0) disables encryption.  A semicolon should follow the encryption flag.
+</p>
+<a name="wp1038867"> </a><p class="pBody">
+The next two fields specify maximum and minimum record size.  If the two numbers are identical, the records are fixed-length.  If the two numbers are not identical, records are variable-length.  The maximum record size allowed in Vision 5 files is 67,108,864 bytes.  The maximum record size allowed in Vision 2, 3, and 4 files is 32,767 bytes.
+</p>
+<a name="wp1038868"> </a><p class="pBody">
+The ninth field is the number of keys in the file, to a maximum of 120.  A semicolon should follow the number of keys.
+</p>
+<a name="wp1038869"> </a><p class="pBody">
+Next, you describe the primary key by at least four entries.  The first entry is the number of segments in the key.  The second entry is always zero (0).  For each segment, you must then specify the segment size in bytes, and the segment offset from the start of the record, in bytes.  If there are no alternate keys, a semicolon should follow the final segment offset.  Otherwise, a comma should be used.
+</p>
+<a name="wp1038870"> </a><p class="pBody">
+If there are any alternate keys, describe each one by a series of at least four entries.  The first entry is the number of segments in the key.  The second entry should be one (1) if duplicate values are allowed, or zero (0) if they are not.  For each segment, you must then specify the segment size in bytes, and the segment offset from the start of the record, in bytes.  A semicolon should follow the final segment entry of the last alternate key.
+</p>
+<a name="wp1038871"> </a><p class="pBody">
+After the keys have been specified, enter the name of a file containing the translation table (collating sequence), if you want anything other than standard ASCII sorting.  If the name is empty, ASCII sorting is assumed.  The format of the translation file is given in the preceding section.  A semicolon should follow the name of the translation file.  
+</p>
+<a name="wp1038872"> </a><p class="pBody">
+Finally, you may provide up to 30 bytes of comment.  This comment is printed by <b class="cBold">vutil</b> when the &quot;info&quot; option is used.  
+</p>
+<a name="wp1038873"> </a><p class="pBody">
+Here's a sample file entry.  Suppose a file containing G/L account descriptions has a record size of 80 and two keys.  The primary key is at the start of the record and is 15 bytes long.  The alternate key has two segments; the first is at record offset 40 and is 30 bytes long.  The second segment of the alternate key is at record offset 20 and is 5 bytes long (duplicates allowed).  A compression factor of 30 and ASCII sorting are desired.  The corresponding entry is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+glactfil,1,1,0,30,0;80,80,2;1,0,15,0,2,1,30,40,5,20; ;G/L account master<a name="wp1038874"> </a>
+</pre></div>
+<a name="wp1038875"> </a><h3 class="pHeadingRef">
+Sequential and Relative Files
+</h3>
+<a name="wp1038877"> </a><p class="pBody">
+For convenience, the non-interactive &quot;gen&quot; option can also create empty sequential and relative files if they are missing.  The entry contains only three fields.  The first field is the file name.  The second field is the record size, and the final field is an &quot;S&quot; for a sequential file or an &quot;R&quot; for a relative file.  The record size field is only comment, so it can be set to any numeric value.
+</p>
+<a name="wp1038878"> </a><p class="pBody">
+Whether to use &quot;gen&quot; or a COBOL program to create the data files for an application depends on which is more convenient.  Creating the file list can be painstaking, but the symbol table listing of the compiler can help to compute the size information.  Once the files are created, however, it is easier to replace missing files this way than with a program that must explicitly test for a file's existence before creating it.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

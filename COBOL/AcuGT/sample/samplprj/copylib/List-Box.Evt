@@ -1,0 +1,213 @@
+      * List-Box.evt
+      * List-Box.evt is generated from C:\Acucorp\Acucbl720\AcuGT\sample\samplprj\List-Box.Psf
+      * This is a generated file. DO NOT modify this file directly.
+      
+
+       Acu-Screen-1-Event-Extra.
+           EVALUATE Event-Type
+           WHEN Msg-Close
+              PERFORM Acu-Screen-1-Msg-Close
+           END-EVALUATE
+           .
+
+       Acu-Screen-1-Msg-Close.
+           ACCEPT Quit-Mode-Flag FROM ENVIRONMENT "QUIT_MODE"
+           IF Quit-Mode-Flag = ZERO
+              PERFORM Acu-Screen-1-Exit
+              PERFORM Acu-Exit-Rtn
+           END-IF
+           .
+
+       Default-Listbox-Exception-Proc.
+      * 
+           IF Event-Occurred
+              EVALUATE Event-Type
+              WHEN Ntf-Selchange
+                 PERFORM Default-Listbox-Selection
+              END-EVALUATE
+           END-IF
+           .
+
+       UnSorted-Listbox-Exception-Proc.
+      * 
+           IF Event-Occurred
+              EVALUATE Event-Type
+              WHEN Ntf-Selchange
+                 PERFORM Unsorted-Listbox-Selection
+              END-EVALUATE
+           END-IF
+           .
+
+       NoBox-Listbox-Exception-Proc.
+      * 
+           IF Event-Occurred
+              EVALUATE Event-Type
+              WHEN Ntf-Selchange
+                 PERFORM Nobox-Listbox-Selection
+              END-EVALUATE
+           END-IF
+           .
+
+       3D-Listbox-Exception-Proc.
+      * 
+           IF Event-Occurred
+              EVALUATE Event-Type
+              WHEN Ntf-Selchange
+                 PERFORM 3d-Listbox-Selection
+              END-EVALUATE
+           END-IF
+           .
+      ***   start event editor code   ***
+      *
+       Default-Listbox-Selection.
+           modify DefaultListbox-EF, value List-Data-1
+           .
+      *
+       UnSorted-Listbox-Selection.
+           modify UnSortedListbox-EF, value List-Data-2
+           .
+      *
+       NoBox-Listbox-Selection.
+           modify NoBoxListbox-EF, value List-Data-3
+           .
+      *
+       3D-Listbox-Selection.
+           modify 3DListbox-EF, value List-Data-4
+           .
+      *
+       Toggle-Default-Enable.
+           if Enable-1 = 0
+             move 1 to enable-1
+             move "Disable" to Enable-1-Title
+           else
+             move 0 to enable-1
+             move "Enable" to Enable-1-Title
+           end-if.
+
+           modify Default-Listbox  
+             enabled enable-1.
+           modify DefaultDisabled-PB, 
+             title enable-1-title.
+
+           move 1 to accept-control
+           .
+      *
+       Toggle-Default-Visible.
+           if Visible-1 = 0
+              move 1 to visible-1
+              move "Invisible" to Visible-1-Title
+           else
+              move 0 to visible-1
+              move "Visible" to Visible-1-Title
+           end-if.
+
+           modify default-listbox, 
+             visible visible-1.
+           modify DefaultInvisible-PB, 
+             title Visible-1-title.
+
+           move 1 to accept-control
+           .
+      *
+       Toggle-Unsorted-Enable.
+           if Enable-2 = 0
+             move 1 to enable-2
+             move "Disable" to Enable-2-Title
+           else
+             move 0 to enable-2
+             move "Enable" to Enable-2-Title
+           end-if.
+
+           modify UnSorted-Listbox, 
+             enabled enable-2.
+           modify UnSortedDisabled-PB,
+             title enable-2-title.
+
+           move 1 to accept-control
+           .
+      *
+       Toggle-Unsorted-Visible.
+           if Visible-2 = 0
+              move 1 to visible-2
+              move "Invisible" to Visible-2-Title
+           else
+              move 0 to visible-2
+              move "Visible" to Visible-2-Title
+           end-if.
+
+           modify UnSorted-Listbox, 
+             visible visible-2.
+           modify UnSortedInvisible-PB, 
+             title Visible-2-title.
+
+           move 1 to accept-control
+           .
+      *
+       Toggle-NoBox-Enable.
+           if Enable-3 = 0
+             move 1 to enable-3
+             move "Disable" to Enable-3-Title
+           else
+             move 0 to enable-3
+             move "Enable" to Enable-3-Title
+           end-if.
+
+           modify NoBox-Listbox, 
+             enabled enable-3.
+           modify NoBoxDisabled-PB,
+             title enable-3-title.
+
+           move 1 to accept-control
+           .
+      *
+       Toggle-NoBox-Visible.
+           if Visible-3 = 0
+              move 1 to visible-3
+              move "Invisible" to Visible-3-Title
+           else
+              move 0 to visible-3
+              move "Visible" to Visible-3-Title
+           end-if.
+
+           modify NoBox-Listbox, 
+             visible visible-3.
+           modify NoBoxInvisible-PB, 
+             title Visible-3-title.
+
+           move 1 to accept-control
+           .
+      *
+       Toggle-3D-Enable.
+           if Enable-4 = 0
+             move 1 to enable-4
+             move "Disable" to Enable-4-Title
+           else
+             move 0 to enable-4
+             move "Enable" to Enable-4-Title
+           end-if.
+
+           modify 3D-Listbox, 
+             enabled enable-4.
+           modify 3DDisabled-PB,
+             title enable-4-title.
+
+           move 1 to accept-control
+           .
+      *
+       Toggle-3D-Visible.
+           if Visible-4 = 0
+              move 1 to visible-4
+              move "Invisible" to Visible-4-Title
+           else
+              move 0 to visible-4
+              move "Visible" to Visible-4-Title
+           end-if.
+
+           modify 3D-Listbox, 
+             visible visible-4.
+           modify 3DInvisible-PB, 
+             title Visible-4-title.
+
+           move 1 to accept-control
+           .
+       

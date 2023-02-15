@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:09" />
+  <title>3.2.2.1  Creating remote object libraries</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt13.htm"><br />Chapter 3:  Debugger and Utilities</a> &gt; <a href="gt1329.htm">3.2  Object File Utility - cblutil</a> &gt; <a href="gt1331.htm">3.2.2  Creating Object Libraries </a> &gt; </p>
+<a name="wp1033117"> </a><h2 class="pHeading3">
+3.2.2.1  Creating remote object libraries
+</h2>
+<a name="wp1033121"> </a><p class="pBody">
+If AcuServer or AcuConnect is running on a remote machine, <b class="cBold">cblutil</b> can read remote objects and write a remote library.  The syntax rules that apply to specifying remote object libraries with <b class="cBold">cblutil</b> are the same as those for compiling to remote object libraries with the compiler.<b class="cBold">  </b>See <a  href="gt1218.htm#wp1033061">section 2.1.15.1, &quot;Remote file name handling,&quot;</a> for details.
+</p>
+<a name="wp1033122"> </a><p class="pBody">
+This capability allows you to create a remote library from local object files or to create a local or remote library from remote object files.
+</p>
+<a name="wp1033123"> </a><p class="pBody">
+With <b class="cBold">cblutil</b>, you can also use the regular AcuServer syntax for referring to the remote files.  This syntax is not allowed with the compiler because the &quot;@&quot; symbol is reserved for another purpose.  See also,  <em class="cEmphasis">AcuServer User's Guide</em>, section 7.2, &quot;Accessing Remote Files,&quot; for additional information.
+</p>
+<a name="wp1033124"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You <em class="cEmphasis">cannot</em> use wildcard characters to create a library from a collection of remote object files.
+<hr />
+</p>
+<a name="wp1033125"> </a><p class="pBody">
+In the process of creating a remote library, <b class="cBold">cblutil</b> overwrites the named library at the beginning of the operation.  Then if something fails during the process, the library is removed.  For that reason, you may consider creating a backup copy of the named library before executing the <em class="cEmphasis">build library</em> command.  (Incidentally, when creating a local library, <b class="cBold">cblutil</b> creates a temporary library first.  Only after the new library has been successfully compiled is the (existing) named library removed and replaced by the new library.)
+</p>
+<a name="wp1033126"> </a><h3 class="pHeadingRef">
+Examples
+</h3>
+<a name="wp1033127"> </a><p class="pBody">
+The following command creates a library in /myapp/obj on the UNIX server <em class="cEmphasis">myserver</em> called &quot;myapp.lib&quot; from all the .acu files in the current directory.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+cblutil -lib -o acurfap://myserver::/myapp/obj/myapp.lib *.acu<a name="wp1033128"> </a>
+</pre></div>
+<a name="wp1033129"> </a><p class="pBody">
+<em class="cEmphasis">acurfap</em> stands for &quot;Acucorp Remote File Access Protocol.&quot;
+</p>
+<a name="wp1033130"> </a><p class="pBody">
+The following command creates a library in /myapp/obj on the Windows server <em class="cEmphasis">myserver</em> where AcuServer is listening on port 6543.  The library is named &quot;myapp.lib&quot;.  The files used to create the library are all in /myapp/obj on <em class="cEmphasis">myserver</em>.  Because you cannot use wildcard characters, you need to list each file.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+cblutil -lib -o <a name="wp1033131"> </a>
+   acurfap://myserver:6543:c:/myapp/obj/myapp.lib \<a name="wp1042081"> </a>
+      acurfap://myserver:6543:/myapp/obj/test1.acu \<a name="wp1042082"> </a>
+      acurfap://myserver:6543:/myapp/obj/test2.acu \<a name="wp1042083"> </a>
+      acurfap://myserver:6543:/myapp/obj/test3.acu \<a name="wp1042084"> </a>
+      acurfap://myserver:6543:/myapp/obj/test4.acu<a name="wp1042085"> </a>
+</pre></div>
+<a name="wp1033132"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The use of the backslash character <em class="cEmphasis"> </em>(&quot;\&quot;) as <em class="cEmphasis">line continuation</em> delimiter works only on UNIX systems.  If you are entering a command for Windows, you must type the entire command as a continuous string.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:01:17" />
+  <title>11.2.6.9  Retrieving attributes</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr11.htm">Chapter 11: Working with Non-Vision Data</a> &gt; <a href="itr113.htm">11.2  Working with XML Data</a> &gt; <a href="itr1120.htm">11.2.6  Using the C$XML Routine</a> &gt; </p>
+<a name="wp1049362"> </a><h2 class="pHeading3">
+11.2.6.9  Retrieving attributes
+</h2>
+<a name="wp1049363"> </a><p class="pBody">
+If desired, you can retrieve element attributes using one of the following C$XML op-codes:
+</p>
+<a name="wp1049384"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1049366"> </a>
+Op-code
+
+</th>
+    <th><a name="wp1049368"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049371"> </a><p class="pCellBody">
+CXML-GET-ATTRIBUTE-COUNT
+</p>
+</td>
+    <td><a name="wp1049373"> </a><p class="pCellBody">
+Gets the number of attributes in an element
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049376"> </a><p class="pCellBody">
+CXML-GET-ATTRIBUTE
+</p>
+</td>
+    <td><a name="wp1049378"> </a><p class="pCellBody">
+Gets the next attribute
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049381"> </a><p class="pCellBody">
+CXML-GET-ATTRIBUTE-BY-NAME
+</p>
+</td>
+    <td><a name="wp1049383"> </a><p class="pCellBody">
+Gets the named attribute
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1049385"> </a><p class="pBody">
+Attributes have special characteristics:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1049463"> </a><div class="pSmartList1"><li>Attributes don't have a handle; they are attached to the element handle for which they are an attribute. </li></div>
+<a name="wp1049386"> </a><div class="pSmartList1"><li>There can be more than one attribute per element, thus more than one attribute per element handle.</li></div>
+<a name="wp1049651"> </a><div class="pSmartList1"><li>You don't need to call CXML-GET-DATA to fetch the attribute data.  The CXML-GET-ATTRIBUTE op-codes retrieve the data.</li></div>
+</ul></div>
+<a name="wp1049387"> </a><p class="pBody">
+Before you use CXML-GET-ATTRIBUTE, we recommend that you use CXML-GET-ATTRIBUTE-COUNT.  This op-code tells you how many attributes are in the element of interest. Then when you use CXML-GET-ATTRIBUTE, you know which attribute you are getting (the first attribute is number 0, the second number 1, etc.). 
+</p>
+<a name="wp1049895"> </a><p class="pBody">
+Alternatively, if you know the name of the attribute you want and not the number of the attribute, you can use CXML-GET-ATTRIBUTE-BY-NAME.  If you have an unknown number of attributes like this: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Limousine 
+xmlns:tsd=&quot;http://namespaces.softwareag.com/tamino/TaminoSche
+maDefinition&quot; 
+xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt; <a name="wp1049388"> </a>
+</pre></div>
+<a name="wp1049389"> </a><p class="pBody">
+and you are searching for a particular attribute, say &quot;xmlns:xsi&quot;, you can search for the value with CXML-GET-ATTRIBUTE-BY-NAME, or you can get the count and read the attributes one by one searching for the one you want. 
+</p>
+<a name="wp1049860"> </a><p class="pBody">
+Refer to Appendix I in <em class="cEmphasis">ACUCOBOL-GT Appendices</em> for more details on the CXML-GET-ATTRIBUTE op-codes.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

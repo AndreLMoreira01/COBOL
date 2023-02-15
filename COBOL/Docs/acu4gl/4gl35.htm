@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:41:44" />
+  <title>3.2.2  Defaults Used in XFD Files</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl3.htm">Chapter 3: Data Dictionaries</a> &gt; <a href="4gl33.htm">3.2  XFD Files</a> &gt; </p>
+<a name="wp1034083"> </a><h2 class="pHeading2">
+3.2.2  Defaults Used in XFD Files
+</h2>
+<a name="wp1034094"> </a><p class="pBody">
+There are several elements of COBOL that require special handling when data dictionaries are built.  These include multiple record definitions, REDEFINES, FILLER, and OCCUR.  This section describes how the compiler handles each of these situations.
+</p>
+<a name="wp1035665"> </a><p class="pBody">
+Note that in many instances you can override the default behavior described below by placing special comment lines in the FDs of your COBOL code.  These comments are called <em class="cEmphasis">directives</em>, and are described in <a  href="4gl4.htm#wp1039333">Chapter 4, &quot;Using Directives.&quot;</a>  For example, the WHEN directive allows you to use multiple definitions for a single set of data by specifying when each definition should be used. 
+</p>
+<a name="wp1034098"> </a><p class="pBody">
+Databases generally do not support the notion of multiple definitions for the same column.  As the following paragraphs explain, whenever a COBOL program gives more than one definition for the same data, the compiler makes a choice about which definition to use in the dictionary.  Then it disregards the rest.  
+</p>
+<a name="wp1034099"> </a><h3 class="pHeadingRef">
+KEY IS phrase
+</h3>
+<a name="wp1034103"> </a><p class="pBody">
+Fields named in KEY IS phrases of SELECT statements are included as column names.  Other fields that occupy the same areas as the key fields (by either explicit or implicit redefinition) are not included by name, but are mapped to the key field column names by the data dictionary.
+</p>
+<a name="wp1034106"> </a><p class="pBody">
+Remember, if the field named in the KEY IS phrase is a group item, it will not become a column in the database table unless a USE GROUP directive is used (see <a  href="4gl34.htm#wp1034340">section 3.2.1, &quot;Understanding How the Database Table Is Formed&quot;</a>).  Instead, the subordinate fields of the group item will be used.
+</p>
+<a name="wp1034107"> </a><h3 class="pHeadingRef">
+REDEFINES clause
+</h3>
+<a name="wp1034110"> </a><p class="pBody">
+Fields contained in a redefining item occupy the same positions as the fields being redefined.  The compiler needs to select only one of the field definitions to use.  The default rule that it follows is to use the fields in the item being redefined as column names; the data dictionary maps fields that appear subordinate to a REDEFINES clause to column names.
+</p>
+<a name="wp1034111"> </a><h3 class="pHeadingRef">
+Multiple record definitions
+</h3>
+<a name="wp1034114"> </a><p class="pBody">
+This same rule extends to multiple record definitions.  In COBOL, multiple record definitions are essentially redefinitions of the entire record area.  This leads to the same complication that is encountered with REDEFINES: multiple definitions for the same data.  So the compiler needs to select one definition to use. 
+</p>
+<a name="wp1034115"> </a><p class="pBody">
+Because the multiple record types can be different sizes, the compiler needs to use the largest one, so that it can cover all of the fields adequately.  Thus, the compiler's rule is to use the fields in the largest record defined for the file.  If more than one record is of the largest size, the compiler uses the first one.  
+</p>
+<a name="wp1034116"> </a><h3 class="pHeadingRef">
+Group items
+</h3>
+<a name="wp1034120"> </a><p class="pBody">
+Note that group items are, by default, never included in a data dictionary for the same reason that REDEFINES are excluded: they result in multiple names for the same data items.  You can, however, choose to combine grouped fields into one data item by specifying the <a  href="4gl413.htm#wp1034754">USE GROUP</a> directive.
+</p>
+<a name="wp1034121"> </a><h3 class="pHeadingRef">
+FILLER data items
+</h3>
+<a name="wp1034124"> </a><p class="pBody">
+In a COBOL FD, FILLER data items are essentially place holders.  FILLER items are not uniquely named and thus cannot be uniquely referenced.  For this reason, they are not placed into the ACUCOBOL-GT data dictionary.  The dictionary maintains the correct mapping of the other fields, and no COBOL record positional information is lost.  
+</p>
+<a name="wp1034125"> </a><p class="pBody">
+Sometimes you need to include a FILLER data item, such as when it occurs as part of a key.  In such a case, you could include it under a USE GROUP directive or give it a name of its own with the <a  href="4gl410.htm#wp1035551">NAME</a> directive.
+</p>
+<a name="wp1034126"> </a><h3 class="pHeadingRef">
+OCCURS clauses
+</h3>
+<a name="wp1034129"> </a><p class="pBody">
+An OCCURS clause always requires special handling, because the Acu4GL runtime system must assign a unique name to each database column.  The runtime accomplishes this by appending sequential index numbers to the item named in the OCCURS. 
+</p>
+<a name="wp1034130"> </a><p class="pBody">
+For example, if the following were part of a file's description:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+03  employee-table occurs 20 times.<a name="wp1034131"> </a>
+    05  employee-number            pic 9(3)<a name="wp1034132"> </a>
+</pre></div>
+<a name="wp1034133"> </a><p class="pBody">
+these column names would be created in the database table:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+employee_number_1<a name="wp1034134"> </a>
+employee_number_2<a name="wp1034135"> </a>
+.<a name="wp1034136"> </a>
+.<a name="wp1034137"> </a>
+.<a name="wp1034138"> </a>
+employee_number_10<a name="wp1034139"> </a>
+employee_number_11<a name="wp1034140"> </a>
+.<a name="wp1034141"> </a>
+.<a name="wp1034142"> </a>
+.<a name="wp1034143"> </a>
+employee_number_20<a name="wp1034144"> </a>
+</pre></div>
+<a name="wp1034147"> </a><p class="pBody">
+Note that the hyphens in the COBOL code are translated to underscores in database field names, and the index number is preceded by an underscore.
+</p>
+<a name="wp1034148"> </a><h3 class="pHeadingRef">
+XFD location
+</h3>
+<a name="wp1034151"> </a><p class="pBody">
+If you are using object libraries, XFD files can be embedded into COBOL libraries through <b class="cBold">cblutil</b> and the runtime will find them.  This is particularly effective when you are using the ACUCOBOL-GT Web Runtime and Acu4GL.  It allows you to send all of the COBOL objects, as well as XFD files, in one package.
+</p>
+<a name="wp1034152"> </a><p class="pBody">
+Please note that if an XFD file is located in an object library and is also located on the disk (in a directory pointed to by the <a  href="4gl820.htm#wp1036155">XFD_PREFIX</a> configuration variable), the XFD file in the object library is loaded first, unless the XFD_PREFIX configuration variable uses remote name notation.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

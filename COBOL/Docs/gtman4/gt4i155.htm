@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-SET-FONT</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1040369"> </a><h2 class="pHeading3">
+WINPRINT-SET-FONT
+</h2>
+<a name="wp1040371"> </a><p class="pBody">
+This operation code allows you to select any printer font for spooled reports.  
+</p>
+<a name="wp1040378"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040379"> </a>
+    USING WINPRINT-SET-FONT, WINPRINT-DATA<a name="wp1040380"> </a>
+    GIVING RESULT<a name="wp1040381"> </a>
+</pre></div>
+<a name="wp1040382"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040383"> </a><p class="pBody">
+<b class="cBold">WINPRINT-DATA</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 WINPRINT-DATA.<a name="wp1040384"> </a>
+   03 WPRTDATA-SET-STD-FONT.<a name="wp1040385"> </a>
+   03 WPRTDATA-SET-FONT REDEFINES<a name="wp1040386"> </a>
+      WPRTDATA-SET-STD-FONT.<a name="wp1040387"> </a>
+      05 WPRTDATA-FONT     HANDLE OF FONT.<a name="wp1040388"> </a>
+</pre></div>
+<a name="wp1040389"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040390"> </a><p class="pBody">
+First, obtain a handle to the desired font with the W$FONT routine described earlier.  Once you have the font handle, you can select it as the current font by setting WPRTDATA-FONT to the desired font handle and using WINPRINT-SET-FONT.  The font is now associated with the current printer until you change the font again or the runtime finishes.  Note that the font is only used for reports printed by the runtime's spooler handler, which you use when you assign a print file to &quot;-P SPOOLER&quot;.  
+</p>
+<a name="wp1040391"> </a><p class="pBody">
+Fonts are device-specific.  If you let the user change printers via WIN$PRINTER's setup operation, then the user should get a new font handle from W$FONT and associate it with the new printer.  
+</p>
+<a name="wp1040392"> </a><p class="pBody">
+You should not DESTROY a font handle that is currently selected as the print font, unless the printer is closed and you will not open it again.  If you do, then that font will not be available to the printer.  
+</p>
+<a name="wp1040393"> </a><p class="pBody">
+You may use proportionally spaced fonts in print files.  The runtime handles the proportional spacing correctly (in other words, it does not use a fixed width for each character).  The runtime computes the number of columns that fit on a page for a proportional font by using the font's average width.  (See &quot;winspool.cbl&quot; for a sample program that uses arbitrary fonts chosen by the user.)
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

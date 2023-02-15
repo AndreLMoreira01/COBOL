@@ -1,0 +1,134 @@
+      * Build menu ALFRED-MAIN-MENU and return handle in MENU-HANDLE
+      * Created by GENMENU on 01-Nov-2006
+      * Source file: "alfred.gmu"
+ 
+       BUILD-ALFRED-MAIN-MENU.
+           PERFORM GEN-ALFRED-MAIN-MENU THRU GEN-ALFRED-MAIN-MENU-EXIT.
+ 
+       GEN-ALFRED-MAIN-MENU.
+           CALL "W$MENU" USING WMENU-NEW GIVING MENU-HANDLE
+           IF MENU-HANDLE = ZERO
+               GO TO GEN-ALFRED-MAIN-MENU-EXIT
+           END-IF
+ 
+           CALL "W$MENU" USING WMENU-NEW GIVING SUB-HANDLE-1
+           IF SUB-HANDLE-1 = ZERO
+               MOVE ZERO TO MENU-HANDLE
+               GO TO GEN-ALFRED-MAIN-MENU-EXIT
+           END-IF
+ 
+           CALL "W$MENU" USING WMENU-ADD, MENU-HANDLE, 0, 0,
+                               "&File", FILE-SUBMENU, SUB-HANDLE-1
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "&Open ...", MENU-OPEN-FILE
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, W-DISABLED,
+                               "Select &Key ...", MENU-REFERENCE-KEY
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, W-SEPARATOR
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, W-DISABLED,
+                               "Read/&Write", MENU-OPEN-IO
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 17,
+                               "&Read Only", MENU-OPEN-INPUT
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, W-SEPARATOR
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, W-DISABLED,
+                               "&Print", MENU-PRINT
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, W-SEPARATOR
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "E&xit", MENU-EXIT
+ 
+           CALL "W$MENU" USING WMENU-NEW GIVING SUB-HANDLE-1
+           IF SUB-HANDLE-1 = ZERO
+               MOVE ZERO TO MENU-HANDLE
+               GO TO GEN-ALFRED-MAIN-MENU-EXIT
+           END-IF
+ 
+           CALL "W$MENU" USING WMENU-ADD, MENU-HANDLE, 0, W-DISABLED,
+                               "&Edit", EDIT-SUBMENU, SUB-HANDLE-1
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "&Undo\t(^X)", MENU-UNDO
+ 
+           CALL "W$MENU" USING WMENU-NEW GIVING SUB-HANDLE-1
+           IF SUB-HANDLE-1 = ZERO
+               MOVE ZERO TO MENU-HANDLE
+               GO TO GEN-ALFRED-MAIN-MENU-EXIT
+           END-IF
+ 
+           CALL "W$MENU" USING WMENU-ADD, MENU-HANDLE, 0, W-DISABLED,
+                               "&Start", START-SUBMENU, SUB-HANDLE-1
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "&Not Less Than ...", MENU-START-NLT
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "Not &Greater Than ...", MENU-START-NGT
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, W-SEPARATOR
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "&First Record", MENU-START-FIRST
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "&Last Record", MENU-START-LAST
+ 
+           CALL "W$MENU" USING WMENU-NEW GIVING SUB-HANDLE-1
+           IF SUB-HANDLE-1 = ZERO
+               MOVE ZERO TO MENU-HANDLE
+               GO TO GEN-ALFRED-MAIN-MENU-EXIT
+           END-IF
+ 
+           CALL "W$MENU" USING WMENU-ADD, MENU-HANDLE, 0, W-DISABLED,
+                               "&Record", RECORD-SUBMENU, SUB-HANDLE-1
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "&Add a New Record ...", MENU-ADD-RECORD
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "&Delete This Record ...",
+                               MENU-DELETE-RECORD
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "&Save This Record ...", MENU-SAVE-RECORD
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, W-SEPARATOR
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "&Next Record\t(^N)", MENU-NEXT-RECORD
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "&Previous Record\t(^P)",
+                               MENU-PREVIOUS-RECORD
+ 
+           CALL "W$MENU" USING WMENU-NEW GIVING SUB-HANDLE-1
+           IF SUB-HANDLE-1 = ZERO
+               MOVE ZERO TO MENU-HANDLE
+               GO TO GEN-ALFRED-MAIN-MENU-EXIT
+           END-IF
+ 
+           CALL "W$MENU" USING WMENU-ADD, MENU-HANDLE, 0, W-DISABLED,
+                               "&Display", OPTIONS-SUBMENU, SUB-HANDLE-1
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, W-CHECKED,
+                               "&Hexadecimal\t(^T)", MENU-HEX
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "&Octal\t(^T)", MENU-OCTAL
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, W-SEPARATOR
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "&ASCII Area\t(TAB)", MENU-ASCII-AREA
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, W-CHECKED,
+                               "&Raw Data Area\t(TAB)", MENU-RAW-AREA
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, W-SEPARATOR
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "Evaluate &Conditions",
+                               MENU-EVAL-CONDITIONS
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, W-SEPARATOR
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "&Next Page\t(PgDn)", MENU-NEXT-PAGE
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "&Previous Page\t(PgUp)",
+                               MENU-PREVIOUS-PAGE
+ 
+           CALL "W$MENU" USING WMENU-NEW GIVING SUB-HANDLE-1
+           IF SUB-HANDLE-1 = ZERO
+               MOVE ZERO TO MENU-HANDLE
+               GO TO GEN-ALFRED-MAIN-MENU-EXIT
+           END-IF
+ 
+           CALL "W$MENU" USING WMENU-ADD, MENU-HANDLE, 0, 0,
+                               "&Help", HELP-SUBMENU, SUB-HANDLE-1
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "Context Help ...", MENU-HELP
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, W-SEPARATOR
+           CALL "W$MENU" USING WMENU-ADD, SUB-HANDLE-1, 0, 0,
+                               "About Alfred ...", MENU-ABOUT
+           .
+ 
+       GEN-ALFRED-MAIN-MENU-EXIT.
+           MOVE ZERO TO RETURN-CODE.
+ 

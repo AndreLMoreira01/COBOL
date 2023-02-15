@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:01:17" />
+  <title>11.2.6.2  Parsing an XML file</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr11.htm">Chapter 11: Working with Non-Vision Data</a> &gt; <a href="itr113.htm">11.2  Working with XML Data</a> &gt; <a href="itr1120.htm">11.2.6  Using the C$XML Routine</a> &gt; </p>
+<a name="wp1046200"> </a><h2 class="pHeading3">
+11.2.6.2  Parsing an XML file
+</h2>
+<a name="wp1046201"> </a><p class="pBody">
+You can use three main op-codes to parse an XML file with C$XML:   CXML-PARSE-FILE, CXML-OPEN-FILE, and CXML-NEW-PARSER.  Each has a slightly different function, as described below.  Choose the one that best suits your needs.   
+</p>
+<a name="wp1046219"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1046204"> </a>
+Op-code
+
+</th>
+    <th><a name="wp1046206"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1046208"> </a><p class="pCellBody">
+CXML-PARSE-FILE
+</p>
+</td>
+    <td><a name="wp1046210"> </a><p class="pCellBody">
+Opens and parses the specified file
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1046212"> </a><p class="pCellBody">
+CXML-OPEN-FILE
+</p>
+</td>
+    <td><a name="wp1046214"> </a><p class="pCellBody">
+Opens the specified file, so you can parse individual records
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1046216"> </a><p class="pCellBody">
+CXML-NEW-PARSER
+</p>
+</td>
+    <td><a name="wp1046218"> </a><p class="pCellBody">
+Opens a new, empty XML file 
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1046220"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>C$XML can parse local or remote files-even files located on the Internet.  You simply specify the server, IP address, or URL in the pathname.  You cannot write to URLs, however.
+<hr />
+</p>
+<a name="wp1046221"> </a><p class="pBody">
+If you prefer, you can parse an XML file directly without opening a file with the CXML-PARSE-STRING op-code.  Examples for using these op-codes appear in the following paragraphs.  
+</p>
+<a name="wp1046222"> </a><h3 class="pHeadingRef">
+Opening and parsing a file
+</h3>
+<a name="wp1046223"> </a><p class="pBody">
+To open and read an entire XML file, use the CXML-PARSE-FILE op-code.  Once a file is parsed, all its elements are immediately retrievable.  Parsing entire files can take some time, depending on the size of the file.  Use this option when you plan to work extensively with the whole file or when the file is small.
+</p>
+<a name="wp1046224"> </a><p class="pBody">
+For instance:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+call &quot;C$XML&quot; using CXML-PARSE-FILE &quot;http://www.nws.noaa.gov/data/current_obs/KMYF.xml&quot;<a name="wp1046225"> </a>
+move return-code to parser-handle<a name="wp1046226"> </a>
+</pre></div>
+<a name="wp1046227"> </a><h3 class="pHeadingRef">
+Opening a file, parsing individual records
+</h3>
+<a name="wp1046228"> </a><p class="pBody">
+To simply open the file, but not parse it, use the CXML-OPEN-FILE op-code.  With the file open, you can then parse individual records using the CXML-PARSE-NEXT-RECORD op-code.  For instance:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;C$XML&quot; using CXML-OPEN-FILE &quot;http://www.nws.noaa.gov/data/current_obs/KMYF.xml&quot;<a name="wp1046229"> </a>
+move return-code to parser-handle<a name="wp1046230"> </a>
+CALL &quot;C$XML&quot; using CXML-PARSE-NEXT-RECORD parser-handle<a name="wp1046231"> </a>
+move return-code to record-handle<a name="wp1046232"> </a>
+</pre></div>
+<a name="wp1046233"> </a><p class="pBody">
+This option is more efficient than parsing entire files, but you must remember to parse the record before you try to retrieve its elements. 
+</p>
+<a name="wp1046234"> </a><h3 class="pHeadingRef">
+Creating a new parser
+</h3>
+<a name="wp1046235"> </a><p class="pBody">
+To create a new XML file, use the CXML-NEW-PARSER op-code. An empty file is opened, into which you can add children, siblings, attributes, and comments as described in <a  href="itr1125.htm#wp1046342">section 11.2.6.5</a>.  <span style="font-family: Arial, Verdana, Helvetica, sans-serif">Note that the file is not &quot;created&quot; until you write to the file using the CXML-WRITE-FILE op-code.</span>
+</p>
+<a name="wp1046236"> </a><h3 class="pHeadingRef">
+Parsing an XML string directly
+</h3>
+<a name="wp1046237"> </a><p class="pBody">
+If you get XML text from another source and need to parse it, you can parse the string directly using the CXML-PARSE-STRING op-code.  You don't have to write the data to a file, then parse the file.  You simply specify the string directly in the call.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+call &quot;C$XML&quot; using CXML-PARSE-STRING,<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1046238"> </a>
+&quot;&lt;?xml version=&quot;&quot;1.0&quot;&quot;?&gt;&lt;group1&gt;&lt;subgroup1&gt;&lt;item1&gt;data&lt;/item1&gt;&lt;/subgroup1&gt;&lt;/group1&gt;&quot;.<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1046239"> </a>
+move return-code to parse-handle.<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span><a name="wp1046240"> </a>
+</pre></div>
+<a name="wp1046241"> </a><p class="pBody">
+Then you can use the return code elsewhere in your program.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

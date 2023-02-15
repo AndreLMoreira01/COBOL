@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:22:58" />
+  <title>7.11  Loading a File</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run7.htm"><br />Chapter 7: vutil File Manager</a> &gt; </p>
+<a name="wp1038913"> </a><h2 class="pHeading1">
+7.11  Loading a File
+</h2>
+<a name="wp1038920"> </a><p class="pBody">
+The &quot;load&quot; option will create an indexed file from a binary sequential file, a relative file, or a line sequential file.  The command is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+vutil -load [ -b|d|t ] [ -lnvrx ] [ -q ] <em class="cEmphasis">source destination</em><a name="wp1038921"> </a>
+</pre></div>
+<a name="wp1038922"> </a><p class="pBody">
+The <em class="cEmphasis">source</em> file is the name of the binary, relative, or line sequential file to read.  The <em class="cEmphasis">destination </em>file is the name of the Vision file to add to.  This file must already exist; it is used to determine the record size and key information.  
+</p>
+<a name="wp1038923"> </a><p class="pBody">
+By default, records from the <em class="cEmphasis">source</em> file are added to the <em class="cEmphasis">destination</em> file.  If the &quot;-n&quot; flag (new file) is used, then any data in the <em class="cEmphasis">destination </em>file is eliminated before the records are loaded from the <em class="cEmphasis">source</em> file.
+</p>
+<a name="wp1038924"> </a><p class="pBody">
+When doing a load, <b class="cBold">vutil</b> places records that are rejected due to illegal duplicate keys into a file.  Should this happen, <b class="cBold">vutil</b> will report the name of the file that contains the rejected records.  The format of this file is the same as a COBOL binary sequential file with variable-size records.  
+</p>
+<a name="wp1038925"> </a><p class="pBody">
+By default, the source file is assumed to be a binary sequential file with an alternate format.
+</p>
+<a name="wp1038926"> </a><p class="pBody">
+These are the source file format options:
+</p>
+<a name="wp1038974"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1038929"> </a><p class="pCellBody">
+<b class="cBold">-b</b>
+</p>
+</td>
+    <td><a name="wp1038931"> </a><p class="pCellBody">
+This loads a binary sequential file that is compatible with the ACUCOBOL-GT runtime into a Vision file.   
+</p>
+<a name="wp1038932"> </a><p class="pCellBody">
+If &quot;-v&quot; is not present, fixed-length records are read.
+</p>
+<a name="wp1038933"> </a><p class="pCellBody">
+The &quot;-v&quot; option causes <b class="cBold">vutil</b> to read variable-length records.  The record length is stored in a two-byte record header.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038935"> </a><p class="pCellBody">
+<b class="cBold">-d</b>
+</p>
+</td>
+    <td><a name="wp1038937"> </a><p class="pCellBody">
+Records marked as deleted in the relative file are discarded.
+</p>
+<a name="wp1038938"> </a><p class="pCellBody">
+The &quot;-v&quot; option is not allowed for relative files.
+</p>
+<a name="wp1038939"> </a><p class="pCellBody">
+Records marked as deleted in the relative file are discarded.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038941"> </a><p class="pCellBody">
+<b class="cBold">-l<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;</b>
+</p>
+</td>
+    <td><a name="wp1038943"> </a><p class="pCellBody">
+You can use the &quot;-l&quot; flag to prevent <b class="cBold">vutil</b> from locking the file if you need to allow simultaneous access to the destination file while <b class="cBold">vutil</b> is operating.  Normally, <b class="cBold">vutil</b> locks the destination file to improve the performance of the load operation.  When &quot;-l&quot; is not used, <b class="cBold">vutil</b> adds records to the file using &quot;bulk addition&quot; mode, which generally runs faster.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038945"> </a><p class="pCellBody">
+<b class="cBold">-n</b>
+</p>
+</td>
+    <td><a name="wp1038947"> </a><p class="pCellBody">
+If the &quot;-n&quot; flag (new file) is used, then any data in the <em class="cEmphasis">destination </em>file is eliminated before the records are loaded from the <em class="cEmphasis">source</em> file.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038949"> </a><p class="pCellBody">
+<b class="cBold">-q</b>
+</p>
+</td>
+    <td><a name="wp1038951"> </a><p class="pCellBody">
+This option causes <b class="cBold">vutil</b> to exit (with status 99) if user interaction is required.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038953"> </a><p class="pCellBody">
+<b class="cBold">-r</b>
+</p>
+</td>
+    <td><a name="wp1038955"> </a><p class="pCellBody">
+This option causes any &quot;duplicate key&quot; write errors to be retried as rewrites to the file. This option should be used with caution, because duplicate key write errors often indicate that an error exists in the target file description. Warnings about this problem are not seen when you use the &quot;-r&quot; option.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038957"> </a><p class="pCellBody">
+<b class="cBold">-t</b>
+</p>
+</td>
+    <td><a name="wp1038959"> </a><p class="pCellBody">
+This loads a file that has line sequential format into a Vision file.  This means that the source file is a simple text file, with records separated by line feeds.  The source file may not contain any line feeds within the data fields, because a line feed denotes the end of a record.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1038961"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1038963"> </a><p class="pCellBody">
+This option implies &quot;-v&quot; (variable-length records), so the &quot;-v&quot; option is not necessary, although it is allowed.  Line sequential files are assumed to contain variable length records.  As such, they can only be loaded into Vision files that have been generated to accommodate the needed range of record sizes.  If, however, the file contains records that are uniformly fixed length, the Vision file can be generated to accommodate only that fixed length.  Should <b class="cBold">vutil</b> attempt to load variable length records into a fixed record-size Vision file, an invalid record size error will occur.  The error is reported as a generic &quot;parameter error.&quot;
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038965"> </a><p class="pCellBody">
+<b class="cBold">-v</b>
+</p>
+</td>
+    <td><a name="wp1038967"> </a><p class="pCellBody">
+This option causes <b class="cBold">vutil</b> to treat the source file as a file with variable-length records.  The record length is stored in the record's header.  The length of the header is either two or four bytes, depending on your machine type.
+</p>
+<a name="wp1038968"> </a><p class="pCellBody">
+If &quot;-v&quot; is not present, fixed-length records are read.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038970"> </a><p class="pCellBody">
+<b class="cBold">-x</b>
+</p>
+</td>
+    <td><a name="wp1038972"> </a><p class="pCellBody">
+The &quot;-x&quot; option is required when you are working with binary sequential and relative files that contain variable-length records larger than 65,535 bytes.  (These files store the record length in two additional bytes in the record header.  For &quot;vutil -load&quot; to read these files, it is necessary to indicate that these extra header bytes exist.)  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1038975"> </a><p class="pBody">
+If you are creating this file for the first time, you can either use the &quot;gen&quot; option of <b class="cBold">vutil</b> or write a COBOL program to create the empty Vision file.  The &quot;load&quot; function can be used to import data from another application.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

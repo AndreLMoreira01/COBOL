@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.8  File Name Interpretation</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; </p>
+<a name="wp1033680"> </a><h2 class="pHeading1">
+2.8  File Name Interpretation
+</h2>
+<a name="wp1033685"> </a><p class="pBody">
+ACUCOBOL-GT employs a rich set of rules when translating a file name specified in an ASSIGN clause to an actual file name used on the host system.  These rules provide a great deal of flexibility in placing files and dynamically reassigning them.  These rules also allow for convenient handling of printers and other special devices.  See section 2.8.2 for examples that illustrate many of the rules listed below.
+</p>
+<a name="wp1033687"> </a><p class="pBody">
+When interpreting a file name, <b class="cBold">runcbl</b> performs the following steps in order:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033688"> </a><div class="pSmartList1"><li>The initial name is taken from the ASSIGN clause of the file.  If not specified in the ASSIGN clause, then the internal name specified by the SELECT clause is used instead.  </li></div>
+<a name="wp1122042"> </a><div class="pSmartList1"><li>The name is examined to see if FILE_ALIAS_PREFIX should be applied.</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1122043"> </a><div class="pSmartList2"><li>The file name is constructed by prepending the first string listed in FILE_ALIAS_PREFIX to the file name.  The runtime searches for that name in the environment or the configuration file.</li></div>
+<a name="wp1122044"> </a><div class="pSmartList2"><li>If the name is not found, the runtime constructs a new name by prepending the second string in FILE_ALIAS_PREFIX and searches for that alias.  </li></div>
+<a name="wp1122045"> </a><div class="pSmartList2"><li>The process is repeated with each string in FILE_ALIAS_PREFIX until a file alias name is found or the end of the list is reached.</li></div>
+</ul></div>
+<a name="wp1122028"> </a><p class="pIndented1">
+If the file name includes a dollar sign (&quot;$&quot;) and EXPAND_ENV_VARS is set to one (&quot;1&quot;), the FILE_ALIAS_PREFIX logic is applied to the environment variable name.  So, for example, &quot;$FILE1&quot; and &quot;FILE1&quot; are treated the same. 
+</p>
+<a name="wp1033692"> </a><div class="pSmartList1"><li>If this name does not start with a hyphen, then it is searched for in the environment.  First the runtime system's configuration variables are searched, followed by the host system's environment.  The value of the variable found becomes the new name.  This search is then repeated until either no new translation is found or the new name starts with a hyphen.  Note that when the runtime system's configuration variables are initially loaded, any name found in both the runtime's configuration file and the user's environment is taken from the user's environment.  </li></div>
+<a name="wp1033693"> </a><p class="pIndented1">
+For example, if the name &quot;PRINT-FILE&quot; is assigned to &quot;PRINTER1&quot; in the ACUCOBOL-GT configuration file, and you have &quot;PRINTER1&quot; assigned to &quot;/dev/lp&quot; in the host's environment, then opening a file called &quot;PRINT-FILE&quot; will actually open the file &quot;/dev/lp&quot;.  &quot;PRINT-FILE&quot; is first translated to &quot;PRINTER1&quot; and then &quot;PRINTER1&quot; is subsequently translated to &quot;/dev/lp&quot;.  
+</p>
+<a name="wp1033694"> </a><div class="pSmartList1"><li>If the name starts with a hyphen, it is interpreted in a special fashion described below.  If it does not start with a hyphen, then it is considered to be a normal file name.  This name is further processed as follows.</li></div>
+<a name="wp1033697"> </a><div class="pSmartList1"><li>If the FILE_CASE configuration variable has been specified, the change to upper case or lower case is applied if appropriate.</li></div>
+<a name="wp1033698"> </a><div class="pSmartList1"><li>The name is examined to see if it has an extension (zero to three characters following a period).  If it does not, and the FILE_SUFFIX configuration variable has been defined, then the value of the FILE_SUFFIX is added to the name, with an intervening period if necessary.</li></div>
+<a name="wp1033702"> </a><div class="pSmartList1"><li>The name is examined to see if FILE_PREFIX should be applied.</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1107264"> </a><div class="pSmartList2"><li>If the name contains a disk drive designation, or begins with a &quot;\&quot; (back slash), processing continues at step 8.  </li></div>
+<a name="wp1107265"> </a><div class="pSmartList2"><li>If the name begins with a &quot;/&quot; (forward slash) and the configuration variable APPLY_FILE_PATH is set to off (0), processing continues at step 8.  </li></div>
+<a name="wp1107421"> </a><div class="pSmartList2"><li>If the name begins with a &quot;/&quot; (forward slash) and the configuration variable APPLY_FILE_PATH is set to on (1), the current FILE_PREFIX is applied to the name and processing continues at step 8.</li></div>
+<a name="wp1107422"> </a><div class="pSmartList2"><li>If the name does not contain a full path or drive designation, the current FILE_PREFIX is applied to it and processing continues at step 8.</li></div>
+<a name="wp1107398"> </a><p class="pIndented2">
+FILE_PREFIX is a configuration variable that contains one or more strings that are prefixed to the filename.  After each string is prefixed and the EXPAND_ENV_VARS variable is checked (see step 8), <b class="cBold">runcbl</b> tries to find a file by that name.  If it finds the file, processing of the name stops.  If it does not, the next prefix is tried until no more prefixes are available.  A prefix consisting of a single period  (&quot;.&quot;) is treated as an empty prefix (i.e., the current directory is used).
+</p>
+</ul></div>
+<a name="wp1033712"> </a><div class="pSmartList1"><li>Before the runtime tries to find the file, if EXPAND_ENV_VARS is set to on (1), the runtime expands any environment variables found in the name.  A file specification that includes a &quot;$&quot; character will have all the characters from &quot;$&quot; to the end of the name or to the next &quot;/&quot; or &quot;\&quot; replaced with the value of the matching environment variable.  For more information, see the entry for EXPAND_ENV_VARS in Book 4, Appendix H.  The runtime now attempts to find the file.  If the file is found, processing stops.  If the file is not found and there is another FILE_PREFIX to apply, the prefix is applied and step 8 is repeated.  If all the prefixes have been tried and the file has not been found, the first prefix is re-applied, and processing of the name stops.  This means that files newly created by <b class="cBold">runcbl</b> will reside, by default, in the first directory specified in the FILE_PREFIX configuration variable.  </li></div>
+</ol></div>
+<a name="wp1033713"> </a><p class="pBody">
+Upper or lower case in a file name is significant if it is significant to the host operating system.  The same is true when the host environment is searched for a translation.  Upper or lower case is <em class="cEmphasis">not</em> significant when <b class="cBold">runcbl</b>'s local environment is searched for a translation.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,759 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>W$MENU Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1038857"> </a><h2 class="pHeading2">
+W$MENU Routine
+</h2>
+<a name="wp1038862"> </a><p class="pBody">
+You construct and control menus with the W$MENU library routine.  You use the CALL statement to access this routine.  
+</p>
+<a name="wp1038863"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;W$MENU&quot;<a name="wp1038864"> </a>
+    USING OP-CODE, parameters,<a name="wp1038865"> </a>
+    GIVING WMENU-RESULT<a name="wp1038866"> </a>
+</pre></div>
+<a name="wp1038867"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1038868"> </a><p class="pBody">
+<b class="cBold">OP-CODE   </b>Numeric parameter
+</p>
+<a name="wp1038871"> </a><p class="pBody">
+This indicates the desired operation.  Level 78 symbolic names for these operations can be found in &quot;acugui.def&quot;.
+</p>
+<a name="wp1038872"> </a><p class="pBody">
+<b class="cBold">parameters</b> Vary depending on the op-code chosen
+</p>
+<a name="wp1038874"> </a><p class="pBody">
+<b class="cBold">WMENU-RESULT</b>   PIC S9(9)
+</p>
+<a name="wp1038875"> </a><p class="pBody">
+Holds the return value from W$MENU.  A value of zero indicates failure for all operations.
+</p>
+<a name="wp1038876"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1038877"> </a><p class="pBody">
+The routine takes one or more parameters, which are always passed BY REFERENCE (the default in COBOL).  The first parameter is always an operation code.  This code defines what the routine will do.  The remaining parameters depend on the operation selected.  The operation codes are defined in the COPY file &quot;acugui.def&quot;.  The available codes are described here:  
+</p>
+<a name="wp1038879"> </a><p class="pBody">
+<b class="cBold">WMENU-NEW</b> -- This operation constructs a new empty menu bar.  W$MENU returns a <em class="cEmphasis">handle</em> for this menu bar in the special register WMENU-RESULT.  This handle should be stored in a variable declared as PIC S9(9) COMP-4.  All future references to this menu bar are made with this handle.  This operation can fail if the system runs out of memory.  In this case, WMENU-RESULT will be set to zero.    
+</p>
+<a name="wp1038884"> </a><p class="pBody">
+<b class="cBold">WMENU-NEW-POPUP</b> -- This operation constructs a new empty pop-up menu.  W$MENU returns a <em class="cEmphasis">handle</em> for this menu in the special register WMENU-RESULT.  This handle should be stored in a variable declared as PIC S9(9) COMP-4.  All future references to this pop-up menu are made with this handle.  This operation can fail if the system runs out of memory.  In this case, WMENU-RESULT will be set to zero.  This option is available for Windows systems only.  
+</p>
+<a name="wp1038889"> </a><p class="pBody">
+<b class="cBold">WMENU-POPUP</b> -- This operation displays a pop-up menu and gets the user's response.  After the user makes a selection, the pop-up menu is removed.  (This is not the typical way to display a pop-up window.  It is easier to assign the pop-up menu to a window or control and let the runtime handle activation.)  The second parameter passed in conjunction with this operation code is the handle of the pop-up menu to show.  The next two parameters are optional.  If they are omitted, the menu appears where the mouse is currently located.  If specified, they are the row and column (respectively) of the location where the menu should appear.  This is expressed in screen base units (pixels under Windows), with &quot;1,1&quot; being the upper left corner of the physical screen.  The user's response is sent to the current window and is treated as if it were a regular entry from the widow's menu bar.  This option is available for Windows systems only.  
+</p>
+<a name="wp1038894"> </a><p class="pBody">
+<b class="cBold">WMENU-DESTROY</b> -- You must pass the handle of a valid menu as the second parameter.  That menu is destroyed and all memory it occupies is released.  Any submenus that it contains are also destroyed.  If the menu is currently being displayed, it is removed from the screen first.  After destroying a menu, you must not use it any more.  You should not destroy a submenu directly--use the WMENU-DELETE operation instead.   
+</p>
+<a name="wp1038899"> </a><p class="pBody">
+<b class="cBold">WMENU-DESTROY-DELAYED</b> --  You must pass the handle of a valid menu as the second parameter.  If that menu is not being displayed, the menu is destroyed and all memory it occupies is released.  Any submenus that it contains are also destroyed.  If the menu is currently being displayed, it is not destroyed immediately.  Instead, it is marked for destruction later.  It is actually destroyed immediately after the next WMENU-SHOW operation.  After destroying a menu, you must not use it any more.  You should not destroy a submenu directly--use the WMENU-DELETE operation instead.   
+</p>
+<a name="wp1038904"> </a><p class="pBody">
+<b class="cBold">WMENU-ADD</b> -- Adds a menu item to a menu.  This operation takes several parameters.  Note that all of the parameters are passed as integers (either USAGE DISPLAY or COMP-4) except for the &quot;text&quot; parameter, which is alphanumeric.  You must use WMENU-SHOW to display an altered menu at the top level.   
+</p>
+<a name="wp1083917"> </a><p class="pBody">
+The parameters are, in order: 
+</p>
+<a name="wp1083968"> </a><p class="pBodyRelative">
+ </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1083920"> </a><p class="pCellBody">
+<b class="cBold">Handle</b>
+</p>
+</td>
+    <td><a name="wp1083922"> </a><p class="pCellBody">
+This is the handle of the menu to which you are adding the item.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083924"> </a><p class="pCellBody">
+<b class="cBold">Position</b>
+</p>
+</td>
+    <td><a name="wp1083926"> </a><p class="pCellBody">
+This is the location at which you want to place the new item.  If this value is zero, then the item is appended to the menu.  Otherwise, this value is the ID of the item in front of which you want to insert the new item.   
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083928"> </a><p class="pCellBody">
+<b class="cBold">Flags</b>
+</p>
+</td>
+    <td><a name="wp1083930"> </a><p class="pCellBody">
+This is a combination of one or more of the following:
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1083932"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1083935"> </a><p class="pCellBody">
+<b class="cBold">W-CHECKED  </b>indicates that a check mark should be placed beside the item.  Check marks appear only on submenus.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1083937"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1083939"> </a><p class="pCellBody">
+<b class="cBold">W-DISABLED  </b>indicates that the item may not be selected.  It will appear gray on the menu.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1083941"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1083943"> </a><p class="pCellBody">
+<b class="cBold">W-SEPARATOR  </b>indicates that this item consists of a bar that separates items on the menu.  This item may not be selected by the user.  The &quot;text&quot; field is ignored for this item.  Separator bars may appear only on submenus.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1083945"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1083947"> </a><p class="pCellBody">
+You may combine flags by adding their values together.  Values are defined in the file &quot;acugui.def&quot;.  The default value is &quot;0&quot;, which indicates an enabled, unchecked menu item.   
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083949"> </a><p class="pCellBody">
+<b class="cBold">Text</b>
+</p>
+</td>
+    <td><a name="wp1083951"> </a><p class="pCellBody">
+This is the text of the menu item that will appear on the menu bar.  Text is limited to 50 characters.  The text will appear exactly as you specify it, so be sure to use the desired case.  (Graphical environments typically have conventions that you may want to follow, for consistency with other applications.  For example, under Windows it is conventional to capitalize the first letter of each major word in a menu item.) 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1083953"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1090704"> </a><p class="pCellBody">
+You may place an &quot;&amp;&quot; symbol in front of the letter you want to use as the <em class="cEmphasis">key letter</em> for this menu item.  The user can select this menu item by pressing &lt;Alt&gt; and typing its key letter.  The key letter typically appears underlined on the menu (you can change this appearance; see section 8.12, &quot;Menu Configuration With the Generic Menu Handler&quot; in Book 2, <em class="cEmphasis">ACUCOBOL-GT User Interface Programming</em>).
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1083957"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1083959"> </a><p class="pCellBody">
+If you omit the &quot;&amp;&quot; symbol, no underline will appear, and the first letter of the item will be used as the item's key letter.  If the same key letter represents more than one item, and a user types that letter, the system will highlight the next menu item with that key letter and will wait for the user to confirm the selection by pressing &lt;return&gt;.  If &quot;flags&quot; contains the W-SEPARATOR option, you should either omit this parameter or pass NULL.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083961"> </a><p class="pCellBody">
+<b class="cBold">Id</b>
+</p>
+</td>
+    <td><a name="wp1083963"> </a><p class="pCellBody">
+This is an unsigned integer less than or equal to 4095 that you will use to identify this menu item.  Use this ID anytime you need to refer to this menu item.  This is the ID that's returned to your program when the item is selected by the user.  Assign a unique ID to each item in a particular menu hierarchy.  Normal (text) menu items must be given an ID.  Submenu names and separator bars may optionally be given an ID of zero.  These become anonymous menu items that you may never refer to again.  If this parameter is omitted, an ID of zero is used.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1083965"> </a><p class="pCellBody">
+<b class="cBold">Submenu</b>
+</p>
+</td>
+    <td><a name="wp1083967"> </a><p class="pCellBody">
+This parameter is omitted or set to zero for normal menu items and separator bars.  You can create a submenu by setting this value to the handle of another menu.  When the user selects this item, that other menu will pop up.  Pop-up menus are placed down and to the right, unless they fit better in another position.  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1038923"> </a><p class="pBody">
+<b class="cBold">WMENU-CHANGE</b> -- This operation takes the same parameters as WMENU-ADD (handle, position, flags, text, id, and submenu).  The &quot;position&quot; parameter must not be zero.  It indicates the ID of the menu entry you want to change.  That entry is deleted and the entry described by the current parameters is inserted in the same location.  If the item that you are replacing is a submenu, that submenu's entries are  also destroyed.  If you change the main menu bar, you must use WMENU-SHOW to display the changed menu.   
+</p>
+<a name="wp1038930"> </a><p class="pBody">
+<b class="cBold">WMENU-DELETE</b> -- Pass the handle of a menu as the second parameter, and the ID of an entry in that menu as the third parameter.  The indicated entry is removed by this operation.  If the deleted item is a submenu name, the submenu is also destroyed.  If you change the main menu bar, you must use WMENU-SHOW to display the changed menu.  
+</p>
+<a name="wp1038937"> </a><p class="pBody">
+<b class="cBold">WMENU-CHECK</b> -- This operation places a check mark in front of a menu item.  You pass two additional parameters:  the handle of the menu and the ID of the item you want to change.  Only items that appear in submenus can have check marks. 
+</p>
+<a name="wp1038944"> </a><p class="pBody">
+<b class="cBold">WMENU-UNCHECK</b> -- Use this operation to remove a check mark from a menu item.  The second and third parameters are the handle of the menu and the ID of the item you want to change.
+</p>
+<a name="wp1038951"> </a><p class="pBody">
+<b class="cBold">WMENU-DISABLE</b> -- Use this operation to disable individual menu items.  Disabled menu items are displayed with gray text.  The second and third parameters are the menu's handle and the ID of the item you want to disable.  You may disable items that appear on the top level of the menu.  If you disable a submenu, then access to the submenu's items is denied.  If you change the main menu bar, you must use WMENU-SHOW to display the changed menu. If you call W$MENU using this option, and pass the menu's main handle, without specifying an item on the menubar, the entire menu bar is disabled.
+</p>
+<a name="wp1038958"> </a><p class="pBody">
+<b class="cBold">WMENU-ENABLE</b> -- Use this operation to enable a menu item.  The second and third parameters are the menu's handle and the menu item's ID.  If you change the main menu bar, you must use WMENU-SHOW to display the changed menu.  
+</p>
+<a name="wp1038965"> </a><p class="pBody">
+<b class="cBold">WMENU-SHOW</b> -- Use this operation to display a menu bar on the screen.  The first parameter after the op-code is the handle of the menu bar to show.  The second parameter (optional) is the handle of the window on which to display the menu.  If the second parameter is omitted, the menu is displayed on the current window.  Use this operation both to display the menu bar initially and to display any changes made to the top level of the menu.
+</p>
+<a name="wp1038971"> </a><p class="pBody">
+For example, if you disable one of the top-level menu items, then you must use WMENU-SHOW to make that change visible.  If the application already has another menu bar showing when you call WMENU-SHOW, then that menu bar is removed.  It is not destroyed--you may re-use that menu bar again later.  If you pass a menu handle of zero, then any existing menu bar is removed and no new menu bar is shown, so passing a menu handle of zero is a way to clear all menu bars off the screen.
+</p>
+<a name="wp1180959"> </a><p class="pBody">
+<b class="cBold">WMENU-REFRESH</b> -- Use this operation to redraw an existing menu.  This is typically used to restore a menu that has been overwritten by an external piece of software.  For example, if you called the SYSTEM library routine to display the current directory, the directory listing might overwrite the menu.  Use WMENU-REFRESH to redraw the menu when you are ready to see it again. 
+</p>
+<a name="wp1180963"> </a><p class="pBody">
+<b class="cBold">WMENU-GET-MENU</b> -- Sets WMENU-RESULT to the handle of the currently displayed menu.  This returns zero if no menu is currently displayed.  Use this in routines that need to save the current menu bar before replacing it with their own menu.
+</p>
+<a name="wp1038987"> </a><p class="pBody">
+<b class="cBold">WMENU-RELEASE</b> -- This operation logically removes the menu from the screen, but doesn't update the screen.  The menu is still visible, but not operational.  This makes the entire screen available to your program, but doesn't scroll the current screen contents.  This is occasionally useful when you need to remove a menu bar and clear the entire screen.  If you instead use WMENU-SHOW to remove the menu bar, you'll have additional screen activity as it removes the menu bar and (if that bar was static) scrolls the screen.  The screen update isn't needed if you are going to clear the whole screen anyway.  
+</p>
+<a name="wp1038991"> </a><p class="pBody">
+Under Windows, this function blocks the menu bar, but leaves it in place.  The runtime uses this function just prior to shutting down.  
+</p>
+<a name="wp1038992"> </a><p class="pBody">
+This operation takes no parameters.  
+</p>
+<a name="wp1038994"> </a><p class="pBody">
+<b class="cBold">WMENU-GET-CONFIGURATION</b> -- Returns the generic menu handler's current configuration.  You must pass it one parameter that has the layout described in the next section.  This gets filled in with the current configuration.  This operation sets WMENU-RESULT to &quot;1&quot; if the configuration was retrieved.  It sets WMENU-RESULT to &quot;0&quot; if the host machine does not use the generic menu handler.  In this case, the configuration information is not used and is meaningless.
+</p>
+<a name="wp1038999"> </a><p class="pBody">
+<b class="cBold">WMENU-SET-CONFIGURATION</b> -- You must pass one parameter to this operation that has the layout described in the next section.  It causes this parameter to become the current configuration for the generic menu handler.  It sets WMENU-RESULT to &quot;1&quot; if the generic menu handler is being used, or &quot;0&quot; if it is not.  In the latter case, the configuration will not be used.  
+</p>
+<a name="wp1039003"> </a><p class="pBody">
+If you have a menu displayed when you change the configuration, you should immediately use WMENU-SHOW to update that menu.  Alternately, you may use WMENU-SHOW to remove that menu and display a new menu with the new configuration.  If you have a menu displayed and change the configuration, you can get undefined results if you fail to use WMENU-SHOW.
+</p>
+<a name="wp1039005"> </a><p class="pBody">
+<b class="cBold">WMENU-BLOCK</b> -- This inhibits the menu.  It works by maintaining a <em class="cEmphasis">blocking-count</em>.  Initially, the blocking-count is set to zero.  This call adds one to the blocking-count.  Anytime the blocking-count is greater than zero, the user will not be allowed to use the menu.  This is typically used by &quot;modal&quot; routines that need to ensure that the user completes some action before continuing.  For example, if you are prompting for a file name, you might want to disable the menu until the user has entered a name.  See also WMENU-UNBLOCK, WMENU-GET-BLOCK, and WMENU-SET-BLOCK.
+</p>
+<a name="wp1039012"> </a><p class="pBody">
+<b class="cBold">WMENU-UNBLOCK</b> -- If the blocking-count is currently greater than zero, this subtracts one from the blocking-count.  If this results in the blocking-count reaching zero, then the user will once again be able to use the menu.  See also WMENU-BLOCK, WMENU-GET-BLOCK, and WMENU-SET-BLOCK.
+</p>
+<a name="wp1039019"> </a><p class="pBody">
+<b class="cBold">WMENU-GET-BLOCK</b> -- Sets WMENU-RESULT to the current blocking-count.  This is typically used by routines that need to save the current menu state before replacing the menu with their own menu.  They can save the blocking-count, set it to zero (with WMENU-SET-BLOCK), and then reset to the saved state when they exit.  For example, the ACUCOBOL-GT debugger uses this call when replacing the application menu with its own menu.  See also WMENU-BLOCK, WMENU-UNBLOCK, and WMENU-SET-BLOCK.
+</p>
+<a name="wp1039024"> </a><p class="pBody">
+<b class="cBold">WMENU-SET-BLOCK</b> -- Sets the blocking-count to the value of the second parameter.  Use this in conjunction with WMENU-GET-BLOCK to save and restore the current blocking-count.  See also WMENU-BLOCK, WMENU-UNBLOCK, and WMENU-GET-BLOCK.
+</p>
+<a name="wp1039029"> </a><p class="pBody">
+The W$MENU routine always sets WMENU-RESULT.  Except as described above, this is either &quot;1&quot; to indicate success or &quot;0&quot; to indicate that the operation failed.  
+</p>
+<a name="wp1039030"> </a><p class="pBody">
+The ACUCOBOL-GT generic menu handler allows you to configure several aspects of its look and feel.  This is done with get/set configuration operations described in the previous section.  For both of these operations, you must pass a parameter that has the following layout:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 MENU-CONFIGURATION.<a name="wp1039031"> </a>
+   03 MENU-STYLE                         PIC 9 COMP-X.<a name="wp1039032"> </a>
+      88 MENU-IS-STATIC                  VALUE 0.<a name="wp1039033"> </a>
+      88 MENU-IS-POPUP                   VALUE 1.<a name="wp1039034"> </a>
+   03 MENU-CHECK-MARK                    PIC X.<a name="wp1039035"> </a>
+   03 MENU-SUBMENU-MARK                  PIC X.<a name="wp1039036"> </a>
+   03 MENU-COLOR-ATTRIBUTES.<a name="wp1039037"> </a>
+      05 MENU-NORMAL-COLOR-ATTRIBUTES.<a name="wp1039038"> </a>
+         07 MENU-NORMAL-COLOR            PIC 9(4) COMP-X.<a name="wp1039039"> </a>
+         07 MENU-NORMAL-COLOR-KEY-1      PIC 9(4) COMP-X.<a name="wp1039040"> </a>
+         07 MENU-NORMAL-COLOR-KEY-2      PIC 9(4) COMP-X.<a name="wp1039041"> </a>
+      05 MENU-SELECTED-COLOR-ATTRIBUTES.<a name="wp1039042"> </a>
+         07 MENU-SELECTED-COLOR          PIC 9(4) COMP-X.<a name="wp1039043"> </a>
+         07 MENU-SELECTED-COLOR-KEY-1    PIC 9(4) COMP-X.<a name="wp1039044"> </a>
+         07 MENU-SELECTED-COLOR-KEY-2    PIC 9(4) COMP-X.<a name="wp1039045"> </a>
+      05 MENU-DISABLED-COLOR-ATTRIBUTES.<a name="wp1039046"> </a>
+         07 MENU-DISABLED-COLOR          PIC 9(4) COMP-X.<a name="wp1039047"> </a>
+         07 MENU-DISABLED-COLOR-KEY-1    PIC 9(4) COMP-X.<a name="wp1039048"> </a>
+         07 MENU-DISABLED-COLOR-KEY-2    PIC 9(4) COMP-X.<a name="wp1039049"> </a>
+   03 MENU-MONO-ATTRIBUTES.<a name="wp1039050"> </a>
+      05 MENU-NORMAL-MONO-ATTRIBUTES.<a name="wp1039051"> </a>
+         07 MENU-NORMAL-MONO             PIC 9(4) COMP-X.<a name="wp1039052"> </a>
+         07 MENU-NORMAL-MONO-KEY-1       PIC 9(4) COMP-X.<a name="wp1039053"> </a>
+         07 MENU-NORMAL-MONO-KEY-2       PIC 9(4) COMP-X.<a name="wp1039054"> </a>
+      05 MENU-SELECTED-MONO-ATTRIBUTES.<a name="wp1039055"> </a>
+         07 MENU-SELECTED-MONO           PIC 9(4) COMP-X.<a name="wp1039056"> </a>
+         07 MENU-SELECTED-MONO-KEY-1     PIC 9(4) COMP-X.<a name="wp1039057"> </a>
+         07 MENU-SELECTED-MONO-KEY-2     PIC 9(4) COMP-X.<a name="wp1039058"> </a>
+      05 MENU-DISABLED-MONO-ATTRIBUTES.<a name="wp1039059"> </a>
+         07 MENU-DISABLED-MONO           PIC 9(4) COMP-X.<a name="wp1039060"> </a>
+         07 MENU-DISABLED-MONO-KEY-1     PIC 9(4) COMP-X.<a name="wp1039061"> </a>
+         07 MENU-DISABLED-MONO-KEY-2     PIC 9(4) COMP-X.<a name="wp1039062"> </a>
+</pre></div>
+<a name="wp1039063"> </a><p class="pBody">
+A copy of this data item can be found in &quot;acugui.def&quot;. 
+</p>
+<a name="wp1039064"> </a><p class="pBody">
+When a menu is shown, the current configuration defines how it is presented.  The fields have the following meaning:
+</p>
+<a name="wp1039065"> </a><p class="pBody">
+<b class="cBold">MENU-STYLE</b> -- Determines whether the menu is static (value &quot;0&quot;) or pop-up (value &quot;1&quot;).  The default is static.  
+</p>
+<a name="wp1039066"> </a><p class="pBody">
+<b class="cBold">MENU-CHECK-MARK</b> -- Sets the character used to display check marks.  The default character is an asterisk.  
+</p>
+<a name="wp1039067"> </a><p class="pBody">
+<b class="cBold">MENU-SUBMENU-MARK</b> -- Sets the character used to indicate that the item is a submenu.  This is not used on the main menu bar.  The default character is a greater-than sign.  
+</p>
+<a name="wp1039068"> </a><p class="pBody">
+<b class="cBold">MENU-COLOR-ATTRIBUTES</b> -- Defines the display attributes used if the station supports color.  This is described in detail below.
+</p>
+<a name="wp1039069"> </a><p class="pBody">
+<b class="cBold">MENU-MONO-ATTRIBUTES</b> -- Defines the display attributes used if the station is monochrome.  See below for details.
+</p>
+<a name="wp1039070"> </a><p class="pBody">
+Notice that there are two sets of attributes, one for color stations and one for monochrome stations.  Within each set, there are three group items that determine the attributes used for a particular case.  Using color stations as an example, we have:
+</p>
+<a name="wp1039071"> </a><p class="pIndented1">
+<b class="cBold">MENU-NORMAL-COLOR-ATTRIBUTES</b> -- Determines the attributes used for the normal menu items.  This is used for the menu's background color along with all items that are not highlighted or disabled.  
+</p>
+<a name="wp1039072"> </a><p class="pIndented1">
+<b class="cBold">MENU-SELECTED-COLOR-ATTRIBUTES</b> -- Determines the attributes used for the currently selected (highlighted) menu items.
+</p>
+<a name="wp1039073"> </a><p class="pIndented1">
+<b class="cBold">MENU-DISABLED-COLOR-ATTRIBUTES</b> -- Determines the attributes used by disabled menu items.  
+</p>
+<a name="wp1039074"> </a><p class="pBody">
+Finally, within each group, there are three fields that determine the attributes used for the appropriate menu items.  For example, with normal menu items on a color station, we have:
+</p>
+<a name="wp1039075"> </a><p class="pIndented1">
+<b class="cBold">MENU-NORMAL-COLOR</b> -- This is the attribute used to draw the menu item and its background.
+</p>
+<a name="wp1039076"> </a><p class="pIndented1">
+<b class="cBold">MENU-NORMAL-COLOR-KEY-1</b> -- This is the attribute used to draw the key letter in the menu item (if any).
+</p>
+<a name="wp1039077"> </a><p class="pIndented1">
+<b class="cBold">MENU-NORMAL-COLOR-KEY-2</b> -- This is used only if MENU-NORMAL-COLOR-KEY-1 contains the underline attribute and the station does not support underlining.  In this case, the actual attribute used is determined by this field.  
+</p>
+<a name="wp1039078"> </a><p class="pBody">
+This scheme of having two possible attributes available for the key letter makes it easier to implement a portable set of attributes.  Traditionally, key letters are shown underlined, and so underlining is typically used in the &quot;KEY-1&quot; attribute.  Since many stations do not support underlining, having a second attribute provides a backup system.  
+</p>
+<a name="wp1039079"> </a><p class="pBody">
+Attributes are set using the same scheme as that used for the COLOR phrase in an ACCEPT or DISPLAY statement.  The only exception is that the &quot;Protected&quot; attribute (32768) has a special meaning when used in conjunction with disabled menu items.  If you specify &quot;protected&quot; as the disabled item's color, then disabled items will appear in parentheses on the menu.  This helps distinguish them from normal items.  
+</p>
+<a name="wp1039080"> </a><p class="pBody">
+Attribute values are numeric.  They represent combinations of colors and other video features such as intensity.  You make combinations by adding appropriate values together from these tables:
+</p>
+<a name="wp1039137"> </a><p class="pBody">
+ </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1039084"> </a>
+Color
+
+</td>
+    <td><a name="wp1039086"> </a>
+Foreground
+
+</td>
+    <td><a name="wp1039088"> </a>
+Background
+
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039090"> </a><p class="pCellBody">
+Black
+</p>
+</td>
+    <td><a name="wp1039092"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1039094"> </a><p class="pCellBody">
+32
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039096"> </a><p class="pCellBody">
+Blue
+</p>
+</td>
+    <td><a name="wp1039098"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1039100"> </a><p class="pCellBody">
+64
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039102"> </a><p class="pCellBody">
+Green
+</p>
+</td>
+    <td><a name="wp1039104"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1039106"> </a><p class="pCellBody">
+96
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039108"> </a><p class="pCellBody">
+Cyan
+</p>
+</td>
+    <td><a name="wp1039110"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1039112"> </a><p class="pCellBody">
+128
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039114"> </a><p class="pCellBody">
+Red
+</p>
+</td>
+    <td><a name="wp1039116"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1039118"> </a><p class="pCellBody">
+160
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039120"> </a><p class="pCellBody">
+Magenta
+</p>
+</td>
+    <td><a name="wp1039122"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1039124"> </a><p class="pCellBody">
+192
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039126"> </a><p class="pCellBody">
+Brown
+</p>
+</td>
+    <td><a name="wp1039128"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1039130"> </a><p class="pCellBody">
+224
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039132"> </a><p class="pCellBody">
+White
+</p>
+</td>
+    <td><a name="wp1039134"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1039136"> </a><p class="pCellBody">
+256
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1039168"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1039141"> </a>
+Attribute
+
+</td>
+    <td><a name="wp1039143"> </a>
+Value
+
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039145"> </a><p class="pCellBody">
+Reverse video
+</p>
+</td>
+    <td><a name="wp1039147"> </a><p class="pCellBody">
+1024
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039149"> </a><p class="pCellBody">
+Low intensity
+</p>
+</td>
+    <td><a name="wp1039151"> </a><p class="pCellBody">
+2048
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039153"> </a><p class="pCellBody">
+High intensity
+</p>
+</td>
+    <td><a name="wp1039155"> </a><p class="pCellBody">
+4096
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039157"> </a><p class="pCellBody">
+Underline
+</p>
+</td>
+    <td><a name="wp1039159"> </a><p class="pCellBody">
+8192
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039161"> </a><p class="pCellBody">
+Blink
+</p>
+</td>
+    <td><a name="wp1039163"> </a><p class="pCellBody">
+16384
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039165"> </a><p class="pCellBody">
+Protected
+</p>
+</td>
+    <td><a name="wp1039167"> </a><p class="pCellBody">
+32768
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1039169"> </a><p class="pBody">
+The default settings for attributes are as follows:
+</p>
+<a name="wp1039170"> </a><h3 class="pHeadingRef">
+Color Defaults
+</h3>
+<a name="wp1039204"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1039173"> </a>
+Type
+
+</td>
+    <td><a name="wp1039175"> </a>
+Main Attribute
+
+</td>
+    <td><a name="wp1039177"> </a>
+Key-1 Attribute
+
+</td>
+    <td><a name="wp1039179"> </a>
+Key-2 Attribute
+
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039181"> </a><p class="pCellBody">
+Normal
+</p>
+</td>
+    <td><a name="wp1039183"> </a><p class="pCellBody">
+Black on Cyan (129)
+</p>
+</td>
+    <td><a name="wp1039185"> </a><p class="pCellBody">
+Black on Cyan, Underlined (8321)
+</p>
+</td>
+    <td><a name="wp1039187"> </a><p class="pCellBody">
+High-intensity White on Cyan (4232)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039189"> </a><p class="pCellBody">
+Selected
+</p>
+</td>
+    <td><a name="wp1039191"> </a><p class="pCellBody">
+White on Blue (72)
+</p>
+</td>
+    <td><a name="wp1039193"> </a><p class="pCellBody">
+White on Blue, Underlined (8264)
+</p>
+</td>
+    <td><a name="wp1039195"> </a><p class="pCellBody">
+High-intensity White on Blue (4168)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039197"> </a><p class="pCellBody">
+Disabled
+</p>
+</td>
+    <td><a name="wp1039199"> </a><p class="pCellBody">
+White on Cyan (136)
+</p>
+</td>
+    <td><a name="wp1039201"> </a><p class="pCellBody">
+White on Cyan (136)
+</p>
+</td>
+    <td><a name="wp1039203"> </a><p class="pCellBody">
+White on Cyan (136)
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1039206"> </a><h3 class="pHeadingRef">
+Monochrome Defaults
+</h3>
+<a name="wp1039240"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1039209"> </a>
+Type
+
+</td>
+    <td><a name="wp1039211"> </a>
+Main Attribute
+
+</td>
+    <td><a name="wp1039213"> </a>
+Key-1 Attribute
+
+</td>
+    <td><a name="wp1039215"> </a>
+Key-2 Attribute
+
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039217"> </a><p class="pCellBody">
+Normal
+</p>
+</td>
+    <td><a name="wp1039219"> </a><p class="pCellBody">
+Black on White (257)
+</p>
+</td>
+    <td><a name="wp1039221"> </a><p class="pCellBody">
+Black on White, Underlined (8449)
+</p>
+</td>
+    <td><a name="wp1039223"> </a><p class="pCellBody">
+High-intensity Black on White (4353)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039225"> </a><p class="pCellBody">
+Selected
+</p>
+</td>
+    <td><a name="wp1039227"> </a><p class="pCellBody">
+White on Black (40)
+</p>
+</td>
+    <td><a name="wp1039229"> </a><p class="pCellBody">
+White on Black, Underlined (8232)
+</p>
+</td>
+    <td><a name="wp1039231"> </a><p class="pCellBody">
+High-intensity White on Black (4136)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039233"> </a><p class="pCellBody">
+Disabled
+</p>
+</td>
+    <td><a name="wp1039235"> </a><p class="pCellBody">
+Black on White, Parenthesized (32935)
+</p>
+</td>
+    <td><a name="wp1039237"> </a><p class="pCellBody">
+Black on White (257)
+</p>
+</td>
+    <td><a name="wp1039239"> </a><p class="pCellBody">
+Black on White (257)
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1039241"> </a><p class="pBody">
+The ACUCOBOL-GT debugger always uses the default configuration for its own menu bar.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

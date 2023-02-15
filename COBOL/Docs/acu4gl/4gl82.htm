@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:34" />
+  <title>8.1 Compiler Options</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl8.htm">Chapter 8:  Compiler and Runtime Options</a> &gt; </p>
+<a name="wp1046261"> </a><h2 class="pHeading1">
+8.1 Compiler Options
+</h2>
+<a name="wp1046262"> </a><p class="pBody">
+Some file options (-Fa, -Fe, -Fx, and -F4) are used to generate XFD files (data dictionaries) that are used with Acu4GL.  Other file options (-Fl, -Fs, and -Ft) can simplify the addition of transaction management facilities to existing programs.  This section describes compiler options that are useful when working with Acu4GL.
+</p>
+<a name="wp1047286"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1047702"> </a><p class="pCellBody">
+<b class="cBold">-Fa</b> <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1047709"> </a><p class="pCellBody">
+This option tells the compiler to build data dictionaries (XFD files) for every indexed, relative, and sequential data file in the FDs of the program.  It is the only option that builds XFDs for relative and sequential files.  This option is also used for international character mapping.  See also the &quot;-Fo&quot; compile-time option, which specifies the directory in which the data dictionaries are placed.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1047711"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1047713"> </a><p class="pCellBody">
+The &quot;-Fa&quot; option generates the most current format for the XFD files (Version 5), compatible with Acu4GL Version 6.0 and later.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1047715"> </a><p class="pCellBody">
+<b class="cBold">-Fc</b>
+</p>
+</td>
+    <td><a name="wp1047719"> </a><p class="pCellBody">
+This option causes the field names in generated XFD files to match exactly the source of the COBOL program that generated them.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1047721"> </a><p class="pCellBody">
+<b class="cBold">-Fe</b>
+</p>
+</td>
+    <td><a name="wp1047724"> </a><p class="pCellBody">
+Causes XFD files to be generated in XML format rather than the standard flat text format.  Acu4GL, AcuODBC, and <b class="cBold">alfred</b> can all read the XFD files in XML format.  This option must be used in conjunction with the &quot;-Fx&quot; or &quot;-Fa&quot; options.  The C$XML library routine can be used to parse the XML files if desired.  In addition, by specifying  the <a  href="4gl416.htm#wp1034289">XSL</a> directive, you can specify a stylesheet to be used when compiling
+</p>
+<a name="wp1049987"> </a><p class="pCellBody">
+This option will not work in combination with &quot;-F4&quot;.  Version 4 XFD files cannot be generated in XML format.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1047726"> </a><p class="pCellBody">
+<b class="cBold">-Fl</b>
+</p>
+</td>
+    <td><a name="wp1047731"> </a><p class="pCellBody">
+Enables single-locking rules rather than multiple-locking rules as the lock mode default.  Normally, &quot;WITH ROLLBACK&quot; causes multiple locking rules to be in effect for a file.  When &quot;-Fl&quot; is used, the &quot;WITH ROLLBACK&quot; clause does not affect whether single or multiple record locking rules are followed.  Single locking becomes the default.  You may enable multiple locking either by specifying &quot;WITH LOCK ON MULTIPLE RECORDS&quot; in a file's SELECT statement or by using &quot;APPLY LOCK-HOLDING ON <em class="cEmphasis">file</em>&quot; in the I-O CONTROL paragraph. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1047733"> </a><p class="pCellBody">
+<b class="cBold">-Fo</b>
+</p>
+</td>
+    <td><a name="wp1047737"> </a><p class="pCellBody">
+This option must be followed (as the next separate argument) by the directory that will hold the data dictionary files generated by the compiler when you use the &quot;-Fx&quot; option.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1047739"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1047741"> </a><p class="pCellBody">
+Type a space after the option and then give the name of the chosen directory.  If this option is not used, the data dictionaries are placed into the current directory. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1047743"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1047745"> </a><p class="pCellBody">
+For example, to cause the dictionaries to be stored in the directory &quot;/usr/inventory/dictionaries&quot; you would enter:
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1047747"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+-Fo  /usr/inventory/dictionaries  <a name="wp1047749"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1047751"> </a><p class="pCellBody">
+<b class="cBold">-Fs</b>
+</p>
+</td>
+    <td><a name="wp1047756"> </a><p class="pCellBody">
+Causes an implied START TRANSACTION verb before the first OPEN, CLOSE, WRITE, REWRITE, or DELETE and after each COMMIT or ROLLBACK.  In effect, every file operation is part of a transaction.  If this option is enabled and the compiler encounters a START TRANSACTION verb, it reports a warning and does not generate any code for the START TRANSACTION.  The &quot;-Fs&quot; option provides an alternate way to program transactions and is often useful when you are converting from other COBOL or SQL implementations. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1047758"> </a><p class="pCellBody">
+<b class="cBold">-Ft</b>
+</p>
+</td>
+    <td><a name="wp1047763"> </a><p class="pCellBody">
+Causes implied transactions for every OPEN, CLOSE, WRITE, REWRITE, or DELETE that is not part of an explicit transaction.  Single file operations that are not part of a transaction are preceded by an implied START TRANSACTION and followed by an implied COMMIT. This option makes converting existing applications to a transaction system easier.  Note that unlike most COMMITs, which unlock all of the file's currently locked records, the implied COMMIT does not unlock any records.   
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1047765"> </a><p class="pCellBody">
+<b class="cBold">-Fx</b>
+</p>
+</td>
+    <td><a name="wp1047773"> </a><p class="pCellBody">
+This option directs the compiler to build Version 5 data dictionaries (XFD files) for every indexed data file in the FDs of the program.   If you require the older version of XFD files, specify the &quot;-F4&quot; option instead of &quot;-Fx&quot;.  If you use relative, sequential, or XML data files, use the &quot;-Fa&quot; option instead.  Use the &quot;-Fo&quot; option to specify the directory in which the data dictionaries should be placed.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1047779"> </a><p class="pCellBody">
+<b class="cBold">-F4</b>
+</p>
+</td>
+    <td><a name="wp1047781"> </a><p class="pCellBody">
+This option tells the compiler to build Version 4 data dictionaries (XFD files) for every indexed data file in the FDs of the program.  This older version of the XFD files is compatible with Acu4GL Version 5.x and earlier.  To build Version 4 XFDs for every indexed, relative, and sequential data file in your FDs, combine &quot;-F4&quot; with &quot;-Fa&quot;, as in &quot;ccbl -F4 -Fa&quot;.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1041950"> </a><p class="pBody">
+See <a  href="4gl83.htm#wp1035994">section 8.2</a> for a description of runtime options.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

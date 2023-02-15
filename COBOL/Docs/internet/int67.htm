@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/01/05 10:10:58" />
+  <title>6.3  Accessing COBOL Programs Over the Internet</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Programmer's Guide to the Internet <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="int6.htm">Chapter 6: Other Internet Access Solutions</a> &gt; </p>
+<a name="wp1029284"> </a><h2 class="pHeading1">
+6.3  Accessing COBOL Programs Over the Internet
+</h2>
+<a name="wp1034869"> </a><p class="pBody">
+If you want users to be able to launch remote applications from their local machine, you can use Acucorp's remote application server, AcuConnect, to accomplish your goal.  Reasons for this may be that the application itself is revised frequently or the application is processing-intensive.  
+</p>
+<a name="wp1029286"> </a><p class="pBody">
+With AcuConnect, users or programs on client machines can launch applications on server machines, whether those servers are part of a local area network, wide area network, or global Internet.  Some portions of your application can continue to run on the client while the resource-intensive portions run on the server, or all but the user interface can run on the server, in a thin client configuration.  
+</p>
+<a name="wp1040196"> </a><p class="pBody">
+In Chapter 3, we described how to launch a thin client from a Web page or over the Internet from the command line.  But you can also use AcuConnect with the standard ACUCOBOL-GT runtime to distribute your application resources between the client and one or more servers on the Internet.  Exactly how much processing is performed on the client and how much on the server is up to you.  
+</p>
+<a name="wp1029288"> </a><p class="pBody">
+AcuConnect also provides users access to remote Vision data.  If the data is on the same remote server as AcuConnect, data is considered local and no special software is required.  If the data is on a third data server, AcuConnect can work in tandem with AcuServer to provide seamless data access.  AcuConnect can also work with Acu4GL, Acucorp's COBOL-to-RDBMS bridge, to provide access to relational data wherever it resides.
+</p>
+<a name="wp1029289"> </a><p class="pBody">
+The following figures show AcuConnect in two-tier and three-tier environments.  In a two-tier environment, applications and data are stored on the same remote server as follows:
+</p>
+<a name="wp1029293"> </a><p class="pBodyRelative">
+</p><div><img src="images/acuconn2.gif" height="147" width="395" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1033341"> </a><p class="pBody">
+In a three-tier configuration, the data files reside on a different server than the application.  Sites may do this for security purposes or because this may make for more efficient use of system resources.  When the applications and data are on different servers, the data files are considered remote, and AcuServer is required.
+</p>
+<a name="wp1033345"> </a><p class="pBodyRelative">
+</p><div><img src="images/3tier.gif" height="159" width="408" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1042048"> </a><p class="pBody">
+Consider using AcuConnect when your program is I/O-intensive or if you have reason to believe that the program will be updated frequently.   You can determine how much reprogramming you want to do to facilitate remote application access for your users - either by embedding COBOL calls into your program or dividing it into client and server components.  Your users do not require a Web browser for remote application access.
+</p>
+<a name="wp1031810"> </a><h3 class="pHeadingRef">
+Sample Scenario
+</h3>
+<a name="wp1042222"> </a><p class="pBody">
+Your inventory program updates a file when products are sold, when products are returned, and when the supply is replenished.  In addition, it interacts with a vendor's programs placing orders as supplies get low.  In some circumstances, the program interacts with a payroll program to apply sales commissions to salaries.  When performed over the network, these computationally intense activities are time consuming, and they sometimes produce bottlenecks.  You decide to distribute the processing onto a fast application server that reduces network I/O and uses AcuConnect to launch the various program modules.  
+</p>
+<a name="wp1042223"> </a><p class="pBody">
+Because your inventory and payroll data is updated frequently, you decide to store it on a server that is devoted to data files.  You use AcuServer to serve the requests for data.  The user, at the client machine, starts an application that calls AcuConnect.  The data files reside on a different server, so the files on the data server are accessed through AcuServer.  After processing, the results are returned to the user via AcuConnect.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

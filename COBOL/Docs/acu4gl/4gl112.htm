@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:41:07" />
+  <title>1.5.3  Steps to Follow</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl1.htm">Chapter 1:  Acu4GL Overview</a> &gt; <a href="4gl19.htm">1.5  How Acu4GL Works</a> &gt; </p>
+<a name="wp1038683"> </a><h2 class="pHeading2">
+1.5.3  Steps to Follow
+</h2>
+<a name="wp1038684"> </a><p class="pBody">
+The Acu4GL product builds its own database queries dynamically whenever an input or output request is received.  These are the steps that you take to compile your program and execute it using Acu4GL:
+</p>
+<a name="wp1033252"> </a><h3 class="pHeadingRef">
+Compiling with  -Fx
+</h3>
+<a name="wp1033256"> </a><p class="pBody">
+You compile your standard COBOL application with ACUCOBOL-GT.  See the appendix specific to your RDBMS for details to determine which version of the compiler is required.  When you compile, you specify via a compile-time option that you want the compiler to generate data dictionaries, in addition to an object code file.
+</p>
+<a name="wp1033257"> </a><h3 class="pHeadingRef">
+Creating dictionaries
+</h3>
+<a name="wp1033262"> </a><p class="pBody">
+An ACUCOBOL-GT data dictionary is created by the compiler for each indexed file in your program.  These data dictionaries map COBOL records in an indexed file to rows in a database.  Like ACUCOBOL-GT object files, these data dictionaries are portable across platforms.
+</p>
+<a name="wp1033263"> </a><h3 class="pHeadingRef">
+Setting the files host
+</h3>
+<a name="wp1033270"> </a><p class="pBody">
+In your configuration file, you may specify which RDBMS or ISAM file system you are using by setting the <a  href="4gl815.htm#wp1036068">DEFAULT_HOST</a> variable (sets a default for all files), or the <a  href="4gl816.htm#wp1036081">filename_HOST</a> variable (sets a file system for individual files), or both.  For example, you might say DEFAULT_HOST VISION and EMPFILE_HOST ORACLE.  This would direct EMPFILE input and output functions to the Oracle RDBMS via Acu4GL, and direct I/O for all other indexed files to the Vision system.  These are runtime settings that allow you to change hosts without recompilation, and enable you to tailor your application for the specific needs of a particular end user site.  
+</p>
+<a name="wp1033271"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The HOST variable also allows you to do load balancing and migration of your application.  You can move vision files into the database in an incremental fashion allowing you to test scaling and performance of the new configuration.
+<hr />
+</p>
+<a name="wp1033272"> </a><h3 class="pHeadingRef">
+Setting database-specific variables
+</h3>
+<a name="wp1033276"> </a><p class="pBody">
+At this point, you set variables in the runtime configuration file which apply to the specific database system you are using.  See the appendix specific to your RDBMS for details. 
+</p>
+<a name="wp1033277"> </a><h3 class="pHeadingRef">
+Passing I/O requests to the interface
+</h3>
+<a name="wp1033282"> </a><p class="pBody">
+You use the Acu4GL enabled ACUCOBOL-GT runtime system to execute your application.  Whenever the runtime system encounters an input or output instruction (such as READ or WRITE) on a file that is directed to an RDBMS, it passes the request to the Acu4GL product.
+</p>
+<a name="wp1033283"> </a><h3 class="pHeadingRef">
+Automatically building SQL statements
+</h3>
+<a name="wp1033289"> </a><p class="pBody">
+Acu4GL automatically builds SQL instructions that your database management system can understand.  As it builds these SQL instructions, it looks at the ACUCOBOL-GT data dictionary, which maps the COBOL record and its fields to the table rows and its columns.
+</p>
+<a name="wp1033290"> </a><h3 class="pHeadingRef">
+Accessing a database
+</h3>
+<a name="wp1033294"> </a><p class="pBody">
+The database management system uses its own dictionary as a pointer into its own data files, performs the requested I/O operation, and passes the results back to the Acu4GL product.
+</p>
+<a name="wp1033295"> </a><h3 class="pHeadingRef">
+Forming COBOL records 
+</h3>
+<a name="wp1033301"> </a><p class="pBody">
+Acu4GL translates the data fields into COBOL records or status codes, which are then passed back to the runtime system via the generic file handler.
+</p>
+<a name="wp1033302"> </a><p class="pBody">
+All of this communication is automatic, and all database queries and translations are performed behind the scenes, so that the end user experiences no interruption in program execution.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

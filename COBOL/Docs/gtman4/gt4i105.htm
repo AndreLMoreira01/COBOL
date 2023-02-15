@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>REG_ENUM_KEY, DISPLAY_REG_ENUM_KEY Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1037691"> </a><h2 class="pHeading2">
+REG_ENUM_KEY, DISPLAY_REG_ENUM_KEY Routine
+</h2>
+<a name="wp1037697"> </a><p class="pBody">
+Enumerates subkeys of a specified open registry key.  REG_ENUM_KEY retrieves the name of one subkey each time it is called.
+</p>
+<a name="wp1206525"> </a><p class="pBody">
+Use DISPLAY_REG_ENUM_KEY to perform the action on the display host's registry (the local host when the application is run with a standard runtime; the <em class="cEmphasis">thin client</em> when the application is run with the thin client).  Use REG_ENUM_KEY to perform the action on the server host's registry (the local host when the application is run with a standard runtime, and the application host when the application is run with the thin client).
+</p>
+<a name="wp1037698"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;REG_ENUM_KEY&quot; <a name="wp1037699"> </a>
+    USING OPEN-KEY-HANDLE, NDX, SUBKEY-NAME, NAME-SIZE,<a name="wp1037700"> </a>
+    GIVING STATUS-CODE<a name="wp1037702"> </a>
+</pre></div>
+<a name="wp1037704"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1037705"> </a><p class="pBody">
+<b class="cBold">OPEN-KEY-HANDLE   </b> Usage unsigned-long
+</p>
+<a name="wp1037706"> </a><p class="pBody">
+Handle of a currently open key or one of the following predefined handles of keys that are always open (defined in &quot;acugui.def&quot;):
+</p>
+<a name="wp1037707"> </a><p class="pBody">
+HKEY_CLASSES_ROOT
+</p>
+<a name="wp1037708"> </a><p class="pBody">
+HKEY_CURRENT_USER
+</p>
+<a name="wp1037709"> </a><p class="pBody">
+HKEY_LOCAL_MACHINE
+</p>
+<a name="wp1037710"> </a><p class="pBody">
+HKEY_USERS
+</p>
+<a name="wp1037711"> </a><p class="pBody">
+The keys enumerated by REG_ENUM_KEY are subkeys of the key identified by OPEN-KEY-HANDLE.
+</p>
+<a name="wp1037712"> </a><p class="pBody">
+<b class="cBold">NDX</b>   Numeric data item
+</p>
+<a name="wp1037713"> </a><p class="pBody">
+Specifies the index of the subkey to retrieve.  NDX should be set to `1' for the first call to REG_ENUM_KEY and then incremented for subsequent calls.  The subkeys are not returned in any particular order.
+</p>
+<a name="wp1037714"> </a><p class="pBody">
+<b class="cBold">SUBKEY-NAME</b>   PIC  X(n)
+</p>
+<a name="wp1037715"> </a><p class="pBody">
+Receives the name of the subkey.  REG_ENUM_KEY copies only the name of the subkey, not the full key hierarchy, to the SUBKEY-NAME buffer.
+</p>
+<a name="wp1037716"> </a><p class="pBody">
+<b class="cBold">NAME-SIZE</b>   Numeric data item
+</p>
+<a name="wp1037717"> </a><p class="pBody">
+Specifies the size, in characters, of the SUBKEY-NAME buffer.
+</p>
+<a name="wp1037718"> </a><p class="pBody">
+<b class="cBold">STATUS-CODE</b>   Numeric data item.
+</p>
+<a name="wp1037719"> </a><p class="pBody">
+Receives the return status of the call to Microsoft's &quot;RegEnumKey&quot; function.  A return status of zero indicates success; non-zero indicates that an error occurred.  
+</p>
+<a name="wp1037720"> </a><h3 class="pHeadingRef">
+Comments
+</h3>
+<a name="wp1037721"> </a><p class="pBody">
+To enumerate subkeys, your application should initialize the NDX parameter to `1' and call REG_ENUM_KEY repeatedly, incrementing NDX each time, until there are no more subkeys.  You can tell that there are no more subkeys when the function returns a non-zero STATUS-CODE (`259' for 32-bit Windows). 
+</p>
+<a name="wp1037722"> </a><p class="pBody">
+While an application is using REG_ENUM_KEY, it should not make calls to any registry routines that might change the key being queried.
+</p>
+<a name="wp1037723"> </a><p class="pBody">
+If the subkey name exceeds the size of the SUBKEY-NAME buffer (as specified by the NAME-SIZE parameter), the result depends on the operating system.  Under 32-bit Windows, a STATUS-CODE of `234' is returned.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

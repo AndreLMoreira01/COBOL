@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:09" />
+  <title>3.4  File Transfer Utility - vio</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt13.htm"><br />Chapter 3:  Debugger and Utilities</a> &gt; </p>
+<a name="wp1033614"> </a><h2 class="pHeading1">
+3.4  File Transfer Utility - vio
+</h2>
+<a name="wp1033621"> </a><p class="pBody">
+<b class="cBold">vio</b> is a file transfer utility similar to the UNIX program <b class="cBold">cpio</b>.  <b class="cBold">vio</b> allows you to collect a group of files together into archives, and allows you to extract some or all of these files from these archives.  Typically, an archive is some external media such as a tape or a diskette, but the archive may also be another disk file.  <b class="cBold">vio</b> is typically used to back up a set of files or to move files from one machine to another.  
+</p>
+<a name="wp1033622"> </a><p class="pBody">
+<b class="cBold">vio</b> is particularly well suited for moving files to a different machine, because: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033623"> </a><div class="pSmartList1"><li><b class="cBold">vio</b> is available on a wide-range of operating systems, including Windows, UNIX, Linux, and VMS.</li></div>
+<a name="wp1033624"> </a><div class="pSmartList1"><li><b class="cBold">vio</b> automatically adjusts for certain machine-dependent aspects such as byte-swapping.</li></div>
+<a name="wp1033625"> </a><div class="pSmartList1"><li><b class="cBold">vio</b> handles multiple volumes gracefully.</li></div>
+<a name="wp1033626"> </a><div class="pSmartList1"><li>On any system where Vision is supported, <b class="cBold">vio</b> can automatically convert ACUCOBOL-GT indexed data files to the appropriate format for the target machine.</li></div>
+</ol></div>
+<a name="wp1033627"> </a><p class="pBody">
+<b class="cBold">vio</b> runs in two modes, the input mode (-i) and the output mode (-o).  The syntax for each mode, with all possible options, is shown here:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp1033628"> </a>
+vio -o [ -b ] [ -f <em class="cEmphasis">file </em>] [ -u ] [ -g ] [ -h <em class="cEmphasis">headerfile </em>] <a name="wp1045907"> </a>
+       [ -k ][ -l <em class="cEmphasis">listfile </em>] [ -pr ] [ -s  <em class="cEmphasis">blocks </em>] [ -v ]<a name="wp1053525"> </a>
+<a name="wp1045906"> </a>
+vio -i [ -cd ] [ -f <em class="cEmphasis">file </em>] [ -g ] [ -h <em class="cEmphasis">bytes </em>]<a name="wp1044509"> </a>
+       [ -kmnstv2345 ] [ <em class="cEmphasis">files</em> ]<a name="wp1067828"> </a>
+</pre></div>
+<a name="wp1033629"> </a><p class="pBody">
+The input mode reads <b class="cBold">vio</b> archives to extract files.  The output mode creates new <b class="cBold">vio</b> archives.
+</p>
+<a name="wp1033630"> </a><p class="pBody">
+In the output mode, <b class="cBold">vio</b> reads its standard input for a list of files to place in the archive.  The archive is written to its standard output.
+</p>
+<a name="wp1033631"> </a><p class="pBody">
+In the input mode, <b class="cBold">vio</b> reads the archive from its standard input and extracts all the files.  The extracted files have the same names, permissions, and owners that they had when the archive was created.  
+</p>
+<a name="wp1033632"> </a><p class="pBody">
+If <em class="cEmphasis">files</em> are specified, then only the named files are extracted.  Note that each file must exactly match the name of a file in the archive; no wild card characters are allowed.
+</p>
+<a name="wp1033633"> </a><p class="pBody">
+When <b class="cBold">vio</b> encounters an ACUCOBOL-GT indexed data file, it treats that file specially.  When it's running in output mode, it extracts each data record from the file and writes that record to the archive along with some formatting information.  When that file is later read in the input mode, a new indexed data file is created with the proper format, and each data record is loaded into the file using the host's indexed file system.  Using this technique, <b class="cBold">vio</b> is able to transfer an indexed file so that it is ready for use on the target machine.
+</p>
+<a name="wp1033634"> </a><p class="pBody">
+When it's archiving files other than indexed files or ACUCOBOL-GT object files, <b class="cBold">vio</b> assumes that the files are text files.  It performs any conversions necessary to match the text file conventions on the host machine.  For example, if a file is transferred from a UNIX system to a Windows system, new-line characters are translated into carriage-return, line-feed sequences.  The &quot;-p&quot; option described below can cause these files to be treated as binary files instead, in which case no translation occurs.  (If you are transferring multiple files at one time, some ASCII and some binary, do not use the &quot;-p&quot; option.  Instead, add a space followed by a &quot;b&quot; or a &quot;B&quot; after the name of each binary file in the filename list.  The &quot;&lt;space&gt; b&quot; prevents translation from occurring on an individual file.)
+</p>
+<a name="wp1033635"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>ACUCOBOL-GT object files are automatically detected and written out to an archive as binary files, even if you fail to specify &quot;-p&quot;.  
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

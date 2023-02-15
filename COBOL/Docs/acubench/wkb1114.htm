@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:14:29" />
+  <title>11.3.10  Integrating Code Back into Your Program</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuBench User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="wkb11.htm">Chapter 11: Working with Screens</a> &gt; <a href="wkb114.htm">11.3  Importing a Character-based Screen</a> &gt; </p>
+<a name="wp1034622"> </a><h2 class="pHeading2">
+11.3.10  Integrating Code Back into Your Program
+</h2>
+<a name="wp1034626"> </a><p class="pBody">
+The final step in the conversion process is integrating your new graphical screens back into your program.  This step typically takes the most time and may require some program changes.  In some cases, the changes can be extensive.  The amount of work you have to do depends on the original state of your program.  The process is made somewhat easier because the new screen refers to your program's variables and embedded procedures where applicable.  
+</p>
+<a name="wp1034627"> </a><p class="pBody">
+There is no single correct way to do this step, and no procedure that works for every case.  Instead, you have to evaluate your program to see how it can best interact with the updated screen.  In the simplest case, the integration process consists of putting the new code in place and commenting out the old code.  
+</p>
+<a name="wp1034628"> </a><p class="pBody">
+When you're integrating the new code, you should analyze your application's:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034629"> </a><div class="pSmartList1"><li>data characteristics </li></div>
+<a name="wp1034630"> </a><div class="pSmartList1"><li>keyboard characteristics </li></div>
+<a name="wp1034631"> </a><div class="pSmartList1"><li>display characteristics</li></div>
+<a name="wp1034632"> </a><div class="pSmartList1"><li>initialization sequence</li></div>
+</ul></div>
+<a name="wp1034633"> </a><h3 class="pHeadingRef">
+Data characteristics
+</h3>
+<a name="wp1034635"> </a><p class="pBody">
+Even though the concept of the Character-to-GUI Wizard is display oriented, you must understand the relationship between the screen and the data.  For instance, you should verify that the fields on your new screen are matched with the fields in the FD or working-storage.  You should also verify that embedded procedures are associated with your screens and its fields correctly.
+</p>
+<a name="wp1034636"> </a><p class="pBody">
+In addition, if you've done things like create data sets, then you have to be aware of the fact that you generated code that opens files on initialization.  If you don't need those files open, you should de-select OPEN in the definition of the data set.  To do this, right-click on the data set node for the target program in the workspace Structure view and select <b class="cBold">Referenced FD/SL files</b> from the drop-down box.  Clear the <b class="cBold">Open</b> check box for the files you do not wish to be opened.  
+</p>
+<a name="wp1034637"> </a><h3 class="pHeadingRef">
+Keyboard characteristics
+</h3>
+<a name="wp1034639"> </a><p class="pBody">
+When integrating your new screen code, you must also be aware of your program's keyboard characteristics.  If your application instructs users to press a function key and you want to implement this functionality with a push button, you have to know what exception value that key produces and you have to match the same exception values to your screen's new push buttons.
+</p>
+<a name="wp1034640"> </a><p class="pBody">
+If you printed your &quot;cblconfig&quot; file or the section of code that contains environment settings before conversion, you should be able to easily locate the KEYSTROKE settings.
+</p>
+<a name="wp1034641"> </a><h3 class="pHeadingRef">
+Display characteristics
+</h3>
+<a name="wp1034643"> </a><p class="pBody">
+The most important element of the conversion is your application's display characteristics.  In general, the conversion process results in a set of new DISPLAY statements that you must use in place of your old DISPLAY statements.  
+</p>
+<a name="wp1034644"> </a><p class="pBody">
+To locate your old DISPLAY statements, you can select <b class="cBold">Find All</b> in the Find dialog box and search on the word, &quot;DISPLAY&quot;.  This generates an Output window list of all the lines of code in your program containing the word, &quot;DISPLAY.&quot;  If it is not obvious to which screen the DISPLAY statements relate, try running the ACUCOBOL-GT debugger at the same time that you capture the screens with the Character-to-GUI Wizard.  If you run your program with both the &quot;--char2gui&quot; and &quot;-d&quot; runtime options, you can turn on paragraph trace, capture a screen, turn off paragraph trace, and know exactly where in the source you've been.  
+</p>
+<a name="wp1034645"> </a><p class="pBody">
+Once you know which DISPLAY statements correspond to which screen, you can begin replacing old code with new.  
+</p>
+<a name="wp1034646"> </a><p class="pBody">
+<b class="cBold">Where screens are displayed initially</b>, you should comment out the old DISPLAY statement and replace it with a PERFORM statement that uses the following syntax:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+     PERFORM Acu-[screen-name]-Scrn<a name="wp1034647"> </a>
+</pre></div>
+<a name="wp1034648"> </a><p class="pBody">
+For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    * display myscreen<a name="wp1034649"> </a>
+     PERFORM Acu-myscreen-Scrn<a name="wp1037719"> </a>
+</pre></div>
+<a name="wp1034650"> </a><p class="pBody">
+This paragraph contains code to create a window, display the screen and its main menu on the window, and initialize any complex controls that have been included.  
+</p>
+<a name="wp1034651"> </a><p class="pBody">
+<b class="cBold">Where elements of screens are displayed</b> (e.g., with field-level DISPLAY statements), you should comment out the old DISPLAY statement and replace it with a MODIFY statement.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    * display id-no-field<a name="wp1034652"> </a>
+     MODIFY ID-NO-FIELD value Techhelp-ID<a name="wp1037720"> </a>
+</pre></div>
+<a name="wp1034653"> </a><p class="pBody">
+This is made easier because the wizard preserves the name of the Screen section element.
+</p>
+<a name="wp1034654"> </a><p class="pBody">
+If your original program uses Screen section DISPLAYs and you have duplicated the name of the screen in the Screen Designer, then you may have very little work to do.  However, you should replace the initial &quot;display window ERASE&quot; statement with the workbench-generated DISPLAY STANDARD WINDOW code in the &quot;.prd&quot; file.  
+</p>
+<a name="wp1034655"> </a><p class="pBody">
+Be sure to comment out non-Screen section DISPLAY statements if your program uses a combination of Screen section and field-level DISPLAY statements.  DISPLAY LINE and DISPLAY BOX statements fall into this category.  Comment them out.
+</p>
+<a name="wp1034656"> </a><h3 class="pHeadingRef">
+ACCEPT handling
+</h3>
+<a name="wp1034657"> </a><p class="pBody">
+Even though the generated code contains ACCEPT statements as well as DISPLAY statements, we recommend that you leave your application's ACCEPTs intact whenever possible.  Where your application ACCEPTs screens, no conversion is necessary.  (The screen name is already established by the wizard.)  
+</p>
+<a name="wp1034658"> </a><p class="pBody">
+However, where your application ACCEPTs variables, you should comment out the old syntax and replace it with an ACCEPT screen.  You should then add an entry field to the screen whose value is the variable you were previously ACCEPTing.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    * accept new-status<a name="wp1034659"> </a>
+     ACCEPT NEW-STATUS-SCREEN<a name="wp1037724"> </a>
+</pre></div>
+<a name="wp1034660"> </a><p class="pBody">
+In this example, the screen, NEW-STATUS-SCREEN, contains an entry field whose value is new-status.  The old ACCEPT is commented out and the new ACCEPT screen is added.
+</p>
+<a name="wp1034661"> </a><p class="pBody">
+As a rule, you should examine your ACCEPT statements to determine whether they are ACCEPTing screens or variables, and therefore, whether or not you must perform any conversion.  To locate the ACCEPT statements, you can select <b class="cBold">Find</b> <b class="cBold">All</b> in the Find dialog box and search on the word, &quot;ACCEPT&quot;. 
+</p>
+<a name="wp1034662"> </a><h3 class="pHeadingRef">
+Other display considerations
+</h3>
+<a name="wp1034663"> </a><p class="pBody">
+After you have made an initial pass through your application's ACCEPT and DISPLAY statements, you should consider how and whether your screens may be used differently in a graphical world than they were in a character-based world.  For instance, it is a common practice in many character-based applications to use DISPLAY statements to redisplay a main screen whenever a field is updated.  In the graphical world, it is impractical and unnecessary to recreate a window and redisplay an entire screen just to update a field.  Therefore, you may want to use a MODIFY statement to update the field rather than the PERFORM screen.  
+</p>
+<a name="wp1034664"> </a><p class="pBody">
+In addition, in character-based applications, DISPLAYs are often made over existing DISPLAYs, in effect replacing the old DISPLAY with the new one.  In graphical applications, controls must be explicitly destroyed or made invisible before other controls are put in the same space.  
+</p>
+<a name="wp1034665"> </a><p class="pBody">
+The way that a screen closes in a character application is also different from the way a screen or window is closed in a graphical application.  For this reason, when you are replacing your DISPLAY statements, you should track where the screen closes or is blanked (a less obvious display event) and convert the close as needed.  For example, you may replace a DISPLAY statement with a MODIFY statement in the following case:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    * display grow-scrn-1.<a name="wp1034666"> </a>
+     MODIFY GROW-SCRN-1 TITLE GROW-DESC-LABEL.<a name="wp1037728"> </a>
+</pre></div>
+<a name="wp1034667"> </a><p class="pBody">
+However, if you are using a pop-up window, then your close event may specify &quot;close window handle-1&quot;.  In this case, when you import the screen, all you need to do is give it a handle of &quot;handle-1&quot; and no other conversion is necessary.
+</p>
+<a name="wp1034668"> </a><p class="pBody">
+Another important difference between character and graphical applications is that character-based applications often dynamically build a screen one line at a time, but it is impractical to display elements line-by-line in the graphical world.  Therefore, if your application DISPLAYs a variable in column 10, line 10 then again in column 10, line 11, and so on, in the graphical world, this may be better accomplished through the use of a list box.  
+</p>
+<a name="wp1034669"> </a><p class="pBody">
+Finally, with a graphical application, you have the opportunity to display message boxes, combo boxes, and other graphical elements that you didn't have access to before.  You can use the Screen Designer to add these elements whenever you're ready.  
+</p>
+<a name="wp1034670"> </a><h3 class="pHeadingRef">
+Initialization sequence
+</h3>
+<a name="wp1034672"> </a><p class="pBody">
+When you generate code for a screen, a statement called &quot;perform acu-initial-routine&quot; is generated.  The acu-initial-routine paragraph performs several functions, some of which you may want and some of which you may not.  It performs an &quot;ACCEPT System-Information FROM System-Info&quot; and an &quot;ACCEPT Terminal-Abilities FROM Terminal-Info&quot;.  In addition, it initializes fonts, bitmaps, and ActiveX resource files; creates menus; and opens files described in data sets.  Your character application may already be performing some of these functions, but it isn't likely to perform all of them and some, like initializing fonts, are critical in the graphical world.  
+</p>
+<a name="wp1034673"> </a><p class="pBody">
+As you are adjusting your original application for the new screen code, you need to make some decisions about what you want your application to do upon initialization.  If you want all of the stated initialization routines to take place, you can leave the new perform statement in place, but you may need to remove old redundant code.  If you want to perform some of the initialization routines but not others, rather than performing acu-initial-routine, you may prefer to call individual routines, like initialize fonts.  In this case, delete the new perform statement and add the desired calls to your own sequence.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuBench-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:09" />
+  <title>C.14  Changes Affecting Version 3.1</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4c.htm">Appendix C:  Changes Affecting Previous Versions</a> &gt; </p>
+<a name="wp1034812"> </a><h2 class="pHeading1">
+C.14  Changes Affecting Version 3.1
+</h2>
+<a name="wp1034814"> </a><p class="pBody">
+Two compilation switches provide compatibility with Version 3.1:
+</p>
+<a name="wp1036112"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1036161"> </a><p class="pCellBody">
+-C31
+</p>
+</td>
+    <td><a name="wp1036163"> </a><p class="pCellBody">
+Causes the compiler to generate code according to the rules used by Version 3.1. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1036165"> </a><p class="pCellBody">
+-Z31
+</p>
+</td>
+    <td><a name="wp1036167"> </a><p class="pCellBody">
+Creates object code that can be run with a Version 3.1 runtime.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1034817"> </a><p class="pBody">
+The following section describes changes that can affect programs originally written with ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>Version 3.1.  
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034818"> </a><div class="pSmartList1"><li>The Vision Version 4 indexed file system uses a dual file format.  Version 4 files cannot be read by ACUCOBOL-GT Version 3.1 or earlier runtimes.  For a complete description of Vision Version 4, see section 6.1.3, &quot;Indexed Files - Vision&quot; in Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide.</em>  Note that runtimes beginning with Version 3.2 are able to read any version of Vision file.  To continue to use Vision Version 3 indexed files, see the entry for the <a  href="gt4h313.htm#wp1037790">V_VERSION</a> configuration variable in Appendix H.</li></div>
+<a name="wp1034820"> </a><div class="pSmartList1"><li>Recursive PERFORMs are automatically enabled when you compile your programs with Version 3.2 or later.  Recursive PERFORMs are <em class="cEmphasis">required</em> for the use of EVENT PROCEDURES.  In very rare cases, this can affect the flow of control in a program.  A program would be affected, for example, if it performs paragraph &quot;A&quot;, which performs paragraph &quot;B&quot; and then returns from &quot;A&quot; before returning from &quot;B&quot;.  If you want, you can disable recursive PERFORMs with either the &quot;-C31&quot; (or earlier) flag or the &quot;-Zr0&quot; flag.  </li></div>
+<a name="wp1034822"> </a><div class="pSmartList1"><li>Beginning with Version 3.2, data in a list box column can no longer overflow into the adjacent column (causing all columns to shift to the right).  Instead, the data is truncated if it doesn't fit in the allotted space for that column.  There is no way to prevent this change.  </li></div>
+<a name="wp1034823"> </a><div class="pSmartList1"><li>Beginning with Version 3.2, list box columns have a small buffer between them, so that the columns do not merge together when they are full.  This can cause partial loss of the last character in a column if your columns are very close together.  To correct this, set the configuration variable COLUMN-SEPARATION to zero.  </li></div>
+<a name="wp1034826"> </a><div class="pSmartList1"><li>Beginning with Version 3.2, in environments that use system messages, such as Microsoft Windows, message processing during file I/O operations is no longer performed by default.  This is due to problems that can occur in programs that use multithreading, modeless windows, or event procedures.  To restore the old behavior, use the FILE-IO-PROCESSES-MESSAGES configuration variable.  Enabling message processing should only be done under certain conditions.  For a complete description, see the entry for <a  href="gt4h119.htm#wp1035774">FILE_IO_PROCESSES_MESSAGES</a> in Appendix H.</li></div>
+<a name="wp1034831"> </a><div class="pSmartList1"><li>The IS NUMERIC test for COMP-3 fields is more rigorous beginning with Version 3.2.  In prior versions, any bit pattern was allowed in the sign field.  The runtime treated any bit pattern, other than 0x0D, as indicating a positive value.  Starting with Version 3.2, only signs of 0x0C, 0x0D and 0x0F are treated as legal values in the IS NUMERIC test.  These values are the normal values for signs (there are two positive values to match various other COBOLs).  You can suppress this change by compiling for compatibility with Version 3.1 (i.e. &quot;-C31&quot;).  </li></div>
+<a name="wp1034833"> </a><div class="pSmartList1"><li>Beginning with Version 3.2, the DESTROY <em class="cEmphasis">handle-1</em> statement now sets the value of <em class="cEmphasis">handle-1</em> to NULL if the statement succeeds.  In prior versions the value of <em class="cEmphasis">handle-1</em> was not changed.  You can prevent the setting of <em class="cEmphasis">handle-1</em> to NULL by compiling for compatibility with Version 3.1 (i.e. &quot;-C31&quot;).  </li></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

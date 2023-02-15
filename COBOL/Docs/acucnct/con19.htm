@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:52:52" />
+  <title>1.3.1  Distributed Processing</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con1.htm">Chapter 1: Introduction</a> &gt; <a href="con18.htm">1.3  How AcuConnect Works</a> &gt; </p>
+<a name="wp1033392"> </a><h2 class="pHeading2">
+1.3.1  Distributed Processing
+</h2>
+<a name="wp1028782"> </a><p class="pBody">
+In a distributed processing environment, AcuConnect is a runtime server that handles user requests to start new runtimes on server machines.  AcuConnect supports multiple runtime instances so that users may start multiple applications on the server at the same time.  It also allows programs on one server to start programs on another server, <em class="cEmphasis">ad infinitum</em>, so long as each server has a copy of AcuConnect installed.
+</p>
+<a name="wp1028784"> </a><p class="pBody">
+In distributed processing, both the client and server have a copy of the ACUCOBOL-GT runtime.  The runtime version on the client should match the version of the runtime on the server.  <span style="font-family: Arial, Verdana, Helvetica, sans-serif">If your application interfaces with C-ISAM or other special library routines, you must relink the runtime with the library routines you are using.</span>
+</p>
+<a name="wp1028788"> </a><p class="pBody">
+Because both the client and server have an ACUCOBOL-GT runtime, you decide how much of an application runs on the client, and how much on the server.  The client can be as &quot;thin&quot; or as &quot;thick&quot; as you like.  With AcuConnect in distributed processing, the client is actually a &quot;smart&quot; client.
+</p>
+<a name="wp1028789"> </a><p class="pBody">
+To launch a server program, the client uses standard COBOL CALL syntax.  You embed a CALL in the client application, and AcuConnect launches the server application for you automatically. All application (and data) access is completely transparent to the end user.
+</p>
+<a name="wp1028790"> </a><p class="pBody">
+Differentiation is achieved through configuration files and more precisely, through definition of either a CODE_PREFIX variable or a &quot;code name alias,&quot; which defines the directory containing the object programs.  Without modifying or recompiling the original code, the same object can operate on any server, client, or stand-alone machine.
+</p>
+<a name="wp1033589"> </a><p class="pBody">
+The AcuConnect process can be described as follows: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033590"> </a><div class="pSmartList1"><li>A network administrator starts the <b class="cBold">acurcl</b> daemon on the server.   On Windows servers, this can be accomplished through an application service.  In UNIX, the administrator uses the <b class="cBold">acurcl</b> command along with options.  For instance, he or she may type:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acurcl -start -c acurcl.cfg -e server.err<a name="wp1033591"> </a>
+</pre></div>
+<a name="wp1033592"> </a><div class="pSmartList1"><li>The user starts the ACUCOBOL-GT client application on the client.  In Windows, he or she clicks an icon.  In UNIX, he or she types a &quot;runcbl&quot; command.  For instance:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+runcbl -c client.cfg prog1.acu <a name="wp1035026"> </a>
+</pre></div>
+<a name="wp1033594"> </a><div class="pSmartList1"><li>The client application, &quot;prog1.acu&quot; in this example, performs a remote CALL to the server application.  For instance:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;prog2.acu&quot; using customer-info.<a name="wp1033595"> </a>
+</pre></div>
+<a name="wp1033596"> </a><div class="pSmartList1"><li>AcuConnect automatically starts the remote application, &quot;prog2.acu&quot;, on the server using the runtime flags and configuration file specified in &quot;client.cfg&quot;.  </li></div>
+<a name="wp1033597"> </a><div class="pSmartList1"><li>The remote application performs the requested task and returns a response to the client.  If programmed accordingly, the remote application may perform a CALL to another application on the same or different server before sending back a response.</li></div>
+<a name="wp1033598"> </a><div class="pSmartList1"><li>The client program processes the result, possibly displaying it to the user.</li></div>
+</ol></div>
+<a name="wp1033632"> </a><h3 class="pHeadingRef">
+Synchronous or Asynchronous Operation
+</h3>
+<a name="wp1033635"> </a><p class="pBody">
+In the example shown above, the client application waits in a suspended state until the remote application performs its task and returns a result (i.e., a &quot;synchronous&quot; CALL was performed).  If desired, you can allow the client application to continue running by CALLing the C$ASYNCRUN library routine along with the remote application.  In this case, you specify the &quot;handle&quot; of the remote application, as well as the application name itself.  For instance:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;C$ASYNCRUN&quot; using handle-of-prog2 &quot;prog2.acu&quot; customer-info.<a name="wp1033636"> </a>
+</pre></div>
+<a name="wp1033638"> </a><p class="pBody">
+C$ASYNCRUN tells AcuConnect to allow asynchronous processing.  If you use C$ASYNCRUN, then you can check the status of the server application using the companion routine, C$ASYNCPOLL.  See <a  href="con211.htm#wp1028924">section 2.3, &quot;Synchronous or Asynchronous Execution,&quot;</a> for more details.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

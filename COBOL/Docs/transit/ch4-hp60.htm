@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.4.3  $DEFINE Directive</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp57.htm">4.4  Preprocessor for HP COBOL</a> &gt; </p>
+<a name="wp1042040"> </a><h2 class="pHeading2">
+4.4.3  $DEFINE Directive
+</h2>
+<a name="wp1042044"> </a><p class="pBody">
+The $DEFINE preprocessor directive associates a string of text with a macro name.  When the preprocessor encounters a defined macro name in the source program, it invokes the macro and passes the associated string of text.
+</p>
+<a name="wp1042045"> </a><p class="pBody">
+The string of text may specify up to nine formal parameters.  If the string of text uses parameters, then the macro call can specify actuals for these parameters; otherwise, they are ignored.
+</p>
+<a name="wp1042046"> </a><p class="pBody">
+<b class="cBold">Format</b>
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+$DEFINE <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">macro-name</span>=[<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">string-text</span>]#<a name="wp1042047"> </a>
+</pre></div>
+<a name="wp1042048"> </a><p class="pBody">
+where: 
+</p>
+<a name="wp1042049"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">macro-name</span> is the name of the macro.  Macro names begin with a non-alphanumeric character.  By default, it is the percent symbol (&quot;%&quot;);
+</p>
+<a name="wp1042050"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">string-text</span> is a string of text to replace occurrences of the macro call within the body of the program code.  The string of text may contain formal parameters (which are sometimes referred to as <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">variables</span>).  These are designated by an exclamation point followed by an integer in the range of 1 to 9.  <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">string-text</span> may also contain other macro calls, which recursively expand; and 
+</p>
+<a name="wp1042051"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">string-text</span> is delimited by the equal sign (&quot;=&quot;) and pound sign (&quot;#&quot;).  The pound sign marks the end of the definition.  The pound sign is the default delimiter and it can be changed with the $PREPROCESSOR command.   
+</p>
+<a name="wp1042052"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Use of an &quot;&amp;&quot; character is interpreted as part of the macro definition and not as a continuation (as it would in the $COMMENT command).
+<hr />
+</p>
+<a name="wp1042053"> </a><p class="pBody">
+If the string-text starts on the same line as the macro name, the replacing text is expanded from exactly the same column as the macro call.  Otherwise, the replacing text starts at the beginning of the next line.
+</p>
+<a name="wp1042054"> </a><p class="pBody">
+The two different forms of the macro call are: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+macro-name<a name="wp1042055"> </a>
+</pre></div>
+<a name="wp1042056"> </a><p class="pBody">
+and
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">macro-name</span>(p1#,p2#,...,pn#)<a name="wp1042057"> </a>
+</pre></div>
+<a name="wp1042058"> </a><p class="pBody">
+where 
+</p>
+<a name="wp1042059"> </a><p class="pBody">
+&quot;p1&quot;, &quot;p2&quot;, ..., &quot;pn&quot; are actual parameters that replace the formal parameters in the string of text.  Each actual parameter can be a null character or any combination of characters, including spaces;
+</p>
+<a name="wp1042060"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">n</span> is an integer in the range of 1 to 9; and 
+</p>
+<a name="wp1042061"> </a><p class="pBody">
+&quot;#&quot; is a delimiter.
+</p>
+<a name="wp1042062"> </a><p class="pBody">
+Formal parameters that are not specified with an actual parameter in the macro call are ignored.  You can specify which formal parameters should be ignored by entering only a pound sign (&quot;#&quot;) in the appropriate position within the macro call.  For example, to ignore the first parameter, you write the call like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">macro-name</span>(#,p2#,...,pn#)<a name="wp1042063"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>CHAIN Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1037075"> </a><h2 class="pHeading2">
+CHAIN Statement
+</h2>
+<a name="wp1037077"> </a><p class="pBody">
+The CHAIN statement provides a method for starting another run unit.  
+</p>
+<a name="wp1037080"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">CHAIN</u> program-name [ <u class="cUnderline">USING</u> {parameter} ... ]<a name="wp1037081"> </a>
+<a name="wp1037082"> </a>
+   [ ON {<u class="cUnderline">EXCEPTION</u>} statement ]<a name="wp1037083"> </a>
+        {<u class="cUnderline">OVERFLOW</u> }<a name="wp1037084"> </a>
+<a name="wp1037085"> </a>
+   [ <u class="cUnderline">END-CHAIN</u> ]<a name="wp1037086"> </a>
+</pre></div>
+<a name="wp1037087"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037088"> </a><div class="pSmartList1"><li><em class="cEmphasis">Program-name</em> is a nonnumeric literal or an alphanumeric data item. </li></div>
+<a name="wp1037089"> </a><div class="pSmartList1"><li><em class="cEmphasis">Parameter </em>is any non-level 88 data item or a nonnumeric literal.  No more than 50 <em class="cEmphasis">parameters</em> may be specified.  </li></div>
+<a name="wp1037090"> </a><div class="pSmartList1"><li><em class="cEmphasis">Statement</em> is an imperative statement.</li></div>
+<a name="wp1037091"> </a><div class="pSmartList1"><li>If a CHAIN statement appears in a consecutive sequence of imperative statements within a sentence, it must be the last statement in that sequence, unless the EXCEPTION phrase is specified.  </li></div>
+</ol></div>
+<a name="wp1037093"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037094"> </a><div class="pSmartList1"><li>The CHAIN statement causes the current run unit to terminate and initiates a new run unit.  Executing a CHAIN statement has the following effects: </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1037096"> </a><div class="pSmartList2"><li>The current run unit is halted as if a STOP RUN statement were executed.</li></div>
+<a name="wp1037097"> </a><div class="pSmartList2"><li>The run unit specified by <em class="cEmphasis">program-name</em> is initiated.  <em class="cEmphasis">Program-name</em> is resolved into an executable program name using the same rules specified for the CALL statement.  </li></div>
+</ol></div>
+<a name="wp1037098"> </a><div class="pSmartList1"><li>If the EXCEPTION phrase is used, then <em class="cEmphasis">statement</em> executes if the CHAIN statement is unable to load <em class="cEmphasis">program-name</em>.  This is usually caused by <em class="cEmphasis">program-name</em> being either absent or not readable by the runtime system.  Certain types of errors cannot be caught by the ON EXCEPTION phrase because of the nature of the CHAIN statement.  If the EXCEPTION phrase is not present when an error occurs, the runtime system prints a message and halts.  </li></div>
+<a name="wp1037100"> </a><div class="pSmartList1"><li>If the USING phrase is specified, each <em class="cEmphasis">parameter</em> is transferred to the new run unit.  Each <em class="cEmphasis">parameter</em> is mapped to the corresponding CHAINING argument in the new run unit.  See <a  href="gt3677.htm#wp1035655">section 6.5, &quot;Procedure Division Format,&quot;</a> for a description of the CHAINING phrase.  </li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

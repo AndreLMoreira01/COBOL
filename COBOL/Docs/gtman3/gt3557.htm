@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.9.6  PROCEDURE Clause</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3551.htm">5.9  Screen Description Entry</a> &gt; </p>
+<a name="wp1037068"> </a><h2 class="pHeading2">
+5.9.6  PROCEDURE Clause
+</h2>
+<a name="wp1037071"> </a><p class="pBody">
+A Screen Section entry may refer to paragraphs and sections in the Procedure Division.  The reference describes a procedure that the runtime will execute when a Format 2 ACCEPT statement transfers control to or from that field. The procedure temporarily suspends the operation of the ACCEPT statement.  When the procedure finishes, control returns to the ACCEPT statement.  
+</p>
+<a name="wp1037072"> </a><p class="pBody">
+Procedures named in the Screen Section in this way are called <em class="cEmphasis">embedded procedures</em>.  You can use embedded procedures to perform immediate validation of user-supplied data. 
+</p>
+<a name="wp1037074"> </a><p class="pBody">
+Another type of procedure named in the Screen Section is an <em class="cEmphasis">event procedure</em>, which is tied to a screen control.  When a control generates events, it executes its event procedure as one of its first operations.  When the procedure terminates, the control resumes execution.  You can use event procedures to detect and act on desired events.  Event procedures are explained in detail in the General Rules section below.  For a description of the specific events that can be generated in an event-driven environment, see section 4.2 of Book 2, <em class="cEmphasis">User Interface Programming</em>.
+</p>
+<a name="wp1037081"> </a><p class="pBody">
+General Rule 1 describes when an AFTER or EXCEPTION procedure is executed.
+</p>
+<a name="wp1037082"> </a><p class="pBody">
+You create embedded procedures or event procedures by using syntax in the Screen Section.  On any Screen Section entry, you may use the following syntax.  
+</p>
+<a name="wp1037083"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+{<u class="cUnderline">BEFORE</u>   } PROCEDURE IS {proc-1 [{<u class="cUnderline">THROUGH</u>} proc-2]}<a name="wp1037084"> </a>
+{<u class="cUnderline">AFTER</u>    }                       {<u class="cUnderline">THRU</u>   }<a name="wp1037085"> </a>
+{<u class="cUnderline">EXCEPTION</u>}              {NULL                     }<a name="wp1037086"> </a>
+{<u class="cUnderline">EVENT</u>    }<a name="wp1037087"> </a>
+</pre></div>
+<a name="wp1037088"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037089"> </a><div class="pSmartList1"><li><em class="cEmphasis">Proc-1</em> and <em class="cEmphasis">proc-2</em> must be names of paragraphs or sections defined in the Procedure Division of the program.  </li></div>
+<a name="wp1037090"> </a><div class="pSmartList1"><li>THROUGH and THRU are synonymous.</li></div>
+<a name="wp1037091"> </a><div class="pSmartList1"><li>You may have one event procedure or up to three embedded procedures defined for each Screen Section entry--one BEFORE, one AFTER, and one EXCEPTION.  You may not have more than one of each type in any one Screen Section entry.  </li></div>
+</ol></div>
+<a name="wp1037092"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<a name="wp1037094"> </a><h3 class="pHeadingRef">
+Embedded Procedures
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037095"> </a><div class="pSmartList1"><li>An ACCEPT statement executes embedded procedures when the cursor reaches the field defined by the associated Screen Section entry.  The type of an embedded procedure defines exactly when it will execute:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1037097"> </a><div class="pSmartList2"><li>BEFORE procedures execute when control is transferred to the associated field, before the user can enter any data.</li></div>
+<a name="wp1037098"> </a><div class="pSmartList2"><li>AFTER procedures execute when the user attempts to leave the field normally.  This can be due to typing a termination key, filling an auto-terminate field, or typing a field-movement key such as the Tab key.  Keys that serve as both movement and exception keys, such as the default definition of the Up arrow key, always cause the AFTER procedure to execute. </li></div>
+<a name="wp1037102"> </a><p class="pIndented2">
+As pertains to this rule, the movement actions are defined as:
+</p>
+<a name="wp1037103"> </a><p class="pIndented2">
+Default-Next, Down, Erase-All, Erase-Next, First, Last, Left, Next, Next-Line, Numeric-Next, Previous, Previous-Line, Right, and Up.
+</p>
+<a name="wp1037104"> </a><p class="pIndented2">
+In the default keyboard configuration, this affects the handling of the Up and Down arrows in the first and last fields of a Screen Section item.  
+</p>
+<a name="wp1037105"> </a><p class="pIndented2">
+To avoid having keys that are both movement keys and exception keys, you can make the affected keys movement and termination keys.  In the default keyboard configuration, you would change the Up and Down arrows to be:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+     KEYBOARD   Edit=Up    Terminate=52  ku<a name="wp1037106"> </a>
+     KEYBOARD   Edit=Down  Terminate=53  kd<a name="wp1037107"> </a>
+</pre></div>
+<a name="wp1037109"> </a><div class="pSmartList2"><li>EXCEPTION procedures execute when the user types an exception key (assuming that exception keys are allowed) or when some other exception condition exists. </li></div>
+</ol></div>
+<a name="wp1037110"> </a><div class="pSmartList1"><li>The word NULL in the PROCEDURE phrase indicates that no procedure exists.  It has the same effect as omitting the PROCEDURE phrase and is essentially commentary.</li></div>
+<a name="wp1037111"> </a><div class="pSmartList1"><li>When the ACCEPT statement executes an embedded procedure, it treats <em class="cEmphasis">proc-1</em> and <em class="cEmphasis">proc-2</em> in the same manner that a PERFORM statement does.  That is, it begins execution at <em class="cEmphasis">proc-1</em> and continues to the end of <em class="cEmphasis">proc-2</em> (or <em class="cEmphasis">proc-1</em> if you omit <em class="cEmphasis">proc-2</em>).  When the embedded procedure completes, control returns to the ACCEPT statement.  </li></div>
+<a name="wp1037112"> </a><div class="pSmartList1"><li>An embedded procedure may contain other ACCEPT statements, which, in turn, can contain embedded procedures.  This is handled in the same fashion as nested PERFORMS.  Embedded procedures may CALL subprograms.  An embedded procedure remains active until one of the following occurs:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1037113"> </a><div class="pSmartList2"><li>The embedded procedure finishes and returns control to its ACCEPT statement.</li></div>
+<a name="wp1037114"> </a><div class="pSmartList2"><li>The program containing the embedded procedure does an implicit or explicit EXIT PROGRAM.  </li></div>
+<a name="wp1037115"> </a><div class="pSmartList2"><li>The run-unit containing the embedded procedure does an implicit or explicit STOP RUN.</li></div>
+</ol></div>
+<a name="wp1037116"> </a><div class="pSmartList1"><li>Prior to executing an embedded procedure, the ACCEPT statement moves the contents of each input and update field to its corresponding data item.  In addition, each control is INQUIREd for its current VALUE (unless the TC_CONTROL_SYNC_LEVEL configuration variable is set to a value that contradicts this behavior).  This allows you to examine the current Screen Section data from inside an embedded procedure.  </li></div>
+<a name="wp1037117"> </a><div class="pSmartList1"><li>The ACCEPT statement updates any CURSOR variable that you have declared in Special-Names.  It does this prior to executing any AFTER or EXCEPTION procedure.  Note that BEFORE procedures do not update the variable.  This is due to the fact that the cursor does not actually move to the field being entered until the BEFORE procedure returns control to the ACCEPT statement.  </li></div>
+<a name="wp1037118"> </a><div class="pSmartList1"><li>The ACCEPT statement updates any CRT STATUS variable that you have declared prior to executing an AFTER or EXCEPTION procedure.  This allows you to determine what key the user typed to leave the field.  You may also use the ACCEPT FROM ESCAPE KEY verb inside an embedded procedure for this purpose.  </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1037119"> </a><div class="pSmartList2"><li>If the user leaves the field due to the action of an editing key (such as an arrow key or a &quot;next field&quot; key), the CRT STATUS will be set to zero (for a numeric CRT STATUS) or to &quot;0&quot;, &quot;0&quot;, x&quot;00&quot; (for a group item CRT STATUS).  For the format of a group item CRT STATUS, see <a  href="gt346.htm#wp1034415">section 4.2.3, &quot;Special-Names Paragraph.&quot;</a></li></div>
+<a name="wp1037120"> </a><div class="pSmartList2"><li>Note that some keys are both editing keys and termination keys.  For example, by default, the Tab key is set up to be a &quot;next field&quot; key until the last field of the Screen Section, when it becomes a termination key.  These keys are treated as editing keys until their termination condition applies.  Therefore, their CRT STATUS value will change depending on whether the key is being treated as an editing key or a termination key.  </li></div>
+</ol></div>
+<a name="wp1037121"> </a><div class="pSmartList1"><li>After completing an embedded procedure, the ACCEPT statement re-computes all variable information contained in the Screen Section entry being accepted.  This allows you to change colors and other aspects of the Screen Section entry dynamically.  </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1037122"> </a><div class="pSmartList2"><li>Note, however, that data is not automatically moved to update (USING) fields from their corresponding data items.  If you want to change the contents of an update field from inside an embedded procedure (to provide a new default, for example), you must DISPLAY the changed field.  The DISPLAY verb moves data to the Screen Section and shows it on the screen.  </li></div>
+<a name="wp1037124"> </a><div class="pSmartList2"><li>In an embedded procedure, you may &quot;protect&quot; screen fields by changing their COLOR value (see <a  href="gt3630.htm#wp1034866">section 6.4.9, &quot;Common Screen Options&quot;</a>).  As a result, the ACCEPT statement may terminate when the embedded procedure returns control because there are no remaining fields to enter.  If this occurs, the CRT STATUS is left unchanged from the value it had when the embedded procedure returned.  </li></div>
+</ol></div>
+<a name="wp1037125"> </a><div class="pSmartList1"><li>An embedded procedure can alter the behavior of its controlling ACCEPT statement.  See <a  href="gt346.htm#wp1034415">section 4.2.3</a> for details on the SCREEN CONTROL data item.</li></div>
+<a name="wp1037128"> </a><div class="pSmartList1"><li>You may specify an embedded procedure for a group item in the Screen Section.  The effect is to apply that procedure to each elementary item contained in the group.  Subsidiary items may specify their own embedded procedures, which take precedence over the group's embedded procedures.  For more information, see<em class="cEmphasis"> </em>the <em class="cEmphasis">User's Guide, </em>section 6.5.5, &quot;Using Screen Section Embedded Procedures.&quot;</li></div>
+</ol></div>
+<a name="wp1037129"> </a><h3 class="pHeadingRef">
+Event Procedures
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037130"> </a><div class="pSmartList1"><li>The EVENT option of the PROCEDURE phrase establishes an event procedure for a control.  Event procedures are different from Screen Section embedded procedures in that an event procedure becomes part of the control when it is created, while embedded procedures do not.  An event procedure is executed directly by the control.  Embedded procedures execute as part of the flow of control of the Screen Section.  An event procedure can potentially execute any time after its owning control is created, even when the defining Screen Section item is not being ACCEPTed. </li></div>
+<a name="wp1037132"> </a><div class="pSmartList1"><li>By default, a control does <em class="cEmphasis">not</em> have an event procedure, which is like specifying an event procedure of NULL.  </li></div>
+<a name="wp1037133"> </a><div class="pSmartList1"><li>When a control invokes an event procedure, the EVENT-STATUS data item reflects the invoking event.  When the procedure terminates, the previous contents of the EVENT-STATUS item are restored (this is important when nested events exist).  If the program does not contain an EVENT-STATUS data item, then the event is processed normally.  For more information about the EVENT-STATUS data item, see <a  href="gt346.htm#wp1034415">section 4.2.3, &quot;Special-Names Paragraph.&quot;</a>  </li></div>
+<a name="wp1037134"> </a><div class="pSmartList1"><li>Event procedures are similar to embedded procedures (for example, the AFTER procedure).  However, you should note the following differences:  </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1037135"> </a><div class="pSmartList2"><li>Unlike embedded procedures, the values of data elements corresponding to a control's values are not updated when an event procedure is entered.  You must use the INQUIRE verb to examine the current value of a control inside an event procedure.  </li></div>
+<a name="wp1037136"> </a><div class="pSmartList2"><li>Unlike embedded procedures, the event procedure executes while processing the control, instead of after the control terminates.  Every event that occurs in the control is passed to the event procedure.  When the event procedure terminates, the event is processed by the control and the control continues normal processing as dictated by the value of the EVENT-ACTION element of EVENT-STATUS (see <a  href="gt346.htm#wp1034415">section 4.2.3</a>).  An advantage of event procedures is that they receive all events.  You do not need to remember if the event should be processed in the AFTER or EXCEPTION procedure.  </li></div>
+<a name="wp1037137"> </a><div class="pSmartList2"><li>Event procedures can be executed any time the control receives events.  The Screen Section embedded procedures receive control only during an ACCEPT of the corresponding Screen Section.  This behavior can be important with tool bar controls, which normally are not ACCEPTed.  </li></div>
+<a name="wp1037138"> </a><div class="pSmartList2"><li>Events classified as <em class="cEmphasis">messages</em> (whose symbolic names start with &quot;MSG-&quot;) are sent only to event procedures.  They cannot be detected by the Screen Section embedded procedures.  See Chapter&#160;6 of Book 2, <em class="cEmphasis">User Interface Programming</em>, for detailed information about messages.  </li></div>
+<a name="wp1037139"> </a><div class="pSmartList2"><li>You can change a control's event procedure via the MODIFY verb.  The Screen Section's embedded procedures are fixed.  </li></div>
+</ol></div>
+<a name="wp1037140"> </a><div class="pSmartList1"><li>Event procedures are unique in that they can receive control when the owning COBOL program is otherwise inactive.  The following rules cover the activation of an event procedure:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1037141"> </a><div class="pSmartList2"><li>If the current program contains the event procedure, then it is executed as if it were the subject of the PERFORM statement.</li></div>
+<a name="wp1037142"> </a><div class="pSmartList2"><li>If the program containing the event procedure is active, but is not the current program, control flows to the containing program at the point of the event procedure.  This situation is not considered a recursive call, because the transfer of control is not via CALL.  When the event procedure terminates, control returns to the original program.</li></div>
+<a name="wp1037143"> </a><div class="pSmartList2"><li>If the program containing the event procedure is not active, but is resident in memory, it is made active with the following conditions:</li></div>
+<div class="pSmartList3"><ul class="pSmartList3">
+<a name="wp1037144"> </a><div class="pSmartList3"><li>It has no USING items passed to it, so program parameters are not defined and should not be used.  </li></div>
+<a name="wp1037145"> </a><div class="pSmartList3"><li>While active, the program is not affected by CANCEL (just like all active programs).</li></div>
+<a name="wp1037146"> </a><div class="pSmartList3"><li>When the event procedure terminates, the program is made inactive again.</li></div>
+<a name="wp1037147"> </a><div class="pSmartList3"><li>On entry to the event procedure, all other states of the program (e.g., the values of variables) are unchanged from the time when the program was last active.  </li></div>
+<a name="wp1037148"> </a><div class="pSmartList3"><li>The program retains any changes made to its state (variables and file state) when the procedure exits.</li></div>
+</ul></div>
+<a name="wp1037149"> </a><div class="pSmartList2"><li>If the program containing the event procedure is not memory resident, then the event procedure is removed from the control.  </li></div>
+<a name="wp1037150"> </a><div class="pSmartList2"><li>For recursive programs, the copy of the program at the depth that registered the procedure is the one that counts for determining which program contains the event procedure.</li></div>
+<a name="wp1037151"> </a><div class="pSmartList2"><li>While an event procedure is active (due to an event), an EXIT PROGRAM statement is ignored in the event procedure's controlling program.</li></div>
+</ol></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

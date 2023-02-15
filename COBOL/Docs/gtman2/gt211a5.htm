@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:27" />
+  <title>11.4  Regarding Configuration Variables</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt211.htm">Chapter 11:  Tips and Hints</a> &gt; </p>
+<a name="wp1026183"> </a><h2 class="pHeading1">
+11.4  Regarding Configuration Variables
+</h2>
+<a name="wp1032884"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1026188"> </a><p class="pBody">
+	In the programs I developed with Version 2.3 and 2.4, I used the configuration variable MOUSE-FLAGS to detect certain mouse events.  After updating my screens to include graphical controls, I notice that the double-clicked events that I use to get in my entry fields are no longer generated.  What's going on?
+</p>
+<a name="wp1032921"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1026190"> </a><p class="pBody">
+	MOUSE-FLAGS does not detect any event that takes place over a control.  Mouse events that take place over a control are handled differently than mouse events that interact with text-based screen items.  The mouse, when positioned over a control, is <em class="cEmphasis">owned</em> by the control.  All mouse events that take place over the control are sent directly to and handled by the control.  List box controls are the only controls that pass double-click events back to the program.  To detect a double-click in a list box, check for CMD-DBLCLICK in EVENT-STATUS. 
+</p>
+<a name="wp1026195"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1032959"> </a><p class="pBody">
+In my configuration file I have a KEYSTROKE entry that defines carriage return (^M) to have both a termination and exception value of &quot;13&quot;.  It also defines &quot;edit=next&quot; so that a carriage return also moves the cursor to the next field.  But when I have a screen that includes an &quot;OK&quot; button and a carriage return is pressed, the screen terminates and the cursor is not moved to the next field.  
+</p>
+<a name="wp1026198"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1032997"> </a><p class="pBody">
+This is the correct behavior.  Remember that the OK button style also implies the DEFAULT button style.  The DEFAULT button style has the effect of acting as if it is pushed whenever a key with the value of &quot;13&quot; is pressed.
+</p>
+<a name="wp1026203"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1033039"> </a><p class="pBody">
+A program running in UNIX with the configuration variable &quot;KEYSTROKE EDIT=Next terminate=17 kr&quot; and &quot;KEYSTROKE EDIT=Previous terminate=17 kl&quot; can return to the previous field or advance to the next field when the &lt;left arrow&gt; or &lt;right arrow&gt; keys are pressed, but when the program is running in Windows these keys do not work.
+</p>
+<a name="wp1033080"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1026204"> </a><p class="pBody">
+This is the correct behavior.  When using controls, the host GUI determines the meaning of any editing keys in the control itself.  For our own simulated GUI, we allow you to define the editing functions using the KEYSTROKE entries.  For other systems (such as Windows), the host determines how keys are used.  In the case of Windows, the left and right arrow keys move the cursor but do not act as terminators.  
+</p>
+<a name="wp1026205"> </a><p class="pBody">
+While the runtime does allow you to configure which keys are terminating keys (even for Windows), it cannot force the host GUI into a mixed mode where a key is sometimes an editing key and sometimes a terminating key.  	
+</p>
+<a name="wp1030571"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1030660"> </a><p class="pBody">
+With the KEYSTROKE configuration variable I redefine the menu activation key.  The redefinition works fine under UNIX but doesn't under Windows.  Why?
+</p>
+<a name="wp1030732"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1030733"> </a><p class="pBody">
+Windows' menu activation keys are <em class="cEmphasis">not</em> configurable.  The only keys available are the ones defined by Microsoft.  The menu activation key under Windows is F10. 
+</p>
+<a name="wp1030659"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1030643"> </a><p class="pBody">
+In many of my character-based applications I use BLINK to highlight some text.  Why is it that when I run those applications under Windows, the text doesn't blink? 
+</p>
+<a name="wp1030430"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1030523"> </a><p class="pBody">
+ BLINK isn't supported under Windows.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

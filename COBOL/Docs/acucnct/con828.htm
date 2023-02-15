@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:53:15" />
+  <title>8.8.4   Frequently Asked Questions</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con8.htm">Chapter 8: Managing the System </a> &gt; <a href="con815.htm">8.8  AcuConnect Thin Client: Troubleshooting</a> &gt; </p>
+<a name="wp1035326"> </a><h2 class="pHeading2">
+8.8.4   Frequently Asked Questions
+</h2>
+<a name="wp1039827"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1039888"> </a><p class="pBody">
+<b class="cBold">Can AcuConnect load object files on mapped server drives?</b>
+</p>
+<a name="wp1040642"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1040514"> </a><p class="pBody">
+AcuConnect starts a new instance of the ACUCOBOL-GT runtime for each client request for an application to be executed.  This runtime can locate object files on a Windows server mapped drive only if the drive mapping has occurred at an Administrator level at system startup.
+</p>
+<a name="wp1040749"> </a><p class="pBody">
+To load object files on a Windows server mapped drive in this way, you must ensure that the SECURITY_METHOD configuration variable defines the type of Windows security to be used for the connection.  For information about the SECURITY_METHOD variable, refer to <a  href="con667.htm#wp1072445">section 6.3.2.10</a>.  
+</p>
+<a name="wp1035331"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1040774"> </a><p class="pBody">
+<b class="cBold">Is the Windows print spooler supported in the Thin Client?</b>
+</p>
+<a name="wp1035332"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1040796"> </a><p class="pBody">
+Generally speaking, all functionality of the Windows print spooler is supported except the following WIN$PRINTER functions:  
+</p>
+<a name="wp1035338"> </a><p class="pBody">
+WINPRINT_GET_SETTINGS_SIZE
+</p>
+<a name="wp1035339"> </a><p class="pBody">
+WINPRINT_GET_SETTINGS
+</p>
+<a name="wp1035340"> </a><p class="pBody">
+WINPRINT_SET_SETTINGS
+</p>
+<a name="wp1035341"> </a><p class="pBody">
+These functions are not supported because of variations in memory allocated by data types on the client and the server (for example, a 64-bit UNIX server versus a 32-bit Windows client).  Instead, you can make calls to WINPRINT_GET_PRINTER_INFO_EX and WINPRINT_SET_PRINTER, which are similar.  
+</p>
+<a name="wp1035345"> </a><p class="pBody">
+For information about these functions, refer to <a  href="con511.htm#wp1035073">section 5.1.3.3</a>.
+</p>
+<a name="wp1039335"> </a><h5 class="pHeading4">
+Question:	
+</h5>
+<a name="wp1039353"> </a><p class="pBody">
+<b class="cBold">I am using ACCEPT user-id FROM SYSTEM-INFO to return details about the user that is running a specific copy of the application, but the returned user ID is &quot;root&quot;.  How can I ensure that the correct user information is returned?</b>
+</p>
+<a name="wp1039368"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1039379"> </a><p class="pBody">
+To return the actual user ID of the user who is executing the application on a UNIX server, AcuConnect must be started automatically at server startup or by a user that logs into the server as root and then logs out of the system.  When a subsequent client user starts an application that executes ACCEPT user-id FROM SYSTEM-INFO, the correct user ID is returned.
+</p>
+<a name="wp1039365"> </a><p class="pBody">
+To return the correct user ID when a program is running on a Windows server, AcuConnect must be started as a Windows service and SECURITY_METHOD must be set to LOGON.
+</p>
+<a name="wp1035350"> </a><p class="pBody">
+Information about starting AcuConnect automatically at system startup or as a Windows service can be found in <a  href="con683.htm#wp1036009">section 6.4</a>.  
+</p>
+<a name="wp1040854"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1040874"> </a><p class="pBody">
+<b class="cBold">I have an application that contains branching code, which is used when the application is executed on either UNIX or Windows servers.  The code relies on information that is returned about the operating system by ACCEPT FROM SYSTEM-INFO.</b>
+</p>
+<a name="wp1035352"> </a><p class="pBody">
+<b class="cBold">However, with the Thin Client, the information returned is from the server side of the configuration.  How can I obtain information about the client side, so that the application is executed using the correct client-side information?</b>
+</p>
+<a name="wp1035354"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1040893"> </a><p class="pBody">
+ACCEPT FROM SYSTEM-INFO returns server-side information for the thin client environment.  To obtain client-side information, you should modify your existing code to perform an ACCEPT FROM TERMINAL-INFO.  
+</p>
+<a name="wp1040894"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1040899"> </a><p class="pBody">
+<b class="cBold">If a thin client application is launched from a Web browser, does that application have Web browser access?  We may want to include a hyperlink on the screen.  </b>
+</p>
+<a name="wp1035356"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1040919"> </a><p class="pBody">
+The Thin Client does not run in a Web browser.  However, you could use the Web browser control inside your application to allow Web browser access or include your links on the same Web page that launches the application.
+</p>
+<a name="wp1035357"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1040925"> </a><p class="pBody">
+<b class="cBold">Are there any restrictions regarding the use of ActiveX or COM objects?</b>
+</p>
+<a name="wp1035358"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1040933"> </a><p class="pBody">
+You can use ActiveX controls.  However, they must be installed on the client machine.  (Refer to <a  href="con76.htm#wp1035075">section 7.2.3, &quot;Installing ActiveX Files.&quot;</a>)  Note that some controls may generate too many messages to be usable over the Internet.  
+</p>
+<a name="wp1035359"> </a><p class="pBody">
+COM objects are not usable, because everything executes on the server.  
+</p>
+<a name="wp1034611"> </a><p class="pBody">
+
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

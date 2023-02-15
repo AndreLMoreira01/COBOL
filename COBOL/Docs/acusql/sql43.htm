@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:36:08" />
+  <title>4.2  Running Your Application with Microsoft SQL Server</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql4.htm">Chapter 4:  Program Execution</a> &gt; </p>
+<a name="wp1033671"> </a><h2 class="pHeading1">
+4.2  Running Your Application with Microsoft SQL Server
+</h2>
+<a name="wp1033673"> </a><p class="pBody">
+AcuSQL offers a special runtime DLL for running the product with Microsoft SQL Server.  Note that the pre-compiler is unchanged.  To pre-compile COBOL programs with embedded SQL, use the procedures found in <a  href="sql3.htm#wp1033616">Chapter 3</a>.  
+</p>
+<a name="wp1033674"> </a><p class="pBody">
+The new runtime DLL is named &quot;asqlsrvr.dll&quot;.  You can use this DLL in two ways:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1033676"> </a><div class="pSmartList1"><li>Rename the DLL to &quot;esqllib.dll&quot; for the runtime to use this DLL when attempting to execute any AcuSQL commands.</li></div>
+<a name="wp1033679"> </a><div class="pSmartList1"><li>Give the DLL a name of your choice, and set the configuration variable ACUSQL_RUNTIME_DLL to the name you have chosen.  Acucorp recommends keeping the name as &quot;asqlsrvr.dll&quot; and setting ACUSQL_RUNTIME_DLL to &quot;asqlsrvr.dll&quot;.  </li></div>
+</ul></div>
+<a name="wp1033680"> </a><p class="pBody">
+When getting runtime version information, in order to list the versions of the AcuSQL runtime DLLs, the runtime attempts to find and load all AcuSQL DLLs that it knows about.  Currently these are &quot;esqllib.dll&quot; and &quot;asqlsrvr.dll&quot;.  This is why Acucorp recommends not changing the name of the DLL.
+</p>
+<a name="wp1035714"> </a><p class="pBody">
+ACUSQL_RUNTIME_DLL must be set in the configuration file; this variable cannot be set from the COBOL program.  In addition, note that the value of ACUSQL_RUNTIME_DLL cannot be changed from the COBOL program once an AcuSQL command has been executed.  In other words, it is not possible to use both &quot;esqllib.dll&quot; and &quot;asqlsrvr.dll&quot; in the same run unit.  
+</p>
+<a name="wp1035717"> </a><p class="pBody">
+When connecting to a server, the  runtime DLL for the AcuSQL interface to SQL Server environments takes the name of the server, not the name of a datasource.  Username and password information is used as described in <a  href="sql36.htm#wp1033917">section 3.3, &quot;Environment Variables.&quot;</a>
+</p>
+<a name="wp1033686"> </a><p class="pBody">
+The following statements are not supported by AcuSQL interface to Microsoft SQL Server:
+</p>
+<a name="wp1033687"> </a><p class="pIndented1">
+DESCRIBE <em class="cEmphasis">ident</em> INTO <em class="cEmphasis">parameter</em>
+</p>
+<a name="wp1033688"> </a><p class="pIndented1">
+FETCH ... USING DESCRIPTOR <em class="cEmphasis">parameter</em>
+</p>
+<a name="wp1033689"> </a><p class="pIndented1">
+EXECUTE <em class="cEmphasis">statement</em> USING DESCRIPTOR <em class="cEmphasis">parameter</em>
+</p>
+<a name="wp1033690"> </a><p class="pIndented1">
+OPEN <em class="cEmphasis">cursor</em> USING DESCRIPTOR <em class="cEmphasis">parameter</em>
+</p>
+<a name="wp1033691"> </a><p class="pIndented1">
+CALL <em class="cEmphasis">procname</em> USING DESCRIPTOR <em class="cEmphasis">parameter</em>
+</p>
+<a name="wp1033692"> </a><p class="pBody">
+All other statements are supported.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

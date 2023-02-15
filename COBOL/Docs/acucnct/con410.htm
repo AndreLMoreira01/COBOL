@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:53:00" />
+  <title>4.2.1.1  CODE_PREFIX</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con4.htm">Chapter 4: Distributed Processing:  Preparing the Client(s)</a> &gt; <a href="con48.htm">4.2  Creating a Client Configuration File</a> &gt; <a href="con49.htm">4.2.1  Defining Remote Application Path</a> &gt; </p>
+<a name="wp1029173"> </a><h2 class="pHeading3">
+4.2.1.1  CODE_PREFIX
+</h2>
+<a name="wp1029176"> </a><p class="pBody">
+If desired, you can use the CODE_PREFIX variable to define the location of the object programs being CALLed.  In a distributed processing environment, the CODE_PREFIX variable can be defined as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CODE_PREFIX . /usr/prog1 *servername:/usr/prog2<a name="wp1029179"> </a>
+</pre></div>
+<a name="wp1029180"> </a><p class="pBody">
+where prog1 and prog2 are the directories containing the ACUCOBOL-GT object code (for example, &quot;prog1.acu&quot; and &quot;prog2.acu&quot;).  In this example, whenever the client application tries to access a program's object code, it will first look for the code in the current directory (&quot;.&quot;), then in the local &quot;/usr/prog1&quot; directory, and finally on the remote application server &quot;servername&quot; in the directory &quot;/usr/prog2&quot;.
+</p>
+<a name="wp1029181"> </a><p class="pBody">
+Because AcuConnect supports Transmission Control Protocol/Internet Protocol (TCP/IP), it can also be used to launch application processes over the Internet.  In an Internet environment, the &quot;servername&quot; portion of CODE_PREFIX would be the name of the application server on the Internet.  
+</p>
+<a name="wp1029183"> </a><p class="pBody">
+Notice that the remote server name is preceded by the character, &quot;*&quot;.  The asterisk indicates that the program is located on the server and must be run on the server as well.
+</p>
+<a name="wp1029184"> </a><p class="pBody">
+When the client COBOL program executes a CALL, it verifies which directory contains the program (by looking in CODE_PREFIX), and executes the program either on the client or the server.
+</p>
+<a name="wp1029186"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>When you use CODE_PREFIX to specify the location of your CALLed program, the runtime traverses the specified paths to locate the resource.  If you use this method, try to place remote notations towards the end of the file.  Generally, you achieve better performance by defining a code name alias, because remote machines do not need to be searched using this method.
+<hr />
+</p>
+<a name="wp1029187"> </a><p class="pBody">
+This architecture allows most existing COBOL programs to operate in a true distributed processing environment without any code modification.  You can simply install AcuConnect and modify the &quot;client.cfg&quot; file according to your needs. Even the parameter transfer is performed following standard COBOL procedures (the USING clause after the CALL command).
+</p>
+<a name="wp1029190"> </a><p class="pBody">
+For example, in a stand-alone environment, CODE_PREFIX could be defined as follows in Windows systems:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CODE_PREFIX c:\prog1;c:\prog2<a name="wp1029192"> </a>
+</pre></div>
+<a name="wp1029193"> </a><p class="pBody">
+And as the following in UNIX systems:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CODE_PREFIX /usr/prog1:/usr/prog2<a name="wp1029195"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

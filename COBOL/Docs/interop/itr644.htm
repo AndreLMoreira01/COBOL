@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>6.5.2.4  Notes on COBOL verbs</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr638.htm">6.5  Calling COBOL From C Programs</a> &gt; <a href="itr640.htm">6.5.2  Calling the Runtime From a C Main Program</a> &gt; </p>
+<a name="wp1122383"> </a><h2 class="pHeading3">
+6.5.2.4  Notes on COBOL verbs
+</h2>
+<a name="wp1122384"> </a><p class="pBody">
+The following notes describe special considerations for COBOL verbs when you are calling the ACUCOBOL-GT runtime from a C main program.
+</p>
+<a name="wp1122385"> </a><h3 class="pHeadingRef">
+CALL and CALL RUN
+</h3>
+<a name="wp1122386"> </a><p class="pBody">
+The CALL and CALL RUN verbs work normally.  You return from a CALL with EXIT PROGRAM and from a CALL RUN with STOP RUN.
+</p>
+<a name="wp1122387"> </a><h3 class="pHeadingRef">
+EXIT PROGRAM
+</h3>
+<a name="wp1122388"> </a><p class="pBody">
+The EXIT PROGRAM verb works normally.  Use EXIT PROGRAM to return from a COBOL subroutine to the C function that called it.  
+</p>
+<a name="wp1122389"> </a><h3 class="pHeadingRef">
+STOP RUN
+</h3>
+<a name="wp1122390"> </a><p class="pBody">
+A STOP RUN causes the runtime to shut down (except when a STOP RUN returns to a CALL RUN statement).  If you need to control the shutdown in C (to perform clean-up for example), do not code any STOP RUN statements.  Alternatively, you can place any clean-up code you need in the <b class="cBold">acu_shutdown()</b> routine found in &quot;sub.c&quot;.  This routine is automatically executed during runtime shutdown.  Refer to the no_stop element of the ACUCOBOLINFO structure for more information.
+</p>
+<a name="wp1122391"> </a><h3 class="pHeadingRef">
+CHAIN and CALL PROGRAM
+</h3>
+<a name="wp1122392"> </a><p class="pBody">
+Both the CHAIN and CALL PROGRAM verbs halt the current run unit and initiate a new run unit.  Use these verbs with care as they prevent you from returning to your C main program.  The chained-to COBOL program is now treated as the start of a new run unit, essentially meaning that it acts like a main program.  Because it is treated like a main program, the EXIT PROGRAM verb in it is ignored.  The only way to halt the program is with a STOP RUN (which halts the entire runtime) or with another CHAIN.
+</p>
+<a name="wp1122393"> </a><p class="pBody">
+If you do execute a CHAIN or CALL PROGRAM, any C routines that are part of the call stack leading to the first COBOL subroutine will be left in place.  Although you cannot access these routines, their stack memory remains allocated.  On the other hand, any C routines that are on the call stack after the first COBOL subroutine will be removed from the stack.  
+</p>
+<a name="wp1122394"> </a><p class="pBody">
+There is one case where you can still return to your C routine after executing a CHAIN.  This case occurs when you use the CALL RUN verb to initiate a new run unit without halting the original.  The new run unit can use CHAIN.  When the new run unit finally executes a STOP RUN, control returns to the original run unit, which may still return to your C routine via an EXIT PROGRAM.
+</p>
+<a name="wp1145479"> </a><p class="pBody">
+However, we suggest avoiding these verbs.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

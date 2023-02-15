@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:12" />
+  <title>7.5  Screen Section Behavior</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt27.htm">Chapter 7:  Using the Mouse </a> &gt; </p>
+<a name="wp1026348"> </a><h2 class="pHeading1">
+7.5  Screen Section Behavior
+</h2>
+<a name="wp1026350"> </a><p class="pBody">
+When the user selects a field in the Screen Section, the exact behavior depends on the field's underlying type.  You can control the behavior of the mouse with regard to each field type with the &quot;MOUSE&quot; configuration variable.  This variable takes as its arguments one of the field-type names, an equals sign, and then two keywords separated by a comma, as shown:
+</p>
+<a name="wp1026353"> </a><p class="pBody">
+<em class="cEmphasis">field-type name=keyword, keyword</em>
+</p>
+<a name="wp1026354"> </a><p class="pBody">
+Depending on where you are setting the MOUSE variable, there are three methods of setting its configuration. 
+</p>
+<a name="wp1026355"> </a><p class="pBody">
+If you want to implement this variable in a configuration file, the variable can be set without using the equals sign. For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MOUSE-NUMERIC-SHAPE     Bar<a name="wp1026356"> </a>
+</pre></div>
+<a name="wp1026357"> </a><p class="pBody">
+If you are setting the variable as part of your environment in Windows, the variable would look this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SET MOUSE-NUMERIC-SHAPE=Bar<a name="wp1026358"> </a>
+</pre></div>
+<a name="wp1026359"> </a><p class="pBody">
+If you are setting the variable in your program using COBOL syntax, the variable would look like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SET ENVIRONMENT &quot;MOUSE-NUMERIC-SHAPE&quot; TO &quot;Bar&quot;<a name="wp1026360"> </a>
+</pre></div>
+<a name="wp1026361"> </a><p class="pBody">
+For more information, see the entry titled &quot;MOUSE*&quot; in Book 4, Appendix H.
+</p>
+<a name="wp1026362"> </a><h3 class="pHeadingRef">
+Field-type name
+</h3>
+<a name="wp1026363"> </a><p class="pBody">
+The runtime distinguishes between three classes of fields:  numeric, numeric-edited, and all others.  These are referred to respectively as NUMERIC, EDITED, and ALPHA.  
+</p>
+<a name="wp1026364"> </a><h3 class="pHeadingRef">
+First keyword
+</h3>
+<a name="wp1026368"> </a><p class="pBody">
+The first keyword defines how the field is selected when the user presses the left button.  It can be one of the following:  
+</p>
+<a name="wp1026369"> </a><p class="pBody">
+<b class="cBold">NONE</b>&#160;&#160;&#160; Indicates that this type of field may not be selected with the mouse.  When this keyword is used, then the second keyword (which defines the mouse's shape) is ignored.  The mouse will adopt the shape used for areas of the screen that are not part of any field.   
+</p>
+<a name="wp1026370"> </a><p class="pBody">
+<b class="cBold">FIELD&#160;&#160;&#160;</b>Indicates that pressing the left button anywhere in the field will cause the cursor to be positioned at the beginning of the field.<b class="cBold"> </b>     
+</p>
+<a name="wp1026372"> </a><p class="pBody">
+<b class="cBold">CHARACTER&#160;&#160;&#160;</b>Indicates that pressing the left button in the field will position the cursor at the character pointed to by the mouse.  If this is past the last non-prompt character in the field, the cursor will be placed just after the last non-prompt character. 
+</p>
+<a name="wp1026374"> </a><h3 class="pHeadingRef">
+Second keyword
+</h3>
+<a name="wp1026378"> </a><p class="pBody">
+The second keyword is used only for graphical environments.  It indicates the shape that the mouse pointer should take while in the field.  It can be one of the following: 
+</p>
+<a name="wp1032419"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1032425"> </a><p class="pCellBody">
+<b class="cBold">ARROW </b>  
+</p>
+</td>
+    <td><a name="wp1032427"> </a><p class="pCellBody">
+The mouse pointer appears in the default arrow shape.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1032429"> </a><p class="pCellBody">
+<b class="cBold">BAR  </b> 
+</p>
+</td>
+    <td><a name="wp1032431"> </a><p class="pCellBody">
+The mouse appears as a vertical bar.  This is the &quot;I-Bar&quot; shape typically used to indicate that the mouse can be positioned at a particular character.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1032433"> </a><p class="pCellBody">
+<b class="cBold">CROSS </b><b class="cBold"> </b>
+</p>
+</td>
+    <td><a name="wp1032435"> </a><p class="pCellBody">
+<b class="cBold"> </b>The mouse pointer appears as cross-hairs.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1026382"> </a><p class="pBody">
+In graphical environments such as Windows, you may also define the shape that the mouse will take when it is used in the <em class="cEmphasis">current field</em>.  Because the action of the mouse is the same for all field types once they become the current field, the mouse shape is the same for all three types.  You set the desired shape using the &quot;CURRENT&quot; keyword in the MOUSE configuration variable.  This is followed by an equals sign and the desired shape.  The default shape is the BAR shape.
+</p>
+<a name="wp1026383"> </a><p class="pBody">
+The default configuration is as follows:
+</p>
+<a name="wp1032639"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1032661"> </a><p class="pCellBody">
+<b class="cBold">MOUSE </b>
+</p>
+</td>
+    <td><a name="wp1032663"> </a><p class="pCellBody">
+Alpha=Character, Bar 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1032665"> </a><p class="pCellBody">
+<b class="cBold">MOUSE</b>
+</p>
+</td>
+    <td><a name="wp1032667"> </a><p class="pCellBody">
+Numeric=Field, Arrow    
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1032669"> </a><p class="pCellBody">
+<b class="cBold">MOUSE</b>
+</p>
+</td>
+    <td><a name="wp1032671"> </a><p class="pCellBody">
+Edited=Field, Arrow
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1032673"> </a><p class="pCellBody">
+<b class="cBold">MOUSE</b>
+</p>
+</td>
+    <td><a name="wp1032675"> </a><p class="pCellBody">
+Current=Bar
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1026403"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You may place multiple entries on the &quot;MOUSE&quot; configuration line, but you are not required to do so.  
+<hr />
+</p>
+<a name="wp1026404"> </a><p class="pBody">
+The following configuration variables can also be used to set the behavior of the mouse:
+</p>
+<a name="wp1032778"> </a><p class="pBody">
+    </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1032759"> </a>
+To set field selection:
+
+</td>
+    <td><a name="wp1032761"> </a>
+To set cursor shape:
+
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1032763"> </a><p class="pCellBody">
+MOUSE_ALPHA_SELECT
+</p>
+</td>
+    <td><a name="wp1032765"> </a><p class="pCellBody">
+MOUSE_ALPHA_SHAPE
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1032767"> </a><p class="pCellBody">
+MOUSE_EDITED_SELECT
+</p>
+</td>
+    <td><a name="wp1032769"> </a><p class="pCellBody">
+MOUSE_EDITED_SHAPE
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1032771"> </a><p class="pCellBody">
+MOUSE_NUMERIC_SELECT
+</p>
+</td>
+    <td><a name="wp1032773"> </a><p class="pCellBody">
+MOUSE_NUMERIC_SHAPE
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1032775"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1032777"> </a><p class="pCellBody">
+MOUSE_CURRENT_SHAPE
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1026428"> </a><p class="pBody">
+With these variables, you need to set the first and second keywords separately. For example, to change the defaults shown above for a numeric field, you would enter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MOUSE<span style="font-family: Arial, Verdana, Helvetica, sans-serif">_</span>NUMERIC<span style="font-family: Arial, Verdana, Helvetica, sans-serif">_</span>SELECT = character<a name="wp1026429"> </a>
+MOUSE<span style="font-family: Arial, Verdana, Helvetica, sans-serif">_</span>NUMERIC<span style="font-family: Arial, Verdana, Helvetica, sans-serif">_</span>SHAPE = bar<a name="wp1030585"> </a>
+</pre></div>
+<a name="wp1026430"> </a><p class="pBody">
+The REQUIRED phrase is  used in the Screen Section to ensure that a user cannot bypass required fields by jumping to the last field with the mouse.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

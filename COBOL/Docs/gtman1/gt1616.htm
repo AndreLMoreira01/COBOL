@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.1.6.1  Compression</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt162.htm">6.1 Handling Files</a> &gt; <a href="gt1615.htm">6.1.6  Indexed File Considerations</a> &gt; </p>
+<a name="wp1032429"> </a><h2 class="pHeading3">
+6.1.6.1  Compression
+</h2>
+<a name="wp1032433"> </a><p class="pBody">
+File compression can be used on indexed files to save disk space.  The Vision file system supports compression, but not all file systems do.  Compression is enabled by specifying the WITH COMPRESSION phrase in the ASSIGN clause of a file's SELECT statement.  Compression must be specified when the file is initially created to have any effect.  However, the <b class="cBold">vutil</b> &quot;-rebuild&quot; option allows you to apply or remove compression during the file rebuilding process.  See<em class="cEmphasis"> </em><a  href="gt1338.htm#wp1033242">section 3.3.3, &quot;Rebuilding Files.&quot;</a>
+</p>
+<a name="wp1032434"> </a><p class="pBody">
+File compression uses a simple run-length compression scheme.  This replaces &quot;runs&quot; of identical bytes with a shorter sequence.  Files using compression may contain any type of data.  
+</p>
+<a name="wp1032435"> </a><p class="pBody">
+Some files will compress better than others.  Generally speaking, files that contain text compress the best due to repeated space characters.  Results can vary significantly, however.  Experimentation is the best way to tell how much space may be saved.
+</p>
+<a name="wp1032437"> </a><p class="pBody">
+Each compressed record usually retains some extra, unused space for future expansion.  This is advisable especially if the records are frequently changed.  You can specify via a <em class="cEmphasis">compression factor </em>how much of the space saved by compression should be retained to allow for future growth.  When no compression factor is specified, WITH COMPRESSION uses the default compression factor (70).  The following paragraphs explain how the factor is used.
+</p>
+<a name="wp1043133"> </a><p class="pBody">
+A compression factor other than the default may be specified via the COMPRESSION CONTROL VALUE IS clause in the SELECT statement.  The factor must be a numeric literal within the range zero (no compression) to 100 (maximum compression).  A factor of one (1) causes Vision to examine the COMPRESS_FACTOR configuration variable.  If COMPRESS_FACTOR is not set, the default compression factor is used (70).  
+</p>
+<a name="wp1032439"> </a><p class="pBody">
+For factors from two through 100, the factor is considered to be a percentage.  It specifies how much of the space saved by compression is actually removed from the record.  For example, suppose an 80-byte record is compressed to 30 bytes.  Then the compression factor is used to determine how much of the 50 bytes of saved space is  to be removed from the record.  A compression factor of 70 would mean that 70% of the 50 bytes (35 bytes total) will be removed.  This leaves 15 bytes for future expansion, and results in a compressed record size of 45 bytes (30 compressed size plus 15 extra for growth).  The larger the compression factor, the more of the saved space is removed.  A compression factor of 100 removes all saved space and is advisable only if the file is rarely updated. 
+</p>
+<a name="wp1044218"> </a><p class="pBody">
+An alternate way to specify the compression factor is to set the COMPRESS_FACTOR configuration variable.  COMPRESS_FACTOR is used when the COMPRESSION CONTROL VALUE IS clause is either omitted or set to a value of one.  See the entry for COMPRESS_FACTOR in Book 4, Appendix H.  As noted earlier, the compression factor for a file is established when the file is created.  Subsequent changes to COMPRESS_FACTOR do not affect existing files.
+</p>
+<a name="wp1032444"> </a><p class="pBody">
+The selection of the compression factor should be based on the amount of updating that the file undergoes.  If rewrites and deletes are rarely or never done on the file, then a high compression factor is most efficient.  We recommend 100 for files that are rarely updated, 70 for average files, and 50 (or less) for files that are frequently updated.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

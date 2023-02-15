@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:06" />
+  <title>5.1.2  The Transaction Logging Process</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt15.htm"><br />Chapter 5:  File Processing</a> &gt; <a href="gt152.htm">5.1 Transaction Management</a> &gt; </p>
+<a name="wp1032252"> </a><h2 class="pHeading2">
+5.1.2  The Transaction Logging Process
+</h2>
+<a name="wp1032255"> </a><p class="pBody">
+Transaction logging provides the programmer with a COBOL verb that can roll back or &quot;undo&quot; file operations performed during a transaction.  A rollback is typically invoked when the program detects a file error or other error condition.
+</p>
+<a name="wp1032257"> </a><p class="pBody">
+Outside of the application, transaction log files can be used for another purpose: to recover files after a program failure or system crash.  The recovery process is performed by an ACUCOBOL-GT library routine that accesses the latest backup and the log files.  It is the site's responsibility to clear the log files when a backup is made, so that the logs always contain precisely those transactions that have occurred since the last backup.  The logs and the backup can then be used to reconstruct files into a consistent state after a crash.  
+</p>
+<a name="wp1032258"> </a><p class="pBody">
+To make rollback and recovery operations possible, the runtime records information about how to &quot;redo&quot; and &quot;undo&quot; each file update that occurs within a transaction.  After the transaction starts, each Vision or relative file update operation is recorded until the transaction is committed or rolled back.  At that point:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1032259"> </a><div class="pSmartList1"><li>If the transaction is committed, the commit operation writes the &quot;redo&quot; information to the log file.  The &quot;undo&quot; information is not recorded in the log file.</li></div>
+<a name="wp1032260"> </a><div class="pSmartList1"><li>If the transaction is rolled back, the rollback operation scans the record of changes in reverse order and performs the operations needed to undo the file updates done during the transaction.</li></div>
+</ul></div>
+<a name="wp1032261"> </a><p class="pBody">
+All programs that operate on the same set of data files must also use the same set of transaction log files.
+</p>
+<a name="wp1032262"> </a><p class="pBody">
+In transaction management, the log files must be synchronized to the backup procedure for the files being managed.  When the files are backed up, the log files must be cleared (or deleted).  The next time a transaction occurs, the runtime creates new log files (or begins writing to the cleared files).  Thus, the logs contain precisely those transactions that have occurred since the last backup.  
+</p>
+<a name="wp1032267"> </a><p class="pBody">
+If the log files and backups are synchronized, when a program dies in mid-transaction, you can reconstruct the files into a consistent state.  To do this, you restore the backup, then run a program that calls the C$RECOVER utility routine (see <a  href="gt1516.htm#wp1032381">section 5.1.10</a>).  This routine reads a log file and performs each update operation that was part of a completed transaction.  Operations that were not part of a completed transaction are not performed.  
+</p>
+<a name="wp1032268"> </a><p class="pBody">
+By using transaction logging, you ensure logically consistent files.  In addition, you never need to do a rebuild operation on a broken data file, because you can always recover files by restoring the backup and running a program that calls C$RECOVER. 
+</p>
+<a name="wp1032269"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You can use the utility program <b class="cBold">logutil</b> to examine and edit an ACUCOBOL-GT transaction log file.  For details, see <a  href="gt1381.htm#wp1034195">section 3.6, &quot;logutil.&quot;</a>
+<hr />
+</p>
+<a name="wp1032271"> </a><p class="pBody">
+Though a transaction logging system provides a high degree of file security, it does impose extra overhead.  Backups are essential, and there is increased disk I/O, more memory use, and more record locks.  
+</p>
+<a name="wp1032272"> </a><p class="pBody">
+Going to your backups and using the recovery procedure usually takes more time than just checking the data files and restarting the program.  On the other hand, if the system dies, you do not need to worry about examining the files for problems.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

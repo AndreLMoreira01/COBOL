@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:01:17" />
+  <title>To enable your program to read XML data:  </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb">
+<a href="itr11.htm">Chapter 11: Working with Non-Vision Data</a> &gt; 
+<a href="itr113.htm">11.2  Working with XML Data</a> &gt; <a href="itr1114.htm">11.2.4  Using AcuXML</a> &gt; 
+</p>
+<a name="wp1036767"> </a><h2 class="pHeadingProc">
+To enable your program to read XML data:  
+</h2>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036768"> </a><div class="pSmartList1"><li>Prepare your ACUCOBOL-GT application.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1036769"> </a><div class="pSmartList2"><li>Obtain a representative XML document from the anticipated source of your files.  For the best results, the document should refer to a DTD or schema.</li></div>
+<a name="wp1036770"> </a><div class="pSmartList2"><li>Use the <b class="cBold">xm2fd</b> utility to create FDs and SELECT statements for the XML document.  Refer to <a  href="itr118.htm#wp1036726">section 11.2.2</a> for more information on using this utility.</li></div>
+<a name="wp1036774"> </a><div class="pSmartList2"><li>Include the new FDs and SELECT statements in your program as you would any FD and SELECT.</li></div>
+<a name="wp1036775"> </a><div class="pSmartList2"><li>Compile your program with the &quot;-Fa&quot; option specified.  This option tells the compiler to generate XFDs for each COBOL data file included in the program.  The &quot;-Fa&quot; option is described in section 2.1.6 of the <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>. To prevent naming errors, you should also include the &quot;-Fc&quot; option, which tells the compiler that the field names in the resulting XFDs must match the element names in the COBOL source exactly, including case, hyphen usage, etc.</li></div>
+</ol></div>
+<a name="wp1036779"> </a><div class="pSmartList1"><li>Set up and configure the runtime system.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1036780"> </a><div class="pSmartList2"><li>Install the ACUCOBOL-GT runtime, object code, data dictionaries, and COBOL data files on the end-user system.</li></div>
+<a name="wp1036781"> </a><div class="pSmartList2"><li>Acquire XML data from your data source, or if reading data from the Internet, acquire the exact URL of the XML data stream.</li></div>
+<a name="wp1036784"> </a><div class="pSmartList2"><li>Create a configuration file for the runtime as described in section 2.7 of the <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>. In the configuration file:</li></div>
+<div class="pSmartList3"><ul class="pSmartList3">
+<a name="wp1036786"> </a><div class="pSmartList3"><li>Specify the location of your data files. If the files are local or accessed via AcuServer, use the FILE_PREFIX configuration variable to specify the location.  If the files will be accessed over the Internet, map the data files directly to a URL.  For example, to read &quot;bookfile.xml&quot; over the Internet, you could add the following line to the configuration file:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+BOOKFILE  http://myserver.mycomp.com/data/bookfile.xml<a name="wp1036787"> </a>
+</pre></div>
+<a name="wp1036788"> </a><div class="pSmartList3"><li>Specify which files should be treated as XML data files by setting the  <em class="cEmphasis">filename</em>_HOST variable to &quot;XML&quot;, where <em class="cEmphasis">filename</em> is the base name of the XML document with no file extension  (e.g., &quot;custdata_HOST XML&quot;).  Include a separate entry for each XML document name.  Make sure that the files you indicate are sequential files.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+BOOKFILE_HOST XML<a name="wp1036790"> </a>
+</pre></div>
+<a name="wp1036791"> </a><div class="pSmartList3"><li>Tell the runtime to keep the case of your XFD field names intact by setting the 4GL-COLUMN-CASE variable to &quot;unchanged&quot;.  XML (unlike HTML) is case sensitive.  If you do not set 4GL-COLUMN-CASE, the runtime converts the field names to lower case and hyphens to underscores.  Then the runtime may not be able to read your XML data properly.</li></div>
+<a name="wp1036792"> </a><div class="pSmartList3"><li>Configure the XML output as desired using a set of AcuXML-specific configuration variables.  (These variables all start with the &quot;AXML&quot; prefix.  See <a  href="itr1113.htm#wp1037652">section 11.2.3.2</a>.)  With these variables, you can tell the runtime whether to create a DTD or schema when creating XML data, whether to associate a style sheet with the output, and more.</li></div>
+<a name="wp1036793"> </a><div class="pSmartList3"><li>Perform additional configuration as desired.  You can use any configuration variables that affect XFD parsing, such as XFD-PREFIX and XFD-DIRECTORY.  Note that  XFD files must  be available in the named XFD_DIRECTORY even when the XML data stream is read over the Internet via HTTP.</li></div>
+</ul></div>
+<a name="wp1036794"> </a><p class="pIndented2">
+Refer to Appendix H in <em class="cEmphasis">ACUCOBOL-GT Appendices</em> for details on any of these configuration file entries.  Following is a sample &quot;cblconfig&quot; file for use with AcuXML:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+file-prefix           . /usr/data<a name="wp1036795"> </a>
+orderfile-host        xml<a name="wp1036796"> </a>
+bookfile-host         xml<a name="wp1036797"> </a>
+customer-host         xml<a name="wp1036798"> </a>
+4gl-column-case       unchanged<a name="wp1036799"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1036800"> </a><div class="pSmartList1"><li>Run your ACUCOBOL-GT program normally.</li></div>
+</ol></div>
+<a name="wp1036801"> </a><p class="pBody">
+The rest is automatic.  When your ACUCOBOL-GT program READs a file designated as XML, the AcuXML interface converts the XML data to COBOL using XFDs, your program performs the request, and then returns data in desired format.  Your program automatically WRITEs output in sequential XML format as specified in configuration file.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

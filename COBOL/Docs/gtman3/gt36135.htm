@@ -1,0 +1,383 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>SEARCH Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1041338"> </a><h2 class="pHeading2">
+SEARCH Statement
+</h2>
+<a name="wp1041340"> </a><p class="pBody">
+The SEARCH statement searches an indexed table for a specific table entry.  The search may be sequential or binary (SEARCH or SEARCH ALL).  The search terminates when either a match is found (first match), or when the entire table has been searched.
+</p>
+<a name="wp1041341"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This manual entry includes code examples and highlights for first-time users following the General Rules section.
+<hr />
+</p>
+<a name="wp1041343"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<a name="wp1041344"> </a><h3 class="pHeadingRef">
+Format 1
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">SEARCH</u> table-name [ <u class="cUnderline">VARYING</u> index-item ]<a name="wp1041345"> </a>
+<a name="wp1041346"> </a>
+ [ AT <u class="cUnderline">END</u> statement-1 ]<a name="wp1041347"> </a>
+<a name="wp1041348"> </a>
+ { <u class="cUnderline">WHEN</u> srch-cond {statement-2   }   } ...<a name="wp1041349"> </a>
+                  {<u class="cUnderline">NEXT</u> <u class="cUnderline">SENTENCE</u> }<a name="wp1041350"> </a>
+<a name="wp1041351"> </a>
+ [ <u class="cUnderline">END-SEARCH</u> ]<a name="wp1041352"> </a>
+</pre></div>
+<a name="wp1041353"> </a><h3 class="pHeadingRef">
+Format 2
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">SEARCH</u> <u class="cUnderline">ALL</u> table-name<a name="wp1041354"> </a>
+<a name="wp1041355"> </a>
+ [ AT <u class="cUnderline">END</u> statement-1 ]<a name="wp1041356"> </a>
+<a name="wp1041357"> </a>
+ <u class="cUnderline">WHEN</u> { tbl-item   {IS <u class="cUnderline">EQUAL</u> TO} value    }<a name="wp1041358"> </a>
+      {            {IS =       }          }<a name="wp1041359"> </a>
+      { cond-name                         }<a name="wp1041360"> </a>
+<a name="wp1041361"> </a>
+      [ <u class="cUnderline">AND</u> { tbl-item   {IS <u class="cUnderline">EQUAL</u> TO} value } ] ...<a name="wp1041362"> </a>
+            {            {IS =       }       }<a name="wp1041363"> </a>
+            { cond-name                      }<a name="wp1041364"> </a>
+<a name="wp1041365"> </a>
+            { statement-2   }<a name="wp1041366"> </a>
+            { <u class="cUnderline">NEXT</u> <u class="cUnderline">SENTENCE</u> }<a name="wp1041367"> </a>
+<a name="wp1041368"> </a>
+ [ <u class="cUnderline">END-SEARCH</u> ]<a name="wp1041369"> </a>
+</pre></div>
+<a name="wp1041371"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041372"> </a><div class="pSmartList1"><li><em class="cEmphasis">Table-name</em> is a data item that must contain an OCCURS clause including an INDEXED BY phrase.  <em class="cEmphasis">Table-name</em> must <em class="cEmphasis">not</em> be subscripted in the SEARCH statement.  In Format 2, <em class="cEmphasis">table-name</em> must also contain the KEY IS phrase in its OCCURS clause.</li></div>
+<a name="wp1041373"> </a><div class="pSmartList1"><li><em class="cEmphasis">Index-item</em> is a numeric integer data item or an index name.  It may not be subscripted by the first index name in the INDEXED BY phrase in the OCCURS clause of <em class="cEmphasis">table-name</em>.  </li></div>
+<a name="wp1041374"> </a><div class="pSmartList1"><li><em class="cEmphasis">Srch-cond</em> is a conditional expression.</li></div>
+<a name="wp1041375"> </a><div class="pSmartList1"><li><em class="cEmphasis">Statement-1</em> and <em class="cEmphasis">statement-2</em> are imperative statements.</li></div>
+<a name="wp1041376"> </a><div class="pSmartList1"><li><em class="cEmphasis">Value</em> may be a data item, a literal, or an arithmetic expression.  It must be legal to compare <em class="cEmphasis">value</em> with <em class="cEmphasis">tbl-item</em>.  No data item in <em class="cEmphasis">value</em> may be referenced in the KEY IS phrase in the OCCURS clause of <em class="cEmphasis">table-name,</em> nor may it be subscripted by the first index-name associated with <em class="cEmphasis">table-name</em>.  </li></div>
+<a name="wp1041377"> </a><div class="pSmartList1"><li><em class="cEmphasis">Cond-name</em> is a condition-name (level 88) that must be defined as having only a single value.  The condition-variable associated with <em class="cEmphasis">cond-name</em> must appear in the KEY IS phrase in the OCCURS clause of <em class="cEmphasis">table-name</em>.  </li></div>
+<a name="wp1041378"> </a><div class="pSmartList1"><li><em class="cEmphasis">Tbl-item</em> must be subscripted by the first index-name associated with <em class="cEmphasis">table-name</em> along with other subscripts as required.  It must be referenced in the KEY IS phrase in the OCCURS clause of <em class="cEmphasis">table-name</em>.  <em class="cEmphasis">Tbl-item</em> may not be reference modified.</li></div>
+<a name="wp1041379"> </a><div class="pSmartList1"><li>In Format 2, when a <em class="cEmphasis">tbl-item</em> or a <em class="cEmphasis">cond-name</em> is referenced, all preceding data-names in the KEY IS phrase in the OCCURS clause of <em class="cEmphasis">table-name</em> (or their associated condition-names) must also be referenced.  </li></div>
+</ol></div>
+<a name="wp1041382"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<a name="wp1041383"> </a><h3 class="pHeadingRef">
+Format 1
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041384"> </a><div class="pSmartList1"><li>The Format 1 SEARCH statement searches a table serially starting with the current index setting.  </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1041385"> </a><div class="pSmartList2"><li>If the index-name associated with <em class="cEmphasis">table-name</em> contains a value that is higher than the highest occurrence number for <em class="cEmphasis">table-name</em>, the search terminates immediately.  If the AT END phrase is specified, <em class="cEmphasis">statement-1</em> executes.  Control then passes to the end of the SEARCH statement.</li></div>
+<a name="wp1041386"> </a><div class="pSmartList2"><li>If the index-name associated with <em class="cEmphasis">table-name</em> contains a valid occurrence number, the SEARCH statement evaluates the WHEN conditions (<em class="cEmphasis">srch-cond</em>) in the order they appear.  If no condition is satisfied, the index-name associated with <em class="cEmphasis">table-name</em> is set to the next occurrence number.  The evaluation process is then repeated.  This process ends when a condition is satisfied or an occurrence number outside of the range of <em class="cEmphasis">table-name</em> is generated.  In this second case, processing continues as in step (1a) above.  </li></div>
+<a name="wp1041387"> </a><div class="pSmartList2"><li>When a <em class="cEmphasis">srch-cond</em> is satisfied, the SEARCH terminates and the associated <em class="cEmphasis">statement-2</em> executes (or control passes to the next sentence if NEXT SENTENCE is used).  The index-name associated with <em class="cEmphasis">table-name</em> remains set at its current value.  Control then passes to the end of the SEARCH statement.</li></div>
+</ol></div>
+<a name="wp1041388"> </a><div class="pSmartList1"><li>If there is no VARYING phrase specified, the index-name used for the search is the first index-name in the INDEXED BY phrase associated with <em class="cEmphasis">table-name</em>.  Other index-names associated with <em class="cEmphasis">table-name</em> remain unchanged.</li></div>
+<a name="wp1041389"> </a><div class="pSmartList1"><li>If the VARYING phrase is specified, and <em class="cEmphasis">index-item</em> names an index-name associated with <em class="cEmphasis">table-name</em>, then that index-name is used for the search operation.  If <em class="cEmphasis">index-name</em> names some other index-name or a numeric data item, that item is incremented by 1 every time the index-name associated with the search operation is incremented.  The index-name specified in rule 2 is used for the search procedure.</li></div>
+</ol></div>
+<a name="wp1041390"> </a><h3 class="pHeadingRef">
+Format 2
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041391"> </a><div class="pSmartList1"><li>A Format 2 SEARCH performs a binary search of an ordered table.  It yields predictable results only when:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1041392"> </a><div class="pSmartList2"><li>the data in the table has the same order as specified by the KEY IS phrase associated with table-name</li></div>
+<a name="wp1041393"> </a><div class="pSmartList2"><li>the contents of the keys in the WHEN phrase identify a unique table element</li></div>
+</ol></div>
+<a name="wp1041394"> </a><div class="pSmartList1"><li>The initial value of the <em class="cEmphasis">table-name</em> index-name is ignored.  It is varied in a non-linear manner by the SEARCH operation until the WHEN conditions are satisfied or the table has been searched.  </li></div>
+<a name="wp1041395"> </a><div class="pSmartList1"><li>If the WHEN phrase conditions are not satisfied for any index setting, control passes to the AT END phrase <em class="cEmphasis">statement-1</em>, if any, or to the end of the SEARCH statement.  The setting of the <em class="cEmphasis">table-name</em> index-name is not predictable in this case.</li></div>
+<a name="wp1041396"> </a><div class="pSmartList1"><li>If all of the WHEN phrase conditions are satisfied for an index setting, control passes either to the associated <em class="cEmphasis">statement-2</em> or to the next sentence, whichever is specified.  The <em class="cEmphasis">table-name</em> index-name indicates the occurrence number that satisfied the conditions.</li></div>
+<a name="wp1041397"> </a><div class="pSmartList1"><li>The index-name used for the search is the first index-name listed in the INDEXED BY phrase associated with <em class="cEmphasis">table-name</em>.  Other index-names remain unchanged.</li></div>
+</ol></div>
+<a name="wp1041398"> </a><h3 class="pHeadingRef">
+Code examples
+</h3>
+<a name="wp1041399"> </a><h3 class="pHeadingRef">
+Example 1:
+</h3>
+<a name="wp1041401"> </a><p class="pBody">
+In this example SEARCH is used to conduct a sequential search of the table for the first match.  The index data item must be assigned an initial value by the program.  Note that subsequent searches of the table for additional matches may be made if the value of the search index is saved after a match.
+</p>
+<a name="wp1041402"> </a><p class="pBody">
+Assume the following table data item:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  FRUIT-TREE-INVENTORY.<a name="wp1041403"> </a>
+    05  FRUIT-TREE-TABLE<a name="wp1041404"> </a>
+        OCCURS 100 TIMES <a name="wp1041405"> </a>
+        INDEXED BY FTT-INDEX.<a name="wp1041406"> </a>
+        10  FT-NAME    PIC X(25).<a name="wp1041407"> </a>
+        10  FT-CODE    PIC X(5).<a name="wp1041408"> </a>
+        10  FT-PRICE   PIC 9(5)V99.<a name="wp1041409"> </a>
+        10  FT-COUNT   PIC 999.<a name="wp1041410"> </a>
+*05 table name is specified by SEARCH<a name="wp1041411"> </a>
+*OCCURS and INDEXED BY required for SEARCH<a name="wp1041412"> </a>
+</pre></div>
+<a name="wp1041413"> </a><p class="pBody">
+Assume that FRUIT-TREE-TABLE has been loaded.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*use SET to initialize the index<a name="wp1041414"> </a>
+SET FTT-INDEX TO 1.<a name="wp1041415"> </a>
+SEARCH FRUIT-TREE-TABLE<a name="wp1041416"> </a>
+*handle no match in table<a name="wp1041417"> </a>
+   AT END DISPLAY &quot;Variety not found.&quot;<a name="wp1041418"> </a>
+*test for match<a name="wp1041419"> </a>
+   WHEN FT-NAME (FTT-INDEX) = TREE-NAME <a name="wp1041420"> </a>
+*match found, perform action<a name="wp1041421"> </a>
+      PERFORM DISPLAY-INVENTORY-ITEM<a name="wp1041422"> </a>
+END-SEARCH.<a name="wp1041423"> </a>
+</pre></div>
+<a name="wp1041424"> </a><h3 class="pHeadingRef">
+Example 2:
+</h3>
+<a name="wp1041425"> </a><p class="pBody">
+In this example a WHEN clause is used in a sequential search to test for an &quot;end of table&quot; (AT END equivalent) condition.  Note that when the table being searched is not full (has table elements at the end that have not been filled), searching the table into the unfilled space will give unpredictable results.  You can search a partially filled table by determining the position of the last valid entry in the table and then using a WHEN clause in the SEARCH statement to test for when the search process traverses past the last valid entry.
+</p>
+<a name="wp1041426"> </a><p class="pBody">
+Assume the same table declaration as in example 1.  Assume, also, that the program has verified the table entries and has saved the subscript value of the last valid entry in a variable named LAST-VALID-ENTRY.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*initialize the search index<a name="wp1041427"> </a>
+SET FTT-INDEX TO 1.<a name="wp1041428"> </a>
+SEARCH FRUIT-TREE-TABLE<a name="wp1041429"> </a>
+*test for match<a name="wp1041430"> </a>
+   WHEN FT-NAME (FTT-INDEX) = TREE-NAME<a name="wp1041431"> </a>
+*match found, perform action<a name="wp1041432"> </a>
+      PERFORM DISPLAY-INVENTORY-ITEM<a name="wp1041433"> </a>
+*test for indexing into unfilled table space<a name="wp1041434"> </a>
+   WHEN FTT-INDEX &gt; LAST-VALID-ENTRY<a name="wp1041435"> </a>
+*exit the SEARCH statement<a name="wp1041436"> </a>
+      NEXT SENTENCE.<a name="wp1041437"> </a>
+<a name="wp1041438"> </a>
+if ftt-index &gt; last-valid-entry<a name="wp1041439"> </a>
+      display &quot; variety not found&quot;.<a name="wp1041440"> </a>
+</pre></div>
+<a name="wp1041441"> </a><h3 class="pHeadingRef">
+Example 3:
+</h3>
+<a name="wp1041442"> </a><p class="pBody">
+In this example SEARCH ALL is used to conduct a binary search of an ordered table.  <b class="cBold">Binary searches require sequential, ordered tables.</b>  The table definition must include an ASCENDING or DESCENDING KEY clause.  The search terminates upon first match, and there is no way to continue the search to find a second match.  Binary searches are best suited to large tables (typically 50 records or more).  When used to search large tables, the binary search method will, on average, find a table record much more quickly than will a sequential search.  For example, a table containing 1000 records will need to perform no more than ten comparisons to find a match.
+</p>
+<a name="wp1041443"> </a><p class="pBody">
+Assume the following table data item:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  FRUIT-TREE-INVENTORY.<a name="wp1041444"> </a>
+    05 FRUIT-TREE-TABLE<a name="wp1041445"> </a>
+*OCCURS required for SEARCH<a name="wp1041446"> </a>
+      OCCURS 100 TIMES<a name="wp1041447"> </a>
+*ASCENDING/DESCENDING KEY required<a name="wp1041448"> </a>
+*for SEARCH ALL<a name="wp1041449"> </a>
+      ASCENDING KEY IS FT-NAME<a name="wp1041450"> </a>
+*INDEXED BY required for SEARCH<a name="wp1041451"> </a>
+      INDEXED BY FTT-INDEX.<a name="wp1041452"> </a>
+      10  FT-NAME    PIC X(25).<a name="wp1041453"> </a>
+      10  FT-CODE    PIC X(5).<a name="wp1041454"> </a>
+      10  FT-PRICE   PIC 9(5)V99.<a name="wp1041455"> </a>
+      10  FT-COUNT   PIC 999.<a name="wp1041456"> </a>
+</pre></div>
+<a name="wp1041457"> </a><p class="pBody">
+Assume the table has been loaded.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*FTT-INDEX is initialized by SEARCH ALL<a name="wp1041458"> </a>
+SEARCH ALL FRUIT-TREE-TABLE<a name="wp1041459"> </a>
+*Handle no match in table.<a name="wp1041460"> </a>
+    AT END DISPLAY &quot;Variety not found&quot;<a name="wp1041461"> </a>
+*Test for match<a name="wp1041462"> </a>
+    WHEN FT-NAME (FTT-INDEX) = TREE-NAME<a name="wp1041463"> </a>
+*Match found, perform action<a name="wp1041464"> </a>
+    PERFORM DISPLAY-INVENTORY-ITEM<a name="wp1041465"> </a>
+END-SEARCH.<a name="wp1041466"> </a>
+</pre></div>
+<a name="wp1041467"> </a><h3 class="pHeadingRef">
+Example 4:
+</h3>
+<a name="wp1041468"> </a><p class="pBody">
+This example demonstrates how to use SEARCH or SEARCH ALL to search multi-dimensional tables:
+</p>
+<a name="wp1041469"> </a><p class="pBody">
+SEARCH is not, by itself, equipped to perform multi-dimensional table searches.  One approach to accomplishing multi-dimensional table searches is to use SEARCH in conjunction with PERFORM/VARYING (as the following example will illustrate).  When used together, SEARCH handles lookups at the innermost level (dimension) of the table structure and PERFORM/VARYING is used to manage stepping through the outer levels of the table.
+</p>
+<a name="wp1041470"> </a><p class="pBody">
+Assume the following table data item:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  TREE-INVENTORY.<a name="wp1041471"> </a>
+    05  NURSERY-YARD                   |inventory location,<a name="wp1041472"> </a>
+            OCCURS 10 TIMES            |&quot;outer&quot; table<a name="wp1041473"> </a>
+            INDEXED BY YARD-IDX.<a name="wp1041474"> </a>
+            10  TREE-TABLE             |tree type,<a name="wp1041475"> </a>
+                   OCCURS 100 TIMES    |&quot;inner&quot; table<a name="wp1041476"> </a>
+                   INDEXED BY TT-IDX.<a name="wp1041477"> </a>
+                15  FT-NAME       PIC X(25).<a name="wp1041478"> </a>
+                15  FT-CODE       PIC X(5).<a name="wp1041479"> </a>
+                15  FT-PRICE      PIC 9(5)V99.<a name="wp1041480"> </a>
+                15  FT-COUNT      PIC 999.<a name="wp1041481"> </a>
+</pre></div>
+<a name="wp1041482"> </a><p class="pBody">
+Assume the table has been loaded.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+MOVE &quot;N&quot; TO TREE-FOUND.<a name="wp1041483"> </a>
+PERFORM SEARCH-TREE-INVENTORY<a name="wp1041484"> </a>
+*step through the outer table<a name="wp1041485"> </a>
+   VARYING YARD-IDX FROM 1 BY 1<a name="wp1041486"> </a>
+      UNTIL YARD-IDX &gt; 10 OR TREE-FOUND = &quot;Y&quot;.<a name="wp1041487"> </a>
+<a name="wp1041488"> </a>
+IF TREE-FOUND = &quot;N&quot;            |note that this code <a name="wp1041489"> </a>
+    PERFORM NO-TREE-FOUND.     |executes after the <a name="wp1041490"> </a>
+END-IF.                        |search is complete<a name="wp1041491"> </a>
+{ . . . }<a name="wp1041492"> </a>
+SEARCH-TREE-INVENTORY.<a name="wp1041493"> </a>
+   SET TT-IDX TO 1.<a name="wp1041494"> </a>
+   SEARCH TREE-TABLE<a name="wp1041495"> </a>
+      WHEN TREE-TABLE(YARD-IDX,TT-IDX) = TREE-NAME<a name="wp1041496"> </a>
+<a name="wp1041497"> </a>
+*note that both the inner and outer table<a name="wp1041498"> </a>
+*indexes are required<a name="wp1041499"> </a>
+         PERFORM DISPLAY-INVENTORY-ITEM<a name="wp1041500"> </a>
+         MOVE &quot;Y&quot; TO TREE-FOUND<a name="wp1041501"> </a>
+   END-SEARCH.<a name="wp1041502"> </a>
+</pre></div>
+<a name="wp1041503"> </a><p class="pBody">
+If the inner table is ordered and large enough to benefit from a binary search, use SEARCH ALL.
+</p>
+<a name="wp1041505"> </a><h3 class="pHeadingRef">
+Highlights for first-time users
+</h3>
+<a name="wp1041506"> </a><h3 class="pHeadingRef">
+General notes:
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041507"> </a><div class="pSmartList1"><li>The table name identifier used in SEARCH must be the table name specified in the OCCURS phrase of the table declaration.  You cannot use the 01 table label that starts the table declaration.</li></div>
+<a name="wp1041508"> </a><div class="pSmartList1"><li>If END-SEARCH is used NEXT SENTENCE cannot be used.  Where possible it is best to use the sentence terminator, END-SEARCH.  Unintended logic errors are often introduced by the use of NEXT SENTENCE and are easily avoided by the use of END-SEARCH.</li></div>
+</ol></div>
+<a name="wp1041509"> </a><h3 class="pHeadingRef">
+Notes regarding sequential searches (SEARCH):
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041510"> </a><div class="pSmartList1"><li>A sequential search is conducted as follows:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1041511"> </a><div class="pSmartList2"><li>The search cycle begins by verifying that the value of the index data item falls within the range of the table size (the range is from 1 to the value specified in the OCCURS clause of the record definition).</li></div>
+<a name="wp1041512"> </a><div class="pSmartList2"><li>If the index value is valid, then each WHEN condition phrase is evaluated until either a match is found or until all WHEN conditions have been tested.</li></div>
+<a name="wp1041513"> </a><div class="pSmartList2"><li>If there is no match, the value of the index is incremented by one, validated (as in step a), and the WHEN condition evaluation cycle is repeated.</li></div>
+<a name="wp1041514"> </a><div class="pSmartList2"><li>Steps a - c iterate until either a match is found or the value of the index exceeds the table range, indicating that the entire table has been searched.</li></div>
+<a name="wp1041515"> </a><div class="pSmartList2"><li>If a match is found, the search terminates and the imperative statement associated with the WHEN clause is executed.  Program execution then resumes immediately after the SEARCH statement.  Note that the value of the index data item remains set to the value of the subscript of the matched entry.  </li></div>
+<a name="wp1041516"> </a><div class="pSmartList2"><li>If the value of the search index ever becomes less than one or greater than the table size, the search terminates, the optional AT END statement, if present, is executed, and program execution continues immediately after the SEARCH statement.</li></div>
+</ol></div>
+<a name="wp1041517"> </a><div class="pSmartList1"><li>The index data item named in the INDEXED BY clause is used to index the table in the sequential search and must be explicitly initialized in the program.  Use SET to assign the initial value.  When the search results in a match, the index data item remains set to the table subscript of the matching entry.  Saving or preserving this value makes it possible to make another search of the table for a subsequent match.</li></div>
+<a name="wp1041518"> </a><p class="pIndented1">
+Initializing the index data item:
+</p>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1041519"> </a><div class="pSmartList2"><li>If the entire table is to be searched, the index data item should be assigned, using SET, the value 1, thereby starting the search with the first record.</li></div>
+<a name="wp1041520"> </a><div class="pSmartList2"><li>If the search is to begin with an entry other than the first, then the index data item should be assigned the value of the position of the first table entry to be checked.  For example, to start the search at table entry 10, assign the value 10 to the index data item.</li></div>
+<a name="wp1041521"> </a><div class="pSmartList2"><li>If, after a search finds a match, you want to make an additional search of the table to find a subsequent match, the value of the index data item should be preserved and then reassigned so that the next search begins at 1 + <em class="cEmphasis">index-item</em>.</li></div>
+</ol></div>
+<a name="wp1041522"> </a><div class="pSmartList1"><li>When searching tables that are not full (do not contain valid entries for every occurrence in the table), use a WHEN clause to test for the actual end-of-table condition.  If the search is allowed to proceed into the unused portion of the table, garbage values in the unfilled table space will give unpredictable results.  See code example 2.</li></div>
+<a name="wp1041523"> </a><div class="pSmartList1"><li>The relational match conditions associated with each WHEN clause may be connected with the logical connectors AND or OR thereby specifying multiple or alternate match conditions.  For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+WHEN NAME = SEARCH-NAME OR SIZE &lt; MAX-SIZE<a name="wp1041524"> </a>
+</pre></div>
+<a name="wp1041525"> </a><div class="pSmartList1"><li>Use of the VARYING phrase: The VARYING phrase allows alternate or multiple indexes to be incremented by the search loop.  If VARYING is omitted, the first index-item defined in the INDEXED BY phrase of the OCCURS clause (for the table) is incremented.</li></div>
+<a name="wp1041526"> </a><p class="pIndented1">
+If the VARYING phrase is included, the index item named after VARYING is incremented, as well as the first named index in the INDEXED BY phrase, with one exception.  If the index named after VARYING is also named in the INDEXED BY phrase, then it is the only index incremented.
+</p>
+</ol></div>
+<a name="wp1041527"> </a><h3 class="pHeadingRef">
+Notes regarding binary searches (SEARCH ALL):
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041528"> </a><div class="pSmartList1"><li>The binary search is conducted as follows:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1041529"> </a><div class="pSmartList2"><li>The search begins at the midpoint of the table (for example, 50 of 100) and compares the value of the table entry with the search item to determine if there is a match.</li></div>
+<a name="wp1041530"> </a><div class="pSmartList2"><li>If there is no match, SEARCH determines whether the search item is logically located in the upper or lower half of the table (0-49, or 51-100).</li></div>
+<a name="wp1041531"> </a><div class="pSmartList2"><li>SEARCH then finds the midpoint of the half that logically contains the search item and determines if the table element at the midpoint matches the search item.</li></div>
+<a name="wp1041532"> </a><div class="pSmartList2"><li>If there is no match, SEARCH again determines whether the search item is logically located in the upper or lower half of the remaining range.</li></div>
+<a name="wp1041533"> </a><div class="pSmartList2"><li>This process iterates until the search item is found or until it is determined that the table does not contain the search item (the remaining table range becomes null).</li></div>
+<a name="wp1041534"> </a><div class="pSmartList2"><li>If at any time a match is found, the search immediately terminates and the imperative statement associated with the WHEN clause is executed.  Program execution then resumes immediately after the SEARCH statement.</li></div>
+</ol></div>
+<a name="wp1041535"> </a><div class="pSmartList1"><li>Binary searches require sequential, ordered tables (via use of the ASCENDING/DESCENDING KEY phrase).  The table must be ordered as specified by the KEY IS phrase of the table definition.</li></div>
+<a name="wp1041536"> </a><div class="pSmartList1"><li>The matching conditions of the WHEN clause must identify a unique table entry.</li></div>
+<a name="wp1041537"> </a><div class="pSmartList1"><li>Binary searches are best suited to large tables (typically 50 records or more) where the binary search algorithm significantly reduces the average number of lookups per match.</li></div>
+<a name="wp1041538"> </a><div class="pSmartList1"><li>Unlike a sequential search, the binary search format permits only one WHEN clause.</li></div>
+<a name="wp1041539"> </a><div class="pSmartList1"><li>Because only one WHEN clause is permitted and because the index value is automatically set by the program, it is not possible to SEARCH partially full tables. </li></div>
+<a name="wp1041540"> </a><div class="pSmartList1"><li>The SEARCH ALL match conditions are very restrictive.  Match condition evaluation is restricted to evaluation of a condition-name, which can represent only a single value (no range or sequence of values permitted), <em class="cEmphasis">or</em> a condition which tests for equality.</li></div>
+<a name="wp1041541"> </a><div class="pSmartList1"><li>The table data item and the index must be on the left side of the condition statement.</li></div>
+<a name="wp1041542"> </a><div class="pSmartList1"><li>Multiple condition tests are permitted but can be connected only with an AND (no OR).</li></div>
+<a name="wp1041543"> </a><div class="pSmartList1"><li>Any table item or condition-name referenced must be named in the KEY IS phrase of the OCCURS clause of the table definition.</li></div>
+<a name="wp1041544"> </a><div class="pSmartList1"><li>The VARYING option is not permitted.</li></div>
+<a name="wp1041545"> </a><div class="pSmartList1"><li>When a match is found, the index retains the value of the table subscript of the matched entry.  If no match is found the value of the index is unpredictable.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

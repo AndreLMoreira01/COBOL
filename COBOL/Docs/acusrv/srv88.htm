@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:46:11" />
+  <title>8.3  Diagnosing Errors with C$PING</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv8.htm">Chapter 8: System Management</a> &gt; </p>
+<a name="wp1035162"> </a><h2 class="pHeading1">
+8.3  Diagnosing Errors with C$PING
+</h2>
+<a name="wp1035165"> </a><p class="pBody">
+ACUCOBOL-GT includes a library routine, C$PING, that provides diagnostic information for debugging network performance with AcuServer.  If you write a small COBOL program that calls C$PING, you will obtain information such as whether or not the client is AcuServer-enabled, whether or not the parameter passed from the COBOL program is valid, whether the connection was refused or accepted by the server, and whether or not a socket error occurred.
+</p>
+<a name="wp1035168"> </a><p class="pBody">
+A compiled COBOL program called <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuping </span>is included in the \AcuGT\bin directory where you installed ACUCOBOL-GT.  This program contains a call to the C$PING library routine along with a graphical screen that runs well on Windows and UNIX platforms.  If desired, you can run this program to diagnose AcuServer errors, or you can modify the source code for the program as required.  You'll notice that AcuPing has four entry fields:  log file name, server to ping, number of pings, and ping delay (1/10th second).  The program shows results for Message ID, Time at Client, Time at Server, and Round Trip Time.
+</p>
+<a name="wp1035169"> </a><p class="pBody">
+If you choose to write your own COBOL program, use the following calling sequence for C$PING:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+call &quot;C$PING&quot; using server-to-ping, server-time [, client-data].<a name="wp1035170"> </a>
+</pre></div>
+<a name="wp1035171"> </a><p class="pBody">
+where:
+</p>
+<a name="wp1035172"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">server-to-ping</span> is a PIC X(64) data item that should be filled in by the COBOL program before calling C$PING.  This is the server that will be pinged.
+</p>
+<a name="wp1035173"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">server-time</span> is a pic 9(8) data item that is filled in by C$PING, and that designates the time the server got and returned the request.  Note that if this is a group item, the time is left-justified instead of right-justified (as is done via a COBOL MOVE statement).  For this reason, a PIC 9(8) elementary data item is highly recommended.
+</p>
+<a name="wp1035174"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">client-data</span> is a PIC X(n) data item that is passed verbatim to the server.  The server displays this data in the trace file (if tracing is enabled) and returns it verbatim to the client.  The result is that the data in this data item is unchanged, even though it came from the server.  This argument is optional.
+</p>
+<a name="wp1035175"> </a><p class="pBody">
+When the library routine finishes, it sets the external variable <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">return-code</span> to the status of the ping, as follows:  (these values are defined in acucobol.def.)
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+       78  CPING-OK                         VALUE 0.<a name="wp1035176"> </a>
+       78  CPING-NO-CLIENT                  VALUE 1.<a name="wp1040343"> </a>
+       78  CPING-PARAM-ERROR                VALUE 2.<a name="wp1040344"> </a>
+       78  CPING-CONN-REFUSED               VALUE 3.<a name="wp1040345"> </a>
+       78  CPING-VERSION-ERROR              VALUE 4.<a name="wp1040346"> </a>
+       78  CPING-SOCKET-ERROR               VALUE 5.<a name="wp1040347"> </a>
+</pre></div>
+<a name="wp1035177"> </a><p class="pBody">
+CPING-OK means that everything worked, and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">time-at-server</span> has a valid time from the server.
+</p>
+<a name="wp1035178"> </a><p class="pBody">
+CPING-NO-CLIENT means that this runtime is not AcuServer-enabled.
+</p>
+<a name="wp1035179"> </a><p class="pBody">
+CPING-PARAM-ERROR means that the COBOL program passed an invalid parameter.
+</p>
+<a name="wp1035180"> </a><p class="pBody">
+CPING-CONN-REFUSED means that the server refused the connection, possibly because it is not running or is running on a different port than the one for which the client is configured.
+</p>
+<a name="wp1035181"> </a><p class="pBody">
+CPING-VERSION-ERROR means that the version of the server is not compatible with this version of the runtime.  
+</p>
+<a name="wp1035182"> </a><p class="pBody">
+CPING-SOCKET-ERROR means that some unknown socket error occurred.
+</p>
+<a name="wp1035183"> </a><p class="pBody">
+If the server has tracing enabled, the ping request is logged in the trace file. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

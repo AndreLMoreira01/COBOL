@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:27" />
+  <title>11.2  Regarding Controls</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt211.htm">Chapter 11:  Tips and Hints</a> &gt; </p>
+<a name="wp1034237"> </a><h2 class="pHeading1">
+11.2  Regarding Controls
+</h2>
+<a name="wp1032261"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1026803"> </a><p class="pBody">
+I have a window in which I've placed a number of SELF-ACT style radio buttons.  When one of those buttons is clicked, I see the button flash but the previous control remains selected.  What's going on?
+</p>
+<a name="wp1032266"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1026133"> </a><p class="pBody">
+		What you're seeing is correct, if confusing, behavior.  Self-activating buttons have two traits: they don't generate CMD-GOTO events, and once the user is finished with them they reactivate the previously active control.  In this case, clicking on the radio button turns it on and also &quot;completes&quot; the use, causing control to be returned to the previously selected radio button, turning off the button that was clicked.  All this happens in a <em class="cEmphasis">flash</em>.  The bottom line is, don't make radio buttons self-activating if you plan to ACCEPT them directly.
+</p>
+<a name="wp1032272"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1026136"> </a><p class="pBody">
+I have defined a TERMINATION-VALUE (or EXCEPTION-VALUE) for my push button.  When I click on it, I get a status &quot;96&quot; instead of the value I have assigned.  Is this a bug? 
+</p>
+<a name="wp1032278"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1026139"> </a><p class="pBody">
+What you are seeing is correct behavior.  When you click on a push button with the mouse, two actions take place.  First, when you press the mouse button down, the push button requests that the program activate it.  It does this by generating a CMD-GOTO event, which is the status &quot;96&quot; that you are seeing.  After it gains control, it waits for you to release the mouse button.  At this point, the push button generates the termination or exception value that you have assigned to it.  Although we talk about &quot;pushing&quot; a button, in reality, it is the act of releasing the button that is important.  You can see this by running any Windows application and pushing a button down with the mouse.  As long as you hold the mouse button down, nothing happens other than the push button appearing depressed and gaining the input focus.  Once you release the mouse button, the program action associated with the push button takes place.  
+</p>
+<a name="wp1026141"> </a><p class="pBody">
+If you are using push buttons in a Screen Section entry, you usually don't see the CMD-GOTO events because the Screen Section handler responds to these events for you (although you can detect them in AFTER procedures and EVENT procedures).  When you are managing the activation of controls directly in your program, then it is your responsibility to detect these events and activate the appropriate controls.
+</p>
+<a name="wp1026142"> </a><p class="pBody">
+Another possibility is to use the SELF-ACT style of push button.  This style tells the button to automatically activate itself when pushed.  It does not generate CMD-GOTO events.  
+</p>
+<a name="wp1032291"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1026143"> </a><p class="pBody">
+I asked for a FRAME that was 20 characters wide.  When I use the WIN3-GRID option, I can see that it is nowhere near that size.  What's happening? 
+</p>
+<a name="wp1032297"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1026146"> </a><p class="pBody">
+	Frames, like other controls, are normally measured in terms of their font.  In the case of a frame, the font is the frame's title font (even if the frame is not given a title, it still has a title font).  A frame of size &quot;20&quot; is a frame that is 20 title-font-characters wide.  What the WIN3-GRID option shows you is the size of each character cell in the window.  A window's character cell is normally the same as the size of its text font.  If the window's text font and the frame's title font are not the same, then a frame of size &quot;20&quot; will not occupy 20 character cells.  
+</p>
+<a name="wp1026147"> </a><p class="pBody">
+You can address this issue in one of four ways:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1026148"> </a><div class="pSmartList1"><li>You can use the CELLS option when specifying the frame's size (e.g., &quot;SIZE 20 CELLS&quot;).  This causes the frame to be measured using the window's cell size;  </li></div>
+<a name="wp1026149"> </a><div class="pSmartList1"><li>You can change the dimensions of the window's cell size to match the frame's title font (by using the CELL SIZE phrase when you create the window); </li></div>
+<a name="wp1026150"> </a><div class="pSmartList1"><li>You can make the frame's font and the window's text font the same; or,</li></div>
+<a name="wp1026151"> </a><div class="pSmartList1"><li>You can use the PIXELS option when specifying the frame's size (e.g., &quot;SIZE 200 PIXELS&quot;).  This causes the frame to be measured using the screen's pixel size, and the resulting frame's size is unrelated to either the frame's title font or the window's text font. </li></div>
+</ol></div>
+<a name="wp1032323"> </a><h5 class="pHeading4">
+Question: 
+</h5>
+<a name="wp1026698"> </a><p class="pBody">
+How many items can I put in a standard list box or combo box?  
+</p>
+<a name="wp1032429"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1026701"> </a><p class="pBody">
+Microsoft Windows limits the amount of data in these boxes to 64K bytes.  Each item uses the size of its text plus one byte for a NULL terminator.  Note, however, that filling a box with that much data will take considerable time.  
+</p>
+<a name="wp1026156"> </a><p class="pBody">
+A <em class="cEmphasis">paged</em> list box can handle an unlimited number of items.  See <a  href="gt2314.htm#wp1026402">section 3.8</a>.
+</p>
+<a name="wp1032537"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1026157"> </a><p class="pBody">
+When the runtime is putting data into a standard list box or combo box defined in the Screen Section, the last data item gets repeated.  How do I prevent this?  
+</p>
+<a name="wp1032679"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1026160"> </a><p class="pBody">
+	You need to move spaces to your ITEM-TO-ADD data item after you have finished filling the list box or combo box.  Otherwise, the last data item it contains will be added to the box every time you DISPLAY that Screen Section box, or any of its parent group items.  
+</p>
+<a name="wp1032703"> </a><h5 class="pHeading4">
+Question:
+</h5>
+<a name="wp1027622"> </a><p class="pBody">
+When I use a property in a MODIFY statement, I get the compiler error &quot;Undefined data item:<b style="font-weight: bold" class="cBold"> </b><em style="font-weight: normal" class="cEmphasis">property-name</em>&quot;.  I know the property is the right one.  Why do I get an error?<b class="cBold">  </b>
+</p>
+<a name="wp1032709"> </a><h5 class="pHeading4">
+Answer:
+</h5>
+<a name="wp1026165"> </a><p class="pBody">
+The handle that you are specifying in the MODIFY statement is a generic handle (i.e., &quot;USAGE HANDLE&quot; instead of &quot;USAGE HANDLE OF <em class="cEmphasis">type</em>&quot;).  The compiler does not recognize style and property names when you reference a generic handle because it does not know which set of names to use.  To rectify this problem, declare the handle as a handle to the appropriate control type.  
+</p>
+<a name="wp1026167"> </a><p class="pBody">
+ACCEPT FROM SCREEN doesn't return anything!  
+</p>
+<a name="wp1026168"> </a><p class="pBody">
+ACCEPT FROM SCREEN returns <em class="cEmphasis">classical</em> text-based fields, but not controls or the contents of controls (including entry fields).  In other words, it reads the <em class="cEmphasis">terminal emulator</em> plane of the screen, but not the <em class="cEmphasis">graphical</em> plane.  To determine the current contents of a control, use the INQUIRE verb.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

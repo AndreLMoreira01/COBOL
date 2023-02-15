@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:34" />
+  <title>filename_HOST</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl8.htm">Chapter 8:  Compiler and Runtime Options</a> &gt; <a href="4gl83.htm">8.2  Runtime Configuration Variables  </a> &gt; </p>
+<a name="wp1036081"> </a><h2 class="pHeading2">
+filename_HOST
+</h2>
+<a name="wp1036084"> </a><p class="pBody">
+The second variable which can be used to assign a newly-created file to a file system is <em class="cEmphasis">filename</em>_HOST.  This configuration variable is used to assign an individual data file to a file system.  Any file so assigned will use the designated file system, and not the one specified by DEFAULT_HOST. 
+</p>
+<a name="wp1036085"> </a><p class="pBody">
+Substitute the base name of the file for <em class="cEmphasis">filename</em>.  The name you substitute should <em class="cEmphasis">not</em> include any directory names and should <em class="cEmphasis">not</em> include a file extension.  
+</p>
+<a name="wp1036086"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1036087"> </a><p class="pBody">
+For example, if the file CUSTFILE were the only file you wanted to assign to the Vision file system, and all other files were to be Informix files, you could specify:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DEFAULT_HOST  INFORMIX<a name="wp1036088"> </a>
+CUSTFILE_HOST  VISION<a name="wp1038233"> </a>
+</pre></div>
+<a name="wp1036089"> </a><p class="pBody">
+in the configuration file.  
+</p>
+<a name="wp1036090"> </a><h3 class="pHeadingRef">
+See also
+</h3>
+<a name="wp1036091"> </a><p class="pBody">
+The <a  href="4gl815.htm#wp1036068">DEFAULT_HOST</a> variable, which specifies the file system to be used for all files not specified by <em class="cEmphasis">filename</em>_HOST.  
+</p>
+<a name="wp1036588"> </a><p class="pBody">
+You can use DEFAULT_HOST and <em class="cEmphasis">filename</em>_HOST in combination to assign your new files in a default with exceptions manner.  For example, the following directives:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DEFAULT_HOST VISION<a name="wp1036094"> </a>
+<em class="cEmphasis">afile_</em>HOST ORACLE<a name="wp1036095"> </a>
+<em class="cEmphasis">bfile_</em>HOST ORACLE<a name="wp1036096"> </a>
+</pre></div>
+<a name="wp1036097"> </a><p class="pBody">
+mean that all new files except <em class="cEmphasis">afile</em> and <em class="cEmphasis">bfile</em> will be assigned to Vision, and those two files will be assigned to Oracle.  
+</p>
+<a name="wp1051302"> </a><p class="pBody">
+Now suppose <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">myfile1a</span> and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">myfile1b</span> both reside in mydb1, and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">myfile2a</span> and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">myfile2b</span> both reside in mydb2.  With the following directives:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DEFAULT_HOST VISION<a name="wp1051303"> </a>
+a-mssql-database mydb1<a name="wp1051304"> </a>
+myfile1a-HOST mssql<a name="wp1051305"> </a>
+myfile1b-HOST mssql<a name="wp1051306"> </a>
+myfile2a mydb2.dbo.myfile2a<a name="wp1051307"> </a>
+myfile2b mydb2.dbo.myfile2b<a name="wp1051308"> </a>
+mydb2-HOST mssql<a name="wp1051309"> </a>
+</pre></div>
+<a name="wp1051310"> </a><p class="pBody">
+the runtime will use the SQL Server interface for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">myfile1a</span>, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">myfile1b</span>, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">myfile2a</span>, and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">myfile2b</span> and will find all the tables in the correct database.  When the COBOL program opens <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">myfile2a</span>, the runtime translates that name to <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">mydb2.dbo.myfile2a</span> and looks at the basename to determine the filesystem to use (mydb2).  It then looks for mydb2-HOST to determine which filesystem to send the file requests to.
+</p>
+<a name="wp1051171"> </a><p class="pBody">
+You can change the values of the filename-HOST and DEFAULT_HOST variables during program execution by including the following in your code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SET ENVIRONMENT &quot;filename_HOST&quot; TO filesystem<a name="wp1036098"> </a>
+</pre></div>
+<a name="wp1036099"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SET ENVIRONMENT &quot;DEFAULT_HOST&quot; TO filesystem<a name="wp1036100"> </a>
+</pre></div>
+<a name="wp1036101"> </a><p class="pBody">
+This enables you to change file systems during the execution of your program.  (This is not the typical way to specify a file system; it is usually designated in the runtime configuration file, and is not changed in the COBOL program.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

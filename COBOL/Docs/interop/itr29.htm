@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:25" />
+  <title>2.2.2.4  Configuration and deployment</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr2.htm">Chapter 2: Working with Java Technology</a> &gt; <a href="itr23.htm">2.2  Calling COBOL from Java</a> &gt; <a href="itr25.htm">2.2.2  Using the Java API, &quot;CVM.jar&quot; </a> &gt; </p>
+<a name="wp1044829"> </a><h2 class="pHeading3">
+2.2.2.4  Configuration and deployment
+</h2>
+<a name="wp1045716"> </a><p class="pBody">
+To call COBOL from Java using the CVM, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1042526"> </a><div class="pSmartList1"><li>Install and correctly configure the ACUCOBOL-GT runtime.  Optionally, install AcuBench<sup style="vertical-align: baseline" class="cSuperscript">®</sup> if the system will also be used for COBOL development.</li></div>
+<a name="wp1041916"> </a><div class="pSmartList1"><li>Install and correctly configure a Java Runtime Environment (JRE) Version 1.4.2 or later.  Optionally, install a J2SE Software Developer's Kit (SDK) if the same system will also be used for Java development.</li></div>
+<a name="wp1041920"> </a><div class="pSmartList1"><li>Place the path to the JRE /bin directory in the PATH environment variable. Here is an example: </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PATH =D:/j2sdk1.4.2_04/bin. <a name="wp1045326"> </a>
+</pre></div>
+<a name="wp1045327"> </a><p class="pIndented1">
+If the ACUCOBOL-GT installation directory is not the current directory, then that directory should also be placed on the path.  The runtime path must be correctly configured so that a call to LoadLibrary(&quot;wrun32.dll&quot;) or loading the shared library &quot;libruncbl.so&quot; succeeds.
+</p>
+<a name="wp1090183"> </a><div class="pSmartList1"><li>Place the path to &quot;CVM.jar&quot; in the CLASSPATH environment variable. Also ensure that the class or JAR (Java Archive) file that contains the declaration of main is included in the classpath.  For JAR files, include the filenames in the classpath.  For class files, include the directory where the class files reside.  Here is a Windows example: </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CLASSPATH=d:\cobol7\bin\acuUtilities.jar;d:\cobol7\bin
+\CVM.jar;c:\cobol7\JavaProject <a name="wp1090184"> </a>
+</pre></div>
+<a name="wp1090180"> </a><p class="pIndented1">
+For UNIX platforms, use a colon as a delimiter instead of a semicolon.
+</p>
+<a name="wp1107413"> </a><div class="pSmartList1"><li>Add the location of the runtime DLLs and shared libraries to the variable LD_LIBRARY_PATH.  For example:</li></div>
+<a name="wp1107407"> </a><p class="pIndented1">
+LD_LIBRARY_PATH=C:\Acucorp\Acucbl700\AcuGT\bin
+</p>
+<a name="wp1089691"> </a><div class="pSmartList1"><li>Do one of the following:  </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1045320"> </a><div class="pSmartList2"><li>Place a copy of the COBOL program to be called in the same directory as the ACUCOBOL-GT runtime.  This would be the compiled &quot;.acu&quot; file that contains the COBOL program. </li></div>
+<a name="wp1045324"> </a><div class="pSmartList2"><li>Pass the fully qualified filename of the COBOL program to be called to the runtime.</li></div>
+<a name="wp1045325"> </a><div class="pSmartList2"><li>Use a configuration variable to identify the location of the COBOL program.</li></div>
+</ol></div>
+<a name="wp1045613"> </a><div class="pSmartList1"><li>Ensure that all configuration options located in the configuration file are set up correctly.  This includes the location of the JRE, preloading the JVM, and the command line that will be passed to the JVM.</li></div>
+<a name="wp1045679"> </a><div class="pSmartList1"><li>The Java class being used to call COBOL must provide a main function such as this: </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static void main(String[] args)<a name="wp1091803"> </a>
+</pre></div>
+<a name="wp1045275"> </a><div class="pSmartList1"><li>The Java program calling COBOL must include an import statement that imports the ACUCOBOL-GT Java class that is used. Here is an example: </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import com.acucorp.acucobolgt.*;<a name="wp1045344"> </a>
+</pre></div>
+<a name="wp1041928"> </a><div class="pSmartList1"><li>The Java program calling COBOL must declare two objects:  one of type CVM and one of type CALL_OPTIONS.  The following is sample Java code that shows how to call a COBOL program, passing two parameters, using the &quot;CVM.class&quot;: </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CVM cvm = CVM.GET_INSTANCE(); <a name="wp1091976"> </a>
+cvm.setErrorsOut(&quot;/tmp/errfile&quot;); <a name="wp1091977"> </a>
+cvm.setConfigFile(&quot;c:/myproject/config&quot;); <a name="wp1091978"> </a>
+cvm.initialize(); <a name="wp1091979"> </a>
+<a name="wp1091980"> </a>
+CALL_OPTIONS co = new CALL_OPTIONS(); <a name="wp1092363"> </a>
+co.setOption(&quot;debug_method&quot;, &quot;1&quot;); <a name="wp1091981"> </a>
+<a name="wp1091982"> </a>
+Object objInt = new Integer(1); <a name="wp1092368"> </a>
+Object objString = new String(&quot;Test String Parameter&quot;); <a name="wp1091983"> </a>
+Object params[] = { <a name="wp1091984"> </a>
+objInt, <a name="wp1091985"> </a>
+objString <a name="wp1091986"> </a>
+}; <a name="wp1091987"> </a>
+cvm.callProgram(&quot;TestJavaToCobol&quot;, params, co); <a name="wp1091988"> </a>
+cvm.cancelProgram(&quot;TestJavaToCobol&quot;); <a name="wp1091989"> </a>
+cvm.shutdown();<a name="wp1091914"> </a>
+</pre></div>
+<a name="wp1045702"> </a><div class="pSmartList1"><li>The COBOL program being called must provide a Linkage Section that matches the order and type of the Java parameters passed in the Java Object array.  This is done by the COBOL programmer.  Here is an example of a Linkage Section that does this for the above program:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+linkage section. <a name="wp1092375"> </a>
+77 test-integer-parameter usage is signed-int. <a name="wp1092376"> </a>
+77 test-string-parameter pic x(21) value spaces.<a name="wp1092369"> </a>
+</pre></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

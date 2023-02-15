@@ -1,0 +1,72 @@
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      PRGSCR.
+       ENVIRONMENT      DIVISION.
+       CONFIGURATION    SECTION.
+       SPECIAL-NAMES.
+           DECIMAL-POINT IS COMMA.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+
+       01 WORK-GERAL.
+           03 W-VALOR1                   PIC S9(11)V99.
+           03 W-VALOR2                   PIC S9(11)V99.
+           03 W-RES                      PIC S9(11)V99.
+           03 W-CODIGO                   PIC 9(06).
+           03 W-AUX                      PIC X(01).
+
+       SCREEN SECTION.
+       01 TELA-PRINCIPAL.
+           03 LINE 03 COL 05
+                VALUE "INFORME O VALOR 1".
+           03 LINE 04 COL 05
+                VALUE "INFORME O VALOR 2".
+           03 LINE 05 COL 05
+                VALUE "INFORME O CODIGO".
+           03 LINE 10 COL 05
+                VALUE "SOMA:".
+
+           03 VALOR-D1 USING W-VALOR1
+                      PIC ZZ.ZZZ.ZZZ.ZZ9,99-
+                      LINE 03 COL 24
+                      AUTO.
+           03 VALOR-D2 USING W-VALOR2
+                      PIC ZZ.ZZZ.ZZZ.ZZ9,99-
+                      LINE 04 COL 24
+                      AUTO.
+
+           03 VALOR-RESUL USING W-RES
+                      PIC ZZ.ZZZ.ZZZ.ZZ9,99-
+                      LINE 10 COL 10
+                      AUTO.
+
+           03 CODIGO-D USING W-CODIGO
+                      PIC ZZZ.ZZ9
+                      LINE 05 COL 24
+                      AUTO.
+           03 RES-D USING W-RES
+                      PIC ZZZ.ZZ9
+                      LINE 05 COL 24
+                      AUTO.
+                 
+       
+           PROCEDURE DIVISION
+           INICIO.
+                DISPLAY WINDOW AT 0101 LINES 50 SIZE 100
+                                       BACKGROUND-COLOR 7
+                                       FOREGROUND-COLOR 1
+                                       ERASE
+      *          INITIALIZE TELA-PRINCIPAL
+                DISPLAY TELA-PRINCIPAL.
+                ACCEPT TELA-PRINCIPAL.
+
+                COMPUTE W-RES = W-VALOR1 + W-VALOR2.
+                DISPLAY VALOR-RESUL
+
+                DISPLAY "DESEJA CONTINUAR? " AT 2001
+                ACCEPT W-AUX AT 2040  
+                IF W-AUX = 'S'
+                        PERFORM INICIO
+                END-IF.
+                EXIT PROGRAM.
+                STOP RUN.

@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.1.2  Level-Numbers</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt352.htm">5.1 Data Structures</a> &gt; </p>
+<a name="wp1034360"> </a><h2 class="pHeading2">
+5.1.2  Level-Numbers
+</h2>
+<a name="wp1034362"> </a><p class="pBody">
+Level-numbers are used to describe the hierarchical organization of a record.  Level-numbers that describe this hierarchy range from 01 through 49.  
+</p>
+<a name="wp1034363"> </a><p class="pBody">
+The topmost data item is the record.  It always has a level-number of 01.  Items that are included in the record have greater (although not necessarily consecutive) level-numbers.  
+</p>
+<a name="wp1034364"> </a><p class="pBody">
+All items subordinate to a group item must have level-numbers greater than the group's level-number.  The end of a group item is delimited by the next data description entry that has a level-number less than or equal to the group's level-number.
+</p>
+<a name="wp1034365"> </a><p class="pBody">
+Four special level-numbers are used to specify special types of data.  They are never used in a hierarchical structure.  Instead, they define the following special types:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034367"> </a><div class="pSmartList1"><li>Level-number 66 identifies a RENAMES item which regroups other data items.</li></div>
+<a name="wp1034368"> </a><div class="pSmartList1"><li>Level-number 77 identifies an elementary data item in the Working-Storage or Linkage sections.  These are essentially identical to a level 01 elementary data item.  The level-number is used to emphasize that the data item is not part of a hierarchy and cannot itself be subdivided.</li></div>
+<a name="wp1034370"> </a><div class="pSmartList1"><li>Level-number 78 associates a value with the name of a constant.</li></div>
+<a name="wp1034372"> </a><div class="pSmartList1"><li>Level-number 88 identifies a condition-name and its values.</li></div>
+</ul></div>
+<a name="wp1034373"> </a><p class="pBody">
+The following example shows how level-numbers define a record's hierarchy and shows how records, groups, and elementary items interact.  The items are indented to display the hierarchy.  This is a recommended programming practice but is not required by COBOL.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  EMPLOYEE-RECORD.                    (record)<a name="wp1034374"> </a>
+    03  EMPLOYEE-KEY.                   (group)<a name="wp1034375"> </a>
+        05  DEPARTMENT-CODE             (elementary)<a name="wp1034376"> </a>
+        05  EMPLOYEE-NUMBER             (elementary)<a name="wp1034377"> </a>
+    03  EMPLOYEE-IDENTIFICATION.        (group)<a name="wp1034378"> </a>
+        05  EMPLOYEE-NAME               (elementary)<a name="wp1034379"> </a>
+        05  EMPLOYEE-ADDRESS.           (group)<a name="wp1034380"> </a>
+            07  STREET-ADDRESS-1        (elementary)<a name="wp1034381"> </a>
+            07  STREET-ADDRESS-2        (elementary)<a name="wp1034382"> </a>
+            07  CITY                    (elementary)<a name="wp1034383"> </a>
+            07  STATE                   (elementary)<a name="wp1034384"> </a>
+            07  ZIP-CODE                (elementary)<a name="wp1034385"> </a>
+        05  EMPLOYEE-RACE               (elementary)<a name="wp1034386"> </a>
+        05  MARRIAGE-STATUS             (elementary)<a name="wp1034387"> </a>
+    03  PAYROLL-INFORMATION.            (group)<a name="wp1034388"> </a>
+        05  SALARY                      (elementary)<a name="wp1034389"> </a>
+        05  PAY-FREQUENCY               (elementary)<a name="wp1034390"> </a>
+        05  DEDUCTION-CODE-1            (elementary)<a name="wp1034391"> </a>
+        05  DEDUCTION-CODE-2            (elementary)<a name="wp1034392"> </a>
+        05  SICK-ACCRUAL-RATE           (elementary)<a name="wp1034393"> </a>
+        05  VACATION-ACCRUAL-RATE       (elementary)<a name="wp1034394"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

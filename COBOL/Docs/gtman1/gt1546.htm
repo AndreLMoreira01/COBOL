@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:06" />
+  <title>5.3.3.9  Use Group directive</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt15.htm"><br />Chapter 5:  File Processing</a> &gt; <a href="gt1521.htm">5.3  XFD Files</a> &gt; <a href="gt1537.htm">5.3.3  Syntax</a> &gt; </p>
+<a name="wp1032937"> </a><h2 class="pHeading3">
+5.3.3.9  Use Group directive
+</h2>
+<a name="wp1032939"> </a><p class="pBody">
+The USE GROUP directive allows you to enter a group item into the XFD as a single field, instead of using the elements contained in the group.  This is necessary if the item is stored in a pre-existing database as a group, rather than as individual fields.  
+</p>
+<a name="wp1032941"> </a><p class="pBody">
+Combining fields of data into meaningful groups for database storage also improves I/O efficiency. 
+</p>
+<a name="wp1032942"> </a><h3 class="pHeadingRef">
+Syntax
+</h3>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+$XFD USE GROUP<a name="wp1032943"> </a>
+</pre></div>
+<a name="wp1032944"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+*(( XFD USE GROUP ))<a name="wp1032945"> </a>
+</pre></div>
+<a name="wp1032946"> </a><p class="pBody">
+By default, the USE GROUP directive implies that the consolidated field is alphanumeric.  If you want a numeric field, simply add the word NUMERIC at the end of the directive.  
+</p>
+<a name="wp1032947"> </a><h3 class="pHeadingRef">
+Example 1
+</h3>
+<a name="wp1032948"> </a><p class="pBody">
+For example, the directive in the following code combines the functions of the USE GROUP and DATE directives, and indicates that the date should be entered into the XFD as a single date-formatted data item instead of three distinct fields:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( XFD  USE GROUP, DATE ))<a name="wp1032949"> </a>
+  03  date-entered.<a name="wp1032950"> </a>
+    05  yy   pic 99.<a name="wp1032951"> </a>
+    05  mm   pic 99.<a name="wp1032952"> </a>
+    05  dd   pic 99.<a name="wp1032953"> </a>
+</pre></div>
+<a name="wp1032954"> </a><p class="pBody">
+Either a comma or a space (or both) may separate the word DATE from the words USE GROUP.  
+</p>
+<a name="wp1032955"> </a><h3 class="pHeadingRef">
+Example 2
+</h3>
+<a name="wp1032956"> </a><p class="pBody">
+Other fields with which you might use this directive include multi-part account numbers or department numbers, or keys that are referenced as a unit but not by their individual pieces.  Here's an example of an item that might be grouped:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+$xfd  use group<a name="wp1032957"> </a>
+ 01  gl-acct-no.<a name="wp1032958"> </a>
+   03  main-acct     pic 9(4).<a name="wp1032959"> </a>
+   03  sub-acct      pic 9(3).<a name="wp1032960"> </a>
+   03  dept-no       pic 9(3).<a name="wp1032961"> </a>
+</pre></div>
+<a name="wp1032962"> </a><p class="pBody">
+If you are using a pre-existing database in which certain fields are grouped, they must also be grouped in your COBOL FD.
+</p>
+<a name="wp1032963"> </a><p class="pBody">
+If the database does not yet exist, keep in mind that combining fields into groups typically improves execution speed.  Whether to group fields or not also depends on how you want to process them.  Do you always store and use the fields together?  Someone who really knows how the data is being used might help to identify groups of fields that can be combined to speed processing.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

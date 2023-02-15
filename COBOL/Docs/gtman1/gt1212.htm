@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.1.10  Video Options</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt122.htm">2.1 Using the Compiler</a> &gt; </p>
+<a name="wp1132446"> </a><h2 class="pHeading2">
+2.1.10  Video Options
+</h2>
+<a name="wp1132400"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif"></span></p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1132985"> </a><p class="pCellBody">
+<b class="cBold">-Va</b>
+</p>
+</td>
+    <td><a name="wp1132989"> </a><p class="pCellBody">
+This option must be used with either the &quot;-Vh&quot; or &quot;-Vl&quot; option.  When used, the default intensity specified by the &quot;-Vh&quot; or &quot;-Vl&quot; option will be used only for ACCEPT statements.  DISPLAY statements will use the <em class="cEmphasis">opposite</em> intensity.  Thus &quot;-Vha&quot; will cause the default intensity for ACCEPT statements to be high while the default for DISPLAY statements will be low.  When Screen Section items are used, then input and update fields will use the ACCEPT intensity, while output and literal fields will use the DISPLAY intensity. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132991"> </a><p class="pCellBody">
+<b class="cBold">-Vb</b>
+</p>
+</td>
+    <td><a name="wp1132995"> </a><p class="pCellBody">
+Causes the phrase &quot;BLANK LINE&quot;, when used in a Screen Section entry, to be treated as if it were written &quot;BLANK EOL&quot;.  Most other COBOL compilers work this way, but the X/Open COBOL standard  requires the syntax supported by ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif">. </span>
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1132997"> </a><p class="pCellBody">
+<b class="cBold">-Vc</b>
+</p>
+</td>
+    <td><a name="wp1133002"> </a><p class="pCellBody">
+Causes any ACCEPT statement that contains a numeric or numeric edited receiving field to be treated as if the CONVERT phrase were also specified.  This is the default for RM/COBOL-85 but not for RM/COBOL version 2 or VAX COBOL. For information about the CONVERT phrase, see section 6.4.9 in Book 3, <em class="cEmphasis">Reference Manual</em>.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1133005"> </a><p class="pCellBody">
+<b class="cBold">-Ve<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</b>
+</p>
+</td>
+    <td><a name="wp1133012"> </a><p class="pCellBody">
+Alters the rules that determine which conditions cause an ON EXCEPTION phrase to receive control in a Format 1 ACCEPT statement.  Normally, entering an exception key will cause the ON EXCEPTION phrase to receive control.  If you specify this option, then you must follow the &quot;-Ve&quot; with a digit (as part of the same argument) taken from the following list: 
+</p>
+<a name="wp1133013"> </a><p class="pCellBody">
+`1'&#160;&#160;&#160;Exception keys cause the ON EXCEPTION phrase to execute (default handling).
+</p>
+<a name="wp1133015"> </a><p class="pCellBody">
+`2'&#160;&#160;&#160;Conversion error causes the ON EXCEPTION phrase to execute.  When a numeric item is being entered and the CONVERT phrase is specified, then entering an illegal number will cause the exception.
+</p>
+<a name="wp1133016"> </a><p class="pCellBody">
+`3'&#160;&#160;&#160;Combines the effects of both `1' and `2'.
+</p>
+<a name="wp1133017"> </a><p class="pCellBody">
+By default, the runtime system handles conversion errors by displaying an error message and forcing the user to re-enter the data.  If you specify &quot;-Ve2&quot; or &quot;-Ve3&quot;, then conversion errors are returned to your program instead.  For strict compatibility with VAX COBOL, you should specify &quot;-Ve2&quot;, while for strict compatibility with RM/COBOL, you should specify &quot;-Ve3&quot;.  The default setting is recommended, however, because it provides a meaning for ON EXCEPTION that is more consistent with the rest of the ACUCOBOL-GT language. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1133019"> </a><p class="pCellBody">
+<b class="cBold">-Vh</b>
+</p>
+</td>
+    <td><a name="wp1133025"> </a><p class="pCellBody">
+Forces the default video intensity for ACCEPT and DISPLAY statements to be set to <em class="cEmphasis">high</em> intensity.  The default for ACUCOBOL-GT is to use the normal operating intensity for the terminal being used. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1133027"> </a><p class="pCellBody">
+<b class="cBold">-Vi</b>
+</p>
+</td>
+    <td><a name="wp1133032"> </a><p class="pCellBody">
+Changes the behavior of a Screen Section ERASE (and BLANK) phrase with respect to color handling.  If the screen item containing the ERASE phrase has either BACKGROUND-COLOR or COLOR specified, then the &quot;-Vi&quot; option causes the erased area to be painted with that color instead of the subwindow's background color.  
+</p>
+<a name="wp1133033"> </a><p class="pCellBody">
+Keep in mind that background color can be specified using a background color number with the COLOR phrase.  For a table of foreground and background color numerical values, see the entry for &quot;FOREGROUND-COLOR and BACKGROUND-COLOR Phrases&quot; in section 6.4.9 of Book 3.
+</p>
+<a name="wp1133034"> </a><p class="pCellBody">
+If the screen item has no background color specification, or if the background color portion of a COLOR phrase is zero, then the subwindow's background color is used.
+</p>
+<a name="wp1133035"> </a><p class="pCellBody">
+The default behavior is to use the current subwindow's background color when executing an ERASE phrase.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1133037"> </a><p class="pCellBody">
+<b class="cBold">-Vl</b>
+</p>
+</td>
+    <td><a name="wp1133042"> </a><p class="pCellBody">
+Forces the default video intensity for ACCEPT and DISPLAY statement to be set to <em class="cEmphasis">low </em>intensity. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1133044"> </a><p class="pCellBody">
+<b class="cBold">-Vq</b>
+</p>
+</td>
+    <td><a name="wp1133049"> </a><p class="pCellBody">
+Causes ACUCOBOL-GT to produce quiet programs by inhibiting the default bell produced by ACCEPT statements compiled in RM/COBOL compatibility mode.  However, this does not override explicit BELL or BEEP phrases.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1133051"> </a><p class="pCellBody">
+<b class="cBold">-Vu</b>
+</p>
+</td>
+    <td><a name="wp1133053"> </a><p class="pCellBody">
+Allows you to imply the UPDATE phrase for all Format 1 ACCEPT statements that do not have an explicit UPDATE or DEFAULT phrase specified for them.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1133055"> </a><p class="pCellBody">
+<b class="cBold">-Vx</b>
+</p>
+</td>
+    <td><a name="wp1133060"> </a><p class="pCellBody">
+Allows exception keys to be entered by the user for any ACCEPT statement.  Normally, ACUCOBOL-GT inhibits the use of exception keys on ACCEPT statements that do not have a CONTROL KEY clause or an ON EXCEPTION clause. 
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"><span style="font-family: Arial, Verdana, Helvetica, sans-serif"></span>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

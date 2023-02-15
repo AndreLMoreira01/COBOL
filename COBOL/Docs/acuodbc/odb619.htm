@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:29:19" />
+  <title>6.3.10  USE GROUP Directive</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb6.htm">Chapter 6: Mapping COBOL Data Items and Database Fields</a> &gt; <a href="odb69.htm">6.3  Using Directives</a> &gt; </p>
+<a name="wp1044530"> </a><h2 class="pHeading2">
+6.3.10  USE GROUP Directive
+</h2>
+<a name="wp1044535"> </a><p class="pBody">
+Generally, only elementary data items correspond to fields.  The USE GROUP directive indicates that the following group item is to correspond to a field as if it were an elementary item of the same width.  This is necessary if the item is stored in your Windows application as a group, rather than as individual fields.
+</p>
+<a name="wp1029057"> </a><p class="pBody">
+By default, the USE GROUP directive implies that the consolidated field is alphanumeric.  If you want a numeric field, add the word NUMERIC at the end of the directive.
+</p>
+<a name="wp1029058"> </a><p class="pBody">
+Grouping data items in this way is efficient if the groups are usually processed as units.  
+</p>
+<a name="wp1029059"> </a><h3 class="pHeadingRef">
+Syntax
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+$XFD USE GROUP<a name="wp1029060"> </a>
+</pre></div>
+<a name="wp1029061"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( XFD USE GROUP )) <a name="wp1029062"> </a>
+</pre></div>
+<a name="wp1029063"> </a><h3 class="pHeadingRef">
+Example 
+</h3>
+<a name="wp1029064"> </a><p class="pBody">
+You might use this directive with fields like multi-part account numbers or department numbers, or keys that are referenced as a unit but not by their individual pieces.  In the sample file, you can group the &quot;year&quot; and &quot;seq_no&quot; fields to make a single account number (&quot;acct_no&quot;) as shown below:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+       FILE SECTION.<a name="wp1029065"> </a>
+       FD  qa-file.<a name="wp1029066"> </a>
+      $XFD COMMENT  This sample file demonstrates directives.<a name="wp1029067"> </a>
+       01  qa-record.<a name="wp1029068"> </a>
+           03  animal-info.<a name="wp1029069"> </a>
+      *((XFD NAME=PATIENT, NUMERIC ))<a name="wp1029070"> </a>
+               05  patient-id                  pic x(5).<a name="wp1029071"> </a>
+               05  atype                       pic x.<a name="wp1029072"> </a>
+               05  ctype redefines atype       pic x.<a name="wp1029073"> </a>
+               05  dtype redefines atype       pic x.<a name="wp1029074"> </a>
+               05  otype redefines atype       pic x.<a name="wp1029075"> </a>
+           03  owner-info.<a name="wp1029076"> </a>
+               05  phone                       pic x(8).<a name="wp1029077"> </a>
+      *(( XFD READ-ONLY ))<a name="wp1029078"> </a>
+               05  owner                       pic x(30). <a name="wp1029079"> </a>
+           03  financial.<a name="wp1029080"> </a>
+      $XFD USE GROUP<a name="wp1029081"> </a>
+               05  acct_no.<a name="wp1029082"> </a>
+                   10  year                    pic x(2).<a name="wp1029083"> </a>
+                   10  seq_no                  pic x(4).<a name="wp1029084"> </a>
+      *(( XFD DATE=YYYYMMDD, USE GROUP ))<a name="wp1029085"> </a>
+               05  last_visit.<a name="wp1029086"> </a>
+                   10  yyyy                    pic 9(4).<a name="wp1042921"> </a>
+                   10  mm                      pic 9(2).<a name="wp1029087"> </a>
+                   10  dd                      pic 9(2).<a name="wp1029088"> </a>
+      $XFD HIDDEN<a name="wp1029090"> </a>
+               05  fee                         pic s9(5)v99.<a name="wp1029091"> </a>
+</pre></div>
+<a name="wp1029092"> </a><p class="pBody">
+The resulting table looks similar to this:</p><div><img src="images/use_groa.gif" height="276" width="563" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1029094"> </a><p class="pBody">
+If you are using an existing database in which certain fields are grouped, they must also be grouped in your COBOL FD.
+</p>
+<a name="wp1029095"> </a><p class="pBody">
+If the database does not yet exist, keep in mind that combining fields into groups typically improves execution speed.  Whether to group fields or not also depends on how you want to process them.  Do you always store and use the fields together?  Someone who really knows how the data is being used might help to identify groups of fields that can be combined to speed processing.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

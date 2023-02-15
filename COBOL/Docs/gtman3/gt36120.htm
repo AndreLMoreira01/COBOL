@@ -1,0 +1,583 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>INSPECT Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1039632"> </a><h2 class="pHeading2">
+INSPECT Statement
+</h2>
+<a name="wp1039634"> </a><p class="pBody">
+The INSPECT statement supports counting and modification of single characters or groups of characters within a data item.  INSPECT performs its operations on strings and requires that the source data item be designated USAGE DISPLAY.
+</p>
+<a name="wp1039635"> </a><p class="pBody">
+INSPECT performs three basic functions: TALLYING, REPLACING, and CONVERTING.  (CONVERTING is a specialized, shorthand form of REPLACING).
+</p>
+<a name="wp1039636"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This manual entry includes code examples and highlights for first-time users following the General Rules section.
+<hr />
+</p>
+<a name="wp1039638"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<a name="wp1039639"> </a><h3 class="pHeadingRef">
+Format 1
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">INSPECT</u> source<a name="wp1039640"> </a>
+<a name="wp1039641"> </a>
+ [ <u class="cUnderline">TALLYING</u> { counter <u class="cUnderline">FOR</u> { { {<u class="cUnderline">ALL</u>    } comp-val }<a name="wp1039642"> </a>
+                            { {<u class="cUnderline">LEADING</u>}          }<a name="wp1039643"> </a>
+                            {     <u class="cUnderline">CHARACTERS</u>     }<a name="wp1039644"> </a>
+<a name="wp1039645"> </a>
+           [delim] } ... } ... ] ...<a name="wp1039646"> </a>
+<a name="wp1039647"> </a>
+ [ <u class="cUnderline">REPLACING</u> <a name="wp1039648"> </a>
+<a name="wp1039649"> </a>
+    { <u class="cUnderline">CHARACTERS</u> <u class="cUnderline">BY</u> repl-char [delim]        }<a name="wp1039650"> </a>
+    { {<u class="cUnderline">ALL</u>    }                              }<a name="wp1039651"> </a>
+    { {<u class="cUnderline">LEADING</u>} { targ <u class="cUnderline">BY</u> repl [delim] } ... }<a name="wp1039652"> </a>
+    { {<u class="cUnderline">FIRST</u>  }                              }<a name="wp1039653"> </a>
+                      ... ]<a name="wp1039654"> </a>
+</pre></div>
+<a name="wp1039655"> </a><h3 class="pHeadingRef">
+Format 2
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">INSPECT</u> source<a name="wp1039656"> </a>
+    <u class="cUnderline">CONVERTING</u> comp-chars <u class="cUnderline">TO</u> conv-chars  [delim]<a name="wp1039657"> </a>
+</pre></div>
+<a name="wp1039658"> </a><p class="pBody">
+<em class="cEmphasis">delim</em> has the following format:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    { {BEFORE} INITIAL delimiter } ...<a name="wp1039659"> </a>
+      {AFTER }<a name="wp1039660"> </a>
+</pre></div>
+<a name="wp1039661"> </a><h3 class="pHeadingRef">
+Format 3
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">INSPECT</u> source<a name="wp1039662"> </a>
+<a name="wp1039663"> </a>
+    [ <u class="cUnderline">TALLYING</u> counter <u class="cUnderline">FOR</u> <u class="cUnderline">TRAILING</u> comp-value ] <a name="wp1039664"> </a>
+    [ <u class="cUnderline">REPLACING</u> <u class="cUnderline">TRAILING</u> target <u class="cUnderline">BY</u> replace ] <a name="wp1039665"> </a>
+</pre></div>
+<a name="wp1039667"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039669"> </a><div class="pSmartList1"><li><em class="cEmphasis">Source</em> is a data item with USAGE DISPLAY.  </li></div>
+<a name="wp1039670"> </a><div class="pSmartList1"><li><em class="cEmphasis">Counter</em> is an elementary numeric data item.  </li></div>
+<a name="wp1039671"> </a><div class="pSmartList1"><li><em class="cEmphasis">Comp-val</em> is a nonnumeric literal (other than an ALL literal) or an elementary alphabetic, alphanumeric, or numeric data item with USAGE DISPLAY.  </li></div>
+<a name="wp1039672"> </a><div class="pSmartList1"><li><em class="cEmphasis">Repl-char</em> is a one-character item with the same restrictions as <em class="cEmphasis">comp-val</em>.</li></div>
+<a name="wp1039673"> </a><div class="pSmartList1"><li><em class="cEmphasis">Targ</em>, <em class="cEmphasis">delimiter, repl</em>, <em class="cEmphasis">comp-chars,</em> and <em class="cEmphasis">conv-chars</em> have the same restrictions as <em class="cEmphasis">comp-val</em>.</li></div>
+<a name="wp1039674"> </a><div class="pSmartList1"><li>In Formats 1 and 3, at least one of the TALLYING or REPLACING phrases must be specified.</li></div>
+<a name="wp1039675"> </a><div class="pSmartList1"><li>Any <em class="cEmphasis">delim</em> phrase may have no more than one AFTER and one BEFORE phrase in it.</li></div>
+<a name="wp1039676"> </a><div class="pSmartList1"><li>The sizes of the data referred to by <em class="cEmphasis">targ</em> and <em class="cEmphasis">repl</em> must be the same.  If <em class="cEmphasis">repl</em> is a figurative constant, its size is set equal to the size of <em class="cEmphasis">targ</em>.  </li></div>
+<a name="wp1039677"> </a><div class="pSmartList1"><li>When the CHARACTERS phrase of the REPLACING clause is used, <em class="cEmphasis">delimiter</em> (if specified) must have a data size of one character.  </li></div>
+<a name="wp1039678"> </a><div class="pSmartList1"><li>The sizes of the data referred to by <em class="cEmphasis">comp-chars</em> and <em class="cEmphasis">conv-chars</em> must be the same.  When <em class="cEmphasis">conv-chars</em> is a figurative constant, its size equals that of <em class="cEmphasis">comp-chars</em>.  </li></div>
+<a name="wp1039679"> </a><div class="pSmartList1"><li>The same character cannot appear more than once in the data referred to by <em class="cEmphasis">comp-chars</em>.  </li></div>
+<a name="wp1039680"> </a><div class="pSmartList1"><li><em class="cEmphasis">Comp-value</em>, <em class="cEmphasis">target</em>, and <em class="cEmphasis">replace</em> are nonnumeric literals or single-character alphanumeric data items.  </li></div>
+</ol></div>
+<a name="wp1039683"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039684"> </a><div class="pSmartList1"><li>Inspection starts at the leftmost character of <em class="cEmphasis">source</em> and proceeds character by character until it reaches the rightmost character.</li></div>
+<a name="wp1039685"> </a><div class="pSmartList1"><li><em class="cEmphasis">Source, comp-val, delimiter, targ, repl, repl-char, comp-chars</em>, and <em class="cEmphasis">conv-chars</em> are treated as if they were redefined by an alphanumeric elementary data item.  The data referred to by these items is treated as a character string.  </li></div>
+<a name="wp1039686"> </a><div class="pSmartList1"><li>If the size of <em class="cEmphasis">source</em> is zero characters, no inspection occurs.</li></div>
+<a name="wp1039687"> </a><div class="pSmartList1"><li>If the size of <em class="cEmphasis">comp-val</em> or <em class="cEmphasis">targ</em> is zero characters, no match in <em class="cEmphasis">source</em> by these items is successful.  </li></div>
+<a name="wp1039690"> </a><div class="pSmartList1"><li><em class="cEmphasis">Comp-val</em> and <em class="cEmphasis">targ</em> are matched in the source string according to the following rules:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1039691"> </a><div class="pSmartList2"><li>Comparison starts at the leftmost character and proceeds character by character until the rightmost character of <em class="cEmphasis">source</em> is reached.  </li></div>
+<a name="wp1039692"> </a><div class="pSmartList2"><li>The first <em class="cEmphasis">comp-val</em> or <em class="cEmphasis">targ</em> item is checked at the current character location for a match.  A match occurs if every character of <em class="cEmphasis">comp-val</em> or <em class="cEmphasis">targ</em> is the same as the corresponding characters in <em class="cEmphasis">source</em> starting at the current character position.</li></div>
+<a name="wp1039693"> </a><div class="pSmartList2"><li>If no match occurs, successive <em class="cEmphasis">comp-val</em> or <em class="cEmphasis">targ</em> items are checked at the current character position until a match occurs or the list of items is exhausted.  The next character position is then checked and the process repeats.</li></div>
+<a name="wp1039694"> </a><div class="pSmartList2"><li>When a match occurs, the specified tallying or replacement is performed.  Further checking for matching items at this character position is not performed.  The new next character position to use for matching is set to be the character to the immediate right of the rightmost character position that matched in the preceding comparison.  </li></div>
+<a name="wp1039695"> </a><div class="pSmartList2"><li>Inspection halts when the rightmost character of <em class="cEmphasis">source</em> has served as the current matching character position or has been successfully matched in the preceding rule.</li></div>
+<a name="wp1039698"> </a><div class="pSmartList2"><li>When the CHARACTERS phrase is present, inspection proceeds as if a single-character value were being compared and it successfully matches every character in <em class="cEmphasis">source</em>.</li></div>
+</ol></div>
+<a name="wp1039699"> </a><div class="pSmartList1"><li>The BEFORE phrase modifies the character position to use as the rightmost position in <em class="cEmphasis">source</em> for the corresponding comparison operation.  Comparisons in <em class="cEmphasis">source</em> occur only to the left of the first occurrence of <em class="cEmphasis">delimiter</em>.  If <em class="cEmphasis">delimiter</em> is not present in <em class="cEmphasis">source</em>, then the comparison proceeds as if there were no BEFORE phrase.</li></div>
+<a name="wp1039700"> </a><div class="pSmartList1"><li>The AFTER phrase modifies the character position to use as the leftmost position in <em class="cEmphasis">source</em> for the corresponding comparison operation.  Comparisons in <em class="cEmphasis">source</em> occur only to the right of the first occurrence of <em class="cEmphasis">delimiter</em>.  This character position is the one immediately to the right of the rightmost character of the <em class="cEmphasis">delimiter</em> found.  If <em class="cEmphasis">delimiter</em> is not found in <em class="cEmphasis">source</em>, the INSPECT statement has no effect (no tallying or replacement occurs).  </li></div>
+<a name="wp1039701"> </a><div class="pSmartList1"><li>If both the TALLYING and REPLACING phrases are present, the TALLYING option is performed first, and then the REPLACING option is performed as if it were written as a separate INSPECT statement.  </li></div>
+</ol></div>
+<a name="wp1039702"> </a><p class="pBody">
+<b class="cBold">TALLYING Option</b>
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039705"> </a><div class="pSmartList1"><li>The INSPECT statement does not initialize <em class="cEmphasis">counter</em>. </li></div>
+<a name="wp1039706"> </a><div class="pSmartList1"><li>If the ALL phrase is present, <em class="cEmphasis">counter</em> is incremented by one for each occurrence of <em class="cEmphasis">comp-val</em> in <em class="cEmphasis">source</em>.</li></div>
+<a name="wp1039707"> </a><div class="pSmartList1"><li>If the LEADING phrase is present, <em class="cEmphasis">counter</em> is incremented by one for each contiguous occurrence of <em class="cEmphasis">comp-val</em> in <em class="cEmphasis">source</em>.  These occurrences must start at the position in <em class="cEmphasis">source</em> where comparison begins.  Otherwise, no tallying occurs.</li></div>
+<a name="wp1039708"> </a><div class="pSmartList1"><li>If the CHARACTERS phrase is present, <em class="cEmphasis">counter</em> is incremented by one for each character in <em class="cEmphasis">source</em> that is matched (see General Rule 5f above).  </li></div>
+<a name="wp1039709"> </a><div class="pSmartList1"><li>If the FOR TRAILING phrase is present, <em class="cEmphasis">counter</em> is incremented by one for each contiguous occurrence of <em class="cEmphasis">comp-value</em> in <em class="cEmphasis">source,</em> starting at the rightmost (trailing) character and scanning leftwards.  If the rightmost character is not <em class="cEmphasis">comp-value,</em> then <em class="cEmphasis">counter</em> is not incremented.</li></div>
+</ol></div>
+<a name="wp1039710"> </a><p class="pBody">
+<b class="cBold">REPLACING Option</b>
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039711"> </a><div class="pSmartList1"><li>The adjectives ALL, LEADING, and FIRST apply to succeeding compare items until the next such adjective appears. </li></div>
+<a name="wp1039713"> </a><div class="pSmartList1"><li>If the CHARACTERS phrase is used, each character matched in <em class="cEmphasis">source</em> is replaced by the single character <em class="cEmphasis">repl-char</em>.  </li></div>
+<a name="wp1039714"> </a><div class="pSmartList1"><li>When the ALL phrase is present, each occurrence of <em class="cEmphasis">targ</em> matched in <em class="cEmphasis">source</em> is replaced by <em class="cEmphasis">repl</em>.  </li></div>
+<a name="wp1039715"> </a><div class="pSmartList1"><li>If the LEADING phrase is present, each contiguous occurrence of <em class="cEmphasis">targ</em> matched in <em class="cEmphasis">source</em> is replaced by <em class="cEmphasis">repl</em>.  These occurrences must begin at the leftmost position in <em class="cEmphasis">source</em> used for comparison.</li></div>
+<a name="wp1039716"> </a><div class="pSmartList1"><li>When the FIRST phrase is present, the leftmost occurrence of <em class="cEmphasis">targ</em> matched in <em class="cEmphasis">source</em> is replaced by <em class="cEmphasis">repl</em>.  </li></div>
+<a name="wp1039717"> </a><div class="pSmartList1"><li>If the TRAILING phrase is present, the REPLACING option causes all contiguous occurrences of <em class="cEmphasis">target</em> to be replaced by <em class="cEmphasis">replace</em>, provided that these occurrences end in the rightmost character position of <em class="cEmphasis">source.</em></li></div>
+<a name="wp1039718"> </a><div class="pSmartList1"><li>It is possible for a size mismatch between the INSPECT and REPLACING data items to occur during program execution.  This could happen when reference modification is used, because in that case the length of a data item is not known at compile time.  If such a mismatch occurs, the runtime generates the &quot;INSPECT REPLACING size mismatch&quot; error.  This error belongs to the &quot;intermediate&quot; class of runtime errors which call installed error procedures.  See Book 4, <em class="cEmphasis">Appendices</em>, Appendix I &quot;Library Routines,&quot; CBL_ERROR_PROC for details.</li></div>
+</ol></div>
+<a name="wp1039720"> </a><p class="pBody">
+<b class="cBold">CONVERTING Option</b>
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039721"> </a><div class="pSmartList1"><li>The CONVERTING form of the INSPECT statement has the effect of replacing every character in <em class="cEmphasis">source</em> found in <em class="cEmphasis">comp-chars</em> with the corresponding character in <em class="cEmphasis">conv-chars</em>.  This is done according to the following rules: </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1039723"> </a><div class="pSmartList2"><li>The INSPECT statement is treated as if it were specified with the REPLACING option containing a series of ALL phrases, one for each character of <em class="cEmphasis">comp-chars</em>.</li></div>
+<a name="wp1039724"> </a><div class="pSmartList2"><li>The <em class="cEmphasis">targ</em> item in each ALL phrase refers to a single character of <em class="cEmphasis">comp-chars</em>.</li></div>
+<a name="wp1039725"> </a><div class="pSmartList2"><li>The <em class="cEmphasis">repl</em> item in each ALL phrase refers to a single character of <em class="cEmphasis">conv-chars</em>.</li></div>
+<a name="wp1039726"> </a><div class="pSmartList2"><li>The individual characters of <em class="cEmphasis">comp-chars</em> and <em class="cEmphasis">conv-chars</em> correspond by ordinal position.</li></div>
+</ol></div>
+<a name="wp1039727"> </a><div class="pSmartList1"><li>INSPECT CONVERTING is usually more efficient than the corresponding INSPECT REPLACING statement.  </li></div>
+</ol></div>
+<a name="wp1039729"> </a><h3 class="pHeadingRef">
+Code Examples
+</h3>
+<a name="wp1039730"> </a><h3 class="pHeadingRef">
+Example 1:
+</h3>
+<a name="wp1039731"> </a><p class="pBody">
+Use INSPECT to count the number of occurrences of a character or string: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  CHAR-COUNT  PIC 99 VALUE 0.<a name="wp1039732"> </a>
+<a name="wp1039733"> </a>
+*count all &quot;b&quot;s<a name="wp1039734"> </a>
+INSPECT INPUT-ITEM<a name="wp1039735"> </a>
+   TALLYING CHAR-COUNT FOR ALL &quot;B&quot;.<a name="wp1039736"> </a>
+</pre></div>
+<a name="wp1039737"> </a><p class="pBody">
+   </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1056820"> </a>
+Value of INPUT-ITEM
+
+</th>
+    <th><a name="wp1056822"> </a>
+CHAR-COUNT
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056824"> </a><p class="pCellBody">
+#BB44@#AL23#AL88#xx#CC12
+</p>
+</td>
+    <td><a name="wp1056826"> </a><p class="pCellBody">
+2
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056828"> </a><p class="pCellBody">
+#BB@#BBBB#CCCC#xxDD
+</p>
+</td>
+    <td><a name="wp1056830"> </a><p class="pCellBody">
+6
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056832"> </a><p class="pCellBody">
+BB@#BB#BB
+</p>
+</td>
+    <td><a name="wp1056834"> </a><p class="pCellBody">
+6
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*count all &quot;#&quot;s found after the first &quot;@&quot;<a name="wp1039759"> </a>
+*and before the first &quot;x&quot;<a name="wp1039760"> </a>
+INSPECT INPUT-ITEM<a name="wp1039761"> </a>
+  TALLYING CHAR-COUNT FOR ALL &quot;#&quot;:<a name="wp1039762"> </a>
+     AFTER &quot;@&quot; BEFORE &quot;x&quot;.<a name="wp1039763"> </a>
+</pre></div>
+<a name="wp1056895"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1056869"> </a>
+Value of INPUT-ITEM
+
+</th>
+    <th><a name="wp1056871"> </a>
+CHAR-COUNT
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056873"> </a><p class="pCellBody">
+#BB44@#AL23#AL88#xx#CC12
+</p>
+</td>
+    <td><a name="wp1056875"> </a><p class="pCellBody">
+3
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056877"> </a><p class="pCellBody">
+#BB@#BBBB#CCCC#xxDD
+</p>
+</td>
+    <td><a name="wp1056879"> </a><p class="pCellBody">
+3
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056881"> </a><p class="pCellBody">
+BB@#BB#BB
+</p>
+</td>
+    <td><a name="wp1056883"> </a><p class="pCellBody">
+2
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*count all characters<a name="wp1039783"> </a>
+INSPECT INPUT-ITEM<a name="wp1039784"> </a>
+   TALLYING CHAR-COUNT FOR CHARACTERS.<a name="wp1039785"> </a>
+</pre></div>
+<a name="wp1039805"> </a><h3 class="pHeadingRef">
+Example 2:
+</h3>
+<a name="wp1039806"> </a><p class="pBody">
+Use INSPECT to replace matching characters or strings:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+INSPECT NAME-LIST REPLACING<a name="wp1039807"> </a>
+*if the first characters in the string are &quot;a&quot;<a name="wp1039808"> </a>
+*replace the &quot;a&quot;s with &quot;A&quot;s<a name="wp1039809"> </a>
+   LEADING &quot;a&quot; BY &quot;A&quot;<a name="wp1039810"> </a>
+*replace all &quot;T&quot;s found after the first &quot;/&quot;<a name="wp1039811"> </a>
+*with &quot;t&quot;<a name="wp1039812"> </a>
+   ALL &quot;T&quot; BY &quot;t&quot; AFTER &quot;/&quot;<a name="wp1039813"> </a>
+*replace all &quot;/&quot;s with &quot;:&quot;<a name="wp1039814"> </a>
+   ALL &quot;/&quot; BY &quot;:&quot;<a name="wp1039815"> </a>
+*after the first &quot;-&quot; replace all characters <a name="wp1039816"> </a>
+*in the string with &quot;Z&quot;<a name="wp1039817"> </a>
+   CHARACTERS BY &quot;Z&quot; AFTER &quot;-&quot;. <a name="wp1039818"> </a>
+</pre></div>
+<a name="wp1057023"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1056984"> </a>
+Input value NAME-LIST
+
+</th>
+    <th><a name="wp1056986"> </a>
+Output value NAME-LIST
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056988"> </a><p class="pCellBody">
+TED/TRAVIS/UREY/VENNEY
+</p>
+</td>
+    <td><a name="wp1056990"> </a><p class="pCellBody">
+TED:tRAVIS:UREY:VENNEY
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056992"> </a><p class="pCellBody">
+aVERY/BLAZE/TERI
+</p>
+</td>
+    <td><a name="wp1056994"> </a><p class="pCellBody">
+AVERY:BLAZE:tERI
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1056996"> </a><p class="pCellBody">
+MAVIS-GUS-HAL-WESTON
+</p>
+</td>
+    <td><a name="wp1056998"> </a><p class="pCellBody">
+MAVIS-ZZZZZZZZZZZZZZ
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1039838"> </a><h3 class="pHeadingRef">
+Example 3:
+</h3>
+<a name="wp1039839"> </a><p class="pBody">
+Use INSPECT to both tally and replace characters or strings:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+INSPECT PART-LIST<a name="wp1039840"> </a>
+*count all &quot;P-&quot;<a name="wp1039841"> </a>
+   TALLYING P-COUNT FOR ALL &quot;P-&quot;<a name="wp1039842"> </a>
+*replace all &quot;xx&quot; by &quot;__&quot;<a name="wp1039843"> </a>
+   REPLACING ALL &quot;xx&quot; BY &quot;__&quot;.<a name="wp1039844"> </a>
+</pre></div>
+<a name="wp1057151"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1057144"> </a>
+Value of PART-LIST
+
+</th>
+    <th><a name="wp1057146"> </a>
+P-COUNT
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1057148"> </a><p class="pCellBody">
+P-BOLTxxP-WASHERxxP-NUT
+</p>
+</td>
+    <td><a name="wp1057150"> </a><p class="pCellBody">
+3
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1057161"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1057154"> </a>
+Input value PART-LIST
+
+</th>
+    <th><a name="wp1057156"> </a>
+Output value PART-LIST
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1057158"> </a><p class="pCellBody">
+P-BOLTxxP-WASHERxxP-NUT
+</p>
+</td>
+    <td><a name="wp1057160"> </a><p class="pCellBody">
+P-BOLT__P-WASHER__P-NUT
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1039867"> </a><h3 class="pHeadingRef">
+Example 4:
+</h3>
+<a name="wp1039868"> </a><p class="pBody">
+Use INSPECT/CONVERT to convert every occurrence of the specified characters in the input string (equivalent to a series of REPLACE ALL phrases).  The list of characters following the words CONVERT and TO is not a string, but, rather, a list of individual characters.  INSPECT/CONVERT replaces every occurrence of each character in the CONVERT list with the character in the matching ordinal position of the TO list.  AFTER and BEFORE can be used to bracket a portion of the source string.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*convert all occurrences of:<a name="wp1039869"> </a>
+*&quot;-&quot; to &quot;0&quot;, &quot;l&quot; to &quot;L&quot;,<a name="wp1039870"> </a>
+*&quot;a&quot; to &quot;A&quot; and &quot;/&quot; to &quot;:&quot;<a name="wp1039871"> </a>
+INSPECT PART-LIST<a name="wp1039872"> </a>
+   CONVERTING &quot;-la/&quot; TO &quot;0LA:&quot;.<a name="wp1039873"> </a>
+</pre></div>
+<a name="wp1039874"> </a><p class="pBody">
+This INSPECT/CONVERT statement is equivalent to:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+INSPECT PART-LIST<a name="wp1039875"> </a>
+   REPLACING ALL &quot;-&quot; BY &quot;0&quot;<a name="wp1039876"> </a>
+             ALL &quot;l&quot; BY &quot;L&quot;<a name="wp1039877"> </a>
+             ALL &quot;a&quot; BY &quot;A&quot;<a name="wp1039878"> </a>
+             ALL &quot;/&quot; BY &quot;:&quot;.<a name="wp1039879"> </a>
+</pre></div>
+<a name="wp1039883"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1057422"> </a>
+Input value PART-LIST
+
+</th>
+    <th><a name="wp1057424"> </a>
+Output value PART-LIST
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1057426"> </a><p class="pCellBody">
+Yla-1/Yla-2/Yla-3/Yla21
+</p>
+</td>
+    <td><a name="wp1057428"> </a><p class="pCellBody">
+YLA01:YLA02:YLA03:YLA21
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1039892"> </a><h3 class="pHeadingRef">
+Highlights for first-time users
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039893"> </a><div class="pSmartList1"><li>How the matching process works:</li></div>
+<a name="wp1039894"> </a><p class="pIndented1">
+In all formats of the INSPECT statement there must be a set of specified &quot;match&quot; values.  The match values may be single characters or strings, or a mix of both.  The match values are the arguments specified after the TALLYING/FOR, REPLACING, or CONVERTING key words, and before the BY or TO key words (for further clarification see the example that follows).
+</p>
+<a name="wp1039895"> </a><p class="pIndented1">
+INSPECT attempts to locate the match values in the source data item.  The match values are searched for, in order of appearance in the code, at each position in the source string.  Inspection starts at the leftmost character of the source data item and proceeds, character by character, to the rightmost character.  
+</p>
+<a name="wp1039896"> </a><p class="pIndented1">
+Match process example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+INSPECT source-data-item<a name="wp1039897"> </a>
+  REPLACING &quot;cd&quot; BY &quot;QP&quot;<a name="wp1039898"> </a>
+            &quot;e&quot;  BY &quot;T&quot;<a name="wp1039899"> </a>
+            &quot;f&quot;  BY &quot;V&quot;.<a name="wp1039900"> </a>
+</pre></div>
+<a name="wp1039901"> </a><p class="pIndented1">
+Source data item:   &quot;abcdefg&quot;
+</p>
+<a name="wp1124586"> </a><p class="pIndented1">
+Set of match values: &quot;cd&quot;, &quot;e&quot;, &quot;f&quot;
+</p>
+<a name="wp1124588"> </a><p class="pIndented1">
+The search begins at the leftmost character:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&quot;abcdefg&quot;<a name="wp1039906"> </a>
+ ^<a name="wp1039907"> </a>
+</pre></div>
+<a name="wp1039908"> </a><p class="pIndented1">
+The first value in the match set is &quot;cd&quot;.  The first element, &quot;c&quot;, is compared to the value &quot;a&quot; for a match.  No match.  The second value in the match set is &quot;e&quot;.  &quot;e&quot; is tested for a match with &quot;a&quot;.  No match.  The third value in the match set is &quot;f&quot;.  &quot;f&quot; is tested for a match with &quot;a&quot;.  No match.  There are no untested values remaining in the match set.  The current position in the source data item is advanced one position to the right.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&quot;abcdefg&quot;<a name="wp1039909"> </a>
+  ^<a name="wp1039910"> </a>
+</pre></div>
+<a name="wp1039911"> </a><p class="pIndented1">
+The sequential testing of the members of the match set to the value of the current position in the source data item is repeated.  None matches.  The current position in the source data item is advanced one position to the right.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&quot;abcdefg&quot;<a name="wp1039912"> </a>
+   ^<a name="wp1039913"> </a>
+</pre></div>
+<a name="wp1039914"> </a><p class="pIndented1">
+The first match value is &quot;cd&quot;.  &quot;c&quot; is tested for a match with the current position in the source data item and there is a match.  &quot;d&quot; is tested against the value of 1 + the current position (&quot;d&quot;) and, again, there is a match.  There are no more characters in the match value (&quot;cd&quot;).  The first value in the match set results in a complete match at the current position in the source data item.  Remaining values in the match set are not tested.  The specified REPLACING action is performed.  The current position in the source data item is advanced the length of the match value (&quot;cd&quot;), two places to the right.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&quot;abQPefg&quot;<a name="wp1039915"> </a>
+     ^<a name="wp1039916"> </a>
+</pre></div>
+<a name="wp1039917"> </a><p class="pIndented1">
+Sequential testing of the members of the match set to the value of the current position in the source data item is repeated.  The second member of the match set, &quot;e&quot;, is a match.  The REPLACING action is performed and the current position in the source data item is advanced the length of the match value, one position to the right.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&quot;abQPTfg&quot;<a name="wp1039918"> </a>
+      ^<a name="wp1039919"> </a>
+</pre></div>
+<a name="wp1039920"> </a><p class="pIndented1">
+Notice that, if we had replaced &quot;cd&quot; with &quot;ef&quot; instead of &quot;QP&quot;, the &quot;e&quot; and &quot;f&quot; would <em class="cEmphasis">not</em> be subsequently replaced with &quot;T and &quot;V&quot;.
+</p>
+<a name="wp1039921"> </a><p class="pIndented1">
+Sequential testing of the members of the match set to the value of the current position in the source data item is repeated.  The third member of the match set, &quot;f&quot;, is a match.  The REPLACING action is performed and the current position in the source data item is advanced the length of the match value, one position to the right.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&quot;abQPTVg&quot;<a name="wp1039922"> </a>
+       ^<a name="wp1039923"> </a>
+</pre></div>
+<a name="wp1039924"> </a><p class="pIndented1">
+Sequential testing of the members of the match set to the value of the current position in the source data item is repeated.  None matches.  The current position in the source data item is the rightmost character; therefore, the inspection halts.
+</p>
+<a name="wp1039925"> </a><p class="pIndented1">
+For a more concise description of the matching process, see General Rule 5 above.
+</p>
+<a name="wp1039926"> </a><div class="pSmartList1"><li>All replacement actions must replace the same number of characters as matched.  The source data item may not change in size.</li></div>
+<a name="wp1039927"> </a><div class="pSmartList1"><li>Use AFTER and BEFORE to bracket (define) a substring in the source data item.</li></div>
+<a name="wp1039928"> </a><div class="pSmartList1"><li>Use ALL to match all occurrences of the specified value in the string.</li></div>
+<a name="wp1039929"> </a><div class="pSmartList1"><li>Use CHARACTERS to match every character in the source data item that hasn't already been matched.  Because CHARACTERS matches all elements of the source data item, CHARACTERS usually appears as the last phrase in the statement.</li></div>
+<a name="wp1039930"> </a><div class="pSmartList1"><li>Use LEADING to find the leading occurrence, or set of leading contiguous occurrences, in the source data item.</li></div>
+<a name="wp1039931"> </a><div class="pSmartList1"><li>Use TRAILING (ACUCOBOL-GT extension) to find the rightmost occurrence, or set of contiguous occurrences, in the source data item.  If a TRAILING occurrence is found, a right to left scan of the source data item is made to find contiguous occurrences.</li></div>
+<a name="wp1039932"> </a><div class="pSmartList1"><li>Use FIRST to specify a match of the first occurrence only.</li></div>
+<a name="wp1039933"> </a><div class="pSmartList1"><li>Many COBOL programming texts caution against writing involved and complicated INSPECT statements, because complex statements are difficult to understand and maintain.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

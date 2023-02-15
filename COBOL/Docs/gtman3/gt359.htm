@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.1.7  File Types</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt352.htm">5.1 Data Structures</a> &gt; </p>
+<a name="wp1034468"> </a><h2 class="pHeading2">
+5.1.7  File Types
+</h2>
+<a name="wp1034471"> </a><p class="pBody">
+ACUCOBOL-GT manages four types of file organization.  These are:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034474"> </a><div class="pSmartList1"><li><b class="cBold">Sequential</b> <b class="cBold">Files</b> - are ordered by the historical order in which records are written to the file. </li></div>
+<a name="wp1034475"> </a><div class="pSmartList1"><li><b class="cBold">Relative Files</b> - contain records that are identified by their record number, where the first record in the file is record number one.  Relative files are ordered by ascending record numbers. </li></div>
+<a name="wp1034478"> </a><div class="pSmartList1"><li><b class="cBold">Indexed Files</b> - contain records that have one or more <em class="cEmphasis">key fields</em>.  Records in an indexed file are ordered by ascending values in these key fields.  Each key of an indexed file represents an ordered sequence by which the records can be accessed.  One of the key fields, known as the <em class="cEmphasis">primary key</em>, must contain a unique value for each record and is used to identify records uniquely. </li></div>
+<a name="wp1034481"> </a><div class="pSmartList1"><li><b class="cBold">Sort Files</b> - are used only by the SORT, MERGE, RELEASE, and RETURN verbs.  These are used to sort and merge records. </li></div>
+</ol></div>
+<a name="wp1034485"> </a><p class="pBody">
+There are also four record types.  These are:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034488"> </a><div class="pSmartList1"><li><b class="cBold">Fixed-length Records</b> - these records are a constant size.</li></div>
+<a name="wp1034491"> </a><div class="pSmartList1"><li><b class="cBold">Variable-length Records</b> - these records contain information about the length of each record, which may vary. </li></div>
+<a name="wp1034492"> </a><div class="pSmartList1"><li><b class="cBold">Text Records</b> - are sequential file records that contain text data.  Text files should generally contain only USAGE DISPLAY fields, because the binary information contained in other types of fields may inadvertently resemble line-length delimiters used by the host computer system (e.g., carriage return or line-feed characters).  Text records may optionally have trailing spaces automatically removed from them by the runtime system.  This is determined by the device type named in the file's ASSIGN phrase. </li></div>
+<a name="wp1034495"> </a><div class="pSmartList1"><li><b class="cBold">Print Records</b> - are text records that additionally contain printer carriage control information.  Only sequential files may be print files.  Print records have trailing blanks removed from them when they are written to the file.  This is done to improve printing performance for printers that use serial communications.  Unless otherwise noted, a print file follows the same rules as a text file. </li></div>
+</ol></div>
+<a name="wp1034498"> </a><p class="pBody">
+The organization of a file is determined by the file's SELECT clause of the Environment Division and its FD or SD clause of the Data Division.  The record type is determined by the first of the following rules that applies:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034501"> </a><div class="pSmartList1"><li>If the file's ASSIGN clause has the PRINT option, print records are used.</li></div>
+<a name="wp1034503"> </a><div class="pSmartList1"><li>If any WRITE statement that references the file contains the ADVANCING phrase, print records are used.</li></div>
+<a name="wp1034505"> </a><div class="pSmartList1"><li>If LINAGE is specified for the file, print records are used.  </li></div>
+<a name="wp1034507"> </a><div class="pSmartList1"><li>If PRINT-CONTROL is specified, print records are used.</li></div>
+<a name="wp1034509"> </a><div class="pSmartList1"><li>If the file's SELECT has the LINE SEQUENTIAL clause, text records are used.</li></div>
+<a name="wp1034512"> </a><div class="pSmartList1"><li>If the file's device type is DISPLAY or KEYBOARD, text records are used.</li></div>
+<a name="wp1034514"> </a><div class="pSmartList1"><li>In RM/COBOL compatibility mode, if the file is sequential and &quot;-Cb&quot; is <em class="cEmphasis">not</em> specified, text records are used. </li></div>
+<a name="wp1034515"> </a><div class="pSmartList1"><li>If the file's FD or SD contains a RECORD clause, variable-length records are used if the IS VARYING IN SIZE phrase is used or if both a minimum and maximum record size is specified.  If only a single record size is specified, then fixed-length records are used.  </li></div>
+<a name="wp1034518"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>The compiler has an internal restriction of at least 6 bytes for SORT FILE records.  If a record is shorter than that, the compiler detects it and pads the record to 6 bytes.  Note also that in versions prior to 5.0, using SORT FILE with records shorter than 6 bytes would cause crashes.
+<hr />
+</p>
+<a name="wp1034519"> </a><div class="pSmartList1"><li>If multiple record layouts are declared for the file and these records are not all the same size, variable-length records are used.  </li></div>
+<a name="wp1034522"> </a><div class="pSmartList1"><li>If the &quot;-Cf&quot; flag is used, then any variable-length record is made fixed-length.</li></div>
+<a name="wp1034523"> </a><div class="pSmartList1"><li>If none of the preceding rules applies, then fixed-length records are used.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

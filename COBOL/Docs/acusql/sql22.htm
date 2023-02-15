@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:35:43" />
+  <title>2.1 Preparing Your Programs</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql2.htm">Chapter 2: Program Preparation</a> &gt; </p>
+<a name="wp1033642"> </a><h2 class="pHeading1">
+2.1 Preparing Your Programs
+</h2>
+<a name="wp1033644"> </a><p class="pBody">
+Preparing your ESQL source code for use with the pre-compiler is straightforward.  All ESQL statement blocks must start with the keywords &quot;EXEC SQL&quot; and end with the keyword &quot;END-EXEC&quot;.  The structure and syntax of the SQL statements within each code block should conform to the variant of SQL required by the target database.  
+</p>
+<a name="wp1033645"> </a><p class="pBody">
+Note that the pre-compiler mode used to perform syntax checking can create variability with respect to errors encountered at runtime and, therefore, should be taken into consideration when you prepare your source code.  For example, if you direct the pre-compiler to pass ESQL statements to the database engine for syntax checking (provided that your ODBC driver supports the return of syntax errors), you will know exactly what is acceptable and unacceptable to the database engine.  This method ensures that your SQL statements are syntactically correct when the source code successfully pre-compiles.  If, instead, you use the pre-compiler's <em class="cEmphasis">relaxed</em> syntax checking mode (by specifying the &quot;-Pr&quot; option at compile time), some of your ESQL statements will pass through the pre-compiler without any test against the syntax accepted by the target database, increasing the likelihood of undetected SQL syntax errors causing problems at run time.  For a description of the &quot;-Pr&quot; option, see <a  href="sql35.htm#wp1033849">section 3.2.2, &quot;Invoking the Pre-compiler From the ACUCOBOL-GT Command Line.&quot;</a>  
+</p>
+<a name="wp1033647"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>The AcuSQL<sup class="cSuperscript">®</sup> precompiler does not currently support any <em class="cEmphasis">large object</em> data types (LOBs).  If your existing applications include LOBs, contact Acucorp's Professional Services Organization for assistance in evaluating the steps you may need to take to make the best use of AcuSQL.
+</p>
+<a name="wp1042943"> </a><p class="pNoteEnd">
+<b class="cBold">Also note:  </b>This manual provides only a brief treatment of the rules and application of SQL and ESQL.  It is up to the programmers to know SQL and ESQL and to have a comprehensive SQL/ESQL reference manual at their disposal<b class="cBold">.</b>  Programmers will benefit from studying the special provisions of ESQL because they offer some supports for the programmatic application of SQL that are not included in interactive SQL.  
+<hr />
+</p>
+<a name="wp1033649"> </a><p class="pBody">
+By default, the pre-compiler performs syntax checking for compliance with the ISO/ANSI SQL&#160;92 standard.  For complete information about pre-compiler options, see <a  href="sql33.htm#wp1033768">section 3.2, &quot;Using the Pre-compiler.&quot;</a> 
+</p>
+<a name="wp1033650"> </a><h3 class="pHeadingRef">
+Working with DB2 databases
+</h3>
+<a name="wp1033655"> </a><p class="pBody">
+If your program will access a DB2 database, your ESQL statements should conform to the IBM SQL standard described in IBM publication S10J-8158-00, &quot;Embedded SQL Programming Guide, Version 5.&quot;  A reference level definition of IBM SQL is included in IBM publication S10J-8165, &quot;SQL Reference.&quot;  When you pre-compile your program, specify the &quot;-Pk DB2&quot; option to direct the pre-compiler to perform DB2-specific syntax checking, or use the &quot;-Pc&quot; option to have the DB2 engine perform direct validation.
+</p>
+<a name="wp1033656"> </a><h3 class="pHeadingRef">
+Working with Microsoft SQL Server databases
+</h3>
+<a name="wp1033661"> </a><p class="pBody">
+If your program will access a Microsoft SQL Server database, specify the &quot;-Pk&#160;mssql&quot; option to direct the pre-compiler to perform SQL Server-specific syntax checking.
+</p>
+<a name="wp1033662"> </a><p class="pBody">
+In order to accommodate SQL Server function syntax (db_name(), for example), AcuSQL also supports SELECT statements that do not include &quot;FROM ... tablelist&quot;.  Note that if this is the only SQL Server-specific syntax your program contains, you do not need to use the &quot;-Pk mssql&quot; option on your command line.
+</p>
+<a name="wp1033664"> </a><p class="pBody">
+AcuSQL supports the following SQL Server syntax for embedded transactions:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1033665"> </a><div class="pSmartList1"><li>BEGIN TRANSACTION <em class="cEmphasis">name</em></li></div>
+<a name="wp1033666"> </a><div class="pSmartList1"><li>COMMIT TRANSACTION <em class="cEmphasis">name</em></li></div>
+<a name="wp1033667"> </a><div class="pSmartList1"><li>ROLLBACK TRANSACTION <em class="cEmphasis">name</em></li></div>
+</ul></div>
+<a name="wp1033668"> </a><p class="pBody">
+The <em class="cEmphasis">name</em> will be passed to SQL Server as is, and must match the rules for embedded transaction names.  For information on configuration variables supported by AcuSQL in a SQL Server environment, see <a  href="sql44.htm#wp1033698">section 4.2.1, &quot;Runtime Configuration Variables.&quot;</a>  For additional information on running applications with AcuSQL in a SQL Server environment, see <a  href="sql43.htm#wp1033671">section 4.2, &quot;Running Your Application with Microsoft SQL Server.&quot;</a>
+</p>
+<a name="wp1046586"> </a><p class="pBody">
+In addition, it is possible to nest transactions, as supported by SQL Server.  When you use nested transactions, note how many transactions you BEGIN, because you must COMMIT the same number of transactions for the transaction to be considered complete.  For example, if you execute three BEGIN TRANSACTION statements, you must later execute three COMMIT TRANSACTION or COMMIT WORK statements to commit the work you have done.
+</p>
+<a name="wp1046655"> </a><p class="pBody">
+Note, however, that a single ROLLBACK rolls back all nested transactions.  This behavior is a feature of SQL Server, and is not controlled by the AcuSQL interface.
+</p>
+<a name="wp1046682"> </a><p class="pBody">
+When a connection is closed, the AcuSQL interface completes or abandons any active transactions (depending on the value of the <a  href="sql47.htm#wp1033712">ASQL_DISCONNECT_ACTION</a> configuration variable).
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

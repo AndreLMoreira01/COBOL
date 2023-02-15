@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$SYSLOG</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1474841"> </a><h2 class="pHeading2">
+C$SYSLOG
+</h2>
+<a name="wp1474855"> </a><p class="pBody">
+This library routine can be used to open, write to, and close the system log.  Using this routine, you can write to the system log or event notification system (on Windows) in the event of a serious error that administrators need to know about.  
+</p>
+<a name="wp1479012"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$SYSLOG&quot;<a name="wp1479013"> </a>
+    USING OP-CODE, parameters<a name="wp1479022"> </a>
+</pre></div>
+<a name="wp1479023"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1479042"> </a><p class="pBody">
+<b class="cBold">OP-CODE  </b>Constant
+</p>
+<a name="wp1479058"> </a><p class="pBody">
+Indicates which C$SYSLOG operation to perform.  The operations are described below in the Description section.
+</p>
+<a name="wp1479080"> </a><p class="pBody">
+<b class="cBold">parameters  </b>vary depending on the op-code chosen
+</p>
+<a name="wp1479085"> </a><p class="pBody">
+Provide information and hold results for the operation specified.  These parameters are discussed with their corresponding op-codes in the Description section below.
+</p>
+<a name="wp1479115"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1479129"> </a><p class="pBody">
+C$SYSLOG sends messages to syslog on UNIX systems that have the syslog function.  On other UNIX systems, and on other non-Windows operating systems, this routine sends messages to the console.  On Windows systems, the routine sends messages to the event log, which can be viewed using the Event Viewer applet available on Windows.
+</p>
+<a name="wp1479130"> </a><p class="pBody">
+The runtime also sends messages to the system log when it detects broken files.  This function allows COBOL programmers to notify system administrators automatically when a broken file is detected, instead of relying on individual users to report such errors.  The runtime sends such notifications only if the COBOL program has opened the system log using the C$SYSLOG routine as described below.  
+</p>
+<a name="wp1481197"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Because the various implementations of system logging don&#39;t report errors, the C$SYSLOG routine does not report errors either, because it never receives any.
+<hr />
+</p>
+<a name="wp1479132"> </a><p class="pBody">
+See your UNIX system documentation for information about the syslog facility.  Refer to your Windows documentation for information on the Event Viewer applet. 
+</p>
+<a name="wp1480003"> </a><p class="pBody">
+The following constants used by the C$SYSLOG library routine are defined in &quot;acucobol.def&quot;.  
+</p>
+<a name="wp1480142"> </a><p class="pBody">
+<b class="cBold">CSYSLOG-OPEN</b> (op-code 0) opens the system log.  This operation takes the following two parameters and has no return value:  
+</p>
+<a name="wp1480013"> </a><h5 class="pHeading4">
+DOMAIN  Alphanumeric item
+</h5>
+<a name="wp1480023"> </a><p class="pBody">
+The UNC name of a Windows machine to which to send events.  This parameter is used only for Windows machines.  It is ignored on other operating systems.  
+</p>
+<a name="wp1480049"> </a><p class="pBody">
+If this parameter is set to any of the following items, the local machine executing the runtime receives the event messages:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1480058"> </a><div class="pSmartList2"><li>the NULL keyword</li></div>
+<a name="wp1480078"> </a><div class="pSmartList2"><li>an empty string literal (this setting generates a compiler warning)</li></div>
+<a name="wp1480083"> </a><div class="pSmartList2"><li>a string literal that contains spaces</li></div>
+<a name="wp1480088"> </a><div class="pSmartList2"><li>a data item with a value of spaces or low-values</li></div>
+</ul></div>
+</ul></div>
+<a name="wp1480095"> </a><h5 class="pHeading4">
+APPNAME  Alphanumeric item
+</h5>
+<a name="wp1480113"> </a><p class="pBody">
+The name of the application under which to log the notifications.  See the Event Viewer or syslog documentation for information about what this parameter actually does and how to filter notifications on this name.
+</p>
+<a name="wp1480099"> </a><p class="pBody">
+<b class="cBold">CSYSLOG-WRITE</b> (op-code 1) allows you to write to the system log.  This operation takes the following two parameters:
+</p>
+<a name="wp1480241"> </a><h5 class="pHeading4">
+PRIORITY   Numeric item 
+</h5>
+<a name="wp1480242"> </a><p class="pBody">
+This parameter may have one of the following values:
+</p>
+<a name="wp1480243"> </a><p class="pIndented1">
+CSYSLOG-PRIORITY-SUCCESS (value 0)
+</p>
+<a name="wp1480244"> </a><p class="pIndented1">
+CSYSLOG-PRIORITY-INFORMATION (value 1)
+</p>
+<a name="wp1480245"> </a><p class="pIndented1">
+CSYSLOG-PRIORITY-WARNING (value 2)
+</p>
+<a name="wp1480246"> </a><p class="pIndented1">
+CSYSLOG-PRIORITY-ERROR (value 3)
+</p>
+<a name="wp1480247"> </a><p class="pBody">
+See the Event Viewer or syslog documentation that comes with your operating system for information about these values and how to filter based on them.  
+</p>
+<a name="wp1480248"> </a><h5 class="pHeading4">
+MESSAGE   Alphanumeric item 
+</h5>
+<a name="wp1482271"> </a><p class="pBody">
+The message sent to the system log.  This parameter has no maximum length; it is sent to the system log as is.  The system administrator sees this message in the system log.  
+</p>
+<a name="wp1482282"> </a><p class="pBody">
+<b class="cBold">CSYSLOG-CLOSE</b> (op-code 2) closes the system log.  This operation takes no parameters and returns no value.  After the system log is closed and before it is opened again, all writes to the system log (including those done internally by the runtime for reporting broken files) fail with no warning or error message.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:41:44" />
+  <title>3.2.1  Understanding How the Database Table Is Formed</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl3.htm">Chapter 3: Data Dictionaries</a> &gt; <a href="4gl33.htm">3.2  XFD Files</a> &gt; </p>
+<a name="wp1034340"> </a><h2 class="pHeading2">
+3.2.1  Understanding How the Database Table Is Formed
+</h2>
+<a name="wp1034054"> </a><p class="pBody">
+ACUCOBOL-GT data dictionaries (XFDs) enable the Acu4GL product to create a table (or access an existing one) in the database for each indexed file.  Each <em class="cEmphasis">column</em> in the table contains the values for one <em class="cEmphasis">field</em>.  The column names are essentially the field names.
+</p>
+<a name="wp1034055"> </a><p class="pBody">
+The table that is built is <em class="cEmphasis">based on the largest record in the COBOL file</em>, and contains the fields from that record plus any key fields (key fields are those which are named in KEY IS} phrases of SELECT verbs in the FILE CONTROL section).  This ensures that data from all COBOL records will fit within the table, and simplifies the storage and retrieval process.  If you were to examine the database columns, only the fields from the largest record, and the key fields, would appear.  See <a  href="4gl35.htm#wp1034083">section 3.2.2, &quot;Defaults Used in XFD Files,&quot;</a> for additional information.
+</p>
+<a name="wp1035523"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If the field named in the KEY IS phrase is a group item, it will not become a column in the database table.  Instead, each of the elementary items subordinate to the named group item will become a column.  
+<hr />
+</p>
+<a name="wp1035527"> </a><p class="pBody">
+You can force a group item to be a column by using the <a  href="4gl413.htm#wp1034754">USE GROUP</a> directive.
+</p>
+<a name="wp1034060"> </a><p class="pBody">
+With multiple record formats (level 01), not all COBOL fields are represented in the database by name, but all fields <em class="cEmphasis">are</em> storable and retrievable.  The data dictionary maps fields from all records of a file to the corresponding locations in the master (largest) record of the file, and thus to the database table.  Since Acu4GL has access to the data dictionary, it knows where the data from a given COBOL record fits in the database tables.  This activity is invisible to the COBOL application.  
+</p>
+<a name="wp1034061"> </a><p class="pBody">
+For example, if your program has one file with the three records shown below, the underlined fields will be included in the database table by default (this example assumes that <b class="cBold">ar-codes-key</b> is named in a KEY IS phrase).  Some fields will not appear in the table, but the data dictionary will map them to the master field names.  Acu4GL thus will eliminate redundancies and give you optimum performance.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  ar-codes-record.<a name="wp1034062"> </a>
+    03  ar-codes-key.<a name="wp1034063"> </a>
+        05  <u class="cUnderline">ar-code-type</u>      pic x. <a name="wp1034064"> </a>
+        05  <u class="cUnderline">ar-code-num</u>       pic 999.<a name="wp1034065"> </a>
+<a name="wp1034066"> </a>
+01  ship-code-record.<a name="wp1034067"> </a>
+    03  filler                pic x(4).<a name="wp1034068"> </a>
+    03  ship-weight           pic s999v9.<a name="wp1034069"> </a>
+    03  ship-instruct         pic x(15).<a name="wp1034070"> </a>
+<a name="wp1034071"> </a>
+01  terms-code-record.<a name="wp1034072"> </a>
+    03  filler                pic x(4).<a name="wp1034073"> </a>
+    03  <u class="cUnderline">terms-rate-1</u>          pic s9v999.<a name="wp1034074"> </a>
+    03  <u class="cUnderline">terms-days-1</u>          pic 9(3).<a name="wp1034075"> </a>
+    03  <u class="cUnderline">terms-rate-2</u>          pic s9v999.<a name="wp1034076"> </a>
+    03  <u class="cUnderline">terms-descript</u>        pic x(15).<a name="wp1034077"> </a>
+</pre></div>
+<a name="wp1036016"> </a><p class="pBody">
+The following diagram shows how Acu4GL creates database columns for some of the fields in the COBOL record, while the data dictionary maps other fields to those columns; this means that <em class="cEmphasis">all</em> the fields are accessible to the COBOL program.
+</p>
+<a name="wp1036017"> </a><p class="pBody">
+</p><div><img src="images/4in_dd_b.gif" height="153" width="504" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1036021"> </a><p class="pBody">
+See <a  href="4gl35.htm#wp1034083">section 3.2.2, &quot;Defaults Used in XFD Files,&quot;</a> for a description of the rules that Acu4GL follows as it builds the database table, and an explanation of how you can override those rules when necessary. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

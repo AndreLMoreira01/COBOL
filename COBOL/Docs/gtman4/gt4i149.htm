@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-GRAPH-DRAW</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1040079"> </a><h2 class="pHeading3">
+WINPRINT-GRAPH-DRAW
+</h2>
+<a name="wp1040081"> </a><p class="pBody">
+This operation code specifies the size, shape and location of a graphic in the current print job using pen and brush attributes specified by WINPRINT-GRAPH-BRUSH and WINPRINT-GRAPH-PEN.
+</p>
+<a name="wp1040085"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040086"> </a>
+    USING WINPRINT-GRAPH-DRAW, WINPRINT-DATA<a name="wp1040087"> </a>
+    GIVING RESULT<a name="wp1040088"> </a>
+</pre></div>
+<a name="wp1040089"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040090"> </a><p class="pBody">
+<b class="cBold">WINPRINT-DATA</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 WINPRINT-DATA.<a name="wp1040091"> </a>
+   03 WPRTDATA-SET-STD-FONT.<a name="wp1040092"> </a>
+   03  WPRTDATA-DRAW REDEFINES<a name="wp1040093"> </a>
+   WPRTDATA-SET-STD-FONT.<a name="wp1040094"> </a>
+      05  WPRTDATA-DRAW-START-X       PIC 9(7)V99 COMP-5.<a name="wp1040095"> </a>
+      05  WPRTDATA-DRAW-START-Y       PIC 9(7)V99 COMP-5.<a name="wp1040096"> </a>
+      05  WPRTDATA-DRAW-STOP-X        PIC 9(7)V99 COMP-5.<a name="wp1040097"> </a>
+      05  WPRTDATA-DRAW-STOP-Y        PIC 9(7)V99 COMP-5.<a name="wp1040098"> </a>
+      05  WPRTDATA-DRAW-UNITS         UNSIGNED-SHORT.<a name="wp1040099"> </a>
+      05  WPRTDATA-DRAW-SHAPE         UNSIGNED-SHORT.<a name="wp1040100"> </a>
+</pre></div>
+<a name="wp1040101"> </a><h3 class="pHeadingRef">
+Return Value
+</h3>
+<a name="wp1040102"> </a><p class="pBody">
+This operation returns the coordinates and shape of a graphic.
+</p>
+<a name="wp1040103"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1040104"> </a><p class="pBody">
+The printer must be open to perform this operation.  WPRTDATA-DRAW should be initialized prior to use.  There is no limit to the number of times this operation may be called. Once it is called, all further printing using the WRITE statement is performed using a TRANSPARENT background.  The TRANSPARENT setting is not usually applied to WRITE statements, but this mode is necessary for graphics to print correctly. (This does not apply to WINPRINT-COLUMN operations, which have a particular setting for TRANSPARENCY.)
+</p>
+<a name="wp1040105"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The current cursor position on the printer is not modified by this call.
+<hr />
+</p>
+<a name="wp1040106"> </a><p class="pBody">
+If WINPRINT-GRAPH-PEN or WINPRINT-GRAPH-BRUSH have not yet been called, this operation will create and use the defaults. The default pen is solid black, with a width of &quot;1&quot;.  The default brush is NULL, meaning there is no fill.   
+</p>
+<a name="wp1225753"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>When you call WINPRINT-GRAPH-DRAW, the operation will automatically test to see if a form feed is pending. If this is the case, the form feed will be performed before the call to this operation is executed. 
+<hr />
+</p>
+<a name="wp1040107"> </a><p class="pBody">
+WINPRINT-GRAPH-DRAW has the following values:
+</p>
+<a name="wp1040108"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-DRAW-UNITS </b>-- Specifies the unit of measure of the values passed for drawing coordinates.  If an illegal value is set, the unit of measure will be set to the default (WPRTUNITS-PIXELS). The unit of measure may be set to one of the following values:
+</p>
+<a name="wp1085945"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1086041"> </a><p class="pCellBody">
+WPRTUNITS-CELLS
+</p>
+</td>
+    <td><a name="wp1086043"> </a><p class="pCellBody">
+Values are measured using the &quot;cell size&quot; of the currently selected font.  The cell-size is determined by the height and width of the &quot;0&quot; character of a font.  This is roughly equivalent to measuring in &quot;characters &quot;.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1086045"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1086047"> </a><p class="pCellBody">
+If you use a proportional font, it is common for uppercase characters to be wider than this measurement.  Non-integer values are allowed in the measurements. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1149469"> </a><p class="pCellBody">
+WPRTUNITS-CELLS-ABS
+</p>
+</td>
+    <td><a name="wp1149471"> </a><p class="pCellBody">
+Values are measured using the &quot;cell size&quot; of the currently selected font.  Positioning is based on the left edge of the paper, regardless of the physical left margin determined by the printer (even if the absolute position is smaller).  If the dimensions of the area to be printed are less than the printer's left or top physical margin, or greater than the printer's right or bottom physical margin, WIN$PRINTER will return an error. (Note that due to inherent differences in the hardware of printer manufacturers, this value may not provide truly device-independent results.)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1086049"> </a><p class="pCellBody">
+WPRTUNITS-INCHES
+</p>
+</td>
+    <td><a name="wp1086051"> </a><p class="pCellBody">
+Values are measured in inches.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1149473"> </a><p class="pCellBody">
+WPRTUNITS-INCHES-ABS
+</p>
+</td>
+    <td><a name="wp1149475"> </a><p class="pCellBody">
+Values are measured in inches. Positioning is based on the left edge of the paper, regardless of the physical left margin determined by the printer (even if the absolute position is smaller).  If the dimensions of the area to be printed are less than the printer's left or top physical margin, or greater than the printer's right or bottom physical margin, WIN$PRINTER will return an error.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1086053"> </a><p class="pCellBody">
+WPRTUNITS-CENTIMETERS
+</p>
+</td>
+    <td><a name="wp1086055"> </a><p class="pCellBody">
+Values are measured in centimeters.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1149477"> </a><p class="pCellBody">
+WPRTUNITS-CENTIMETERS-ABS
+</p>
+</td>
+    <td><a name="wp1149479"> </a><p class="pCellBody">
+Values are measured in centimeters. Positioning is based on the left edge of the paper, regardless of the physical left margin determined by the printer (even if the absolute position is smaller).  If the dimensions of the area to be printed are less than the printer's left or top physical margin, or greater than the printer's right or bottom physical margin, WIN$PRINTER will return an error.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1086057"> </a><p class="pCellBody">
+WPRTUNITS-PIXELS (default)
+</p>
+</td>
+    <td><a name="wp1086059"> </a><p class="pCellBody">
+Values are measured using the dots-per-inch (DPI) resolution of the output device.  Only integer values are allowed in the measurements.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1086061"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1086063"> </a><p class="pCellBody">
+The actual size of this measurement varies depending on the target printer's resolution.  This means that a width of &quot;5&quot; will appear differently on a 300dpi printer than it will on a 600dpi printer.  Consider the unit of measure relative to the resolution of the targeting printer before printing.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1040115"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-DRAW-SHAPE</b> -- Specifies which type of shape to draw. If an illegal value is used, no shape will be drawn. The possible values are:
+</p>
+<a name="wp1086681"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1086687"> </a><p class="pCellBody">
+WPRT-DRAW-RECTANGLE
+</p>
+</td>
+    <td><a name="wp1086689"> </a><p class="pCellBody">
+Draws a rectangle with 90-degree corners.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1086691"> </a><p class="pCellBody">
+WPRT-DRAW-ROUND-RECTANGLE
+</p>
+</td>
+    <td><a name="wp1086693"> </a><p class="pCellBody">
+Draws a rectangle with rounded corners.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1086695"> </a><p class="pCellBody">
+WPRT-DRAW-LINE
+</p>
+</td>
+    <td><a name="wp1086697"> </a><p class="pCellBody">
+Draws a line.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1040119"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-DRAW-START-X </b>-- Specifies the top-left horizontal coordinate of the shape to draw.  The unit of measure is set with WPRTDATA-DRAW-UNITS. The minimum value of this coordinate is &quot;0&quot;.  The top-leftmost coordinate for all graphic operations is &quot;0,0&quot;
+</p>
+<a name="wp1040120"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-DRAW-START-Y</b> -- Specifies the top-left vertical coordinate of the shape to draw.  The unit of measure is set with WPRTDATA-DRAW-UNITS. The minimum value of this coordinate is &quot;0&quot;.  The top-leftmost coordinate for all graphic operations is &quot;0,0&quot;
+</p>
+<a name="wp1040121"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-DRAW-STOP-X</b> -- Specifies the lower-right horizontal coordinate of the shape to draw.  The unit of measure is set with WPRTDATA-DRAW-UNITS. The maximum value of this coordinate depends on the unit of measure selected.
+</p>
+<a name="wp1040122"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-DRAW-STOP-Y</b> -- Specifies the lower-right vertical coordinate of the shape to draw.  The unit of measure is set with WPRTDATA-DRAW-UNITS. The maximum value of  this coordinate depends on the unit of measure selected.
+</p>
+<a name="wp1040123"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1040124"> </a><p class="pBody">
+See &quot;graphprn.cbl&quot; for examples of printing graphics.  This example will draw a box with rounded edges:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+INITIALIZE               WPRTDATA-DRAW.<a name="wp1040125"> </a>
+MOVE    WPRT-DRAW-ROUND-RECTANGLE TO  WPRTDATA-DRAW-SHAPE.<a name="wp1040126"> </a>
+MOVE    3                TO  WPRTDATA-DRAW-START-X.<a name="wp1040127"> </a>
+MOVE    1                TO  WPRTDATA-DRAW-START-Y.<a name="wp1040128"> </a>
+MOVE    40               TO  WPRTDATA-DRAW-STOP-X.<a name="wp1040129"> </a>
+MOVE    10               TO  WPRTDATA-DRAW-STOP-Y.<a name="wp1040130"> </a>
+MOVE    WPRTUNITS-CELLS  TO  WPRTDATA-DRAW-UNITS.<a name="wp1040131"> </a>
+<a name="wp1040132"> </a>
+CALL    &quot;WIN$PRINTER&quot;    <a name="wp1040133"> </a>
+        USING     WINPRINT-GRAPH-DRAW, WINPRINT-DATA<a name="wp1040134"> </a>
+        GIVING    CALL-RESULT.<a name="wp1040135"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

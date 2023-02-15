@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.3.1  COPY Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp30.htm">4.3  The &quot;-Cp&quot; HP COBOL Compatibility Switch </a> &gt; </p>
+<a name="wp1043990"> </a><h2 class="pHeading2">
+4.3.1  COPY Statement
+</h2>
+<a name="wp1041492"> </a><p class="pBody">
+The HP COBOL syntax of the COPY statement is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<u class="cUnderline">COPY</u> source-file [ {<u class="cUnderline">OF</u>} library-name ] [ <u class="cUnderline">NOLIST</u> ]<a name="wp1041493"> </a>
+                   {<u class="cUnderline">IN</u>}<a name="wp1049424"> </a>
+<a name="wp1049474"> </a>
+   [ <u class="cUnderline">REPLACING</u>  { { old-text } <u class="cUnderline">BY</u> { new-text } } ... ].<a name="wp1049441"> </a>
+</pre></div>
+<a name="wp1041494"> </a><p class="pBody">
+If the &quot;-Cp&quot; option is specified, ACUCOBOL-GT supports the HP COBOL variant of the COPY statement that copies a file from a resident library.  In this usage, <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">library-name</span> is a one to eight character alphanumeric name that specifies the resident library in which the source file is located.  This library is a KSAM or text file that contains one or more source files.
+</p>
+<a name="wp1041495"> </a><p class="pBody">
+If <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">library-name</span> is not specified, the compiler assumes that the library name is COPYLIB.  If <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">source-file</span> cannot be found in the library, then ACUCOBOL-GT checks to see if <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">source-file</span> is in the current directory.  
+</p>
+<a name="wp1041496"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>HP COBOL assumes the name of the source file is in uppercase.  If an uppercase name is not found in the current directory, the rules that ACUCOBOL-GT uses for <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">source-file</span> and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">library-name</span> will be used (described below).
+<hr />
+</p>
+<a name="wp1041497"> </a><p class="pBody">
+If the &quot;-Cp&quot; option is not specified, the standard rules that ACUCOBOL-GT applies to <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">source-file</span> and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">library-name</span> are used.  This means that <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">library-name</span> is interpreted as a directory name.  If you have a resident library, you will need to unload its contents.  In the working directory in which you perform compilations, create a subdirectory of the same name and case as <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">library-name</span>.  Unload the library's source files into this subdirectory using the same name and case as specified by <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">source-file</span>.  The next time you compile, ACUCOBOL-GT will find <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">source-file</span> in the directory you created.  For example, if your COBOL COPY statement reads:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY support IN common<a name="wp1041498"> </a>
+</pre></div>
+<a name="wp1041499"> </a><p class="pBody">
+During compilation, ACUCOBOL-GT will translate that statement into:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COPY &quot;./common/support&quot;<a name="wp1041500"> </a>
+</pre></div>
+<a name="wp1041501"> </a><p class="pBody">
+If <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">library-name</span> is not specified, ACUCOBOL-GT checks to see if <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">source-file</span> is in the current directory.  If <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">source-file</span> is not found in the current directory, the rules that ACUCOBOL-GT uses for finding <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">source-file</span> are applied.  (For more information about ACUCOBOL-GT's treatment of the COPY statement and the use of the COPYPATH environment variable for locating copy files, see the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT User's Guide</span>, section 2.5, &quot;COPY Libraries&quot;.)
+</p>
+<a name="wp1041502"> </a><p class="pBody">
+NOLIST is supported by ACUCOBOL-GT in HP COBOL compatibility mode.  NOLIST has the same meaning as SUPPRESS in ACUCOBOL-GT's default mode.  See the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">ACUCOBOL-GT Reference Manual</span>, section 2.4.1, &quot;The COPY Statement,&quot; for details.  
+</p>
+<a name="wp1041503"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">old-text</span> and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">new-text</span> have the same meaning in HP COBOL as in ACUCOBOL-GT.  See the reference manual, section 2.4.1, &quot;The COPY Statement,&quot; for details.
+</p>
+<a name="wp1041507"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>COPY REPLACING within nested Copy books is not supported.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

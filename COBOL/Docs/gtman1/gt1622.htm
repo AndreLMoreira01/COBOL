@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.2.1  Performance Considerations</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt1621.htm">6.2  Terminal I/O</a> &gt; </p>
+<a name="wp1040559"> </a><h2 class="pHeading2">
+6.2.1  Performance Considerations
+</h2>
+<a name="wp1032704"> </a><p class="pBody">
+ACUCOBOL-GT comes with a built-in window-oriented Terminal Manager.  Efficient use of windows partially depends on the hardware characteristics of the host machine and terminal.  Machines with memory-mapped screens (such as most personal computers) will run efficiently in any case.  Machines with attached terminals, however, can significantly benefit from careful use of the windows.  
+</p>
+<a name="wp1032705"> </a><p class="pBody">
+As an example of an unwise choice of a window, consider trying to scroll a window that is almost the size of the screen.  Without any hardware support, the Terminal Manager might have to move 1000 characters or so.  On a memory-mapped machine, this will happen quickly, but on a machine with a terminal that is running at 9600 baud, this will take about one second.  If several lines are being scrolled onto the screen, the entire operation will take several seconds to complete.  This might be acceptable on occasion, but is very tedious if used regularly.
+</p>
+<a name="wp1032706"> </a><p class="pBody">
+The Terminal Manager attempts to minimize screen I/O by keeping track of every character on the screen.  Characters that do not need to be displayed (because they are already on the screen) are not sent to the terminal.  Because much of a screen is often empty, substantial savings are achieved when you are clearing a window.  Other general optimizations are done which result in generally faster screen I/O.
+</p>
+<a name="wp1032707"> </a><p class="pBody">
+Special hardware characteristics of most terminals are used for time-consuming operations.  The following guidelines will help you use windows efficiently on most machines by taking advantage of these characteristics.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1032708"> </a><div class="pSmartList1"><li>Large windows that will be cleared regularly should extend to the right edge of the screen.  This allows the use of the terminal's &quot;clear to end-of-line&quot; function.</li></div>
+<a name="wp1032709"> </a><div class="pSmartList1"><li>Large windows that will be scrolled regularly should be the width of the screen and extend to the bottom edge.  This case will use the &quot;insert-line&quot; and &quot;delete-line&quot; functions of most terminals.  </li></div>
+<a name="wp1032710"> </a><div class="pSmartList1"><li>Reverse-video windows should be kept small.  Creating a large reverse-video window is time-consuming because each location of the window must be initially written to.  If you want a large window to stand out, consider making it boxed instead.  </li></div>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

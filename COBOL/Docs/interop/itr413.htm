@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:57:47" />
+  <title>4.8  Multiple Object Interfaces</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr4.htm">Chapter 4: Using ActiveX Controls and COM Objects</a> &gt; </p>
+<a name="wp1037916"> </a><h2 class="pHeading1">
+4.8  Multiple Object Interfaces
+</h2>
+<a name="wp1037921"> </a><p class="pBody">
+Some ActiveX controls are designed with multiple (object) interfaces. For example, &quot;Microsoft Chart Control, version 6.0 (OLEDB)&quot; has 42 public interfaces.  Each interface is equivalent to a new object definition. In order to access the full feature set of the Microsoft Chart control, ACUCOBOL-GT must allow the property modification and method invocation of 42 different objects.  For example, to set the Microsoft Chart legend, you get the value of the Legend property.  This value is an object that you may then modify to change the legend. The Legend object has properties whose values are other objects, and so on.
+</p>
+<a name="wp1037922"> </a><p class="pBody">
+Here's how you would set the text and backdrop parameters for a chart legend in Visual Basic.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Private Sub Command1_Click()<a name="wp1037923"> </a>
+   With MSChart1.Legend<a name="wp1037924"> </a>
+      &#39; Make Legend Visible.<a name="wp1037925"> </a>
+      .Location.Visible = True<a name="wp1037926"> </a>
+      .Location.LocationType = VtChLocationTypeRight<a name="wp1037927"> </a>
+      &#39; Set Legend properties.<a name="wp1037928"> </a>
+      .TextLayout.HorzAlignment = _<a name="wp1037929"> </a>
+      VtHorizontalAlignmentRight   &#39; Right justify.<a name="wp1037930"> </a>
+      &#39; Use Yellow text.<a name="wp1037931"> </a>
+      .VtFont.VtColor.Set 255, 255, 0<a name="wp1037932"> </a>
+      .Backdrop.Fill.Style = VtFillStyleBrush<a name="wp1037933"> </a>
+      .Backdrop.Fill.Brush.Style = VtBrushStyleSolid<a name="wp1037934"> </a>
+      .Backdrop.Fill.Brush.FillColor.Set 255, 0, 255<a name="wp1037935"> </a>
+   End With<a name="wp1037936"> </a>
+End Sub<a name="wp1037937"> </a>
+</pre></div>
+<a name="wp1037938"> </a><p class="pBody">
+In ACUCOBOL-GT this task is accomplished in a similar way with the USE verb, &quot;^&quot; and &quot;::&quot; operators. For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+MODIFY MS-CHART-1 Legend::Location::Visible = 1.<a name="wp1037939"> </a>
+MODIFY MS-CHART-1 Legend::Location::LocationType =<a name="wp1037940"> </a>
+       VtChLocationTypeRight.<a name="wp1037941"> </a>
+MODIFY MS-CHART-1 Legend::TextLayout::HorzAlignment =<a name="wp1037942"> </a>
+       VtHorizontalAlignmentRight.<a name="wp1037943"> </a>
+MODIFY MS-CHART-1 Legend::VtFont::VtColor::<a name="wp1037944"> </a>
+       Set ( 255, 255, 0 ).<a name="wp1037945"> </a>
+MODIFY MS-CHART-1 Legend::BackDrop::Fill::Style = <a name="wp1037946"> </a>
+       VtFillStyleBrush.<a name="wp1037947"> </a>
+MODIFY MS-CHART-1 Legend::BackDrop::Fill::Brush::Style = <a name="wp1037948"> </a>
+       VtBrushStyleSolid.<a name="wp1037949"> </a>
+MODIFY MS-CHART-1 <a name="wp1037950"> </a>
+       Legend::BackDrop::Fill::Brush::FillColor::<a name="wp1037951"> </a>
+             Set ( 255, 0, 255 ).<a name="wp1037952"> </a>
+</pre></div>
+<a name="wp1037953"> </a><p class="pBody">
+or:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+USE MS-CHART-1 Legend<a name="wp1037954"> </a>
+MODIFY ^Location::Visible = 1<a name="wp1037955"> </a>
+       ^Location::LocationType = VtChLocationTypeRight<a name="wp1037956"> </a>
+       ^TextLayout::HorzAlignment =<a name="wp1037957"> </a>
+              VtHorizontalAlignmentRight<a name="wp1037958"> </a>
+       ^VtFont::VtColor::Set ( 255, 255, 0 )<a name="wp1037959"> </a>
+       ^BackDrop::Fill::Style = <a name="wp1037960"> </a>
+             VtFillStyleBrush<a name="wp1037961"> </a>
+       ^BackDrop::Fill::Brush::Style = <a name="wp1037962"> </a>
+             VtBrushStyleSolid<a name="wp1037963"> </a>
+       ^BackDrop::Fill::Brush::FillColor::<a name="wp1037964"> </a>
+             Set ( 255, 0, 255 )<a name="wp1037965"> </a>
+END-USE<a name="wp1037966"> </a>
+</pre></div>
+<a name="wp1037967"> </a><p class="pBody">
+This syntax can be described as follows. In this format, the word following MODIFY must always be a control handle or &quot;^&quot;.  Each property or method name can be followed by &quot;::&quot; and then another property or method name to invoke methods inline.  &quot;MethodName1::MethodName2&quot; means invoke the method &quot;MethodName1&quot; of the current object and set the current object to the return value.  When a property or method name is followed by a token other than `::', then it means to actually invoke the method on the current object passing the specified arguments or set the property to the specified value and reset the current object to null.
+</p>
+<a name="wp1037968"> </a><p class="pBody">
+For example, the following code: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+MODIFY MS-CHART-1 <a name="wp1037969"> </a>
+       Legend::BackDrop::Fill::Brush::FillColor::<a name="wp1037970"> </a>
+             Set ( 255, 0, 255 ).<a name="wp1037971"> </a>
+</pre></div>
+<a name="wp1037972"> </a><p class="pBody">
+can be broken down as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MODIFY<a name="wp1037973"> </a>
+MS-CHART-1 <a name="wp1037974"> </a>
+Legend<a name="wp1037975"> </a>
+::<a name="wp1037976"> </a>
+BackDrop<a name="wp1037977"> </a>
+::<a name="wp1037978"> </a>
+Fill<a name="wp1037979"> </a>
+::<a name="wp1037980"> </a>
+Brush<a name="wp1037981"> </a>
+::<a name="wp1037982"> </a>
+FillColor<a name="wp1037983"> </a>
+::<a name="wp1037984"> </a>
+Set<a name="wp1037985"> </a>
+( 255, 0, 255 ).<a name="wp1037986"> </a>
+</pre></div>
+<a name="wp1037987"> </a><p class="pBody">
+which means MODIFY MS-CHART-1 in the following ways:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1037988"> </a><div class="pSmartList1"><li>Set the current object to the chart control.</li></div>
+<a name="wp1037989"> </a><div class="pSmartList1"><li>Invoke the &quot;Legend&quot; method of the current object (the chart control).</li></div>
+<a name="wp1037990"> </a><div class="pSmartList1"><li>Release the current object.</li></div>
+<a name="wp1037991"> </a><div class="pSmartList1"><li>Set the current object to the value returned by Legend.</li></div>
+<a name="wp1037992"> </a><div class="pSmartList1"><li>Invoke the &quot;BackDrop&quot; method of the current object (the Legend object).</li></div>
+<a name="wp1037993"> </a><div class="pSmartList1"><li>Release the current object.</li></div>
+<a name="wp1037994"> </a><div class="pSmartList1"><li>Set the current object to the value returned by BackDrop.</li></div>
+<a name="wp1037995"> </a><div class="pSmartList1"><li>Invoke the &quot;Fill&quot; method of the current object (the BackDrop object).</li></div>
+<a name="wp1037996"> </a><div class="pSmartList1"><li>Release the current object.</li></div>
+<a name="wp1037997"> </a><div class="pSmartList1"><li>Set the current object to the value returned by Fill.</li></div>
+<a name="wp1037998"> </a><div class="pSmartList1"><li>Invoke the &quot;Brush&quot; method of the current object (the Fill object).</li></div>
+<a name="wp1037999"> </a><div class="pSmartList1"><li>Release the current object.</li></div>
+<a name="wp1038000"> </a><div class="pSmartList1"><li>Set the current object to the value returned by Brush.</li></div>
+<a name="wp1038001"> </a><div class="pSmartList1"><li>Invoke the &quot;FillColor&quot; method of the current object (the Brush object).</li></div>
+<a name="wp1038002"> </a><div class="pSmartList1"><li>Release the current object.</li></div>
+<a name="wp1038003"> </a><div class="pSmartList1"><li>Set the current object to the value returned by FillColor.</li></div>
+<a name="wp1038004"> </a><div class="pSmartList1"><li>Invoke the &quot;Set&quot; method of the current object (the FillColor object) passing ( 255, 0, 255 ) as arguments.</li></div>
+<a name="wp1038005"> </a><div class="pSmartList1"><li>Release the current object.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

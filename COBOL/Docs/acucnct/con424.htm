@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:53:00" />
+  <title>4.5  Sample Programs</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con4.htm">Chapter 4: Distributed Processing:  Preparing the Client(s)</a> &gt; </p>
+<a name="wp1032124"> </a><h2 class="pHeading1">
+4.5  Sample Programs
+</h2>
+<a name="wp1032126"> </a><p class="pBody">
+This section contains sample client and server programs:  &quot;prog1.cbl&quot;, &quot;prog2.cbl&quot;, and &quot;asynch.cbl&quot;.  By default, these files were placed in your acuconnect/sample directory during installation on the server. These programs are included in the sample directory on your AcuConnect installation media.  
+</p>
+<a name="wp1032127"> </a><p class="pBody">
+&quot;prog1.cbl&quot; is a client program that performs a synchronous CALL.  Notice the CALL statement in the Procedure Division section of this program.  This CALL invokes &quot;prog2&quot; on the server, and displays the result on the client workstation.  Remember that the client configuration file (&quot;client.cfg&quot;, for example) defines the location of the server.  In this case, it also defines the CODE_SUFFIX, &quot;.acu&quot;.
+</p>
+<a name="wp1032128"> </a><p class="pBody">
+&quot;asynch.cbl&quot; is a client program that performs an asynchronous CALL.  Notice that in the Procedure Division section of this program, a CALL is made to the C$ASYNCRUN library routine using &quot;prog2&quot; and some parameters.  This tells AcuConnect to allow processing on the client to continue.  Notice also that this program later CALLs the C$ASYNCPOLL routine to check the status of &quot;prog2&quot;.
+</p>
+<a name="wp1032131"> </a><p class="pBody">
+Both &quot;prog1.cbl&quot; and &quot;asynch.cbl&quot; start &quot;prog2&quot; on the server using the same &quot;client.cfg&quot; file.
+</p>
+<a name="wp1032132"> </a><p class="pBody">
+After you have prepared your server and client, you can try running &quot;prog1.acu&quot; and/or &quot;asynch.acu&quot; on the client to test your AcuConnect connection.  For instructions, refer to <a  href="con425.htm#wp1032305">section 4.6, &quot;Running the Sample Programs.&quot;</a> 
+</p>
+<a name="wp1032136"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The sample file &quot;prog1.acu&quot; was compiled with &quot;ccbl32 -o @.acu prog1.cbl&quot;.  &quot;prog2.acu&quot; was compiled with &quot;ccbl32 -o @.acu prog2.cbl&quot;.
+<hr />
+</p>
+<a name="wp1032137"> </a><h3 class="pHeadingRef">
+&quot;prog1.cbl&quot;
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+identification division.<a name="wp1032138"> </a>
+program-id. prog1.<a name="wp1032139"> </a>
+working-storage section.<a name="wp1032140"> </a>
+01  err-code                  pic x(2).<a name="wp1032141"> </a>
+01  err-message               pic x(60).<a name="wp1032142"> </a>
+01  customer-info.<a name="wp1032143"> </a>
+    05  requested-age.<a name="wp1032144"> </a>
+        10  low-age           pic x(2).<a name="wp1032145"> </a>
+        10  high-age          pic x(2).<a name="wp1032146"> </a>
+    05  age-group-count       pic 9(3).<a name="wp1032147"> </a>
+procedure division.<a name="wp1032148"> </a>
+main-logic.<a name="wp1032149"> </a>
+    move &quot;35&quot; to low-age.<a name="wp1032150"> </a>
+    move &quot;39&quot; to high-age.<a name="wp1032151"> </a>
+    call &quot;prog2&quot; using customer-info <a name="wp1032152"> </a>
+        on exception<a name="wp1032153"> </a>
+            perform exception-handling<a name="wp1032154"> </a>
+        end-call.<a name="wp1032155"> </a>
+  display &quot;Number of customers between &quot; low-age &quot; and &quot;<a name="wp1032156"> </a>
+        high-age &quot;: &quot; age-group-count.<a name="wp1032157"> </a>
+    accept omitted.<a name="wp1032158"> </a>
+    stop run.<a name="wp1032159"> </a>
+exception-handling.<a name="wp1032160"> </a>
+    call &quot;C$CALLERR&quot; using err-code, err-message.<a name="wp1032161"> </a>
+    display &quot;Error#: &quot; err-code &quot;, &quot; err-message.<a name="wp1032162"> </a>
+    accept omitted.<a name="wp1032163"> </a>
+    stop run.<a name="wp1032164"> </a>
+</pre></div>
+<a name="wp1032165"> </a><h3 class="pHeadingRef">
+&quot;prog2.cbl&quot;
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+identification division.<a name="wp1032166"> </a>
+program-id. prog2.<a name="wp1032167"> </a>
+environment division.<a name="wp1032168"> </a>
+input-output section.<a name="wp1032169"> </a>
+file-control.<a name="wp1032170"> </a>
+select customer-file<a name="wp1032171"> </a>
+    assign to &quot;custfile&quot;<a name="wp1032172"> </a>
+    organization is line sequential<a name="wp1032173"> </a>
+    file status is customer-status.<a name="wp1032174"> </a>
+data division.<a name="wp1032175"> </a>
+file section.<a name="wp1032176"> </a>
+fd customer-file.<a name="wp1032177"> </a>
+01 customer-record.<a name="wp1032178"> </a>
+    05 customer-id           pic 9(3).<a name="wp1032179"> </a>
+    05 customer-name         pic x(20).<a name="wp1032180"> </a>
+    05 customer-age          pic xx.<a name="wp1032181"> </a>
+working-storage section.<a name="wp1032182"> </a>
+01  customer-status pic xx.<a name="wp1032183"> </a>
+    88  eof-customer-file    value &quot;10&quot;.<a name="wp1032184"> </a>
+linkage section.<a name="wp1032185"> </a>
+01  customer-info.<a name="wp1032186"> </a>
+    05  requested-age.<a name="wp1032187"> </a>
+        10  low-age          pic x(2).<a name="wp1032188"> </a>
+        10  high-age         pic x(2).<a name="wp1032189"> </a>
+    05  age-group-count      pic 9(3). <a name="wp1032190"> </a>
+procedure division using customer-info.<a name="wp1032191"> </a>
+main-logic.<a name="wp1032192"> </a>
+    perform count-customers.<a name="wp1032193"> </a>
+    goback.<a name="wp1032194"> </a>
+count-customers.<a name="wp1032195"> </a>
+    move zero to age-group-count.<a name="wp1032196"> </a>
+    open input customer-file.<a name="wp1032197"> </a>
+    perform until eof-customer-file<a name="wp1032198"> </a>
+        read customer-file next record<a name="wp1032199"> </a>
+        at end<a name="wp1032200"> </a>
+            continue<a name="wp1032201"> </a>
+        not at end<a name="wp1032202"> </a>
+            if customer-age &gt;= low-age and <a name="wp1032203"> </a>
+                customer-age &lt;= high-age<a name="wp1032204"> </a>
+                add 1 to age-group-count<a name="wp1032205"> </a>
+            end-if<a name="wp1032206"> </a>
+        end-read<a name="wp1032207"> </a>
+    end-perform.<a name="wp1032208"> </a>
+    close customer-file.			<a name="wp1032209"> </a>
+</pre></div>
+<a name="wp1032210"> </a><h3 class="pHeadingRef">
+&quot;asynch.cbl&quot;
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+identification division.<a name="wp1032211"> </a>
+program-id. asynch.<a name="wp1032212"> </a>
+author. MJE.<a name="wp1032213"> </a>
+remarks.<a name="wp1032214"> </a>
+  Used to test asynchronous calls.  Need prog2 on server.<a name="wp1032215"> </a>
+<a name="wp1032216"> </a>
+working-storage section.<a name="wp1032217"> </a>
+01  h-call-prog2           usage handle.<a name="wp1032218"> </a>
+01  state-of-call          pic s9.<a name="wp1032219"> </a>
+01  call-status            pic xx.<a name="wp1032220"> </a>
+    88  call-complete      value &quot;ok&quot;.<a name="wp1032221"> </a>
+01  customer-info.<a name="wp1032222"> </a>
+    05  requested-age.<a name="wp1032223"> </a>
+        10  low-age        pic x(2).<a name="wp1032224"> </a>
+        10  high-age       pic x(2).<a name="wp1032225"> </a>
+    05  age-group-count    pic 9(3).<a name="wp1032226"> </a>
+<a name="wp1032227"> </a>
+procedure division.<a name="wp1032228"> </a>
+main-logic.<a name="wp1032229"> </a>
+    move &quot;35&quot; to low-age.<a name="wp1032230"> </a>
+    move &quot;39&quot; to high-age.<a name="wp1032231"> </a>
+    call &quot;C$ASYNCRUN&quot; using h-call-prog2 &quot;prog2&quot; customer-info.<a name="wp1032232"> </a>
+    if return-code not equal zero<a name="wp1032233"> </a>
+         display &quot;CALL ERROR#: &quot; return-code<a name="wp1032234"> </a>
+         accept omitted<a name="wp1032235"> </a>
+         stop run<a name="wp1032236"> </a>
+    end-if.<a name="wp1032237"> </a>
+    display &quot;age-group-count immediately after async call: &quot;<a name="wp1032238"> </a>
+         age-group-count.<a name="wp1032239"> </a>
+    display &quot;Begin sleep for 5&quot;.<a name="wp1032240"> </a>
+    call &quot;C$SLEEP&quot; using 5.<a name="wp1032241"> </a>
+    display &quot;End sleep, call asyncpoll&quot;.<a name="wp1032242"> </a>
+    perform until call-complete<a name="wp1032243"> </a>
+     call &quot;C$ASYNCPOLL&quot; using <a name="wp1032244"> </a>
+         h-call-prog2 state-of-call customer-info<a name="wp1032245"> </a>
+     if return-code not equal zero<a name="wp1032246"> </a>
+         display &quot;CALL ERROR#: &quot; return-code<a name="wp1032247"> </a>
+         accept omitted<a name="wp1032248"> </a>
+         stop run<a name="wp1032249"> </a>
+     end-if<a name="wp1032250"> </a>
+     if state-of-call = 1<a name="wp1032251"> </a>
+         display &quot;Number of customers between &quot; low-age &quot; and &quot;<a name="wp1032252"> </a>
+                   high-age &quot;: &quot; age-group-count<a name="wp1032253"> </a>
+         set call-complete to true<a name="wp1032254"> </a>
+         accept omitted<a name="wp1032255"> </a>
+      end-if<a name="wp1032256"> </a>
+     end-perform.<a name="wp1032257"> </a>
+     stop run.<a name="wp1032258"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.1.6  File Options</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; <a href="gt122.htm">2.1 Using the Compiler</a> &gt; </p>
+<a name="wp1032482"> </a><h2 class="pHeading2">
+2.1.6  File Options
+</h2>
+<a name="wp1064372"> </a><p class="pBody">
+Some file options (-Fa, -Fe, -Fx, and -F4) are used to generate XFD files (data dictionaries) that are used with Acu4GL, AcuXML, the <b class="cBold">alfred</b> record editor, and with international character mapping for AcuODBC and AcuServer.  Other file options (-Fl, -Fs, and -Ft) can simplify the addition of transaction management facilities to existing programs that use the Vision file system.  For more details regarding transaction management, see <a  href="gt152.htm#wp1032218">section 5.1, &quot;Transaction Management.&quot;</a>  For more details about international character mapping, see <a  href="gt1555.htm#wp1044134">section 5.4, &quot;International Character Handling.&quot;</a>
+</p>
+<a name="wp1064482"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1064382"> </a><p class="pCellBody">
+<b class="cBold">-Fa</b> <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1064390"> </a><p class="pCellBody">
+This option tells the compiler to build data dictionaries (XFD files) for every indexed, relative, and sequential data file in the FDs of the program.  It is the only option that builds XFDs for relative and sequential files.  This option is also used for AcuXML file translation and for international character mapping.  See also the &quot;-Fo&quot; compile-time option, which specifies the directory in which the data dictionaries are placed.  
+</p>
+<a name="wp1097564"> </a><p class="pCellBody">
+The &quot;-Fa&quot; option generates the most current format for the XFD files (Version 5).  (XFD versioning is distinct from Vision versioning.)  Any version of Vision will work with any version of XFD, as long as the XFD version can store all the necessary precision of the Vision file. (For example, if you are using Vision Version 5 and you want to use a larger record size than what can be stored in 5 digits, then you will need to use Version 5 XFDs.)
+</p>
+<a name="wp1097565"> </a><p class="pCellBody">
+An attempt to use the &quot;-Fa&quot; option with a backwards-compatibility switch results in a warning and the XFDs for RELATIVE and SEQUENTIAL files are not created.  An attempt to use this option for records containing duplicate element names also results in a warning; however, if you are creating XFDs for AcuXML, you may disregard this warning. XFDs will be generated, and XML supports duplicate names.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1064396"> </a><p class="pCellBody">
+<b class="cBold">-Fc</b>
+</p>
+</td>
+    <td><a name="wp1064401"> </a><p class="pCellBody">
+This option causes the field names in generated XFD files to match exactly the source of the COBOL program that generated them.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1093250"> </a><p class="pCellBody">
+<b class="cBold">-Fe</b>
+</p>
+</td>
+    <td><a name="wp1093252"> </a><p class="pCellBody">
+Causes XFD files to be generated in XML format rather than the standard flat text format.  Acu4GL, AcuODBC, and <b class="cBold">alfred</b> can all read XFD files in XML format.  This option must be used in conjunction with the &quot;-Fx&quot; or &quot;-Fa&quot; options. The C$XML library routine can be used to parse the XML files if desired.  This option will not work in combination with &quot;-F4&quot; or &quot;-F3&quot;.  Version 4 and 3 XFD files cannot be generated in XML format.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1064403"> </a><p class="pCellBody">
+<b class="cBold">-Fl</b>
+</p>
+</td>
+    <td><a name="wp1064408"> </a><p class="pCellBody">
+Enables single locking rules rather than multiple locking rules as the lock mode default.  Normally, &quot;WITH ROLLBACK&quot; causes multiple locking rules to be in effect for a file.  When &quot;-Fl&quot; is used, the &quot;WITH ROLLBACK&quot; clause does not affect whether single or multiple record locking rules are followed.  Single locking becomes the default.  You may enable multiple locking either by specifying &quot;WITH LOCK ON MULTIPLE RECORDS&quot; in a file's SELECT statement or by using &quot;APPLY LOCK-HOLDING ON <em class="cEmphasis">file</em>&quot; in the I-O CONTROL paragraph. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1115247"> </a><p class="pCellBody">
+<b class="cBold">-Fm</b>
+</p>
+</td>
+    <td><a name="wp1115249"> </a><p class="pCellBody">
+Causes LOCK MODE IS MANUAL to be applied when the LOCK clause is omitted from the SELECT statement in the FILE-CONTROL paragraph.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1064410"> </a><p class="pCellBody">
+<b class="cBold">-Fo</b>
+</p>
+</td>
+    <td><a name="wp1064415"> </a><p class="pCellBody">
+This option must be followed (as the next separate argument) by the directory that will hold the data dictionary files generated by the compiler when you use the &quot;-Fx&quot; option.
+</p>
+<a name="wp1097578"> </a><p class="pCellBody">
+Type a space after the option and then give the name of the chosen directory.  If this option is not used, the data dictionaries are placed into the current directory.
+</p>
+<a name="wp1097579"> </a><p class="pCellBody">
+For example, to cause the dictionaries to be stored in the directory &quot;/usr/inventory/dictionaries&quot; you would enter:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+-Fo  /usr/inventory/dictionaries<a name="wp1097596"> </a>
+</pre></div>
+<a name="wp1097580"> </a><p class="pCellBody">
+The <em class="cEmphasis">acurfap</em> syntax can be used to specify a location on a system being served by AcuServer or AcuConnect.  For information about <em class="cEmphasis">acurfap</em> syntax, see <a  href="gt1218.htm#wp1033061">section 2.1.15.1, &quot;Remote file name handling.&quot;</a>
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1102427"> </a><p class="pCellBody">
+<b class="cBold">-Fp</b>
+</p>
+</td>
+    <td><a name="wp1102429"> </a><p class="pCellBody">
+Causes all files, except sort files, to be treated as if the OPTIONAL phrase is specified in the SELECT statement.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1064433"> </a><p class="pCellBody">
+<b class="cBold">-Fs</b>
+</p>
+</td>
+    <td><a name="wp1064438"> </a><p class="pCellBody">
+Causes an implied START TRANSACTION verb before the first OPEN, CLOSE, WRITE, REWRITE, or DELETE and after each COMMIT or ROLLBACK. In effect, every file operation is part of a transaction. If this option is enabled, and the compiler encounters a START TRANSACTION verb, it reports a warning and does not generate any code for the START TRANSACTION. The &quot;-Fs&quot; option provides an alternate way to program transactions and is often useful when you are converting from other COBOL or SQL implementations. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1064440"> </a><p class="pCellBody">
+<b class="cBold">-Ft</b>
+</p>
+</td>
+    <td><a name="wp1064445"> </a><p class="pCellBody">
+Causes implied transactions for every OPEN, CLOSE, WRITE, REWRITE, or DELETE that is not part of an explicit transaction.  Single file operations that are not part of a transaction are preceded by an implied START TRANSACTION and followed by an implied COMMIT. This option makes converting existing applications to a transaction system easier.  Note that unlike most COMMITs, which unlock all of the file's currently locked records, the implied COMMIT does not unlock any records.  See section 5.1.4, &quot;Extended Locking Rules,&quot; for details regarding file locking and the handling of implied transactions. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1064447"> </a><p class="pCellBody">
+<b class="cBold">-Fx</b>
+</p>
+</td>
+    <td><a name="wp1064456"> </a><p class="pCellBody">
+This option directs the compiler to build Version 5 data dictionaries (XFD files) for every indexed data file in the FDs of the program.   If you need to have the older version of XFD files, specify the &quot;-F4&quot; option instead of &quot;-Fx&quot;.  If you use relative, sequential, or XML data files,  use the &quot;-Fa&quot; option instead.  Use the &quot;-Fo&quot; option to specify the directory in which the data dictionaries should be placed.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1064458"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1064460"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>XFDs are required if you plan to use any Acu4GL interface, AcuODBC, or AcuXML; these interfaces cannot operate without data dictionaries.  XFDs are also required for international character mapping with AcuServer and they provide useful information to the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">alfred</span> record editor.   XFD files have two different formats: Version 4 and Version 5.  Database technologies in the <span style="font-style: italic" class="cBoldItalic">extend</span><b style="font-style: normal" class="cBold">6</b> Interoperability Series, including AcuXML, require Version 5 XFDs. Version 4 XFDs are required for previous versions of Acu4GL, <b class="cBold">alfred</b>, and AcuODBC (Version 5.x and earlier).  
+<hr />
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1064463"> </a><p class="pCellBody">
+<b class="cBold">-F4</b>
+</p>
+</td>
+    <td><a name="wp1064465"> </a><p class="pCellBody">
+This option tells the compiler to build Version 4 data dictionaries (XFD files) for every indexed data file in the FDs of the program.  This older version of the XFD files is compatible with Acu4GL, AcuODBC, and <b class="cBold">alfred</b> Version 5.x and earlier.  To build Version 4 XFDs for every indexed, relative, and sequential data file in your FDs, combine &quot;-F4&quot; with &quot;-Fa&quot;, as in &quot;ccbl -F4 -Fa&quot;.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1064506"> </a><p class="pCellBody">
+<b class="cBold">-Fxa</b>
+</p>
+</td>
+    <td><a name="wp1064477"> </a><p class="pCellBody">
+Supported but obsolete.  It produces the same result as &quot;-Fa&quot;.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1114628"> </a><p class="pCellBody">
+<b class="cBold">--fileAssign=</b>
+</p>
+</td>
+    <td><a name="wp1114630"> </a><p class="pCellBody">
+This option allows you to specify how to assign a filename when neither DYNAMIC or EXTERNAL is part of the ASSIGN clause of the SELECT statement.  The &quot;=&quot; must be followed by the keyword DYNAMIC or EXTERNAL.  For example, &quot;--fileAssign=external&quot; causes the compiler to treat SELECT statements that do not specify DYNAMIC or EXTERNAL in the ASSIGN clause, as if EXTERNAL were specified.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1064479"> </a><p class="pCellBody">
+<b class="cBold">--fileIdSize=#<br /></b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</p>
+</td>
+    <td><a name="wp1064481"> </a><p class="pCellBody">
+Specifies the size, in bytes, of file handles passed to COBOL programs.  &quot;#&quot; is replaced by the value 2, 4, or 8 to specify the number of bytes in the passed integer.  A four byte native integer is passed by default.  A two byte native integer is used in HP COBOL compatibility mode (&quot;-Cp&quot;).
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

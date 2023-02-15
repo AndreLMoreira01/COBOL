@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:20:41" />
+  <title>2.5.1  Restricted Video Modes</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run2.htm"><br />Chapter 2: Setting Up Your Terminals</a> &gt; <a href="run229.htm">2.5  Restricted Attribute Handling </a> &gt; </p>
+<a name="wp1044561"> </a><h2 class="pHeading2">
+2.5.1  Restricted Video Modes
+</h2>
+<a name="wp1044565"> </a><p class="pBody">
+The action of ACUCOBOL-GT on a terminal with &quot;non-hidden&quot; attributes is determined by the setting of the RESTRICTED_VIDEO_MODE runtime configuration variable. This variable can take several different settings to control the rules ACUCOBOL-GT uses for these terminals.
+</p>
+<a name="wp1044569"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The following rules do not apply to intensity.  These terminals can apply intensity attributes individually to each screen position.  The Terminal Manager treats high and low intensity in the normal manner for these types of terminals.  
+<hr />
+</p>
+<a name="wp1044570"> </a><p class="pBody">
+By default, the RESTRICTED-VIDEO-MODE value is zero, which causes the Terminal Manager to ignore attributes other than intensity; the application will run correctly, but without any video attributes.  This is convenient when you are running a program that has not been written to conform to the following rules.  
+</p>
+<a name="wp1044571"> </a><p class="pBody">
+To use video attributes with these terminals, you must set RESTRICTED-VIDEO-MODE to a non-zero value; the syntax is:   
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+RESTRICTED-VIDEO-MODE  <em class="cEmphasis">value</em><a name="wp1044572"> </a>
+</pre></div>
+<a name="wp1044573"> </a><p class="pBody">
+Optional <em class="cEmphasis">values</em> are:
+</p>
+<a name="wp1044574"> </a><p class="pBody">
+<b class="cBold"></b></p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1049135"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">1</span>
+</p>
+</td>
+    <td><a name="wp1049278"> </a><p class="pBody">
+When the variable is set to &quot;1&quot;, the Terminal Manager uses rules that tend to emphasize getting the fields in the right location over getting all the attributes correct.  These rules are as follows:
+</p>
+<div class="pSmartList1"><ol type="a" class="pSmartList1">
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1049279"> </a><div class="pSmartList2"><li>Every ACCEPT and DISPLAY is preceded by the appropriate attribute-setting character.</li></div>
+<a name="wp1049280"> </a><div class="pSmartList2"><li>This character is placed immediately to the left of the beginning of the field.  Note that this may overwrite existing data.  </li></div>
+<a name="wp1049281"> </a><div class="pSmartList2"><li>If the field position is column 1 of the current window, and the attribute is normal white on black, then the attribute-setting character is <em class="cEmphasis">not </em>displayed.</li></div>
+<a name="wp1049282"> </a><div class="pSmartList2"><li>If the field position is column 1 of the current window, and the attribute is other than white on black, the field is moved over to column 2 to allow space for the attribute character.</li></div>
+<a name="wp1049283"> </a><div class="pSmartList2"><li>The field is then accepted or displayed using the normal rules.</li></div>
+<a name="wp1049284"> </a><div class="pSmartList2"><li>If the screen location immediately after the end of the field does not contain an attribute-setting character, a normal white-on-black attribute character is placed there.  If this statement is an ACCEPT statement, this is done before the ACCEPT occurs.  The current cursor location is then set according to the normal ACUCOBOL-GT rules (this will cause the cursor location to be where this terminating attribute character is located).</li></div>
+</ol></div>
+</ol></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049139"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">3</span>
+</p>
+</td>
+    <td><a name="wp1049492"> </a><p class="pBody">
+When RESTRICTED-VIDEO-MODE is set to &quot;3&quot;, the Terminal Manager follows all the rules listed under <em class="cEmphasis">value </em>&quot;1&quot; except for rule (c).  This causes all ACCEPT and DISPLAY statements that reference column 1 to be placed in column 2.  This setting prevents you from placing data in column 1, but causes all fields placed in column 1 to line up vertically regardless of which attributes they use.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049143"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">5</span>
+</p>
+</td>
+    <td><a name="wp1049842"> </a><p class="pBody">
+When RESTRICTED-VIDEO-MODE is set to &quot;5&quot;, the Terminal Manager follows all the rules listed under &quot;1&quot; except for rule (b).  The attribute character is placed in the first position of the field, and the field is moved to the right one character.  This setting will cause all fields to shift to the right by one, but will not overwrite data if two fields are adjacent.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049147"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">7</span>
+</p>
+</td>
+    <td><a name="wp1049149"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">When RESTRICTED-VIDEO-MODE is set to &quot;7&quot;, the Terminal Manager follows all the rules listed for &quot;1&quot; except for rules (b) and (c).  Thus, every ACCEPT and DISPLAY will always be preceded by an attribute character, and this character will always occupy the first field position.  This </span><em class="cEmphasis">value</em><span style="font-family: Arial, Verdana, Helvetica, sans-serif"> emphasizes getting the attributes correct over getting the fields in the correct screen location. </span>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"><b class="cBold"></b>
+</p>
+<a name="wp1044588"> </a><p class="pBody">
+These rules give a certain amount of flexibility, but also have restrictions.  These are discussed in the next section.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

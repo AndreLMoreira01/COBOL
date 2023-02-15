@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:56:25" />
+  <title>2.3.1.4  Creating and using Java arrays in COBOL</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr2.htm">Chapter 2: Working with Java Technology</a> &gt; <a href="itr220.htm">2.3  Calling Java from COBOL</a> &gt; <a href="itr221.htm">2.3.1  Calling the C$JAVA Routine</a> &gt; </p>
+<a name="wp1075795"> </a><h2 class="pHeading3">
+2.3.1.4  Creating and using Java arrays in COBOL
+</h2>
+<a name="wp1075796"> </a><p class="pBody">
+You can use the C$JAVA routine to create and pass Java arrays of <a  href="itr225.htm#wp1075797">primitive types</a>, <a  href="itr225.htm#wp1075803">objects</a>, and <a  href="itr225.htm#wp1075813">strings</a>; to get and set <a  href="itr225.htm#wp1075829">array elements</a>; to <a  href="itr225.htm#wp1075841">clear arrays</a>; and to <a  href="itr225.htm#wp1075847">convert COBOL tables</a> to Java arrays and vice versa.
+</p>
+<a name="wp1075797"> </a><h3 class="pHeadingRef">
+Creating and passing arrays of primitive types
+</h3>
+<a name="wp1075799"> </a><p class="pBody">
+To create Java arrays, use the op-code CJAVA-CREATEARRAY and pass in the type of the array and the size of the array.  Return the array handle through the GIVING statement. 
+</p>
+<a name="wp1085002"> </a><p class="pBody">
+In the example below, an array of ints is created, and ARRAY-SIZE is declared USAGE IS SIGNED-INT VALUE 10.  An object method that would take this array would have a parameter in its signature of type [I such as &quot;([I)I&quot;.  The primitives array types are documented in <a  href="itr222.htm#wp1075702">section 2.3.1.1</a>.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$JAVA&quot; USING CJAVA-CREATEARRAY, CJAVA-INTARRAY, 
+ARRAY-SIZE GIVING ARRAY-HANDLE.<a name="wp1075801"> </a>
+</pre></div>
+<a name="wp1075803"> </a><h3 class="pHeadingRef">
+Creating and passing arrays of objects
+</h3>
+<a name="wp1075805"> </a><p class="pBody">
+You can create an object array as shown here:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$JAVA&quot; USING CJAVA-CREATEARRAY, CJAVA-OBJECTARRAY, 10 
+GIVING ARRAY-HANDLE.<a name="wp1110718"> </a>
+</pre></div>
+<a name="wp1075809"> </a><p class="pBody">
+In this case, the array consists of an array of object handles.  Here is an example of calling a Java method that takes an array of objects:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$JAVA&quot; USING CJAVA-CALL, OBJECT-HANDLE, &quot;acuCobolGT/
+CAcuCobol&quot;, &quot;CobolCallingJavaObjectArray&quot;, &quot;([Ljava/lang/
+Object;)X&quot;, ARRAY-HANDLE, FIELD-STRINGRET GIVING STATUS-VAL.<a name="wp1075811"> </a>
+</pre></div>
+<a name="wp1075813"> </a><h3 class="pHeadingRef">
+Creating and passing arrays of strings
+</h3>
+<a name="wp1075815"> </a><p class="pBody">
+Even though strings in Java are objects, they are treated separately for the convenience of using them with PIC X tables.  Here is an example of creating a string array:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$JAVA&quot; USING CJAVA-CREATEARRAY, CJAVA-STRINGARRAY, 10 
+GIVING ARRAY-HANDLE.<a name="wp1075817"> </a>
+</pre></div>
+<a name="wp1075819"> </a><p class="pBody">
+Here are examples of setting a string array element.  In this example, STRING-TABLE is declared PIC X(20) OCCURS 10.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+MOVE &quot;99999999999999999999&quot; TO STRING-TABLE(10)<a name="wp1075821"> </a>
+<a name="wp1080410"> </a>
+CALL &quot;C$JAVA&quot; USING CJAVA-SETARRAYELEMENT, ARRAY-HANDLE, 1, 
+STRING-TABLE(10), GIVING STATUS-VAL.<a name="wp1075822"> </a>
+</pre></div>
+<a name="wp1075824"> </a><p class="pBody">
+This example demonstrates how to call a Java method that takes an array of strings as a parameter:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$JAVA&quot; USING CJAVA-CALL, OBJECT-HANDLE, &quot;acuCobolGT/
+CAcuCobol&quot;, &quot;CobolCallingJavaStringArray&quot;, &quot;([Ljava/lang/
+String;)X&quot;, ARRAY-HANDLE, FIELD-STRINGRET GIVING STATUS-VAL.<a name="wp1077834"> </a>
+</pre></div>
+<a name="wp1075829"> </a><h3 class="pHeadingRef">
+Getting and setting array elements
+</h3>
+<a name="wp1075831"> </a><p class="pBody">
+You set array elements using the CJAVA-SETARRAYELEMENT op-code and passing in an array handle, the position in the array to set, and the value to set.  In the following example, the first element of an array is set with the first value from an integer table that is USAGE IS SIGNED-INT OCCURS 10.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$JAVA&quot; USING CJAVA-SETARRAYELEMENT, ARRAY-HANDLE, 1, 
+INT-TABLE(1), GIVING STATUS-VAL.<a name="wp1075833"> </a>
+</pre></div>
+<a name="wp1075835"> </a><p class="pBody">
+Getting array elements is done using a similar syntax with the op-code CJAVA-GETARRAYELEMENT.  This call requires an array handle, the position in the array to get, and the variable into which the array value will be placed.  Here is an example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$JAVA&quot; USING CJAVA-GETARRAYELEMENT, ARRAY-HANDLE, 5, 
+INT-TABLE(1), GIVING STATUS-VAL.<a name="wp1075837"> </a>
+</pre></div>
+<a name="wp1075839"> </a><p class="pBody">
+In this case, we are getting element 5 from the array and placing it in the first element of an integer table.
+</p>
+<a name="wp1075841"> </a><h3 class="pHeadingRef">
+Clearing arrays
+</h3>
+<a name="wp1075843"> </a><p class="pBody">
+Clearing arrays is straightforward.  Use the op-code CJAVA-CLEARARRAY and pass in the array handle of the array to be cleared, as shown:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$JAVA&quot; USING CJAVA-CLEARARRAY, ARRAY-HANDLE GIVING 
+STATUS-VAL.<a name="wp1075845"> </a>
+</pre></div>
+<a name="wp1075847"> </a><h3 class="pHeadingRef">
+Implicit COBOL table/Java array conversion
+</h3>
+<a name="wp1075849"> </a><p class="pBody">
+With ACUCOBOL-GT, it is possible to pass a COBOL table directly to a method that requires a Java array.  The contents of the table are automatically converted to an array of the type the Java method expects.  When the method completes, the contents of the table are updated with what is in the array.  You do not have to explicitly convert the COBOL table to a Java array and convert it back again.  No special op-code is required to do the conversion.  When the runtime sees the array type in the signature, it tries to convert that table parameter to an array.  Here is an example of a table being passed to a Java method that takes an array parameter:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$JAVA&quot; USING CJAVA-CALL, OBJECT-HANDLE, &quot;acuCobolGT/
+CAcuCobol&quot;, &quot;CobolCallingJavaIntArray&quot;, &quot;([I)I&quot;, INT-GROUP, 
+FIELD-RET GIVING STATUS-VAL.<a name="wp1075851"> </a>
+</pre></div>
+<a name="wp1075853"> </a><p class="pBody">
+In the above example, INT-GROUP is declared:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 INT-GROUP.<a name="wp1075855"> </a>
+    03  INT-DATA occurs 10 times.<a name="wp1075856"> </a>
+        05  INT-ELEMENT signed-int.<a name="wp1075857"> </a>
+</pre></div>
+<a name="wp1075859"> </a><p class="pBody">
+The values for INT-GROUP are set as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+	   MOVE 1111 to INT-ELEMENT(1)<a name="wp1075861"> </a>
+	   MOVE 2222 to INT-ELEMENT(2)<a name="wp1075862"> </a>
+	   MOVE 3333 to INT-ELEMENT(3)<a name="wp1075863"> </a>
+	   MOVE 4444 to INT-ELEMENT(4)<a name="wp1075864"> </a>
+	   MOVE 5555 to INT-ELEMENT(5)<a name="wp1075865"> </a>
+</pre></div>
+<a name="wp1075867"> </a><p class="pBody">
+It should be noted that the type of the table passed into the Java method should be the appropriate type, that is, data of the same element size (in bits).  The size of the Java array will be the number of elements in the table.
+</p>
+<a name="wp1075869"> </a><h3 class="pHeadingRef">
+Explicit COBOL table/Java array conversion
+</h3>
+<a name="wp1075871"> </a><p class="pBody">
+With ACUCOBOL-GT, you can also use C$JAVA op-codes to explicitly convert Java arrays to COBOL and COBOL tables to Java.  This functionality gives you more precise control over the conversion process. 
+</p>
+<a name="wp1101762"> </a><p class="pBody">
+The op-code to convert a Java array to a table is JAVA-CONVERTARRAYTOTABLE.  Here is an example of an array of Java ints being converted to a USAGE SIGNED-INT OCCURS 10 COBOL table:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$JAVA&quot; USING CJAVA-CONVERTARRAYTOTABLE, ARRAY_HANDLE, 
+10, 0, INT-TABLE(1) GIVING STATUS-VAL.<a name="wp1075873"> </a>
+</pre></div>
+<a name="wp1075875"> </a><p class="pBody">
+The call takes the array handle, the number of elements to convert, the starting element position in the array, and the COBOL table variable in which to place the converted array.
+</p>
+<a name="wp1075879"> </a><p class="pBody">
+To explicitly convert a COBOL table to Java, you can use the C$JAVA op-code CJAVA-CONVERTTABLETOARRAY.  Here is an example of a call that converts a table to an array:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$JAVA&quot; USING CJAVA-CONVERTTABLETOARRAY, INT-TABLE(1), 
+10, 0, ARRAY-HANDLE, GIVING STATUS-VAL.<a name="wp1075881"> </a>
+</pre></div>
+<a name="wp1075883"> </a><p class="pBody">
+In this case, the call requires the COBOL table from which the values are taken, the number of elements, the position of the first element, and the handle of the destination array.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

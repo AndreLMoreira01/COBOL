@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>SYSTEM Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1038228"> </a><h2 class="pHeading2">
+SYSTEM Routine
+</h2>
+<a name="wp1038235"> </a><p class="pBody">
+The SYSTEM library routine provides a method of executing an operating system command. 
+</p>
+<a name="wp1038236"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;SYSTEM&quot;<a name="wp1038237"> </a>
+    USING MY-COMMAND-LINE,<a name="wp1038238"> </a>
+    GIVING EXIT-STATUS<a name="wp1038239"> </a>
+</pre></div>
+<a name="wp1038241"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1038242"> </a><p class="pBody">
+<b class="cBold">MY-COMMAND-LINE</b>   PIC X(n)
+</p>
+<a name="wp1038243"> </a><p class="pBody">
+Contains the operating system command line to execute.
+</p>
+<a name="wp1038244"> </a><p class="pBody">
+<b class="cBold">EXIT-STATUS</b> Any numeric data item
+</p>
+<a name="wp1038245"> </a><p class="pBody">
+Returns the called program's exit status.
+</p>
+<a name="wp1038247"> </a><h3 class="pHeadingRef">
+Comments
+</h3>
+<a name="wp1038248"> </a><p class="pBody">
+The SYSTEM routine takes a parameter, which is submitted to the host operating system as if it were a command typed in from a terminal.  
+</p>
+<a name="wp1038249"> </a><p class="pBody">
+Some operating systems place limits on the length of a command-line string.  Under Windows, the limit is 128 bytes.  When you issue a SYSTEM call using a variable, make sure that the length of the variable doesn't exceed the operating system's limit.
+</p>
+<a name="wp1230070"> </a><p class="pBody">
+The user's terminal is set to its default operating state before this command is run and is reset after it's complete.  The runtime system waits for the command to complete.   
+</p>
+<a name="wp1233965"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>On Windows systems, if you append an ampersand (&amp;) character to the command line, the program will run asynchronously.  This should not be done for programs providing input files, but is often useful for programs processing output files.  
+<hr />
+</p>
+<a name="wp1230072"> </a><p class="pBody">
+The status of a call to SYSTEM is placed into EXIT-STATUS.  This is usually the exit status of the executed program, or is &quot;-1&quot; if the SYSTEM routine failed.  
+</p>
+<a name="wp1038252"> </a><p class="pBody">
+Here's an example of a call to SYSTEM.  On a UNIX machine, you could display a directory listing of the &quot;/usr&quot; directory with the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;SYSTEM&quot; USING &quot;ls /usr&quot;<a name="wp1038253"> </a>
+</pre></div>
+<a name="wp1038254"> </a><p class="pBody">
+If your machine is running Windows and you want to execute MS-DOS operating system commands via SYSTEM, you must pass the name COMMAND.COM, as well as the operating system command.  Use the syntax shown in this example that executes the DIR command:   
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;SYSTEM&quot; USING <a name="wp1038255"> </a>
+     &quot;COMMAND.COM /C DIR&quot;<a name="wp1038256"> </a>
+</pre></div>
+<a name="wp1038257"> </a><p class="pBody">
+When CALL &quot;SYSTEM&quot; is used to initiate a program, it looks only for files with a &quot;.EXE&quot; extension.  If you want to call a &quot;.COM&quot; or &quot;.BAT&quot; file, you must explicitly add that extension in your code.  For example:    
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CALL &quot;SYSTEM&quot; USING <a name="wp1038258"> </a>
+     &quot;COMMAND.COM /C MYBATCH.BAT&quot;<a name="wp1038259"> </a>
+</pre></div>
+<a name="wp1038260"> </a><p class="pBody">
+The SYSTEM routine is provided in source form as a sample of a C subroutine.  
+</p>
+<a name="wp1038261"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This routine causes ACUCOBOL-GT to <em class="cEmphasis">forget</em> the contents of the user's screen.  This is done because the command executed may display information on the screen that ACUCOBOL-GT is not aware of.  Because of this, <em class="cEmphasis">pop-up </em>windows made after a call to the SYSTEM routine may not correctly restore the screen contents when they are closed.  You can avoid this problem by re-initializing the screen after you call the SYSTEM routine.  You can do this by erasing the screen or by closing a pop-up window that covers the entire screen.  
+<hr />
+</p>
+<a name="wp1038262"> </a><p class="pBody">
+If the command to be executed will not perform any screen I/O, then you can request the SYSTEM routine to retain ACUCOBOL-GT's memory of the user's screen.  This will avoid the problem mentioned in the preceding paragraph.  To do this, simply pass a second argument to the SYSTEM routine.  This may be any parameter you choose.  For clarity, we suggest that the second argument be the literal &quot;NO I-O&quot;.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

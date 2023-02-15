@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$GETCGI Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1035881"> </a><h2 class="pHeading2">
+C$GETCGI Routine
+</h2>
+<a name="wp1035886"> </a><p class="pBody">
+The C$GETCGI routine retrieves CGI (Common Gateway Interface) variables. 
+</p>
+<a name="wp1035887"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$GETCGI&quot;<a name="wp1035888"> </a>
+    USING VARIABLE-NAME, DEST-ITEM, VALUE-INDEX<a name="wp1035889"> </a>
+    GIVING VALUE-SIZE<a name="wp1035890"> </a>
+</pre></div>
+<a name="wp1035891"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1035892"> </a><p class="pBody">
+<b class="cBold">VARIABLE-NAME</b>   PIC X(n)
+</p>
+<a name="wp1035893"> </a><p class="pBody">
+Contains the name of the CGI variable.
+</p>
+<a name="wp1035894"> </a><p class="pBody">
+<b class="cBold">DEST-ITEM</b>   PIC X(n)
+</p>
+<a name="wp1035895"> </a><p class="pBody">
+Receives the value of the given CGI variable.
+</p>
+<a name="wp1035896"> </a><p class="pBody">
+<b class="cBold">VALUE-INDEX</b>   Numeric value
+</p>
+<a name="wp1035897"> </a><p class="pBody">
+Contains the CGI value index.  This optional parameter contains an index that is used when a CGI variable has multiple values in the CGI input data.  This typically happens when multiple items have been selected from a &quot;choose many&quot; list box.  For example, to receive the third selected value, pass 3 for VALUE-INDEX.  If VALUE-INDEX is greater than the total number of values in the input stream for the given CGI variable, then spaces are moved to DEST-ITEM.
+</p>
+<a name="wp1035898"> </a><p class="pBody">
+<b class="cBold">VALUE-SIZE   </b>Signed numeric value
+</p>
+<a name="wp1035899"> </a><p class="pBody">
+Receives the size of the resulting value.  This may be &quot;0&quot; to indicate that the variable exists but has no value, or &quot;-1&quot; to indicate that the variable does not exist.
+</p>
+<a name="wp1035900"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1035901"> </a><p class="pBody">
+This library routine is intended to be called from COBOL CGI scripts to retrieve CGI variables from either the environment or the standard input stream, &quot;stdin&quot;.
+</p>
+<a name="wp1035902"> </a><p class="pBody">
+C$GETCGI automatically determines whether to read the CGI variable from the environment or &quot;stdin&quot; depending on the value of the &quot;REQUEST_METHOD&quot; environment variable, which is set by the Web Server.  The first time C$GETCGI is called, it reads all of the CGI variables and values into a variable length buffer.  If REQUEST_METHOD is &quot;GET&quot;, then the data is read from the &quot;QUERY_STRING&quot; environment variable.  If the REQUEST_METHOD is &quot;POST&quot;, then it is read from &quot;stdin&quot;.
+</p>
+<a name="wp1035903"> </a><p class="pBody">
+Each time C$GETCGI is called, it searches for the variable name passed in the first parameter, translates the value from CGI format into standard format, and moves the result to the destination item passed in the second parameter.  An optional third parameter specifies a CGI value index.  This index is used when a CGI variable has multiple values in the CGI input data, such as the case where multiple items have been selected from a &quot;choose-many&quot; list.
+</p>
+<a name="wp1035905"> </a><p class="pBody">
+The size of the resulting value is returned in the special RETURN-CODE register.  This may be &quot;0&quot; to indicate that the variable has no value or &quot;-1&quot; to indicate that the variable does not exist.  The value of RETURN-CODE is moved to VALUE-SIZE.
+</p>
+<a name="wp1035906"> </a><p class="pBody">
+The value is truncated to the size of the destination item.
+</p>
+<a name="wp1035907"> </a><p class="pBody">
+You may use C$GETCGI instead of or in combination with external forms.  Use C$GETCGI if you must know the exact size of a CGI variable or if you are converting an existing COBOL CGI program.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

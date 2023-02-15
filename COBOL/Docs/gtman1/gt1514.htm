@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:06" />
+  <title>5.1.8  Transaction Error Handling</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt15.htm"><br />Chapter 5:  File Processing</a> &gt; <a href="gt152.htm">5.1 Transaction Management</a> &gt; </p>
+<a name="wp1032357"> </a><h2 class="pHeading2">
+5.1.8  Transaction Error Handling
+</h2>
+<a name="wp1032360"> </a><p class="pBody">
+Error codes associated with transaction management are stored in a special register called TRANSACTION-STATUS.  These codes tell you the status of the last transaction and are documented in Appendix E.4.  Transaction management errors fall into two categories:  
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1032361"> </a><div class="pSmartList1"><li>For errors that occur during a START TRANSACTION, COMMIT, ROLLBACK, or call to C$RECOVER (see <a  href="gt1516.htm#wp1032381">section 5.1.10, &quot;Recovery&quot;</a>), use TRANSACTION-STATUS to determine the type of error that occurred.   </li></div>
+<a name="wp1032362"> </a><div class="pSmartList1"><li>After the execution of any file operation during a transaction, the file's FILE-STATUS variable will contain 9E if an error occurred in the transaction system.  The exact nature of the error will be shown by the contents of TRANSACTION-STATUS.</li></div>
+<a name="wp1032364"> </a><p class="pIndented1">
+A subcategory of these errors are &quot;intermediate&quot; runtime errors that call installed error procedures.  They are:
+</p>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1032365"> </a><div class="pSmartList2"><li>&quot;File error #&quot;</li></div>
+<a name="wp1032366"> </a><div class="pSmartList2"><li>&quot;File error # on #&quot;</li></div>
+<a name="wp1032367"> </a><div class="pSmartList2"><li>&quot;Transaction error #&quot;</li></div>
+<a name="wp1032368"> </a><div class="pSmartList2"><li>&quot;Transaction error # on #&quot;</li></div>
+</ul></div>
+<a name="wp1032369"> </a><p class="pIndented1">
+where the # signs are replaced at run time by error names, numbers, or other information.  See Book 4, Appendix I, &quot;Library Routines,&quot; for detailed discussion of the error and exit procedures.
+</p>
+</ol></div>
+<a name="wp1032370"> </a><p class="pBody">
+The TRANSACTION-STATUS variable has the same format as a file's status variable.  It is automatically created by the compiler, and is implicitly shared by all programs of a run unit.  TRANSACTION-STATUS is a reserved word. 
+</p>
+<a name="wp1032371"> </a><p class="pBody">
+You can specify procedures for transaction error handling with the USE statement and the reserved word TRANSACTION.  The syntax is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">USE</u> <u class="cUnderline">AFTER</u> STANDARD {<u class="cUnderline">EXCEPTION</u>} <u class="cUnderline">PROCEDURE</u> ON <u class="cUnderline">TRANSACTION</u><a name="wp1032372"> </a>
+                   {<u class="cUnderline">ERROR</u>    }<a name="wp1036854"> </a>
+</pre></div>
+<a name="wp1032373"> </a><p class="pBody">
+If TRANSACTION is specified, the procedure executes when an error occurs during a START TRANSACTION, COMMIT, ROLLBACK, or call to C$RECOVER.  See <a  href="gt1516.htm#wp1032381">section 5.1.10, &quot;Recovery.&quot;</a>
+</p>
+<a name="wp1032374"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>A transaction error &quot;10&quot; is returned by a START TRANSACTION statement when the LOG-FILE configuration variable (that specifies the default log file) is undefined.  The COBOL program may choose to ignore this error in the cases where the <em class="cEmphasis">filename</em>-LOG variables are used.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

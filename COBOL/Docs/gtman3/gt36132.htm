@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>RETURN Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1041234"> </a><h2 class="pHeading2">
+RETURN Statement
+</h2>
+<a name="wp1041236"> </a><p class="pBody">
+The RETURN statement retrieves records from sort or merge operations.
+</p>
+<a name="wp1041238"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">RETURN</u> file-name RECORD [ <u class="cUnderline">INTO</u> dest-record ]<a name="wp1041239"> </a>
+<a name="wp1041240"> </a>
+      AT <u class="cUnderline">END</u> statement-1<a name="wp1041241"> </a>
+<a name="wp1041242"> </a>
+    [ <u class="cUnderline">NOT</u> AT <u class="cUnderline">END</u> statement-2 ]<a name="wp1041243"> </a>
+<a name="wp1041244"> </a>
+    [ <u class="cUnderline">END-RETURN</u> ]<a name="wp1041245"> </a>
+</pre></div>
+<a name="wp1041247"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041248"> </a><div class="pSmartList1"><li><em class="cEmphasis">File-name</em> is the name of a sort file described by an SD entry in the Data Division.</li></div>
+<a name="wp1041249"> </a><div class="pSmartList1"><li><em class="cEmphasis">Dest-record</em> is a data item.</li></div>
+<a name="wp1041250"> </a><div class="pSmartList1"><li><em class="cEmphasis">Statement-1</em> and <em class="cEmphasis">statement-2</em> are imperative statements.</li></div>
+<a name="wp1041251"> </a><div class="pSmartList1"><li>A RETURN statement may appear only in an output procedure associated with a SORT or MERGE statement.  A RETURN statement may not be placed in Declaratives.</li></div>
+<a name="wp1041253"> </a><div class="pSmartList1"><li>The record area associated with <em class="cEmphasis">file-name</em> and <em class="cEmphasis">dest-record</em> may not have overlapping storage.</li></div>
+</ol></div>
+<a name="wp1041255"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041256"> </a><div class="pSmartList1"><li>The RETURN statement returns the next record from the output phase of a SORT or MERGE statement and places this record in the record area associated with <em class="cEmphasis">file-name</em>.  The RETURN statement may be executed only while the program is executing an output procedure of a SORT or MERGE statement.  </li></div>
+<a name="wp1041257"> </a><div class="pSmartList1"><li>Any area in the record area associated with <em class="cEmphasis">file-name</em> that is beyond the end of the returned record is left unchanged.  </li></div>
+<a name="wp1041258"> </a><div class="pSmartList1"><li>If the INTO phrase is specified, the record area associated with <em class="cEmphasis">file-name</em> is moved to <em class="cEmphasis">dest-record</em> according to the rules of the MOVE statement.  This move occurs after the record is retrieved, but only if the statement is successful.</li></div>
+<a name="wp1041259"> </a><div class="pSmartList1"><li>When no more records are available from the SORT or MERGE operation, <em class="cEmphasis">statement-1</em> is executed.  Otherwise, <em class="cEmphasis">statement-2</em>, if specified, is executed.</li></div>
+<a name="wp1041260"> </a><div class="pSmartList1"><li>The RETURN statement does <em class="cEmphasis">not</em> update the FILE STATUS variable associated with <em class="cEmphasis">file-name</em>.  </li></div>
+<a name="wp1041262"> </a><div class="pSmartList1"><li>If a RETURN statement is executed in a wrong context, the runtime displays the error &quot;Illegal RETURN.&quot;  This error belongs to the class of &quot;intermediate&quot; runtime errors that, upon occurrence, call installed error procedures.  See Book 4, <em class="cEmphasis">Appendices</em>, Appendix I &quot;Library Routines,&quot; CBL_ERROR_PROC for details.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

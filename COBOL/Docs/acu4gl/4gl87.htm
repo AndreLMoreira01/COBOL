@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:34" />
+  <title>4GL_COMMIT_COUNT  </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl8.htm">Chapter 8:  Compiler and Runtime Options</a> &gt; <a href="4gl83.htm">8.2  Runtime Configuration Variables  </a> &gt; </p>
+<a name="wp1039618"> </a><h2 class="pHeading2">
+4GL_COMMIT_COUNT  
+</h2>
+<a name="wp1039621"> </a><p class="pBody">
+The value of 4GL_COMMIT_COUNT indicates the conditions under which you want to issue an automatic COMMIT<span style="font-family: Symbol">-</span>WORK operation.  Valid values are:
+</p>
+<a name="wp1039622"> </a><h3 class="pHeadingRef">
+4GL_COMMIT_COUNT = 0 (Default)
+</h3>
+<a name="wp1039624"> </a><p class="pBody">
+When you set this variable to zero, the runtime tracks the number of logical locks that are currently in effect.  When the number of logical locks reaches zero, the runtime assumes that a transaction is complete and issues a COMMIT statement.  
+</p>
+<a name="wp1039625"> </a><h3 class="pHeadingRef">
+4GL_COMMIT_COUNT = n
+</h3>
+<a name="wp1039627"> </a><p class="pBody">
+When you set this variable to a nonzero value, the runtime tracks the number of WRITE, REWRITE, and DELETE operations, until the value of 4GL_COMMIT_COUNT is reached, at which time the runtime issues a COMMIT statement.  The READ, START and READ NEXT operations do not count toward this total because the runtime is tracking data-altering operations rather than logical record locks.  The disadvantage of this method is that when a COMMIT is issued, any record locks held by the runtime are released. 
+</p>
+<a name="wp1039628"> </a><h3 class="pHeadingRef">
+4GL_COMMIT_COUNT = -1 
+</h3>
+<a name="wp1039630"> </a><p class="pBody">
+No commit is issued by the Acu4GL product.  When 4GL_COMMIT_COUNT is set to &quot;-1&quot;, two alternate ways to perform a commit or rollback are available:  
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1039631"> </a><div class="pSmartList1"><li>Call <b class="cBold">sql.acu</b> with COMMIT WORK or ROLLBACK WORK. </li></div>
+<a name="wp1039632"> </a><div class="pSmartList1"><li>Use the COBOL verbs COMMIT and ROLLBACK, available in ACUCOBOL-GT.  </li></div>
+</ol></div>
+<a name="wp1039633"> </a><p class="pBody">
+4GL_COMMIT_COUNT is set to &quot;-1&quot; automatically when you use the transaction management facilities available in the ACUCOBOL-GT compiler.  A COMMIT WORK is, however, issued on exit from the runtime (for example, on execution of a STOP RUN).
+</p>
+<a name="wp1039634"> </a><h3 class="pHeadingRef">
+Examples
+</h3>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+4GL_COMMIT_COUNT  0<a name="wp1039635"> </a>
+</pre></div>
+<a name="wp1039636"> </a><p class="pBody">
+A commit will be issued when no locks are held, either because all files that had locked records have been closed, or because a COBOL COMMIT verb has been issued.  This is the default value.
+</p>
+<a name="wp1039637"> </a><p class="pBody">
+Note that some data sources lose the current row when a COMMIT or ROLLBACK is executed.  For these data sources, a setting of &quot;0&quot; for 4GL_COMMIT_COUNT can adversely affect performance.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+4GL_COMMIT_COUNT  n<a name="wp1039638"> </a>
+</pre></div>
+<a name="wp1039639"> </a><p class="pBody">
+A commit will be issued after <em class="cEmphasis">n</em> operations.  WRITE, REWRITE, and DELETE count towards <em class="cEmphasis">n</em>; READ, START, and READ NEXT do not.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+4GL_COMMIT_COUNT  -1<a name="wp1039640"> </a>
+</pre></div>
+<a name="wp1039641"> </a><p class="pBody">
+No commit will be issued by the Acu4GL product.  When 4GL_COMMIT_COUNT is set to &quot;-1&quot;, the only way to perform a commit or rollback is to use the COBOL verbs COMMIT and ROLLBACK.  
+</p>
+<a name="wp1039642"> </a><p class="pBody">
+4GL_COMMIT_COUNT is set to &quot;-1&quot; internally when you use the transaction management facilities available in ACUCOBOL-GT.
+</p>
+<a name="wp1039643"> </a><p class="pBody">
+A COMMIT will, however, be issued on exit from the runtime (for example, on execution of a STOP RUN).
+</p>
+<a name="wp1039610"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>4GL_COMMIT_COUNT can only be set in the configuration file.  It cannot be set programmatically.
+</p>
+<a name="wp1039688"> </a><p class="pNoteEnd">
+4GL_COMMIT_COUNT is available only in the Acu4GL for ODBC and Acu4GL for DB2 interfaces.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

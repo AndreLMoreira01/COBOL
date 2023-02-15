@@ -1,0 +1,7 @@
+       SELECT CUSUARIO ASSIGN TO 'USUARIO.ARQ'
+                  ORGANIZATION INDEXED
+                  ACCESS MODE  DYNAMIC
+                  LOCK MODE    AUTOMATIC
+                  RECORD KEY   USU-LOGIN
+                  ALTERNATE RECORD KEY USU-NOME WITH DUPLICATES
+                  FILE STATUS  IS ST-USU.

@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:34" />
+  <title>5.2  Global Styles</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt25.htm">Chapter 5:  Control Types Reference</a> &gt; </p>
+<a name="wp1027434"> </a><h2 class="pHeading1">
+5.2  Global Styles
+</h2>
+<a name="wp1027436"> </a><p class="pBody">
+There are several styles that apply to all controls.  These styles include:
+</p>
+<a name="wp1027440"> </a><h5 class="pHeading4">
+NO-TAB
+</h5>
+<a name="wp1039969"> </a><p class="pBody">
+This style causes a Tab (or Shift-Tab) key press to skip the control.  Normally, while the program is performing a Screen Section ACCEPT, when the user presses Tab or Shift-Tab, the next or previous element in the Screen Section is activated.  Specify NO-TAB on controls that you want skipped when these keys are used.  This style affects any key with the following editing actions:  Default-Next, Erase-Next, Next, Numeric-Next, and Previous.  When the program responds to key presses that invoke the above editing actions, it does not activate any control that has the NO-TAB style. 
+</p>
+<a name="wp1027444"> </a><h5 class="pHeading4">
+PERMANENT 
+</h5>
+<a name="wp1040038"> </a><p class="pBody">
+ A <em class="cEmphasis">permanent</em> control is one that can be destroyed only by the DESTROY verb, or by destroying the window containing the control.  By default, controls are permanent.  A control can be made <em class="cEmphasis">temporary</em> using the TEMPORARY-CONTROLS runtime configuration variable.
+</p>
+<a name="wp1027447"> </a><p class="pBody">
+Permanent controls are more efficient than temporary controls (see TEMPORARY below).  The PERMANENT style is applied to a control when it is created and does not change during the life of that control, even if the control's style is modified.
+</p>
+<a name="wp1027448"> </a><h5 class="pHeading4">
+TEMPORARY  
+</h5>
+<a name="wp1127514"> </a><p class="pBody">
+ A <em class="cEmphasis">temporary</em> control self-destructs when its home location is overwritten by another control or by textual output.  Temporary controls can also be destroyed in the same manner as permanent controls.  A temporary control self-destructs in the following circumstances:
+</p>
+<div class="pSmartList1"><ol type="a" class="pSmartList1">
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1027451"> </a><div class="pSmartList2"><li>Another control is created in the exact same location.</li></div>
+<a name="wp1053422"> </a><p class="pIndented2">
+The runtime maintains location information to the nearest 100th of a character cell.  If the newly created control is placed in the same row and column as a temporary control (or less than one one-hundredth of a cell away), it destroys the temporary control.  Note that moving a control on top of a temporary control does not destroy the control (the runtime assumes that the temporary control is about to be moved, also.  This occasionally happens with Screen Section updates when several items are of variable size).  Only a newly created control can destroy a temporary control.
+</p>
+<a name="wp1027452"> </a><div class="pSmartList2"><li>Textual output is placed in the same character cell as the temporary cell's home location.</li></div>
+<a name="wp1027454"> </a><p style="font-family: Arial, Verdana, Helvetica, sans-serif">
+<hr />
+<b>Note:  </b>BLANK SCREEN destroys all temporary controls in a window.
+<hr />
+</p>
+</ol></div>
+</ol></div>
+<a name="wp1027455"> </a><p class="pBody">
+The temporary style is applied when a control is first created and does not change during the life of the control.  If you attempt to apply both the PERMANENT and TEMPORARY style to a control, the PERMANENT style is used.
+</p>
+<a name="wp1027458"> </a><h5 class="pHeading4">
+HEIGHT-IN-CELLS   
+</h5>
+<a name="wp1069160"> </a><p class="pBody">
+Normally, the height of a control is expressed in <em class="cEmphasis">control units</em>.  Each control defines its own meaning for these units.  Typically, a control that is <em class="cEmphasis">n</em> units high will be exactly big enough to hold <em class="cEmphasis">n</em> lines of text.  This allows you to specify the size of a control in logical terms without having to know its exact physical representation on the screen.  The HEIGHT-IN-CELLS style overrides this behavior.  Instead of using control units, you specify the height of the control exactly, using the cell size of the owning window as the base unit.  Thus, a height of one (1) would cause the control to be exactly one row tall.
+</p>
+<a name="wp1027459"> </a><p class="pBody">
+This option is especially useful in sizing frame control objects.  The style allows you to specify the frame's exact dimensions without having to know anything about the frame's title font.  You can also specify this style with the CELLS option of the LINES phrase.  For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+LINES = 15 CELLS.<a name="wp1116290"> </a>
+</pre></div>
+<a name="wp1027462"> </a><p class="pBody">
+This style is not intended for use in combination with a control's default height.  Default heights are based on <em class="cEmphasis">control units</em> and when based on <em class="cEmphasis">character cells</em> do not typically produce useful results.
+</p>
+<a name="wp1027464"> </a><h5 class="pHeading4">
+WIDTH-IN-CELLS
+</h5>
+<a name="wp1069167"> </a><p class="pBody">
+This option is analogous to HEIGHT-IN-CELLS, except that it affects the width of a control.  This style is particularly useful when you want to center a label over a region of the screen.  By specifying the label's width in cells, and using the CENTER label style, you can easily do the centering without knowing anything about the label's font.  For example, if you have a window that is 40 columns wide, and you want to center a title in it, you could use: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DISPLAY LABEL MY-TITLE, COLUMN 10, SIZE 20 CELLS, <a name="wp1027466"> </a>
+   CENTER<a name="wp1245133"> </a>
+</pre></div>
+<a name="wp1027467"> </a><p class="pBody">
+Assuming that the title fits in 20 cells, this works for any title in any font.
+</p>
+<a name="wp1027469"> </a><h5 class="pHeading4">
+OVERLAP-LEFT
+</h5>
+<a name="wp1069171"> </a><p class="pBody">
+This style causes the control to be shifted a small amount to the left from its specified position.  The amount is equal to the width of the control's border.  This shifting occurs when the control is created or moved.  If the control does not have a border, no shifting occurs. 
+</p>
+<a name="wp1027471"> </a><p class="pBody">
+The purpose of this style is to simplify placing several similar controls in a row.  For example, if you have a series of adjacent push buttons, the normal appearance would be to draw each push button exactly touching each other.  This causes a double border to appear between the push buttons.  By shifting each one slightly to the left, you can have the borders overlap and achieve a more uniform appearance with a single border between the buttons.  Most applications that have adjacent push buttons do this.  You can create the same effect by manually positioning the controls with overlapping borders, but using this style is easier and more portable because you don't need to know exactly how wide the borders are.  
+</p>
+<a name="wp1027473"> </a><h5 class="pHeading4">
+OVERLAP-TOP   
+</h5>
+<a name="wp1102154"> </a><p class="pBody">
+This style is similar to the OVERLAP-LEFT style (see above), except that in this case the control is shifted slightly upward.  The amount of the shift is determined by the height of the control's border.  This style is useful when you want to create a series of controls that appear to be adjacent to one another in a single column. 
+</p>
+<a name="wp1027475"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b> A way to achieve a similar effect with entry fields is to use the OVERLAPPED option on the CELL SIZE phrase of the DISPLAY FLOATING WINDOW verb.  This method is usually easier to employ than the OVERLAP-TOP style applied to each individual field, because it applies to the whole window.  
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

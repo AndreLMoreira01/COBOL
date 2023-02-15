@@ -1,0 +1,348 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:41:58" />
+  <title>4.3.11  WHEN</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gl4.htm">Chapter 4:  Using Directives</a> &gt; <a href="4gl44.htm">4.3  Directives Supported by the Acu4GL Interfaces</a> &gt; </p>
+<a name="wp1036748"> </a><h2 class="pHeading2">
+4.3.11  WHEN
+</h2>
+<a name="wp1034801"> </a><p class="pBody">
+The WHEN directive is used when you want to include multiple record definitions or REDEFINES in a database table.  It's typically used when you want to force certain columns to be built that wouldn't be built by default (because you want to use them from the RDBMS side).
+</p>
+<a name="wp1034802"> </a><p class="pBody">
+Recall that the key fields and the fields from the <em class="cEmphasis">largest</em> record are automatically included as explicit columns in the database table.  <em class="cEmphasis">All fields</em> are stored and retrieved from the database, whether they appear as explicit columns or not.  So you don't need to use WHEN unless you want to ensure that some additional fields are <em class="cEmphasis">explicitly listed by name</em> in the table.  
+</p>
+<a name="wp1034805"> </a><p class="pBody">
+WHEN declares that the field (or subordinate fields, if it is a group item) that immediately follow the directive <em class="cEmphasis">must</em> appear as a column (or columns) in the database table.  It also states one condition under which the columns are to be used.  The WHEN directive guarantees that the fields will be explicitly included in the table, as long as they aren't FILLER and don't occupy the same area as key fields. 
+</p>
+<a name="wp1034806"> </a><p class="pBody">
+The WHEN directive results in a table that unites all fields subordinate to the WHEN directive.  This table might include more columns, and could affect performance and storage requirements. 
+</p>
+<a name="wp1034807"> </a><h3 class="pHeadingRef">
+Syntax
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+$XFD WHEN <em class="cEmphasis">field </em>= <em class="cEmphasis">value</em>      (equals)<a name="wp1034808"> </a>
+$XFD WHEN <em class="cEmphasis">field </em>&lt;= <em class="cEmphasis">value</em>     (is less than or equals)<a name="wp1034809"> </a>
+$XFD WHEN <em class="cEmphasis">field </em>&lt; <em class="cEmphasis">value</em>      (is less than)<a name="wp1034810"> </a>
+$XFD WHEN <em class="cEmphasis">field </em>&gt;= <em class="cEmphasis">value</em>     (is greater than or equals)<a name="wp1034811"> </a>
+$XFD WHEN <em class="cEmphasis">field </em>&gt; <em class="cEmphasis">value</em>      (is greater than)<a name="wp1034812"> </a>
+$XFD WHEN <em class="cEmphasis">field </em>!= <em class="cEmphasis">value</em>     (is not equal to)<a name="wp1034813"> </a>
+$XFD WHEN <em class="cEmphasis">field </em>= OTHER<a name="wp1034814"> </a>
+</pre></div>
+<a name="wp1034815"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( XFD WHEN <em class="cEmphasis">field = value</em> ))  (also &lt;, &lt;=, &gt;, &gt;=, !=)<a name="wp1034816"> </a>
+</pre></div>
+<a name="wp1034819"> </a><p class="pBody">
+The<em class="cEmphasis"> value</em> may be an explicit data value (in quotes).  The word OTHER can be used only with &quot;=&quot;.  It means use the following field(s) only if the WHEN condition(s) listed at the level of this field are not met.
+</p>
+<a name="wp1034820"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>WHEN values must be on individual lines as single values in the code. WHEN values cannot be combined. 
+<hr />
+</p>
+<a name="wp1034821"> </a><p class="pBody">
+For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+      03  ar-code-type                  pic x.<a name="wp1034822"> </a>
+ *(( xfd  when ar-code-type = &quot;s&quot; ))<a name="wp1034823"> </a>
+      03  ship-code-record              pic x(4).<a name="wp1034824"> </a>
+ *(( xfd  when ar-code-type = &quot;b&quot; ))<a name="wp1034825"> </a>
+      03  backorder-code-record redefines ship-code-record.<a name="wp1037423"> </a>
+ *(( xfd  when ar-code-type = other ))<a name="wp1034826"> </a>
+      03  obsolete-code-record redefines ship-code-record.<a name="wp1034827"> </a>
+</pre></div>
+<a name="wp1034828"> </a><p class="pBody">
+OTHER may be used before one record definition, and may be used once at <em class="cEmphasis">each level </em>within each record definition. 
+</p>
+<a name="wp1034829"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>A WHEN directive with condition OTHER <em class="cEmphasis">must</em> be used if there is a possibility that the data in the field will not meet any of the explicit conditions specified in the other WHEN directives.  If this is not done, results are undefined.
+<hr />
+</p>
+<a name="wp1034830"> </a><h3 class="pHeadingRef">
+Example 1
+</h3>
+<a name="wp1034831"> </a><p class="pBody">
+If the following code were compiled without directives, the underlined fields would appear explicitly in the database table.  Note that the key fields would be included automatically, as would the fields from the largest record.  FILLER would be ignored:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  ar-codes-record.<a name="wp1034832"> </a>
+    03  ar-codes-key.<a name="wp1034833"> </a>
+        05  <u class="cUnderline">ar-code-type</u>                  pic x. <a name="wp1034834"> </a>
+        05  <u class="cUnderline">ar-code-num</u>                   pic 999.<a name="wp1034835"> </a>
+01  ship-code-record.<a name="wp1034836"> </a>
+    03  filler                            pic x(4).<a name="wp1034837"> </a>
+    03  ship-instruct                     pic x(15).<a name="wp1034838"> </a>
+01  terms-code-record.<a name="wp1034839"> </a>
+    03  filler                            pic x(4).<a name="wp1034840"> </a>
+    03  <u class="cUnderline">terms-rate-1</u>                      pic s9v999.<a name="wp1034841"> </a>
+    03  <u class="cUnderline">terms-days-1</u>                      pic 9(3).<a name="wp1034842"> </a>
+    03  <u class="cUnderline">terms-rate-2</u>                      pic s9v999.<a name="wp1034843"> </a>
+    03  <u class="cUnderline">terms-descript</u>                    pic x(15).<a name="wp1034844"> </a>
+</pre></div>
+<a name="wp1034845"> </a><p class="pBody">
+If you add the WHEN directive as shown below, it causes the fields from the SHIP-CODE-RECORD to be included in the database table, and determines when specific database columns are used.  The underlined fields then appear as columns in the database table:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ 01  ar-codes-record.<a name="wp1034846"> </a>
+     03  ar-codes-key.<a name="wp1034847"> </a>
+         05  <u class="cUnderline">ar-code-type</u>                  pic x.<a name="wp1034848"> </a>
+         05  <u class="cUnderline">ar-code-num</u>                   pic 999.<a name="wp1034849"> </a>
+$xfd  when ar-code-type = &quot;s&quot;<a name="wp1034850"> </a>
+ 01  ship-code-record.<a name="wp1034851"> </a>
+     03  filler                            pic x(4).<a name="wp1034852"> </a>
+     03  <u class="cUnderline">ship-instruct</u>                     pic x(15).<a name="wp1034853"> </a>
+$xfd  when ar-code-type = &quot;t&quot;<a name="wp1034854"> </a>
+ 01  terms-code-record.<a name="wp1034855"> </a>
+     03  filler                            pic x(4).<a name="wp1034856"> </a>
+     03  <u class="cUnderline">terms-rate-1</u>                      pic s9v999.<a name="wp1034857"> </a>
+     03  <u class="cUnderline">terms-days-1</u>                      pic 9(3).<a name="wp1034858"> </a>
+     03  <u class="cUnderline">terms-rate-2</u>                      pic s9v999.<a name="wp1034859"> </a>
+     03  <u class="cUnderline">terms-descript</u>                    pic x(15).<a name="wp1034860"> </a>
+</pre></div>
+<a name="wp1034861"> </a><p class="pBody">
+FILLER data items don't have unique names and are thus not used to form columns in the database table.  You could use the NAME directive to give them a name if you really need to see them in the database table.  
+</p>
+<a name="wp1034862"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In this example, the FILLER data items implicitly redefine key fields.  Thus, they would be disregarded <em class="cEmphasis">even if you provided a name for them</em>.
+<hr />
+</p>
+<a name="wp1034863"> </a><h3 class="pHeadingRef">
+Example 2
+</h3>
+<a name="wp1034864"> </a><p class="pBody">
+In the following code, in which no WHEN directives are used, the underlined fields will be explicitly named in the database table.  (Key fields have the suffix key in their names in this example.)  
+</p>
+<a name="wp1034867"> </a><p class="pBody">
+Note that REDEFINES records simply re-map the same data area and are not explicitly included in the database table by default:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  archive-record.<a name="wp1034868"> </a>
+    03  filler                         pic x(33).<a name="wp1034869"> </a>
+    03  archive-code                   pic 9(6).<a name="wp1034870"> </a>
+    03  archive-location               pic 9(2).<a name="wp1034871"> </a>
+    03  filler                         pic x(10).<a name="wp1034872"> </a>
+01  master-record.<a name="wp1034873"> </a>
+    03  animal-id-key.<a name="wp1034874"> </a>
+        05  <u class="cUnderline">patient-id</u>                 pic 9(6). <a name="wp1034875"> </a>
+        05  <u class="cUnderline">species-code-type</u>          pic 9(5). <a name="wp1034876"> </a>
+        05  <u class="cUnderline">species-name</u>               pic x(6). <a name="wp1034877"> </a>
+    03  service-code-key.<a name="wp1034878"> </a>
+        05  <u class="cUnderline">service-code-type</u>          pic 9(6). <a name="wp1034879"> </a>
+        05  <u class="cUnderline">service-name</u>               pic x(10).<a name="wp1034880"> </a>
+    03  billing-code.<a name="wp1034881"> </a>
+        05  <u class="cUnderline">billing-code-type</u>          pic 9(4). <a name="wp1034882"> </a>
+        05  <u class="cUnderline">plan-name</u>                  pic x(8).<a name="wp1034883"> </a>
+    03  office-info.<a name="wp1034884"> </a>
+        05  <u class="cUnderline">date-in-office</u>             pic 9(8). <a name="wp1034885"> </a>
+        05  <u class="cUnderline">served-by-name</u>             pic x(10).<a name="wp1034886"> </a>
+    03  remote-info redefines office-info.<a name="wp1034887"> </a>
+        05  van-id                     pic 9(4). <a name="wp1034888"> </a>
+        05  proc-code                  pic 9(8).<a name="wp1034889"> </a>
+        05  vet-name                   pic x(6). <a name="wp1034890"> </a>
+</pre></div>
+<a name="wp1034891"> </a><p class="pBody">
+If you add the WHEN directives shown below, you add several columns to the database table.  The fields that then appear in the table are underlined:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( xfd when animal-id-key = &quot;00000000000000000&quot; ))<a name="wp1034892"> </a>
+ 01  archive-record.<a name="wp1034893"> </a>
+     03  filler                          pic x(33).<a name="wp1034894"> </a>
+     03  <u class="cUnderline">archive-code</u>                    pic 9(6).<a name="wp1034895"> </a>
+     03  <u class="cUnderline">archive-location</u>                pic 9(2).<a name="wp1034896"> </a>
+     03  filler                          pic x(10).<a name="wp1034897"> </a>
+*(( xfd  when animal-id-key =  other ))   <a name="wp1034898"> </a>
+ 01  master-record.<a name="wp1034899"> </a>
+*(( xfd  use group ))   <a name="wp1034900"> </a>
+     03  <u class="cUnderline">animal-id-key</u>.<a name="wp1034901"> </a>
+         05  patient-id                  pic 9(6). <a name="wp1034902"> </a>
+         05  species-code-type           pic 9(5). <a name="wp1034903"> </a>
+         05  species-name                pic x(6).<a name="wp1034904"> </a>
+     03  service-code-key.<a name="wp1034905"> </a>
+         05  <u class="cUnderline">service-code-type</u>           pic 9(6). <a name="wp1034906"> </a>
+         05  <u class="cUnderline">service-name</u>                pic x(10).<a name="wp1034907"> </a>
+     03  billing-code.<a name="wp1034908"> </a>
+         05  <u class="cUnderline">billing-code-type</u>           pic 9(4). <a name="wp1034909"> </a>
+         05  <u class="cUnderline">plan-name</u>                   pic x(8).<a name="wp1034910"> </a>
+*(( xfd when billing-code-type = &quot;1440&quot; ))<a name="wp1034911"> </a>
+     03  office-info.<a name="wp1034912"> </a>
+         05  <u class="cUnderline">date-in-office</u>              pic 9(8). <a name="wp1034913"> </a>
+         05  <u class="cUnderline">served-by-name</u>              pic x(10).<a name="wp1034914"> </a>
+*(( xfd when billing-code-type = other ))<a name="wp1034915"> </a>
+     03  remote-info redefines office-info.<a name="wp1034916"> </a>
+         05  <u class="cUnderline">van-id</u>                      pic 9(4). <a name="wp1034917"> </a>
+         05  <u class="cUnderline">proc-code</u>                   pic 9(8).<a name="wp1034918"> </a>
+         05  <u class="cUnderline">vet-name</u>                    pic x(6). <a name="wp1034919"> </a>
+</pre></div>
+<a name="wp1034920"> </a><h3 class="pHeadingRef">
+Example 3
+</h3>
+<a name="wp1034921"> </a><p class="pBody">
+If your application has a REDEFINES whose field names are more meaningful than the fields they redefine, you might consider switching the order of your code, rather than using a WHEN directive.  Use the less significant field names in the REDEFINES.  
+</p>
+<a name="wp1034922"> </a><p class="pBody">
+For example, you might change this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    03  code-info.<a name="wp1034923"> </a>
+        05  filler                  pic 9(8). <a name="wp1034924"> </a>
+        05  <u class="cUnderline">code-1</u>                  pic x(10).<a name="wp1034925"> </a>
+    03  patient-info redefines code-info.<a name="wp1034926"> </a>
+        05  patient-id              pic 9(4). <a name="wp1034927"> </a>
+        05  service-code            pic 9(8). <a name="wp1034928"> </a>
+        05  server-name             pic x(6). <a name="wp1034929"> </a>
+</pre></div>
+<a name="wp1034930"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">to this</span>:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    03  patient-info.<a name="wp1034931"> </a>
+        05  <u class="cUnderline">patient-id</u>              pic 9(4). <a name="wp1034932"> </a>
+        05  <u class="cUnderline">service-code</u>            pic 9(8).<a name="wp1034933"> </a>
+        05  <u class="cUnderline">server-name</u>             pic x(6). <a name="wp1034934"> </a>
+    03  code-info redefines patient-info.<a name="wp1034935"> </a>
+        05  filler                  pic 9(8). <a name="wp1034936"> </a>
+        05  code-1                  pic x(10).<a name="wp1034937"> </a>
+</pre></div>
+<a name="wp1034938"> </a><p class="pBody">
+The fields that would appear in the database table by default are underlined above.  This shows how the column names might become more meaningful when the order is reversed.  Your application operates the same either way.
+</p>
+<a name="wp1034939"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>When a WHEN directive condition is met, COBOL record definitions or REDEFINES records that are subordinate to other WHEN directives are not used.  Database columns in rows that correspond to those records are set to the special database value NULL.  This means that there is no value provided for those columns.  NULL is not equivalent to zero, and it has special properties in the RDBMS.  For example, you can select all rows for which a given column is NULL.
+<hr />
+</p>
+<a name="wp1034940"> </a><h3 class="pHeadingRef">
+Example 4
+</h3>
+<a name="wp1034941"> </a><p class="pBody">
+This COBOL code:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+  01  col-type                         pic x.<a name="wp1034942"> </a>
+ $xfd  when col-type = &quot;a&quot;<a name="wp1034943"> </a>
+      03  def1                         pic x(2).<a name="wp1034944"> </a>
+ $xfd  when col-type = &quot;b&quot;<a name="wp1034945"> </a>
+      03  def2 redefines def1          pic 9(2).<a name="wp1034946"> </a>
+</pre></div>
+<a name="wp1034947"> </a><p class="pBody">
+results in this database table:
+</p>
+<a name="wp1034948"> </a><p class="pBody">
+  </p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1038404"> </a>
+col_type
+
+</th>
+    <th><a name="wp1038406"> </a>
+def1
+
+</th>
+    <th><a name="wp1038408"> </a>
+def2
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034957"> </a><p class="pCellBody">
+a
+</p>
+</td>
+    <td><a name="wp1034959"> </a><p class="pCellBody">
+Xx
+</p>
+</td>
+    <td><a name="wp1034961"> </a><p class="pCellBody">
+&lt;Null&gt;
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034963"> </a><p class="pCellBody">
+b
+</p>
+</td>
+    <td><a name="wp1034965"> </a><p class="pCellBody">
+&lt;Null&gt;
+</p>
+</td>
+    <td><a name="wp1034967"> </a><p class="pCellBody">
+10
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

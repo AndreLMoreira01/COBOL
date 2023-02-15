@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:34" />
+  <title>5.3.2  ActiveX: Special Properties</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt25.htm">Chapter 5:  Control Types Reference</a> &gt; <a href="gt2510.htm">5.3  ActiveX</a> &gt; </p>
+<a name="wp1153999"> </a><h2 class="pHeading2">
+5.3.2  ActiveX: Special Properties
+</h2>
+<a name="wp1154004"> </a><h5 class="pHeading4">
+CLSID (alphanumeric)  
+</h5>
+<a name="wp1154005"> </a><p class="pBody">
+This special property is provided for advanced programming tasks that require a generic interface to ActiveX controls. You may create, modify, inquire and destroy an ActiveX control using the ACTIVE-X control type, but with certain restrictions.  The compiler will not recognize symbolic property, method, or event names provided by the ActiveX control.  You must specify properties and methods by their dispatch identifier (&quot;dispid&quot;) using the PROPERTY phrase, and you must identify events by their dispatch identifier in your event procedure.  ACTIVE-X controls are identified by a globally unique identifier called a &quot;class id&quot; (CLSID). In order to create an instance of an ACTIVE-X control, you must provide this class id. Set CLSID to the class id of the control when you create the control (either in the screen section definition or in the DISPLAY statement).
+</p>
+<a name="wp1154008"> </a><h5 class="pHeading4">
+LICENSE-KEY (alphanumeric)  
+</h5>
+<a name="wp1167206"> </a><p class="pBody">
+Some ActiveX controls are licensed for run time via a license key that is provided to you by the distributor of the control. This license key is a text string provided by the control vendor.  When you set the LICENSE-KEY property to the value of the license key, you cause the license key to be embedded in your COBOL program.  Then, when the COBOL program is run, the license key is passed to the ActiveX control for verification. 
+</p>
+<a name="wp1208952"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>It is not necessary to specify a LICENSE-KEY for any of the Microsoft controls included on the ACUCOBOL-GT installation CD.  If you use one of these controls in your program, the runtime applies the license key for you automatically.  For a discussion of these controls, see Chapter 4 of <em class="cEmphasis">A Guide to Interoperating with ACUCOBOL-GT</em>.
+<hr />
+</p>
+<a name="wp1167208"> </a><p class="pBody">
+Getting the license key value and setting the LICENSE-KEY property is simple using AcuBench.  It is recommended that you use AcuBench to get the license key value even if you don't use AcuBench to create your screens.  In AcuBench, when you place an ActiveX control on a screen form in the Screen Designer, the LICENSE-KEY property is automatically set to the license key value (if the vendor provided a value when the control was acquired and installed).  If you use the AcuBench Screen Designer to create your screens and generate code, there is nothing more to do.  
+</p>
+<a name="wp1186641"> </a><p class="pBody">
+If you do not use AcuBench to create your screens, simply locate the entry for the LICENSE-KEY property in the control's Property window, and copy and assign that value to LICENSE-KEY in the Screen Section definition or DISPLAY statement of your program. For example, you might include a LICENSE-KEY property like this one:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+LICENSE-KEY &quot;C1P0009-XPJ439-01MQ7-2223&quot;.<a name="wp1186651"> </a>
+</pre></div>
+<a name="wp1186653"> </a><p class="pBody">
+Please note that if the license key is WideChar (WCHAR) (Doublebyte) such as &quot;0x0067 0x01a2 0x00dd 0x0134 0x0167,&quot; you must use the STRING verb to put the license into a pic x variable, otherwise the embedded NULLs may cause the key to be truncated or even empty.  To use a key such as this, you should declare a variable like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+77 mLicenseKey PIC X(128).<a name="wp1186655"> </a>
+</pre></div>
+<a name="wp1186657"> </a><p class="pBody">
+(Note that any size will do as long as it is wide enough to hold all the characters as specified in the license plus two final NULLs.)
+</p>
+<a name="wp1186659"> </a><p class="pIndented1">
+You should then set the variable's value.  For example:
+</p>
+INITIALIZE mLicenseKey REPLACING ALPHANUMERIC BY LOW-VALUES.<a name="wp1186661"> </a>
+STRING x&quot;00&quot; x&quot;67&quot; x&quot;01&quot; x&quot;a2&quot; x&quot;00&quot; x&quot;dd&quot; x&quot;01&quot; x&quot;34&quot; x&quot;01&quot;<a name="wp1186662"> </a>
+   x&quot;67&quot; delimited by size into mLicenseKey.<a name="wp1243926"> </a>
+<a name="wp1186664"> </a><p class="pIndented1">
+You can then invoke the ActiveX component through SCREEN SECTION or PROCEDURE DIVISION using the DISPLAY verb providing the following property:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+LICENSE-KEY mLicenseKey.<a name="wp1186666"> </a>
+</pre></div>
+<a name="wp1167210"> </a><p class="pIndented1">
+The default value of LICENSE-KEY is &quot;  &quot;.   
+</p>
+<a name="wp1154012"> </a><h5 class="pHeading4">
+INITIAL-STATE (multiple parameters)  
+</h5>
+<a name="wp1154013"> </a><p class="pBody">
+Use INITIAL-STATE in conjunction with the C$RESOURCE library routine to establish the ActiveX control's initial state.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+{ INITIAL-STATE } { Is  } ( resource-handle, resource-name )<a name="wp1154016"> </a>
+                  { Are }<a name="wp1154017"> </a>
+                  { =   }<a name="wp1154018"> </a>
+</pre></div>
+<a name="wp1154019"> </a><p class="pBody">
+where
+</p>
+<a name="wp1154020"> </a><p class="pBody">
+&quot;resource-handle&quot; is a HANDLE OF RESOURCE;
+</p>
+<a name="wp1154021"> </a><p class="pBody">
+&quot;resource-name&quot; is a literal or data-item.
+</p>
+<a name="wp1154022"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1154023"> </a><div class="pSmartList1"><li>&quot;resource-handle&quot; must be the handle of an open resource file. It is obtained by calling the C$RESOURCE library routine.</li></div>
+<a name="wp1154024"> </a><div class="pSmartList1"><li>&quot;resource-name&quot; must be the name of a resource item in the resource file whose handle is specified in &quot;resource-handle&quot;. </li></div>
+<a name="wp1154025"> </a><div class="pSmartList1"><li>INITIAL-STATE is only set once per control instance. After a program creates an ActiveX control only the first DISPLAY or MODIFY that specifies INITIAL-STATE will set it. </li></div>
+<a name="wp1154026"> </a><div class="pSmartList1"><li>INITIAL-STATE failure raises one of the following exceptions:</li></div>
+<a name="wp1154040"> </a><p class="pBodyRelative">
+<div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1154029"> </a><p class="pCellBody">
+ACU-E-INITIALSTATE
+</p>
+</td>
+    <td><a name="wp1154031"> </a><p class="pCellBody">
+Error reading resource item from resource file
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154033"> </a><p class="pCellBody">
+ACU-E-INVALIDHANDLE
+</p>
+</td>
+    <td><a name="wp1154035"> </a><p class="pCellBody">
+Invalid control handle
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1154037"> </a><p class="pCellBody">
+ACU-E-UNEXPECTED
+</p>
+</td>
+    <td><a name="wp1154039"> </a><p class="pCellBody">
+Unexpected error
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+</ol></div>
+<a name="wp1154041"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+77 RES-HANDLE USAGE HANDLE OF RESOURCE<a name="wp1154042"> </a>
+<a name="wp1154043"> </a>
+CALL &quot;C$RESOURCE&quot; USING CRESOURCE-LOAD, &quot;PROGRAM1.RES&quot;<a name="wp1154044"> </a>
+   GIVING RES-HANDLE.<a name="wp1154045"> </a>
+</pre></div>
+<a name="wp1154046"> </a><p class="pBody">
+To set the ActiveX control's initial state:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+DISPLAY Calendar LINE 4 COLUMN 6 LINES 10 SIZE 40<a name="wp1154047"> </a>
+   INITIAL-STATE (RES-HANDLE, &quot;CALENDAR-1-INITIAL-STATE&quot;)<a name="wp1154048"> </a>
+   HANDLE IN CALENDAR-1.<a name="wp1154049"> </a>
+</pre></div>
+<a name="wp1154050"> </a><p class="pBody">
+or in the screen section:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+03 CALENDAR-1 Calendar LINE 4 COLUMN 6 LINES 10 SIZE 40 <a name="wp1154051"> </a>
+   INITIAL-STATE (RES-HANDLE, &quot;CALENDAR-1-INITIAL-STATE&quot;).<a name="wp1154052"> </a>
+</pre></div>
+<a name="wp1172484"> </a><p class="pBody">
+&quot;CALENDAR-1-INITIAL-STATE&quot; is the name of a resource in &quot;PROGRAM1.RES&quot;.  Its binary value is the initial state of the CALENDAR-1 ActiveX control.  Note that each program that contains ActiveX controls generally has its own resource file.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

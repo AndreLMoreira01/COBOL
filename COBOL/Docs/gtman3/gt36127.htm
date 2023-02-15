@@ -1,0 +1,428 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:28:08" />
+  <title>OPEN Statement</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt36.htm"><br />Chapter 6:  Procedure Division</a> &gt; <a href="gt3678.htm">6.6  Procedure Division Statements </a> &gt; </p>
+<a name="wp1195819"> </a><h2 class="pHeading2">
+OPEN Statement
+</h2>
+<a name="wp1040730"> </a><p class="pBody">
+The OPEN statement initiates processing of a file.
+</p>
+<a name="wp1040732"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">OPEN</u> [<u class="cUnderline">EXCLUSIVE</u>]<a name="wp1040733"> </a>
+<a name="wp1040734"> </a>
+    { {<u class="cUnderline">INPUT</u> } { file [WITH <u class="cUnderline">NO</u> <u class="cUnderline">REWIND</u>] } ... } ...<a name="wp1040735"> </a>
+      {<u class="cUnderline">OUTPUT</u>}        [lock-option   ]<a name="wp1040736"> </a>
+      {<u class="cUnderline">I-O</u>   }<a name="wp1040737"> </a>
+      {<u class="cUnderline">EXTEND</u>}<a name="wp1040738"> </a>
+</pre></div>
+<a name="wp1040739"> </a><p class="pBody">
+<em class="cEmphasis"> lock-option</em> may be either of these formats:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    { <u class="cUnderline">ALLOWING</u> {<u class="cUnderline">NO</u> OTHERS} }<a name="wp1040740"> </a>
+               {<u class="cUnderline">READERS</u>  }<a name="wp1040741"> </a>
+               {<u class="cUnderline">WRITERS</u>  }<a name="wp1040742"> </a>
+               {<u class="cUnderline">UPDATERS</u> }<a name="wp1040743"> </a>
+               {<u class="cUnderline">ALL</u>      }<a name="wp1040744"> </a>
+<a name="wp1040745"> </a>
+    { {WITH}   {<u class="cUnderline">LOCK</u>         }   }<a name="wp1040746"> </a>
+      {FOR }   {<u class="cUnderline">MASS-UPDATE  </u>}<a name="wp1040747"> </a>
+               {<u class="cUnderline">BULK-ADDITION</u>}<a name="wp1040748"> </a>
+</pre></div>
+<a name="wp1040750"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1040751"> </a><div class="pSmartList1"><li><em class="cEmphasis">File</em> is the name of a file described in the Data Division.  It may not be a sort file.  </li></div>
+<a name="wp1040752"> </a><div class="pSmartList1"><li>The I-O phrase can be specified only for files that reside on disk.</li></div>
+<a name="wp1040753"> </a><div class="pSmartList1"><li>The MASS-UPDATE and BULK-ADDITION phrases may be specified only for indexed files and may not be specified along with the INPUT phrase. </li></div>
+<a name="wp1040755"> </a><div class="pSmartList1"><li>The WITH NO REWIND phrase may be specified only for sequential files opened with the INPUT or OUTPUT phrase.  </li></div>
+<a name="wp1040756"> </a><div class="pSmartList1"><li>If EXCLUSIVE is specified, then <em class="cEmphasis">lock-option</em> may not be specified.  </li></div>
+</ol></div>
+<a name="wp1040758"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1040759"> </a><div class="pSmartList1"><li>A successful OPEN statement prepares the file for further processing by other I/O statements and puts the file in its open mode.</li></div>
+<a name="wp1040760"> </a><div class="pSmartList1"><li>An OPEN may not be performed on a file that is already open.  A file is not open when the program is in its initial state or when the last I/O statement on the file was a successful CLOSE statement.  </li></div>
+<a name="wp1040761"> </a><div class="pSmartList1"><li>Except for the OUTPUT option, and as noted in rule 19 below, a file's organization and data description must match those used when the file was created.  </li></div>
+<a name="wp1040762"> </a><div class="pSmartList1"><li>The following table indicates the effects of the various OPEN types on files that are and are not available.  A file is not available if it does not exist on the host computer.  Note that different results occur for missing files if the file's SELECT contains the OPTIONAL phrase.  </li></div>
+<a name="wp1058276"> </a><p class="pBodyRelative">
+<div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1058148"> </a>
+Mode
+
+</th>
+    <th><a name="wp1058150"> </a>
+Available
+
+</th>
+    <th><a name="wp1058152"> </a>
+Unavailable
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058154"> </a><p class="pCellBody">
+INPUT
+</p>
+</td>
+    <td><a name="wp1058156"> </a><p class="pCellBody">
+Open succeeds
+</p>
+</td>
+    <td><a name="wp1058158"> </a><p class="pCellBody">
+Open fails
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058160"> </a><p class="pCellBody">
+     -  Optional
+</p>
+</td>
+    <td><a name="wp1058162"> </a><p class="pCellBody">
+Open succeeds
+</p>
+</td>
+    <td><a name="wp1058164"> </a><p class="pCellBody">
+Open succeeds
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058166"> </a><p class="pCellBody">
+I-O
+</p>
+</td>
+    <td><a name="wp1058168"> </a><p class="pCellBody">
+Open succeeds
+</p>
+</td>
+    <td><a name="wp1058170"> </a><p class="pCellBody">
+Open fails
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058172"> </a><p class="pCellBody">
+     -  Optional
+</p>
+</td>
+    <td><a name="wp1058174"> </a><p class="pCellBody">
+Open succeeds
+</p>
+</td>
+    <td><a name="wp1058176"> </a><p class="pCellBody">
+Open creates file 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058178"> </a><p class="pCellBody">
+OUTPUT
+</p>
+</td>
+    <td><a name="wp1058180"> </a><p class="pCellBody">
+Open recreates file
+</p>
+</td>
+    <td><a name="wp1058182"> </a><p class="pCellBody">
+Open creates file
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058184"> </a><p class="pCellBody">
+EXTEND
+</p>
+</td>
+    <td><a name="wp1058186"> </a><p class="pCellBody">
+Open succeeds
+</p>
+</td>
+    <td><a name="wp1058188"> </a><p class="pCellBody">
+Open fails
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058190"> </a><p class="pCellBody">
+     -  Optional
+</p>
+</td>
+    <td><a name="wp1058192"> </a><p class="pCellBody">
+Open succeeds
+</p>
+</td>
+    <td><a name="wp1058194"> </a><p class="pCellBody">
+Open creates file
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1058514"> </a><div class="pSmartList1"><li>The different OPEN types allow for different I/O statements to be used.  This is summarized in the following chart.</li></div>
+<a name="wp1058586"> </a><p class="pBodyRelative">
+  <div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1058901"> </a>
+Statement
+
+</th>
+    <th><a name="wp1058903"> </a>
+Input
+
+</th>
+    <th><a name="wp1058905"> </a>
+Output
+
+</th>
+    <th><a name="wp1058907"> </a>
+I-O
+
+</th>
+    <th><a name="wp1058909"> </a>
+Extend
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058911"> </a><p class="pCellBody">
+READ
+</p>
+</td>
+    <td><a name="wp1058913"> </a><p class="pCellBody">
+X
+</p>
+</td>
+    <td><a name="wp1058915"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1058917"> </a><p class="pCellBody">
+X
+</p>
+</td>
+    <td><a name="wp1058919"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058921"> </a><p class="pCellBody">
+WRITE
+</p>
+</td>
+    <td><a name="wp1058923"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1058925"> </a><p class="pCellBody">
+X
+</p>
+</td>
+    <td><a name="wp1058927"> </a><p class="pCellBody">
+X
+</p>
+</td>
+    <td><a name="wp1058929"> </a><p class="pCellBody">
+X
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058931"> </a><p class="pCellBody">
+REWRITE
+</p>
+</td>
+    <td><a name="wp1058933"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1058935"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1058937"> </a><p class="pCellBody">
+X
+</p>
+</td>
+    <td><a name="wp1058939"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058941"> </a><p class="pCellBody">
+START
+</p>
+</td>
+    <td><a name="wp1058943"> </a><p class="pCellBody">
+X
+</p>
+</td>
+    <td><a name="wp1058945"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1058947"> </a><p class="pCellBody">
+X
+</p>
+</td>
+    <td><a name="wp1058949"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058951"> </a><p class="pCellBody">
+DELETE
+</p>
+</td>
+    <td><a name="wp1058953"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1058955"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1058957"> </a><p class="pCellBody">
+X
+</p>
+</td>
+    <td><a name="wp1058959"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1058961"> </a><p class="pCellBody">
+UNLOCK
+</p>
+</td>
+    <td><a name="wp1058963"> </a><p class="pCellBody">
+X
+</p>
+</td>
+    <td><a name="wp1058965"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1058967"> </a><p class="pCellBody">
+X
+</p>
+</td>
+    <td><a name="wp1058969"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1058587"> </a><div class="pSmartList1"><li>After a successful OPEN statement, the file is positioned at its first logical record.  (The only exception to this rule is that a sequential access file opened with the EXTEND phrase is positioned after its last record.  Records written to such a file are appended to the file.)</li></div>
+<a name="wp1040891"> </a><div class="pSmartList1"><li>A file opened with the OUTPUT phrase is logically recreated.  This is equivalent to physically removing the file (if it exists) and creating it anew.  </li></div>
+<a name="wp1040892"> </a><div class="pSmartList1"><li>If a file is not available, the OPTIONAL phrase is specified in the file's SELECT and the file is opened with the INPUT phrase, then the first READ on the file will return an end-of-file status condition.  </li></div>
+<a name="wp1040894"> </a><div class="pSmartList1"><li>The execution of the OPEN statement causes the I-O status associated with <em class="cEmphasis">file</em> to be updated.  Note that opening an OPTIONAL file when that file does not exist will return a different status code than opening it if it does exist.  </li></div>
+<a name="wp1040895"> </a><div class="pSmartList1"><li>An OPEN statement with multiple <em class="cEmphasis">files</em> is equivalent to a series of OPEN statements referencing the files in the order named.  </li></div>
+<a name="wp1040896"> </a><div class="pSmartList1"><li>The open state of a file is not affected by other instances of the same file in other run units or other programs of the same run unit.  These other files may be opened or closed without affecting the ability of the current program to open the same file, except as modified by the file locking rules below. </li></div>
+<a name="wp1040898"> </a><div class="pSmartList1"><li>The EXCLUSIVE, WITH, and ALLOWING phrases allow for various forms of file locking.  There are three forms of file locking: ALLOWING ALL, ALLOWING READERS, and ALLOWING NO OTHERS.  File locking is enforced for all file types residing on disk but may not be enforced for non-disk files for some operating systems. </li></div>
+<a name="wp1040901"> </a><div class="pSmartList1"><li>The following phrases imply the ALLOWING ALL form of file locking:  </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1040902"> </a><div class="pSmartList2"><li>No <em class="cEmphasis">lock-option</em> specified</li></div>
+<a name="wp1040903"> </a><div class="pSmartList2"><li>ALLOWING ALL</li></div>
+<a name="wp1040904"> </a><div class="pSmartList2"><li>ALLOWING WRITERS</li></div>
+<a name="wp1040905"> </a><div class="pSmartList2"><li>ALLOWING UPDATERS</li></div>
+<a name="wp1040906"> </a><p class="pIndented2">
+This file locking mode indicates that other programs can access the file without restriction except that another program may not execute an OPEN OUTPUT while this program keeps the file open.
+</p>
+</ol></div>
+<a name="wp1040907"> </a><div class="pSmartList1"><li>The following phrases imply the ALLOWING READERS form of file locking:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1040908"> </a><div class="pSmartList2"><li>ALLOWING READERS</li></div>
+<a name="wp1040909"> </a><div class="pSmartList2"><li>EXCLUSIVE or WITH LOCK specified with the INPUT phrase</li></div>
+<a name="wp1040910"> </a><p class="pIndented2">
+A file open in this mode does not allow any other program to open this file other than with the INPUT phrase.  Furthermore, this OPEN will fail if any other programs currently have the file open unless the INPUT phrase was used by all of these other programs. 
+</p>
+</ol></div>
+<a name="wp1040911"> </a><div class="pSmartList1"><li>These phrases imply the ALLOWING NO OTHERS form of file locking:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1040912"> </a><div class="pSmartList2"><li>ALLOWING NO OTHERS</li></div>
+<a name="wp1040913"> </a><div class="pSmartList2"><li>EXCLUSIVE or WITH LOCK specified with the OUTPUT, I-O, or EXTEND phrases</li></div>
+<a name="wp1040914"> </a><div class="pSmartList2"><li>WITH MASS-UPDATE</li></div>
+<a name="wp1040915"> </a><div class="pSmartList2"><li>BULK-ADDITION</li></div>
+<a name="wp1040916"> </a><p class="pIndented2">
+This form of file locking does not allow any other programs to open the file, and this OPEN will fail if any other programs currently have the file open.  
+</p>
+</ol></div>
+<a name="wp1040917"> </a><div class="pSmartList1"><li>The WITH MASS-UPDATE phrase is equivalent to the WITH LOCK phrase with some additional effects.  It may be specified only for indexed files.  This phrase indicates to the runtime system that the file in question will be heavily updated by this program.  The runtime system may be able to use this information to access the file more efficiently.  Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>, section 6.1.6, &quot;Indexed File Considerations,&quot; contains more information about the effects of this phrase and advice on when it should be specified. </li></div>
+<a name="wp1040920"> </a><div class="pSmartList1"><li>The BULK-ADDITION phrase is equivalent to the MASS-UPDATE phrase with some additional effects.  For Vision files, the BULK-ADDITION phrase opens the file in &quot;bulk addition&quot; mode, which substantially increases efficiency when you are writing a large number of new records to the file.  BULK-ADDITION has several significant effects, including some changes to standard COBOL file handling rules.  See section 6.1.6.3 of <em class="cEmphasis">ACUCOBOL-GT User's Guide</em> for details.  For host file systems other than Vision, specifying BULK-ADDITION has the same effect as specifying MASS-UPDATE.  In this case, none of the special handling dictated by BULK-ADDITION applies. </li></div>
+<a name="wp1040921"> </a><div class="pSmartList1"><li>A file with a LOCK MODE IS EXCLUSIVE phrase in its SELECT treats all OPEN statements as if they were written with the EXCLUSIVE option.</li></div>
+<a name="wp1040924"> </a><div class="pSmartList1"><li>The configuration variable EXTRA_KEYS_OK allows you to open an indexed file without specifying all of that file's alternate keys.  For more information, see Appendix H, Book 4, <em class="cEmphasis">Appendices.</em> </li></div>
+<a name="wp1040925"> </a><div class="pSmartList1"><li>Note that the IBM DOS/VS COBOL &quot;-Cv&quot; compatibility mode supports Reversed File Reads.</li></div>
+</ol></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

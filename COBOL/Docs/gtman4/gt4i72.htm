@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$RERR Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1318941"> </a><h2 class="pHeading2">
+C$RERR Routine
+</h2>
+<a name="wp1036571"> </a><p class="pBody">
+This routine returns extended file status information.
+</p>
+<a name="wp1036572"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$RERR&quot;<a name="wp1036573"> </a>
+    USING EXTEND-STAT, TEXT-MESSAGE, STATUS-TYPE<a name="wp1036574"> </a>
+</pre></div>
+<a name="wp1036576"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1036577"> </a><p class="pBody">
+<b class="cBold">EXTEND-STAT   </b>PIC X(5) or larger; PIC X(7) or larger under VMS
+</p>
+<a name="wp1036579"> </a><p class="pBody">
+<b class="cBold">TEXT-MESSAGE   </b>PIC X(n)
+</p>
+<a name="wp1036580"> </a><p class="pBody">
+<b class="cBold">STATUS-TYPE   </b>Numeric parameter
+</p>
+<a name="wp1036581"> </a><h3 class="pHeadingRef">
+Comments
+</h3>
+<a name="wp1036582"> </a><p class="pBody">
+C$RERR must be passed a USING argument that should be PICTURE X(5) or larger. This argument is filled in with either the extended <em class="cEmphasis">file status</em> caused by the last file I/O, or the extended <em class="cEmphasis">transaction status</em> caused by the last transaction operation.  The value of STATUS-TYPE determines which status will be filled in.   
+</p>
+<a name="wp1036583"> </a><p class="pBody">
+A text message is available for some 9D errors, which are host system errors.  When a text message is available, it's moved into the data item TEXT-MESSAGE, and returned as the second parameter.  You can use TEXT-MESSAGE to display text to the user, so the user can decide what action to take.  This parameter is ignored for transaction status.
+</p>
+<a name="wp1036584"> </a><p class="pBody">
+The third parameter, STATUS-TYPE, controls whether file status or transaction status information is returned by the routine.  If STATUS-TYPE is set to &quot;1&quot; or the parameter is omitted, file status is returned.  If STATUS-TYPE is set to &quot;2&quot;, transaction status is returned.
+</p>
+<a name="wp1036588"> </a><p class="pBody">
+The first two characters of the extended file status are identical to the normal FILE STATUS value returned by ACUCOBOL-GT for a file operation.  The last two characters further clarify the reason for the particular FILE STATUS value.  The values used here are listed in the file status table found in Appendix E.  If the file status (first two characters) is &quot;30&quot;, the remainder of the information is the operating system's status code explaining what caused the error.  
+</p>
+<a name="wp1036589"> </a><p class="pBody">
+On some systems, the operating system requires more than two digits for its status codes.  That is why the C$RERR routine may be passed a field that is larger than four characters.  Whenever an error &quot;30&quot; occurs, the operating system's status value is returned in this extended field.  The number returned is a left-justified decimal value.  If the receiving field is too small, the right-most digits are returned.  If the receiving field is too large, the excess characters are filled with spaces.
+</p>
+<a name="wp1036590"> </a><p class="pBody">
+The first two characters of the extended transaction status are identical to the contents of the TRANSACTION-STATUS register.  The last two characters further clarify the reason for the particular transaction status value.  The values used here are listed in the transaction status table found in Appendix&#160;E, section E.4.  
+</p>
+<a name="wp1036591"> </a><p class="pBody">
+In a few cases, there may also be a tertiary status code.  If there is one, a comma will be placed immediately after the secondary status code, and the tertiary code will then appear left-justified.   
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

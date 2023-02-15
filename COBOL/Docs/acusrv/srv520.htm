@@ -1,0 +1,919 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:45:21" />
+  <title>5.7  Tracking Server Statistics</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv5.htm">Chapter 5: AcuServer Functions</a> &gt; </p>
+<a name="wp1066614"> </a><h2 class="pHeading1">
+5.7  Tracking Server Statistics
+</h2>
+<a name="wp1063025"> </a><p class="pBody">
+AcuServer has an option to collect and report server statistics.  When the COUNT_STATISTICS configuration variable (described in <a  href="srv412.htm#wp1035170">section 4.2.2</a>) is set to &quot;true&quot;, you can track memory usage, network reads and writes, socket select calls, and time spent in kernel, user, and idle modes.  You can also track access to Vision, relative, and sequential data files, recording the number of file reads, writes, rewrites, deletes, and so on.
+</p>
+<a name="wp1065689"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In order to get memory information, start AcuServer with the new -d option (&quot;acuserve -start -d&quot;).  If you do not specify the &quot;-d&quot; parameter, memory is not tracked, and so is reported as 0 at all times.
+<hr />
+</p>
+<a name="wp1063656"> </a><p class="pBody">
+To get a detailed server history, use the command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+acuserve -statistics -t [<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">parameter</span>] [-n <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">port</span>]<a name="wp1063029"> </a>
+</pre></div>
+<a name="wp1063031"> </a><p class="pBody">
+The available parameters are listed below:</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1066126"> </a>
+Parameter
+
+</th>
+    <th><a name="wp1066128"> </a>
+Short Description
+
+</th>
+    <th><a name="wp1066130"> </a>
+Details
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066132"> </a><p class="pCellBody">
+ALL (default)
+</p>
+</td>
+    <td><a name="wp1066134"> </a><p class="pCellBody">
+All statistics
+</p>
+</td>
+    <td><a name="wp1066136"> </a><p class="pCellBody">
+Returns all available statistics for an instance of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span>
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066138"> </a><p class="pCellBody">
+FILE
+</p>
+</td>
+    <td><a name="wp1066140"> </a><p class="pCellBody">
+All data file statistics
+</p>
+</td>
+    <td><a name="wp1066142"> </a><p class="pCellBody">
+Includes file statistics for all Vision, relative, and sequential files
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066144"> </a><p class="pCellBody">
+MEMORY
+</p>
+</td>
+    <td><a name="wp1066146"> </a><p class="pCellBody">
+Memory used
+</p>
+</td>
+    <td><a name="wp1066148"> </a><p class="pCellBody">
+Total number of bytes of memory used by AcuServer
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066150"> </a><p class="pCellBody">
+NETWORK
+</p>
+</td>
+    <td><a name="wp1066152"> </a><p class="pCellBody">
+Users added
+</p>
+</td>
+    <td><a name="wp1066154"> </a><p class="pCellBody">
+Total number of users who have connected
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066156"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066158"> </a><p class="pCellBody">
+Users removed
+</p>
+</td>
+    <td><a name="wp1066160"> </a><p class="pCellBody">
+Total number of users who have disconnected
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066162"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066164"> </a><p class="pCellBody">
+Files opened
+</p>
+</td>
+    <td><a name="wp1066166"> </a><p class="pCellBody">
+Total number of files that have been opened
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066168"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066170"> </a><p class="pCellBody">
+Files closed
+</p>
+</td>
+    <td><a name="wp1066172"> </a><p class="pCellBody">
+Total number of files that have been closed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066174"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066176"> </a><p class="pCellBody">
+Network bytes read
+</p>
+</td>
+    <td><a name="wp1066178"> </a><p class="pCellBody">
+Total number of bytes read by AcuServer
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066180"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066182"> </a><p class="pCellBody">
+Network bytes written
+</p>
+</td>
+    <td><a name="wp1066184"> </a><p class="pCellBody">
+Total number of bytes written by AcuServer
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066186"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066188"> </a><p class="pCellBody">
+Immediate select calls
+</p>
+</td>
+    <td><a name="wp1066190"> </a><p class="pCellBody">
+Total number of times select() was called with no timeout
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066192"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066194"> </a><p class="pCellBody">
+Immediate select sockets
+</p>
+</td>
+    <td><a name="wp1066196"> </a><p class="pCellBody">
+Total number of sockets returned when select() was called with no timeout
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066198"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066200"> </a><p class="pCellBody">
+Timed select calls
+</p>
+</td>
+    <td><a name="wp1066202"> </a><p class="pCellBody">
+Total number of times select() was called with a timeout
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066204"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066206"> </a><p class="pCellBody">
+Timed select sockets
+</p>
+</td>
+    <td><a name="wp1066208"> </a><p class="pCellBody">
+Total number of sockets returned when select() was called with a timeout
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066210"> </a><p class="pCellBody">
+TIME
+</p>
+</td>
+    <td><a name="wp1066212"> </a><p class="pCellBody">
+% Kernel time, last minute
+</p>
+</td>
+    <td><a name="wp1066214"> </a><p class="pCellBody">
+Percentage of time spent in kernel mode in the last minute
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066216"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066218"> </a><p class="pCellBody">
+% Kernel time, last 5 minutes
+</p>
+</td>
+    <td><a name="wp1066220"> </a><p class="pCellBody">
+Percentage of time spent in kernel mode in the last 5 minutes
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066222"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066224"> </a><p class="pCellBody">
+% Kernel time, last 15 minutes
+</p>
+</td>
+    <td><a name="wp1066226"> </a><p class="pCellBody">
+Percentage of time spent in kernel mode in the last 15 minutes
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066228"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066230"> </a><p class="pCellBody">
+% User time, last minute
+</p>
+</td>
+    <td><a name="wp1066232"> </a><p class="pCellBody">
+Percentage of time spent in user mode in the last minute
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066234"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066236"> </a><p class="pCellBody">
+% User time, last 5 minutes
+</p>
+</td>
+    <td><a name="wp1066238"> </a><p class="pCellBody">
+Percentage of time spent in user mode in the last 5 minutes
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066240"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066242"> </a><p class="pCellBody">
+% User time, last 15 minutes
+</p>
+</td>
+    <td><a name="wp1066244"> </a><p class="pCellBody">
+Percentage of time spent in user mode in the last 15 minutes
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066246"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066248"> </a><p class="pCellBody">
+% Idle time, last minute
+</p>
+</td>
+    <td><a name="wp1066250"> </a><p class="pCellBody">
+Percentage of idle time in the last minute
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066252"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066254"> </a><p class="pCellBody">
+% Idle time, last 5 minutes
+</p>
+</td>
+    <td><a name="wp1066256"> </a><p class="pCellBody">
+Percentage of idle time in the last 5 minutes
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066258"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066260"> </a><p class="pCellBody">
+% Idle time, last 15 minutes
+</p>
+</td>
+    <td><a name="wp1066262"> </a><p class="pCellBody">
+Percentage of idle time in the last 15 minutes
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066264"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066266"> </a><p class="pCellBody">
+Uptime (days hours:minutes)
+</p>
+</td>
+    <td><a name="wp1066268"> </a><p class="pCellBody">
+Amount of time the server has been running
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066270"> </a><p class="pCellBody">
+VISION
+</p>
+</td>
+    <td><a name="wp1066272"> </a><p class="pCellBody">
+Vision create
+</p>
+</td>
+    <td><a name="wp1066274"> </a><p class="pCellBody">
+Total number of Vision files created
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066276"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066278"> </a><p class="pCellBody">
+Vision open
+</p>
+</td>
+    <td><a name="wp1066280"> </a><p class="pCellBody">
+Total number of Vision files opened
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066282"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066284"> </a><p class="pCellBody">
+Vision close
+</p>
+</td>
+    <td><a name="wp1066286"> </a><p class="pCellBody">
+Total number of Vision files closed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066288"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066290"> </a><p class="pCellBody">
+Vision read
+</p>
+</td>
+    <td><a name="wp1066292"> </a><p class="pCellBody">
+Total number of Vision records read dynically
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066294"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066296"> </a><p class="pCellBody">
+Vision read next
+</p>
+</td>
+    <td><a name="wp1066298"> </a><p class="pCellBody">
+Total number of Vision records read sequentially (next)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066300"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066302"> </a><p class="pCellBody">
+Vision read previous
+</p>
+</td>
+    <td><a name="wp1066304"> </a><p class="pCellBody">
+Total number of Vision records read sequentially (previous)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066306"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066308"> </a><p class="pCellBody">
+Vision write
+</p>
+</td>
+    <td><a name="wp1066310"> </a><p class="pCellBody">
+Total number of Vision records written
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066312"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066314"> </a><p class="pCellBody">
+Vision rewrite
+</p>
+</td>
+    <td><a name="wp1066316"> </a><p class="pCellBody">
+Total number of Vision records rewritten
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066318"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066320"> </a><p class="pCellBody">
+Vision delete
+</p>
+</td>
+    <td><a name="wp1066322"> </a><p class="pCellBody">
+Total number of Vision records deleted
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066324"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066326"> </a><p class="pCellBody">
+Vision start
+</p>
+</td>
+    <td><a name="wp1066328"> </a><p class="pCellBody">
+Total number of Vision files started
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066330"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066332"> </a><p class="pCellBody">
+Vision info
+</p>
+</td>
+    <td><a name="wp1066334"> </a><p class="pCellBody">
+Total number of Vision info calls
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066336"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066338"> </a><p class="pCellBody">
+Vision remove
+</p>
+</td>
+    <td><a name="wp1066340"> </a><p class="pCellBody">
+Total number of Vision files removed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066342"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066344"> </a><p class="pCellBody">
+Vision rename
+</p>
+</td>
+    <td><a name="wp1066346"> </a><p class="pCellBody">
+Total number of Vision files renamed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066348"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066350"> </a><p class="pCellBody">
+Vision copy
+</p>
+</td>
+    <td><a name="wp1066352"> </a><p class="pCellBody">
+Total number of Vision file copied
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066354"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066356"> </a><p class="pCellBody">
+Vision unlock
+</p>
+</td>
+    <td><a name="wp1066358"> </a><p class="pCellBody">
+Total number of Vision records unlocked
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066360"> </a><p class="pCellBody">
+RELATIVE
+</p>
+</td>
+    <td><a name="wp1066362"> </a><p class="pCellBody">
+Relative create
+</p>
+</td>
+    <td><a name="wp1066364"> </a><p class="pCellBody">
+Total number of relative files created
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066366"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066368"> </a><p class="pCellBody">
+Relative open
+</p>
+</td>
+    <td><a name="wp1066370"> </a><p class="pCellBody">
+Total number of relative files opened
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066372"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066374"> </a><p class="pCellBody">
+Relative unlock
+</p>
+</td>
+    <td><a name="wp1066376"> </a><p class="pCellBody">
+Total number of relative records unlocked
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066378"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066380"> </a><p class="pCellBody">
+Relative close
+</p>
+</td>
+    <td><a name="wp1066382"> </a><p class="pCellBody">
+Total number of relative files closed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066384"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066386"> </a><p class="pCellBody">
+Relative read
+</p>
+</td>
+    <td><a name="wp1066388"> </a><p class="pCellBody">
+Total number of relative records read dynamically
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066390"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066392"> </a><p class="pCellBody">
+Relative read next
+</p>
+</td>
+    <td><a name="wp1066394"> </a><p class="pCellBody">
+Total number of Relative records read sequentially (next)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066396"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066398"> </a><p class="pCellBody">
+Relative read previous
+</p>
+</td>
+    <td><a name="wp1066400"> </a><p class="pCellBody">
+Total number of relative records read sequentially (previous)
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066402"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066404"> </a><p class="pCellBody">
+Relative start
+</p>
+</td>
+    <td><a name="wp1066406"> </a><p class="pCellBody">
+Total number of relative files started
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066408"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066410"> </a><p class="pCellBody">
+Relative write
+</p>
+</td>
+    <td><a name="wp1066412"> </a><p class="pCellBody">
+Total number of relative records written
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066414"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066416"> </a><p class="pCellBody">
+Relative delete
+</p>
+</td>
+    <td><a name="wp1066418"> </a><p class="pCellBody">
+Total number of relative records deleted
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066420"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066422"> </a><p class="pCellBody">
+Relative rewrite
+</p>
+</td>
+    <td><a name="wp1066424"> </a><p class="pCellBody">
+Total number of relative records rewritten
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066426"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066428"> </a><p class="pCellBody">
+Relative remove
+</p>
+</td>
+    <td><a name="wp1066430"> </a><p class="pCellBody">
+Total number of relative files removed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066432"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066434"> </a><p class="pCellBody">
+Relative rename
+</p>
+</td>
+    <td><a name="wp1066436"> </a><p class="pCellBody">
+Total number of relative files renamed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066438"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066440"> </a><p class="pCellBody">
+Relative copy
+</p>
+</td>
+    <td><a name="wp1066442"> </a><p class="pCellBody">
+Total number of relative files copied
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066444"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066446"> </a><p class="pCellBody">
+Relative info
+</p>
+</td>
+    <td><a name="wp1066448"> </a><p class="pCellBody">
+Total number of relative info calls
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1066450"> </a><p class="pCellBody">
+SEQUENTIAL
+</p>
+</td>
+    <td><a name="wp1066452"> </a><p class="pCellBody">
+Sequential create
+</p>
+</td>
+    <td><a name="wp1066454"> </a><p class="pCellBody">
+Total number of sequential files created
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066456"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066458"> </a><p class="pCellBody">
+Sequential open
+</p>
+</td>
+    <td><a name="wp1066460"> </a><p class="pCellBody">
+Total number of sequential files opened
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066462"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066464"> </a><p class="pCellBody">
+Sequential close
+</p>
+</td>
+    <td><a name="wp1066466"> </a><p class="pCellBody">
+Total number of sequential files closed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066468"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066470"> </a><p class="pCellBody">
+Sequential read
+</p>
+</td>
+    <td><a name="wp1066472"> </a><p class="pCellBody">
+Total number of sequential records read
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066474"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066476"> </a><p class="pCellBody">
+Sequential write
+</p>
+</td>
+    <td><a name="wp1066478"> </a><p class="pCellBody">
+Total number of sequential records written
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066480"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066482"> </a><p class="pCellBody">
+Sequential rewrite
+</p>
+</td>
+    <td><a name="wp1066484"> </a><p class="pCellBody">
+Total number of sequential records rewritten
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066486"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066488"> </a><p class="pCellBody">
+Sequential remove
+</p>
+</td>
+    <td><a name="wp1066490"> </a><p class="pCellBody">
+Total number of sequential files removed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066492"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066494"> </a><p class="pCellBody">
+Sequential rename
+</p>
+</td>
+    <td><a name="wp1066496"> </a><p class="pCellBody">
+Total number of sequential files renamed
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><div class="pPreformatted"><pre class="pPreformatted">
+    <a name="wp1066498"> </a>
+</pre></div>
+</td>
+    <td><a name="wp1066500"> </a><p class="pCellBody">
+Sequential copy
+</p>
+</td>
+    <td><a name="wp1066502"> </a><p class="pCellBody">
+Total number of sequential files copied
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1063742"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Information about select() can be used to determine if clients are waiting a long time before getting noticed by AcuServer.  When a client has to wait, the number of sockets returned by select() without a timeout will be large, in general, and also large in comparison to the number of calls to select() with a timeout.  If the number of sockets returned by calls to select() without a timeout is small, then clients are getting serviced immediately. 
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

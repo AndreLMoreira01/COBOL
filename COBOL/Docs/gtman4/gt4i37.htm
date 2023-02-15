@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$CHAIN Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1035304"> </a><h2 class="pHeading2">
+C$CHAIN Routine
+</h2>
+<a name="wp1035309"> </a><p class="pBody">
+The C$CHAIN routine replaces the running program and runtime system with another program.  
+</p>
+<a name="wp1035310"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$CHAIN&quot; <a name="wp1035311"> </a>
+    USING PROG-NAME<a name="wp1473627"> </a>
+</pre></div>
+<a name="wp1035312"> </a><h3 class="pHeadingRef">
+Parameter
+</h3>
+<a name="wp1035313"> </a><p class="pBody">
+<b class="cBold">PROG-NAME</b>   PIC X(n)
+</p>
+<a name="wp1035314"> </a><p class="pBody">
+Contains an operating system command line to execute.
+</p>
+<a name="wp1035315"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1035316"> </a><p class="pBody">
+This routine functions in the same manner as the SYSTEM library routine, except that there is no return to the running program.  Instead, the current program shuts down (like a STOP RUN) and the runtime system then replaces itself with the passed program.  This is similar to the CHAIN verb except that the called program is not a COBOL program; it is any program available on the host machine.  
+</p>
+<a name="wp1035317"> </a><p class="pBody">
+The usual reason for calling this routine is to make more memory available to the called program.  The runtime system can occupy a significant amount of memory that may be needed by the called program.  Calling C$CHAIN ensures that the runtime system is removed from memory along with the various COBOL programs that have been active.  
+</p>
+<a name="wp1035319"> </a><p class="pBody">
+Often it is desirable to return from the called program to the caller.  One way to do this is to use an operating system script to re-execute the calling program.  You can control the script with various exit statuses--for a description of the runtime's exit statuses, see the entry for the STOP Statement in section 6.6 of the <em class="cEmphasis">ACUCOBOL-GT Reference Manual</em>.  Usually the script will sit in a loop calling the ACUCOBOL-GT runtime system until it receives a special exit status.  You can use the STOP RUN statement to pass that special status back to the script when you want to shut down.  You should remember that when the runtime system chains to another program, the script sees the exit status of the called program as the exit status of the runtime system.  
+</p>
+<a name="wp1035320"> </a><p class="pBody">
+For example, suppose on a UNIX system that you have a program (called <b class="cBold">main</b>) that executes the C$CHAIN routine.  After the called program terminates, you want to re-execute the caller.  You decide to use exit value &quot;100&quot; to indicate that the program should terminate.  You could use the following &quot;sh&quot; script:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+runcbl main<a name="wp1035321"> </a>
+while test $? != 100; do runcbl main; done<a name="wp1035322"> </a>
+</pre></div>
+<a name="wp1035323"> </a><p class="pBody">
+This script runs <b class="cBold">main</b> once, and then continues to run it until it executes a &quot;STOP RUN 100&quot; statement.  Writing the script this way allows the program that is called by C$CHAIN to have a non-zero exit value without stopping the entire run.  
+</p>
+<a name="wp1115888"> </a><p class="pBody">
+You may want to distinguish between the first execution of the calling program and subsequent executions.  For example, you may want to display copyright information on the first execution.  You can do this by using a SPECIAL-NAMES switch to distinguish between the first execution and subsequent ones.  For instance, in the preceding example you could add &quot;-1&quot; to the second <b class="cBold">runcbl</b> command to set SWITCH-1 for the subsequent executions.  Your program can then test the value of this switch to determine what to do.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

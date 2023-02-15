@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:06" />
+  <title>5.3.3.6  Name directive</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt15.htm"><br />Chapter 5:  File Processing</a> &gt; <a href="gt1521.htm">5.3  XFD Files</a> &gt; <a href="gt1537.htm">5.3.3  Syntax</a> &gt; </p>
+<a name="wp1034991"> </a><h2 class="pHeading3">
+5.3.3.6  Name directive
+</h2>
+<a name="wp1034993"> </a><p class="pBody">
+The NAME directive assigns a field name to the field defined on the next line.  
+</p>
+<a name="wp1032812"> </a><h3 class="pHeadingRef">
+Syntax
+</h3>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+$XFD NAME=<em class="cEmphasis">fieldname</em><a name="wp1032813"> </a>
+</pre></div>
+<a name="wp1032814"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+*(( XFD NAME=<em class="cEmphasis">fieldname</em> ))<a name="wp1032815"> </a>
+</pre></div>
+<a name="wp1032816"> </a><p class="pBody">
+This directive has several uses, as shown in the following examples.
+</p>
+<a name="wp1032817"> </a><h3 class="pHeadingRef">
+Example 1
+</h3>
+<a name="wp1032818"> </a><p class="pBody">
+Within a database file, all field names must be unique.  (Multiple database tables may include the same field name, but duplicates may not exist within a single table.)  Unique field names are not required in COBOL, because names can be qualified by group items.  For example, in COBOL this is done:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  employee-record.<a name="wp1032819"> </a>
+  03  date-hired.<a name="wp1032820"> </a>
+    05  yy   pic 99.<a name="wp1032821"> </a>
+    05  mm   pic 99.<a name="wp1032822"> </a>
+    05  dd   pic 99.<a name="wp1032823"> </a>
+  03  date-last-paid.<a name="wp1032824"> </a>
+    05  yy   pic 99.<a name="wp1032825"> </a>
+    05  mm   pic 99.<a name="wp1032826"> </a>
+    05  dd   pic 99.<a name="wp1032827"> </a>
+</pre></div>
+<a name="wp1032828"> </a><p class="pBody">
+You need not change the field names in your COBOL program to access a database.  Instead, you use the NAME directive to provide unique database names for the fields.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ 01  employee-record.<a name="wp1032829"> </a>
+   03  date-hired.<a name="wp1032830"> </a>
+     05  yy   pic 99.<a name="wp1032831"> </a>
+     05  mm   pic 99.<a name="wp1032832"> </a>
+     05  dd   pic 99.<a name="wp1032833"> </a>
+   03  date-last-paid.<a name="wp1032834"> </a>
+*(( xfd  name=year-paid ))<a name="wp1032835"> </a>
+     05  yy   pic 99.<a name="wp1032836"> </a>
+$xfd  name=month-paid<a name="wp1032837"> </a>
+     05  mm   pic 99.<a name="wp1032838"> </a>
+$xfd  name=day-paid<a name="wp1032839"> </a>
+     05  dd   pic 99.<a name="wp1032840"> </a>
+</pre></div>
+<a name="wp1032841"> </a><p class="pBody">
+The dates portion of the resulting database table will look like:
+</p>
+<a name="wp1034517"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1034475"> </a>
+yy
+
+</th>
+    <th><a name="wp1034477"> </a>
+mm
+
+</th>
+    <th><a name="wp1034479"> </a>
+dd
+
+</th>
+    <th><a name="wp1034481"> </a>
+year_paid
+
+</th>
+    <th><a name="wp1034483"> </a>
+month_paid
+
+</th>
+    <th><a name="wp1034485"> </a>
+day_paid
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034487"> </a><p class="pCellBody">
+88
+</p>
+</td>
+    <td><a name="wp1034489"> </a><p class="pCellBody">
+02
+</p>
+</td>
+    <td><a name="wp1034491"> </a><p class="pCellBody">
+15
+</p>
+</td>
+    <td><a name="wp1034493"> </a><p class="pCellBody">
+94
+</p>
+</td>
+    <td><a name="wp1034495"> </a><p class="pCellBody">
+04
+</p>
+</td>
+    <td><a name="wp1034497"> </a><p class="pCellBody">
+30
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1032868"> </a><h3 class="pHeadingRef">
+Example 2
+</h3>
+<a name="wp1032870"> </a><p class="pBody">
+Some SQL-based databases require that names be no more than 18 characters long.  For those systems, the Acu4GL runtime will automatically truncate longer COBOL names after the eighteenth character.  
+</p>
+<a name="wp1032871"> </a><p class="pBody">
+If you have names that are identical within the first 18 characters, or that would not be meaningful to you if shortened to the first 18 characters, you can use the NAME directive to assign them different database field names.  
+</p>
+<a name="wp1032872"> </a><p class="pBody">
+For example, a portion of your database might contain:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  acme-employee-record.<a name="wp1032873"> </a>
+  03  acme-employee-record-date-hired<a name="wp1032874"> </a>
+      pic x(6).<a name="wp1032875"> </a>
+  03  acme-employee-record-date-last-paid<a name="wp1032876"> </a>
+      pic x(6).<a name="wp1032877"> </a>
+</pre></div>
+<a name="wp1032878"> </a><p class="pBody">
+You could add two NAME directives to differentiate the two item names by making them meaningful within 18 characters:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ 01  acme-employee-record.<a name="wp1032879"> </a>
+$xfd  name=date-hired<a name="wp1032880"> </a>
+   03  acme-employee-record-date-hired<a name="wp1032881"> </a>
+       pic x(6).<a name="wp1032882"> </a>
+$xfd  name=date-last-paid<a name="wp1032883"> </a>
+   03  acme-employee-record-date-last-paid<a name="wp1032884"> </a>
+       pic x(6).<a name="wp1032885"> </a>
+</pre></div>
+<a name="wp1032886"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Your COBOL names have not changed.  The new names are used only for the XFD fields.
+<hr />
+</p>
+<a name="wp1032887"> </a><p class="pBody">
+Each time you compile your program and specify &quot;-Fx&quot; to create data dictionaries, any field names longer than 18 characters will be checked for uniqueness within the first 18. If any field names are identical for the first 18 characters, a compiler warning message will be issued.  A warning of this type does not prevent the program from compiling and does not prevent the data dictionary from being generated.  
+</p>
+<a name="wp1032888"> </a><h3 class="pHeadingRef">
+Example 3
+</h3>
+<a name="wp1032889"> </a><p class="pBody">
+You may want to use the NAME directive to assign shorter names than those used in your COBOL programs.  This makes the formation of interactive SQL queries easier and quicker.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( XFD  NAME=EMPNO ))<a name="wp1032890"> </a>
+  03  employee-number  pic x(8).<a name="wp1032891"> </a>
+</pre></div>
+<a name="wp1032892"> </a><p class="pBody">
+This directive causes the data dictionary to map EMPLOYEE-NUMBER to EMPNO in the database. 
+</p>
+<a name="wp1032893"> </a><h3 class="pHeadingRef">
+Example 4
+</h3>
+<a name="wp1032894"> </a><p class="pBody">
+If your database already exists, and a field name in the database does not match the name used in your COBOL FD, you can use a NAME directive to associate the two names.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+$xfd  name=employee-no<a name="wp1032895"> </a>
+  03  employee-number  pic x(8).<a name="wp1032896"> </a>
+</pre></div>
+<a name="wp1032897"> </a><p class="pBody">
+This directive causes the data dictionary to map EMPLOYEE-NUMBER in the COBOL program to EMPLOYEE-NO in the database. 
+</p>
+<a name="wp1032898"> </a><h3 class="pHeadingRef">
+Example 5
+</h3>
+<a name="wp1032899"> </a><p class="pBody">
+If your COBOL program uses field names that begin with a numeric character, use the NAME directive to assign a different name for use with your database.  SQL will typically generate a syntax error when it encounters a column name that begins with a numeric character.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+  03  12-months-sales   pic 9(5)V99.<a name="wp1032900"> </a>
+</pre></div>
+<a name="wp1032901"> </a><p class="pBody">
+could be renamed this way:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+$xfd  name=twelve-months-sales<a name="wp1032902"> </a>
+  03  12-months-sales   pic 9(5)V99.<a name="wp1032903"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

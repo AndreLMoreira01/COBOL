@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:28:27" />
+  <title>3.7 File Aliases</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb3.htm">Chapter 3: Creating Data Sources</a> &gt; </p>
+<a name="wp1029736"> </a><h2 class="pHeading1">
+3.7 File Aliases
+</h2>
+<a name="wp1029750"> </a><p class="pBody">
+A file alias provides a way to map data files, &quot;.xfd&quot; files, and SQL tables.  File aliases are useful when 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1029752"> </a><div class="pSmartList1"><li>A single description section in your COBOL program references multiple data files with the same format.  Each of these files represents a distinct table in the database. </li></div>
+<a name="wp1029757"> </a><div class="pSmartList1"><li>The &quot;.xfd&quot; and data files for a table have different names or the data files reside in directories other than those specified on the General tab.</li></div>
+<a name="wp1029758"> </a><div class="pSmartList1"><li>You must assign write permissions to an individual data file that differ from those assigned to the entire DSN.  </li></div>
+</ul></div>
+<a name="wp1029762"> </a><p class="pBody">
+A DSN can support a maximum of 128 aliases. 
+</p>
+<a name="wp1029763"> </a><p class="pBody">
+This section describes the fields on the File Alias tab and also provides an example.
+</p>
+<a name="wp1029766"> </a><h3 class="pHeadingRef">
+Table Name 
+</h3>
+<a name="wp1029771"> </a><p class="pBody">
+Enter the name of one of the tables in the data source that your ODBC-enabled application opens, as shown in the Microsoft Access example below.</p><div><img src="images/tablenam.gif" height="272" width="561" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1029773"> </a><p class="pBody">
+Table names must be unique.  You cannot add an alias to the list if you use a duplicate table name.
+</p>
+<a name="wp1029774"> </a><h3 class="pHeadingRef">
+XFD
+</h3>
+<a name="wp1029780"> </a><p class="pBody">
+Enter the name of the &quot;.xfd&quot; file to be used with the table specified in the Table Name field.  Enter only the file name, with neither the path leading to the file nor the extension.  AcuODBC takes the path from the XFD Directory field on the General tab.
+</p>
+<a name="wp1029781"> </a><h3 class="pHeadingRef">
+Data File 
+</h3>
+<a name="wp1029786"> </a><p class="pBody">
+Enter the full path (including filename) where the file containing the data for the specified table is located.  The data file does not need to be in the same directory as the &quot;.xfd&quot; file.
+</p>
+<a name="wp1029787"> </a><h3 class="pHeadingRef">
+Write Permission 
+</h3>
+<a name="wp1029798"> </a><p class="pBody">
+This is available only for read/write versions of AcuODBC.  Indicate write permissions for the specified tables.  You can specify &quot;DSN Default,&quot; &quot;Read Only,&quot; or &quot;Read/Write&quot;.  &quot;DSN Default&quot; tells AcuODBC to use the permission established in the Read Only field on the Advanced tab.  Selecting &quot;Read Only&quot; or &quot;Read/Write&quot; overrides the setting on the Advanced tab.
+</p>
+<a name="wp1029804"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Field- or column-level write protection can be further defined by adding the READ-ONLY and HIDDEN directives to the file descriptor (FD) of your COBOL program.  Refer to <a  href="odb618.htm#wp1036563">section 6.3.9, &quot;READ-ONLY Directive,&quot;</a> and <a  href="odb615.htm#wp1036378">section 6.3.6, &quot;HIDDEN Directive,&quot;</a> for instructions. 
+<hr />
+</p>
+<a name="wp1029805"> </a><p class="pBody">
+To add the file alias to the DSN definition, click <b class="cBold">Add</b>.  The alias is added to the list box in the lower part of the tab, with a check box to the far left of the row.  The check in the box indicates that AcuODBC will include that entry when performing operations.  Clear the check box if you do not want AcuODBC to include this alias.  Select the check box again when you want to include the alias.  AcuODBC keeps the alias information in memory so that you need only to select or clear a check box to indicate whether a particular file alias should be used by AcuODBC.
+</p>
+<a name="wp1029806"> </a><h3 class="pHeadingRef">
+Example
+</h3>
+<a name="wp1029807"> </a><p class="pBody">
+Your COBOL program has one description section that references three data files:  &quot;file1&quot;, &quot;file2&quot;, and &quot;file3&quot;.  Because there is only one description section in your COBOL file, you will get an &quot;.xfd&quot; file for only one of these three data files.<b class="cBold">  </b>Your ODBC-enabled application needs to see these three data files as three tables (called &quot;cats,&quot; &quot;dogs,&quot; and &quot;fish,&quot; respectively) in a database.   The code in your program looks like this.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ FILE-CONTROL.<a name="wp1029811"> </a>
+ SELECT work-file<a name="wp1076659"> </a>
+     ASSIGN TO pet-file<a name="wp1076660"> </a>
+     ORGANIZATION IS INDEXED<a name="wp1076661"> </a>
+     ACCESS IS DYNAMIC<a name="wp1029815"> </a>
+     RECORD KEY IS type-id<a name="wp1076664"> </a>
+     FILE STATUS IS ws-file-status.<a name="wp1076665"> </a>
+<a name="wp1076666"> </a>
+ DATA DIVISION.<a name="wp1029819"> </a>
+ FILE SECTION.<a name="wp1029820"> </a>
+$XFD FILE=pets<a name="wp1029821"> </a>
+ FD  work-file.<a name="wp1029822"> </a>
+ 01  pet-record.<a name="wp1029823"> </a>
+     05  type-id.<a name="wp1029824"> </a>
+         10 atype             pic x.<a name="wp1029825"> </a>
+         10 ano               pic 99.<a name="wp1029827"> </a>
+     05  owner                pic x(30).<a name="wp1029828"> </a>
+     05  breed                pic x(25).<a name="wp1029829"> </a>
+     05  sex                  pic x.<a name="wp1029830"> </a>
+     05  neutered             pic x.<a name="wp1029831"> </a>
+ WORKING-STORAGE SECTION.<a name="wp1029832"> </a>
+ 01  pet-file                 pic x(10).    <a name="wp1029833"> </a>
+ 01  ws-file-status           pic xx.<a name="wp1029834"> </a>
+</pre></div>
+<a name="wp1035248"> </a><p class="pBody">
+Note the use of the FILE directive in the code.  You must include a FILE directive as a starting name from which to form the name of the data dictionary file.  (In this example, since there is no value in pet-file at compile time, the compiler could not tell what name to assign to the data dictionary.)  See <a  href="odb614.htm#wp1028852">section 6.3.5, &quot;FILE Directive,&quot;</a> for more information on this and other directives.  
+</p>
+<a name="wp1029842"> </a><p class="pBody">
+If the &quot;Read Only&quot; DSN permission is set to &quot;Yes&quot; on the Advanced tab (the check box is selected) and you want to be able to edit the &quot;cats&quot; table, the File Alias tab for your DSN called &quot;family_pets&quot; should look like this to
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1029843"> </a><div class="pSmartList1"><li>recognize the three data files.</li></div>
+<a name="wp1029844"> </a><div class="pSmartList1"><li>generate a table name that is different than the file name.</li></div>
+<a name="wp1064113"> </a><div class="pSmartList1"><li>assign write permission to the &quot;cats&quot; table.</li></div>
+<a name="wp1064117"> </a><p class="pBodyRelative">
+<br />
+<img src="images/odbcfile.gif" height="262" width="504" border="0" hspace="0" vspace="0"/>
+<br />
+
+</p>
+</ul></div>
+<a name="wp1064118"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>For information on file aliasing and the WHEN directive, see <a  href="odb620.htm#wp1029102">section 6.3.11, &quot;WHEN Directive.&quot;</a>
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

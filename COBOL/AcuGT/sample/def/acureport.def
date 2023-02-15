@@ -1,0 +1,106 @@
+      * ACUREPORT.DEF - useful definitions for report.
+      * Last modified: 29-Mar-2002.
+
+       01  ACU-PRINT-VARIABLE.
+           05  ACU-PAGENUM              PIC 9(06) VALUE 0.
+           05  ACU-PAGENUM-SYS          PIC 9(06) VALUE 0.
+           05  ACU-SETUPPRINT           PIC 9     VALUE 0.
+           05  ACU-STATUS-CODE          PIC 9     VALUE 0.
+           05  ACU-PRINTER-NAME         PIC X(125) VALUE SPACES.
+           05  ACU-PAPER-SIZE           PIC X(20)  VALUE SPACES.
+           05  ACU-PAPER-SIZEINT.
+               10  ACU-PAPER-WIDTH      PIC 9(6).
+               10  FILLER                 PIC X  VALUE IS "|".
+               10  ACU-PAPER-HEIGHT     PIC 9(6).
+               10  FILLER                 PIC X  VALUE IS " ".
+           05  ACU-PAPER-HEADER         PIC X(30) VALUE SPACES.
+           05  ACU-PAPER-FOOTER         PIC X(30) VALUE SPACES.
+           05  ACU-PAPER-ORIENTATION    PIC X(10).
+           05  ACU-PAPER-ORIENTATIONINT SIGNED-INT.
+               88  ACU-PAPER-PORTRAIT   VALUE 1.
+               88  ACU-PAPER-LANDSCAPE  VALUE 2.
+           05  ACU-PAPER-COPIES         SIGNED-INT VALUE 0.
+           05  ACU-PAPER-MARGIN.
+               10  ACU-MARGIN-LEFT      PIC 9(6).
+               10  FILLER                 PIC X  VALUE IS "|".
+               10  ACU-MARGIN-RIGHT     PIC 9(6).
+               10  FILLER                 PIC X  VALUE IS "|".
+               10  ACU-MARGIN-TOP       PIC 9(6).
+               10  FILLER                 PIC X  VALUE IS "|".
+               10  ACU-MARGIN-BOTTOM    PIC 9(6).
+               10  FILLER                 PIC X  VALUE IS " ".
+           05  ACUPRINTDLL-STATUS           SIGNED-INT.
+               88  ACUPRINTDLL-FAIL         VALUE 0.
+               88  ACUPRINTDLL-SUCCESS      VALUE 1.  
+                  
+      * For Occurs in Relation Mapping (Please don't modify it).
+       77 ACU-OCCURS-IDX           PIC  9(4) VALUE 1.            
+           
+       77 REPORT-HEADER-PRINT-BEFORE-PAGE   PIC 9  VALUE  0.
+       77 REPORT-FOOTER-PRINT-AFTER-PAGE    PIC 9  VALUE  0.
+       01 STAT-PRINTF.
+           05  STAT-1-PRINTF              PIC X(01).
+               88  VALID-PRINTF           VALUE "0".
+               88  END-PRINTF             VALUE "1".
+           05  STAT-2-PRINTF              PIC X(01).
+
+       01 WS-PRINT-VARIABLE.
+           05  CNT-LINE                   PIC 9(03).
+           05  RPT-LINE         REDEFINES CNT-LINE PIC 9(03).
+           05  CNT-PAGE                   PIC 9(05).
+           05  RPT-PAGE         REDEFINES CNT-PAGE PIC 9(05).
+           05  WSDATE.
+               10  WSYY                   PIC 9(02).
+               10  WSMM                   PIC 9(02).
+               10  WSDD                   PIC 9(02).
+           05  WSDATE-R REDEFINES WSDATE  PIC 9(06).
+           05  WSTIME.
+               10  WSHH                   PIC 9(02).
+               10  WSMN                   PIC 9(02).
+               10  WSSS                   PIC 9(02).
+               10  WSHS                   PIC 9(02).
+           05  WSTIME-R REDEFINES WSTIME  PIC 9(08).
+           05  CRT-STATUS                 PIC 9(03).
+           05  CRT-CURSOR.
+               10 CRT-ROW                 PIC 9(02) VALUE 0.
+               10 CRT-COL                 PIC 9(02) VALUE 0.
+           05  DUMY-LINE                  PIC X(132) VALUE SPACES.
+           05  PRINT-FULLNAME             PIC X(132) VALUE SPACES.
+           05  PTR-DEV-NAME               PIC X(132) VALUE "PRINTER".
+           05  PRINT-BUF                  PIC X(1024).
+           05  PRINT-TMP-BUF              PIC X(1024).
+           05  INDENT-BUF                 PIC X(132).
+           05  TMP-PIXELS                 PIC 9(06) VALUE 0.
+           05  CNT-PIXELS                 PIC 9(06) VALUE 0.
+           05  CNT-INPAGEPIXELS           PIC 9(06) VALUE 0.
+           05  CNT-INPAGEPIXELS-TMP       PIC 9(06) VALUE 0.
+           05  CNT-PIXELS-TMP             PIC 9(06) VALUE 0.
+           05  CNT-PAGENUM-TMP            PIC 9(06) VALUE 0.
+           05  CURRENT-HEIGHT             PIC 9(06) VALUE 0.
+           05  TMP-BUF-INT                PIC 9(06) VALUE 0.
+           05  RPT-RETURN-VALUE           PIC 9     VALUE 0.
+           05  TMP-FORM-INDEX             PIC 9(2).
+           05  HIGH-OFFSET                PIC 9(06) VALUE 0.
+           05  HIGH-OFFSET-IN             PIC 9(06) VALUE 0.  
+           05  SECTION-HIGH-STACK         PIC S9(6) VALUE 0.
+           05  NEW-PAGE                   PIC 9     VALUE 0.
+           05  NTOPCOLUMNNUM              PIC 9(2)  VALUE 1.
+           05  CURRENT-COL                PIC 9(2)  VALUE 1.
+           05  CURRENT-TEXTLINE           PIC 9(3)  VALUE 1.
+           05  CURRENT-LEFTOFFSET         PIC 9(6)  VALUE 0.
+           05  DETAIL-WIDTH               PIC 9(6)  VALUE 0.
+           05  BREAKPAGE-BUF              PIC X.      
+           05  NTOP-MAXLINES              PIC 9(4)  VALUE 0.
+           05  TMP-PRINTORNOT             PIC 9     VALUE 0.
+           05  SYS-SHOWPAGEFOOTER         PIC 9     VALUE 0.
+           05  SYS-ISFIRSTLINE            PIC 9     VALUE 1.
+           05  SYS-ENDPRIMARYFD           PIC 9     VALUE 0.
+      * FOR NetScape N-TOP Variables
+           05  RN-NTOP-TOTALCNT           PIC 9(8)  VALUE 0.
+           05  RN-NTOP-CURRENTIDX         PIC 9(8)  VALUE 0.
+           05  RN-NTOP-COLTOTAL           PIC 9(8)  VALUE 0.
+           05  CALLBY-INDEX               PIC 9(2)  VALUE 0.
+           05  PRT-FULLFILENAME           PIC X(132).
+           05  PRINT-BROWSER-PARA         PIC X(132) VALUE SPACES.
+           05  PRINT-UNIT-TYPE            SIGNED-INT.
+       77 PRINT-PTR                       POINTER.  

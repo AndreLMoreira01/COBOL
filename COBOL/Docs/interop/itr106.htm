@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:01:05" />
+  <title>10.4.1  Adding WebSphere MQ Calls to Your ACUCOBOL-GT Program</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr10.htm">Chapter 10: Working with Messaging Middleware</a> &gt; <a href="itr105.htm">10.4  Connecting to WebSphere  MQ Applications</a> &gt; </p>
+<a name="wp1054414"> </a><h2 class="pHeading2">
+10.4.1  Adding WebSphere MQ Calls to Your ACUCOBOL-GT Program
+</h2>
+<a name="wp1054415"> </a><p class="pBody">
+In order to interface with IBM WebSphere MQ, your ACUCOBOL-GT program must be able to connect to the queue manager, open specific queues, read messages from queues, write messages to queues, close queues, and disconnect from the queue manager. Once the WebSphere MQ Client software is loaded and configured, you can set up a queue on the message queue manager or server to receive messages. We support calls to the message queues and the message queue manager.
+</p>
+<a name="wp1054416"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Once they are defined, the queue manager and queue names are case sensitive.
+<hr />
+</p>
+<a name="wp1054417"> </a><p class="pBody">
+The runtime uses the following WebSphere MQ calls to communicate with other WebSphere MQ applications by sending and receiving messages:
+</p>
+<a name="wp1054418"> </a><h3 class="pHeadingRef">
+Connection Calls
+</h3>
+<a name="wp1054419"> </a><p class="pBody">
+MQCONN - Connect to queue manager
+</p>
+<a name="wp1054420"> </a><p class="pBody">
+MQCONNX - Connect to queue manager (extended)
+</p>
+<a name="wp1054421"> </a><p class="pBody">
+MQDISC - Disconnect queue manager
+</p>
+<a name="wp1054422"> </a><h3 class="pHeadingRef">
+Queue Manipulation Calls:
+</h3>
+<a name="wp1054423"> </a><p class="pBody">
+MQOPEN - Open object (usually a queue)
+</p>
+<a name="wp1054424"> </a><p class="pBody">
+MQCLOSE - Close Object
+</p>
+<a name="wp1054425"> </a><p class="pBody">
+MQINQ - Inquire about an object
+</p>
+<a name="wp1054426"> </a><p class="pBody">
+MQGET - Get a message off of the queue
+</p>
+<a name="wp1054427"> </a><p class="pBody">
+MQPUT - Put a message on the queue
+</p>
+<a name="wp1054428"> </a><p class="pBody">
+MQPUT1 - Open, put single message, close in one call
+</p>
+<a name="wp1054429"> </a><p class="pBody">
+MQSET - Set object attributes
+</p>
+<a name="wp1054430"> </a><h3 class="pHeadingRef">
+Transaction Support
+</h3>
+<a name="wp1054431"> </a><p class="pBody">
+MQBEGIN - Begin Unit of work
+</p>
+<a name="wp1054432"> </a><p class="pBody">
+MQBACK - Back out changes
+</p>
+<a name="wp1054433"> </a><p class="pBody">
+MQCMIT - Commit changes
+</p>
+<a name="wp1055953"> </a><p class="pBody">
+These routines can be called directly from COBOL, as shown in the subsequent sections.  Please note that for Windows-based applications, it is not necessary to use the parameter qualifiers &quot;BY VALUE&quot; or &quot;BY REFERENCE&quot; if  the runtime is configured to load the WebSphere MQ DLL automatically.  (See <a  href="itr1015.htm#wp1054813">section 10.4.4, &quot;Configuring the Runtime and Environment,&quot;</a> for details.)  However, if you load the DLL manually, or if you are operating under UNIX or Linux, you must use these qualifiers.   
+</p>
+<a name="wp1056021"> </a><p class="pBody">
+For all of these calls, we recommend that you check the COMP-CODE and REASON variables to verify that the calls executed successfully.  
+</p>
+<a name="wp1055983"> </a><p class="pBody">
+For a detailed description of all available commands and their usage, refer to the IBM WebSphere MQ manuals.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

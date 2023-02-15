@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:09" />
+  <title>C.6  Changes Affecting Version 5.2</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4c.htm">Appendix C:  Changes Affecting Previous Versions</a> &gt; </p>
+<a name="wp1042266"> </a><h2 class="pHeading1">
+C.6  Changes Affecting Version 5.2
+</h2>
+<a name="wp1036655"> </a><p class="pBody">
+The following paragraphs describe changes that can affect programs originally written with ACUCOBOL-GT Version 5.2.
+</p>
+<a name="wp1037305"> </a><h3 class="pHeadingRef">
+Vision Version 5
+</h3>
+<a name="wp1037564"> </a><p class="pBody">
+Version 6.0  introduces a new Vision file format: Vision Version 5.  Vision Version 5 supports records up to 64 megabytes in size, block sizes up to 8192 bytes, very large pre-allocate and extension factors, and a virtually unrestricted number of records that allow duplicates.  Version 5 files cannot be read by ACUCOBOL-GT Version 5.2.1 or earlier runtimes.  For a complete description of Vision Version 5, see section 6.1.3, &quot;Indexed Files - Vision&quot; in Book 1, <em class="cEmphasis">ACUCOBOL-GT User's Guide.</em> 
+</p>
+<a name="wp1039380"> </a><h3 class="pHeadingRef">
+Windows console runtime
+</h3>
+<a name="wp1039468"> </a><p class="pBody">
+Version 6.0 introduces a new runtime for the Windows operating environment that may be used to run applications originally deployed in the Extended DOS environment, as well as other character-based applications.  The new runtime is called the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">console</span> runtime.  The name of the executable is &quot;crun32.exe&quot;.  The console runtime uses the Windows Console API and runs in a virtual DOS window.  The console runtime replaces the Extended DOS runtime and is sold separately.  
+</p>
+<a name="wp1040753"> </a><p class="pBody">
+The console runtime can run ACUCOBOL-GT applications developed for the Extended DOS environment provided that some minor changes are made.   For example, the console runtime supports printing capabilities based on the Windows model.  Program code that relies on DOS printing functions must be modified.
+</p>
+<a name="wp1040754"> </a><p class="pBody">
+The following runtime configuration variables are MS DOS-specific and are not supported in Version 6.0:
+</p>
+<a name="wp1041788"> </a><p class="pBody">
+132_MODE
+</p>
+<a name="wp1039674"> </a><p class="pBody">
+A_WAIT_FOR_LICENSE
+</p>
+<a name="wp1039724"> </a><p class="pBody">
+AUTO_BUFFER
+</p>
+<a name="wp1039725"> </a><p class="pBody">
+DOS_OUTPUT_METHOD
+</p>
+<a name="wp1039726"> </a><p class="pBody">
+DOS_WATCOM_10
+</p>
+<a name="wp1039743"> </a><p class="pBody">
+LOCKED_RECORD_DELAY
+</p>
+<a name="wp1039744"> </a><p class="pBody">
+USE_MOUSE
+</p>
+<a name="wp1036658"> </a><h3 class="pHeadingRef">
+Web Plug-in discontinued
+</h3>
+<a name="wp1039869"> </a><p class="pBody">
+The browser industry has shifted away from its support of Internet plug-ins in favor of ActiveX controls.  For this reason, we developed and released an ActiveX-based Web Runtime in ACUCOBOL-GT Version 5.2.1.  Due to lack of browser support, the ACUCOBOL-GT Web Plug-in is not offered or supported in Version 6.0.  For information on migrating from the Web Plug-in to the Web Runtime, see section 5.11 of <em class="cEmphasis">A Programmer's Guide to the Internet</em>.
+</p>
+<a name="wp1039787"> </a><h3 class="pHeadingRef">
+List box and combo box handling of VALUE
+</h3>
+<a name="wp1037120"> </a><p class="pBody">
+In Version 5.2 and earlier, setting the VALUE of a combo box or list box caused the first item in the list that started with the value of VALUE to be selected, regardless of case.  Beginning with Version 6.0, when a box's VALUE is set, the list is searched for an exact, case sensitive match with the specified value.  If the value is found, it is selected.  If an exact match is not found, the list is searched for an exact match regardless of case.  If a match is still not found, the list is searched again, this time for the first string that contains the passed VALUE as a leading substring, regardless of case.
+</p>
+<a name="wp1040763"> </a><p class="pBody">
+This change could affect the behavior of an existing application.  The configuration variable V60_LIST_VALUE allows you to select which search algorithm, new or old, to use.  See <a  href="gt4h322.htm#wp1087307">V60_LIST_VALUE</a> in Appendix H.
+</p>
+<a name="wp1040767"> </a><h3 class="pHeadingRef">
+Area A in RM COBOL compatibility mode 
+</h3>
+<a name="wp1037576"> </a><p class="pBody">
+Starting with Version 6.0,  when you compile for RM COBOL compatibility (&quot;-Cr&quot;), in the Identification Division, Area A can start in either column 8 or 9 (ANSI format) or column 1 or 2 (terminal format).  In prior versions, Area A in the Identification Division started precisely in column 8 (ANSI format) or column 1 (terminal format).
+</p>
+<a name="wp1037688"> </a><p class="pBody">
+This change may cause warnings in programs that previously compiled without warnings.  To revert to the old rule, you can use the &quot;--noRmMargin&quot; compiler option.
+</p>
+<a name="wp1039886"> </a><h3 class="pHeadingRef">
+Image rendering for BITMAP controls
+</h3>
+<a name="wp1040354"> </a><p class="pBody">
+The image processing code used by Version 6.0 (and later) for BITMAP controls is device-dependent. This may affect image rendering in some programs, written for Version 5.2 or earlier, which rely on device-independent bitmaps. If BITMAP controls are displaying incorrectly, adjust the setting of the configuration variable, V52_BITMAPS, described in Appendix H.
+</p>
+<a name="wp1040776"> </a><h3 class="pHeadingRef">
+Bitmap push button behavior change
+</h3>
+<a name="wp1040777"> </a><p class="pBody">
+If some event in the system forces the focus away from a text-based push button after a click has been initiated but not finished, the click is voided.  Starting with Version 6.0, bitmap push buttons void the click just like a text-based push button.  This change applies only to programs compiled for 6.0 semantics or later.  
+</p>
+<a name="wp1041008"> </a><h3 class="pHeadingRef">
+Changes to data items used by C$REDIRECT
+</h3>
+<a name="wp1041176"> </a><p class="pBody">
+The definitions of the HANDLER-PRE-ALLOCATE-AMOUNT,  HANDLER-EXTENSION-AMOUNT, HANDLER-MAX-LREC-SIZE, HANDLER-MIN-LREC-SIZE, and HANDLER-SEGMENT-OFFSETdata items in &quot;sample/handler.cpy&quot; have changed.
+</p>
+<a name="wp1041319"> </a><h3 class="pHeadingRef">
+Changes to data items used by I$IO
+</h3>
+<a name="wp1041320"> </a><p class="pBody">
+The definitions of the PRE-ALLOCATION-AMOUNT, EXTENSION-AMOUNT, MAX-REC-SIZE, MIN-REC-SIZE, and KEY-OFFSET data items in &quot;sample/def/filesys.def&quot; have changed.
+</p>
+<a name="wp1040356"> </a><h3 class="pHeadingRef">
+Compiler changes
+</h3>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034693"> </a><div class="pSmartList1"><li>Two compilation switches provide compatibility with Version 5.2:</li></div>
+<a name="wp1035752"> </a><p class="pBodyRelative">
+<div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1035761"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; vertical-align: baseline">-C52</span>
+</p>
+</td>
+    <td><a name="wp1035763"> </a><p class="pCellBody">
+Causes the compiler to generate code according to the rules used by Version 5.2. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1035765"> </a><p class="pCellBody">
+-Z52
+</p>
+</td>
+    <td><a name="wp1037764"> </a><p class="pCellBody">
+Creates object code that can be run with a Version 5.2 runtime.
+</p>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<a name="wp1037818"> </a><div class="pSmartList1"><li>When compiling for Version 6.0 or later format, table indexes and USAGE INDEX data items are treated as 32-bit signed native binary data items. In versions prior to 6.0, the default for indexes is to act as 16-bit unsigned portable binary data items.  In rare cases, this change from 16-bit to 32-bit indexes may cause problems with an existing program.  One case where this could be a problem is if you place USAGE INDEX items in a data file.  Another case would be if you rely on undefined overflow behavior with arithmetic on 16-bit indexes. </li></div>
+<a name="wp1039376"> </a><p class="pIndented1">
+If you need to preserve indexes as 16-bit items, you can either compile for an object format prior to Version 6.0, or you can compile using the &quot;--nodata32bit&quot; option.  This option inhibits the new data addressing features of 6.0 and causes indexes to be kept as 16-bit data items.  
+</p>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

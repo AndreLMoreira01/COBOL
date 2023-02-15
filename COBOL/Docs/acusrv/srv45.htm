@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:45:06" />
+  <title>AGS_PING_TIME</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="srv4.htm">Chapter 4: Configuration</a> &gt; <a href="srv43.htm">4.2  Configuration Variables</a> &gt; <a href="srv44.htm">4.2.1  Runtime Configuration Variables</a> &gt; </p>
+<a name="wp1035095"> </a><h2 class="pHeading3">
+AGS_PING_TIME
+</h2>
+<a name="wp1035097"> </a><p class="pBody">
+AGS_PING_TIME is used in combination with the server configuration variable DEAD_CLIENT_TIMEOUT to enable a mechanism in AcuServer that automatically detects when a client &quot;hangs&quot; or  &quot;disappears&quot; (see <a  href="srv82.htm#wp1034994">section 8.1, &quot;Machine Failures,&quot;</a> for a complete description).
+</p>
+<a name="wp1049444"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If you use AGS_PING_TIME, the variable must be set before the socket connection between the client and the server is created.  This means that the runtime configuration file must reside on the client, rather than on the server, for AcuServer to detect lost connections.
+<hr />
+</p>
+<a name="wp1035098"> </a><p class="pBody">
+If you set AGS_PING_TIME to &quot;-1&quot;, the default value, the client does not participate in the server's dead client detection service.  
+</p>
+<a name="wp1042828"> </a><p class="pBody">
+If you set AGS_PING_TIME to any other value, the client reporting mechanism is enabled and the connection is included in <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span>'s monitoring table (if it is enabled).  The value of AGS_PING_TIME specifies the interval, in seconds, in which the client will send an &quot;I'm alive&quot; message (a &quot;no-op&quot; instruction) to <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span>.  The value is communicated to <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> at the time that the connection is established so that <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> can determine, when it checks its monitoring records, whether the connection has missed two or more consecutive communication periods.  If the client misses two or more consecutive communications periods, AcuServer determines that the client is no longer responding and it closes all associated files, releases all associated locks, and closes the associated socket.
+</p>
+<a name="wp1063229"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>When you are running a program in debug mode, the runtime is not able to send ping messages to the debugger prompt.  Therefore, if you are debugging a COBOL program, we suggest that you set AGS_PING_TIME to &quot;-1&quot;.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

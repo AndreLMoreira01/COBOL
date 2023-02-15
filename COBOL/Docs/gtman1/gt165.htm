@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:19" />
+  <title>6.1.3  Indexed Files - Vision</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt16.htm"><br />Chapter 6:  Programmer's Guide</a> &gt; <a href="gt162.htm">6.1 Handling Files</a> &gt; </p>
+<a name="wp1032286"> </a><h2 class="pHeading2">
+6.1.3  Indexed Files - Vision
+</h2>
+<a name="wp1032290"> </a><p class="pBody">
+Vision is ACUCOBOL-GT&#39;s native indexed sequential file system.  It provides fast, flexible, and reliable data storage to ACUCOBOL-GT applications in all environments except VMS where ACUCOBOL-GT uses the native RMS file system.  Vision handles small or large amounts of data with equal efficiency and provides rapid access to data via optimized indexes, sequential reading, or a combination of indexed START and sequential READ statements.  Vision handles all ANSI standard COBOL data types.  The Vision file system is described here.
+</p>
+<a name="wp1041742"> </a><h3 class="pHeadingRef">
+Vision Version 5 and 4
+</h3>
+<a name="wp1041754"> </a><p class="pBody">
+Vision Version 5 and 4 use a dual file format.  One file, or <em class="cEmphasis">segment</em>, holds the data records and another segment holds the key information.  When a segment approaches the file size limit (configurable up to nearly 2 GB), Vision creates a new data or index segment in which to store more information.  The dual file format provides several key benefits:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1041429"> </a><div class="pSmartList1"><li>The maximum size of Vision 5 and 4 files is virtually unlimited.  Individual data and index segments can be up to 2 GB in size.</li></div>
+<a name="wp1044300"> </a><div class="pSmartList1"><li>Separating data and key information provides a higher degree of reliability when files must be rebuilt.</li></div>
+<a name="wp1041431"> </a><div class="pSmartList1"><li>Permanent data loss due to memory-related problems is less likely to impact two files.</li></div>
+</ol></div>
+<a name="wp1041585"> </a><p class="pBody">
+Vision Version 5 is a superset of Version 4.  The rules that apply to Version&#160;4 segment file naming also apply to Version 5.  
+</p>
+<a name="wp1042054"> </a><p class="pBody">
+ACUCOBOL-GT uses Vision Version 5 by default.  Vision Version 5 is the most recent and advanced Vision version. Version 5 supports the following capabilities that Version 4 does not:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1041586"> </a><div class="pSmartList1"><li>records up to 64 megabytes in size</li></div>
+<a name="wp1041587"> </a><div class="pSmartList1"><li>block sizes up to 8192 bytes</li></div>
+<a name="wp1041588"> </a><div class="pSmartList1"><li>very large pre-allocate and extension factors</li></div>
+<a name="wp1042107"> </a><div class="pSmartList1"><li>the ability to recover deleted records (that have not yet been overwritten by subsequent writes)</li></div>
+</ul></div>
+<a name="wp1042108"> </a><h3 class="pHeadingRef">
+Vision Version 3
+</h3>
+<a name="wp1042159"> </a><p class="pBody">
+Vision Version 3 files are generated in a single file that contains both the data records and the key information.  A separate linked list is maintained and used to rebuild corrupted files.  A linked list of deleted records is also maintained so that new records first reuse space held by deleted records before new space is consumed.  The single file format supports a maximum file size of two gigabytes.  
+</p>
+<a name="wp1044818"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>On many (but not all) systems, the runtime system allows an indexed file to be opened for input when the user does not have write-access to the file.
+<hr />
+</p>
+<a name="wp1045120"> </a><p class="pBody">
+Indexed files may be assigned only to disk files.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

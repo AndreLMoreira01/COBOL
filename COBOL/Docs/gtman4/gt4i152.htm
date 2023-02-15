@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>WINPRINT-PRINT-BITMAP</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; <a href="gt4i137.htm">WIN$PRINTER Routine</a> &gt; </p>
+<a name="wp1040227"> </a><h2 class="pHeading3">
+WINPRINT-PRINT-BITMAP
+</h2>
+<a name="wp1040229"> </a><p class="pBody">
+This operation code prints a bitmap in the current report.  
+</p>
+<a name="wp1040239"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;WIN$PRINTER&quot;<a name="wp1040240"> </a>
+    USING WINPRINT-PRINT-BITMAP, WINPRINT-DATA<a name="wp1040241"> </a>
+    GIVING RESULT<a name="wp1040242"> </a>
+</pre></div>
+<a name="wp1040243"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1040244"> </a><p class="pBody">
+<b class="cBold">WINPRINT-DATA</b>   Group item defined in &quot;winprint.def&quot; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01 WINPRINT-DATA.<a name="wp1040245"> </a>
+   03 WPRTDATA-SET-STD-FONT.<a name="wp1040246"> </a>
+   03 WPRTDATA-PRINT-BITMAP REDEFINES<a name="wp1040247"> </a>
+      WPRTDATA-SET-STD-FONT.<a name="wp1040248"> </a>
+      05 WPRTDATA-BITMAP               PIC X(4) COMP-N.<a name="wp1040249"> </a>
+      05 WPRTDATA-BITMAP-ROW           PIC 9(7)V99 COMP-5.<a name="wp1040250"> </a>
+      05 WPRTDATA-BITMAP-COL           PIC 9(7)V99 COMP-5.<a name="wp1040251"> </a>
+      05 WPRTDATA-BITMAP-HEIGHT        PIC 9(7)V99 COMP-5.<a name="wp1040252"> </a>
+      05 WPRTDATA-BITMAP-WIDTH         PIC 9(7)V99 COMP-5.<a name="wp1040253"> </a>
+      05 WPRTDATA-BITMAP-FLAGS         UNSIGNED-SHORT.<a name="wp1040254"> </a>
+</pre></div>
+<a name="wp1040255"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1225512"> </a><p class="pBody">
+The print file must be open when you are using this function.  The bitmap is printed according to the data contained in WPRTDATA-PRINT-BITMAP.  To ensure that elements are initialized to their default values, INITIALIZE WPRTDATA-PRINT-BITMAP before filling in the elements. 
+</p>
+<a name="wp1225513"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>When you call WINPRINT-PRINT-BITMAP, the operation will automatically test to see if a form feed is pending. If this is the case, the form feed will be performed before the call to this operation is executed. 
+<hr />
+</p>
+<a name="wp1040257"> </a><p class="pBody">
+<b class="cBold">WPRTDATA-BITMAP </b>should contain the handle of the bitmap you want to print.  You can obtain this handle by calling the library routine W$BITMAP with the WBITMAP-LOAD option.  This handle can be the same as the handle of the bitmap you have displayed on the screen.
+</p>
+<a name="wp1283878"> </a><p class="pBody">
+The dimensions of the bitmap are specified by <b class="cBold">WPRTDATA-BITMAP-HEIGHT</b> and <b class="cBold">WPRTDATA-BITMAP-WIDTH</b>. The unit of measurement by which the size of the bitmap is calculated is set with <b class="cBold">WPRTDATA-BITMAP-FLAGS</b>.  One of the following values is used:
+</p>
+<a name="wp1283896"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1283881"> </a><p class="pCellBody">
+WPRTBITMAP-SCALE-CELLS
+</p>
+</td>
+    <td><a name="wp1283883"> </a><p class="pCellBody">
+the height and width of a cell depends on the number of rows and columns in the report.  The currently selected font for the printer determines the number of rows and columns on a page.  The top left corner of a report is row 1, column 1. You may use fractional rows and columns, but if you specify a row or column less than 1, then the bitmap is placed at row 1, column 1. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1283885"> </a><p class="pCellBody">
+WPRTBITMAP-SCALE-INCHES
+</p>
+</td>
+    <td><a name="wp1283887"> </a><p class="pCellBody">
+the units represent inches on the printed page.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1283889"> </a><p class="pCellBody">
+WPRTBITMAP-SCALE-CENTIMETERS
+</p>
+</td>
+    <td><a name="wp1283891"> </a><p class="pCellBody">
+ the units represent centimeters on the printed page.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1283893"> </a><p class="pCellBody">
+WPRTBITMAP-SCALE-PIXELS
+</p>
+</td>
+    <td><a name="wp1283895"> </a><p class="pCellBody">
+the units are based on the resolution of the output device. This is measured in dots-per-inch (DPI). Fractional values are ignored.  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1283897"> </a><p class="pBody">
+The location of the top left corner of a bitmap is specified by <b class="cBold">WPRTDATA-BITMAP-ROW</b> and <b class="cBold">WPRTDATA-BITMAP-COL</b>.  By default, this coordinate is specified in cells. You may choose to use another unit of measurement by setting <b class="cBold">WPRTDATA-BITMAP-FLAGS</b> to one of the following values (defined in &quot;winprint.def&quot;):
+</p>
+<a name="wp1283924"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1283900"> </a><p class="pCellBody">
+WPRTBITMAP-UNITS-INCHES
+</p>
+</td>
+    <td><a name="wp1283902"> </a><p class="pCellBody">
+Values are measured in inches.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1283904"> </a><p class="pCellBody">
+WPRTBITMAP-UNITS-CENTIMETERS
+</p>
+</td>
+    <td><a name="wp1283906"> </a><p class="pCellBody">
+Values are measured in centimeters. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1283908"> </a><p class="pCellBody">
+WPRTBITMAP-UNITS-PIXELS
+</p>
+</td>
+    <td><a name="wp1283910"> </a><p class="pCellBody">
+Values are measured using the dots-per-inch (DPI) resolution of the output device. Only integer values are allowed.
+</p>
+<a name="wp1283911"> </a><p class="pCellBody">
+The actual size of this measurement varies depending on the target printer's resolution.  Consider the unit of measure relative to the resolution of the targeting printer before printing.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1284518"> </a><p class="pCellBody">
+WPRTBITMAP-UNITS-CELLS-ABS
+</p>
+</td>
+    <td><a name="wp1284520"> </a><p class="pCellBody">
+Values are measured in cells, and the position of the bitmap is based on the left edge of the paper, regardless of the physical left margin determined by the printer (even if the absolute position is smaller). 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1284514"> </a><p class="pCellBody">
+WPRTBITMAP-UNITS-INCHES-ABS
+</p>
+</td>
+    <td><a name="wp1284516"> </a><p class="pCellBody">
+Values are measured in inches and t<span style="font-family: Arial, Verdana, Helvetica, sans-serif">he position of the bitmap is based on the left edge of the paper, regardless of the physical left margin determined by the printer (even if the absolute position is smaller). </span>
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1284510"> </a><p class="pCellBody">
+WPRTBITMAP-UNITS-CENTIMETERS-ABS
+</p>
+</td>
+    <td><a name="wp1284512"> </a><p class="pCellBody">
+Values are measured in centimeters and <span style="font-family: Arial, Verdana, Helvetica, sans-serif">the position of the bitmap is based on the left edge of the paper, regardless of the physical left margin determined by the printer (even if the absolute position is smaller). </span>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1201351"> </a><p class="pBody">
+This is illustrated in Example 2, below.
+</p>
+<a name="wp1284194"> </a><p class="pBody">
+Many printers have much higher resolution than screens do.  For example, many laser printers can print 300 or 600 dots per inch while most screens display less than 100 pixels per inch.  An image that is 1024 pixels wide would fill or overflow many screens, but would be less than 2 inches wide on a 600 DPI printer.  For this reason, bitmaps are usually scaled when they are printed.  By default, the runtime scales the image so that the relative proportions of the printed image match those of the same image when it is viewed on the screen. 
+</p>
+<a name="wp1040260"> </a><h3 class="pHeadingRef">
+Scaling a bitmap
+</h3>
+<a name="wp1201472"> </a><p class="pBody">
+To scale a bitmap to a particular size, you must set WPRTDATA-BITMAP-FLAGS to the desired unit of measure (cells, inches, centimeters, or pixels).  Then set the desired dimensions of the bitmap in WPRTDATA-BITMAP-WIDTH and WPRTDATA-BITMAP-HEIGHT.  
+</p>
+<a name="wp1201473"> </a><p class="pBody">
+You can either set both dimensions or leave one dimension at zero.  When one of the dimensions is set to zero, the relative proportions of the image are unchanged after the scaling of the other dimension is complete.  
+</p>
+<a name="wp1040268"> </a><p class="pBody">
+You can inhibit the scaling done by the runtime by setting WPRTDATA-BITMAP-FLAGS to WPRTBITMAP-PRINTER-BITMAP.  This informs the runtime that the bitmap was designed directly for printing on the current printer and should not be scaled.  You can also add the value of WPRTDATA-BITMAP-FLAGS to the other scaling options discussed above to prevent the runtime from performing an adjustment to the scaling.  Adjustments are usually done to account for the difference in the relative proportions of the screen's X and Y density in comparison to the printer's X and Y density.  Some devices have a much higher resolution in one dimension than the other.  This adjustment handles the changes needed when you are viewing a screen image on a printer.  Most applications, however,  should avoid this option because most bitmaps are meant to be displayed on the screen only.  
+</p>
+<a name="wp1040269"> </a><p class="pBody">
+Colors in the bitmap image are preserved by the runtime.  It is up to the printer's driver to decide how to print color images on a black-and-white device.  Most drivers turn colors into varying shades of gray.  
+</p>
+<a name="wp1040270"> </a><h3 class="pHeadingRef">
+Example 1
+</h3>
+<a name="wp1040271"> </a><p class="pBody">
+The following sample code prints the AcuBench logo in the center of an 80-character print line.  It scales the image to be 30 characters wide to simplify the centering computation.  This example assumes that the printer is already open:  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+77  LOGO-HANDLE        PIC S9(9) COMP-4.<a name="wp1040272"> </a>
+        :<a name="wp1040273"> </a>
+        :<a name="wp1040274"> </a>
+CALL &quot;W$BITMAP&quot; USING WBITMAP-LOAD, &quot;devsuite.bmp&quot; <a name="wp1040275"> </a>
+    GIVING LOGO-HANDLE<a name="wp1040276"> </a>
+INITIALIZE WPRTDATA-PRINT-BITMAP<a name="wp1040277"> </a>
+MOVE LOGO-HANDLE TO WPRTDATA-BITMAP<a name="wp1040278"> </a>
+MOVE 1 TO WPRTDATA-BITMAP-ROW<a name="wp1040279"> </a>
+MOVE 26 TO WPRTDATA-BITMAP-COL<a name="wp1040280"> </a>
+MOVE 30 TO WPRTDATA-BITMAP-WIDTH<a name="wp1040281"> </a>
+<a name="wp1040282"> </a>
+*Height left at zero<a name="wp1040283"> </a>
+<a name="wp1040284"> </a>
+MOVE WPRTBITMAP-SCALE-CELLS <a name="wp1040285"> </a>
+     TO WPRTDATA-BITMAP-FLAGS<a name="wp1040286"> </a>
+CALL &quot;WIN$PRINTER&quot; USING WINPRINT-PRINT-BITMAP, <a name="wp1040287"> </a>
+     WINPRINT-DATA<a name="wp1040288"> </a>
+CALL &quot;W$BITMAP&quot; USING WBITMAP-DESTROY, LOGO-HANDLE<a name="wp1040289"> </a>
+</pre></div>
+<a name="wp1201755"> </a><h3 class="pHeadingRef">
+Example 2
+</h3>
+<a name="wp1202539"> </a><p class="pBody">
+The following example code scales a bitmap to be 3-by-3 inches square, and places the top left corner 10 centimeters away from both the left and top margins. This example assumes that the printer is already open:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+77  LOGO-HANDLE        PIC S9(9) COMP-4.<a name="wp1202541"> </a>
+        :<a name="wp1202542"> </a>
+        :<a name="wp1202543"> </a>
+CALL &quot;W$BITMAP&quot; USING WBITMAP-LOAD, &quot;your_bitmap.bmp&quot; <a name="wp1202544"> </a>
+     GIVING LOGO-HANDLE<a name="wp1202545"> </a>
+INITIALIZE WPRTDATA-PRINT-BITMAP<a name="wp1202546"> </a>
+MOVE LOGO-HANDLE TO WPRTDATA-BITMAP<a name="wp1202547"> </a>
+MOVE 10 TO WPRTDATA-BITMAP-ROW WPRTDATA-BITMAP-COL.<a name="wp1202548"> </a>
+MOVE 3 TO WPRTDATA-BITMAP-HEIGHT WPRTDATA-BITMAP-WIDTH.<a name="wp1202549"> </a>
+MOVE WPRTBITMAP-SCALE-INCHES TO WPRTDATA-BITMAP-FLAGS.<a name="wp1202550"> </a>
+ADD  WPRTBITMAP-UNITS-CENTIMETERS TO WPRTDATA-BITMAP-FLAGS.<a name="wp1203890"> </a>
+<a name="wp1203837"> </a>
+CALL &quot;WIN$PRINTER&quot; USING WINPRINT-PRINT-BITMAP, <a name="wp1203838"> </a>
+     WINPRINT-DATA<a name="wp1202554"> </a>
+CALL &quot;W$BITMAP&quot; USING WBITMAP-DESTROY, LOGO-HANDLE<a name="wp1202555"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

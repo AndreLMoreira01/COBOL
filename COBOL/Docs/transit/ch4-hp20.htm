@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.2.4.2  Selecting a file system</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp3.htm">4.2  ACUCOBOL-GT in MPE/iX Environments</a> &gt; <a href="ch4-hp18.htm">4.2.4  Accessing MPE KSAM, Relative, and Sequential Files</a> &gt; </p>
+<a name="wp1041169"> </a><h2 class="pHeading3">
+4.2.4.2  Selecting a file system
+</h2>
+<a name="wp1041172"> </a><p class="pBody">
+ACUCOBOL-GT allows a program to interface with more than one external file system in the same program.  The file systems supported by the runtime are identified and enabled in the file &quot;filetbl.c&quot; (located in the &quot;LIB&quot; directory).  On the HP e3000, support for the KSAM and Vision indexed file systems is enabled by default.
+</p>
+<a name="wp1041173"> </a><p class="pBody">
+To specify the indexed file system that the program will use, you must set the DEFAULT_FILESYSTEM configuration variable.  To define a file system for use with a particular file, you set the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">filename</span>_HOST configuration variable.  For an introduction to ACUCOBOL-GT runtime configuration variables and the configuration file, see section 2.7, &quot;Runtime Configuration,&quot; in Book 1 of the ACUCOBOL-GT documentation set.
+</p>
+<a name="wp1041174"> </a><h3 class="pHeadingRef">
+DEFAULT_FILESYSTEM
+</h3>
+<a name="wp1075228"> </a><p class="pBody">
+DEFAULT_FILESYSTEM specifies the default file system to be used for all file I/O.  The default value on HP e3000 machines is &quot;MPE&quot;.  If you want to use ACUCOBOL-GT's Vision file system instead, add the following to the &quot;cblconfig&quot; file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DEFAULT_FILESYSTEM Vision<a name="wp1074980"> </a>
+</pre></div>
+<a name="wp1076141"> </a><p class="pBody">
+This tells the runtime to use Vision files instead of MPE KSAM files.  In addition, if you specify Vision, the relative and sequential files will be in bytestream format instead of MPE format.
+</p>
+<a name="wp1041178"> </a><h3 class="pHeadingRef">
+filename_HOST
+</h3>
+<a name="wp1041180"> </a><p class="pBody">
+This variable specifies the file system to use for a particular file.  For example, if DEFAULT_FILESYSTEM is set to MPE (the default), and the file &quot;CUSTFILE&quot; is a Vision file, in your &quot;cblconfig&quot; you could specify:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CUSTFILE_HOST VISION<a name="wp1041181"> </a>
+</pre></div>
+<a name="wp1041182"> </a><p class="pBody">
+This definition directs the runtime to treat &quot;CUSTFILE&quot; as a Vision file.  Note that the file name may not include any path or directory name and should not include the file extension.
+</p>
+<a name="wp1041183"> </a><p class="pBody">
+DEFAULT_FILESYSTEM and <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">filename</span>_HOST are described in detail in Appendix&#160;H, &quot;Configuration File Entries,&quot; in Book 4 of the ACUCOBOL-GT documentation set.
+</p>
+<a name="wp1041184"> </a><p class="pBody">
+When your program executes, each time a file is opened, the ACUCOBOL-GT runtime checks <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">filename</span>_HOST and DEFAULT_FILESYSTEM to determine which file system to use.  You can change the value of these variables, just before you open the file, by including the following in your code: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SET ENVIRONMENT &quot;DEFAULT_FILESYSTEM&quot; TO <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">value</span><a name="wp1041185"> </a>
+</pre></div>
+<a name="wp1041186"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SET ENVIRONMENT &quot;<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">filename</span>_HOST&quot; TO <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">value</span><a name="wp1041187"> </a>
+</pre></div>
+<a name="wp1041188"> </a><p class="pBody">
+where <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">value</span> is a Working Storage item containing the name of the file system, or is a literal in quotation marks.  SET ENVIRONMENT thus enables you to change file systems during the execution of your program. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

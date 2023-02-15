@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:01:17" />
+  <title>11.2.4.2  Restrictions</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr11.htm">Chapter 11: Working with Non-Vision Data</a> &gt; <a href="itr113.htm">11.2  Working with XML Data</a> &gt; <a href="itr1114.htm">11.2.4  Using AcuXML</a> &gt; </p>
+<a name="wp1036850"> </a><h2 class="pHeading3">
+11.2.4.2  Restrictions
+</h2>
+<a name="wp1036852"> </a><p class="pBody">
+Some restrictions are associated with reading or writing an XML document from ACUCOBOL-GT programs.  For instance, programs can open files INPUT or OUTPUT, but not I-O or EXTEND.  Attempting to open a file EXTEND or I-O fails and returns a NO-SUPPORT error (error 9B in the ANSI-85 code set).
+</p>
+<a name="wp1036853"> </a><p class="pBody">
+In addition, the XML file system interface can write only sequential XML files.  Because XML is intended as a data delivery mechanism and not a data store mechanism, this is not much of a limiting factor.  
+</p>
+<a name="wp1036854"> </a><p class="pBody">
+As any XML parser would, this interface fails to read a record if a parsing error occurs.  The error returned is 9D,05 in this case.  See <a  href="itr1119.htm#wp1037348">section 11.2.5, &quot;AcuXML Error Reporting,&quot;</a> for a list of specific parsing errors.
+</p>
+<a name="wp1036855"> </a><p class="pBody">
+Finally, the XML data file to be read must contain only a single document.  Do not try to concatenate documents into a single data file.  The top-level element of the XML document corresponds to a sequential file.  Each element at the next level corresponds to a record in that file.  
+</p>
+<a name="wp1036856"> </a><p class="pBody">
+For example, the SEQ1 file &quot;iobench&quot; looks like the following after three records have been written to the file:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<b class="cBold">&lt;SEQ-1-FILE&gt;</b><a name="wp1036857"> </a>
+ &lt;SEQ-1-RECORD&gt;<a name="wp1036858"> </a>
+   &lt;SEQ-1-KEY&gt;10&lt;/SEQ-1-KEY&gt;<a name="wp1036859"> </a>
+   &lt;SEQ-1-ALT-KEY&gt;<a name="wp1036860"> </a>
+     &lt;SEQ-1-ALT-KEY-A&gt;164424914991684123046492639014<a name="wp1036861"> </a>
+   &lt;/SEQ-1-ALT-KEY-A&gt;<a name="wp1036862"> </a>
+     &lt;SEQ-1-ALT-KEY-B&gt;10&lt;/SEQ-1-ALT-KEY-B&gt;<a name="wp1036863"> </a>
+   &lt;/SEQ-1-ALT-KEY&gt;<a name="wp1036864"> </a>
+   
+&lt;SEQ-1-BODY&gt;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvw
+&lt;/SEQ-1-BODY&gt;<a name="wp1036865"> </a>
+ &lt;/SEQ-1-RECORD&gt;<a name="wp1036866"> </a>
+ &lt;SEQ-1-RECORD&gt;<a name="wp1036867"> </a>
+   &lt;SEQ-1-KEY&gt;20&lt;/SEQ-1-KEY&gt;<a name="wp1036868"> </a>
+   &lt;SEQ-1-ALT-KEY&gt;<a name="wp1036869"> </a>
+     &lt;SEQ-1-ALT-KEY-A&gt;032472140976086473026412339002<a name="wp1036870"> </a>
+   &lt;/SEQ-1-ALT-KEY-A&gt;<a name="wp1036871"> </a>
+     &lt;SEQ-1-ALT-KEY-B&gt;20&lt;/SEQ-1-ALT-KEY-B&gt;<a name="wp1036872"> </a>
+   &lt;/SEQ-1-ALT-KEY&gt;<a name="wp1036873"> </a>
+   
+&lt;SEQ-1-BODY&gt;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvw
+&lt;/SEQ-1-BODY&gt;<a name="wp1036874"> </a>
+ &lt;/SEQ-1-RECORD&gt;<a name="wp1036875"> </a>
+ &lt;SEQ-1-RECORD&gt;<a name="wp1036876"> </a>
+   &lt;SEQ-1-KEY&gt;30&lt;/SEQ-1-KEY&gt;<a name="wp1036877"> </a>
+   &lt;SEQ-1-ALT-KEY&gt;<a name="wp1036878"> </a>
+     &lt;SEQ-1-ALT-KEY-A&gt;110640971904282743006692139010<a name="wp1036879"> </a>
+   &lt;/SEQ-1-ALT-KEY-A&gt;<a name="wp1036880"> </a>
+     &lt;SEQ-1-ALT-KEY-B&gt;30&lt;/SEQ-1-ALT-KEY-B&gt;<a name="wp1036881"> </a>
+   &lt;/SEQ-1-ALT-KEY&gt;<a name="wp1036882"> </a>
+   
+&lt;SEQ-1-BODY&gt;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvw
+&lt;/SEQ-1-BODY&gt;<a name="wp1036883"> </a>
+ &lt;/SEQ-1-RECORD&gt;<a name="wp1036884"> </a>
+<b class="cBold">&lt;/SEQ-1-FILE&gt;</b><a name="wp1036885"> </a>
+</pre></div>
+<a name="wp1036886"> </a><p class="pBody">
+Note that the end of the file in this example is signaled by the XML command, &lt;/SEQ-1-FILE&gt;.  ACUCOBOL-GT ignores other documents in the file.  For example, if you have an XML file which looks like the this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<b class="cBold">&lt;SEQ-1-FILE&gt;</b><a name="wp1036887"> </a>
+ &lt;SEQ-1-RECORD&gt;<a name="wp1036888"> </a>
+   &lt;SEQ-1-KEY&gt;10&lt;/SEQ-1-KEY&gt;<a name="wp1036889"> </a>
+   &lt;SEQ-1-ALT-KEY&gt;<a name="wp1036890"> </a>
+     &lt;SEQ-1-ALT-KEY-A&gt;164424914991684123046492639014<a name="wp1036891"> </a>
+     &lt;/SEQ-1-ALT-KEY-A&gt;<a name="wp1036892"> </a>
+     &lt;SEQ-1-ALT-KEY-B&gt;10&lt;/SEQ-1-ALT-KEY-B&gt;<a name="wp1036893"> </a>
+   &lt;/SEQ-1-ALT-KEY&gt;<a name="wp1036894"> </a>
+   
+&lt;SEQ-1-BODY&gt;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvw
+&lt;/SEQ-1-BODY&gt;<a name="wp1036895"> </a>
+ &lt;/SEQ-1-RECORD&gt;<a name="wp1036896"> </a>
+<b class="cBold">&lt;/SEQ-1-FILE&gt;</b><a name="wp1036897"> </a>
+<b class="cBold">&lt;SEQ-1-FILE&gt;</b><a name="wp1036898"> </a>
+ &lt;SEQ-1-RECORD&gt;<a name="wp1036899"> </a>
+   &lt;SEQ-1-KEY&gt;20&lt;/SEQ-1-KEY&gt;<a name="wp1036900"> </a>
+   &lt;SEQ-1-ALT-KEY&gt;<a name="wp1036901"> </a>
+     &lt;SEQ-1-ALT-KEY-A&gt;032472140976086473026412339002<a name="wp1036902"> </a>
+     &lt;/SEQ-1-ALT-KEY-A&gt;<a name="wp1036903"> </a>
+     &lt;SEQ-1-ALT-KEY-B&gt;20&lt;/SEQ-1-ALT-KEY-B&gt;<a name="wp1036904"> </a>
+   &lt;/SEQ-1-ALT-KEY&gt;<a name="wp1036905"> </a>
+   
+&lt;SEQ-1-BODY&gt;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvw
+&lt;/SEQ-1-BODY&gt;<a name="wp1036906"> </a>
+ &lt;/SEQ-1-RECORD&gt;<a name="wp1036907"> </a>
+<b class="cBold">&lt;/SEQ-1-FILE&gt;</b><a name="wp1036908"> </a>
+<b class="cBold">&lt;SEQ-1-FILE&gt;</b><a name="wp1036909"> </a>
+ &lt;SEQ-1-RECORD&gt;<a name="wp1036910"> </a>
+   &lt;SEQ-1-KEY&gt;30&lt;/SEQ-1-KEY&gt;<a name="wp1036911"> </a>
+   &lt;SEQ-1-ALT-KEY&gt;<a name="wp1036912"> </a>
+     &lt;SEQ-1-ALT-KEY-A&gt;110640971904282743006692139010<a name="wp1036913"> </a>
+     &lt;/SEQ-1-ALT-KEY-A&gt;<a name="wp1036914"> </a>
+     &lt;SEQ-1-ALT-KEY-B&gt;30&lt;/SEQ-1-ALT-KEY-B&gt;<a name="wp1036915"> </a>
+   &lt;/SEQ-1-ALT-KEY&gt;<a name="wp1036916"> </a>
+   
+&lt;SEQ-1-BODY&gt;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvw
+&lt;/SEQ-1-BODY&gt;<a name="wp1036917"> </a>
+ &lt;/SEQ-1-RECORD&gt;<a name="wp1036918"> </a>
+<b class="cBold">&lt;/SEQ-1-FILE&gt;</b><a name="wp1036919"> </a>
+</pre></div>
+<a name="wp1036920"> </a><p class="pBody">
+then ACUCOBOL-GT ignores everything after the tenth line, because the &lt;/SEQ-1-FILE&gt; XML command signaled the end of the file.  You should use the C$XML library routine instead of AcuXML to read files like these.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

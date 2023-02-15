@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:36:00" />
+  <title>3.2.2  Invoking the Pre-compiler From the ACUCOBOL-GT Command Line</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql3.htm">Chapter 3: Pre-compiler Function and Use</a> &gt; <a href="sql33.htm">3.2  Using the Pre-compiler</a> &gt; </p>
+<a name="wp1033849"> </a><h2 class="pHeading2">
+3.2.2  Invoking the Pre-compiler From the ACUCOBOL-GT Command Line
+</h2>
+<a name="wp1033852"> </a><p class="pBody">
+You can start the pre-compiler from the ACUCOBOL-GT command line with either of the following compiler switches:
+</p>
+<a name="wp1037542"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1038817"> </a><p class="pCellBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif">-</span>Pn <em class="cEmphasis">filename<br /></em>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 
+</p>
+<a name="wp1037523"> </a><p class="pCellBody">
+&#160;
+</p>
+</td>
+    <td><a name="wp1037525"> </a><p class="pCellBody">
+Causes ACUCOBOL-GT to <em class="cEmphasis">only</em> pre-compile<em class="cEmphasis"> </em>the named file<em class="cEmphasis">.  </em>Successful pre-compilation creates an intermediate COBOL file named &quot;<em class="cEmphasis">input-filename</em>.asq&quot; by default.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1037527"> </a><p class="pCellBody">
+-Ps <em class="cEmphasis">source_filename</em>
+</p>
+</td>
+    <td><a name="wp1037529"> </a><p class="pCellBody">
+Causes ACUCOBOL-GT to pre-compile and compile the specified source file
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1033855"> </a><p class="pBody">
+The following additional switches affect pre-compiler behavior:
+</p>
+<a name="wp1038132"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1039086"> </a><p class="pCellBody">
+-e <em class="cEmphasis">filename</em>
+</p>
+</td>
+    <td><a name="wp1039088"> </a><p class="pCellBody">
+Causes all error messages to be written to the specified file.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039662"> </a><p class="pCellBody">
+-Lp
+</p>
+</td>
+    <td><a name="wp1039666"> </a><p class="pBody">
+Causes the compiler to produce a &quot;preprocessed&quot; output file that can be separately compiled to produce the same object code as the original source.  The &quot;-Lp&quot; option includes COPY files and applies COPY REPLACING and REPLACE logic.  The output is sent to the standard output stream unless &quot;-Lo&quot; is used to specify a file.  &quot;-Lp&quot; overrides all other listing options except &quot;-Lo&quot;.
+</p>
+<a name="wp1039871"> </a><p class="pCellBody">
+This option is especially useful if your COPY files contain statements that other preprocessors don't allow in COPY files, such as embedded SQL or CICS statements.  To compile such a program you would first create the preprocessed file and then compile it.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+   ccbl -Lpo finalsrc.cbl -sp
+       copybooks origsrc.cbl<a name="wp1039872"> </a>
+   ccbl -Ga -o myprogram.acu
+       finalsrc.cbl<a name="wp1039873"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039091"> </a><p class="pCellBody">
+-Pc   
+</p>
+</td>
+    <td><a name="wp1039093"> </a><p class="pCellBody">
+Directs the pre-compiler to connect to and use the database engine to perform SQL syntax checking.  This switch should be used in conjunction with the &quot;-Pd&quot;, &quot;-Pu&quot;, and &quot;-Pp&quot; switches; with the environment variables ACUSQL_DATASET, ACUSQL_USER, and ACUSQL_PASSWORD (see <a  href="sql36.htm#wp1033917">section 3.3, &quot;Environment Variables&quot;</a>); or with some combination of switches and environment variables.  Values given on the command line take precedence over values held by environment variables.
+</p>
+<a name="wp1039097"> </a><p class="pCellBody">
+Note that during syntax verification, in some cases an error message may be converted to a warning message in order to prevent the compiler from aborting.  The text of the warning message preserves the text of the error message.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039099"> </a><p class="pCellBody">
+-Pd <em class="cEmphasis">dataset</em>
+</p>
+</td>
+    <td><a name="wp1039101"> </a><p class="pCellBody">
+Is used in conjunction with the &quot;-Pc&quot; option and must be followed by the name of the ODBC data source to use.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039103"> </a><p class="pCellBody">
+-Pg&#160;<em class="cEmphasis">precompiler_name&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</em>
+</p>
+<a name="wp1040734"> </a><p class="pCellBody">
+<em class="cEmphasis"> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</em>
+</p>
+</td>
+    <td><a name="wp1039105"> </a><p class="pCellBody">
+Causes ACUCOBOL-GT to call the named precompiler(s).  See section&#160;2.12 of the <em class="cEmphasis">ACUCOGOL-GT User's Guide</em> for additional information on the &quot;-Pg&quot; switch and calling precompilers.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039107"> </a><p class="pCellBody">
+-Pi <em class="cEmphasis">dir</em>
+</p>
+</td>
+    <td><a name="wp1039109"> </a><p class="pCellBody">
+Specifies the path that the pre-compiler will search to locate files named in SQL INCLUDE statements.  For example &quot;-Pi&#160;c:\SQL\include\&quot; causes the pre-compiler to look in the &quot;C:\SQL\include&quot; directory for files named in SQL INCLUDE statements.  You can also specify a search path via the ACUSQL_INCLUDE environment variable (see <a  href="sql36.htm#wp1033917">section 3.3, &quot;Environment Variables&quot;</a>).  Note that &quot;-Pi&quot; takes precedence over ACUSQL_INCLUDE when both are used.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039117"> </a><p class="pCellBody">
+-Pk <em class="cEmphasis">rlist</em>  		
+</p>
+</td>
+    <td><a name="wp1039119"> </a><p class="pCellBody">
+Directs the pre-compiler to use the designated reserved word set for syntax checking.  <em class="cEmphasis">rlist</em> can be &quot;DB2&quot;, to use the DB2 word set, &quot;MSSQL&quot; to use the Microsoft  SQL Server word set, or &quot;EXT&quot;, to use the extended reserved word set.  &quot;EXT&quot; is the default. 
+</p>
+<a name="wp1039120"> </a><p class="pCellBody">
+<b class="cBold">Note:</b>  The syntax of the ALTER, CREATE, and GRANT statements is not checked by either the &quot;-Pr&quot; or &quot;-Pk <em class="cEmphasis">rlist</em>&quot; modes.  These statements are checked only when you use the &quot;-Pc&quot; mode to connect directly to the database engine.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039122"> </a><p class="pCellBody">
+-Po <em class="cEmphasis">filename</em>
+</p>
+</td>
+    <td><a name="wp1039124"> </a><p class="pCellBody">
+Causes the intermediate file to be given the specified name and prevents it from being deleted after it is compiled.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039126"> </a><p class="pCellBody">
+-Pp <em class="cEmphasis">password</em>    
+</p>
+</td>
+    <td><a name="wp1039128"> </a><p class="pCellBody">
+Is used in conjunction with the &quot;-Pc&quot; option and must be followed by the password that matches the username specified by the &quot;-Pu&quot; switch or by the <a  href="sql312.htm#wp1033941">ACUSQL_USER</a> environment variable.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039136"> </a><p class="pCellBody">
+-Pr <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold"> </span>    
+</p>
+</td>
+    <td><a name="wp1039138"> </a><p class="pCellBody">
+Directs the pre-compiler to perform <em class="cEmphasis">relaxed</em> syntax checking.  &quot;-Pr&quot; is intended for use in situations where the embedded SQL syntax does <em class="cEmphasis">not</em> conform to IBM SQL, Transact-SQL, or SQL92, but is correct for the database that you want to access.
+</p>
+<a name="wp1039139"> </a><p class="pCellBody">
+ &quot;-Pr&quot; does not perform syntax checking on the following statements:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT INTO FROM<a name="wp1039140"> </a>
+VALUES<a name="wp1039141"> </a>
+DELETE<a name="wp1039142"> </a>
+INSERT<a name="wp1039143"> </a>
+DECLARE CURSOR FOR SELECT<a name="wp1039144"> </a>
+UPDATE<a name="wp1039145"> </a>
+</pre></div>
+<a name="wp1039146"> </a><p class="pCellBody">
+<b class="cBold">Note:</b>  The syntax of the ALTER, CREATE, and GRANT statements is not checked by either the &quot;-Pr&quot; or &quot;-Pk <em class="cEmphasis">rlist</em>&quot; modes.  These statements are checked only when you use the &quot;-Pc&quot; mode to connect directly to the database engine.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039148"> </a><p class="pCellBody">
+-Pu <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">username</span>  
+</p>
+</td>
+    <td><a name="wp1039150"> </a><p class="pCellBody">
+Is used in conjunction with the &quot;-Pc&quot; option and must be followed by the username of an authorized database user.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039152"> </a><p class="pCellBody">
+-Pv
+</p>
+</td>
+    <td><a name="wp1039154"> </a><p class="pCellBody">
+Causes the compiler to treat group items as they were treated in releases earlier than Version 6.2; that is, group items containing both a numeric item and a character item only do not need to be level 49 to be treated as a VARCHAR.  See <a  href="sql212.htm#wp1037395">Section 2.4, &quot;Data Types,&quot;</a> for additional information.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039160"> </a><p class="pCellBody">
+-Pw <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold"> </span>
+</p>
+</td>
+    <td><a name="wp1039162"> </a><p class="pCellBody">
+Causes the pre-compiler to dump the current reserved word list to standard output (use the &quot;-Pk&quot; option to set the reserved word list).  No pre-compilation or compilation is performed.  Note that &quot;-Pw&quot; should not be used with any other pre-compiler switches.  In AcuBench, &quot;-Pw&quot; must be specified in the &quot;Additional options&quot; entry field at the top-right of the File Compiler Options dialog box.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039164"> </a><p class="pCellBody">
+-Sa 
+</p>
+</td>
+    <td><a name="wp1039166"> </a><p class="pCellBody">
+Indicates that the input file is in ANSI format.
+</p>
+<a name="wp1039167"> </a><p class="pCellBody">
+<b class="cBold">Note:</b>  When this option is used, the pre-compiler removes all characters from columns 1-6 and 72-80, replacing them with spaces.  Information contained in these columns will not appear in the ACUCOBOL-GT compilation listing file.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039169"> </a><p class="pCellBody">
+-Sd 
+</p>
+</td>
+    <td><a name="wp1039171"> </a><p class="pCellBody">
+Includes debug information.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039173"> </a><p class="pCellBody">
+-Si <em class="cEmphasis">pattern</em> 
+</p>
+</td>
+    <td><a name="wp1039175"> </a><p class="pCellBody">
+Directs the pre-compiler to perform the specified include pattern substitution before initiating pre-compilation.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039177"> </a><p class="pCellBody">
+-St
+</p>
+</td>
+    <td><a name="wp1039179"> </a><p class="pCellBody">
+Indicates that the input file is in terminal format.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039181"> </a><p class="pCellBody">
+-Sx <em class="cEmphasis">pattern</em>
+</p>
+</td>
+    <td><a name="wp1039183"> </a><p class="pCellBody">
+Directs the pre-compiler to perform the specified exclude pattern substitution before initiating pre-compilation.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

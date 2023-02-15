@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:27:52" />
+  <title>5.4.2  Sort File Description Entry</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Reference Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt35.htm"><br />Chapter 5:  Data Division</a> &gt; <a href="gt3519.htm">5.4  File Section</a> &gt; </p>
+<a name="wp1034854"> </a><h2 class="pHeading2">
+5.4.2  Sort File Description Entry
+</h2>
+<a name="wp1034857"> </a><p class="pBody">
+A sort file description entry describes the physical structure for a sort file.  
+</p>
+<a name="wp1034858"> </a><h3 class="pHeadingRef">
+General Format
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+<u class="cUnderline">SD</u> file-name<a name="wp1034859"> </a>
+   [ <u class="cUnderline">RECORD</u> { CONTAINS [min <u class="cUnderline">TO</u>] max CHARACTERS } ]<a name="wp1034860"> </a>
+            { IS <u class="cUnderline">VARYING</u> IN SIZE [ FROM min ]  }<a name="wp1034861"> </a>
+            {        [ <u class="cUnderline">TO</u> max ] CHARACTERS     }<a name="wp1097190"> </a>
+            {        [ <u class="cUnderline">DEPENDING</u> ON depend ]   }<a name="wp1097199"> </a>
+<a name="wp1097192"> </a>
+   [ <u class="cUnderline">DATA</u> { <u class="cUnderline">RECORD</u> IS   } {record-name} ... ] <a name="wp1034864"> </a>
+          { <u class="cUnderline">RECORDS</u> ARE }<a name="wp1034865"> </a>
+<a name="wp1034866"> </a>
+   [ <u class="cUnderline">VALUE</u> <u class="cUnderline">OF</u> <u class="cUnderline">FILE-ID</u> IS id-name ]<a name="wp1034867"> </a>
+</pre></div>
+<a name="wp1034868"> </a><h3 class="pHeadingRef">
+Syntax Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034869"> </a><div class="pSmartList1"><li><em class="cEmphasis">File-name</em> must refer to a file name contained in a SELECT clause in the Environment Division.  That SELECT clause may contain only ASSIGN and FILE STATUS clauses.  However, a PASSWORD clause, TRACK-AREA clause, PROCESSING MODE clause, RECORDING MODE clause, FILE-LIMIT clause, VALUE OF clause, and APPLY clause may appear when the compiler is in the IBM DOS/VS COBOL compatibility mode.  These phrases are scanned, but otherwise they are ignored.</li></div>
+<a name="wp1034870"> </a><div class="pSmartList1"><li>The clauses following <em class="cEmphasis">file-name</em> may appear in any order.</li></div>
+<a name="wp1034871"> </a><div class="pSmartList1"><li><em class="cEmphasis">Id-name</em> must be either a non-numeric literal or the name of an alphanumeric data item in Working Storage.  The value of this name is used as the file's external name.</li></div>
+<a name="wp1034872"> </a><div class="pSmartList1"><li>If a <em class="cEmphasis">file-spec</em> is specified in the file's ASSIGN clause, <em class="cEmphasis">id-name</em> must be identical to <em class="cEmphasis">file-spec</em>. </li></div>
+<a name="wp1034873"> </a><div class="pSmartList1"><li>One or more record description entries must follow a sort file description entry. </li></div>
+</ol></div>
+<a name="wp1034874"> </a><h3 class="pHeadingRef">
+General Rules
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1034875"> </a><div class="pSmartList1"><li>No I/O statement may refer to a file described by a sort file description entry.  Only the SORT and MERGE statements may refer to <em class="cEmphasis">file-name</em>.  </li></div>
+<a name="wp1034876"> </a><div class="pSmartList1"><li>The sort file description entry clauses are described in the following sections.  </li></div>
+</ol></div>
+<a name="wp1071579"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The compiler has an internal restriction of at least 6 bytes for SORT FILE records.  If a record is shorter than that, the compiler detects it and pads the record to 6 bytes.  
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

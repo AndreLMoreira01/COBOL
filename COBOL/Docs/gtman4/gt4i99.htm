@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>Routines to Handle the Windows Registry</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1037455"> </a><h2 class="pHeading2">
+Routines to Handle the Windows Registry
+</h2>
+<a name="wp1037456"> </a><p class="pCaution">
+<hr />
+<b>Caution:  </b>When you are changing registry settings, Windows does not validate any of the values you write to it -- any operation is allowed.  Therefore, you must be very careful of what changes you make to the registry because no error messages will appear if you make a mistake.  You should create a backup of your Windows registry before making any changes.  Even better, back up your entire configuration, so that it could be restored in full in the event of a crash.
+<hr />
+</p>
+<a name="wp1208374"> </a><p class="pBody">
+The library routines that follow enable you to create and query Windows Registry keys.  Each routine can be called by either of two names. Use the DISPLAY_REG_* name when you want to work with the registry on the display host (this is the local host when the application is run with a standard runtime, and the <em class="cEmphasis">thin client</em> when the application is run with the thin client).  Use the REG_* name when you want to work with the registry on the server host (the local host when the application is run with a standard runtime, and the application host when the application is run with the thin client). 
+</p>
+<a name="wp1208333"> </a><p class="pBody">
+If the routines are called from a non-Windows platform, they will return an error status code of &quot;-1&quot;.  
+</p>
+<a name="wp1037461"> </a><p class="pBody">
+The Windows Registry contains the hardware, software, and user preferences that determine the configuration of a particular PC. When a user makes changes to the desktop, file structure, system configuration or software, the changes are reflected in the registry.  This information used to be contained in files like config.sys, autoexec.bat, win.ini, system.ini and control.ini, but the registry provides a single source for accessing all of a computer's settings. 
+</p>
+<a name="wp1037463"> </a><p class="pBody">
+Each setting in the registry has a handle or <em class="cEmphasis">Key</em>.  Only two registry keys are actually stored on the hard disk: HKEY_LOCAL_MACHINE and HKEY_USERS.  All other registry keys are aliases or branches of these two principal keys, or are created dynamically by Windows.  For example, HKEY_CLASSES_ROOT is an alias of the branch HKEY_LOCAL_MACHINE\Software\Classes. In order to interact with these registry keys, the Windows Application Programmer's Interface (API) provides a series of functions that call the registry.  Acucorp has created the library routines below to operate registry functions from within your COBOL program.
+</p>
+<a name="wp1208555"> </a><p class="pBody">
+For security reasons, in thin client deployments several of the functions require user authorization before the action is performed.  These functions include:
+</p>
+<a name="wp1209076"> </a><p class="pBody">
+DISPLAY_REG_CREATE_KEY<br />DISPLAY_REG_CREATE_KEY_EX<br />DISPLAY_REG_DELETE_KEY<br />DISPLAY_REG_DELETE_VALUE<br />DISPLAY_REG_SET_VALUE<br />DISPLAY_REG_SET_VALUE_EX
+</p>
+<a name="wp1209077"> </a><p class="pBody">
+When one of these functions is called, a Security Information dialog is displayed and the user must select a Yes or No button to indicate whether the action may proceed.  The security information dialog may look like this:
+</p>
+<a name="wp1209134"> </a><p class="pBodyRelative">
+</p><div><img src="gt4ia.gif" height="243" width="407" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

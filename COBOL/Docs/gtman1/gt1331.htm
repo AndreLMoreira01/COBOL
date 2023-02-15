@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:21:09" />
+  <title>3.2.2  Creating Object Libraries </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt13.htm"><br />Chapter 3:  Debugger and Utilities</a> &gt; <a href="gt1329.htm">3.2  Object File Utility - cblutil</a> &gt; </p>
+<a name="wp1033091"> </a><h2 class="pHeading2">
+3.2.2  Creating Object Libraries 
+</h2>
+<a name="wp1033095"> </a><p class="pBody">
+You can create object libraries with the <b class="cBold">cblutil</b> program provided with the ACUCOBOL-GT runtime system.  This command line has the following format:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+cblutil  -lib  [<em class="cEmphasis">options</em>]  <em class="cEmphasis">modules</em><a name="wp1033096"> </a>
+</pre></div>
+<a name="wp1033097"> </a><p class="pBody">
+When you create a new object library, the first <em class="cEmphasis">module</em> specified becomes the primary module.  All other modules are simply added to the library.  If no <em class="cEmphasis">options</em> are specified, then the first module specified is converted from an object file or resource into an object library, and the remaining modules are added to it.  
+</p>
+<a name="wp1033098"> </a><p class="pBody">
+The first <em class="cEmphasis">module</em> may also be an object library.  In this case, the remaining modules are added to the library.  Any module that has the same name as one already contained in the library automatically replaces the one in the library.  
+</p>
+<a name="wp1033101"> </a><p class="pBody">
+The <em class="cEmphasis">modules</em> may be any type of file.  If an input file is a COBOL object, then <b class="cBold">cblutil</b> includes it in the resulting library as a COBOL object.  Any other type of file is included as a <em class="cEmphasis">resource</em>.  If an input file is another library, then each component of that library is individually added to the resulting library.  The resulting library may consist entirely of COBOL objects, entirely of resources, or a mixture of the two.  
+</p>
+<a name="wp1033102"> </a><p class="pBody">
+A total of 1024 modules can be placed in a single library.  
+</p>
+<a name="wp1033105"> </a><p class="pBody">
+<em class="cEmphasis">Options</em> can be one or more of the following: 
+</p>
+<a name="wp1049010"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1109427"> </a><p class="pCellBody">
+-c
+</p>
+</td>
+    <td><a name="wp1109429"> </a><p class="pCellBody">
+Used to embed a comment in the object library.  This flag must be followed by the comment.  Comments with embedded spaces must either be between quotation marks, or include the shell's escape character before each space.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049066"> </a><p class="pCellBody">
+<b class="cBold">-o<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</b>
+</p>
+</td>
+    <td><a name="wp1049068"> </a><p class="pCellBody">
+This option must be followed (as the next separate argument) by a file name.  This file becomes the new object library.  If a file exists by that name, it will be deleted first.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049070"> </a><p class="pCellBody">
+<b class="cBold">-v</b>
+</p>
+</td>
+    <td><a name="wp1049072"> </a><p class="pCellBody">
+Causes <b class="cBold">cblutil</b> to be verbose about its progress.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1049074"> </a><p class="pCellBody">
+<b class="cBold">-r</b>
+</p>
+</td>
+    <td><a name="wp1049076"> </a><p class="pCellBody">
+Causes the separate <em class="cEmphasis">modules </em>to be deleted after they have been added to the object library.  If &quot;-o&quot; has not been specified, then the first module (which becomes the new library) is <em class="cEmphasis">not</em> deleted.  
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1033109"> </a><h3 class="pHeadingRef">
+Examples
+</h3>
+<a name="wp1033110"> </a><p class="pBody">
+The following sample command line creates a library called &quot;mylib&quot; that consists of two ACUCOBOL-GT objects named &quot;prog1.acu&quot; and &quot;prog2.acu&quot;:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+cblutil -lib -v -o mylib prog1.acu prog2.acu<a name="wp1033111"> </a>
+</pre></div>
+<a name="wp1109592"> </a><p class="pBody">
+You can add a comment to the object library.  The comment is visible when you use the &quot;-info&quot; command to retrieve information about the object library:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+cblutil -lib -o mylib -c &quot;My comment&quot; prog1.acu prog2.acu<a name="wp1109593"> </a>
+</pre></div>
+<a name="wp1109597"> </a><p class="pBody">
+Alternatively, you can add a comment using an escape character instead of quotation marks as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+cblutil -lib -o mylib -c My\ new\ comment prog1.acu prog2.acu<a name="wp1109601"> </a>
+</pre></div>
+<a name="wp1109616"> </a><p class="pBody">
+Wild cards are permitted:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+cblutil -lib -v -o mylib prog1.acu otherdir/*.*<a name="wp1033113"> </a>
+</pre></div>
+<a name="wp1033114"> </a><p class="pBody">
+To add modules to an existing library, do not use the &quot;-o&quot; argument.  For example, to add &quot;prog3.acu&quot; and &quot;prog4.acu&quot; to &quot;mylib&quot;, do this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+cblutil -lib -v mylib prog3.acu prog4.acu<a name="wp1033115"> </a>
+</pre></div>
+<a name="wp1033116"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>There is no way to remove an object module from a library.  For this reason, we recommend that you create object libraries after all of the programs involved have been fully debugged.  
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

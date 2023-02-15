@@ -1,0 +1,736 @@
+      * Report1a.rpt
+      * Report1a.rpt is generated from C:\Acucorp\Acucbl720\AcuGT\sample\reports\Report1a.Psf
+      * This is a generated file. DO NOT modify this file directly.
+    
+       Acu-Report1a-HTML-HEADER.
+           MOVE '<HTML>' TO PRINT-BUF.
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '<HEAD><TITLE>  </TITLE></HEAD>' 
+              TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           PERFORM Acu-Report1a-HTML-CSS
+           MOVE '<BODY STYLE="BACKGROUND-COLOR:#FFFFFF;">' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           .
+
+       Acu-Report1a-HTML-FOOTER.
+           MOVE '</BODY>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '</HTML>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           .
+
+       Acu-Report1a-HTML-CSS.
+           MOVE '<STYLE TYPE="TEXT/CSS">' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      * Report1a-RwLa-1'S CSS SETTING
+           MOVE 
+              '   .Report1a-RwLa-1 {POSITION:ABSOLUTE; TOP:6; LEFT:21; W
+      -       'IDTH:67; HEIGHT:18; BACKGROUND-COLOR:TRANSPARENT; }'
+               TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      * Report1a-RwEf-1'S CSS SETTING
+           MOVE 
+              '   .Report1a-RwEf-1 {POSITION:ABSOLUTE; TOP:6; LEFT:127; 
+      -       'WIDTH:27; HEIGHT:18; BORDER-STYLE:SOLID; BORDER-WIDTH:1px
+      -       '; border-color:#000000; LETTER-SPACING:0.00; BACKGROUND-C
+      -       'OLOR:TRANSPARENT; OVERFLOW:HIDDEN}' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      * Report1a-RwLa-2'S CSS SETTING
+           MOVE 
+              '   .Report1a-RwLa-2 {POSITION:ABSOLUTE; TOP:30; LEFT:21; 
+      -       'WIDTH:97; HEIGHT:18; BACKGROUND-COLOR:TRANSPARENT; }'
+               TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      * Report1a-RwEf-2'S CSS SETTING
+           MOVE 
+              '   .Report1a-RwEf-2 {POSITION:ABSOLUTE; TOP:30; LEFT:127;
+      -       ' WIDTH:39; HEIGHT:18; BORDER-STYLE:SOLID; BORDER-WIDTH:1p
+      -       'x; border-color:#000000; LETTER-SPACING:0.00; BACKGROUND-
+      -       'COLOR:TRANSPARENT; OVERFLOW:HIDDEN}' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      * Report1a-RwLa-3'S CSS SETTING
+           MOVE 
+              '   .Report1a-RwLa-3 {POSITION:ABSOLUTE; TOP:49; LEFT:21; 
+      -       'WIDTH:93; HEIGHT:18; BACKGROUND-COLOR:TRANSPARENT; }'
+               TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      * Report1a-RwEf-3'S CSS SETTING
+           MOVE 
+              '   .Report1a-RwEf-3 {POSITION:ABSOLUTE; TOP:49; LEFT:127;
+      -       ' WIDTH:303; HEIGHT:18; BORDER-STYLE:SOLID; BORDER-WIDTH:1
+      -       'px; border-color:#000000; LETTER-SPACING:0.00; BACKGROUND
+      -       '-COLOR:TRANSPARENT; OVERFLOW:HIDDEN}' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      * Report1a-RwLa-4'S CSS SETTING
+           MOVE 
+              '   .Report1a-RwLa-4 {POSITION:ABSOLUTE; TOP:70; LEFT:21; 
+      -       'WIDTH:93; HEIGHT:18; BACKGROUND-COLOR:TRANSPARENT; }'
+               TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      * Report1a-RwEf-4'S CSS SETTING
+           MOVE 
+              '   .Report1a-RwEf-4 {POSITION:ABSOLUTE; TOP:70; LEFT:127;
+      -       ' WIDTH:303; HEIGHT:18; BORDER-STYLE:SOLID; BORDER-WIDTH:1
+      -       'px; border-color:#000000; LETTER-SPACING:0.00; BACKGROUND
+      -       '-COLOR:TRANSPARENT; OVERFLOW:HIDDEN}' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '</STYLE>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           .    
+
+       Acu-Report1a-PRINT-PARA.
+           MOVE SPACES TO PRINT-FULLNAME
+           CALL "C$FULLNAME" USING "Report1a.html", PRINT-FULLNAME,
+                GIVING ACU-STATUS-CODE
+           IF ACU-STATUS-CODE = 1
+              MOVE 0 TO ACU-SETUPPRINT
+              EXIT PARAGRAPH
+           END-IF
+           MOVE 0 TO ACU-IDX1
+           INSPECT PRINT-FULLNAME TALLYING ACU-IDX1 FOR ALL "\"
+           INSPECT PRINT-FULLNAME REPLACING TRAILING SPACE BY "*"
+           IF ACU-IDX1 <= 0
+              MOVE SPACES TO DUMY-LINE
+              CALL "C$CHDIR" USING DUMY-LINE
+              INSPECT DUMY-LINE REPLACING TRAILING SPACE BY "*"
+              MOVE 0 TO ACU-STATUS-CODE
+              PERFORM VARYING ACU-IDX2 FROM 1 BY 1 UNTIL
+              ACU-STATUS-CODE = 1
+                 IF DUMY-LINE(ACU-IDX2:1) = "*"
+                    MOVE 1 TO ACU-STATUS-CODE
+                 END-IF
+              END-PERFORM
+              IF DUMY-LINE(ACU-IDX2 - 2:1) = "\"
+                 STRING DUMY-LINE, PRINT-FULLNAME, X"00"
+                    DELIMITED BY "*" INTO PRT-FULLFILENAME
+              ELSE
+                 STRING DUMY-LINE, "\", PRINT-FULLNAME, X"00"
+                    DELIMITED BY "*" INTO PRT-FULLFILENAME
+              END-IF
+           ELSE
+              STRING PRINT-FULLNAME , X"00" DELIMITED BY "*" INTO 
+                 PRT-FULLFILENAME
+           END-IF
+
+           STRING "Letter", X"00" DELIMITED BY SIZE INTO 
+              ACU-PAPER-SIZE
+           STRING "&w&bPage &p of &P", X"00" DELIMITED BY SIZE INTO 
+              ACU-PAPER-HEADER
+           STRING "&u&b&d", X"00" DELIMITED BY SIZE INTO 
+              ACU-PAPER-FOOTER
+           MOVE "PORTRAIT" TO ACU-PAPER-ORIENTATION
+           IF ACU-PAPER-ORIENTATION = "LANDSCAPE"
+              MOVE 2 TO ACU-PAPER-ORIENTATIONINT
+           ELSE
+              MOVE 1 TO ACU-PAPER-ORIENTATIONINT
+           END-IF
+           STRING "PORTRAIT", X"00" DELIMITED BY SIZE INTO
+              ACU-PAPER-ORIENTATION
+           MOVE "75" to ACU-MARGIN-LEFT
+           MOVE "75" to ACU-MARGIN-RIGHT
+           MOVE "75" to ACU-MARGIN-TOP
+           MOVE "75" to ACU-MARGIN-BOTTOM
+           STRING ACU-PAPER-MARGIN, X"00" DELIMITED BY SIZE INTO 
+              PRINT-BROWSER-PARA
+           IF ACU-PAPER-COPIES = 0 
+              OR ACU-PAPER-COPIES(1:) = spaces
+                 MOVE 1 to ACU-PAPER-COPIES
+           END-IF
+           MOVE SPACES TO DUMY-LINE
+           .
+
+       Acu-Report1a-SETUP-PRINT.
+           MOVE 1 TO ACU-SETUPPRINT
+           PERFORM Acu-Report1a-PRINT-PARA
+           SET ENVIRONMENT "DLL_CONVENTION" to "1"
+           CALL "AcuBenchPrintDummy"
+              ON EXCEPTION CALL "AcuBenchPrint.dll" END-CALL
+           END-CALL
+           CALL "AcuBenchPrintExecWBPageSetup" USING
+                BY CONTENT PRINT-BROWSER-PARA,
+                BY CONTENT ACU-PAPER-SIZE, 
+                BY VALUE   ACU-PAPER-ORIENTATIONINT,
+                BY CONTENT ACU-PRINTER-NAME
+                GIVING ACUPRINTDLL-STATUS
+           END-CALL
+           IF ACUPRINTDLL-SUCCESS
+              MOVE 1 TO PRINT-UNIT-TYPE
+              SET PRINT-PTR TO ADDRESS OF ACU-PAPER-MARGIN
+              CALL "AcuBenchPrintGetMargins" USING BY 
+                 VALUE PRINT-UNIT-TYPE, PRINT-PTR
+              SET PRINT-PTR TO ADDRESS OF ACU-PAPER-SIZEINT
+              CALL "AcuBenchPrintGetPaperSize" USING BY 
+                 VALUE PRINT-UNIT-TYPE, PRINT-PTR
+              COMPUTE PAGE-HEIGHT OF Report1a-HEIGHT = 
+                 ACU-PAPER-HEIGHT - ACU-MARGIN-TOP 
+                 - ACU-MARGIN-BOTTOM
+              COMPUTE PAGE-WIDTH OF Report1a-HEIGHT = 
+                 ACU-PAPER-WIDTH - ACU-MARGIN-LEFT
+                 - ACU-MARGIN-RIGHT
+
+              MOVE 2 TO PRINT-UNIT-TYPE
+              SET PRINT-PTR TO ADDRESS OF ACU-PAPER-MARGIN
+              CALL "AcuBenchPrintGetMargins" USING BY VALUE
+                 PRINT-UNIT-TYPE, PRINT-PTR
+              STRING ACU-PAPER-MARGIN, X"00" DELIMITED BY SIZE INTO
+                 PRINT-BROWSER-PARA
+
+              SET PRINT-PTR TO ADDRESS OF ACU-PAPER-SIZE
+              CALL "AcuBenchPrintGetPaperName" USING BY VALUE PRINT-PTR
+              CALL "AcuBenchPrintGetOrientation" GIVING 
+                 ACU-PAPER-ORIENTATIONINT
+              CALL "AcuBenchPrintGetCopies" GIVING ACU-PAPER-COPIES
+              SET PRINT-PTR TO ADDRESS OF ACU-PRINTER-NAME
+              CALL "AcuBenchPrintGetPrinterName" USING BY VALUE 
+                 PRINT-PTR
+
+              PERFORM Acu-Report1a-PRINT-TOFILE
+              PERFORM Acu-Report1a-DO-PRINT
+           END-IF
+           .
+
+       Acu-Report1a-PRINT.
+           MOVE 0 TO ACU-SETUPPRINT
+           PERFORM Acu-Report1a-PRINT-TOFILE
+           PERFORM Acu-Report1a-DO-PRINT
+           .
+
+       Acu-Report1a-DO-PRINT.
+           IF ACU-SETUPPRINT = 0
+              PERFORM Acu-Report1a-PRINT-PARA
+              SET ENVIRONMENT "DLL_CONVENTION" to "1"
+              CALL "AcuBenchPrintDummy"
+                 ON EXCEPTION CALL "AcuBenchPrint.dll" END-CALL
+              END-CALL
+           END-IF
+           CALL "AcuBenchPrintExecWBPrint" USING
+                BY CONTENT PRT-FULLFILENAME,
+                OMITTED,
+                BY CONTENT PRINT-BROWSER-PARA,
+                BY CONTENT ACU-PAPER-HEADER, 
+                BY CONTENT ACU-PAPER-FOOTER, 
+                BY CONTENT ACU-PAPER-SIZE, 
+                BY VALUE ACU-PAPER-ORIENTATIONINT,
+                BY VALUE ACU-PAPER-COPIES,
+                BY CONTENT ACU-PRINTER-NAME
+           END-CALL
+           MOVE 0 TO ACU-SETUPPRINT
+           .
+
+       Acu-Report1a-PREVIEW.
+           PERFORM Acu-Report1a-PRINT-TOFILE
+           PERFORM Acu-Report1a-PRINT-PARA
+           SET ENVIRONMENT "DLL_CONVENTION" to "1"
+           CALL "AcuBenchPrintDummy"
+              ON EXCEPTION CALL "AcuBenchPrint.dll" END-CALL
+           END-CALL
+           CALL "AcuBenchPrintExecWBPreview" USING
+                BY CONTENT PRT-FULLFILENAME,
+                BY CONTENT PRINT-BROWSER-PARA,
+                BY CONTENT ACU-PAPER-HEADER, 
+                BY CONTENT ACU-PAPER-FOOTER, 
+                BY CONTENT ACU-PAPER-SIZE, 
+                BY VALUE ACU-PAPER-ORIENTATIONINT,
+                BY CONTENT ACU-PRINTER-NAME
+           END-CALL
+           .
+
+       Acu-Report1a-PRINT-TOFILE.
+           MOVE "Report1a.html" TO PTR-DEV-NAME.
+           MOVE 1 TO CURRENT-COL
+           MOVE 0 TO Report1a-CLEFTOFFSET
+           MOVE 0 TO CNT-PIXELS
+           MOVE 1 TO NTOPCOLUMNNUM
+           PERFORM Acu-PRINTF-OPEN-ROUTINE.
+      *    BeforePrint           
+           PERFORM Acu-Report1a-HTML-HEADER.
+           PERFORM Acu-Report1a-HTML-PAGE-HEADER.
+           PERFORM Acu-RPT-Report1a-PRINT-LOOP.
+           PERFORM Acu-Report1a-HTML-FOOTER.
+      *    AfterPrint
+           PERFORM Acu-PRINTF-CLOSE-ROUTINE
+           .
+
+       Acu-RPT-Report1a-PRINT-LOOP.
+           MOVE 1 TO TMP-PRINTORNOT
+           MOVE 0 TO CNT-INPAGEPIXELS
+           MOVE 1 TO ACU-PAGENUM
+           MOVE 1 TO ACU-PAGENUM-SYS
+           MOVE 0 TO SYS-ENDPRIMARYFD
+           
+           PERFORM Acu-RPT-Report1a-ALL-RESET
+      * Check Report Header
+           PERFORM Acu-RPT-Report1a-REPORT-HEADER
+      * Start Normal (Page H/F, Group H/F, Detail)
+           PERFORM Acu-RPT-Report1a-MASTER-PRINT-LOOP
+      * End Normal (Page H/F, Group H/F, Detail)
+           PERFORM Acu-RPT-Report1a-PAGE-HEADER
+      * Check Last Group Footer
+           PERFORM Acu-RPT-Report1a-GROUP-MUSTDSP
+           PERFORM Acu-RPT-Report1a-GROUP-FOOTER
+      * Check Report Footer
+           IF ( REPORT-FOOTER-PRINT-AFTER-PAGE = 0 )
+              PERFORM Acu-RPT-Report1a-REPORT-FOOTER
+           END-IF
+      * Normal Ending
+           PERFORM Acu-Report1a-FILL-DETAIL-FOR-ZEBRA
+           IF ( REPORT-FOOTER-PRINT-AFTER-PAGE = 0 )
+              MOVE 1 TO SYS-ENDPRIMARYFD   
+              COMPUTE CNT-PIXELS = ACU-PAGENUM-SYS * PAGE-HEIGHT OF
+                 Report1a-HEIGHT - Report1a-PF-1-DEF-HEIGHT OF
+                 Report1a-HEIGHT
+              COMPUTE CNT-INPAGEPIXELS = PAGE-HEIGHT OF
+                 Report1a-HEIGHT - Report1a-PF-1-DEF-HEIGHT OF
+                 Report1a-HEIGHT
+              MOVE PAGE-HEIGHT OF Report1a-HEIGHT TO CNT-INPAGEPIXELS
+              PERFORM Acu-RPT-Report1a-PAGE-FOOTER
+           END-IF
+      * Check Report Footer
+           IF ( REPORT-FOOTER-PRINT-AFTER-PAGE = 1 )
+              PERFORM Acu-RPT-Report1a-REPORT-FOOTER
+           END-IF
+           .
+
+       Acu-Report1a-HTML-PAGE-HEADER.
+           MOVE ' <!-- Page DIV -->' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           STRING ' <DIV STYLE="POSITION:ABSOLUTE; TOP:', 
+                  CNT-PIXELS, 
+                  '; LEFT:',
+                  Report1a-CLEFTOFFSET,
+                  '; HEIGHT:', PAGE-HEIGHT OF Report1a-HEIGHT, 
+                  '; WIDTH:', PAGE-WIDTH OF Report1a-HEIGHT,
+                  ' ;">'
+               DELIMITED BY SIZE INTO PRINT-BUF.
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           .
+
+       Acu-Report1a-HTML-PAGE-FOOTER.
+           MOVE ' <!-- End(Page) --></DIV>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           .
+
+       Acu-RPT-Report1a-REPORT-HEADER.
+           .
+
+       Acu-RPT-Report1a-REPORT-FOOTER.
+           .
+
+       Acu-RPT-Report1a-PAGE-HEADER.
+      *    BeforePrint
+           IF ( CNT-INPAGEPIXELS < Report1a-PH-1-HEIGHT OF
+              Report1a-HEIGHT ) OR ( REPORT-HEADER-PRINT-BEFORE-PAGE = 1
+              )
+              PERFORM Acu-Report1a-PH-1-PRINT-RTN
+              ADD  Report1a-PH-1-HEIGHT OF Report1a-HEIGHT TO CNT-PIXELS
+              IF ( REPORT-HEADER-PRINT-BEFORE-PAGE = 1 )
+                 ADD Report1a-PH-1-HEIGHT OF Report1a-HEIGHT TO
+              CNT-INPAGEPIXELS
+              ELSE
+                 MOVE Report1a-PH-1-HEIGHT OF Report1a-HEIGHT TO
+              CNT-INPAGEPIXELS
+              END-IF
+           END-IF
+      *    AfterPrint
+           .
+
+       Acu-RPT-Report1a-PAGE-FOOTER.
+      *    BeforePrint
+           COMPUTE TMP-PIXELS = CNT-INPAGEPIXELS + CURRENT-HEIGHT +
+              Report1a-PF-1-HEIGHT OF Report1a-HEIGHT
+           IF TMP-PIXELS > PAGE-HEIGHT OF Report1a-HEIGHT
+              COMPUTE CNT-PIXELS = ACU-PAGENUM-SYS * PAGE-HEIGHT OF
+              Report1a-HEIGHT - Report1a-PF-1-HEIGHT OF Report1a-HEIGHT
+              COMPUTE CNT-INPAGEPIXELS = PAGE-HEIGHT OF
+              Report1a-HEIGHT - Report1a-PF-1-DEF-HEIGHT OF
+              Report1a-HEIGHT
+              PERFORM Acu-Report1a-PF-1-PRINT-RTN
+              PERFORM Acu-Report1a-Page-BREAK-RTN
+              MOVE Report1a-PF-1-DEF-HEIGHT OF Report1a-HEIGHT TO
+              Report1a-PF-1-HEIGHT OF Report1a-HEIGHT
+           END-IF
+      *    AfterPrint         
+           .
+
+       Acu-RPT-Report1a-PAGE-FOOTER-OVERPAGE.
+           MOVE 0 TO RPT-RETURN-VALUE
+           COMPUTE TMP-PIXELS = CNT-INPAGEPIXELS + CURRENT-HEIGHT +
+              Report1a-PF-1-HEIGHT OF Report1a-HEIGHT
+           IF TMP-PIXELS + 1 >= PAGE-HEIGHT OF Report1a-HEIGHT
+              MOVE 1 TO RPT-RETURN-VALUE
+           END-IF
+           .
+
+       Acu-RPT-Report1a-DETAIL.
+           PERFORM Acu-Report1a-Dtl-1-DETAIL-PRINT.
+           .
+
+       Acu-RPT-Report1a-GROUP-HEADER.
+      * Cause there're possibly several Group.
+           .
+
+       Acu-RPT-Report1a-GROUP-FOOTER.
+           .
+
+       Acu-RPT-Report1a-GROUP-MUSTDSP.
+           .
+
+       Acu-RPT-Report1a-GROUP-NOMUSTDSP.
+           .
+
+       Acu-RPT-Report1a-ALL-RESET.
+      * Group Reset
+           .
+
+       Acu-RPT-Report1a-DO-PRINT-RTN.
+           MOVE 1 TO TMP-PRINTORNOT
+      * Check Group Footer
+           PERFORM Acu-RPT-Report1a-GROUP-FOOTER
+      * Init Detail's Height
+           MOVE Report1a-Dtl-1-HEIGHT OF Report1a-HEIGHT TO
+              CURRENT-HEIGHT
+           PERFORM Acu-RPT-Report1a-PAGE-FOOTER
+           PERFORM Acu-RPT-Report1a-PAGE-HEADER
+      * Check Group Header
+           PERFORM Acu-RPT-Report1a-GROUP-HEADER
+      * Detail
+           PERFORM Acu-RPT-Report1a-DETAIL
+           .
+
+       Acu-Report1a-Page-BREAK-RTN.
+           IF CURRENT-COL < NTOPCOLUMNNUM
+              COMPUTE CNT-PIXELS = (ACU-PAGENUM-SYS - 1) 
+                 * PAGE-HEIGHT OF Report1a-HEIGHT
+              COMPUTE Report1a-CLEFTOFFSET = 
+                 Report1a-CLEFTOFFSET + DETAIL-WIDTH
+              MOVE 0 TO CNT-INPAGEPIXELS
+              ADD 1 TO CURRENT-COL
+           ELSE
+              COMPUTE CNT-PIXELS = ACU-PAGENUM-SYS 
+                 * PAGE-HEIGHT OF Report1a-HEIGHT
+              MOVE 0 TO Report1a-CLEFTOFFSET
+              MOVE 0 TO CNT-INPAGEPIXELS
+              ADD 1 TO ACU-PAGENUM-SYS
+              ADD 1 TO ACU-PAGENUM
+              MOVE 1 TO CURRENT-COL
+           END-IF
+           PERFORM Acu-Report1a-HTML-PAGE-FOOTER
+           IF SYS-ENDPRIMARYFD = 0
+              PERFORM Acu-Report1a-HTML-PAGE-HEADER
+           END-IF
+           .           
+
+       Acu-Report1a-FILL-DETAIL-FOR-ZEBRA.
+           .
+
+       Acu-Report1a-ZEBRA-COLOR-CHANGE.
+           .
+      
+       Acu-Report1a-Dtl-1-DETAIL-PRINT.
+           MOVE 816 TO DETAIL-WIDTH
+      *    BeforePrint
+           MOVE Report1a-Dtl-1-HEIGHT OF Report1a-HEIGHT TO
+              CURRENT-HEIGHT
+           PERFORM Acu-RPT-Report1a-PAGE-FOOTER
+           PERFORM Acu-RPT-Report1a-PAGE-HEADER
+           PERFORM Acu-Report1a-Dtl-1-PRINT-RTN
+           ADD Report1a-Dtl-1-HEIGHT OF Report1a-HEIGHT TO CNT-PIXELS
+           ADD Report1a-Dtl-1-HEIGHT OF Report1a-HEIGHT TO
+              CNT-INPAGEPIXELS
+           MOVE Report1a-Dtl-1-DEF-HEIGHT OF Report1a-HEIGHT TO
+              Report1a-Dtl-1-HEIGHT OF Report1a-HEIGHT
+           PERFORM Acu-Report1a-ZEBRA-COLOR-CHANGE
+      *    AfterPrint
+           .
+
+       Acu-Report1a-PH-1-SEC-HEAD.
+           MOVE '   <!-- Section (Report1a-PH-1) -->' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           COMPUTE TMP-PIXELS = CNT-INPAGEPIXELS - HIGH-OFFSET-IN
+           STRING '   <DIV STYLE="',
+                  'POSITION:ABSOLUTE; TOP:', 
+                  TMP-PIXELS,
+                  '; LEFT:0',
+                  '; WIDTH:816; ',
+                  'FONT-SIZE:9pt; ',
+                  'FONT-FAMILY:MS Sans Serif; ',
+                  'COLOR:#000000; ',
+                  'BACKGROUND-COLOR:#FFFFFF; ',
+                  '">'
+              DELIMITED BY SIZE INTO PRINT-BUF.
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           .
+
+       Acu-Report1a-PH-1-SEC-FOOT.
+           MOVE '      <!-- Ending DIV : to fill the Div Height -->' TO
+              PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           STRING '      <DIV STYLE="POSITION:RELATIVE; HEIGHT:',
+                  Report1a-PH-1-HEIGHT OF Report1a-HEIGHT, 
+                  ';"> </DIV>'
+              DELIMITED BY SIZE INTO PRINT-BUF.
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '   <!-- End(Section) --></DIV>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           .
+
+       Acu-Report1a-PH-1-PRINT-RTN.
+           MOVE 0 TO SECTION-HIGH-STACK
+           MOVE Report1a-PH-1-DEF-HEIGHT TO Report1a-PH-1-HEIGHT
+           PERFORM Acu-Report1a-PH-1-SEC-HEAD
+           PERFORM Acu-Report1a-PH-1-SEC-FOOT
+           .
+
+       Acu-Report1a-Dtl-1-SEC-HEAD.
+           MOVE '   <!-- Section (Report1a-Dtl-1) -->' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           COMPUTE TMP-PIXELS = CNT-INPAGEPIXELS - HIGH-OFFSET-IN
+           STRING '   <DIV STYLE="',
+                  'POSITION:ABSOLUTE; TOP:', 
+                  TMP-PIXELS,
+                  '; LEFT:0',
+                  '; WIDTH:816; ',
+                  'FONT-SIZE:9pt; ',
+                  'FONT-FAMILY:MS Sans Serif; ',
+                  'COLOR:#000000; ',
+                  'BACKGROUND-COLOR:', Report1a-Dtl-1-BGCOLOR ,
+                  '">'
+              DELIMITED BY SIZE INTO PRINT-BUF.
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           .
+
+       Acu-Report1a-Dtl-1-SEC-FOOT.
+           MOVE '      <!-- Ending DIV : to fill the Div Height -->' TO
+              PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           STRING '      <DIV STYLE="POSITION:RELATIVE; HEIGHT:',
+                  Report1a-Dtl-1-HEIGHT OF Report1a-HEIGHT, 
+                  ';"> </DIV>'
+              DELIMITED BY SIZE INTO PRINT-BUF.
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '   <!-- End(Section) --></DIV>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           .
+
+       Acu-Report1a-Dtl-1-PRINT-RTN.
+           MOVE 0 TO SECTION-HIGH-STACK
+           MOVE Report1a-Dtl-1-DEF-HEIGHT TO Report1a-Dtl-1-HEIGHT
+           PERFORM Acu-Report1a-Dtl-1-SEC-HEAD
+      * RPT.Label : Report1a-RwLa-1
+      *    BeforePrint
+           MOVE '      <!-- Label (Report1a-RwLa-1) -->' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '      <DIV CLASS="Report1a-RwLa-1" >' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           STRING '         <P><STRONG>',
+                  'Sales-State',
+                  '</STRONG></P></DIV>'
+              DELIMITED BY SIZE INTO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      *    AfterPrint
+      * RPT.Entry-Field : Report1a-RwEf-1
+      *    BeforePrint
+           MOVE '      <!-- Entry-Field (Report1a-RwEf-1) -->' TO
+              PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '      <DIV CLASS="Report1a-RwEf-1" >' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '         <P><STRONG>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE Sales-State TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '         </STRONG></P></DIV>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      *    AfterPrint
+      * RPT.Label : Report1a-RwLa-2
+      *    BeforePrint
+           MOVE '      <!-- Label (Report1a-RwLa-2) -->' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '      <DIV CLASS="Report1a-RwLa-2" >' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           STRING '         <P><STRONG>',
+                  'Sales-Branch-No',
+                  '</STRONG></P></DIV>'
+              DELIMITED BY SIZE INTO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      *    AfterPrint
+      * RPT.Entry-Field : Report1a-RwEf-2
+      *    BeforePrint
+           MOVE '      <!-- Entry-Field (Report1a-RwEf-2) -->' TO
+              PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '      <DIV CLASS="Report1a-RwEf-2" >' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '         <P><STRONG>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE Sales-Branch-No TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '         </STRONG></P></DIV>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      *    AfterPrint
+      * RPT.Label : Report1a-RwLa-3
+      *    BeforePrint
+           MOVE '      <!-- Label (Report1a-RwLa-3) -->' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '      <DIV CLASS="Report1a-RwLa-3" >' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           STRING '         <P><STRONG>',
+                  'Sales-LastName',
+                  '</STRONG></P></DIV>'
+              DELIMITED BY SIZE INTO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      *    AfterPrint
+      * RPT.Entry-Field : Report1a-RwEf-3
+      *    BeforePrint
+           MOVE '      <!-- Entry-Field (Report1a-RwEf-3) -->' TO
+              PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '      <DIV CLASS="Report1a-RwEf-3" >' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '         <P><STRONG>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE Sales-LastName TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '         </STRONG></P></DIV>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      *    AfterPrint
+      * RPT.Label : Report1a-RwLa-4
+      *    BeforePrint
+           MOVE '      <!-- Label (Report1a-RwLa-4) -->' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '      <DIV CLASS="Report1a-RwLa-4" >' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           STRING '         <P><STRONG>',
+                  'Sales-FirstName',
+                  '</STRONG></P></DIV>'
+              DELIMITED BY SIZE INTO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      *    AfterPrint
+      * RPT.Entry-Field : Report1a-RwEf-4
+      *    BeforePrint
+           MOVE '      <!-- Entry-Field (Report1a-RwEf-4) -->' TO
+              PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '      <DIV CLASS="Report1a-RwEf-4" >' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '         <P><STRONG>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE Sales-FirstName TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '         </STRONG></P></DIV>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+      *    AfterPrint
+           PERFORM Acu-Report1a-Dtl-1-SEC-FOOT
+           .
+
+       Acu-Report1a-PF-1-SEC-HEAD.
+           MOVE '   <!-- Section (Report1a-PF-1) -->' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           COMPUTE TMP-PIXELS = CNT-INPAGEPIXELS - HIGH-OFFSET-IN
+           STRING '   <DIV STYLE="',
+                  'POSITION:ABSOLUTE; TOP:', 
+                  TMP-PIXELS,
+                  '; LEFT:0',
+                  '; WIDTH:816; ',
+                  'FONT-SIZE:9pt; ',
+                  'FONT-FAMILY:MS Sans Serif; ',
+                  'COLOR:#000000; ',
+                  'BACKGROUND-COLOR:#FFFFFF; ',
+                  '">'
+              DELIMITED BY SIZE INTO PRINT-BUF.
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           .
+
+       Acu-Report1a-PF-1-SEC-FOOT.
+           MOVE '      <!-- Ending DIV : to fill the Div Height -->' TO
+              PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           STRING '      <DIV STYLE="POSITION:RELATIVE; HEIGHT:',
+                  Report1a-PF-1-HEIGHT OF Report1a-HEIGHT, 
+                  ';"> </DIV>'
+              DELIMITED BY SIZE INTO PRINT-BUF.
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           INITIALIZE PRINT-BUF
+           MOVE '   <!-- End(Section) --></DIV>' TO PRINT-BUF
+           WRITE PRINTF-R FROM PRINT-BUF AFTER 001
+           .
+
+       Acu-Report1a-PF-1-PRINT-RTN.
+           MOVE 0 TO SECTION-HIGH-STACK
+           MOVE Report1a-PF-1-DEF-HEIGHT TO Report1a-PF-1-HEIGHT
+           PERFORM Acu-Report1a-PF-1-SEC-HEAD
+           PERFORM Acu-Report1a-PF-1-SEC-FOOT
+           .
+
+
+       Acu-PRINTF-OPEN-ROUTINE.
+           OPEN   OUTPUT               PRINTF WITH NO REWIND.
+           MOVE   STAT-PRINTF          TO    STAT-PRINTF.
+           IF     NOT VALID-PRINTF
+                  MOVE   "PRINTF"      TO   ACU-ERR-FILE.
+
+       Acu-PRINTF-CLOSE-ROUTINE.
+           CLOSE       PRINTF.
+           

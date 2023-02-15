@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:40" />
+  <title>A_SYB_DEADLOCK_LOOPS</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gle.htm">Appendix E:  Acu4GL for Sybase Information </a> &gt; <a href="4gle17.htm">E.4  Acu4GL for Sybase Configuration File Variables</a> &gt; </p>
+<a name="wp1055090"> </a><h2 class="pHeading2">
+A_SYB_DEADLOCK_LOOPS
+</h2>
+<a name="wp1055092"> </a><p class="pBody">
+Use A_SYB_DEADLOCK_LOOPS if you expect that more than one user will be opening a lot of tables at the same time.  This configuration variable can be used to instruct Acu4GL to reexecute an INSERT statement that could not execute because a row in the AcuOpenTables table was locked or to return an error if the user chooses not to run the query again.  
+</p>
+<a name="wp1055093"> </a><p class="pBody">
+The default for A_SYB_DEADLOCK_LOOPS is &quot;0&quot;, which causes the interface to return an error 9D,1205 indicating that a table is locked.
+</p>
+<a name="wp1055094"> </a><p class="pBody">
+Set A_SYB_DEADLOCK_LOOPS to a positive numeric value to cause Acu4GL for Sybase to reexecute by the number specified the query that tried to open the table, and, thus, caused the deadlock.  Note that it can be as long as 10 seconds until Sybase detects the deadlock, and the application appears to &quot;hang&quot; while the repeated attempts to reexecute the query are in progress.
+</p>
+<a name="wp1055095"> </a><p class="pBody">
+Set A_SYB_DEADLOCK_LOOPS to &quot;-1&quot; or &quot;MESSAGE&quot; to cause Acu4GL for Sybase to display a message box containing the text of the Sybase error message and the option to rerun the query.  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Sybase has returned an error<a name="wp1055412"> </a>
+<em class="cEmphasis">(text of message from Sybase)</em><a name="wp1055413"> </a>
+Do you want to retry the operation?<a name="wp1055414"> </a>
+</pre></div>
+<a name="wp1055407"> </a><p class="pBody">
+If the user answers &quot;yes,&quot; the interface reruns the query.  If the user answers &quot;no,&quot; the interface returns an error 9D.  Setting A_SYB_DEADLOCK_LOOPS to &quot;-1&quot; or &quot;MESSAGE&quot; is the preferred action; the time it takes to inform users of the problem allows other connections to finish opening the tables, giving the AcuOpenTables table time to remove the deadlock.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

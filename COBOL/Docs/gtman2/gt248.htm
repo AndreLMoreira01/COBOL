@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:31" />
+  <title>4.5.2  .NET Example</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt24.htm">Chapter 4:  Supporting Concepts and Related Issues</a> &gt; <a href="gt246.htm">4.5  Methods</a> &gt; </p>
+<a name="wp1031500"> </a><h2 class="pHeading2">
+4.5.2  .NET Example
+</h2>
+<a name="wp1031524"> </a><p class="pBody">
+Consider the sample .NET control, &quot;AmortControl.&quot;  Here is an excerpt from its COPY file, created with the NETDEFGEN utility.  (See Chapter 5 of <em class="cEmphasis">A Guide to Interoperating with ACUCOBOL-GT</em> for more information on using NETDEFGEN.): 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+* .NET Copy Book - Generated On 3/5/2004 10:39:23 AM<a name="wp1031525"> </a>
+<a name="wp1031526"> </a>
+     OBJECT @ASSEMBLY<a name="wp1031527"> </a>
+     NAME &quot;@AmortControl&quot;<a name="wp1031528"> </a>
+            VERSION &quot;1.0.1266.13363&quot;<a name="wp1031529"> </a>
+            CULTURE &quot;neutral&quot;<a name="wp1031530"> </a>
+            STRONG &quot;null&quot;<a name="wp1031531"> </a>
+<a name="wp1031532"> </a>
+* AmortControl.UserControl1<a name="wp1031533"> </a>
+     NAMESPACE &quot;AmortControl&quot;<a name="wp1031534"> </a>
+     CLASS &quot;UserControl1&quot;<a name="wp1031535"> </a>
+     MODULE &quot;amortcontrol.dll&quot;<a name="wp1031536"> </a>
+         VISUAL<a name="wp1031537"> </a>
+<a name="wp1031538"> </a>
+          CONSTRUCTOR,  0, @CONSTRUCTOR1<a name="wp1031539"> </a>
+<a name="wp1031540"> </a>
+* System.String get_WhatIfMonths()<a name="wp1031541"> </a>
+          METHOD,  0, &quot;@get_WhatIfMonths&quot;<a name="wp1031542"> </a>
+                    RETURNING &quot;BSTR&quot;, TYPE 8<a name="wp1031543"> </a>
+<a name="wp1031544"> </a>
+* Void InitializeComponent()<a name="wp1031545"> </a>
+          METHOD,  0, &quot;@InitializeComponent&quot;<a name="wp1031546"> </a>
+<a name="wp1031547"> </a>
+* TotalInterest<a name="wp1031548"> </a>
+          PROPERTY_GET, 0, @TotalInterest<a name="wp1031549"> </a>
+                    RETURNING, &quot;BSTR&quot;, TYPE 8<a name="wp1031550"> </a>
+<a name="wp1031551"> </a>
+* FireCalc  ()<a name="wp1031552"> </a>
+          EVENT, 520214344, @UserControl1_FireCalc<a name="wp1031553"> </a>
+</pre></div>
+<a name="wp1031555"> </a><p class="pBody">
+The get_WhatIfMonths method takes no parameters and returns a string of characters.  To invoke this method from COBOL, you use the MODIFY verb: 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+MODIFY AmortControl-handle &quot;get_WhatIfMonths&quot; ( )<a name="wp1031556"> </a>
+          GIVING MY-PICX-STRING.<a name="wp1031557"> </a>
+</pre></div>
+<a name="wp1031558"> </a><p class="pBody">
+The method has a return value that is converted and moved to the item specified in the GIVING clause of the MODIFY statement.  To get the property TotalInterest:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+INQUIRE ctl-handle TotalInterest IN TOT-INTEREST. <a name="wp1031560"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

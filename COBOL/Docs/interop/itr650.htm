@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 15:00:06" />
+  <title>6.5.5  Unloading Programs from Memory</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr6.htm">Chapter 6: Working with C and C++ Programs</a> &gt; <a href="itr638.htm">6.5  Calling COBOL From C Programs</a> &gt; </p>
+<a name="wp1122476"> </a><h2 class="pHeading2">
+6.5.5  Unloading Programs from Memory
+</h2>
+<a name="wp1122477"> </a><p class="pBody">
+The ACUCOBOL-GT runtime allows you to cancel and unload programs from memory based on the state of the object module.  By default, the CANCEL statements and corresponding C functions, <b class="cBold">acu_cancel()</b> and <b class="cBold">acu_cancel_all()</b>, perform a physical cancel, placing programs in their initial state.  The runtime also allows you to enable logical cancels, which may improve performance.  For a description of runtime memory management and physical and logical cancels, see section 6.3, &quot;Memory Management,&quot; in <em class="cEmphasis">ACUCOBOL-GT User's Guide</em>.
+</p>
+<a name="wp1122478"> </a><p class="pBody">
+Both logical and physical cancels close open files and ensure that any VALUE clauses are in effect when the program is called again.  Physical cancels also release any memory used by the program
+</p>
+<a name="wp1122479"> </a><p class="pBody">
+The following C functions unload one or all programs from memory based on the state of the object module:
+</p>
+<a name="wp1122480"> </a><p class="pBody">
+<b class="cBold">acu_cancel()</b>
+</p>
+<a name="wp1122481"> </a><p class="pBody">
+<b class="cBold">acu_cancel_all()</b>
+</p>
+<a name="wp1122482"> </a><p class="pBody">
+<b class="cBold">acu_unload()</b>
+</p>
+<a name="wp1122483"> </a><p class="pBody">
+<b class="cBold">acu_unload_all()</b>
+</p>
+<a name="wp1122484"> </a><p class="pBody">
+The <b class="cBold">acu_cancel()</b> and <b class="cBold">acu_cancel_all()</b> functions perform a logical cancel.  The <b class="cBold">acu_unload()</b> and <b class="cBold">acu_unload_all()</b> functions perform a physical cancel and force a subsequent call to load the new object file from disk.  
+</p>
+<a name="wp1122485"> </a><p class="pBody">
+Using these functions, an object module can be in one of four states:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1122486"> </a><div class="pSmartList1"><li>Active</li></div>
+<a name="wp1122487"> </a><div class="pSmartList1"><li>Loaded but inactive</li></div>
+<a name="wp1122488"> </a><div class="pSmartList1"><li>Not loaded</li></div>
+<a name="wp1122489"> </a><div class="pSmartList1"><li>Cached, which means the same as &quot;Loaded but inactive&quot; except that the files and data items are set to their initial state.</li></div>
+</ul></div>
+<a name="wp1122490"> </a><p class="pBody">
+Note that the LOGICAL_CANCELS and DYNAMIC_MEMORY_LIMIT configuration variables affect how canceled programs are handled.  For information on these variables, see Appendix H in <em class="cEmphasis">ACUCOBOL-GT Appendices</em>.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

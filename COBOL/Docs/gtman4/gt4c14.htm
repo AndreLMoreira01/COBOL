@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:09" />
+  <title>C.13  Changes Affecting Version 3.2</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4c.htm">Appendix C:  Changes Affecting Previous Versions</a> &gt; </p>
+<a name="wp1034790"> </a><h2 class="pHeading1">
+C.13  Changes Affecting Version 3.2
+</h2>
+<a name="wp1034791"> </a><p class="pBody">
+Two compilation switches provide compatibility with Version 3.2:
+</p>
+<a name="wp1036047"> </a><p class="pBody">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1036096"> </a><p class="pCellBody">
+-C32
+</p>
+</td>
+    <td><a name="wp1036098"> </a><p class="pCellBody">
+Causes the compiler to generate code according to the rules used by Version 3.2. 
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1036100"> </a><p class="pCellBody">
+-Z32
+</p>
+</td>
+    <td><a name="wp1036102"> </a><p class="pCellBody">
+Creates object code that can be run with a Version 3.2 runtime.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1034794"> </a><p class="pBody">
+The following paragraphs describe changes that can affect programs originally written with ACUCOBOL-GT<span style="font-family: Arial, Verdana, Helvetica, sans-serif"> </span>Version 3.2.  
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1034795"> </a><div class="pSmartList1"><li>Under 32-bit Windows, the user name returned in ACCEPT FROM SYSTEM-INFO is now retrieved from the system instead of from the USER environment setting.  The name retrieved is the user's login name.  This change could affect installed programs in that a user's name may appear differently than it did with earlier runtimes.  The runtime does not provide a way to override this change, because doing so would present a security hole under Windows NT.  </li></div>
+<a name="wp1034796"> </a><div class="pSmartList1"><li>The default compile output file has been changed from &quot;cbl.out&quot; to &quot;<em class="cEmphasis">{source-name}</em>.acu&quot;.  This could affect the behavior of scripts used to compile programs.  Also, if no CODE-SUFFIX is specified, the runtime tries a suffix of &quot;.acu&quot; before trying a blank suffix.  This could affect programs if you happen to use a blank suffix for objects and have files named with the &quot;.acu&quot; extension in the same directory as your objects.  To work around this, simply set CODE-SUFFIX explicitly in your configuration file.  To specify a blank extension, simply add &quot;CODE-SUFFIX&quot; with no value.  </li></div>
+<a name="wp1034799"> </a><div class="pSmartList1"><li>AUTO termination on a graphical screen now acts as if the &quot;Tab&quot; key had been pressed.  </li></div>
+<a name="wp1034800"> </a><p class="pIndented1">
+Suppose a user is interacting with a screen that has an entry field followed by a radio button group.  Normally, when the user tabs to the radio button group, control passes to the &quot;group leader&quot; (that is, the button that is selected, or the first button in the group, if none is selected).  Prior to Version 4.0, if the entry field were defined with the AUTO style, then when the field was full, control passed to the very next item in the Screen Section.  This might be a radio button that was not the &quot;group leader.&quot;
+</p>
+<a name="wp1034801"> </a><p class="pIndented1">
+The Version 4.0 runtime has been enhanced to treat this AUTO termination case as if the &quot;Tab&quot; key had been pressed, so that control passes to the &quot;group leader&quot; when the entry field becomes full.
+</p>
+<a name="wp1034802"> </a><p class="pIndented1">
+If the program is compiled with the &quot;-C##&quot; option, where &quot;##&quot; is a number less than 40 (such as &quot;-C32&quot; or &quot;-C31&quot;), this enhancement is disabled, and the behavior reverts to that of earlier versions.
+</p>
+<a name="wp1034803"> </a><div class="pSmartList1"><li>Starting with Version 4.0, the compiler uses a new rule when moving LOW-VALUES or HIGH-VALUES to a numeric item.</li></div>
+<a name="wp1034804"> </a><p class="pIndented1">
+Under standard COBOL, a MOVE of LOW-VALUES or HIGH-VALUES to a numeric item has undefined effects.  Prior to Version 3.0, ACUCOBOL would treat these items as if they had legal numeric values, convert them accordingly, and move the result.  This often results in a meaningless value, but can be useful for some numeric data items.  
+</p>
+<a name="wp1034805"> </a><p class="pIndented1">
+USAGE DISPLAY types, for example, would end up with LOW-VALUES in their storage.  Non-DISPLAY types ended up with odd values.  Some other COBOL systems would produce a value of zero in binary numeric items when LOW-VALUES were moved to them.  
+</p>
+<a name="wp1034806"> </a><p class="pIndented1">
+In order to improve compatibility with these systems, ACUCOBOL-GT was changed in Version 3.0 so that a MOVE of LOW-VALUES to a numeric item moved ZERO to that item.  There were two concerns with this: (a) the compiler did not do this in every case, and (b) this changed the behavior of some programs that were functioning under prior versions of the runtime.
+</p>
+<a name="wp1034807"> </a><p class="pIndented1">
+Starting with Version 4.0, the compiler uses the following rule when moving LOW-VALUES or HIGH-VALUES to a numeric item:
+</p>
+<a name="wp1034808"> </a><p class="pIndented1">
+When the constant LOW-VALUES or HIGH-VALUES is the source of a MOVE statement whose destination is numeric, the move is treated as if the destination were defined as class alphanumeric.  This results in the memory occupied by the numeric item being filled with LOW/HIGH-VALUES.  
+</p>
+<a name="wp1034809"> </a><p class="pIndented1">
+This rule tends to produce the best results of both the pre-3.0 and post-3.0 behavior--the useful cases work out the same.  Also, this rule expresses what most programmers believe should happen.  
+</p>
+<a name="wp1034810"> </a><p class="pIndented1">
+This new rule is used only for programs compiled for 4.0 semantics (this is the default).  If you use the &quot;-C##&quot; or &quot;-Z##&quot; option to compile for earlier semantics, the compiler does not use this rule, and the runtime adjusts to use the semantics that were in place for version &quot;##&quot;.  For example, if you compile with &quot;-C24&quot;, then the runtime will use the pre-3.0 semantics for the meaning of MOVE LOW-VALUES to a numeric item.  
+</p>
+</ul></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

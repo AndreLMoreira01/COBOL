@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:31" />
+  <title>4.8.4  The Resize Layout Manager</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt24.htm">Chapter 4:  Supporting Concepts and Related Issues</a> &gt; <a href="gt2414.htm">4.8  Layout Managers</a> &gt; </p>
+<a name="wp1029499"> </a><h2 class="pHeading2">
+4.8.4  The Resize Layout Manager
+</h2>
+<a name="wp1030317"> </a><p class="pBody">
+The resize layout manager is designed to assist with the process of handling resizable windows (a resizable window is a floating window created with the RESIZABLE phrase; see DISPLAY FLOATING WINDOW in section 6.6 of Book 3).  It implements some basic rules that automate what happens to controls when a window changes size.  While the resize manager only handles some fairly simple cases, the cases are common ones.  This frees the programmer to concentrate on more complex cases. 
+</p>
+<a name="wp1030331"> </a><p class="pBody">
+The standard object name of the resize manager is LM-RESIZE.
+</p>
+<a name="wp1030318"> </a><p class="pBody">
+What the resize manager does affects only controls that have non-zero LAYOUT-DATA.  Thus, by default, the resize manager has no affect on a window.  If you want the resize manager to act on a control, then you assign that control a LAYOUT-DATA value that indicates the kind of action you want it to take.  LAYOUT-DATA values are defined in the next section.
+</p>
+<a name="wp1029503"> </a><p class="pBody">
+When the resize manager is first attached to a window, it does two things:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1029504"> </a><div class="pSmartList1"><li>It automatically applies the CONTROLS-UNCROPPED style to the window.  This is necessary for the resize manager to function properly.</li></div>
+<a name="wp1029505"> </a><div class="pSmartList1"><li>It records the current dimensions of the window.  These are called the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">design dimensions</span>.  The resize manager uses the design dimensions when deciding how to size and position controls.  </li></div>
+</ol></div>
+<a name="wp1029506"> </a><p class="pBody">
+The essential concept with the resize manager is that the size of the window when it is attached is the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">natural</span> or <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">design</span> size of the window.  It assumes that all controls placed on the window look right when placed on a window of this size.  
+</p>
+<a name="wp1029507"> </a><p class="pBody">
+For example, if you design a screen that looks good on a 25 x 80 window, then you should attach the resize manager to that window when it is 25 x 80.  You normally accomplish this by creating the window that size and attaching the resize manager at the same time.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+   DISPLAY STANDARD GRAPHICAL WINDOW<a name="wp1029508"> </a>
+      BACKGROUND-LOW<a name="wp1029509"> </a>
+      LINES 25, SIZE 80<a name="wp1029510"> </a>
+      LAYOUT-MANAGER = LAYOUT-1<a name="wp1029511"> </a>
+</pre></div>
+<a name="wp1032034"> </a><p class="pBody">
+Once attached, the resize manager takes effect anytime the window is resized or a control is added to the window.  The resize manager acts on any control that has a non-zero LAYOUT-DATA value.  The exact value determines what actions the resize manager takes.  The resize manager assumes that it has complete control over the size and placement of controls that have LAYOUT-DATA.  After such a control has been displayed, the program should not modify it in a way that changes its size or position (that is the job of the resize manager).  Doing so may result in improper resizing or repositioning by the resize manager.
+</p>
+<a name="wp1031291"> </a><p class="pBody">
+Note that a Screen Section control that is subject to the resize manager has its design values set when the control is created.
+</p>
+<a name="wp1032013"> </a><p class="pBody">
+There is a COPY file that can be helpful when working with the resize manager.  It contains a pre-declared layout manager handle (called &quot;LM-RESIZE&quot;) and constants for the most common combinations of LAYOUT-DATA settings.  This COPY library is called &quot;lmresize.def&quot;.  
+</p>
+<a name="wp1032014"> </a><p style="font-family: Arial, Verdana, Helvetica, sans-serif">
+<hr />
+<b>Tip:  </b> The resize layout manager facility is demonstrated in an AcuBench sample project located in the Support area of the Acucorp Web site.  To download the program, open your Web browser and navigate to: www.acucorp.com/support/public/sample_programs/index.php.  Select the category &quot;Graphical User Interface Sample Programs&quot; from the drop down list, and click on &quot;layoutmgr.zip&quot;.
+<hr />
+</p>
+<a name="wp1032320"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>.NET controls cannot be managed by the resize layout manager.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

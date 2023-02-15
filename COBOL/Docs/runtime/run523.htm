@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/13/05 15:22:12" />
+  <title>5.8.1  Variables</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Runtime Manual <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="run5.htm"><br />Chapter 5: Runtime Debugger</a> &gt; <a href="run522.htm">5.8   Specifying Addresses </a> &gt; </p>
+<a name="wp1038011"> </a><h2 class="pHeading2">
+5.8.1  Variables
+</h2>
+<a name="wp1038014"> </a><p class="pBody">
+Variables can be specified by their symbolic name or by their address.  If they are specified by <em class="cEmphasis">address</em>, both the starting address (in hexadecimal, preceded by a &quot;.&quot; (period)) and the variable's size (in decimal) must be specified, in that order.  These values can be found in the symbol table listing produced when you compile with the &quot;-Ls&quot; compiler option.  Any variable specified directly by address is treated as if it were an alphanumeric variable.  Variables specified by <em class="cEmphasis">name </em>are treated as their correct type, except for edited fields, which are treated as alphanumeric. 
+</p>
+<a name="wp1038015"> </a><p class="pBody">
+Either form of addressing may have an index specified for it.  This index is a number in parentheses following the address.  Only constant values may be used as table subscripts.  
+</p>
+<a name="wp1038017"> </a><p class="pBody">
+You may use name qualification with the <b class="cBold">Display</b>, <b class="cBold">Accept</b>, and <b class="cBold">Monitor</b> commands.  For example, you may type &quot;FIELD-1 IN GROUP-1&quot; to refer to FIELD-1 of GROUP-1.  Name qualification is not supported for on-screen commands (such as F7) and for situations in which you double-click on the data name.
+</p>
+<a name="wp1038018"> </a><p class="pBody">
+Data items may be qualified by a group name. Table indexes may be specified with variables.
+</p>
+<a name="wp1038019"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>For data items of variable size, the debugger always treats the data item as if it were currently defined to be its maximum size.  
+<hr />
+</p>
+<a name="wp1038020"> </a><p class="pBody">
+<b class="cBold">Examples</b>:
+</p>
+<a name="wp1038034"> </a><p class="pBody">
+   </p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1038023"> </a><p class="pCellBody">
+VAR-1
+</p>
+</td>
+    <td><a name="wp1038025"> </a><p class="pCellBody">
+- Variable name
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038027"> </a><p class="pCellBody">
+3A4, 5
+</p>
+</td>
+    <td><a name="wp1038029"> </a><p class="pCellBody">
+- Address 3A4 for 5 bytes
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1038031"> </a><p class="pCellBody">
+ARRAY-1 (2,4)
+</p>
+</td>
+    <td><a name="wp1038033"> </a><p class="pCellBody">
+- Indexed variable
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1038035"> </a><h3 class="pHeadingRef">
+Configuration variables
+</h3>
+<a name="wp1038038"> </a><p class="pBody">
+You can display and accept configuration variables within the debugger. To display a particular variable use the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+d %<em class="cEmphasis">var-name</em> <a name="wp1038039"> </a>
+</pre></div>
+<a name="wp1038040"> </a><p class="pBody">
+where <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">var-name</span> is the name of the variable you want to display.  Up to 300 characters of the value are displayed.  (This is equivalent to executing the ACCEPT FROM ENVIRONMENT command, and can show the same types of configuration variables.) 
+</p>
+<a name="wp1038041"> </a><p class="pBody">
+To accept a configuration variable, execute the command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+a %<em class="cEmphasis">var-name</em><a name="wp1038042"> </a>
+</pre></div>
+<a name="wp1038043"> </a><p class="pBody">
+where <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">var-name</span> is the name of the variable you want to modify.  In this case, the debugger responds with a prompt.  Enter the new value of the variable, ACCEPT that variable within the COBOL program, and the runtime will use the new value.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

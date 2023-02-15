@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:06" />
+  <title>5.1.4   Extended Locking Rules</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt15.htm"><br />Chapter 5:  File Processing</a> &gt; <a href="gt152.htm">5.1 Transaction Management</a> &gt; </p>
+<a name="wp1032286"> </a><h2 class="pHeading2">
+5.1.4   Extended Locking Rules
+</h2>
+<a name="wp1032289"> </a><p class="pBody">
+In order to prevent another process from updating the records in a way that might make it impossible to do a rollback, the system locks any records modified during a transaction. This is done only for files that allow rollbacks.  ACUCOBOL-GT offers some flexibility in record locking procedures in its transaction management system.  You can enable multiple locking rules or single locking rules as the default locking mode for files that allow rollbacks.  
+</p>
+<a name="wp1032290"> </a><p class="pBody">
+To indicate which files will have record locks held, use the following syntax in the LOCK MODE phrase of the FILE-CONTROL entry for each affected file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+WITH  <u class="cUnderline">ROLLBACK</u> <a name="wp1032291"> </a>
+</pre></div>
+<a name="wp1032292"> </a><p class="pBody">
+When rollback is enabled, record and file locking rules are extended.  Every record updated as part of a transaction is locked until that transaction is committed or rolled back.  The COMMIT and ROLLBACK verbs remove these locks.  Record locks that are applied when the file is read are also kept until the end of the transaction.  Multiple record locking rules are in effect by default.
+</p>
+<a name="wp1032293"> </a><p class="pBody">
+Use of the compiler option, &quot;-Fl&quot;, enables single locking rules rather than multiple locking rules as the lock mode default. Normally, &quot;WITH ROLLBACK&quot; causes multiple locking rules to be in effect for a file.  When &quot;-Fl&quot; is used, the &quot;WITH ROLLBACK&quot; clause does not affect whether single or multiple record locking rules are followed.  Single locking becomes the default.  You may enable multiple locking either by specifying &quot;WITH LOCK ON MULTIPLE RECORDS&quot; in a file's SELECT statement or by using &quot;APPLY LOCK-HOLDING ON <em class="cEmphasis">file</em>&quot; in the I-O CONTROL paragraph. 
+</p>
+<a name="wp1032294"> </a><p class="pBody">
+Record locks are held during a transaction in order to prevent another process from updating the records in a way which might make rollback impossible.  Note, however, that a record may be deleted during a transaction, and another process is allowed to write a record with the same record key to the file.  If this happens, the ROLLBACK will fail with a duplicate key error.  See <a  href="gt1511.htm#wp1032301">section 5.1.5, &quot;Logging and Rollback of File Update Operations.&quot;</a>
+</p>
+<a name="wp1032295"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>During a transaction, the UNLOCK statement affects only files for which rollback is not enabled.  In the case where the UNLOCK statement is ineffective because rollback was enabled for the file, the file status will be set to 00 (success).
+<hr />
+</p>
+<a name="wp1032296"> </a><p class="pBody">
+During a transaction with a Vision or relative file, a CLOSE is postponed if any updates (WRITE, REWRITE, or DELETE) are performed on the file during the transaction, <em class="cEmphasis">regardless of whether any records are locked.</em>  This function permits the file to remain open for ROLLBACK.
+</p>
+<a name="wp1032297"> </a><p class="pBody">
+If the same physical file is OPENed again <em class="cEmphasis">within the same transaction</em>, even if the program is using a different logical file (different SELECT), the postponed CLOSE is canceled.  Note that the mode of the original OPEN is retained.  (For example, if the file were originally OPEN OUTPUT, and if the CLOSE were canceled, then an OPEN I-O on the same file within the same transaction would <em class="cEmphasis">not</em> enable the program to read the file.)  When the second OPEN is encountered, the file position is reset to the beginning so that a READ NEXT would read the first file in the record. 
+</p>
+<a name="wp1032298"> </a><p class="pCaution">
+<hr />
+<b>Caution:  </b>While a CLOSE action is delayed until the transaction is committed, a DELETE FILE action is performed immediately.  If the DELETE FILE statement is contained within a transaction (before the COMMIT) following its associated CLOSE statement, the result will not be what is expected.  Because the CLOSE is delayed but the DELETE FILE is executed right away, the program will attempt to delete the open file.  The result of the attempted DELETE FILE action is host system dependent (for example, under Microsoft Windows, attempting to delete an open file will cause an error 37, 07 to be returned, while under UNIX, where there is no restriction on deleting an open file, the action will succeed).  The safest programming practice is to not code a DELETE FILE action inside a transaction.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

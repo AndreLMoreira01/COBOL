@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:28:56" />
+  <title>5.3  SQL Syntax Supported by AcuODBC</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb5.htm">Chapter 5: Writing Queries to Access Data</a> &gt; </p>
+<a name="wp1028311"> </a><h2 class="pHeading1">
+5.3  SQL Syntax Supported by AcuODBC
+</h2>
+<a name="wp1028314"> </a><p class="pBody">
+According to specification, ODBC programs retrieve data exclusively through Structured Query Language (SQL) queries or commands.  For this reason, one of the functions performed by AcuODBC is to translate SQL queries into calls that can be executed and interpreted by the COBOL data file system.
+</p>
+<a name="wp1028318"> </a><p class="pBody">
+SQL is a very complex language, and most ODBC drivers do not support every SQL command.  AcuODBC supports the most common commands needed to write a query:  SELECT, INSERT, UPDATE, and DELETE.  In addition to these commands, AcuODBC recognizes many SQL reserved words and supports many functions.  These are listed in <a  href="odb513.htm#wp1029055">section 5.5, &quot;SQL Reserved Words Recognized by AcuODBC,&quot;</a> and <a  href="odb514.htm#wp1029137">section 5.6, &quot;Functions Supported by AcuODBC.&quot;</a>
+</p>
+<a name="wp1028320"> </a><p class="pBody">
+The following section describes the SQL syntax of the four commands supported by AcuODBC and uses the following conventions:  
+</p>
+<a name="wp1028321"> </a><h5 class="pHeading4">
+Upper-Case
+</h5>
+<a name="wp1028325"> </a><p class="pBody">
+UPPER-CASE WORDS are keywords.
+</p>
+<a name="wp1028326"> </a><h5 class="pHeading4">
+Brackets 
+</h5>
+<a name="wp1028330"> </a><p class="pBody">
+Brackets ( [ ] ) enclose optional elements.
+</p>
+<a name="wp1028331"> </a><h5 class="pHeading4">
+Ellipses
+</h5>
+<a name="wp1028335"> </a><p class="pBody">
+Ellipses (.  .  .) indicate repetition.  The element immediately preceding an ellipsis may be repeated any number of times.  
+</p>
+<a name="wp1028336"> </a><h5 class="pHeading4">
+Other Characters
+</h5>
+<a name="wp1028340"> </a><p class="pBody">
+All the other characters, such as commas and dots, are required when they appear.
+</p>
+<a name="wp1028341"> </a><h5 class="pHeading4">
+Numeric and Non-numeric Literals 
+</h5>
+<a name="wp1028346"> </a><p class="pBody">
+A <em class="cEmphasis">numeric </em>literal is a string containing
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp1028347"> </a><div class="pSmartList2"><li>one or more digits.</li></div>
+<a name="wp1028348"> </a><div class="pSmartList2"><li>an optional plus (+) sign or minus (-) sign, which, if it is present, must be the first (leftmost) character of the literal. </li></div>
+<a name="wp1028349"> </a><div class="pSmartList2"><li>an optional decimal point.</li></div>
+</ul></div>
+</ul></div>
+<a name="wp1028350"> </a><p class="pBody">
+Here are some examples of valid numeric literals:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
++25  -25  26.0  .78  92  -3.000002  45<a name="wp1028351"> </a>
+</pre></div>
+<a name="wp1028360"> </a><p class="pBody">
+A <em class="cEmphasis">non-numeric</em>, or <em class="cEmphasis">alphanumeric</em>, literal is a string enclosed in single quotation marks, as in these examples: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&#39;hello&#39;  &#39;now is the time&#39;<a name="wp1028361"> </a>
+</pre></div>
+<a name="wp1028362"> </a><p class="pBody">
+Notice that the single quotation mark is actually an apostrophe.
+</p>
+<a name="wp1028363"> </a><p class="pBody">
+The quotation marks are usually not part of the string.  However, two consecutive quotation marks inside a <em class="cEmphasis">non-numeric</em> literal are interpreted as a single quotation mark as in the following examples:
+</p>
+<a name="wp1028378"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1029778"> </a>
+Non-numeric literal
+
+</th>
+    <th><a name="wp1029780"> </a>
+Interpretation
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028371"> </a><p class="pCellBody">
+&#39;Altman&#39;&#39;s Lane&#39;
+</p>
+</td>
+    <td><a name="wp1028373"> </a><p class="pCellBody">
+Altman&#39;s Lane
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1028375"> </a><p class="pCellBody">
+&#39;&#39;&#39;&#39;
+</p>
+</td>
+    <td><a name="wp1028377"> </a><p class="pCellBody">
+&#39;&#39;
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1028379"> </a><h5 class="pHeading4">
+Date and Timestamp Literals
+</h5>
+<a name="wp1028384"> </a><p class="pIndented1">
+A <em class="cEmphasis">date literal</em> has the following format, where YYYY is the year expressed as a four-digit number and MM and DD are the month and day, respectively, expressed as two-digit numbers:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+{d &#39;YYYY-MM-DD&#39;}<a name="wp1028385"> </a>
+</pre></div>
+<a name="wp1028386"> </a><p class="pIndented1">
+For example, the following date literal represents June 18, 2001:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+{d &#39;2001-06-18&#39;}<a name="wp1028387"> </a>
+</pre></div>
+<a name="wp1028392"> </a><p class="pIndented1">
+A <em class="cEmphasis">timestamp literal</em> is similar, but it indicates the time as well as the date.  Use one of three formats for timestamp literals, depending the precision required:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+{ts &#39;YYYY-MM-DD HH:NN:SS&#39;}<a name="wp1028393"> </a>
+{ts &#39;YYYY-MM-DD HH:NN:SS.TT&#39;}<a name="wp1028394"> </a>
+{ts &#39;YYYY-MM-DD HH:NN:SS.TTTT&#39;}<a name="wp1028395"> </a>
+</pre></div>
+<a name="wp1028397"> </a><p class="pIndented1">
+HH, NN, and SS are the hour, minute, and second, respectively, expressed as two-digit numbers.  TT is the number of hundredths of a second expressed as a two-digit number, and TTTT is hundredths of seconds expressed as a four-digit number.  This is based on a 24-hour clock, so there is no need to designate either &quot;AM&quot; or &quot;PM&quot;.
+</p>
+<a name="wp1028398"> </a><p class="pIndented1">
+For example, the following timestamp literal represents a time 57.1234 seconds after 5:42 PM on March 28, 2001:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+{ts &#39;2001-03-28 17:42:57.1234&#39;}<a name="wp1028399"> </a>
+</pre></div>
+<a name="wp1028400"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>This section is intended to provide a brief introduction to SQL and to using AcuODBC.  It is not intended to provide an all-encompassing description of SQL.  Please refer to any of the currently available reference books for additional information on SQL and relational databases.
+<hr />
+</p>
+<a name="wp1028401"> </a><h3 class="pHeadingRef">
+Sample Files
+</h3>
+<a name="wp1028404"> </a><p class="pBody">
+The examples in this chapter were developed using ACUCOBOL-GT<sup class="cSuperscript">®</sup> and Microsoft Access 2000.  In addition, the data has been linked, rather than imported.  See <a  href="odb45.htm#wp1035623">section 4.1.3, &quot;Accessing Data From Access 97 and 2000,&quot;</a> for more information on linking versus importing and for information on bringing external data into the database. 
+</p>
+<a name="wp1028405"> </a><p class="pBody">
+This section contains examples based on four of the sample files shipped with AcuODBC (&quot;accounts&quot;, &quot;clients&quot;, &quot;codes&quot;, and &quot;pets&quot;).  These are part of the AcuODBC Datasource DSN included with AcuODBC.  You may want to enter the queries in this chapter or experiment with some of your own.  Note that the syntax of queries may be different if you are working in a different ODBC-enabled application.  
+</p>
+<a name="wp1028407"> </a><p class="pBody">
+If you haven't done so already, open the application that you want to use and perform the necessary steps to access the data in the sample files.  If you are using Microsoft Access 2000, the procedure is as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1028408"> </a><div class="pSmartList1"><li>Start Microsoft Access.</li></div>
+<a name="wp1028409"> </a><div class="pSmartList1"><li>Create a new database or open an existing one.  If you create a new database, name and save it.</li></div>
+<a name="wp1028410"> </a><div class="pSmartList1"><li>Select <b class="cBold">Get External Data </b>and then either <b class="cBold">Import</b> or <b class="cBold">Link Tables</b> from the File menu.  </li></div>
+<a name="wp1028411"> </a><div class="pSmartList1"><li>Select <b class="cBold">ODBC Databases</b> from the &quot;Files of type:&quot; drop-down list in the Import dialog box.  </li></div>
+<a name="wp1028412"> </a><div class="pSmartList1"><li>Select <b class="cBold">AcuODBC Datasource</b> from the Select Data Source dialog box.</li></div>
+<a name="wp1028413"> </a><div class="pSmartList1"><li>Select <b class="cBold">Select All</b> from the Link Tables dialog box.  Click <b class="cBold">OK</b>.</li></div>
+</ol></div>
+<a name="wp1028415"> </a><p class="pBody">
+The tables created by the sample COBOL files, and used in this chapter, appear in Access as follows.
+</p>
+<a name="wp1038980"> </a><h3 class="pHeadingRef">
+Accounts table (&quot;accounts&quot;)
+</h3>
+<a name="wp1039164"> </a><p class="pBody">
+</p><div><img src="images/table_ac.gif" height="289" width="564" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028418"> </a><h3 class="pHeadingRef">
+Clients table (&quot;clients&quot;)
+</h3>
+<a name="wp1039168"> </a><p class="pBody">
+</p><div><img src="images/table_cl.gif" height="325" width="679" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028420"> </a><h3 class="pHeadingRef">
+Codes table (&quot;codes&quot;)
+</h3>
+<a name="wp1039193"> </a><p class="pBody">
+</p><div><img src="images/codes_cr.gif" height="107" width="209" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028422"> </a><h3 class="pHeadingRef">
+Pets table (&quot;pets&quot;)
+</h3>
+<a name="wp1039197"> </a><p class="pBody">
+</p><div><img src="images/table_pe.gif" height="392" width="567" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028430"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>AcuODBC automatically converts hyphens to underscores; however, to improve performance, use underscores rather than hyphens in the names of tables.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

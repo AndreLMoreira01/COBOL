@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:24:34" />
+  <title>5.19.2  Tab: Special Properties </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt25.htm">Chapter 5:  Control Types Reference</a> &gt; <a href="gt2584.htm">5.19  Tab</a> &gt; </p>
+<a name="wp1193578"> </a><h2 class="pHeading2">
+5.19.2  Tab: Special Properties 
+</h2>
+<a name="wp1028981"> </a><h5 class="pHeading4">
+TAB-TO-ADD (alphanumeric)   
+</h5>
+<a name="wp1078554"> </a><p class="pBody">
+Assigning a value to this property adds a new tab to the control.  The value is the text of the tab.  You may add several tabs at once by using parentheses, as shown in the following example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MODIFY TAB-1, <a name="wp1028982"> </a>
+    TAB-TO-ADD = ( &quot;TAB 1&quot;, &quot;TAB 2&quot;, &quot;TAB 3&quot; )<a name="wp1078561"> </a>
+</pre></div>
+<a name="wp1028983"> </a><p class="pBody">
+This example adds three tabs in the order listed.  Inquiring from this property has no effect.  
+</p>
+<a name="wp1028986"> </a><h5 class="pHeading4">
+TAB-TO-DELETE (numeric)   
+</h5>
+<a name="wp1078563"> </a><p class="pBody">
+Assigning a non-zero value to this property removes the correspondingly numbered tab.  Inquiring from this property has no effect.  
+</p>
+<a name="wp1028989"> </a><h5 class="pHeading4">
+RESET-TABS (numeric)   
+</h5>
+<a name="wp1078562"> </a><p class="pBody">
+Assigning a non-zero value to this property removes all existing tabs from the control.  Inquiring from this property has no effect.
+</p>
+<a name="wp1028995"> </a><h5 class="pHeading4">
+BITMAP-HANDLE (numeric)   
+</h5>
+<a name="wp1078564"> </a><p class="pBody">
+This property allows images from a bitmap file to be placed on individual tabs.  The images are displayed before the text of each tab.  Before a bitmap image can be placed on a tab, you must load the bitmap file into memory by calling the library routine W$BITMAP with the WBITMAP-LOAD option.  The routine returns a handle that is referred to by this property of the tab control.
+</p>
+<a name="wp1028996"> </a><p class="pBody">
+The bitmap file loaded into memory is treated as a bitmap strip - a series of images of equal width that are laid out side-by-side in a single bitmap.  The images are numbered sequentially starting at &quot;1&quot;.  By default, each tab in the control displays the image whose number is the same as the tab's ordinal number when the tab was defined.  If you take the following code as an example,
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MODIFY TAB-1, <a name="wp1028997"> </a>
+    TAB-TO-ADD = ( &quot;TAB 1&quot;, &quot;TAB 2&quot;, &quot;TAB 3&quot; )<a name="wp1115601"> </a>
+</pre></div>
+<a name="wp1028998"> </a><p class="pBody">
+then by default, TAB1 will show image &quot;1&quot;, TAB2 will show image &quot;2&quot;, and TAB3 will show image &quot;3&quot;.  You may change the default handling of the assignment of these images with the BITMAP-NUMBER property.  See BITMAP-NUMBER and BITMAP-WIDTH for additional information.  <em class="cEmphasis">(create, modify, inquire)</em>
+</p>
+<a name="wp1029001"> </a><h5 class="pHeading4">
+BITMAP-WIDTH (numeric)  
+</h5>
+<a name="wp1078582"> </a><p class="pBody">
+This property sets the width of the images in the bitmap strip described by BITMAP-HANDLE.  If this property is not set, the images default to 16-pixels wide.  Set this property to match the actual width of the images that make up the bitmap strip to get the look that you desire for the tabs.  <em class="cEmphasis">(create, modify, inquire)</em>
+</p>
+<a name="wp1029004"> </a><h5 class="pHeading4">
+BITMAP-NUMBER (numeric)  
+</h5>
+<a name="wp1078583"> </a><p class="pBody">
+This property identifies which bitmap image will be displayed for each tab. To use this property, set the value of BITMAP-NUMBER to the number of the image in the bitmap strip.  <em class="cEmphasis">(create, modify)</em>
+</p>
+<a name="wp1029005"> </a><p class="pBody">
+This property is additive.  The first time you set the BITMAP-NUMBER, the image identified with the bitmap number will be displayed on the first tab; the second time you set this property, the image identified will be displayed on the second tab, and so on. The additive behavior of this property may be overridden in one of three ways:
+</p>
+<div class="pSmartList1"><ol type="a" class="pSmartList1">
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp1029006"> </a><div class="pSmartList2"><li>You may assign a value of &quot;1&quot; to this property.</li></div>
+<a name="wp1029007"> </a><div class="pSmartList2"><li>You may empty the tab control through RESET-TABS.</li></div>
+<a name="wp1029008"> </a><div class="pSmartList2"><li>You may specify a new list by keying in the bitmap numbers in parentheses as shown in the example below.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp1029009"> </a><p class="pBody">
+The following Screen Section entry creates a tab control with 3 tabs, and places image numbers 3, 5 and 7 on those tabs:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+03 TAB-CONTROL<a name="wp1029010"> </a>
+   TAB-TO-ADD = (&quot;Tab 1&quot;, &quot;Tab 2&quot;, &quot;Tab 3&quot;)<a name="wp1078666"> </a>
+   BITMAP-NUMBER = (3, 5, 7)<a name="wp1078667"> </a>
+</pre></div>
+<a name="wp1029011"> </a><p class="pBody">
+If you omit the BITMAP-NUMBER, the bitmap images are assigned in ordinal number by default.  In other words, the following definition:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+03 TAB-CONTROL<a name="wp1029012"> </a>
+   TAB-TO-ADD = (&quot;Tab 1&quot;, &quot;Tab 2&quot;, &quot;Tab 3&quot;)<a name="wp1078665"> </a>
+</pre></div>
+<a name="wp1029013"> </a><p class="pBody">
+has the same meaning as:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+03 TAB-CONTROL<a name="wp1029014"> </a>
+   TAB-TO-ADD = (&quot;Tab 1&quot;, &quot;Tab 2&quot;, &quot;Tab 3&quot;)<a name="wp1078663"> </a>
+   BITMAP-NUMBER = (1, 2, 3)<a name="wp1078664"> </a>
+</pre></div>
+<a name="wp1029015"> </a><p class="pBody">
+When no value is set for this property, the default behavior is to automatically put bitmap number 1 on the first tab, bitmap number 2 on the second tab, and so on.  <em class="cEmphasis">(create, modify)</em>
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

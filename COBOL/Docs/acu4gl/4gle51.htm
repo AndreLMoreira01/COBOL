@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:40" />
+  <title>E.5  Record and Table Locking</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gle.htm">Appendix E:  Acu4GL for Sybase Information </a> &gt; </p>
+<a name="wp1049746"> </a><h2 class="pHeading1">
+E.5  Record and Table Locking
+</h2>
+<a name="wp1049752"> </a><p class="pBody">
+By default, Sybase doesn't support the type of record and table locking that COBOL expects.  For this reason, the Acu4GL for Sybase product implements its own locking method.  This is accomplished with the addition of two tables to a database.  You choose which database will hold these tables during installation of the Acu4GL for Sybase product. 
+</p>
+<a name="wp1049753"> </a><p class="pBody">
+Before using the locking tables, you need to execute the included &quot;syb_inst.sql&quot; script.  See the installation instructions you used from this manual for the exact procedure.  If you don't perform this step, the first time you try to execute a COBOL program that opens a Sybase table, you receive error 9D,11, &quot;ACUCOBOL Lock Table Incorrect&quot;.
+</p>
+<a name="wp1049754"> </a><p class="pBody">
+The first locking table is called AcuLocks; it holds the record locks.  The columns in this table are the DBID, the Table ID, the Process ID of the process holding the lock, and the primary key of the record that is locked.  There is a unique index on the DBID, the Table ID, and the Key Value, so that inserts into this table are automatically rejected if another user holds a lock on the row in question.  This also gives the Database Administrator the information needed to determine who has locks set, and whether the user in question still has a connection to the server.
+</p>
+<a name="wp1049755"> </a><p class="pBody">
+The second locking table is called AcuOpenTables; it holds information about open tables.  The columns in this table are: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1049756"> </a><div class="pSmartList1"><li>the DBID</li></div>
+<a name="wp1049757"> </a><div class="pSmartList1"><li>the Table ID</li></div>
+<a name="wp1049758"> </a><div class="pSmartList1"><li>the process ID (PID) of the process that has the table open </li></div>
+<a name="wp1049759"> </a><div class="pSmartList1"><li>the open mode (input, output, I/O, or extend) </li></div>
+<a name="wp1049760"> </a><div class="pSmartList1"><li>whether multiple records can be locked </li></div>
+<a name="wp1049761"> </a><div class="pSmartList1"><li>whether the file can be open for I/O by any other users </li></div>
+<a name="wp1049762"> </a><div class="pSmartList1"><li>whether the file can be open at all by any other users </li></div>
+<a name="wp1049763"> </a><div class="pSmartList1"><li>whether Mass Update was specified in the open  </li></div>
+</ul></div>
+<a name="wp1049764"> </a><p class="pBody">
+There are no indices on this table, but there is a trigger, which automatically rejects opens that are not allowed based on other users' open modes.  
+</p>
+<a name="wp1049765"> </a><p class="pBody">
+By using these lock tables, the Acu4GL for Sybase product is able to support all the types of locking ordinarily supported by ACUCOBOL-GT.  No special runtime configuration variables are required.
+</p>
+<a name="wp1049766"> </a><p class="pBody">
+This method of locking is all that is needed if no applications other than COBOL programs are going to be using the Acu4GL for Sybase product.  But if your site has other applications that access the Sybase databases, you must use a method of locking that is inherent to Sybase.
+</p>
+<a name="wp1049767"> </a><p class="pBody">
+The only method of locking that Sybase supports internally is the result of time stamping and the use of BROWSE MODE (see the discussion of BROWSE MODE in the <em class="cEmphasis">Sybase Commands Reference Manual</em>).  If a table has a time stamp column, the Acu4GL for Sybase product uses browse mode.  This allows the server to detect whether another application has modified a record while an ACUCOBOL-GT application has had it locked.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="05/23/06 14:36:00" />
+  <title>3.1 The ESQL Translation Process</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuSQL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="sql3.htm">Chapter 3: Pre-compiler Function and Use</a> &gt; </p>
+<a name="wp1033642"> </a><h2 class="pHeading1">
+3.1 The ESQL Translation Process
+</h2>
+<a name="wp1033645"> </a><p class="pBody">
+The AcuSQL<sup class="cSuperscript">®</sup> pre-compiler identifies and translates ESQL statements into COBOL statements.  It begins its work in the program's Data Division.  The pre-compiler identifies ESQL statements by searching for the keywords &quot;EXEC SQL&quot; and &quot;END-EXEC&quot; in the source code.  When it finds these markers, it encapsulates them with comments and line numbers and then parses and generates COBOL code, including CALLs to the AcuSQL library.  
+</p>
+<a name="wp1033646"> </a><p class="pBody">
+For example, if your code specifies an include file such as:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+EXEC SQL INCLUDE SQLCA END-EXEC. <a name="wp1033647"> </a>
+</pre></div>
+<a name="wp1033648"> </a><p class="pBody">
+This line is translated into:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( PREPROC ACUSQL LINE BEGIN 12 ))<a name="wp1033649"> </a>
+   01  SQLCA IS EXTERNAL.<a name="wp1033650"> </a>
+       05  SQLCAID                PIC X(8).<a name="wp1033651"> </a>
+       05  SQLCABC         COMP-5 PIC S9(9).<a name="wp1033652"> </a>
+       05  SQLCODE         COMP-5 PIC S9(9).<a name="wp1033653"> </a>
+       05  SQLERRM.<a name="wp1033654"> </a>
+           10  SQLERRML    COMP-5 PIC S9(4).<a name="wp1033655"> </a>
+           10  SQLERRMC           PIC X(70).<a name="wp1033656"> </a>
+       05  SQLERRP                PIC X(8).<a name="wp1033657"> </a>
+       05  SQLERRD OCCURS 6 TIMES COMP-5 PIC S9(9).<a name="wp1033658"> </a>
+       05  SQLWARN.<a name="wp1033659"> </a>
+           10  SQLWARN0           PIC X.<a name="wp1033660"> </a>
+           10  SQLWARN1           PIC X.<a name="wp1033661"> </a>
+           10  SQLWARN2           PIC X.<a name="wp1033662"> </a>
+           10  SQLWARN3           PIC X.<a name="wp1033663"> </a>
+           10  SQLWARN4           PIC X.<a name="wp1033664"> </a>
+           10  SQLWARN5           PIC X.<a name="wp1033665"> </a>
+           10  SQLWARN6           PIC X.<a name="wp1033666"> </a>
+           10  SQLWARN7           PIC X.<a name="wp1033667"> </a>
+           10  SQLWARN8           PIC X.<a name="wp1033668"> </a>
+           10  SQLWARN9           PIC X.<a name="wp1033669"> </a>
+           10  SQLWARNA           PIC X.<a name="wp1033670"> </a>
+       05  SQLSTATE               PIC X(5).<a name="wp1033671"> </a>
+       05  SQLERRM-PREFIX.<a name="wp1033672"> </a>
+           10  SQLERRPL    COMP-5 PIC S9(4).<a name="wp1033673"> </a>
+           10  SQLERRPC           PIC X(70)<a name="wp1035466"> </a>
+*EXEC SQL INCLUDE SQLCA END-EXEC.                             <a name="wp1035468"> </a>
+*(( PREPROC ACUSQL LINE END 12 ))<a name="wp1033677"> </a>
+           .                                    <a name="wp1033678"> </a>
+</pre></div>
+<a name="wp1033679"> </a><p class="pBody">
+The following ESQL statement:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+EXEC SQL<a name="wp1033680"> </a>
+    SELECT MIN(C_NUMBER)<a name="wp1033681"> </a>
+        INTO :MIN-C-NUMBER<a name="wp1033682"> </a>
+        FROM CUSTOMER<a name="wp1033683"> </a>
+END-EXEC.<a name="wp1033684"> </a>
+</pre></div>
+<a name="wp1033685"> </a><p class="pBody">
+is translated into:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+*(( PREPROC ACUSQL LINE BEGIN 41 ))<a name="wp1033686"> </a>
+           PERFORM CALL &quot;SQL$START&quot; END-CALL CALL &quot;SQL$PREPARE&quot; USING &#39;S<a name="wp1033687"> </a>
+      -    &#39;QLISTM&#39; &quot;SELECT MIN(C_NUMBER) FROM CUSTOMER &quot; END-CALL IF SQ<a name="wp1033688"> </a>
+      -    LCODE OF SQLCA &lt; 0 THEN GO TO Error-Exit END-IF CALL &quot;SQL$BIN<a name="wp1033689"> </a>
+      -    &quot;DCOLUMN&quot; USING &#39;SQLISTM&#39; 1 MIN-C-NUMBER   END-CALL IF SQLCOD<a name="wp1033690"> </a>
+      -    E OF SQLCA &lt; 0 THEN GO TO Error-Exit END-IF CALL &quot;SQL$CURSOR&quot;<a name="wp1033691"> </a>
+            USING &#39;SQLICUR&#39; &#39;SQLISTM&#39; IF SQLCODE OF SQLCA &lt; 0 THEN GO TO<a name="wp1033692"> </a>
+            Error-Exit END-IF CALL &quot;SQL$OPEN&quot; USING &#39;SQLICUR&#39; IF SQLCODE<a name="wp1033693"> </a>
+            OF SQLCA &lt; 0 THEN GO TO Error-Exit END-IF CALL &quot;SQL$FETCH&quot; U<a name="wp1033694"> </a>
+      -    SING 1 0 &#39;SQLICUR&#39; IF SQLCODE OF SQLCA &lt; 0 THEN GO TO Error-E<a name="wp1033695"> </a>
+      -    xit END-IF CALL &quot;SQL$CLOSE&quot; USING &#39;SQLICUR&#39; IF SQLCODE OF SQL<a name="wp1033696"> </a>
+      -    CA &lt; 0 THEN GO TO Error-Exit END-IF CALL &quot;SQL$UNPREPARE&quot; USIN<a name="wp1033697"> </a>
+      -    G &#39;SQLISTM&#39;  END-CALL END-PERFORM<a name="wp1033698"> </a>
+      *    EXEC SQL<a name="wp1033699"> </a>
+      *        SELECT MIN(C_NUMBER)<a name="wp1033700"> </a>
+      *            INTO :MIN-C-NUMBER<a name="wp1033701"> </a>
+      *            FROM CUSTOMER<a name="wp1033702"> </a>
+      *    END-EXEC.<a name="wp1033703"> </a>
+      *(( PREPROC ACUSQL LINE END 45 ))<a name="wp1033704"> </a>
+           .<a name="wp1033705"> </a>
+</pre></div>
+<a name="wp1033706"> </a><p class="pBody">
+The pre-compiler generates a standard 72-character line without regard for the end of statements or other formatting considerations.
+</p>
+<a name="wp1033707"> </a><p class="pBody">
+The line numbers that appear in the comment lines specify the original line numbers in the input file.
+</p>
+<a name="wp1033709"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The precise results of these translations may vary depending on your version of the pre-compiler. 
+<hr />
+</p>
+<a name="wp1033710"> </a><p class="pBody">
+As AcuSQL works through your ESQL source, it creates a temporary COBOL source file, also known as the &quot;intermediate file.&quot;  This file is later compiled by ACUCOBOL-GT to produce an executable object file.  You can save, and subsequently view, the temporary file by specifying the &quot;-Po&quot; option when invoking AcuSQL.  (See <a  href="sql35.htm#wp1033849">section 3.2.2, &quot;Invoking the Pre-compiler From the ACUCOBOL-GT Command Line.&quot;</a> )  This intermediate file has the extension &quot;.asq&quot;.
+</p>
+<a name="wp1033713"> </a><p class="pBody">
+Into the temporary file, AcuSQL inserts directives that instruct the compiler to reset certain internal state variables.  These directives, which begin with the words &quot;PREPROC ACUSQL,&quot; are listed below.
+</p>
+<a name="wp1034962"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1034899"> </a>
+Pre-compiler Directive
+
+</th>
+    <th><a name="wp1034901"> </a>
+Function
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034903"> </a><p class="pCellBody">
+PREPROC ACUSQL LINE BEGIN
+</p>
+</td>
+    <td><a name="wp1034905"> </a><p class="pCellBody">
+Inserted whenever AcuSQL finds &quot;EXEC SQL&quot;.  Informs the compiler that a pre-compiler automatically generated future lines.  Important for cross-listings and debugging.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034907"> </a><p class="pCellBody">
+PREPROC ACUSQL LINE END
+</p>
+</td>
+    <td><a name="wp1034909"> </a><p class="pCellBody">
+Inserted whenever AcuSQL finds &quot;END-EXEC&quot;.  Informs the compiler to start counting lines itself.  Important for cross-listings and debugging.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034911"> </a><p class="pCellBody">
+PREPROC ACUSQL FILE
+</p>
+</td>
+    <td><a name="wp1034913"> </a><p class="pCellBody">
+Informs the compiler which file should be considered the source file for future lines.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034915"> </a><p class="pCellBody">
+PREPROC ACUSQL INCLUDE BEGIN<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 
+</p>
+</td>
+    <td><a name="wp1034917"> </a><p class="pCellBody">
+Informs the compiler that it should detect ANSI vs. terminal format, and push the old format onto a stack.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1034919"> </a><p class="pCellBody">
+PREPROC ACUSQL INCLUDE END
+</p>
+</td>
+    <td><a name="wp1034921"> </a><p class="pCellBody">
+Informs the compiler that it should pop its ANSI vs. terminal format stack.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuSQL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

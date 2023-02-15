@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.2.1.1  Compiling and running in the MPE/iX environment</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp3.htm">4.2  ACUCOBOL-GT in MPE/iX Environments</a> &gt; <a href="ch4-hp4.htm">4.2.1  Using ACUCOBOL-GT in Traditional MPE/iX Environments </a> &gt; </p>
+<a name="wp1040961"> </a><h2 class="pHeading3">
+4.2.1.1  Compiling and running in the MPE/iX environment
+</h2>
+<a name="wp1040963"> </a><p class="pBody">
+To run the compiler and runtime from the MPE/iX command line, you should use the following general syntax.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:RUN &lt;command&gt;;INFO=&quot;args&quot;<a name="wp1040964"> </a>
+</pre></div>
+<a name="wp1040965"> </a><p class="pBody">
+or:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:&lt;command&gt; &quot;&lt;args&gt;&quot;<a name="wp1040966"> </a>
+</pre></div>
+<a name="wp1040967"> </a><p class="pBody">
+where:
+</p>
+<a name="wp1040968"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">command</span> could be &quot;ccbl&quot; (for the compiler) or &quot;runcbl&quot; (for the runtime); and
+</p>
+<a name="wp1040969"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">args</span> are the options to the compiler or runtime.  The options must be enclosed in quotes.  Recall that you must use the &quot;-Cp&quot; option to enable HP COBOL compatibility.    
+</p>
+<a name="wp1040970"> </a><p class="pBody">
+For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:CHDIR /ACUCOBOL/sample<a name="wp1040971"> </a>
+:ccbl &quot;-Cp tourhp.cbl&quot;<a name="wp1053955"> </a>
+:runcbl &quot;tourhp.acu&quot;<a name="wp1053956"> </a>
+</pre></div>
+<a name="wp1040972"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>ACUCOBOL-GT filenames are case sensitive and must be entered in the case shown.   See the installation instructions to help resolve any errors you encounter when compiling or running the &quot;tourhp&quot; sample.
+<hr />
+</p>
+<a name="wp1040975"> </a><h3 class="pHeadingRef">
+Examples of compiling programs with HP COBOL
+</h3>
+<a name="wp1040977"> </a><p class="pBody">
+With HP COBOL, the syntax for compiling and linking a COBOL program might look like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:BUILD HELLOLST;REC=-80,1,F,ASCII;DISC=2000<a name="wp1040978"> </a>
+:COB85XLK HELLOCBL,HELLOEXE,HELLOLST<a name="wp1053957"> </a>
+</pre></div>
+<a name="wp1040979"> </a><p class="pBody">
+or like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:FILE COBTEXT=HELLOCBL<a name="wp1040980"> </a>
+:FILE COBOBJ=HELLOOBJ<a name="wp1054282"> </a>
+:FILE COBLIST=HELLOLST<a name="wp1054737"> </a>
+:BUILD HELLOLST;REC=-80,1,F,ASCII;DISC=2000<a name="wp1054868"> </a>
+:RUN COBOL.PUB.SYS;PARM=7<a name="wp1054869"> </a>
+:LINK FROM=HELLOOBJ;TO=HELLOEXE<a name="wp1054870"> </a>
+</pre></div>
+<a name="wp1040983"> </a><h3 class="pHeadingRef">
+Examples of compiling programs with ACUCOBOL-GT
+</h3>
+<a name="wp1040985"> </a><p class="pBody">
+With ACUCOBOL-GT, the syntax for compiling the same COBOL program might look like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:ccbl &quot;-Cp -Lof HELLOLST -o HELLOOBJ HELLOCBL&quot;<a name="wp1040986"> </a>
+</pre></div>
+<a name="wp1040987"> </a><p class="pBody">
+where:
+</p>
+<a name="wp1040988"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">-Cp</span> tells the compiler to use HP COBOL compatibility mode;
+</p>
+<a name="wp1040989"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">-Lof HELLOLST</span> creates a full listing file called HELLOLST;
+</p>
+<a name="wp1040990"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">-o HELLOOBJ</span> creates an object file called HELLOOBJ; and
+</p>
+<a name="wp1040991"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">HELLOCBL</span> is the name of the source COBOL program.
+</p>
+<a name="wp1040992"> </a><p class="pBody">
+For a quick reference to all of the compiler options type:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:ccbl &quot;-help&quot;<a name="wp1040993"> </a>
+</pre></div>
+<a name="wp1040994"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You should use the command line options in lieu of the HP COBOL $CONTROL directives.  See <a  href="ch4-hp59.htm#wp1041869">section 4.4.2</a> of this guide for a table that maps HP COBOL $CONTROL directives to the ACUCOBOL-GT command line options for the compiler and the runtime.
+<hr />
+</p>
+<a name="wp1040995"> </a><p class="pBody">
+Here are some other options that you might use while compiling HP COBOL programs with ACUCOBOL-GT:
+</p>
+<a name="wp1040996"> </a><p class="pBody">
+&quot;-Rw&quot; - suppresses individual ACUCOBOL-GT reserved words.  If your HP COBOL program uses words that are not HP COBOL reserved words, but <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">are </span>ACUCOBOL-GT reserved words, a compile time error occurs.  For example, if your HP COBOL program has a working storage item called BELL or BEEP, the program will not compile unless you use the &quot;-Rw&quot; option because these words are ACUCOBOL-GT reserved words.  You can suppress reserved words with the &quot;-Rw&quot; option on the compiler command line, like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:ccbl &quot;-Rw BELL -Rw BEEP -Cp -Lof HELLOLST <a name="wp1040997"> </a>
+     -o HELLOOBJ HELLOCBL&quot;<a name="wp1054871"> </a>
+</pre></div>
+<a name="wp1040998"> </a><p class="pBody">
+&quot;-Di&quot; - causes the compiler to initialize Working-Storage.  Many of the problems that surface due to differences in the that way HP COBOL and ACUCOBOL-GT initialize (or not initialize) data items by default, can be avoided by compiling with &quot;-Di&quot;.  When &quot;-Di&quot; is specified, data items are initialized according to their type.  For more information about &quot;-Di&quot;, see Book 1 of the ACUCOBOL-GT documentation set, section 2.1.9, &quot;Data Storage Options.&quot;
+</p>
+<a name="wp1068486"> </a><p class="pBody">
+&quot;-Gd&quot; - compiles for source debugging (this option includes the source code in the compiled object file).  You then invoke the debugger with the &quot;-d&quot; option on the ACUCOBOL-GT runtime command line (&quot;runcbl&quot;).
+</p>
+<a name="wp1040999"> </a><p class="pBody">
+&quot;-v&quot; - tells the compiler to output information about what it is doing during compilation.
+</p>
+<a name="wp1041002"> </a><h3 class="pHeadingRef">
+Examples of running programs with HP COBOL
+</h3>
+<a name="wp1041004"> </a><p class="pBody">
+With HP COBOL, the syntax for running a COBOL program with an XL (Executable Library) in your group library is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:RUN program; <a name="wp1041005"> </a>
+   INFO=`options'; PARM=parameter; <a name="wp1055196"> </a>
+   XL=`xl.group.account'<a name="wp1055327"> </a>
+</pre></div>
+<a name="wp1041006"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:RUN program; <a name="wp1041007"> </a>
+   INFO=`options'; PARM=parameter; <a name="wp1055652"> </a>
+   LIB=G<a name="wp1056107"> </a>
+</pre></div>
+<a name="wp1041008"> </a><p class="pBody">
+where: 
+</p>
+<a name="wp1041009"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">program</span> is the name of the program you want to run; 
+</p>
+<a name="wp1041010"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">options </span>are any options to your program; 
+</p>
+<a name="wp1041011"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">parameter</span> specifies any software switches you need to set; 
+</p>
+<a name="wp1041012"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">xl.group.account</span> is the name of your XL; and
+</p>
+<a name="wp1041013"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">LIB=G</span> means the program's group library is searched first, next its public account library is searched, and finally the system library is searched to resolve the program's external references.  You can also specify LIB=P or LIB=S.
+</p>
+<a name="wp1041016"> </a><h3 class="pHeadingRef">
+Examples of running programs with ACUCOBOL-GT
+</h3>
+<a name="wp1041018"> </a><p class="pBody">
+With ACUCOBOL-GT, the syntax for running a COBOL program with an XL (Executable Library) is:
+</p>
+<a name="wp1041019"> </a><p class="pBody">
+MPE:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:RUN /ACUCOBOL/bin/runcbl; <a name="wp1041020"> </a>
+   INFO=`options program'; PARM=parameter; <a name="wp1056238"> </a>
+   XL=`xl.group.account'<a name="wp1056239"> </a>
+</pre></div>
+<a name="wp1041021"> </a><p class="pBody">
+POSIX:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+shell/iX&gt; callci &quot;RUN /ACUCOBOL/bin/runcbl; <a name="wp1041022"> </a>
+   INFO=`options program'; PARM=parameter; <a name="wp1056240"> </a>
+   XL=`xl.group.account'&quot;<a name="wp1056241"> </a>
+</pre></div>
+<a name="wp1041023"> </a><p class="pBody">
+where:
+</p>
+<a name="wp1041024"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">options</span> are any options to &quot;runcbl&quot;;
+</p>
+<a name="wp1041025"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">program</span> is the name of the program you want to run; 
+</p>
+<a name="wp1041026"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">parameter</span> specifies any software switches you need to set; and
+</p>
+<a name="wp1060055"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">xl.group.account</span> is the name of your XL.  
+</p>
+<a name="wp1060056"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You must specify the full or relative pathname of &quot;runcbl&quot; if it is not in your current directory or if your HPPATH environment variable is not set correctly.  See the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">Getting Started</span> booklet, section 1.6, &quot;Installing on HP&#160;e3000 Machines&quot; for  instructions on how to set the HPPATH environment variable.
+<hr />
+</p>
+<a name="wp1041029"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>If you change the name or case of &quot;ccbl&quot; or &quot;runcbl&quot;, you must also change the name of its associated license file.  The license file must have the same name and case as the program, plus the file extension &quot;.alc&quot; in lowercase.  For example, if you rename &quot;runcbl&quot; to &quot;RUNCBL&quot; you must rename the license file from &quot;runcbl.alc&quot; to RUNCBL.alc&quot;.
+<hr />
+</p>
+<a name="wp1041030"> </a><p class="pBody">
+If the ACUCOBOL-GT programs are renamed to uppercase names and are in an MPE/iX MPE/iX group like:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+RUNCBL.group.account<a name="wp1041031"> </a>
+</pre></div>
+<a name="wp1041032"> </a><p class="pBody">
+then you can use the &quot;LIB=&quot; option to specify searching the group library, public account library, or the system library.  For example:
+</p>
+<a name="wp1041033"> </a><p class="pBody">
+MPE:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:RUN RUNCBL; INFO=`options program'; LIB=G<a name="wp1041034"> </a>
+</pre></div>
+<a name="wp1041035"> </a><p class="pBody">
+POSIX:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+shell/iX&gt; callci &quot;RUN RUNCBL; INFO=`options program'; <a name="wp1041036"> </a>
+   LIB=G&quot;<a name="wp1056242"> </a>
+</pre></div>
+<a name="wp1041037"> </a><p class="pBody">
+&quot;LIB=G&quot; means the program's group library is searched first, then its public account library is searched, and finally the system library is searched to resolve the program's external references.  You can also specify LIB=P or LIB=S.  
+</p>
+<a name="wp1041038"> </a><p class="pBody">
+&quot;runcbl&quot; needs to be either in your current directory or in one of the directories specified in your HPPATH.
+</p>
+<a name="wp1041039"> </a><p class="pBody">
+If you do not have an XL that you need to specify, you can use the implied version of RUN.  For example:
+</p>
+<a name="wp1041040"> </a><p class="pBody">
+MPE:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:runcbl; INFO=`options program'<a name="wp1041041"> </a>
+</pre></div>
+<a name="wp1041042"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:runcbl `options program'<a name="wp1041043"> </a>
+</pre></div>
+<a name="wp1041044"> </a><p class="pBody">
+POSIX:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+shell/iX&gt; callci &quot;runcbl; INFO=`options program'&quot;<a name="wp1041045"> </a>
+</pre></div>
+<a name="wp1041046"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+shell/iX&gt; callci &quot;runcbl `options program'&quot;<a name="wp1041047"> </a>
+</pre></div>
+<a name="wp1041048"> </a><p class="pBody">
+If you do not specify the full pathname of &quot;runcbl&quot;, then it needs to be located in one of the directories specified in your HPPATH.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:42:57" />
+  <title>A.6  Supported Features </title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gla.htm">Appendix A:  Acu4GL for Informix Information </a> &gt; </p>
+<a name="wp1037456"> </a><h2 class="pHeading1">
+A.6  Supported Features 
+</h2>
+<a name="wp1037461"> </a><p class="pBody">
+OPEN ALLOWING READERS is not supported by Informix.  You determine in your runtime configuration file how this phrase will be interpreted.  Set the variable STRENGTHEN_LOCKS to &quot;1&quot; (one) to cause this phrase to be treated as OPEN ALLOWING NO OTHERS.  Set the variable to &quot;0&quot; (zero) to cause the phrase to be treated as OPEN ALLOWING ALL.  The default value is &quot;0&quot;.  
+</p>
+<a name="wp1039711"> </a><p class="pBody">
+Only single-record locking is supported, unless the program is within a transaction.
+</p>
+<a name="wp1039712"> </a><p class="pBody">
+If you attempt to REWRITE a record that contains a SERIAL data type, you will receive an Informix error.  You might want to change SERIAL fields to SMALLINT, as we do for the orders table in the demonstration.  However, you may encounter the situation where the user has a table with a serial column and cannot change it.  There may be a solution to this, and the solution is determined by whether you need to reference this serial column when you do your READs.
+</p>
+<a name="wp1039713"> </a><p class="pBody">
+If the user does not need to access these columns directly, you can build your FDs without this field.  Because the current version of Acu4GL for Informix lists the columns from the XFD ahd Acu4GL for Informix allows the table to have more columns than the FD, it should be possible for you not to include the serial columns in the FD.  This has the effect that, on an INSERT, the unmentioned serial columns would be populated by the next sequential value.
+</p>
+<a name="wp1039746"> </a><p class="pBody">
+If it is necessary for the user to access these columns, consider having two FDs.  One FD would list the serial column, included for reading.  Then use another FD, this time without the serial column, for your writes or rewrites.
+</p>
+<a name="wp1037464"> </a><p class="pBody">
+Informix does not support record encryption, record compression, or alternate collating sequences.  You may include these options in your program; they will be disregarded if they are specified.  
+</p>
+<a name="wp1037465"> </a><p class="pBody">
+The ACUCOBOL-GT utility program <b class="cBold">vutil</b> cannot be used with Informix files.  Instead, use utilities supplied by Informix.
+</p>
+<a name="wp1037466"> </a><p class="pBody">
+Whenever you are using the library routine RENAME, you must specify that you are using <em class="cEmphasis">indexed files</em>.  This information is passed by the value I in the fourth parameter.  If you want to delete an Informix table with the DELETE FILE verb, make sure the verb references an <em class="cEmphasis">indexed file</em>.  
+</p>
+<a name="wp1037467"> </a><p class="pBody">
+Acu4GL passes all transaction operations on to the database.  Passing all transaction flags to the database may have the unexpected effect of releasing a lock due to the COMMIT of a transaction.  Acu4GL for Informix performs REWRITE and DELETE operations on the current record through the record lock using the syntax &quot;WHERE CURRENT OF&quot;.  If this is a problem, Acu4GL can be told to use an alternate method of explicitly specifying the primary key in the REWRITE and DELETE operations by setting the configuration variable: &quot;4GL_POSITIONED_MODIFICATIONS = 0&quot;.  The default is 1.  You should note that database systems will not perform well with applications compiled with the &quot;-ft&quot; option.  You should consider explicitly coding the transactions.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

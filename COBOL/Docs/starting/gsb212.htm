@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/12/05 11:53:30" />
+  <title>2.5.2  Direct Control</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Getting Started <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gsb2.htm"><br />Chapter 2: Windows Installation</a> &gt; <a href="gsb28.htm">2.5  Printing and Spooler Issues</a> &gt; </p>
+<a name="wp1035383"> </a><h2 class="pHeading2">
+2.5.2  Direct Control
+</h2>
+<a name="wp1035384"> </a><p class="pBody">
+If you want to control the format of the printout yourself using embedded control codes, simply assign your print file to &quot;-P&#160;SPOOLER-DIRECT&quot; or to &quot;-Q&#160;&lt;<em class="cEmphasis">printername</em>&gt;&quot; using the &quot;DIRECT=ON&quot; option.  For example, to assign the print job  &quot;PRINTER1&quot; to the spooler and retain direct control over formatting, enter the following line in your COBOL configuration file (&quot;CBLCONFI&quot;):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PRINTER1  -P  SPOOLER-DIRECT<a name="wp1035386"> </a>
+</pre></div>
+<a name="wp1035387"> </a><p class="pBody">
+Or, use the following command to assign PRINTER1 to the spooler for printing to a specific printer while retaining direct formatting control: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PRINTER1 -Q <em class="cEmphasis">printername</em>;DIRECT=ON<a name="wp1035388"> </a>
+</pre></div>
+<a name="wp1035389"> </a><p class="pBody">
+Both of these methods cause the print job to be sent to the printer via the Windows spooler, but the program does not use the spooler to format the pages.  You must use embedded control codes to handle formatting (much as you would under UNIX if you used the UNIX spooler).
+</p>
+<a name="wp1035391"> </a><p class="pBody">
+When using the &quot;-P SPOOLER-DIRECT&quot; option, you may use the WIN$PRINTER library routine to choose a printer.  But because you completely control the printer, the various options provided by WIN$PRINTER are ignored.  For example, WIN$PRINTER does not set the page size, page orientation, or font.  Information returned from WIN$PRINTER, such as number of lines and columns on the page, may not be accurate and should not be used.  This subject is discussed in detail in Appendix I &quot;Library Routines&quot; of the ACUCOBOL-GT manual set.
+</p>
+<a name="wp1035392"> </a><p class="pBody">
+Because some print drivers do not flush the last page, be sure to end your last page with a form-feed (for example, WRITE ... BEFORE ADVANCING PAGE).  This ensures that all pages are printed.  The ACUCOBOL-GT runtime ensures that no extra blank pages are printed at the end.  
+</p>
+<a name="wp1035393"> </a><p class="pBody">
+If you code WRITE...AFTER ADVANCING PAGE instead of WRITE...BEFORE ADVANCING PAGE, you might receive a blank last page.  This is because a blank line written on the new page causes the Windows subsystem to flush the page for some print drivers.  ACUCOBOL-GT ensures that entirely empty lines are not sent to the device (only the form-feed will be sent).  But it is essential that: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1035394"> </a><div class="pSmartList1"><li>you have specified trailing space removal in your COBOL code (the default for print files). </li></div>
+<a name="wp1035396"> </a><div class="pSmartList1"><li>you have set the configuration option MIN-REC-SIZE to &quot;0&quot;.  </li></div>
+</ol></div>
+<a name="wp1035397"> </a><p class="pBody">
+Your other option is to specify WRITE... BEFORE ADVANCING PAGE to avoid this potential problem.
+</p>
+<a name="wp1035398"> </a><p class="pBody">
+If the user looks for the job in the spooler, it is named with the current title of the ACUCOBOL-GT window. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/02/06 14:45:21" />
+  <title>To install acuserve as a service from the command line</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuServer User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb">
+<a href="srv5.htm">Chapter 5: AcuServer Functions</a> &gt; 
+<a href="srv54.htm">5.3  Installing and Removing acuserve as a Windows Service</a> &gt; 
+</p>
+<a name="wp1059332"> </a><h2 class="pHeadingProc">
+To install acuserve as a service from the command line
+</h2>
+<a name="wp1059334"> </a><p class="pBody">
+<em style="font-style: normal" class="cEmphasis">The </em>&quot;acuserve -install&quot; command installs <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> as a Windows NT/2000 service.  Optional arguments to &quot;-install&quot; include:</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1065373"> </a>
+Option
+
+</th>
+    <th><a name="wp1065375"> </a>
+Description
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1059341"> </a><p class="pCellBody">
+<em class="cEmphasis">server</em>
+</p>
+</td>
+    <td><a name="wp1059343"> </a><p class="pCellBody">
+Specifies the name of the server machine.  If no server is specified, the server is assumed to be the local host.  
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1059345"> </a><p class="pCellBody">
+-depends 
+</p>
+</td>
+    <td><a name="wp1059347"> </a><p class="pCellBody">
+Specifies the name of a service or service group on which <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> depends.  This option may be repeated multiple times.  The effect of the &quot;-depends&quot; option(s) is to establish a dependency in which <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> will not start unless each service named after a &quot;-depends&quot; is currently installed on the server as a service.  &quot;-depends&quot; must be followed by a space and the name of a Windows service or service group.  If the name is a service group, it must be preceded by a &quot;+&quot; character (e.g., &quot;-depends +Alerter&quot;). The &quot;-depends&quot; option and service name must come after the <em class="cEmphasis">server</em> option and before any &quot;-start&quot; options.   
+</p>
+<a name="wp1059348"> </a><p class="pCellBody">
+If AcuServer is already installed as a service and you want to add or change dependencies, you must remove the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> service and reinstall it with the new &quot;-depends&quot; options.
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1059350"> </a><p class="pCellBody">
+most start options
+</p>
+</td>
+    <td><a name="wp1059352"> </a><p class="pCellBody">
+Most &quot;-start&quot; options can be used with &quot;-install&quot;.  The exception is &quot;-f&quot;, which prevents <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> from being installed as a service.  (Refer to <a  href="srv59.htm#wp1038886">section 5.4, &quot;Starting and Stopping acuserve,&quot;</a> for a list of options.)  Note that these options are stored for service start-up on this particular port.  For example, to run the service with the arguments &quot;-c c:\etc\server1.cfg -le c:\tmp\server1.log&quot; on start-up, you would use the following &quot;-install&quot; command:
+</p>
+<a name="wp1059356"> </a><p class="pCellBody">
+acuserve -install -c c:\etc\server1.cfg -le c:\tmp\server1.log
+</p>
+<a name="wp1059357"> </a><p class="pCellBody">
+If there are no options stored for a service, then starting the server on a particular port automatically installs a service on that port and stores the options used.  In other words, you can install and run a service with one set of arguments and then occasionally run the service with different arguments by using &quot;acuserve -start&quot;.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1047112"> </a><p class="pBody">
+If you are running multiple instances of <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span>, use the &quot;-n&quot; option to specify a number for a particular <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">acuserve</span> service.  The service will be named AcuserveX, where X is the number you specified with this option.  If you do not use the &quot;-n&quot; option, then the name of the service will be Acuserve.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuServer-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

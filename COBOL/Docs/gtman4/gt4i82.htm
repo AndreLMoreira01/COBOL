@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$SYSTEM Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1114731"> </a><h2 class="pHeading2">
+C$SYSTEM Routine
+</h2>
+<a name="wp1114736"> </a><p class="pBody">
+This routine combines the functionality of &quot;SYSTEM&quot; and &quot;C$RUN&quot;.  It allows you to run other programs from inside a COBOL application in a variety of ways.
+</p>
+<a name="wp1036819"> </a><p class="pBody">
+C$SYSTEM adds the following capabilities to the original capabilities of SYSTEM and C$RUN:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1036820"> </a><div class="pSmartList1"><li>Uniform programming interface for all options</li></div>
+<a name="wp1036821"> </a><div class="pSmartList1"><li>Asynchronous operation (C$RUN) added to UNIX hosts</li></div>
+<a name="wp1036822"> </a><div class="pSmartList1"><li>Windows hosts can specify minimized, maximized, or hidden windows</li></div>
+<a name="wp1036823"> </a><div class="pSmartList1"><li>Smart shell selection for Windows and Windows NT</li></div>
+</ol></div>
+<a name="wp1036824"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$SYSTEM&quot; <a name="wp1036825"> </a>
+    USING CMD-LINE, FLAGS<a name="wp1474794"> </a>
+    GIVING EXIT-STATUS<a name="wp1036826"> </a>
+</pre></div>
+<a name="wp1036827"> </a><h3 class="pHeadingRef">
+Parameter
+</h3>
+<a name="wp1036828"> </a><p class="pBody">
+<b class="cBold">CMD-LINE   </b>PIC X(n)
+</p>
+<a name="wp1036829"> </a><p class="pBody">
+Contains the operating system command line to execute.
+</p>
+<a name="wp1036830"> </a><p class="pBody">
+<b class="cBold">FLAGS</b>   Numeric unsigned (optional)
+</p>
+<a name="wp1036831"> </a><p class="pBody">
+Supplies the options for the operation.  If omitted, acts as if &quot;0&quot; was specified.
+</p>
+<a name="wp1036832"> </a><p class="pBody">
+<b class="cBold">EXIT-STATUS</b>   Any numeric data item
+</p>
+<a name="wp1036833"> </a><p class="pBody">
+Returns the called program's exit status.
+</p>
+<a name="wp1036834"> </a><h3 class="pHeadingRef">
+Comments
+</h3>
+<a name="wp1301671"> </a><p class="pBody">
+The &quot;C$SYSTEM&quot; routine submits CMD-LINE to the host operating system as if it were a command keyed in from the terminal.  The maximum allowable length for the command line is 1024 bytes.
+</p>
+<a name="wp1301682"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Applications that run under Windows but that do <em class="cEmphasis">not</em> create their own windows should use the CSYS-SHELL flag to execute &quot;.COM&quot;, &quot;.BAT&quot;, and built-in shell commands such as COPY and DIR.  See the description of CSYS-SHELL below.
+<hr />
+</p>
+<a name="wp1036840"> </a><p class="pBody">
+The FLAGS field specifies various options about how the command should be run.  Determine the value of the FLAGS field by adding together the values corresponding to the following options:
+</p>
+<a name="wp1036842"> </a><p class="pBody">
+<b class="cBold">CSYS-ASYNC</b> (value 1): This option causes the command to run independently of the COBOL program.  After starting the command, the COBOL program continues.  When this option is specified, EXIT-STATUS returns undefined results.  When this flag is not used, the COBOL program waits for the command executed to finish before the COBOL program continues.  CSYS-ASYNC is functional only on Windows and UNIX systems.
+</p>
+<a name="wp1036843"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>On UNIX machines, specifying CSYS-ASYNC with a program that tries to do input or output to the terminal is not supported.
+<hr />
+</p>
+<a name="wp1036844"> </a><p class="pBody">
+<b class="cBold">CSYS-NO-IO</b> (value 2): For character-based systems, the runtime normally sets the terminal to its default state prior to running the command, and resets it back to the state needed by the runtime when the command finishes.  This option ensures that the called application runs correctly if the application uses the screen.  However, CSYS-NO-IO also causes the runtime to &quot;forget&quot; the contents of the screen.  This happens because the command executed may display information on the screen that ACUCOBOL-GT is not aware of.  Because of this, windows created after a call to C$SYSTEM may not correctly restore the screen contents when these windows are closed.  You can avoid this problem by re-initializing the screen after C$SYSTEM returns.  You can do this by erasing the screen or closing a floating or pop-up window that covers the entire screen (the window must have been created by the C$SYSTEM call).  
+</p>
+<a name="wp1036845"> </a><p class="pBody">
+If the command to be executed will not perform any screen I/O, then you can request that C$SYSTEM retain ACUCOBOL-GT's memory of the original screen by using the CSYS-NO-IO option.  This will avoid the problem described above.  The option has no effect in Windows, where the command runs in its own window.  
+</p>
+<a name="wp1036846"> </a><p class="pBody">
+<b class="cBold">CSYS-MAXIMIZED</b> (value 4): This option causes the command to run in a maximized window.  This is functional only when you are running under Windows.  
+</p>
+<a name="wp1036847"> </a><p class="pBody">
+<b class="cBold">CSYS-MINIMIZED</b> (value 8): This option causes the command to run in a minimized window.  In addition, the COBOL program remains the active program retaining the keyboard focus and keeping the active appearance. This is functional only when you are running under Windows.  
+</p>
+<a name="wp1036848"> </a><p class="pBody">
+<b class="cBold">CSYS-COMPATIBILITY</b> (value 16): This option causes the command to run in a window that is compatible with the way the SYSTEM library routine works.  Use this option if you want to modify a call to SYSTEM and change this call to C$SYSTEM.  There are very few differences between the default behavior of SYSTEM and C$SYSTEM, so this option is rarely needed.  The only known difference involves the Microsoft Word application.  If you use SYSTEM to start Microsoft Word, it always starts in a &quot;normal&quot; sized window, that is, the window size suggested by Windows.  If you use C$SYSTEM to start Microsoft Word (with no FLAGS specified), then Word adopts the last window size it previously used.  Supplying a flag of CSYS-COMPATIBILITY causes C$SYSTEM to behave the same as SYSTEM.  Of course, if you prefer the behavior of C$SYSTEM, the flag should not be used.  In comparison with SYSTEM, C$SYSTEM generally conforms more closely to the way Windows itself launches programs.  The CSYS-COMPATIBILITY flag is recommended only if you change a SYSTEM call to a C$SYSTEM call and you observe a difference you do not like.  
+</p>
+<a name="wp1036849"> </a><p class="pBody">
+<b class="cBold">CSYS-HIDDEN</b> (value 32): This option runs the command in a hidden window.  Note that some applications, particularly those that routinely interact with the user, may get confused if you &quot;hide&quot; the command.  This works well, however, for executing system tasks that do not have a user interface, such as executing a batch file that renames a series of files.  This option is functional only when you are running under Windows.  
+</p>
+<a name="wp1036850"> </a><p class="pBody">
+<b class="cBold">CSYS-SHELL</b> (value 64): When this option is specified, C$SYSTEM uses the host's command line processor (the host's shell) to execute the command.  Otherwise, the command may be executed without the command line processor.  This option affects only Windows (non-Windows versions always use the host's shell).  For Windows applications that create their own windows, you should avoid using the shell - the application will not receive the initial window size request specified in FLAGS.  For &quot;.COM&quot; and &quot;.BAT&quot; programs, and other built-in shell commands such as COPY and DIR, you <em class="cEmphasis">must</em> use the shell or the command may not execute.  
+</p>
+<a name="wp1115132"> </a><p class="pBody">
+The effect of this option is to prefix the command with the value of the COMSPEC environment variable and &quot;/C&quot;.  Under Windows, this will usually result in a prefix like &quot;C:\COMMAND.COM /C&quot;.  Under Windows NT, the prefix will typically be &quot;CMD.EXE /C&quot;.
+</p>
+<a name="wp1115483"> </a><p class="pBody">
+<b class="cBold">CSYS-DESKTOP</b> (value 128): This option is for applications running in the thin client environment.  It indicates that the application wants to run the command on the client system rather than the application server.  When the command executes, unless the CSYS-ASYNC option is also specified, the thin client appears to &quot;hang&quot; while the application waits for the command's termination status.  This behavior can be avoided with the CSYS-ASYNC flag.  The CSYS-ASYNC flag causes the command to be run asynchronously.
+</p>
+<a name="wp1115460"> </a><p class="pBody">
+If CSYS-DESKTOP is specified but the calling program is not running under thin client, the flag is ignored and the command is run on the same machine as the calling application.
+</p>
+<a name="wp1115464"> </a><p class="pBody">
+You should specify only one window size flag (CSYS-MAXIMIZED, CSYS-MINIMIZED, CSYS-COMPATIBILITY, or CSYS-HIDDEN).  In the absence of any window size flag, the command runs in a &quot;normal&quot; window whose size is determined by the operating system.  Windows programs can set their own window size.  This will override the window size suggested by FLAGS.  Essentially, the value of FLAGS is only a &quot;suggestion&quot; to the application.  You can find possible values of FLAGS in &quot;acucobol.def&quot;.
+</p>
+<a name="wp1036855"> </a><p class="pBody">
+Options that are not meaningful to the host system are ignored.  Meaningful options in the same FLAGS setting are still applied.  
+</p>
+<a name="wp1036856"> </a><p class="pBody">
+The status of a call to C$SYSTEM is placed in EXIT-STATUS.  This is usually the exit status of the executed program, or is &quot;-1&quot; if C$SYSTEM failed.  Note that Windows will return &quot;-1&quot; from commands that are built into COMMAND.COM because COMMAND.COM does not return an exit status for built-in functions.  
+</p>
+<a name="wp1211478"> </a><p class="pBody">
+<b class="cBold">CSYS-INHERIT-HANDLES</b> (value 256):  This option causes the new process to inherit each inheritable handle owned by the calling process.  This includes &quot;stdin&quot;, &quot;stdout&quot;, &quot;stderr&quot;, and other file handles that the calling process has open.
+</p>
+<a name="wp1211667"> </a><p class="pBody">
+Note that because the called process inherits many open files, it is vulnerable to running out of file handles.
+</p>
+<a name="wp1224248"> </a><p class="pBody">
+This option is needed when an Alternate Terminal Manager runtime calls C$SYSTEM to run a batch program which in turn calls another Alternate Terminal Manager runtime.  Without this option, the called program will not display any output to the screen.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

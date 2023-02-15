@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.2.1.4  Using XLs and RLs with ACUCOBOL-GT</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; <a href="ch4-hp3.htm">4.2  ACUCOBOL-GT in MPE/iX Environments</a> &gt; <a href="ch4-hp4.htm">4.2.1  Using ACUCOBOL-GT in Traditional MPE/iX Environments </a> &gt; </p>
+<a name="wp1041087"> </a><h2 class="pHeading3">
+4.2.1.4  Using XLs and RLs with ACUCOBOL-GT
+</h2>
+<a name="wp1041091"> </a><p class="pBody">
+The use of XLs and RLs is supported by ACUCOBOL-GT on the HP e3000.  XLs should be specified on the &quot;runcbl&quot; command line when the program is started.  RLs must be linked into the ACUCOBOL-GT runtime.  Relinking the runtime requires a C compiler.  In the past, HP has made a C compiler available to DSPP members.  By arrangement, Acucorp's Professional Services Organization can provide assistance or perform relinking for you.  The need to relink the runtime should arise only if you are calling functions stored in an RL.
+</p>
+<a name="wp1060749"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>XL and RL programs sometimes change the current working directory, which can have the affect of causing the runtime to fail to locate a subsequently called program.  To prevent such a failure, you should set the CODE_PREFIX runtime configuration variable.  The CODE_PREFIX variable defines a series of directories that the runtime searches to locate object files.  CODE_PREFIX can include absolute and relative paths, and can include the current working directory by specifying a period (&quot;.&quot;).  For example:
+</p>
+<a name="wp1060489"> </a><p class="pBody">
+CODE_PREFIX   . ; /ACUCOBOL/SAMPLE ; /MYAPP/CBLOBJ
+</p>
+<a name="wp1060491"> </a><p class="pNoteEnd">
+For more information about how the runtime locates program object files, see section 2.7.2, &quot;Code and Data File Search Paths,&quot; in Book 1 of the ACUCOBOL-GT documentation set.  For more information about the CODE_PREFIX configuration variable, see Appendix H of the same set.
+<hr />
+</p>
+<a name="wp1041094"> </a><h3 class="pHeadingRef">
+XLs
+</h3>
+<a name="wp1041095"> </a><p class="pBody">
+XLs should be specified on the command line when you start the program.  On the command line, after the &quot;XL=&quot; argument, specify the name of the XL.  For example:
+</p>
+<a name="wp1041096"> </a><p class="pBody">
+MPE:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:RUN /ACUCOBOL/bin/runcbl; <a name="wp1041097"> </a>
+   INFO=`options program'; PARM=parameter; <a name="wp1056243"> </a>
+   XL=`xl.group.account'<a name="wp1056244"> </a>
+</pre></div>
+<a name="wp1041098"> </a><p class="pBody">
+POSIX:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+shell/iX&gt; callci &quot;RUN /ACUCOBOL/bin/runcbl; <a name="wp1041099"> </a>
+   INFO=`options program'; PARM=parameter; <a name="wp1056245"> </a>
+   XL=`xl.group.account'&quot;<a name="wp1056246"> </a>
+</pre></div>
+<a name="wp1041100"> </a><p class="pBody">
+where:
+</p>
+<a name="wp1041101"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">options</span> are any options to &quot;runcbl&quot;;
+</p>
+<a name="wp1041102"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">program</span> is the name of the program you want to run; 
+</p>
+<a name="wp1041103"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">parameter</span> specifies any software switches you need to set; and
+</p>
+<a name="wp1041104"> </a><p class="pBody">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">xl.group.account</span> is the name of your XL.  
+</p>
+<a name="wp1041105"> </a><p class="pBody">
+If you do not want to specify the XL on the command line, you can choose to link the name of the XL into the ACUCOBOL-GT runtime.  To link an XL name into the runtime:
+</p>
+<a name="wp1041106"> </a><p class="pBody">
+Edit /ACUCOBOL/lib/Makefile.
+</p>
+<a name="wp1041107"> </a><p class="pBody">
+   Change: LDFLAGS = -s
+</p>
+<a name="wp1041108"> </a><p class="pBody">
+   to:           LDFLAGS = -s -WL,XL=xl.group.account
+</p>
+<a name="wp1041109"> </a><p class="pBody">
+where <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">xl.group.account</span> is the name of your XL file.
+</p>
+<a name="wp1041112"> </a><h3 class="pHeadingRef">
+RLs
+</h3>
+<a name="wp1041113"> </a><p class="pBody">
+To access functions in an RL, you must link the RL into the ACUCOBOL-GT runtime.  To link an RL into the runtime, perform the following:
+</p>
+<a name="wp1041114"> </a><p class="pBody">
+Edit /ACUCOBOL/lib/Makefile.
+</p>
+<a name="wp1041115"> </a><p class="pBody">
+   Change: LDFLAGS = -s
+</p>
+<a name="wp1041116"> </a><p class="pBody">
+   to:           LDFLAGS = -s -WL,RL=rl.group.account
+</p>
+<a name="wp1041117"> </a><p class="pBody">
+where <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">rl.group.account</span> is the name of your RL file.
+</p>
+<a name="wp1041118"> </a><p class="pBody">
+Relink the runtime with the following commands:
+</p>
+<a name="wp1041119"> </a><p class="pBody">
+MPE:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+:CHDIR /ACUCOBOL/lib<a name="wp1041120"> </a>
+:MAKE.HPBIN.SYS<a name="wp1056810"> </a>
+</pre></div>
+<a name="wp1041121"> </a><p class="pBody">
+POSIX:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+shell/iX&gt; cd /ACUCOBOL/lib<a name="wp1041122"> </a>
+shell/iX&gt; make<a name="wp1056819"> </a>
+</pre></div>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

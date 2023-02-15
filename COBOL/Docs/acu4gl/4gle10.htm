@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/13/06 09:44:40" />
+  <title>E.2.4.1  Installation steps on the UNIX server machine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Acu4GL User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="4gle.htm">Appendix E:  Acu4GL for Sybase Information </a> &gt; <a href="4gle3.htm">E.2  Acu4GL for Sybase Installation and Setup</a> &gt; <a href="4gle9.htm">E.2.4  Installing the Acu4GL for Sybase Product for Use with a Windows Client and a UNIX or Windows NT Server</a> &gt; </p>
+<a name="wp1049311"> </a><h2 class="pHeading3">
+E.2.4.1  Installation steps on the UNIX server machine
+</h2>
+<a name="wp1049312"> </a><p class="pBody">
+To install the Acu4GL for Sybase diskette on a UNIX server machine:
+</p>
+<a name="wp1049313"> </a><h3 class="pHeadingRef">
+Step 1: Install Sybase
+</h3>
+<a name="wp1049314"> </a><p class="pBody">
+The Sybase RDBMS, version 11.0 or later, must be installed and configured before you install Acu4GL for Sybase.  Follow the Sybase installation instructions in your Sybase documentation.
+</p>
+<a name="wp1049315"> </a><p class="pBody">
+Sybase's <b class="cBold">isql</b> product, which is an interactive query tool, is also necessary for installing the ACUCOBOL-GT stored procedures.
+</p>
+<a name="wp1049316"> </a><p class="pBody">
+The Acu4GL product does not need <b class="cBold">isql</b> after installation, but it's a tool that can give you quite a bit of flexibility.  It allows you to do database work outside of COBOL, including interactive queries, table creation, table modification, and creation of views, constraints, and relationships between tables.
+</p>
+<a name="wp1049317"> </a><p class="pBody">
+Acucorp does not provide these products.
+</p>
+<a name="wp1049318"> </a><h3 class="pHeadingRef">
+Step 2: Copy files
+</h3>
+<a name="wp1049319"> </a><p class="pBody">
+Copy &quot;syb_inst&quot;, &quot;syb_cfg.in&quot;, and &quot;syb_inst.in&quot; to your UNIX server machine.
+</p>
+<a name="wp1049320"> </a><h3 class="pHeadingRef">
+Step 3: Create stored procedures
+</h3>
+<a name="wp1049325"> </a><p class="pBody">
+The file &quot;syb_inst&quot; is an interactive shell script that generates the SQL script used to install ACUCOBOL-GT stored procedures.  
+</p>
+<a name="wp1049326"> </a><p class="pBody">
+Execute the shell script &quot;syb_inst&quot; by entering the following command on your server machine:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+sh  syb_inst  <a name="wp1049327"> </a>
+</pre></div>
+<a name="wp1049328"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You may exit the script at any time by pressing the system interrupt key (usually CTRL+C).  
+<hr />
+</p>
+<a name="wp1049329"> </a><p class="pBody">
+If you entered only <b class="cBold">syb_inst </b> instead of the full command, this message may appear:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+VAL=0: command not found<a name="wp1049330"> </a>
+VAL:  Undefined variable<a name="wp1056459"> </a>
+</pre></div>
+<a name="wp1049331"> </a><p class="pBody">
+This can be fixed by entering <b class="cBold">sh syb_inst</b>.
+</p>
+<a name="wp1049332"> </a><p class="pBody">
+When the script begins executing, you will see the following message:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+During the execution of this script, we will create an SQL 
+script which you will need to execute from isql, using a 
+command like:<a name="wp1049333"> </a>
+&#160;&#160;<a name="wp1053233"> </a>
+&quot;isql -Usa -P<em class="cEmphasis">password</em> &lt; syb_inst.sql&quot;<a name="wp1049334"> </a>
+&#160;&#160;<a name="wp1053234"> </a>
+This script will add some stored procedures, and create some 
+tables in a database that you specify during the execution of 
+this script.<a name="wp1049335"> </a>
+</pre></div>
+<a name="wp1049336"> </a><p class="pBody">
+In order to implement locking from ACUCOBOL-GT, we need to create a lock table.  This should be a pretty small table, but we need to decide which database to create this table in.  You should now enter the name of the database you want the lock tables created in.  If the database does not exist, it is created.
+</p>
+<a name="wp1049337"> </a><p class="pBody">
+The following question is asked until you enter a valid database name:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+Which database would you like to create this table in?<a name="wp1049338"> </a>
+</pre></div>
+<a name="wp1049339"> </a><p class="pBody">
+This database will eventually be located on your server machine.  Enter a valid database name.  (<em class="cEmphasis">Invalid</em> names are master, model, temp, or sybsystemprocs.)  Names must start with a letter or underscore, must contain only letters, digits, and underscores, and may be up to 30 characters long.  Any other entry will be modified.
+</p>
+<a name="wp1049340"> </a><p class="pBody">
+Next you see the following message:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Saving any old version of syb_inst.sql...<a name="wp1049341"> </a>
+</pre></div>
+<a name="wp1049342"> </a><p class="pBody">
+Old versions of &quot;syb_inst.sql&quot; are saved to &quot;syb_inst<em class="cEmphasis">nnn</em>.sql&quot; where <em class="cEmphasis">nnn</em> starts at 001 and goes to 999.  If a file &quot;syb_inst.sql&quot; exists, you see:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Saving syb_inst.sql as syb_inst<em class="cEmphasis">nnn</em>.sql<a name="wp1049343"> </a>
+</pre></div>
+<a name="wp1049344"> </a><p class="pBody">
+for some value of <em class="cEmphasis">nnn</em>.  Then you see:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Creating syb_inst.sql...<a name="wp1049345"> </a>
+</pre></div>
+<a name="wp1049346"> </a><p class="pBody">
+This uses the file &quot;syb_inst.in&quot; as a template, and creates &quot;syb_inst.sql&quot;, using the database name you entered above.
+</p>
+<a name="wp1049347"> </a><p class="pBody">
+You also see:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Creating cblconfig.syb...<a name="wp1049348"> </a>
+</pre></div>
+<a name="wp1049349"> </a><p class="pBody">
+This is a sample file of configuration variables you may want to add to your cblconfig file.
+</p>
+<a name="wp1049350"> </a><p class="pBody">
+You then see the following message:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Do you want to set up the Makefile for this system?<a name="wp1049351"> </a>
+</pre></div>
+<a name="wp1049352"> </a><p class="pBody">
+Type <b class="cBold">n</b> or <b class="cBold">N</b> to quit the script.  
+</p>
+<a name="wp1049353"> </a><h3 class="pHeadingRef">
+Step 4: Install the ACUCOBOL-GT stored procedures 
+</h3>
+<a name="wp1049358"> </a><p class="pBody">
+You must have database administrator privileges to install the ACUCOBOL-GT shared procedures on the server.  (You need to enter the password for the database administrator.)  Enter the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+isql -Usa<b class="cBold"> </b>-P<em class="cEmphasis">password</em>  &lt;  syb_inst.sql<a name="wp1049359"> </a>
+</pre></div>
+<a name="wp1076833"> </a><p class="pBody">
+By default, the stored procedures are installed into the master or sybsystemprocs databases.  However, you may choose another database in which to store them.  Follow these steps if you want to install the stored procedures in a database other than the default:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1076834"> </a><div class="pSmartList1"><li>Before you execute the &quot;syb_inst.sql&quot; query, modify the query file to use the desired database instead of the master or sybsystemprocs database.  After you have modified the query file, execute it as described above.</li></div>
+<a name="wp1076835"> </a><div class="pSmartList1"><li>Create in each database that contains tables accessed by Acu4GL the stored procedures that were previously in the master or sybsystemprocs database.  Note that the stored procedures are executed without being prefixed by a database name, and Sybase requires that such stored procedures must be in the master or sybsystemprocs database.</li></div>
+</ol></div>
+<a name="wp1076837"> </a><p class="pBody">
+The interface also searches for and executes the <b class="cBold">sp_AcuInit</b> stored procedure from this location.  This stored procedure is executed when a connection is made to the database; therefore, <b class="cBold">sp_AcuInit</b> should reside in the default database for each user if it is not created in the master database.  See <a  href="4gle59.htm#wp1049901">section E.6.2, &quot;Stored Procedures in Acu4GL for Sybase,&quot;</a> for information on the <b class="cBold">sp_AcuInit</b> stored procedure. 
+</p>
+<a name="wp1076841"> </a><p class="pBody">
+This completes the setup on the UNIX or Windows NT server machine.
+</p>
+<a name="wp1076842"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>If you are upgrading from an earlier version of Acu4GL, be sure to install the new stored procedures.  Acucorp always upgrades stored procedures in such a way that they are compatible with older versions of the product, so installing new stored procedures over old ones does not affect your ability to run with an older version of the interface software.  Your new version of Acu4GL for Sybase may not run properly without the corresponding stored procedures.
+</p>
+<a name="wp1076844"> </a><p class="pNoteEnd">
+It can be difficult to maintain multiple copies of stored procedures; therefore, Acucorp recommends that you continue to create the stored procedures in the master or sybsystemprocs database.  If your installation does not permit this, you do have the flexibility to create the stored procedures elsewhere.  However, to facilitate maintenance of the stored procedures, Acucorp recommends that you create as few databases as possible.
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-Acu4GL-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

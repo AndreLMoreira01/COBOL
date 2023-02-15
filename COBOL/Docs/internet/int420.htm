@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/01/05 10:10:06" />
+  <title>Using the ACCEPT verb</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Programmer's Guide to the Internet <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="int4.htm">Chapter 4: Launching Applications on a Web Server With CGI</a> &gt; <a href="int418.htm">4.5  Writing a CGI Program</a> &gt; <a href="int419.htm">4.5.1  Reading CGI Input Data</a> &gt; </p>
+<a name="wp1028319"> </a><h2 class="pHeading3">
+Using the ACCEPT verb
+</h2>
+<a name="wp1028321"> </a><p class="pBody">
+To read CGI variables from the client machine, you can use the ACCEPT verb in your CGI program.  ACUCOBOL-GT includes special syntax for accepting HTML, XML, or WML form records.  The syntax is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ACCEPT external-form-item<a name="wp1028322"> </a>
+</pre></div>
+<a name="wp1028323"> </a><p class="pBody">
+where<em class="cEmphasis"> external-form-item</em> is an input record for an HTML, XML, or WML form.  It is a group data item (declared with the IS EXTERNAL-FORM clause) that has one or more elementary items associated with CGI variables.  For &quot;input forms,&quot; the association is made using the IDENTIFIED BY clause in the description of the elementary item.  The value of external-name is the name of the CGI variable.  If the IDENTIFIED BY phrase is omitted, the data item's own name (data-name) is used as the name of the CGI variable.
+</p>
+<a name="wp1028325"> </a><p class="pBody">
+<em class="cEmphasis">External-form-item</em> may also be an output record for an HTML, XML, or WML form.  In this case, the group item is declared with both the IS EXTERNAL-FORM and IDENTIFIED BY clauses.
+</p>
+<a name="wp1028326"> </a><p class="pBody">
+The &quot;external form&quot; is called an &quot;output form&quot; if the IDENTIFIED BY clause is used in the description of the group item to associate it with a template file.
+</p>
+<a name="wp1028327"> </a><p class="pBody">
+For example, the following is an input form:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  CGI-FORM   IS EXTERNAL-FORM.<a name="wp1028328"> </a>
+    03  CGI-VAR1   PIC X(10).<a name="wp1028329"> </a>
+    03  CGI-VAR2   PIC X(10).<a name="wp1028330"> </a>
+</pre></div>
+<a name="wp1028331"> </a><p class="pBody">
+and here is an output form:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  HTML-FORM   IS EXTERNAL-FORM IDENTIFIED BY &quot;tmplate1&quot;.<a name="wp1028332"> </a>
+    03  HTML-VAR1   PIC X(10).<a name="wp1028333"> </a>
+    03  HTML-VAR2   PIC X(10).<a name="wp1028334"> </a>
+</pre></div>
+<a name="wp1028335"> </a><p class="pBody">
+The ACCEPT verb treats input and output forms the same.  ACCEPT sets the value of each elementary item in the external form, in order, to the value of its associated CGI variable, padding with trailing spaces.  ACCEPT automatically decodes and translates the CGI input data before moving it to the elementary items of <em class="cEmphasis">external-form-item</em>.  The value of each CGI variable is converted to the appropriate COBOL data type when it is moved to the external form.  
+</p>
+<a name="wp1028339"> </a><p class="pBody">
+Please note that when some browsers encounter multiple-line entry fields (also known as HTML TEXTAREAs, they send a carriage return line feed sequence to the CGI program.  If carriage returns are not desired, as in operating systems that automatically terminate text lines with line feed characters, you can have them removed by using the CGI_STRIP_CR runtime configuration variable.
+</p>
+<a name="wp1028342"> </a><p class="pBody">
+Also note that CGI variable names are case-sensitive.  However, for convenience, if ACCEPT cannot identify a CGI variable, it will repeat the search for the variable ignoring the case.
+</p>
+<a name="wp1028343"> </a><p class="pBody">
+If the CGI variable is empty or does not exist, ACCEPT sets the value of numeric data items to zero and nonnumeric data items to spaces.
+</p>
+<a name="wp1028344"> </a><p class="pBody">
+If the CGI variable is repeated in the CGI input data, as in the case where multiple items have been selected from a &quot;choose-many&quot; list, the external form item that is identified with the CGI variable must be in a table using the OCCURS clause.  Otherwise, only the first CGI value is moved to the external form item.  
+</p>
+<a name="wp1028345"> </a><p class="pBody">
+For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  CGI-FORM   IS EXTERNAL-FORM.<a name="wp1028346"> </a>
+    03  CGI-TABLE   OCCURS 10 TIMES.<a name="wp1028347"> </a>
+        05  CGI-VAR1   PIC X(10).<a name="wp1028348"> </a>
+        05  CGI-VAR2   PIC X(10).<a name="wp1028349"> </a>
+</pre></div>
+<a name="wp1028350"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+01  CGI-FORM   IS EXTERNAL-FORM.<a name="wp1028351"> </a>
+    03  CGI-VAR1   PIC X(10) OCCURS 10 TIMES.<a name="wp1028352"> </a>
+    03  CGI-VAR2   PIC X(10) OCCURS 10 TIMES.<a name="wp1028353"> </a>
+</pre></div>
+<a name="wp1028354"> </a><p class="pBody">
+ACCEPT moves the values of the CGI variable to the items in the table.  After all of the CGI values have been moved to items in the COBOL table, the remaining items in the table are set to &quot;0&quot; if they are numeric items and spaces otherwise.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 11:28:56" />
+  <title>5.3.2  JOIN Statements</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuODBC User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="odb5.htm">Chapter 5: Writing Queries to Access Data</a> &gt; <a href="odb56.htm">5.3  SQL Syntax Supported by AcuODBC</a> &gt; </p>
+<a name="wp1028859"> </a><h2 class="pHeading2">
+5.3.2  JOIN Statements
+</h2>
+<a name="wp1028860"> </a><p class="pBody">
+JOIN statements represent a special instance of the SELECT statement.  They enable you to view data from multiple tables, by combining the tables along a common field.
+</p>
+<a name="wp1028861"> </a><p class="pBody">
+AcuODBC supports a variety of JOIN statements, including the natural joins, <em class="cEmphasis">inner</em> <em class="cEmphasis">joins</em> (the default if no join type is specified), <em class="cEmphasis">left (outer)</em> joins, and <em class="cEmphasis">right (outer)</em> joins (by reversing a left join).  Note that the word &quot;outer&quot; is optional and is provided for clarity; it has no effect on the join.  
+</p>
+<a name="wp1028862"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>When you list more than one table and do not include a condition with the ON or WHERE clause, the result is all possible pairs of rows, or the product of the number of rows in the tables.  For example, if you join two tables that each have six rows and don't specify a condition, the resulting view will have 36 rows.
+<hr />
+</p>
+<a name="wp1028863"> </a><p class="pBody">
+For additional information on JOIN statements, see any standard SQL text.   
+</p>
+<a name="wp1028864"> </a><h3 class="pHeadingRef">
+Inner joins
+</h3>
+<a name="wp1028868"> </a><p class="pBody">
+<em class="cEmphasis">Inner joins</em> include only those rows where matches are found.  The syntax for an inner join is:  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT &lt;field-1&gt;[, &lt;field-2&gt; . . .]<a name="wp1028869"> </a>
+FROM &lt;table-name-1&gt; <a name="wp1028870"> </a>
+[INNER] JOIN &lt;table-name-2&gt;<a name="wp1028871"> </a>
+ON [&lt;table-name-1&gt;.]&lt;field-name-1&gt; = [&lt;table-name-2&gt;.]&lt;field-name-2&gt;<a name="wp1028872"> </a>
+</pre></div>
+<a name="wp1028873"> </a><p class="pBody">
+(Note that the word &quot;inner&quot; is optional; it is provided here for clarity.)
+</p>
+<a name="wp1028875"> </a><p class="pBody">
+For example, if you want a listing of pets and their owners, you can join the &quot;pets&quot; and &quot;owners&quot; tables as shown in the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT patient_name, owner<a name="wp1028876"> </a>
+FROM pets <a name="wp1028877"> </a>
+INNER JOIN clients <a name="wp1028878"> </a>
+ON pets.owner_id = clients.client_id<a name="wp1028879"> </a>
+</pre></div>
+<a name="wp1028880"> </a><p class="pBody">
+Your application returns the following view:</p><div><img src="images/inner_ja.gif" height="383" width="248" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028882"> </a><p class="pBody">
+You can join more than two tables.  For example, to see a listing of pets, the treatments they received, and their owners, enter the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT patient_name, explanation, owner<a name="wp1028883"> </a>
+FROM (pets INNER JOIN codes <a name="wp1028884"> </a>
+ON pets.treatment = codes.treatment) <a name="wp1028885"> </a>
+INNER JOIN clients <a name="wp1028886"> </a>
+ON pets.owner_id = clients.client_id<a name="wp1028887"> </a>
+</pre></div>
+<a name="wp1028888"> </a><p class="pBody">
+Your application returns the following view:</p><div><img src="images/inner_jo.gif" height="357" width="312" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1028890"> </a><p class="pBody">
+Note that Copper is not included in this view, because the &quot;pets&quot; table does not list a treatment for her.
+</p>
+<a name="wp1028892"> </a><h3 class="pHeadingRef">
+Outer  joins
+</h3>
+<a name="wp1042038"> </a><p class="pBody">
+If you want to include rows where matches are not found, use an <em class="cEmphasis">outer join</em>. (The word &quot;outer&quot; is optional.)
+</p>
+<a name="wp1028893"> </a><h3 class="pHeadingRef">
+Left joins
+</h3>
+<a name="wp1028897"> </a><p class="pBody">
+<em class="cEmphasis">Left joins</em> include all rows from table-name-1, matched or not, plus the columns from matching rows of table-name-2.  The syntax for left joins is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT * FROM &lt;table-name-1&gt; LEFT JOIN &lt;table-name-2&gt; <a name="wp1028898"> </a>
+ON &lt;field-name-1&gt;=&lt;field-name-2&gt;<a name="wp1028899"> </a>
+</pre></div>
+<a name="wp1028900"> </a><p class="pBody">
+For example, you can perform a left join on the tables &quot;pets&quot; and &quot;codes&quot; to see a listing of pets and the treatments they received:  
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT patient_name, explanation<a name="wp1028901"> </a>
+FROM pets <a name="wp1028902"> </a>
+LEFT JOIN codes <a name="wp1028903"> </a>
+ON pets.treatment = codes.treatment<a name="wp1028904"> </a>
+ORDER BY patient_name<a name="wp1028905"> </a>
+</pre></div>
+<a name="wp1028906"> </a><p class="pBody">
+The following view is a result of this command.  Here you can see that Copper's treatment does not match any of the explanations in the &quot;codes&quot; table.</p><div><img src="images/left_joi.gif" height="376" width="224" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1042063"> </a><p class="pBody">
+You can also join three or more tables at a time. The syntax for this kind of join is as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT &lt;field-1&gt;[, &lt;field-2&gt;,  &lt;field-3&gt;...]<a name="wp1042065"> </a>
+FROM &lt;table-name-1&gt; <a name="wp1042066"> </a>
+LEFT JOIN &lt;table-name-2&gt; <a name="wp1042067"> </a>
+ON &lt;field-name-1&gt;=&lt;field-name-2&gt;  <a name="wp1042068"> </a>
+LEFT JOIN &lt;table-name-3&gt;<a name="wp1042069"> </a>
+ON &lt;field-name-3&gt;=&lt;field-name-4&gt;  <a name="wp1042070"> </a>
+</pre></div>
+<a name="wp1042072"> </a><p class="pBody">
+For example, to see a listing of pets, the treatments they received, and their owners, enter the following command:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT patient_name, explanation, owner<a name="wp1042077"> </a>
+FROM (pets LEFT OUTER JOIN codes <a name="wp1042078"> </a>
+ON pets.treatment = codes.treatment)<a name="wp1042079"> </a>
+LEFT OUTER JOIN clients <a name="wp1042080"> </a>
+ON pets.owner_id = clients.client_id<a name="wp1028909"> </a>
+</pre></div>
+<a name="wp1042130"> </a><p class="pBody">
+This will produce the following view:
+</p>
+<a name="wp1042168"> </a><p class="pBodyRelative">
+</p><div><img src="images/left_joa.gif" height="295" width="328" border="0" hspace="0" vspace="0"/>
+</div><p class="pBodyRelative">
+</p>
+<a name="wp1042048"> </a><h3 class="pHeadingRef">
+Right joins
+</h3>
+<a name="wp1042390"> </a><p class="pBody">
+<em class="cEmphasis">Right joins</em> are almost the same as left joins, except that all rows from the right table (table-name-2) are included, matched or not, plus all matching columns from the left table (table-name-1).  The syntax remains the same except for the type of join:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT * FROM &lt;table-name-1&gt; <b class="cBold">RIGHT</b> JOIN &lt;table-name-2&gt; <a name="wp1042391"> </a>
+ON &lt;field-name-1&gt;=&lt;field-name-2&gt;<a name="wp1042392"> </a>
+</pre></div>
+<a name="wp1042453"> </a><p class="pBody">
+For example, if you perform the query shown above as a right join:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT patient_name, explanation<a name="wp1042504"> </a>
+FROM pets <a name="wp1042505"> </a>
+<b class="cBold">RIGHT</b> JOIN codes <a name="wp1042506"> </a>
+ON pets.treatment = codes.treatment<a name="wp1042507"> </a>
+ORDER BY patient_name<a name="wp1042473"> </a>
+</pre></div>
+<a name="wp1042524"> </a><p class="pBody">
+you will see that none of the patients had any lab work.  In addition, Copper is not listed among the patients because her treatment didn't match any of the treatment codes.</p><div><img src="images/right_jo.gif" height="395" width="235" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp1042482"> </a><p class="pBody">
+You can also join three or more tables at a time, in the same way as you would for a left outer join.  The syntax for that command is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT &lt;field-1&gt;[, &lt;field-2&gt;,  &lt;field-3&gt;...]<a name="wp1042394"> </a>
+FROM &lt;table-name-1&gt; <a name="wp1042395"> </a>
+<b class="cBold">RIGHT</b> JOIN &lt;table-name-2&gt; <a name="wp1042396"> </a>
+ON &lt;field-name-1&gt;=&lt;field-name-2&gt;  <a name="wp1042397"> </a>
+<b class="cBold">RIGHT</b> JOIN &lt;table-name-3&gt;<a name="wp1042398"> </a>
+ON &lt;field-name-3&gt;=&lt;field-name-4&gt;  <a name="wp1042328"> </a>
+</pre></div>
+<a name="wp1042445"> </a><h3 class="pHeadingRef">
+Self joins
+</h3>
+<a name="wp1028926"> </a><p class="pBody">
+You can also <em class="cEmphasis">self-join</em> a table, essentially putting two copies of the table side by side.  To do this, your select-expression lists the table twice in the FROM clause.  You cannot use the same table name twice, so you must assign it a different alias each time.  This is similar to the column alias introduced in <a  href="odb57.htm#wp1028436">section 5.3.1, &quot;SELECT Command.&quot;</a>  Use the aliases to refer to the table in the SELECT and WHERE clauses as if there were two tables.  
+</p>
+<a name="wp1028928"> </a><p class="pBody">
+The syntax for this type of select-expression is:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT &lt;alias1.field-name&gt; [, &lt;alias2.fieldname&gt;] [, ...]]<a name="wp1028929"> </a>
+FROM [&lt;table-name&gt; &lt;alias1&gt;] [, &lt;table-name&gt; &lt;alias2&gt;] [, ...]]<a name="wp1028930"> </a>
+</pre></div>
+<a name="wp1028931"> </a><p class="pBody">
+As in other SELECT statements, you can narrow the focus of the query by including a WHERE clause, as in the following example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+SELECT a.treatment, a.explanation, b.treatment, b.explanation<a name="wp1028932"> </a>
+FROM codes a, codes b<a name="wp1028933"> </a>
+WHERE a.treatment = b.treatment<a name="wp1028934"> </a>
+</pre></div>
+<a name="wp1028935"> </a><p class="pBody">
+The following view is a result of this query:</p><div><img src="images/self_joi.gif" height="144" width="419" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuODBC-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

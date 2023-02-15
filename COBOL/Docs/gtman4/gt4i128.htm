@@ -1,0 +1,403 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>W$PALETTE Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1039377"> </a><h2 class="pHeading2">
+W$PALETTE Routine
+</h2>
+<a name="wp1039383"> </a><p class="pBody">
+In graphical environments, you can customize the basic set of colors that you use in your programs.  
+</p>
+<a name="wp1039384"> </a><p class="pBody">
+ACUCOBOL-GT allows programs to reference 16 distinct colors (8 low-intensity and 8 high-intensity).  For most machines, this set of colors is fixed (black, blue, green, cyan, red, magenta, brown, and white).  On Windows machines, you can select which 16 colors you will be using.  You are given access to a <em class="cEmphasis">palette</em> of 16 colors that defines which color corresponds to each color number.  
+</p>
+<a name="wp1039385"> </a><p class="pBody">
+You control the palette through the library routine W$PALETTE.  
+</p>
+<a name="wp1039386"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;W$PALETTE&quot; <a name="wp1039387"> </a>
+    USING OP-CODE, WPALETTE-DATA <a name="wp1039388"> </a>
+    GIVING RESULT<a name="wp1039389"> </a>
+</pre></div>
+<a name="wp1039390"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1039391"> </a><p class="pBody">
+<b class="cBold">OP-CODE   </b>Numeric value
+</p>
+<a name="wp1039392"> </a><p class="pBody">
+Selects which palette function to perform.  The operations are described below.
+</p>
+<a name="wp1039395"> </a><p class="pBody">
+<b class="cBold">WPALETTE-DATA   </b>Group item as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+01  WPALETTE-DATA.<a name="wp1039396"> </a>
+    03  WPAL-COLOR-ID    PIC X COMP-X.<a name="wp1039397"> </a>
+    03  WPAL-FLAGS REDEFINES <a name="wp1039398"> </a>
+        WPAL-COLOR-ID    PIC X COMP-X.<a name="wp1039399"> </a>
+    03  WPAL-RED         PIC X COMP-X.<a name="wp1039400"> </a>
+    03  WPAL-USER-COLOR-ID REDEFINES<a name="wp1039401"> </a>
+        WPAL-RED         PIC X COMP-X.<a name="wp1039402"> </a>
+    03  WPAL-GREEN       PIC X COMP-X.<a name="wp1039403"> </a>
+    03  WPAL-BLUE        PIC X COMP-X.<a name="wp1039404"> </a>
+</pre></div>
+<a name="wp1039405"> </a><p class="pBody">
+This provides information and holds results for certain operations described below.  It may be omitted from those operations that do not use it.
+</p>
+<a name="wp1039406"> </a><p class="pBody">
+<b class="cBold">RESULT   </b>Signed numeric data item.
+</p>
+<a name="wp1039407"> </a><p class="pBody">
+Returns the status of the operation.  Unless otherwise stated below, &quot;1&quot; indicates success, and a zero or negative result indicates failure.
+</p>
+<a name="wp1039410"> </a><p class="pBody">
+The WPALETTE-DATA group item and all of the level 78 symbolic names described below can be found in the COPY library &quot;palette.def&quot;.
+</p>
+<a name="wp1039411"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1039412"> </a><p class="pBody">
+W$PALETTE performs a variety of operations depending on the passed OP-CODE.  These operations are as follows:
+</p>
+<a name="wp1039413"> </a><h3 class="pHeadingRef">
+WPALETTE-SUPPORTED (op-code 1)
+</h3>
+<a name="wp1039415"> </a><p class="pBody">
+This determines the level of support the host machine provides for the W$PALETTE routine.  Use this to determine if the host machine will allow you to perform certain operations.  
+</p>
+<a name="wp1039419"> </a><p class="pBody">
+WPALETTE-DATA is not used.  The RESULT value will be one of the following:
+</p>
+<a name="wp1039420"> </a><p class="pIndented1">
+<b class="cBold">WPAL-NO-SUPPORT</b> (value &quot;0&quot;) -- This value indicates that the host machine does not support palettes.  Only the WPALETTE-SUPPORTED and WPALETTE-NUM-COLORS operations will function.  Currently, this result is returned for all platforms other than Windows and Windows NT.
+</p>
+<a name="wp1039421"> </a><p class="pIndented1">
+<b class="cBold">WPAL-PALETTE-SUPPORTED</b> (value &quot;1&quot;) -- This value indicates that all W$PALETTE functions are supported except for the WPALETTE-CHOOSE-COLOR function.  
+</p>
+<a name="wp1039422"> </a><p class="pIndented1">
+<b class="cBold">WPAL-FULL-SUPPORT </b>(value &quot;2&quot;) -- This value indicates that all W$PALETTE functions are available.
+</p>
+<a name="wp1039424"> </a><h3 class="pHeadingRef">
+WPALETTE-NUM-COLORS  (op-code 2)
+</h3>
+<a name="wp1039428"> </a><p class="pBody">
+This operation sets RESULT to the number of distinct solid colors that the host machine can display simultaneously.  
+</p>
+<a name="wp1039429"> </a><p class="pBody">
+WPALETTE-DATA is not used.  For monochrome machines, the RESULT value will be &quot;2&quot;.  For color machines other than Windows, this value will be &quot;16&quot;.  
+</p>
+<a name="wp1039430"> </a><p class="pBody">
+For Windows machines, this value will depend on the host hardware and drivers installed.  For a standard VGA system, this value will be &quot;16&quot;.  For Super VGA systems with the proper driver installed, this value can be &quot;256&quot; or higher.  If the machine supports more than 32,767 distinct colors, then &quot;32767&quot; will be returned.  
+</p>
+<a name="wp1039431"> </a><p class="pBody">
+For machines with 16 or fewer colors, the standard ACUCOBOL-GT palette represents the entire range of solid (pure) colors.  In order to display any other color, that color must be simulated by dithering two or more colors together.  Windows allows us to do this, but only for background colors.  If you attempt to display a dithered color in the foreground, Windows will automatically substitute the nearest solid color.  Dithered background colors can also make the foreground text look ragged, depending on the exact colors used.  For this reason, you may want to limit yourself to solid colors.  One way to do this is to allow the user to change the palette only when the machine supports 256 colors or more.  
+</p>
+<a name="wp1039433"> </a><h3 class="pHeadingRef">
+WPALETTE-GET-COLOR (op-code 3)
+</h3>
+<a name="wp1039437"> </a><p class="pBody">
+This operation retrieves the color that currently corresponds to a particular color number.  Colors are numbered &quot;1&quot; through &quot;16&quot;.  The first 8 colors correspond to the low-intensity colors.
+</p>
+<a name="wp1039438"> </a><p class="pBody">
+Their initial values are as follows:
+</p>
+<a name="wp1039473"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1039442"> </a><p class="pCellBody">
+1
+</p>
+</td>
+    <td><a name="wp1039444"> </a><p class="pCellBody">
+Black
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039446"> </a><p class="pCellBody">
+2
+</p>
+</td>
+    <td><a name="wp1039448"> </a><p class="pCellBody">
+Blue
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039450"> </a><p class="pCellBody">
+3
+</p>
+</td>
+    <td><a name="wp1039452"> </a><p class="pCellBody">
+Green
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039454"> </a><p class="pCellBody">
+4
+</p>
+</td>
+    <td><a name="wp1039456"> </a><p class="pCellBody">
+Cyan
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039458"> </a><p class="pCellBody">
+5
+</p>
+</td>
+    <td><a name="wp1039460"> </a><p class="pCellBody">
+Red
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039462"> </a><p class="pCellBody">
+6
+</p>
+</td>
+    <td><a name="wp1039464"> </a><p class="pCellBody">
+Magenta
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039466"> </a><p class="pCellBody">
+7
+</p>
+</td>
+    <td><a name="wp1039468"> </a><p class="pCellBody">
+Brown
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039470"> </a><p class="pCellBody">
+8
+</p>
+</td>
+    <td><a name="wp1039472"> </a><p class="pCellBody">
+White
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1039474"> </a><p class="pBody">
+The second set of 8 colors contains the same colors in their high-intensity forms.  To determine the current definition of any color number, move the color number desired into the WPAL-COLOR-ID field of WPALETTE-DATA and call W$PALETTE.  
+</p>
+<a name="wp1039475"> </a><p class="pBody">
+When it returns, the WPAL-RED, WPAL-GREEN, and WPAL-BLUE fields of WPALETTE-DATA will be filled in with the current definition of that color number.  Each of these fields will contain a value from &quot;0&quot; to &quot;255&quot; that indicates the intensity of the red, green, and blue components of the color.  A red-green-blue (RGB) combination of &quot;0&quot;, &quot;0&quot;, &quot;0&quot; indicates black.  A RGB value of &quot;255&quot;, &quot;255&quot;, &quot;255&quot; is bright white.  Other values cover the entire range of colors possible under Windows.  
+</p>
+<a name="wp1039476"> </a><h3 class="pHeadingRef">
+WPALETTE-SET-COLOR (op-code 4)
+</h3>
+<a name="wp1039478"> </a><p class="pBody">
+This function complements WPALETTE-GET-COLOR; it lets you assign a new color to a particular color number.  At entry, WPAL-COLOR-ID should contain the color number you want to change.  WPAL-RED, WPAL-GREEN, and WPAL-BLUE should contain the RGB value of the new color (see WPALETTE-GET-COLOR for a description of RGB values).
+</p>
+<a name="wp1039482"> </a><p class="pBody">
+For example, if you want to make color number &quot;2&quot; represent a dark blue-green, you could use the following values:
+</p>
+<a name="wp1039501"> </a><p class="pBodyRelative">
+</p><div>
+<table border="0" cellpadding="6" cellspacing="1">
+  <caption></caption>
+  <tr align="left" valign="top">    <td><a name="wp1039486"> </a><p class="pCellBody">
+WPAL-COLOR-ID
+</p>
+</td>
+    <td><a name="wp1039488"> </a><p class="pCellBody">
+2
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039490"> </a><p class="pCellBody">
+WPAL-RED
+</p>
+</td>
+    <td><a name="wp1039492"> </a><p class="pCellBody">
+0
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039494"> </a><p class="pCellBody">
+WPAL-GREEN
+</p>
+</td>
+    <td><a name="wp1039496"> </a><p class="pCellBody">
+64
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039498"> </a><p class="pCellBody">
+WPAL-BLUE
+</p>
+</td>
+    <td><a name="wp1039500"> </a><p class="pCellBody">
+64
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBodyRelative">
+</p>
+<a name="wp1039502"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Changing the palette will change the colors currently shown on the screen as well as all future displays.  In the previous example, if you had displayed any data (or background) using color number &quot;2&quot;, that data would now change to dark blue-green.
+<hr />
+</p>
+<a name="wp1039503"> </a><p class="pBody">
+The color palette is the lowest level of color handling in the ACUCOBOL-GT system.  It defines the basic set of colors used.  Although you are free to change the palette as you see fit, ACUCOBOL-GT makes certain assumptions that you should be aware of.  First of all, ACUCOBOL-GT assumes that color &quot;1&quot; is always black, and color &quot;16&quot; is always bright white.  Likewise, colors &quot;8&quot; and &quot;9&quot; are assumed to be shades of gray.  These assumptions affect the rendering of window shadows and &quot;3-D&quot; lines.  Additionally, the first 8 colors are assumed to be low-intensity, and the second 8 are high-intensity.  
+</p>
+<a name="wp1039504"> </a><p class="pBody">
+ACUCOBOL-GT computes the high- or low-intensity version of a color by adding or subtracting &quot;8&quot; from its color number.  This assumption also affects the rendering of &quot;3-D&quot; lines if you use them on a colored background.  Although you are not required to maintain any of these assumptions, be aware of them so that you can anticipate the total effects of your changes.  
+</p>
+<a name="wp1039505"> </a><h3 class="pHeadingRef">
+WPALETTE-UPDATE (op-code 5)
+</h3>
+<a name="wp1039507"> </a><p class="pBody">
+In order to allow you to change several colors efficiently, W$PALETTE does not immediately apply the new palette after you change it.  It waits until the next screen update (usually caused by either an ACCEPT or DISPLAY statement).  In most cases this is adequate.  If you want to force the screen to be updated immediately with the new palette, you can use the WPALETTE-UPDATE function.  WPALETTE-DATA is not used.  The effect is to update the screen with the new palette and return.
+</p>
+<a name="wp1039511"> </a><h3 class="pHeadingRef">
+WPALETTE-CHOOSE-COLOR (op-code 6)
+</h3>
+<a name="wp1039513"> </a><p class="pBody">
+This operation provides a simple method for getting a color selection from the user.  You can use this to simplify the process of constructing your color palette according to your user's desires.  When this operation executes, a standard color selection box pops up over your application.  This box is similar to the &quot;Color Palette&quot; portion of the Windows' Control Panel application.  It should be familiar to most users.  
+</p>
+<a name="wp1039517"> </a><p class="pBody">
+This box contains a selection of pre-determined colors (called the &quot;Basic Colors&quot;) that the user can choose from.  Windows selects these colors.  Typically, there are 48 of them drawn from the entire spectrum (there can be fewer on some systems).  
+</p>
+<a name="wp1039518"> </a><p class="pBody">
+The user can pick one of these by clicking the mouse on it or by using the arrow keys.  
+</p>
+<a name="wp1039519"> </a><p class="pBody">
+Beneath these colors is a set of 16 &quot;Custom Colors&quot;.  Initially, these colors are all white.  The user can select the &quot;Define Custom Colors&quot; option to define new colors.  This pulls up a color chart that the user can select from.  After selecting a custom color, the user can add it to the set of 16 custom colors by selecting the &quot;Add to Custom Colors&quot; button.  This color is then available for future selection.  
+</p>
+<a name="wp1039520"> </a><p class="pBody">
+The user selects the &quot;OK&quot; button (or presses &lt;enter&gt;) to complete selection of the color.  The RGB value of the color selected is returned in WPAL-RED, WPAL-GREEN, and WPAL-BLUE.  
+</p>
+<a name="wp1039521"> </a><p class="pBody">
+Alternately, the user can select the &quot;Cancel&quot; button (or press &lt;escape&gt;).  In this case, no color is returned and the value of RESULT is set to WPERR-CANCELLED (see below).  
+</p>
+<a name="wp1039522"> </a><p class="pBody">
+The initial default color selection is black (RGB value &quot;0&quot;, &quot;0&quot;, &quot;0&quot;).  You may supply a different default value by moving the desired color into WPAL-RED, WPAL-GREEN, and WPAL-BLUE.  You  must also set WPAL-FLAGS to WPAL-USE-DEFAULT (value &quot;1&quot;).  If you do not use this option, then you should set WPAL-FLAGS to zero before calling W$PALETTE.  
+</p>
+<a name="wp1039523"> </a><p class="pBody">
+The color selection box is a standard component of Windows and Windows&#160;NT.  
+</p>
+<a name="wp1039524"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>In some Windows setups &quot;COMMDLG.DLL&quot; provides support for the color selection dialog (as well as other standard dialogs).  Because ACUCOBOL-GT is used to build applications for use in a variety of nations and languages, Acucorp does not distribute this file.  The standard dialogs defined in this DLL contain text that is specific to the local language.  
+<hr />
+</p>
+<a name="wp1039525"> </a><h3 class="pHeadingRef">
+WPALETTE-SET-USER-COLOR (op-code 7)
+</h3>
+<a name="wp1039527"> </a><p class="pBody">
+This operation allows you to assign selected system colors to COBOL color numbers.  It uses two fields in the WPALETTE-DATA group item.
+</p>
+<a name="wp1039531"> </a><p class="pIndented1">
+<b class="cBold">WPAL-COLOR-ID</b> contains the number of the COBOL color you want to change.  Values range from &quot;1&quot; (low-intensity black) to &quot;16&quot; (high-intensity white).  
+</p>
+<a name="wp1039532"> </a><p class="pIndented1">
+<b class="cBold">WPAL-USER-COLOR-ID</b>  contains the number of the system color to use.   You can use either WPUSER-COLOR-3D, which matches the system's color for the background of 3-D objects, or WPUSER-COLOR-BACKGROUND, which matches the system's color for window backgrounds.  These values are defined in &quot;palette.def&quot;.
+</p>
+<a name="wp1039533"> </a><p class="pBody">
+The following example redefines the COBOL color number &quot;8&quot; (which is gray in the default palette) to be the same as the system's 3-D color:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    MOVE 8 TO WPAL-COLOR-ID<a name="wp1039534"> </a>
+    MOVE WPUSER-COLOR-3D TO WPAL-USER-COLOR-ID<a name="wp1039535"> </a>
+    CALL &quot;W$PALETTE&quot; USING<a name="wp1039536"> </a>
+       WPALETTE-SET-USER-COLOR, WPALETTE-DATA<a name="wp1039537"> </a>
+</pre></div>
+<a name="wp1039538"> </a><p class="pBody">
+Errors are handled in the same manner as the WPALETTE-SET-COLOR function.  Note that under some systems, such as Microsoft Windows, the system colors can change dynamically at runtime.  If this occurs, the runtime will automatically remap the colors in the palette as needed to match the new system colors.  
+</p>
+<a name="wp1039539"> </a><p class="pBody">
+For additional color configuration options, see the USER-GRAY, USER-WHITE, and USER-COLORS options of the DISPLAY FLOATING WINDOW verb.
+</p>
+<a name="wp1039540"> </a><h3 class="pHeadingRef">
+Error Handling
+</h3>
+<a name="wp1039543"> </a><p class="pBody">
+RESULT is set to a positive value if the call to W$PALETTE is successful.  Except for the WPALETTE-SUPPORTED and WPALETTE-NUM-COLORS operations, the success value is always &quot;1&quot;.  A zero or negative value indicates a problem.  The following values are possible:
+</p>
+<a name="wp1039544"> </a><p class="pBody">
+<b class="cBold">WPERR-UNSUPPORTED</b> (value &quot;0&quot;) -- Either the requested operation cannot be performed on the host system, or you passed an invalid operation code.
+</p>
+<a name="wp1039546"> </a><p class="pBody">
+<b class="cBold">WPERR-BAD-ARG</b> (value &quot;-1&quot;) -- Either you did not pass WPALETTE-DATA when it was required, or WPALETTE-DATA contains some invalid data.
+</p>
+<a name="wp1039548"> </a><p class="pBody">
+<b class="cBold">WPERR-CANCELLED</b> (value &quot;-2&quot;) -- The user selected the &quot;cancel&quot; operation of the color selection box, or the user closed the selection box.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

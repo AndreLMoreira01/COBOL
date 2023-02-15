@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="07/01/05 10:10:58" />
+  <title>6.2.1.1  Defining Internet pathnames</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Programmer's Guide to the Internet <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="int6.htm">Chapter 6: Other Internet Access Solutions</a> &gt; <a href="int63.htm">6.2  Accessing Vision Data Over the Internet</a> &gt; <a href="int64.htm">6.2.1  Internet Considerations for AcuServer</a> &gt; </p>
+<a name="wp1030754"> </a><h2 class="pHeading3">
+6.2.1.1  Defining Internet pathnames
+</h2>
+<a name="wp1028253"> </a><p class="pBody">
+In both standard client/server and Internet configurations, enabling your applications to use AcuServer requires that your applications refer to remote files with <em class="cEmphasis">remote name notation</em>.  
+</p>
+<a name="wp1028259"> </a><p class="pBody">
+The easiest way to enable your applications to use AcuServer is to update the FILE_PREFIX and CODE_PREFIX runtime configuration variables to include paths with remote name notation.  This holds true whether the remote path is a standard remote server address or an Internet address.
+</p>
+<a name="wp1028260"> </a><p class="pBody">
+To add a remote search path, you simply append or insert the name and path of the remote directory to the variable's definition.  For Internet configurations, you include the domain name of the AcuServer server that users are accessing over the Internet.  For example, if the name of the server is &quot;condor,&quot; you could define the configuration variables as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE_PREFIX   @condor.XYZCorp.com:/usr/data<a name="wp1028266"> </a>
+CODE_PREFIX   @condor.XYZCorp.com:/usr/objects<a name="wp1032446"> </a>
+</pre></div>
+<a name="wp1028268"> </a><p class="pBody">
+Of course, you could define &quot;condor&quot; as an alias for condor.XYZCorp.com, and simplify the remote name notation in these variables to &quot;@condor:/usr/data&quot; and &quot;@condor:/usr/objects&quot;.  This would not include the port number, but the port number is not always required.
+</p>
+<a name="wp1032804"> </a><p class="pBody">
+If you want to enter the explicit IP address of the server, you may do so as shown in the following example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FILE_PREFIX @128.110.121.42:/usr/data<a name="wp1032800"> </a>
+CODE_PREFIX @128.110.121.42:/usr/objects<a name="wp1032787"> </a>
+</pre></div>
+<a name="wp1050747"> </a><p class="pBody">
+Alternatively, for highest performance, you can map the Vision filename directly to the Internet pathname by defining a file name alias in your runtime configuration file.  A file name alias is a substitute string for the literal name that appears in the ASSIGN TO clause of a SELECT statement.  Defining the alias shown below allows you to bypass FILE-PREFIX for &quot;customer.dat&quot;:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+CUSTOMER @condor.XYZCorp.com:/usr/data/customer.dat <a name="wp1050754"> </a>
+</pre></div>
+<a name="wp1050748"> </a><p class="pBody">
+By not requiring the runtime to connect to the server to see whether a file exists, you can open the file more quickly.  For information on using name aliases, refer to section 7.2.4 of the <em class="cEmphasis">AcuServer User's Guide</em>.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

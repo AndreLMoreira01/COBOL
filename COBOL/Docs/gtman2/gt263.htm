@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:25:10" />
+  <title>6.2  Window Events</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User Interface Programming <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt26.htm">Chapter 6:  Events Reference</a> &gt; </p>
+<a name="wp1026455"> </a><h2 class="pHeading1">
+6.2  Window Events
+</h2>
+<a name="wp1026460"> </a><p class="pBody">
+The EVENT-CONTROL-HANDLE and EVENT-CONTROL-ID values will always be zero (NULL) when a window event occurs.  The values returned are stored as signed integers and may return negative values.  
+</p>
+<a name="wp1026086"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>Command events begin with the prefix &quot;CMD&quot;.  Notification events start with &quot;NTF&quot;, and messages begin with &quot;MSG&quot;.
+<hr />
+</p>
+<a name="wp1026089"> </a><h5 class="pHeading4">
+CMD-CLOSE (value 1)
+</h5>
+<a name="wp1027989"> </a><p class="pBody">
+This event indicates that the user has selected the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">close</span> option from the active window's system menu.  The application should respond by hiding or destroying the window.  The EVENT-WINDOW-HANDLE data item will contain the handle of the window that the user wants to close.  The EVENT-DATA-1 and EVENT-DATA-2 values are not used. Note that floating windows always return the exception CMD-CLOSE.  Also note that the runtime configuration variable QUIT-MODE affects only the main application window.  All other windows in the application return the event CMD-CLOSE when the <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">close</span> button is&#160;clicked.
+</p>
+<a name="wp1026094"> </a><h5 class="pHeading4">
+CMD-ACTIVATE (value 6)   
+</h5>
+<a name="wp1028010"> </a><p class="pBody">
+This event occurs when a window is activated by the user, but only if the previously active window belongs to the same program (i.e., the user switches windows within the program, and does not transfer control from another program).  The normal response is to ACCEPT something in the newly active window, making it the active window from the program's point of view.  If you use either the LINK or BIND TO THREAD options when creating the window, then the runtime can automatically handle this event.  The EVENT-DATA-1 and EVENT-DATA-2 values are not used.  Threads are discussed in detail in section 6.8 of Book 1, <em class="cEmphasis">ACUCOBOL-GT</em> <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">User's Guide</span>.
+</p>
+<a name="wp1026098"> </a><h5 class="pHeading4">
+NTF-RESIZED (value 4114)   
+</h5>
+<a name="wp1034090"> </a><p class="pBody">
+This event occurs when a resizeable window that does not have AUTO-RESIZE specified is resized by the user.  The application typically reconstructs the screen in response.  EVENT-DATA-1 contains the new height and EVENT-DATA-2 contains the new width,  both measured in hundredths of cells (e.g., an 80-column wide screen is expressed as &quot;8000&quot;).  Alternatively, after the ACCEPT terminates, you can use a format 2 INQUIRE statement to obtain the window's dimensions and other information (see INQUIRE in section 6.6, &quot;Procedure Division,&quot; of Book&#160;3, <em class="cEmphasis">Reference Manual</em>.  
+</p>
+<a name="wp1034091"> </a><p class="pBody">
+The <em class="cEmphasis">resize</em> layout manager can simplify the task of resizing controls in a window that has been resized.  See <a  href="gt2414.htm#wp1029443">Section 4.8, &quot;Layout Managers,&quot;</a> for more information.
+</p>
+<a name="wp1027892"> </a><h5 class="pHeading4">
+MSG-CLOSE (value 16415)   
+</h5>
+<a name="wp1028050"> </a><p class="pBody">
+This event occurs when the user clicks on the window's close box, selects &quot;Close&quot; from the window's system menu, or types the host system's key sequence to close the application (Alt-F4 for Windows).
+</p>
+<a name="wp1027893"> </a><p class="pBody">
+MSG-CLOSE provides a single point where you can test for the close operation.  This event will be followed by the normal close sequence for the window.  Handling of the initial window is dictated by the current setting of the QUIT-MODE configuration variable.  This may also result in the generation of a CMD-CLOSE event for the other windows.  If you set EVENT-ACTION to EVENT-ACTION-FAIL in response to this event, the close operation is inhibited.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

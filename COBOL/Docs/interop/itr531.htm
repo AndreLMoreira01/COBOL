@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/08/06 14:58:17" />
+  <title>5.5.2.2  Passing data as parameters</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       A Guide to Interoperating with ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="itr5.htm">Chapter 5: Working With .NET Assemblies</a> &gt; <a href="itr522.htm">5.5  Calling .NET from COBOL </a> &gt; <a href="itr529.htm">5.5.2  NETDEFGEN Utility Reference</a> &gt; </p>
+<a name="wp1038992"> </a><h2 class="pHeading3">
+5.5.2.2  Passing data as parameters
+</h2>
+<a name="wp1038993"> </a><p class="pBody">
+The .NET CLR is type-sensitive and generates or <em style="font-style: normal" class="cEmphasis">throws</em> an error if an exact match on a data type does not occur.  At run time, ACUCOBOL-GT attempts to convert data types to the format expected by the CLR.  For the best possible results, when passing data as parameters to .NET functions, use the table below to determine what parameter to pass.
+</p>
+<a name="wp1038994"> </a><p class="pBody">
+For example, when the COPY file says &quot;int&quot;, pass  &quot;SIGNED-INT&quot; for the parameter type in your COBOL program.  The ACUCOBOL-GT runtime converts this  to &quot;System.Int32&quot; before passing it to the .NET assembly.  The &quot;int&quot;, &quot;SIGNED-INT&quot;, and &quot;System32.Int32&quot; parameters all represent a 4-byte field holding signed binary data.  The runtime also converts PIC s999 to a SIGNED-INT field. 
+</p>
+<a name="wp1039050"> </a><p class="pBody">
+</p><div>
+<table border="1" cellpadding="2" cellspacing="2">
+  <caption></caption>
+  <tr align="left" valign="top">    <th><a name="wp1038997"> </a>
+COPY File Parameter
+
+</th>
+    <th><a name="wp1038999"> </a>
+Parameter to Pass
+
+</th>
+    <th><a name="wp1039001"> </a>
+Converted to .NET
+
+</th>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039003"> </a><p class="pCellBody">
+BSTR - TYPE 8
+</p>
+</td>
+    <td><a name="wp1039005"> </a><p class="pCellBody">
+PIC X(n)
+</p>
+</td>
+    <td><a name="wp1039007"> </a><p class="pCellBody">
+System.String
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039009"> </a><p class="pCellBody">
+int - TYPE 3
+</p>
+</td>
+    <td><a name="wp1039011"> </a><p class="pCellBody">
+SIGNED-INT
+</p>
+</td>
+    <td><a name="wp1039013"> </a><p class="pCellBody">
+System.Int32
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039015"> </a><p class="pCellBody">
+unsigned int - TYPE 19
+</p>
+</td>
+    <td><a name="wp1039017"> </a><p class="pCellBody">
+UNSIGNED-INT
+</p>
+</td>
+    <td><a name="wp1039019"> </a><p class="pCellBody">
+System.UInt32
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039021"> </a><p class="pCellBody">
+single - TYPE 4
+</p>
+</td>
+    <td><a name="wp1039023"> </a><p class="pCellBody">
+FLOAT
+</p>
+</td>
+    <td><a name="wp1039025"> </a><p class="pCellBody">
+System.Single
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039027"> </a><p class="pCellBody">
+double - TYPE 5
+</p>
+</td>
+    <td><a name="wp1039029"> </a><p class="pCellBody">
+DOUBLE
+</p>
+</td>
+    <td><a name="wp1039031"> </a><p class="pCellBody">
+System.Double
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039033"> </a><p class="pCellBody">
+short - TYPE 2
+</p>
+</td>
+    <td><a name="wp1039035"> </a><p class="pCellBody">
+SIGNED-SHORT
+</p>
+</td>
+    <td><a name="wp1039037"> </a><p class="pCellBody">
+System.Int16
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039039"> </a><p class="pCellBody">
+unsigned short - TYPE 18
+</p>
+</td>
+    <td><a name="wp1039041"> </a><p class="pCellBody">
+UNSIGNED-SHORT
+</p>
+</td>
+    <td><a name="wp1039043"> </a><p class="pCellBody">
+System.UInt16
+</p>
+</td>
+</tr>
+  <tr align="left" valign="top">    <td><a name="wp1039045"> </a><p class="pCellBody">
+unsigned char - TYPE 17
+</p>
+</td>
+    <td><a name="wp1039047"> </a><p class="pCellBody">
+PIC X
+</p>
+</td>
+    <td><a name="wp1039049"> </a><p class="pCellBody">
+System.Byte
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060622-Interop-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

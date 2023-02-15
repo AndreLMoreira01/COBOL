@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/12/06 10:53:04" />
+  <title>6.2.2.4  Installing AcuConnect on a VMS server</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       AcuConnect User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="con6.htm">Chapter 6: Thin Client: Preparing the Server </a> &gt; <a href="con63.htm">6.2  Installing Server Software Components</a> &gt; <a href="con65.htm">6.2.2  Installing AcuConnect</a> &gt; </p>
+<a name="wp1060013"> </a><h2 class="pHeading3">
+6.2.2.4  Installing AcuConnect on a VMS server
+</h2>
+<a name="wp1060017"> </a><p class="pBody">
+For VMS platforms (version 7.2 or later), AcuConnect software is shipped in BACKUP format.  Select a directory on the server to hold the AcuConnect software, and extract the files from the tape.  Follow the installation instructions on the Quick Start card that came with your product.  You should be logged in to the &quot;SYSTEM&quot; account or an account with &quot;SYSPRV&quot; system privileges. 
+</p>
+<a name="wp1061074"> </a><p class="pBody">
+You should note that runtimes on VMS servers use RMS indexed files rather than Vision.
+</p>
+<a name="wp1061178"> </a><p class="pBody">
+Install AcuConnect on VMS as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1060099"> </a><div class="pSmartList1"><li>Define a symbol so users can access AcuConnect.  Set up a symbol for each AcuConnect user.</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acurcl == &quot;<em class="cEmphasis">$disk:[directory]</em>acurcl.exe&quot;<a name="wp1060130"> </a>
+</pre></div>
+<a name="wp1060145"> </a><div class="pSmartList1"><li>Use the &quot;acurcl -access&quot; command that launches the access file utility to create a server access file.  Refer to <a  href="con312.htm#wp1029016">section 3.3.2, &quot;The Server Access File,&quot;</a> for information about creating and maintaining the server access file.  Note that the server access file in VMS is an RMS indexed file rather than Vision.  </li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+acurcl -access<a name="wp1060163"> </a>
+Enter the name of the Server Access File<a name="wp1060475"> </a>
+Filename [acuaccess.dat]: acuaccess.dat<a name="wp1060563"> </a>
+</pre></div>
+<a name="wp1060564"> </a><div class="pSmartList1"><li>Set up user account quotas to define each user's capabilities.  You can always modify account quotas as needed, but the following settings are suggested if you encounter quota errors:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Maxjobs:      0   Fillm:      300  Bytlm:       100000<a name="wp1060654"> </a>
+Maxacctjobs:  0   Shrfillm:     0  Pbytlm:           0<a name="wp1060655"> </a>
+Maxdetach:    0   BIOlm:    10000  JTquota:       4096<a name="wp1060656"> </a>
+Prclm:       40   DIOlm:    10000  WSdef:       100000<a name="wp1060657"> </a>
+Prio:         4   ASTlm:      400  WSquo:       100000<a name="wp1060658"> </a>
+Queprio:      0   TQElm:      400  WSextent:    100000<a name="wp1060659"> </a>
+CPU:     (none)   Enqlm:     4000  Pgflquo:     100000<a name="wp1060660"> </a>
+</pre></div>
+</ol></div>
+<a name="wp1060633"> </a><p class="pBody">
+AcuConnect is now installed and ready for configuration on the VMS server.  Refer to <a  href="con657.htm#wp1035318">section 6.3.2, &quot;Assigning Values to Server Configuration Variables,&quot;</a> for possible configuration variable settings.  Refer to <a  href="con676.htm#wp1035524">section 6.3.3, &quot;Creating a Server Alias File,&quot;</a> to learn how to create and maintain an alias file that holds all the information needed to start the desired application on the server.  <a  href="con687.htm#wp1061020">Section 6.4.4, &quot;Starting acurcl on a VMS Server,&quot;</a> describes how to start AcuConnect.  
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com?subject=E-01-UG-060621-AcuConnect-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

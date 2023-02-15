@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/15/06 14:43:47" />
+  <title>C$PARAMSIZE Routine</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT Appendices <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt4i.htm">Appendix I:  ACUCOBOL-GT Library Routines</a> &gt; <a href="gt4i2.htm">I.1 Library Routines</a> &gt; </p>
+<a name="wp1036464"> </a><h2 class="pHeading2">
+C$PARAMSIZE Routine
+</h2>
+<a name="wp1036469"> </a><p class="pBody">
+This routine returns the number of bytes actually passed by the caller for a particular parameter.   
+</p>
+<a name="wp1036470"> </a><h3 class="pHeadingRef">
+Usage
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+CALL &quot;C$PARAMSIZE&quot; <a name="wp1036471"> </a>
+    USING PARAM-NUM, <a name="wp1036472"> </a>
+    GIVING PARAM-SIZE<a name="wp1036473"> </a>
+</pre></div>
+<a name="wp1036474"> </a><h3 class="pHeadingRef">
+Parameters
+</h3>
+<a name="wp1036475"> </a><p class="pBody">
+<b class="cBold">PARAM-NUM   </b>Numeric parameter
+</p>
+<a name="wp1036476"> </a><p class="pBody">
+This value is the ordinal position in the Procedure Division's USING phrase of the parameter whose size you want to know.  
+</p>
+<a name="wp1036477"> </a><p class="pBody">
+<b class="cBold">PARAM-SIZE   </b>Any numeric data item
+</p>
+<a name="wp1036478"> </a><p class="pBody">
+This item receives the number of bytes in the data item actually passed by the caller.  
+</p>
+<a name="wp1036479"> </a><h3 class="pHeadingRef">
+Description
+</h3>
+<a name="wp1036480"> </a><p class="pBody">
+This routine returns the actual size (in bytes) of a data item passed to the current program by its caller.  You pass the number (starting with &quot;1&quot;) of the data item in the Procedure Division's USING phrase, and C$PARAMSIZE will return the size of the corresponding item that was actually passed.  This can be useful for handling data items of unknown size.  
+</p>
+<a name="wp1036481"> </a><p class="pBody">
+For example, suppose that you wanted to write a routine that could convert any data item to upper-case, up to 10000 bytes in size.  This routine could look like this:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+IDENTIFICATION DIVISION.<a name="wp1036482"> </a>
+PROGRAM-ID.  MAKE-UPPERCASE.<a name="wp1036483"> </a>
+<a name="wp1036484"> </a>
+DATA DIVISION.<a name="wp1036485"> </a>
+WORKING-STORAGE SECTION.<a name="wp1036486"> </a>
+77  PARAM-SIZE    PIC 9(5).<a name="wp1036487"> </a>
+<a name="wp1036488"> </a>
+LINKAGE SECTION.<a name="wp1036489"> </a>
+77  PASSED-ITEM   PIC X(10000).<a name="wp1036490"> </a>
+<a name="wp1036491"> </a>
+PROCEDURE DIVISION USING PASSED-ITEM.<a name="wp1036492"> </a>
+MAIN-LOGIC.<a name="wp1036493"> </a>
+   CALL &quot;C$PARAMSIZE&quot; USING 1, GIVING PARAM-SIZE<a name="wp1036494"> </a>
+   INSPECT PASSED-ITEM( 1 : PARAM-SIZE ) <a name="wp1036495"> </a>
+      CONVERTING &quot;abcdefghijklmnopqrstuvwxyz&quot; <a name="wp1036496"> </a>
+      TO &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;<a name="wp1036497"> </a>
+  EXIT PROGRAM.<a name="wp1036498"> </a>
+</pre></div>
+<a name="wp1036499"> </a><p class="pBody">
+In this example, if you do not use C$PARAMSIZE, you have to pass a full 10000 bytes to this routine or you get a memory usage error.  By using C$PARAMSIZE and reference modification, only the memory actually passed is referenced, and there is no error.  C$PARAMSIZE works only when the program is a called subroutine.  It does not work with the &quot;CALL RUN&quot; form of the CALL verb.
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com subject=E-01-DS-060621-ACUCOBOL-GT-7.2">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

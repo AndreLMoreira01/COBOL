@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:20:56" />
+  <title>2.4  Source Formats</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt12.htm"><br />Chapter 2: Compiler and Runtime</a> &gt; </p>
+<a name="wp1033286"> </a><h2 class="pHeading1">
+2.4  Source Formats
+</h2>
+<a name="wp1033290"> </a><p class="pBody">
+ACUCOBOL-GT supports two different source formats.  One format is ANSI compatible.  The other format is suitable for interactive COBOL development from a terminal.  
+</p>
+<a name="wp1033292"> </a><p class="pBody">
+ANSI format has the following characteristics:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033293"> </a><div class="pSmartList1"><li>Columns 1 - 6 are used for <b class="cBold">Sequence Numbers</b>.  This area is ignored by the compiler.</li></div>
+<a name="wp1033294"> </a><div class="pSmartList1"><li>Column 7 is the <b class="cBold">Indicator Area</b>.  </li></div>
+<a name="wp1033295"> </a><div class="pSmartList1"><li>Columns 8 - 11 are <b class="cBold">Area A</b>.</li></div>
+<a name="wp1033296"> </a><div class="pSmartList1"><li>Columns 12 - 72 are <b class="cBold">Area B.</b></li></div>
+<a name="wp1033297"> </a><div class="pSmartList1"><li>Columns 73 - 80 are the <b class="cBold">Identification Area</b>.  This area is ignored by the compiler (but see Source Code Control below).</li></div>
+<a name="wp1033298"> </a><div class="pSmartList1"><li>Lines are 80 characters long.  Lines shorter than 80 characters are padded with spaces, and longer lines are truncated.</li></div>
+</ol></div>
+<a name="wp1033300"> </a><p class="pBody">
+Terminal format is convenient for developing programs interactively.  This format has the following characteristics:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1033301"> </a><div class="pSmartList1"><li>The <b class="cBold">Sequence Number</b> area is eliminated.</li></div>
+<a name="wp1033302"> </a><div class="pSmartList1"><li>The <b class="cBold">Indicator Area</b> is in column 1.  All of the usual COBOL indicators are accepted here except for the conditional debugging line indicator &quot;D&quot;.  This indicator must be preceded by a backslash (\) in column 1 (placing the &quot;D&quot; in column 2).</li></div>
+<a name="wp1033303"> </a><div class="pSmartList1"><li><b class="cBold">Area A</b> also starts in column 1 unless an indicator is present, in which case it starts immediately after the indicator character.</li></div>
+<a name="wp1033304"> </a><div class="pSmartList1"><li><b class="cBold">Area B </b>starts in column 5 and extends to the end of the line.</li></div>
+<a name="wp1033305"> </a><div class="pSmartList1"><li>The <b class="cBold">Identification Area</b> starts when a &quot;|&quot; or &quot;*&gt;&quot; is encountered, provided it is not part of a literal.  The Identification Area extends to the end of the line.  This can be used to introduce in-line comments.</li></div>
+<a name="wp1094374"> </a><div class="pSmartList1"><li>The line ends when a carriage-return or new-line is found.  Lines may be longer or shorter than 80 characters.</li></div>
+<a name="wp1094375"> </a><p class="pNoteList">
+<hr />
+<b>Note:  </b>Although the compiler accepts lines longer than 80 characters, the runtime debugger does not display characters past the 80th column.  If possible, use the AcuBench runtime debugger in such cases.
+<hr />
+</p>
+</ol></div>
+<a name="wp1094377"> </a><p class="pBody">
+ACUCOBOL-GT Terminal mode is compatible with the VAX COBOL terminal source format, except for the introduction of the Identification Area, which VAX COBOL does not support.  ACUCOBOL-GT Terminal mode is also compatible with ICOBOL terminal source format except that Area A must start in column 1 (in ICOBOL Area A may start in column 2). 
+</p>
+<a name="wp1033310"> </a><p class="pBody">
+Both formats expand tab characters to every eight spaces.  Both formats also translate lower-case characters to upper-case except in literals.  Finally, both formats translate the underscore character to a hyphen when it is found in identifiers.  
+</p>
+<a name="wp1033311"> </a><p class="pBody">
+Normally, the compiler determines the source format automatically by examining the first character of the first non-blank line.  If this character is blank or a digit, the file is assumed to be an ANSI file; otherwise it is assumed to be in terminal format.  This is done independently for the main source file and all COPY libraries.  This allows mixing of formats among a source file and its COPY libraries.  If desired, the format to use for the entire input source can be set to either mode via the &quot;-Sa&quot; or &quot;-St&quot; compile flags. 
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

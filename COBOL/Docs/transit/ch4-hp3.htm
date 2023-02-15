@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.6.1058" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="09/23/05 14:00:34" />
+  <title>4.2  ACUCOBOL-GT in MPE/iX Environments</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Transitioning to ACUCOBOL-GT <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="ch4-hp.htm">Chapter 4:  HP COBOL Conversions</a> &gt; </p>
+<a name="wp1040923"> </a><h2 class="pHeading1">
+4.2  ACUCOBOL-GT in MPE/iX Environments
+</h2>
+<a name="wp1078820"> </a><p class="pBody">
+ACUCOBOL-GT supports HP COBOL compatibility mode in MPE/iX environments on the HP&#160;e3000 platform.  In addition, ACUCOBOL-GT can be used with MPE/iX emulators on non-HP e3000 hardware. This section discusses how to use ACUCOBOL-GT (and its debugger) in these environments.  It also discusses how to access MPE KSAM, relative, and sequential files from an ACUCOBOL-GT program.
+</p>
+<a name="wp1080112"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>You must use the &quot;-Cp&quot; compiler option to enable HP COBOL compatibility.  See <a  href="ch4-hp30.htm#wp1043054">section 4.3</a> for more details on this option. 
+<hr />
+</p>
+<a name="wp1040928"> </a><h3 class="pHeadingRef">
+Qedit source files
+</h3>
+<a name="wp1040931"> </a><p class="pBody">
+When the ACUCOBOL-GT compiler is started, in addition to accepting source files in text file format, the compiler also recognizes and accepts source files in Qedit format.  To support the compilation of a Qedit file, the compiler makes a temporary text file from the original file.  The temporary file is removed after compilation.  If the compiler is also invoked with the &quot;-v&quot; (verbose) option, a message similar to the following is displayed for every Qedit file:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">filename</span> is a Qedit file<a name="wp1040932"> </a>
+Processing Qedit source file:/tmp/SRCxxxxxx from:<span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-style: italic">filename</span><a name="wp1052951"> </a>
+</pre></div>
+<a name="wp1040936"> </a><h3 class="pHeadingRef">
+KSAM COPY files and libraries
+</h3>
+<a name="wp1040945"> </a><p class="pBody">
+ACUCOBOL-GT can read KSAM COPY files and COPY libraries on HP&#160;e3000 systems.  On other platforms, ACUCOBOL-GT requires COPY files and COPY libraries to be plain text files.  ACUCOBOL-GT includes a utility called <b class="cBold">libutil</b> that can be used to easily convert KSAM COPY libraries into text format COPY libraries.  For more information about <b class="cBold">libutil</b>, see <a  href="ch4-hp29.htm#wp1041420">section 4.2.7, &quot;The libutil Utility.&quot;</a>
+</p>
+<a name="wp1040949"> </a><h3 class="pHeadingRef">
+Runtime configuration file
+</h3>
+<a name="wp1040952"> </a><p class="pBody">
+Many aspects of the ACUCOBOL-GT runtime system can be controlled through configuration variables.  Configuration variables are maintained in a configuration file.  This is a standard text file that can be modified by the host system's text editor.  For more information about runtime configuration, see section 2.7, &quot;Runtime Configuration,&quot; in Book 1 of the ACUCOBOL-GT documentation set.  For more information about runtime configuration variables, see Appendix H of the same documentation set. 
+</p>
+<a name="wp1052523"> </a><p class="pNoteHead">
+<hr />
+<b>Note:  </b>Configuration file entries are not recognized when the configuration file contains line numbers along the right-hand column.  Such numbers are included by default by the MPE/iX <span style="font-family: Arial, Verdana, Helvetica, sans-serif; font-weight: bold">Editor</span> program.  To remove line numbering, specify &quot;unn&quot; when you save the file.  For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+:editor<a name="wp1053288"> </a>
+/a<a name="wp1053304"> </a>
+     1 DEFAULT_FILESYSTEM MPE<a name="wp1053313"> </a>
+     2 //<a name="wp1053322"> </a>
+/k CBLCONFI, unn<a name="wp1053331"> </a>
+/exit<a name="wp1080168"> </a>
+</pre></div>
+<a name="wp1080169"> </a><p class="pNoteEnd">
+
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: (800) 262-6585 (U.S.A. and Canada)<br />
+         Voice: (858) 689-4500<br />
+         Fax: (858) 689-4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>

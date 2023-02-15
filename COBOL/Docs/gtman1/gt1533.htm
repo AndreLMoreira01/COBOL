@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.5.1025" />
+  <meta name="TEMPLATEBASE" content="Acucorp WWH" />
+  <meta name="LASTUPDATED" content="06/14/06 08:22:06" />
+  <title>5.3.1.11  Naming the XFD</title>
+  <link rel="StyleSheet" href="document.css" type="text/css" />
+  <link rel="StyleSheet" href="catalog.css" type="text/css" />
+<script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/context.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/towwhdir.js"></script>
+  <script type="text/javascript" language="JavaScript1.2" src="wwhdata/common/wwhpagef.js"></script>
+
+  <script type="text/javascript" language="JavaScript1.2">
+   <!--
+    // Set reference to top level help frame
+    //
+    var  WWHFrame = WWHGetWWHFrame("");
+   // -->
+  </script>
+ </head>
+
+ <body onLoad="WWHUpdate();">
+
+    <a href="../docs.htm" target="acudoc"><img src="images/sbooks.gif" width="70" height="27" border="0" alt="Books" align="right" /></a>
+    <span style="font-size: 18px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       ACUCOBOL-GT User's Guide <br />
+    </font></span>
+    <span style="font-size: 14px ; font-weight: bold"><font face="Arial, Helvetica, sans-serif">
+       Version 7.2
+     </font></span>
+
+ <p />
+
+ <blockquote>
+<p class="breadcrumb"><a href="gt15.htm"><br />Chapter 5:  File Processing</a> &gt; <a href="gt1521.htm">5.3  XFD Files</a> &gt; <a href="gt1522.htm">5.3.1  Defaults Used in XFD Files</a> &gt; </p>
+<a name="wp1032578"> </a><h2 class="pHeading3">
+5.3.1.11  Naming the XFD
+</h2>
+<a name="wp1032580"> </a><p class="pBody">
+The compiler needs to give a name to each XFD file (data dictionary) that is built.  It attempts to build the name from your COBOL code, although there are some instances where the name in the code is nonspecific, and you must provide a name.  
+</p>
+<a name="wp1032583"> </a><p class="pBody">
+Each XFD name is built from a <em class="cEmphasis">starting name</em> that is derived (if possible) from the SELECT statement in your COBOL code.  The following paragraphs explain how that occurs.
+</p>
+<a name="wp1032584"> </a><h5 class="pHeading4">
+ASSIGN name is a variable
+</h5>
+<a name="wp1032585"> </a><p class="pBody">
+If the SELECT for the file has a variable ASSIGN name (ASSIGN TO <em class="cEmphasis">filename</em>), then you must specify a starting name for the XFD file via a FILE directive in your code.  This process is described in <a  href="gt1542.htm#wp1032784">section 5.3.3.5, &quot;File directive.&quot;</a>  
+</p>
+<a name="wp1032586"> </a><h5 class="pHeading4">
+ASSIGN name is a constant
+</h5>
+<a name="wp1032587"> </a><p class="pBody">
+If the SELECT for the file has a constant ASSIGN name (such as ASSIGN TO &quot;COMPFILE&quot;), then that name is used as the starting name for the XFD name.  
+</p>
+<a name="wp1032588"> </a><h5 class="pHeading4">
+ASSIGN name is generic
+</h5>
+<a name="wp1032589"> </a><p class="pBody">
+If the ASSIGN phrase refers to a generic device (such as ASSIGN TO &quot;DISK&quot;), then the compiler uses the SELECT name as the starting name.  
+</p>
+<a name="wp1032590"> </a><h3 class="pHeadingRef">
+Forming the final XFD name
+</h3>
+<a name="wp1032591"> </a><p class="pBody">
+From the starting name, the final name is formed as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1032592"> </a><div class="pSmartList1"><li>The compiler removes any extensions from the starting name. </li></div>
+<a name="wp1032593"> </a><div class="pSmartList1"><li>It constructs a &quot;universal&quot; base name by stripping out directory information that fits any of the formats used by the operating systems that run ACUCOBOL-GT.  </li></div>
+<a name="wp1032594"> </a><div class="pSmartList1"><li>It converts the base name to lower case.</li></div>
+<a name="wp1032595"> </a><div class="pSmartList1"><li>It appends the letters &quot;.xfd&quot; to the base name.</li></div>
+</ol></div>
+<a name="wp1032596"> </a><p class="pNote">
+<hr />
+<b>Note:  </b>The FD can specify the file name using the &quot;VALUE OF FILE_ID IS xxx&quot; clause.  (See Book 3, <em class="cEmphasis">Reference Manual</em>, section 5.4.1.)  This phrase has a similar effect to the ASSIGN phrase of the SELECT statement, but when this phrase is used it overrides the ASSIGN phrase.  So all of the above rules that relate to the ASSIGN phrase also relate to the FILE_ID phrase, when that phrase is used.  (Technically, the ASSIGN phrase and the FILE_ID phrase are supposed to be identical, but the compiler silently overrrides the ASSIGN with the FILE_ID phrase.)
+<hr />
+</p>
+ </blockquote>
+
+ <hr />
+
+ <table align="left" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td align="left" width="300">
+       <span style="font-size: 12px ; font-weight: bold ; font-family: Arial, Helvetica, sans-serif">
+         <a href="http://www.acucorp.com">Acucorp, Inc.</a><br />
+       </span>
+       <span style="font-size: 10px ; font-family: Arial, Helvetica, sans-serif">
+         Voice: 800.262.6585 (U.S.A. and Canada)<br />
+         Voice: 858.689.4500<br />
+         Fax: 858.689.4550<br />
+         Please share your comments on this manual<br />
+         or on any Acucorp documentation with the<br />
+         <a href="mailto:docfeedback@acucorp.com">Acucorp Communications Department</a>.<br />
+       </span>
+     </td>
+   </tr>
+ </table>
+
+<script type="text/javascript" language="JavaScript1.2">
+   <!--
+    document.write(WWHRelatedTopicsDivTag() + WWHPopupDivTag());
+   // -->
+  </script>
+
+ 
+</body>
+</html>
