@@ -1,5 +1,5 @@
 @if !%1==! goto falta
-C:\Acucobol\AcuGT\bin\WRUN32 -C ..\OBJ\CBLCONFI  %1
+D:\Acucobol\AcuGT\bin\WRUN32 -C ..\OBJ\CBLCONFI  %1
 @GOTO FIM
 :FALTA
 @echo .

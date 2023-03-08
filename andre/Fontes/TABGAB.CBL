@@ -1,6 +1,6 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID.    TABAND.
-       AUTHOR.        ANDRE.
+       PROGRAM-ID.    TABGAB.
+       AUTHOR.        GABRIEL.
 
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
@@ -18,27 +18,27 @@
            COPY "sintab01.fd".
 
        WORKING-STORAGE SECTION.
-           COPY "SINWRK.CPY"
-	   COPY "SINRELW.CPY"
+           COPY "SINWRK.CPY".
+           COPY "SINRELW.CPY".
 
        77  SMALL-FONT                     HANDLE.
        78  EXCEPTION-GRAVAR               VALUE 02.
        78  EXCEPTION-EXCLUIR              VALUE 03.
        78  EXCEPTION-LER                  VALUE 04.
        78  EXCEPTION-CONTAR               VALUE 05.
-       78  EXCEPTION-CONTE                VALUE 06.
+       78  EXCEPTION-CONTAR02             VALUE 06.
 
        01  CAMPOS-W.
-           03  STAT-SINTAB01               PIC  X(02).
-               88 VALID-SINTAB01           VALUE '00' THRU '09'.
+           03  STAT-SINTAB01                PIC  X(02).
+               88 VALID-SINTAB01            VALUE '00' THRU '09'.
 
            03  CAMPOS-TELA-W.
-               05 W-CODMUNI-EDIT           PIC 9(005).
-               05 W-NOMEMUN-EDIT           PIC X(030).
-	       05 W-CODIBGE-EDIT           PIC 9(007).
-	       05 W-SIGLEST-EDIT           PIC X(002).
+               05 W-CODMUNI-EDIT          PIC  9(005).
+               05 W-NOMEMUN-EDIT          PIC  X(030).
+               05 W-CODIBGE-EDIT          PIC  9(007).
+               05 W-SIGLEST-EDIT          PIC  X(002).
 
-	       05 CONT                     PIC 9(005). 
+               05 CONT                    PIC  9(05).
 
        01  CAMPOS-903-00-ERROARQUIV-W.
            03  W-FSTATUS                  PIC  X(02).
@@ -67,44 +67,44 @@
                05 W-CONTROL-HANDLE        USAGE HANDLE.
                05 W-CONTROL-ID            PIC X(2) COMP-X.
 
-       01  JANELA-PROGRAMA                PIC X(10).
+       01  JANELA-PROGRAMA                PIC X(10). 
 
        LINKAGE SECTION.
 
        SCREEN SECTION.
        01  TELA-PRINCIPAL.
-           03 LABEL       LINE 06
+           03 LABEL       LINE 05
                           COL 05
-                          TITLE "Código Município"
+                          TITLE "Código do Município"
                           ID 1
                           TRANSPARENT.
 
            03 ENTRY-FIELD USING W-CODMUNI-EDIT
-                          LINE 06
+                          LINE 05
                           COL 30
                           3-D
                           BOXED
                           AUTO
                           ID 2
-			              SIZE 12
+			                 SIZE 16
                           FONT SMALL-FONT.
            
            03 PUSH-BUTTON TITLE "&Ler o arquivo"
-                          LINE 07
+                          LINE 05
                           COL 50
                           SIZE 12
                           ID 3
                           EXCEPTION-VALUE EXCEPTION-LER.
 
-           03 LABEL       LINE 08
+           03 LABEL       LINE 07
                           COL 05
-                          TITLE "Nome da Cidade"
+                          TITLE "Nome do Município"
                           ID 4
                           TRANSPARENT.
 
            03 ENTRY-FIELD USING W-NOMEMUN-EDIT
-                          SIZE 12
-                          LINE 08
+                          SIZE 16
+                          LINE 07
                           COL 30
                           3-D
                           BOXED
@@ -112,57 +112,64 @@
                           ID 5
                           FONT SMALL-FONT.
 
-           03 LABEL       LINE 10
+           03 LABEL       LINE 9
                           COL 05
-                          TITLE "Código IBJE"
-                          ID 4
+                          TITLE "Código do IBGE"
+                          ID 6
                           TRANSPARENT.
 
            03 ENTRY-FIELD USING W-CODIBGE-EDIT
-                          SIZE 12
-                          LINE 10
+                          SIZE 16
+                          LINE 9
                           COL 30
                           3-D
                           BOXED
                           AUTO
-                          ID 5
+                          ID 7
                           FONT SMALL-FONT.
-     
-           03 LABEL       LINE 12
+
+           03 LABEL       LINE 11
                           COL 05
                           TITLE "Estado"
-                          ID 4
+                          ID 8
                           TRANSPARENT.
 
            03 ENTRY-FIELD USING W-SIGLEST-EDIT
-                          SIZE 12
-                          LINE 12
+                          LINE 11
                           COL 30
                           3-D
                           BOXED
                           AUTO
-                          ID 5
+                          ID 9
+			                 SIZE 16
                           FONT SMALL-FONT.
-
-	    03 PUSH-BUTTON TITLE "&Contar SQL"
-                          LINE 12
-                          COL 75
-                          SIZE 12
-                          ID 6
+           
+           03 PUSH-BUTTON TITLE "&Contar cidades SQL"
+                          LINE 11
+                          COL 50
+                          SIZE 20
+                          ID 10
                           EXCEPTION-VALUE EXCEPTION-CONTAR.
-	   
-	   03 PUSH-BUTTON TITLE "&Gravar"
+           
+           03 PUSH-BUTTON TITLE "&Contar cidades COBOL"
+                          LINE 11
+                          COL 75
+                          SIZE 20
+                          ID 10
+                          EXCEPTION-VALUE EXCEPTION-CONTAR02.
+     
+           03 PUSH-BUTTON TITLE "&Gravar"
                           LINE 14,5
                           COL 05
                           SIZE 12
-                          ID 6
+                          ID 11
                           EXCEPTION-VALUE EXCEPTION-GRAVAR.
 
            03 PUSH-BUTTON TITLE "&Excluir"
                           LINE 14,5
                           COL 20
                           SIZE 12
-                          ID 15
+                          ID 12
                           EXCEPTION-VALUE EXCEPTION-EXCLUIR.
 
            03 PUSH-BUTTON TITLE "&Sair"
@@ -170,23 +177,15 @@
                           COL 35
                           SIZE 12
                           SELF-ACT
-                          ID 8
+                          ID 13
                           EXCEPTION-VALUE 27.
-
-          03 PUSH-BUTTON TITLE "Contar Cobol"
-                          LINE 12
-                          COL 55
-                          SIZE 12
-                          SELF-ACT
-                          ID 8
-                          EXCEPTION-VALUE EXCEPTION-CONTE.
 
        PROCEDURE DIVISION.
            COPY "MAINRTN.DCL".
 
        INICIO.
            OPEN I-O SINTAB01
-           IF STAT-SINTAB01= '35'
+           IF STAT-SINTAB01 = '35'
               PERFORM PERGUNTA-INICIALIZA
               OPEN OUTPUT SINTAB01
               CLOSE SINTAB01
@@ -217,7 +216,6 @@
 
        FECHA-TUDO.
            CLOSE SINTAB01.
-
            CLOSE WINDOW JANELA-PROGRAMA.
            COPY "FINALIZA.CPY".
 
@@ -238,14 +236,14 @@
                   PERFORM ROTINA-LER
              WHEN EXCEPTION-CONTAR
                   PERFORM ROTINA-CONTAR
-             WHEN EXCEPTION-CONTE
-                  PERFORM ROTINA-CONTE
+             WHEN EXCEPTION-CONTAR02
+                  PERFORM ROTINA-CONTAR02
            END-EVALUATE.
 
        ROTINA-GRAVAR.
            IF W-CODMUNI-EDIT = 0
               INITIALIZE CA-MESSAGE-LINK
-              MOVE 'Município inválido.' TO CA-MESSAGE-1
+              MOVE 'Código do Município inválido.' TO CA-MESSAGE-1
               PERFORM MOSTRA-MSG-ERRO
               MOVE 4 TO W-ACCEPT-CONTROL
               MOVE 2 TO W-CONTROL-ID
@@ -253,14 +251,16 @@
 
            IF W-NOMEMUN-EDIT = SPACES
               INITIALIZE CA-MESSAGE-LINK
-              MOVE 'O nome do Município é obrigatório.' TO CA-MESSAGE-1
+              MOVE 'O nome da Município é obrigatório.' TO CA-MESSAGE-1
               PERFORM MOSTRA-MSG-ERRO
+              MOVE 4 TO W-ACCEPT-CONTROL
+              MOVE 5 TO W-CONTROL-ID
               EXIT PARAGRAPH.
 
            INITIALIZE             NTAB-REGISTR-1
            MOVE W-CODMUNI-EDIT TO NTAB-CODMUNI-1
            READ SINTAB01
-           IF STAT-SINTAB01= '23'
+           IF STAT-SINTAB01 = '23'
               INITIALIZE             NTAB-REGISTR-1
               MOVE W-CODMUNI-EDIT TO NTAB-CODMUNI-1
            ELSE
@@ -268,11 +268,11 @@
                  PERFORM 903-00-ERROARQUIV.
 
            MOVE W-NOMEMUN-EDIT TO NTAB-NOMEMUN-1
-	   MOVE W-CODIBGE-EDIT TO NTAB-CODIBGE-1
+           MOVE W-CODIBGE-EDIT TO NTAB-CODIBGE-1
 
            INITIALIZE CA-MESSAGE-LINK
 
-           IF STAT-SINTAB01= '23'
+           IF STAT-SINTAB01 = '23'
               WRITE NTAB-REGISTR-1
               MOVE 'Registro gravado.' TO CA-MESSAGE-1
            ELSE
@@ -289,9 +289,9 @@
            INITIALIZE             NTAB-REGISTR-1
            MOVE W-CODMUNI-EDIT TO NTAB-CODMUNI-1
            READ SINTAB01
-           IF STAT-SINTAB01= '23'
+           IF STAT-SINTAB01 = '23'
               INITIALIZE CA-MESSAGE-LINK
-              MOVE 'Município não cadastrada.' TO CA-MESSAGE-1
+              MOVE 'Município não cadastrado.' TO CA-MESSAGE-1
               PERFORM MOSTRA-MSG-MENSAGEM
               EXIT PARAGRAPH
            ELSE
@@ -308,13 +308,13 @@
 
               UNLOCK SINTAB01
               INITIALIZE WSIN-IFXSSQL-G
-	      STRING 'DELETE FROM sintab01 '
-	             'WHERE ntab_codmuni_1 = ' NTAB-CODMUNI-1
-		  DELIMITED BY SIZE INTO WSIN-IFXSSQL-G
-	      END-STRING
-	      PERFORM IFX-EXECSQL
+              STRING 'DELETE FROM sintab '
+                     'WHERE ntab_codmuni_1 = '  NTAB-CODIMUNI-1
+                DELIMITED BY SIZE INTO WSIN-IFXSSQL-G
+              END-STRING
+              PERFORM IFX-EXECSQL
 
-	     IF NOT VALID-SINTAB01
+              IF NOT VALID-SINTAB01
                  PERFORM 903-00-ERROARQUIV
               END-IF
               INITIALIZE CA-MESSAGE-LINK
@@ -332,12 +332,12 @@
            INITIALIZE        NTAB-REGISTR-1
            MOVE W-CODMUNI-EDIT TO NTAB-CODMUNI-1
            READ SINTAB01
-           IF STAT-SINTAB01= '99'
+           IF STAT-SINTAB01 = '99'
               INITIALIZE CA-MESSAGE-LINK
               MOVE 'Registro bloqueado.' TO CA-MESSAGE-1
               PERFORM MOSTRA-MSG-ATENCAO
               EXIT PARAGRAPH.
-           IF STAT-SINTAB01= '23'
+           IF STAT-SINTAB01 = '23'
               INITIALIZE CA-MESSAGE-LINK
               MOVE 'Município não cadastrado.' TO CA-MESSAGE-1
               PERFORM MOSTRA-MSG-MENSAGEM
@@ -346,72 +346,66 @@
                  PERFORM 903-00-ERROARQUIV.
 
            MOVE NTAB-NOMEMUN-1 TO W-NOMEMUN-EDIT
-	   MOVE NTAB-CODIBGE-1 TO W-CODIBGE-EDIT
+           MOVE NTAB-CODIBGE-1 TO W-CODIBGE-EDIT
 
            DISPLAY TELA-PRINCIPAL.
 
        ROTINA-CONTAR
-           IF EVENT-TYPE <> CMD-GOTO AND CMD-CLICKED
-	      EXIT PARAGRAPH.
+           INITIALIZE WSIN-IFXSSQL-G
+           STRING "SELECT COUNT(*) AS QTDMUNI"
+                  " FROM SINTAB01"
+                  " WHERE NTAB-SIGLEST-1 = '"
+                  W-SIGLEST-EDIT "'"
+               DELIMITED SIZE INTO WSIN-IFXSSQL-G
+           END-STRING.
+           PERFORM IFX-QUERY.
+           IF VALID-IFXQUER
+              MOVE 'QTDMUNI' TO WSIN-IFXFNAM-G
+              PERFORM IFX-FIELDBYNAME
+              INITIALIZE CA-MESSAGE-LINK
+              STRING 'Qtd de municípios SQL: '
+                     WSIN-X256
+                 DELIMITED BY '  '
+                 INTO CA-MESSAGE-1
+              END-STRING
+              PERFORM MOSTRA-MSG-ATENCAO
+           END-IF.
+           PERFORM IFX-CLOSEQUERY.
 
-	   INITIALIZE WSIN-IFXSSQL-G
-	   STRING "SELECT COUNT(*) AS QTDMUNI"
-	          " FROM SINTAB01"
-		  " WHERE NTAB-SIGLEST-1 = '" W-SIGLEST-EDIT "'"
-           DELIMITED SIZE INTO WSIN-IFXSSQL-G
-	   END-STRING.
-	   
-	   PERFORM IFX-QUERY.
-	   IF VALID-IFXQUER
-	      MOVE 'QTDMUNI' TO WSIN-IFXFNAM-G
-	      PERFORM IFX-FIELDBYNAME
-	
-	     INITIALIZE CA-MESSAGE-LINK
-	     STRING 'Qtd de municípios '
-	            WSIN-X256
-		DELIMITED BY '  '
-		INTO CA-MESSAGE-1
-	     END-STRING
-	     PERFORM MOSTRA-MSG-ATENCAO
-	     END-IF.
-	     PERFORM IFX-CLOSEQUERY.
-
-       ROTINA-CONTE
-
-           CALL 'SINTERM' USING 1, 'Aguarde..',
-	                        'SINTAB01.ARQ', 'REGISTROS'.
-
+       ROTINA-CONTAR02
+           CALL 'SINTERM' USING 1, 'Aguarde...',
+                                'SINTAB01.ARQ', 'REGISTROS'.
            INITIALIZE NTAB-REGISTR-1 CONT.
-	   
-	   INITIALIZE WSIN-IFXSSQL-G
-	   MOVE 'SINTAB01' TO WSIN-IFXFILE-G
-	   STRING "NTAB_SIGLEST_1 = '" W-SIGLEST-EDIT "'"
-	      DELIMITED BY SIZE INTO WSIN-IFXSSQL-G
-	   END-STRING
-	   PERFORM IFX-SETSTARTRANGE
 
-	   START SINTAB01 KEY >= NTAB-CODMUNI-1
-	   PERFORM UNTIL NOT VALID-SINTAB01
-	   READ SINTAB01 NEXT WITH NO LOCK AT END
-	   EXIT PERFORM
-	   END-READ 
+           INITIALIZE WSIN-IFXSSQL-G.
+           MOVE 'SINTAB01' TO WSIN-IFXFILE-G.
+           STRING "NTAB_SIGLEST_1 = '" W-SIGLEST-EDIT "'"
+              DELIMITED BY SIZE INTO WSIN-IFXSSQL-G
+           END-STRING.
+           PERFORM IFX-SETSTARTRANGE.
 
-	   ADD 1 TO WTER-EVOLUCA-G
-	   CALL 'SINTERM' USING 2
+           START SINTAB01 KEY >= NTAB-CODMUNI-1.
+           PERFORM UNTIL NOT VALID-SINTAB01
+             READ SINTAB01 NEXT WITH NO LOCK AT END
+                  EXIT PERFORM
+             END-READ
 
-	   IF W-SIGLEST-EDIT = NTAB-SIGLEST-1
-	   ADD 1 TO CONT
-	   END-IF 
-	   END-PERFORM.
-	   CALL 'SINTERM' USING 3.
-	   CANCEL 'SINTERM'.
+             ADD 1 TO WTER-EVOLUCA-G
+             CALL 'SINTERM' USING 2
 
-	   STRING 'Qtd de municípios '
-	   CONT
-	   DELIMITED BY '  '
-	   INTO CA-MESSAGE-1
-	   END-STRING.
-	   PERFORM MOSTRA-MSG-ATENCAO.
+             IF W-SIGLEST-EDIT = NTAB-SIGLEST-1
+                ADD 1 TO CONT
+             END-IF
+           END-PERFORM.
+           CALL 'SINTERM' USING 3.
+           CANCEL 'SITERM'.
+           STRING 'Qtd de municípios COBOL: '
+                  CONT
+               DELIMITED BY SIZE
+               INTO CA-MESSAGE-1
+           END-STRING.
+           PERFORM MOSTRA-MSG-ATENCAO.
+           
 
        903-00-ERROARQUIV.
            CALL "C$RERR" USING WS-EXTEND-STATUS
@@ -458,6 +452,6 @@
            CANCEL 'CAMESSAG'
            IF CA-MESSAGE-RESP = 2
               PERFORM 903-00-ERROARQUIV.
-       
-       ROTINAS-FINAIS.
+
+       ROTINAS-FINAIS
            COPY "SINFIM.CPY".
